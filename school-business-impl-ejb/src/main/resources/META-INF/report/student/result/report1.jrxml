@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="94dd0d8d-3aa4-4dff-91a4-7da0e5b22ea4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="258"/>
+	<style name="noborder" forecolor="#000000" backcolor="#CCCCCC" fill="Solid"/>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineColor="#000000"/>
+			<bottomPen lineWidth="0.0" lineColor="#000000"/>
+			<rightPen lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF" hAlign="Right">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="styleResume">
+		<box>
+			<topPen lineWidth="1.0"/>
+			<leftPen lineWidth="1.0"/>
+			<bottomPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="styleDirectionFrame">
+		<box>
+			<leftPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="avgResumeFrame">
+		<box>
+			<leftPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="appreciationFrame">
+		<box>
+			<leftPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="detail1">
+		<box>
+			<topPen lineWidth="1.0"/>
+			<leftPen lineWidth="1.0"/>
+			<bottomPen lineWidth="1.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="schoolName" class="java.lang.String">
+		<fieldDescription><![CDATA[schoolName]]></fieldDescription>
+	</field>
+	<field name="staffPerson" class="java.lang.String">
+		<fieldDescription><![CDATA[staffPerson]]></fieldDescription>
+	</field>
+	<field name="rank" class="java.lang.String">
+		<fieldDescription><![CDATA[rank]]></fieldDescription>
+	</field>
+	<field name="signatureInfos" class="java.lang.String">
+		<fieldDescription><![CDATA[signatureInfos]]></fieldDescription>
+	</field>
+	<field name="classroomSession" class="java.lang.String">
+		<fieldDescription><![CDATA[classroomSession]]></fieldDescription>
+	</field>
+	<field name="totalMissedHours" class="java.lang.String">
+		<fieldDescription><![CDATA[totalMissedHours]]></fieldDescription>
+	</field>
+	<field name="average" class="java.lang.String">
+		<fieldDescription><![CDATA[average]]></fieldDescription>
+	</field>
+	<field name="classroomSessionAverageHighest" class="java.lang.String">
+		<fieldDescription><![CDATA[classroomSessionAverageHighest]]></fieldDescription>
+	</field>
+	<field name="photo" class="java.io.InputStream">
+		<fieldDescription><![CDATA[photo]]></fieldDescription>
+	</field>
+	<field name="totalMissedHoursJustified" class="java.lang.String">
+		<fieldDescription><![CDATA[totalMissedHoursJustified]]></fieldDescription>
+	</field>
+	<field name="schoolLogo" class="java.io.InputStream">
+		<fieldDescription><![CDATA[schoolLogo]]></fieldDescription>
+	</field>
+	<field name="appreciation" class="java.lang.String">
+		<fieldDescription><![CDATA[appreciation]]></fieldDescription>
+	</field>
+	<field name="title" class="java.lang.String">
+		<fieldDescription><![CDATA[title]]></fieldDescription>
+	</field>
+	<field name="academicSession" class="java.lang.String">
+		<fieldDescription><![CDATA[academicSession]]></fieldDescription>
+	</field>
+	<field name="totalAverageCoefficiented" class="java.lang.String">
+		<fieldDescription><![CDATA[totalAverageCoefficiented]]></fieldDescription>
+	</field>
+	<field name="totalAverage" class="java.lang.String">
+		<fieldDescription><![CDATA[totalAverage]]></fieldDescription>
+	</field>
+	<field name="subjects" class="java.util.Collection">
+		<fieldDescription><![CDATA[subjects]]></fieldDescription>
+	</field>
+	<field name="footer" class="java.lang.String">
+		<fieldDescription><![CDATA[footer]]></fieldDescription>
+	</field>
+	<field name="appreciationComments" class="java.lang.String">
+		<fieldDescription><![CDATA[appreciationComments]]></fieldDescription>
+	</field>
+	<field name="names" class="java.lang.String">
+		<fieldDescription><![CDATA[names]]></fieldDescription>
+	</field>
+	<field name="orderNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[orderNumber]]></fieldDescription>
+	</field>
+	<field name="numberOfStudents" class="java.lang.String">
+		<fieldDescription><![CDATA[numberOfStudents]]></fieldDescription>
+	</field>
+	<field name="staffTitle" class="java.lang.String">
+		<fieldDescription><![CDATA[staffTitle]]></fieldDescription>
+	</field>
+	<field name="dateOfBirth" class="java.lang.String">
+		<fieldDescription><![CDATA[dateOfBirth]]></fieldDescription>
+	</field>
+	<field name="governmentMinistryInfos" class="java.lang.String">
+		<fieldDescription><![CDATA[governmentMinistryInfos]]></fieldDescription>
+	</field>
+	<field name="appreciationCommentedBy" class="java.lang.String">
+		<fieldDescription><![CDATA[appreciationCommentedBy]]></fieldDescription>
+	</field>
+	<field name="classroomSessionAverageLowest" class="java.lang.String">
+		<fieldDescription><![CDATA[classroomSessionAverageLowest]]></fieldDescription>
+	</field>
+	<field name="classroomSessionAverage" class="java.lang.String">
+		<fieldDescription><![CDATA[classroomSessionAverage]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="117" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="100" height="100" uuid="5d117319-5d67-4ef5-9ee7-483160cdbbf8"/>
+				<imageExpression><![CDATA[$F{schoolLogo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="102" y="0" width="205" height="53" uuid="0bd16c07-6ba2-46e6-a5fa-00d7d7053411"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{schoolName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="376" y="0" width="179" height="80" uuid="73d76611-da50-450e-ba8f-a6213c7fb25d"/>
+				<textFieldExpression><![CDATA[$F{governmentMinistryInfos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="142" splitType="Stretch">
+			<frame>
+				<reportElement style="detail1" x="1" y="0" width="554" height="131" uuid="8dc9b17f-31fe-44f8-ac3a-8ab824ebd54b"/>
+				<image>
+					<reportElement x="0" y="0" width="128" height="128" uuid="41648e97-76b7-41c5-99c7-bb1bcebe74b1"/>
+					<imageExpression><![CDATA[$F{photo}]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="128" y="0" width="100" height="20" uuid="ba72436b-c047-4fdb-b2dc-ced98c822e08"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Numéro d'ordre : ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="228" y="0" width="50" height="20" uuid="156f12ae-8d35-4092-b2f7-56e8c1276c7d"/>
+					<textFieldExpression><![CDATA[$F{orderNumber}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="278" y="0" width="115" height="20" uuid="a166f7b9-78a3-41d0-a920-0d803d5b965f"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Session Académique : ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="393" y="0" width="161" height="20" uuid="69f21c7d-7287-4995-8f0c-fb62af0ed26e"/>
+					<textFieldExpression><![CDATA[$F{academicSession}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="128" y="20" width="100" height="20" uuid="7e92c4b5-f482-48cf-b5e8-272819a4cd6e"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nom et prénoms : ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="128" y="40" width="100" height="20" uuid="c6d873eb-f261-45a1-9081-e6770d279e09"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Né le : ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="128" y="60" width="100" height="20" uuid="ed0ddcf9-007c-4a57-bfbb-4c279ef2340a"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Classe : ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="228" y="20" width="326" height="20" uuid="1d799fd3-1b38-4e7f-ab28-20b8b1f4393c"/>
+					<textFieldExpression><![CDATA[$F{names}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="228" y="60" width="326" height="20" uuid="492dc63e-2d61-4d1b-9bb7-0b5b03f914b8"/>
+					<textFieldExpression><![CDATA[$F{classroomSession}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="228" y="40" width="326" height="20" uuid="bfe89647-c613-419b-b5d8-51046fdd5311"/>
+					<textFieldExpression><![CDATA[$F{dateOfBirth}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="50"/>
+		<band height="50"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="230" y="22" width="100" height="20" uuid="1aa89d78-c5b6-4e64-83ca-45648c2b0cac"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Footer]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

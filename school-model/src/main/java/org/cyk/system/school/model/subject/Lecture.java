@@ -1,0 +1,32 @@
+package org.cyk.system.school.model.subject;
+
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.event.Event;
+
+@Getter @Setter @Entity @NoArgsConstructor
+public class Lecture extends AbstractIdentifiable implements Serializable {
+
+	private static final long serialVersionUID = 2742833783679362737L;
+
+	@ManyToOne private Subject subject;
+	
+	@ManyToOne private Event event;
+
+	public Lecture(Subject subject, Event event) {
+		super();
+		this.subject = subject;
+		this.event = event;
+	}
+	
+	
+	
+}

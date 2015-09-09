@@ -1,0 +1,24 @@
+package org.cyk.system.school.business.impl.subject;
+
+import java.io.Serializable;
+
+import javax.inject.Inject;
+
+import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.school.business.api.subject.SubjectBusiness;
+import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.persistence.api.subject.SubjectDao;
+
+public class SubjectBusinessImpl extends AbstractTypedBusinessService<Subject, SubjectDao> implements SubjectBusiness,Serializable {
+
+	private static final long serialVersionUID = -3799482462496328200L;
+	
+	@Inject
+	public SubjectBusinessImpl(SubjectDao dao) {
+		super(dao); 
+	}
+
+	
+
+    
+}

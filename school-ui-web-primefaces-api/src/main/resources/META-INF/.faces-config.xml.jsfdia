@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="configureLevels::#private#__role__#__manager__#configuration#level#index.xhtml"
+    NAME="output"
+    PATH="/private/__role__/__manager__/configuration/level/index.xhtml"
+    TARGET="rules:#private#__role__#__manager__#configuration#level#index.xhtml"
+    TITLE="configureLevels" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="editLevelName::#private#__role__#__manager__#crudOneLevelName.xhtml"
+    NAME="output1"
+    PATH="/private/__role__/__manager__/crudOneLevelName.xhtml"
+    TARGET="rules:#private#__role__#__manager__#crudOneLevelName.xhtml"
+    TITLE="editLevelName" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM
+  NAME="rules:#private#__role__#__manager__#configuration#level#index.xhtml"
+  PATH="/private/__role__/__manager__/configuration/level/index.xhtml"
+  SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#private#__role__#__manager__#crudOneLevelName.xhtml"
+  PATH="/private/__role__/__manager__/crudOneLevelName.xhtml"
+  SHAPE="256,177,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

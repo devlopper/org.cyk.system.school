@@ -1,0 +1,66 @@
+package org.cyk.system.school.model;
+
+import java.io.Serializable;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import org.cyk.system.root.model.AbstractModelElement;
+import org.cyk.system.root.model.mathematics.Sort;
+import org.cyk.system.root.model.time.Attendance;
+
+@Getter @Setter @Embeddable @NoArgsConstructor
+public class StudentResults extends AbstractModelElement implements Serializable {
+
+	private static final long serialVersionUID = 2742833783679362737L;
+	
+	@Embedded @AttributeOverrides(value={
+			@AttributeOverride(name="average.dividend",column=@Column(name="evaluationAverageDividend"))
+			,@AttributeOverride(name="average.divisor",column=@Column(name="evaluationAverageDivisor"))
+			,@AttributeOverride(name="average.value",column=@Column(name="evaluationAverageValue"))
+			
+			,@AttributeOverride(name="rank.sequenceOrder",column=@Column(name="evaluationRankSequenceOrder"))
+			,@AttributeOverride(name="rank.value",column=@Column(name="evaluationRankValue"))
+			,@AttributeOverride(name="rank.exaequo",column=@Column(name="evaluationRankExaequo"))
+			
+			,@AttributeOverride(name="comments",column=@Column(name="evaluationComments"))
+	})
+	private Sort evaluationSort = new Sort();
+	
+	@Embedded @AttributeOverrides(value={
+			@AttributeOverride(name="average.dividend",column=@Column(name="lectureAttendanceAverageDividend"))
+			,@AttributeOverride(name="average.divisor",column=@Column(name="lectureAttendanceAverageDivisor"))
+			,@AttributeOverride(name="average.value",column=@Column(name="lectureAttendanceAverageValue"))
+			
+			,@AttributeOverride(name="rank.sequenceOrder",column=@Column(name="lectureAttendanceRankSequenceOrder"))
+			,@AttributeOverride(name="rank.value",column=@Column(name="lectureAttendanceRankValue"))
+			,@AttributeOverride(name="rank.exaequo",column=@Column(name="lectureAttendanceRankExaequo"))
+			
+			,@AttributeOverride(name="comments",column=@Column(name="lectureAttendanceComments"))
+	})
+	private Sort lectureAttendanceSort = new Sort();
+		
+	@Embedded private Attendance lectureAttendance = new Attendance();
+	
+	private String appreciation;
+	
+	/**/
+	
+	@Override
+	public String getUiString() {
+		return toString();
+	}
+	
+	@Override
+	public String toString() {
+		return evaluationSort+" , "+lectureAttendanceSort;
+	}
+
+}

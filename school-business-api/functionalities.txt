@@ -1,0 +1,12 @@
+ouvrir une annee academique
+clore une anne academique
+
+arreter les notes
+
+inscrire un etuduiant
+payer la scolarite
+faire l appel
+faire une evaluation
+changer de classe
+
+editer les bulletins
