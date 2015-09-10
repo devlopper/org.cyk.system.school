@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 
-import org.cyk.system.company.ui.web.primefaces.CompanyWebManager;
 import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.ui.web.primefaces.AbstractContextListener;
 
@@ -18,7 +17,6 @@ public class ContextListener extends AbstractContextListener implements Serializ
 	protected void identifiableConfiguration(ServletContextEvent event) {
 		super.identifiableConfiguration(event);
 		uiManager.registerApplicationUImanager(RootWebManager.getInstance());
-		uiManager.registerApplicationUImanager(CompanyWebManager.getInstance());
 		uiManager.registerApplicationUImanager(SchoolWebManager.getInstance());
 	}
 	

@@ -24,7 +24,6 @@ import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.time.Period;
-import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -48,7 +47,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	private static final long serialVersionUID = -7434478805525552120L;
 	public static final int DEPLOYMENT_ORDER = CompanyBusinessLayer.DEPLOYMENT_ORDER+1;
 	
-	@Inject private TeacherBusiness teacherBusiness;
+	//@Inject private TeacherBusiness teacherBusiness;
 	@Inject private FileBusiness fileBusiness;
 	@Inject private CompanyBusiness companyBusiness;
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
@@ -76,6 +75,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 
 	@Override
 	protected void fakeTransactions() {
+		/*
 		School highSchool;
 		File studentClassroomSessionDivisionResultsReportFile;
 		AcademicSession academicSession;
@@ -112,12 +112,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     	create(highSchool);
     	
     	RootRandomDataProvider.getInstance().createActor(Teacher.class, 4);
-    	/*
-    	teachers.add( actor(teacherBusiness,Teacher.class, Boolean.TRUE));
-    	teachers.add(actor(teacherBusiness,Teacher.class, Boolean.FALSE));
-    	teachers.add(actor(teacherBusiness,Teacher.class, Boolean.TRUE));
-    	teachers.add(actor(teacherBusiness,Teacher.class, Boolean.FALSE));
-    	*/
+    	
     	studentClassroomSessionDivisionResultsReportFile = null;//new File();
     	try {
     		//studentClassroomSessionDivisionResultsReportFile.setUri(
@@ -188,6 +183,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		
 		subjectMathsClassroomSessionDivision2 = subject(classroomSessionDivision2,mathsName, "4",RootRandomDataProvider.getInstance().actor(Teacher.class));
 		subjectEnglishClassroomSessionDivision2 = subject(classroomSessionDivision2,englishName, "3",RootRandomDataProvider.getInstance().actor(Teacher.class));
+		*/
 		
 	}
 	    

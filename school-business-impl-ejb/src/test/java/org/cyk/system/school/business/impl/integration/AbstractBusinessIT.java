@@ -19,6 +19,7 @@ import org.cyk.system.root.business.impl.validation.ExceptionUtils;
 import org.cyk.system.root.business.impl.validation.ValidatorMap;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.persistence.impl.GenericDaoImpl;
+import org.cyk.system.root.persistence.impl.PersistenceIntegrationTestHelper;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
@@ -313,9 +314,11 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
         return  
                 new ArchiveBuilder().create().getArchive().
                     addClasses(BusinessIntegrationTestHelper.classes()).
+                    addClasses(PersistenceIntegrationTestHelper.classes()).
+                    addClasses(RootBusinessLayer.class,RootTestHelper.class,CompanyBusinessLayer.class).
                     addPackages(Boolean.FALSE, BusinessIntegrationTestHelper.packages()).
-                    addPackages(Boolean.TRUE,"org.cyk.system.school").
-                    addPackages(Boolean.TRUE,"org.cyk.system.company") 
+                    addPackages(Boolean.TRUE,"org.cyk.system.company").
+                    addPackages(Boolean.TRUE,"org.cyk.system.school") 
                 ;
     } 
     
