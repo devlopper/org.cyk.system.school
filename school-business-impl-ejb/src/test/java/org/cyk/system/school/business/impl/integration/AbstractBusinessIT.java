@@ -259,7 +259,7 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     //protected abstract void __populate__();
 
     protected void installApplication(Boolean fake){
-    	companyBusinessLayer.installApplication(fake);
+    	schoolBusinessLayer.installApplication(fake);
     }
     
     protected void installApplication(){
@@ -277,9 +277,9 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
         businesses();
     }
     
-	protected abstract void finds();
+	protected void finds(){}
 	
-	protected abstract void businesses();
+	protected void businesses(){}
 	
 	/* Shortcut */
     
