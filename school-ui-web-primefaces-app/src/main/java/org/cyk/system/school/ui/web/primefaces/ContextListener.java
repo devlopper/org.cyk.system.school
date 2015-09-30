@@ -12,7 +12,11 @@ import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.ui.web.primefaces.registration.MedicalInformationsFormModel;
 import org.cyk.ui.web.primefaces.AbstractContextListener;
+import org.cyk.ui.web.primefaces.page.BusinessEntityFormPageAdapter;
+import org.cyk.ui.web.primefaces.page.tools.MedicalInformationsEditPage;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 
 @WebListener
@@ -21,6 +25,21 @@ public class ContextListener extends AbstractContextListener implements Serializ
 	private static final long serialVersionUID = -9042005596731665575L;
 
 	@Inject private StudentBusiness studentBusiness;
+	
+	@Override
+	public void contextInitialized(ServletContextEvent event) {
+		super.contextInitialized(event);
+		primefacesManager.getBusinessEntityFormPageListeners().add(new BusinessEntityFormPageAdapter<Student>(Student.class){
+			private static final long serialVersionUID = -823942826619424098L;
+			@Override
+			public void initialisationEnded(AbstractBean bean) {
+				super.initialisationEnded(bean);
+				if(bean instanceof MedicalInformationsEditPage){
+					((MedicalInformationsEditPage)bean).setFormModelClass(MedicalInformationsFormModel.class);
+				}
+			}
+		});
+	}
 	
 	@Override
 	protected void identifiableConfiguration(ServletContextEvent event) {

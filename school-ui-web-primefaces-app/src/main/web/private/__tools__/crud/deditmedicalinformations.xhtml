@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
+
+ 	<ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
+ 		<ui:param name="pageController" value="#{medicalInformationsEditPage}" />
+ 		<ui:define name="body">
+ 			<p:fieldset legend="#{uiManager.text('emergency.contacts')}" >
+ 				<cyk:formOneData value="#{medicalInformationsEditPage.form}" />
+ 			</p:fieldset>
+ 			<cyk:itemCollection value="#{medicalInformationsEditPage.allergyItems}" >
+ 				<p:column headerText="#{uiManager.text('allergy')}" >
+ 					<cyk:inputOneCombo value="#{item.form.findInputByFieldName('allergy')}"/>
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('reaction')}" >
+ 					<cyk:inputText value="#{item.form.findInputByFieldName('reaction')}"/>
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('response')}" >
+ 					<cyk:inputText value="#{item.form.findInputByFieldName('response')}"/>
+ 				</p:column>
+ 			</cyk:itemCollection>
+ 		</ui:define>
+ 		
+ 		<ui:define name="contentMenuBar">
+ 			<cyk:command value="#{medicalInformationsEditPage.form.submitCommandable}" executeParameter="#{medicalInformationsEditPage.form.data}" />
+ 		</ui:define>
+ 		
+ 	</ui:decorate>
+ 	
+</html>
