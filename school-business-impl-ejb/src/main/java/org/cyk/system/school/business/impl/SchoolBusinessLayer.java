@@ -2,44 +2,35 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import lombok.Getter;
 
-import org.apache.commons.io.IOUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
-import org.cyk.system.company.model.structure.Company;
-import org.cyk.system.company.model.structure.OwnedCompany;
+import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
-import org.cyk.system.root.business.impl.RootRandomDataProvider;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
-import org.cyk.system.root.model.time.Period;
+import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
-import org.cyk.system.school.model.session.AcademicSession;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelName;
-import org.cyk.system.school.model.session.LevelSpeciality;
-import org.cyk.system.school.model.session.LevelTimeDivision;
-import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.EvaluationTypeName;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.model.subject.SubjectName;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
-import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER)
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
@@ -51,6 +42,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private FileBusiness fileBusiness;
 	@Inject private CompanyBusiness companyBusiness;
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
+	@Inject private StudentBusiness studentBusiness;
 	
 	@Getter private AverageComputationListener averageComputationListener;
 	@Getter private Script averageComputationScript;
@@ -72,6 +64,15 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void setConstants() {
 		
 	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public void registerTypedBusinessBean(Map<Class<AbstractIdentifiable>, TypedBusiness<AbstractIdentifiable>> beansMap) {
+        beansMap.put((Class)Student.class, (TypedBusiness)studentBusiness);
+        
+        
+        
+    }
 
 	@Override
 	protected void fakeTransactions() {
