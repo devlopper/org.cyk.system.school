@@ -91,7 +91,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	
 	@Override
 	protected IntervalCollection averageIntervalCollection(ClassroomSession classroomSession) {
-		return classroomSession.getLevelTimeDivision().getLevel().getName().getStudentClassroomSessionAverageAppreciation();
+		return classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAverageScale();
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

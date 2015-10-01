@@ -2,6 +2,7 @@ package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -19,5 +20,15 @@ public class School extends AbstractIdentifiable implements Serializable {
 	private static final long serialVersionUID = 2742833783679362737L;
 	
 	@OneToOne @NotNull private OwnedCompany ownedCompany;
+	
+	@Embedded private CommonNodeInformations nodeInformations;
+
+	public School(OwnedCompany ownedCompany,CommonNodeInformations nodeInformations) {
+		super();
+		this.ownedCompany = ownedCompany;
+		this.nodeInformations = nodeInformations;
+	}
+	
+	
 	
 }

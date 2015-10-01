@@ -218,7 +218,7 @@ public class AverageBusinessIT extends AbstractBusinessIT {
         
         ReportBasedOnTemplateFile<StudentClassroomSessionDivisionResultReport> report = studentClassroomSessionDivisionBusiness.resultsReportByClassroomSessionDivisions(
         		Arrays.asList(classroomSessionDivision1,classroomSessionDivision2,classroomSessionDivision3), Boolean.FALSE);
-        reportBusiness.write(new java.io.File("h:\\"), report);
+        //reportBusiness.write(new java.io.File("h:\\"), report);
         
     }
     

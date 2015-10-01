@@ -119,7 +119,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			r.setClassroomSessionAverageLowest(results.getAverageLowest().toString());
 			r.setDateOfBirth(timeBusiness.formatDate(s.getStudent().getPerson().getBirthDate()));
 			r.setFooter("Infos sur contacts ici");
-			r.setGovernmentMinistryInfos(cs.getLevelTimeDivision().getLevel().getName().getStudentClassroomSessionDivisionResultsReportHeadRight());
+			r.setGovernmentMinistryInfos(/*cs.getLevelTimeDivision().getLevel().getName().getStudentClassroomSessionDivisionResultsReportHeadRight()*/"!!! NOT SET !!!");
 			r.setNames(s.getStudent().getPerson().getNames());
 			r.setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
 			r.setOrderNumber(s.getStudent().getRegistration().getCode());
@@ -158,7 +158,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			}
 			report.getDataSource().add(r);
 		}
-		report.setTemplateFile(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getStudentClassroomSessionDivisionResultsReportFile());
+		report.setTemplateFile(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionResultsReportFile());
 		report.setFileExtension("pdf");
 		resultsReport(report, print);
 	}
@@ -208,7 +208,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	protected IntervalCollection averageIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
-		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getName().getStudentClassroomSessionDivisionAverageAppreciation();
+		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

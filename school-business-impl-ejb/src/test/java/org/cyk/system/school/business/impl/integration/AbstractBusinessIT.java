@@ -88,6 +88,7 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
 	
     @Override
     protected final void populate() {
+    	
     	/*
     	highSchool = new School();
     	highSchool.setCompany(new Company());

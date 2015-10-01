@@ -211,6 +211,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     protected LevelName levelName(String code,String name,File studentClassroomSessionDivisionResultsReportFile,IntervalCollection studentSubjectAverageAppreciation
     		,IntervalCollection studentClassroomSessionDivisionAverageAppreciation,IntervalCollection studentClassroomSessionAverageAppreciation){
     	LevelName levelName = new LevelName();
+    	/*
     	levelName.setCode(code);
     	levelName.setName(name);
     	levelName.setStudentClassroomSessionDivisionResultsReportFile(studentClassroomSessionDivisionResultsReportFile);
@@ -222,6 +223,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				+"Union - Discipline - Travail\r\n\r\n"
 				+"Ministere de l'education nationale");
     	create(levelName);
+    	*/
     	return levelName;
     }
 	

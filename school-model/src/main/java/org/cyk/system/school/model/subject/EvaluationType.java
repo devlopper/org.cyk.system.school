@@ -8,11 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 
-@Getter @Setter @Entity
+@Getter @Setter @Entity @NoArgsConstructor
 public class EvaluationType extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
@@ -26,5 +27,15 @@ public class EvaluationType extends AbstractIdentifiable implements Serializable
 	
 	@Column(precision=COEFFICIENT_PRECISION*2,scale=FLOAT_SCALE)
 	private BigDecimal maximumValue;
+
+	public EvaluationType(Subject subject, EvaluationTypeName name,BigDecimal coefficient, BigDecimal maximumValue) {
+		super();
+		this.subject = subject;
+		this.name = name;
+		this.coefficient = coefficient;
+		this.maximumValue = maximumValue;
+	}
+	
+	
 	
 }

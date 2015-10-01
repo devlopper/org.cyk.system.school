@@ -21,12 +21,14 @@ public class AcademicSession extends AbstractIdentifiable implements Serializabl
 	@ManyToOne private School school;
 	
 	@Embedded private Period period;
+	
+	@Embedded private CommonNodeInformations nodeInformations;
 
 	public AcademicSession(School school,Period period) {
 		super();
 		this.school = school;
 		this.period = period;
-	}
+	} 
 	
 	
 }

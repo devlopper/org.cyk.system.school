@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,16 +17,15 @@ import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
-@Entity
-@Getter @Setter @NoArgsConstructor
+@Entity @Getter @Setter @NoArgsConstructor
 public class LevelTimeDivision extends AbstractIdentifiable implements Serializable{
 	
 	private static final long serialVersionUID = 374208919427476791L;
 	
-	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo
+	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull
 	private Level level;
 	
-	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo
+	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull
 	private TimeDivisionType timeDivisionType;
 
 	public LevelTimeDivision(Level level, TimeDivisionType timeDivisionType) {

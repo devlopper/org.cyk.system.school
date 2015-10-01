@@ -22,12 +22,14 @@ public class ClassroomSessionDivision extends AbstractIdentifiable implements Se
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne
-	private ClassroomSession classroomSession;
+	@ManyToOne private ClassroomSession classroomSession;
 	
 	@Embedded private Period period;
 	
 	@ManyToOne private TimeDivisionType timeDivisionType;
+	
+	@Column(precision=5,scale=FLOAT_SCALE)
+	private BigDecimal duration;
 	
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE)
 	private BigDecimal coefficient;
