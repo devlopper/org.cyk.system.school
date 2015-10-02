@@ -90,7 +90,18 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		for(StudentSubject studentSubject : studentSubjects){
 			for(String[] detail : details)
 				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){
-					assertBigDecimalEquals("Average", detail[1], studentSubject.getResults().getEvaluationSort().getAverage().getValue());
+					assertBigDecimalEquals("Average of "+studentSubject.getStudent(), detail[1], studentSubject.getResults().getEvaluationSort().getAverage().getValue());
+				}
+		}
+	}
+	
+	public void assertClassroomSessionDivisionSubjectRank(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details){
+		Collection<StudentSubject> studentSubjects = studentSubjectBusiness.average(Arrays.asList(classroomSessionDivisionSubject), Boolean.TRUE);
+		for(StudentSubject studentSubject : studentSubjects){
+			for(String[] detail : details)
+				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){
+					assertEquals("Rank Value of "+studentSubject.getStudent(), detail[1], studentSubject.getResults().getEvaluationSort().getRank().getValue());
+					assertEquals("Rank Exaequo of "+studentSubject.getStudent(), detail.length>2?detail[2]:"false", studentSubject.getResults().getEvaluationSort().getRank().getExaequo());
 				}
 		}
 	}

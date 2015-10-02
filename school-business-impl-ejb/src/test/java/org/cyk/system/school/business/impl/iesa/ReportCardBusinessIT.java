@@ -49,6 +49,10 @@ public class ReportCardBusinessIT extends AbstractBusinessIT {
     	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAverage(dataProducer.getSubjectEnglishLanguage(), new String[][]{
     		{"STUD1","60"},{"STUD2","90"},{"STUD3","40"},{"STUD4","45"},{"STUD5","20"}
     	});
+    	
+    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectRank(dataProducer.getSubjectEnglishLanguage(), new String[][]{
+    		{"STUD1","2","false"},{"STUD2","1","false"},{"STUD3","4","false"},{"STUD4","3","false"},{"STUD5","5","false"}
+    	});
     }
 
 }
