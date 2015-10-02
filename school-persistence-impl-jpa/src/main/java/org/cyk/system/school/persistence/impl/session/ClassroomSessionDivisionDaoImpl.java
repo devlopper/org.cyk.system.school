@@ -17,13 +17,13 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation(); 
-        registerNamedQuery(readByClassroomSession, _select().where("classroomSession"));
-        registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn("classroomSession"));
+        registerNamedQuery(readByClassroomSession, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
+        registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
     } 
     
     @Override
 	public Collection<ClassroomSessionDivision> readByClassroomSession(ClassroomSession classroomSession) {
-    	return namedQuery(readByClassroomSession).parameter("classroomSession", classroomSession)
+    	return namedQuery(readByClassroomSession).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
                 .resultMany();
 	}
 

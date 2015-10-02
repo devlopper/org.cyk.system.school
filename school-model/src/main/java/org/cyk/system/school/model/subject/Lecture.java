@@ -17,16 +17,17 @@ public class Lecture extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne private Subject subject;
+	@ManyToOne private ClassroomSessionDivisionSubject subject;
 	
 	@ManyToOne private Event event;
 
-	public Lecture(Subject subject, Event event) {
+	public Lecture(ClassroomSessionDivisionSubject subject, Event event) {
 		super();
 		this.subject = subject;
 		this.event = event;
 	}
 	
-	
+	public static final String FIELD_CLASSROOMSESSIONDIVISIONSUBJECT = "subject";
+	public static final String FIELD_EVENT = "event";
 	
 }

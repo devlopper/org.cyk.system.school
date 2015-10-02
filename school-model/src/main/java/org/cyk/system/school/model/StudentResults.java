@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.system.root.model.AbstractModelElement;
 import org.cyk.system.root.model.mathematics.Sort;
 import org.cyk.system.root.model.time.Attendance;
@@ -58,9 +60,15 @@ public class StudentResults extends AbstractModelElement implements Serializable
 		return toString();
 	}
 	
+	/*
 	@Override
 	public String toString() {
 		return evaluationSort+" , "+lectureAttendanceSort;
+	}*/
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 
 }

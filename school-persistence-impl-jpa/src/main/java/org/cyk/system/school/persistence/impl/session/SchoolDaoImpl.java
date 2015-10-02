@@ -18,12 +18,12 @@ public class SchoolDaoImpl extends AbstractTypedDao<School> implements SchoolDao
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
-		registerNamedQuery(readByOwnedCompany, _select().where("ownedCompany"));
+		registerNamedQuery(readByOwnedCompany, _select().where(School.FIELD_OWNED_COMPANY));
 	}
 	
 	@Override
 	public School readByOwnedCompany(OwnedCompany ownedCompany) {
-		return namedQuery(readByOwnedCompany).parameter("ownedCompany", ownedCompany).ignoreThrowable(NoResultException.class).resultOne();
+		return namedQuery(readByOwnedCompany).parameter(School.FIELD_OWNED_COMPANY, ownedCompany).ignoreThrowable(NoResultException.class).resultOne();
 	}
 	
 }

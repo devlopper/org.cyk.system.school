@@ -19,15 +19,15 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.subject.EvaluatedStudent;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
-import org.cyk.system.school.persistence.api.subject.SubjectDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 
 @Stateless
 public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSession, StudentClassroomSession, StudentClassroomSessionDao, StudentClassroomSessionDivision> implements StudentClassroomSessionBusiness,Serializable {
@@ -38,7 +38,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	
 	@Inject private StudentSubjectDao studentSubjectDao;
-	@Inject private SubjectDao subjectDao;
+	@Inject private ClassroomSessionDivisionSubjectDao subjectDao;
 	@Inject private StudentClassroomSessionDivisionDao studentClassroomSessionDivisionDao;
 	@Inject private ClassroomSessionDivisionDao classroomSessionDivisionDao;
 	
@@ -66,11 +66,11 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	protected Collection<StudentClassroomSessionDivision> readDetails(Collection<ClassroomSession> levels,Boolean keepDetails) {
 		//structure
 		Collection<ClassroomSessionDivision> classroomSessionDivisions = classroomSessionDivisionDao.readByClassroomSessions(levels);
-		Collection<Subject> subjects = subjectDao.readByClassroomSessions(levels);
+		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessions(levels);
 		//student data
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = studentClassroomSessionDivisionDao.readByClassroomSessions(levels);
 		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessions(levels);
-		Collection<EvaluatedStudent> evaluatedStudents = evaluatedStudentDao.readByClassroomSessions(levels);
+		Collection<StudentSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessions(levels);
 		
 		studentSubjectBusiness.average(subjects, studentSubjects, evaluatedStudents,keepDetails);
 		

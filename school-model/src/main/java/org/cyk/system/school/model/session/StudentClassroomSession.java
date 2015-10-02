@@ -17,8 +17,7 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne
-	private ClassroomSession classroomSession;
+	@ManyToOne private ClassroomSession classroomSession;
 	
 	public StudentClassroomSession(Student student,ClassroomSession classroomSession) {
 		super();
@@ -31,5 +30,5 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 		return classroomSession;
 	}
 	
-	
+	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
 }

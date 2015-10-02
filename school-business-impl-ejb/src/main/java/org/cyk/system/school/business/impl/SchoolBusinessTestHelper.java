@@ -1,17 +1,29 @@
 package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.system.root.business.impl.AbstractTestHelper;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
+import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
+import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.SubjectEvaluation;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractTestHelper implements Serializable {
@@ -21,6 +33,11 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	
 	@Inject private StudentBusiness studentBusiness;
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject private StudentSubjectEvaluationBusiness studentSubjectEvaluationBusiness;
+	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
+	@Inject private SubjectEvaluationTypeBusiness evaluationTypeBusiness;
+	
+	@Getter @Setter private Boolean coefficientApplied = Boolean.TRUE;
 	
 	/**/
 	
@@ -38,18 +55,47 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		return studentBusiness.create(student);
 	}
 	
-	public void takeSubjects(String[] studentRegistrationCodes,Subject[] subjects){
+	public void registerStudents(String[] codes){
+		for(String code : codes)
+			registerStudent(code, null);
+	}
+	
+	public void takeSubjects(String[] studentRegistrationCodes,ClassroomSessionDivisionSubject[] classroomSessionDivisionSubjects){
 		for(String studentRegistrationCode : studentRegistrationCodes){
 			Student student = studentBusiness.findByRegistrationCode(studentRegistrationCode);
-			for(Subject subject : subjects){
-				StudentSubject studentSubject = new StudentSubject(student, subject);
+			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
+				StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
 				studentSubjectBusiness.create(studentSubject);
 			}
 		}
 	}
 	
+	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName,Boolean coefficientApplied,String[][] details){
+		SubjectEvaluation subjectEvaluation = new SubjectEvaluation(evaluationTypeBusiness.findBySubjectByEvaluationType(subject, evaluationTypeName),coefficientApplied);
+		for(String[] detail : details){
+			Student student = studentBusiness.findByRegistrationCode(detail[0]);
+			StudentSubject studentSubject = studentSubjectBusiness.findByStudentBySubject(student, subjectEvaluation.getType().getSubject());
+			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
+		}
+		subjectEvaluationBusiness.create(subjectEvaluation);
+	}
+	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName,String[][] details){
+		evaluateStudents(subject, evaluationTypeName, coefficientApplied,details);
+	}
+	
 	/**/
 	
+	public void assertClassroomSessionDivisionSubjectAverage(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details){
+		Collection<StudentSubject> studentSubjects = studentSubjectBusiness.average(Arrays.asList(classroomSessionDivisionSubject), Boolean.TRUE);
+		for(StudentSubject studentSubject : studentSubjects){
+			for(String[] detail : details)
+				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){
+					assertBigDecimalEquals("Average", detail[1], studentSubject.getResults().getEvaluationSort().getAverage().getValue());
+				}
+		}
+	}
+	
+	/**/
 	public static SchoolBusinessTestHelper getInstance() {
 		return INSTANCE;
 	}

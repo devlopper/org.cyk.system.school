@@ -27,5 +27,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	@Transient protected Collection<DETAIL> details = new ArrayList<>();
 	
 	public abstract LEVEL getLevel();
+	
+	public static final String FIELD_STUDENT = "student";
 
 }

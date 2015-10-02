@@ -49,4 +49,11 @@ public class ClassroomSessionDivision extends AbstractIdentifiable implements Se
 		return timeDivisionType.getUiString();
 	}
 	
+	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
+	public static final String FIELD_PERIOD = "period";
+	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
+	public static final String FIELD_DURATION = "duration";
+	public static final String FIELD_COEFFICIENT = "coefficient";
+	public static final String FIELD_RESULTS = "results";
+	
 }

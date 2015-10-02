@@ -20,20 +20,20 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
-        registerNamedQuery(readByClassroomSession, _select().where("classroomSession"));
-        registerNamedQuery(readByStudentByClassroomSession, _select().where("student").and("classroomSession"));
-        registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn("classroomSession"));
+        registerNamedQuery(readByClassroomSession, _select().where(StudentClassroomSession.FIELD_CLASSROOMSESSION));
+        registerNamedQuery(readByStudentByClassroomSession, _select().where(StudentClassroomSession.FIELD_STUDENT).and(StudentClassroomSession.FIELD_CLASSROOMSESSION));
+        registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(StudentClassroomSession.FIELD_CLASSROOMSESSION));
     }
     
 	@Override
 	public Collection<StudentClassroomSession> readByClassroomSession(ClassroomSession classroomSession) {
-		return namedQuery(readByClassroomSession).parameter("classroomSession", classroomSession).resultMany();
+		return namedQuery(readByClassroomSession).parameter(StudentClassroomSession.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
 	}
 
 	@Override
 	public StudentClassroomSession readByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return namedQuery(readByStudentByClassroomSession).
-				parameter("student", student).parameter("classroomSession", classroomSession)
+				parameter(StudentClassroomSession.FIELD_STUDENT, student).parameter(StudentClassroomSession.FIELD_CLASSROOMSESSION, classroomSession)
 				.ignoreThrowable(NoResultException.class)
 				.resultOne();
 	}

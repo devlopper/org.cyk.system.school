@@ -35,13 +35,13 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionResultReport;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionResultReportSubjectDetail;
-import org.cyk.system.school.model.subject.EvaluatedStudent;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
-import org.cyk.system.school.persistence.api.subject.SubjectDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 
 @Stateless
 public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
@@ -55,7 +55,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Inject private FileBusiness fileBusiness;
 	
 	@Inject private StudentSubjectDao studentSubjectDao;
-	@Inject private SubjectDao subjectDao; 
+	@Inject private ClassroomSessionDivisionSubjectDao subjectDao; 
 	
 	@Inject 
 	public StudentClassroomSessionDivisionBusinessImpl(StudentClassroomSessionDivisionDao dao) {
@@ -68,7 +68,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		/*
 		 * Data loading
 		 */
-		Collection<EvaluatedStudent> evaluatedStudents = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		
@@ -77,7 +77,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		Collection<EventParticipation> participations = eventParticipationDao.readByEvents(events);
 		Collection<EventMissed> eventMisseds = eventMissedDao.readByEventParticipations(participations);
 		
-		Collection<Subject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		
 		/*
 		 * Data computing
@@ -149,11 +149,11 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				sr.setReport(r);
 				sr.setAppreciation(studentSubject.getResults().getAppreciation());
 				sr.setAverage(studentSubject.getResults().getEvaluationSort().getAverage().getValue().toString());
-				sr.setCoefficient(studentSubject.getSubject().getCoefficient().toString());
-				sr.setAverageCoefficiented(studentSubject.getResults().getEvaluationSort().getAverage().getValue().multiply(studentSubject.getSubject().getCoefficient()).toString());
-				sr.setName(studentSubject.getSubject().getName().getName());
+				sr.setCoefficient(studentSubject.getClassroomSessionDivisionSubject().getCoefficient().toString());
+				sr.setAverageCoefficiented(studentSubject.getResults().getEvaluationSort().getAverage().getValue().multiply(studentSubject.getClassroomSessionDivisionSubject().getCoefficient()).toString());
+				sr.setName(studentSubject.getClassroomSessionDivisionSubject().getSubject().getName());
 				sr.setRank(mathematicsBusiness.format(studentSubject.getResults().getEvaluationSort().getRank()));
-				sr.setTeacherNames(studentSubject.getSubject().getTeacher().getPerson().getNames());
+				sr.setTeacherNames(studentSubject.getClassroomSessionDivisionSubject().getTeacher().getPerson().getNames());
 				r.getSubjects().add(sr);
 			}
 			report.getDataSource().add(r);
@@ -172,7 +172,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	protected WeightedValue weightedValue(StudentSubject detail) {
-		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getSubject().getCoefficient(),Boolean.FALSE);
+		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getClassroomSessionDivisionSubject().getCoefficient(),Boolean.FALSE);
 	}
 
 	@Override
@@ -187,9 +187,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 
 	@Override
 	protected Collection<StudentSubject> readDetails(Collection<ClassroomSessionDivision> levels,Boolean keepDetails) {
-		Collection<Subject> subjects = subjectDao.readByClassroomSessionDivisions(levels);
+		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(levels);
 		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(levels);
-		Collection<EvaluatedStudent> evaluatedStudents = evaluatedStudentDao.readByClassroomSessionDivisions(levels);
+		Collection<StudentSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessionDivisions(levels);
 		
 		studentSubjectBusiness.average(subjects, studentSubjects, evaluatedStudents,keepDetails);
 		
@@ -203,7 +203,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	protected ClassroomSessionDivision level(StudentSubject detail) {
-		return detail.getSubject().getClassroomSessionDivision();
+		return detail.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
 	}
 	
 	@Override

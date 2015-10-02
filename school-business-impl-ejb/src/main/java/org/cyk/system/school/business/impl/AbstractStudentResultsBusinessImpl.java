@@ -30,7 +30,7 @@ import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.Lecture;
-import org.cyk.system.school.persistence.api.subject.EvaluatedStudentDao;
+import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
 
 public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractIdentifiable,RESULT extends AbstractStudentResult<LEVEL,DETAIL>,DAO extends TypedDao<RESULT>,DETAIL> extends AbstractTypedBusinessService<RESULT,DAO> implements AbstractStudentResultsBusiness<LEVEL,RESULT,DETAIL>,Serializable {
@@ -43,7 +43,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	@Inject protected EventBusiness eventBusiness;
 	@Inject protected EventMissedBusiness eventMissedBusiness;
 	
-	@Inject protected EvaluatedStudentDao evaluatedStudentDao;
+	@Inject protected StudentSubjectEvaluationDao evaluatedStudentDao;
 	@Inject protected LectureDao lectureDao;
 	@Inject protected EventParticipationDao eventParticipationDao;
 	@Inject protected EventMissedDao eventMissedDao;
@@ -71,7 +71,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	
 	@Override
 	public void average(Collection<RESULT> results,Collection<DETAIL> details,Boolean keepDetails) {
-		
+		logTrace("Computing average. Results={} Details={} KeepDetails={}", results.size(),details.size(),keepDetails);
 		for(RESULT result : results){
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
@@ -81,6 +81,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 					weightedValues.add(weightedValue(detail));
 				}
 			//computation
+			
 			Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
 			//setting
 			result.getResults().getEvaluationSort().setAverage(average); 

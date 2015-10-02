@@ -29,6 +29,7 @@ public class School extends AbstractIdentifiable implements Serializable {
 		this.nodeInformations = nodeInformations;
 	}
 	
-	
+	public static final String FIELD_OWNED_COMPANY = "ownedCompany";
+	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
 	
 }

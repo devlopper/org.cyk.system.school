@@ -13,26 +13,28 @@ import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
 
 @Getter @Setter @Entity @NoArgsConstructor
-public class StudentSubject extends AbstractStudentResult<Subject,EvaluatedStudent> implements Serializable {
+public class StudentSubject extends AbstractStudentResult<ClassroomSessionDivisionSubject,StudentSubjectEvaluation> implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 	
 	@ManyToOne
-	private Subject subject;
+	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	
-	public StudentSubject(Student student, Subject subject) {
+	public StudentSubject(Student student, ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		super();
 		this.student = student;
-		this.subject = subject;
+		this.classroomSessionDivisionSubject = classroomSessionDivisionSubject;
 	}
 
 	@Override
-	public Subject getLevel() {
-		return subject;
+	public ClassroomSessionDivisionSubject getLevel() {
+		return classroomSessionDivisionSubject;
 	}
 	
 	@Override
 	public String toString() {
-		return student+" "+subject;
+		return student+" "+classroomSessionDivisionSubject;
 	}
+	
+	public static final String FIELD_CLASSROOMSESSIONDIVISIONSUBJECT = "classroomSessionDivisionSubject";
 }

@@ -10,7 +10,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.computation.ArithmeticOperator;
 import org.cyk.utility.common.computation.LogicalOperator;
@@ -19,41 +19,46 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentSubject> impl
 
 	private static final long serialVersionUID = 6306356272165070761L;
 	
-   private String readByStudentBySubject,readBySubject,readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readBySubjects,readByClassroomSessions;
+    private String readByStudentBySubject,readBySubject,readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readBySubjects,readByClassroomSessions;
     
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
-        registerNamedQuery(readByStudentBySubject, _select().where("student").where(LogicalOperator.AND,"subject","subject",ArithmeticOperator.EQ));
-        registerNamedQuery(readBySubject, _select().where("subject"));
-        registerNamedQuery(readByClassroomSessionDivision, _select().where("subject.classroomSessionDivision","classroomSessionDivision"));
-        registerNamedQuery(readByClassroomSession, _select().where("subject.classroomSessionDivision.classroomSession","classroomSession"));
-        registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn("subject.classroomSessionDivision"));
-        registerNamedQuery(readBySubjects, _select().whereIdentifierIn("subject"));
-        registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn("subject.classroomSessionDivision.classroomSession"));
+        registerNamedQuery(readByStudentBySubject, _select().where(StudentSubject.FIELD_STUDENT).where(LogicalOperator.AND,StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT
+        		,StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT,ArithmeticOperator.EQ));
+        registerNamedQuery(readBySubject, _select().where(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT));
+        registerNamedQuery(readByClassroomSessionDivision, _select().where(commonUtils.attributePath(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION)
+        		,ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION));
+        registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION,ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
+        		,ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
+        registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(commonUtils.attributePath(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION)
+        		));
+        registerNamedQuery(readBySubjects, _select().whereIdentifierIn(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT));
+        registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(commonUtils.attributePath(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT
+        		, ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION,ClassroomSessionDivision.FIELD_CLASSROOMSESSION)));
         
     }
     
     @Override
-    public StudentSubject readByStudentBySubject(Student student,Subject subject) {
-        return namedQuery(readByStudentBySubject).parameter("student", student).parameter("subject", subject).ignoreThrowable(NoResultException.class)
+    public StudentSubject readByStudentBySubject(Student student,ClassroomSessionDivisionSubject subject) {
+        return namedQuery(readByStudentBySubject).parameter(StudentSubject.FIELD_STUDENT, student).parameter(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, subject).ignoreThrowable(NoResultException.class)
                 .resultOne();
     }
 
 	@Override
-	public Collection<StudentSubject> readBySubject(Subject subject) {
-		return namedQuery(readBySubject).parameter("subject", subject).resultMany();
+	public Collection<StudentSubject> readBySubject(ClassroomSessionDivisionSubject subject) {
+		return namedQuery(readBySubject).parameter(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, subject).resultMany();
 	}
 
 	@Override
 	public Collection<StudentSubject> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
-		return namedQuery(readByClassroomSessionDivision).parameter("classroomSessionDivision", classroomSessionDivision)
+		return namedQuery(readByClassroomSessionDivision).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION, classroomSessionDivision)
                 .resultMany();
 	}
 
 	@Override
 	public Collection<StudentSubject> readByClassroomSession(ClassroomSession classroomSession) {
-		return namedQuery(readByClassroomSession).parameter("classroomSession", classroomSession).resultMany();
+		return namedQuery(readByClassroomSession).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
 	}
 
 	@Override
@@ -62,7 +67,7 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentSubject> impl
 	}
 
 	@Override
-	public Collection<StudentSubject> readBySubjects(Collection<Subject> subjects) {
+	public Collection<StudentSubject> readBySubjects(Collection<ClassroomSessionDivisionSubject> subjects) {
 		return namedQuery(readBySubjects).parameterIdentifiers(subjects).resultMany();
 	}
 

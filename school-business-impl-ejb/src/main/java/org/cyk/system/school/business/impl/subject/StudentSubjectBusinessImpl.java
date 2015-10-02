@@ -13,14 +13,14 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.subject.EvaluatedStudent;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 
 @Stateless
-public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessImpl<Subject, StudentSubject, StudentSubjectDao, EvaluatedStudent> implements StudentSubjectBusiness,Serializable {
+public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivisionSubject, StudentSubject, StudentSubjectDao, StudentSubjectEvaluation> implements StudentSubjectBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
@@ -32,59 +32,60 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	/**/
 	
 	@Override
-	protected WeightedValue weightedValue(EvaluatedStudent detail) {
-		return new WeightedValue(detail.getValue(), detail.getEvaluation().getType().getCoefficient(), Boolean.TRUE);
+	protected WeightedValue weightedValue(StudentSubjectEvaluation detail) {
+		return new WeightedValue(detail.getValue(), detail.getSubjectEvaluation().getType().getCoefficient()
+				, /*Boolean.TRUE*/ Boolean.TRUE.equals(detail.getSubjectEvaluation().getCoefficientApplied()));
 	}
 
 	@Override
-	protected Student student(EvaluatedStudent detail) {
+	protected Student student(StudentSubjectEvaluation detail) {
 		return detail.getStudentSubject().getStudent();
 	}
 
 	@Override
-	protected Collection<StudentSubject> readResults(Collection<Subject> levels) {
+	protected Collection<StudentSubject> readResults(Collection<ClassroomSessionDivisionSubject> levels) {
 		return dao.readBySubjects(levels); 
 	}
 
 	@Override
-	protected Collection<EvaluatedStudent> readDetails(Collection<Subject> levels,Boolean keepDetails) {
+	protected Collection<StudentSubjectEvaluation> readDetails(Collection<ClassroomSessionDivisionSubject> levels,Boolean keepDetails) {
 		return evaluatedStudentDao.readBySubjects(levels);
 	}
 	 
 	@Override
-	protected Subject level(EvaluatedStudent detail) {
-		return detail.getStudentSubject().getSubject();
+	protected ClassroomSessionDivisionSubject level(StudentSubjectEvaluation detail) {
+		return detail.getStudentSubject().getClassroomSessionDivisionSubject();
 	}
 
 	@Override
-	protected Subject level(StudentSubject result) {
-		return result.getSubject();
+	protected ClassroomSessionDivisionSubject level(StudentSubject result) {
+		return result.getClassroomSessionDivisionSubject();
 	}
 	
 	@Override
-	protected Collection<Lecture> readLectures(Collection<Subject> levels) {
+	protected Collection<Lecture> readLectures(Collection<ClassroomSessionDivisionSubject> levels) {
 		return lectureDao.readBySubjects(levels);
 	}
 
 	@Override
-	protected Subject level(Lecture lecture) {
+	protected ClassroomSessionDivisionSubject level(Lecture lecture) {
 		return lecture.getSubject();
 	}
 	
 	@Override
-	protected IntervalCollection averageIntervalCollection(Subject subject) {
+	protected IntervalCollection averageIntervalCollection(ClassroomSessionDivisionSubject subject) {
 		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentSubjectAverageScale();
 	}
 	
 	/**/
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public Collection<StudentSubject> findBySubject(Subject subject) {
+	public Collection<StudentSubject> findBySubject(ClassroomSessionDivisionSubject subject) {
 		return dao.readBySubject(subject);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public StudentSubject findByStudentBySubject(Student student,Subject subject) {
+	public StudentSubject findByStudentBySubject(Student student,ClassroomSessionDivisionSubject subject) {
 		return dao.readByStudentBySubject(student, subject);
 	}
 	 

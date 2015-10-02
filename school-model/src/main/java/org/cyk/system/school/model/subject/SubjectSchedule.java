@@ -17,7 +17,7 @@ public class SubjectSchedule extends AbstractIdentifiable implements Serializabl
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne private Subject subject;
+	@ManyToOne private ClassroomSessionDivisionSubject subject;
 	
 	@OneToOne private Schedule schedule;
 		

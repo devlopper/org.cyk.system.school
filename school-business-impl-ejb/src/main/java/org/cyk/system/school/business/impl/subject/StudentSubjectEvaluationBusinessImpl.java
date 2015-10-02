@@ -6,32 +6,29 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
-import org.cyk.system.school.business.api.subject.EvaluatedStudentBusiness;
+import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.subject.EvaluatedStudent;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Subject;
-import org.cyk.system.school.persistence.api.subject.EvaluatedStudentDao;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 
-public class EvaluatedStudentBusinessImpl extends AbstractTypedBusinessService<EvaluatedStudent, EvaluatedStudentDao> implements EvaluatedStudentBusiness,Serializable {
+public class StudentSubjectEvaluationBusinessImpl extends AbstractTypedBusinessService<StudentSubjectEvaluation, StudentSubjectEvaluationDao> implements StudentSubjectEvaluationBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	//@Inject private MathematicsBusiness mathematicsBusiness;
-	//@Inject private SchoolBusinessLayer schoolBusinessLayer;
-	
 	@Inject
-	public EvaluatedStudentBusinessImpl(EvaluatedStudentDao dao) {
+	public StudentSubjectEvaluationBusinessImpl(StudentSubjectEvaluationDao dao) {
 		super(dao); 
 	}
 
 	@Override
-	public Collection<EvaluatedStudent> find(StudentSubject studentSubject) {
+	public Collection<StudentSubjectEvaluation> find(StudentSubject studentSubject) {
 		return dao.readByStudentSubject(studentSubject);
 	}
 	
 	@Override
-	public Collection<EvaluatedStudent> findBySubject(Subject subject) {
+	public Collection<StudentSubjectEvaluation> findBySubject(ClassroomSessionDivisionSubject subject) {
 		return dao.readBySubject(subject);
 	}
 	/*
@@ -46,7 +43,7 @@ public class EvaluatedStudentBusinessImpl extends AbstractTypedBusinessService<E
 	*/
 
 	@Override
-	public Collection<EvaluatedStudent> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
+	public Collection<StudentSubjectEvaluation> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByClassroomSessionDivision(classroomSessionDivision);
 	}
 

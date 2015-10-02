@@ -1,14 +1,16 @@
-package org.cyk.system.school.business.impl.integration;
+package org.cyk.system.school.business.impl.iesa;
 
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
+import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
+import org.cyk.system.school.business.impl.integration.IesaFakedDataProducer;
 import org.cyk.utility.test.Transaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 
-public class MarksBusinessIT extends AbstractBusinessIT {
+public class RegistrationBusinessIT extends AbstractBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
  

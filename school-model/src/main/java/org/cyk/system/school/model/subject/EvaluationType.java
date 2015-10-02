@@ -1,41 +1,23 @@
 package org.cyk.system.school.model.subject;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.AbstractEnumeration;
 
-@Getter @Setter @Entity @NoArgsConstructor
-public class EvaluationType extends AbstractIdentifiable implements Serializable {
-
-	private static final long serialVersionUID = 2742833783679362737L;
-
-	@ManyToOne private Subject subject;
+@Entity @Getter @Setter
+public class EvaluationType extends AbstractEnumeration implements Serializable{
 	
-	@ManyToOne private EvaluationTypeName name;
+	private static final long serialVersionUID = 374208919427476791L;
 	
-	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE)
-	private BigDecimal coefficient;
-	
-	@Column(precision=COEFFICIENT_PRECISION*2,scale=FLOAT_SCALE)
-	private BigDecimal maximumValue;
+	public EvaluationType() {}
 
-	public EvaluationType(Subject subject, EvaluationTypeName name,BigDecimal coefficient, BigDecimal maximumValue) {
-		super();
-		this.subject = subject;
-		this.name = name;
-		this.coefficient = coefficient;
-		this.maximumValue = maximumValue;
+	public EvaluationType(String code,String name, String abbreviation) {
+		super(code,name, abbreviation,null);
 	}
-	
-	
 	
 }

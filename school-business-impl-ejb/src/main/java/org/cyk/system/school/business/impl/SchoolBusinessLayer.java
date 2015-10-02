@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
@@ -25,10 +26,10 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelName;
+import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.system.school.model.subject.EvaluationType;
-import org.cyk.system.school.model.subject.EvaluationTypeName;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Subject;
-import org.cyk.system.school.model.subject.SubjectName;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 
@@ -44,8 +45,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private StudentBusiness studentBusiness;
 	
-	@Getter private AverageComputationListener averageComputationListener;
-	@Getter private Script averageComputationScript;
+	@Getter @Setter private AverageComputationListener averageComputationListener;
+	@Getter @Setter private Script averageComputationScript;
 	
 	@Override
 	protected void initialisation() {
@@ -188,9 +189,9 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		
 	}
 	    
-    protected EvaluationType evaluationType(String name, String coefficient,String maximumValue){
-    	EvaluationType evaluationType = new EvaluationType();
-    	evaluationType.setName(new EvaluationTypeName(name, name, name));
+    protected SubjectEvaluationType evaluationType(String name, String coefficient,String maximumValue){
+    	SubjectEvaluationType evaluationType = new SubjectEvaluationType();
+    	evaluationType.setName(new EvaluationType(name, name, name));
     	evaluationType.setCoefficient(new BigDecimal(coefficient));
     	evaluationType.setMaximumValue(new BigDecimal(maximumValue));
     	create(evaluationType.getName());
@@ -198,10 +199,10 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     	return evaluationType;
     }
     
-    protected Subject subject(ClassroomSessionDivision classroomSessionDivision,SubjectName name, String coefficient,Teacher teacher){
-    	Subject subject = new Subject();
+    protected ClassroomSessionDivisionSubject subject(ClassroomSessionDivision classroomSessionDivision,Subject name, String coefficient,Teacher teacher){
+    	ClassroomSessionDivisionSubject subject = new ClassroomSessionDivisionSubject();
     	subject.setClassroomSessionDivision(classroomSessionDivision);
-    	subject.setName(name);
+    	//subject.setName(name);
     	subject.setCoefficient(new BigDecimal(coefficient));
     	subject.setTeacher(teacher);
     	create(subject);

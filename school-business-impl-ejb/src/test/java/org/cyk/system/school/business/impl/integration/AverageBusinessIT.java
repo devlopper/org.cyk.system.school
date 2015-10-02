@@ -26,9 +26,9 @@ import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.subject.EvaluationBusiness;
+import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
-import org.cyk.system.school.business.api.subject.SubjectBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
@@ -37,12 +37,12 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionResultReport;
-import org.cyk.system.school.model.subject.EvaluatedStudent;
-import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.EvaluationType;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Assert;
@@ -61,8 +61,8 @@ public class AverageBusinessIT extends AbstractBusinessIT {
     @Inject private StudentSubjectBusiness studentSubjectBusiness;
     @Inject private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
     @Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
-    @Inject private EvaluationBusiness evaluationBusiness;
-    @Inject private SubjectBusiness subjectBusiness;
+    @Inject private SubjectEvaluationBusiness evaluationBusiness;
+    @Inject private ClassroomSessionDivisionSubjectBusiness subjectBusiness;
     @Inject private ClassroomSessionBusiness classroomSessionBusiness;
     @Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
     
@@ -92,11 +92,11 @@ public class AverageBusinessIT extends AbstractBusinessIT {
     	return student;
     }
         
-    private Evaluation evaluate(Subject subject,EvaluationType type, Object[] objects){
-    	Evaluation evaluation = new Evaluation();
-    	evaluation.setSubject(subject);
-    	evaluation.setType(type);
-    	evaluation.setEvaluatedStudents(new ArrayList<EvaluatedStudent>());
+    private SubjectEvaluation evaluate(ClassroomSessionDivisionSubject subject,SubjectEvaluationType type, Object[] objects){
+    	SubjectEvaluation evaluation = new SubjectEvaluation();
+    	//evaluation.setSubject(subject);
+    	//evaluation.setType(type);
+    	//evaluation.setEvaluatedStudents(new ArrayList<StudentSubjectEvaluation>());
     	for(int i=0;i<objects.length;i=i+2){
     		Student student = (Student)objects[i];
     		StudentClassroomSession studentClassroomSession = studentClassroomSessionBusiness.finddByStudentByClassroomSession(student, subject.getClassroomSessionDivision().getClassroomSession());
@@ -115,14 +115,14 @@ public class AverageBusinessIT extends AbstractBusinessIT {
     			studentSubject = new StudentSubject(student, subject);
     			studentSubjectBusiness.create(studentSubject);		
     		}
-    		evaluation.getEvaluatedStudents().add(new EvaluatedStudent(studentSubject,new BigDecimal((String)objects[i+1])));
+    		//evaluation.getEvaluatedStudents().add(new StudentSubjectEvaluation(studentSubject,new BigDecimal((String)objects[i+1])));
     	}
     	return evaluationBusiness.create(evaluation);
     }
     
-    private void lecture(Subject subject,Integer minutes,Object[] objects){
+    private void lecture(ClassroomSessionDivisionSubject subject,Integer minutes,Object[] objects){
     	Date now = new Date();
-    	Event event = new Event(null, null, subject.getName().getName(), null, new Period(now, DateUtils.addMinutes(now, minutes)));
+    	Event event = new Event(null, null, subject.getSubject().getName(), null, new Period(now, DateUtils.addMinutes(now, minutes)));
     	event.setContactCollection(null);
     	create(event);
     	Lecture lecture = new Lecture(subject,event);
@@ -158,17 +158,17 @@ public class AverageBusinessIT extends AbstractBusinessIT {
     	List<ClassroomSession> classroomSessions = (List<ClassroomSession>) classroomSessionBusiness.find().all();
     	List<ClassroomSessionDivision> classroomSessionDivisions = (List<ClassroomSessionDivision>) classroomSessionDivisionBusiness.find().all();
     	
-    	List<EvaluationType> evts = new ArrayList<>(); 
-    	for(AbstractIdentifiable identifiable : genericBusiness.use(EvaluationType.class).find().all())
-    		evts.add((EvaluationType) identifiable);
-    	List<Subject> csds = (List<Subject>) subjectBusiness.find().all();
+    	List<SubjectEvaluationType> evts = new ArrayList<>(); 
+    	for(AbstractIdentifiable identifiable : genericBusiness.use(SubjectEvaluationType.class).find().all())
+    		evts.add((SubjectEvaluationType) identifiable);
+    	List<ClassroomSessionDivisionSubject> csds = (List<ClassroomSessionDivisionSubject>) subjectBusiness.find().all();
     	
     	ClassroomSession classroomSession = classroomSessions.get(0);
     	ClassroomSessionDivision classroomSessionDivision1=classroomSessionDivisions.get(0),classroomSessionDivision2=classroomSessionDivisions.get(1)
     			,classroomSessionDivision3=classroomSessionDivisions.get(2);
-    	Subject subjectMathsClassroomSessionDivision1=csds.get(0),subjectEnglishClassroomSessionDivision1=csds.get(1),
+    	ClassroomSessionDivisionSubject subjectMathsClassroomSessionDivision1=csds.get(0),subjectEnglishClassroomSessionDivision1=csds.get(1),
     		subjectMathsClassroomSessionDivision2=csds.get(2),subjectEnglishClassroomSessionDivision2=csds.get(3);
-    	EvaluationType interro=evts.get(0),devoir=evts.get(1);
+    	SubjectEvaluationType interro=evts.get(0),devoir=evts.get(1);
     	
     	evaluate(subjectMathsClassroomSessionDivision1,interro, new Object[]{student1, "5",student2, "3"});
     	evaluate(subjectMathsClassroomSessionDivision1,devoir, new Object[]{student1, "9",student2, "13",student3, "10"});
@@ -235,7 +235,7 @@ public class AverageBusinessIT extends AbstractBusinessIT {
 		Assert.assertEquals("Justified - "+student,justified.longValue(),results.getLectureAttendance().getMissedDurationJustified().longValue());
     }
     
-    private void assertStudentSubjectAverage(Subject subject,RankOptions<SortableStudentResults> rankOptions,Object...expecteds){
+    private void assertStudentSubjectAverage(ClassroomSessionDivisionSubject subject,RankOptions<SortableStudentResults> rankOptions,Object...expecteds){
     	Collection<StudentSubject> studentSubjects = studentSubjectBusiness.average(Arrays.asList(subject),Boolean.FALSE);
     	studentSubjectBusiness.rank(studentSubjects,rankOptions);
     	for(int i=0;i<expecteds.length;i=i+3){
@@ -275,7 +275,7 @@ public class AverageBusinessIT extends AbstractBusinessIT {
     
     /**/
     
-    private void assertStudentSubjectAttendance(Subject subject,Object...expecteds){
+    private void assertStudentSubjectAttendance(ClassroomSessionDivisionSubject subject,Object...expecteds){
     	Collection<StudentSubject> studentSubjects = studentSubjectBusiness.attendance(Arrays.asList(subject));
     	for(int i=0;i<expecteds.length;i=i+4){
     		Student student = (Student) expecteds[i];

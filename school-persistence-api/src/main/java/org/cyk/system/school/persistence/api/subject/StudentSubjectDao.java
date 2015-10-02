@@ -7,13 +7,13 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 
 public interface StudentSubjectDao extends TypedDao<StudentSubject> {
 
-	StudentSubject readByStudentBySubject(Student student, Subject subject);
+	StudentSubject readByStudentBySubject(Student student, ClassroomSessionDivisionSubject subject);
 
-	Collection<StudentSubject> readBySubject(Subject subject);
+	Collection<StudentSubject> readBySubject(ClassroomSessionDivisionSubject subject);
 	
 	Collection<StudentSubject> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 
@@ -22,7 +22,7 @@ public interface StudentSubjectDao extends TypedDao<StudentSubject> {
 
 	Collection<StudentSubject> readByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions);
 
-	Collection<StudentSubject> readBySubjects(Collection<Subject> subjects);
+	Collection<StudentSubject> readBySubjects(Collection<ClassroomSessionDivisionSubject> subjects);
 
 	Collection<StudentSubject> readByClassroomSessions(Collection<ClassroomSession> levels);
 	

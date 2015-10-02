@@ -21,13 +21,11 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne
-	private ClassroomSessionDivision classroomSessionDivision;
+	@ManyToOne private ClassroomSessionDivision classroomSessionDivision;
 	
 	/**/
 	
-	@Lob
-	@Basic(fetch=FetchType.LAZY)
+	@Lob @Basic(fetch=FetchType.LAZY)
 	private byte[] resultsReport;
 	
 	public StudentClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision) {
@@ -41,5 +39,6 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 		return classroomSessionDivision;
 	}
 	
+	public static final String FIELD_CLASSROOMSESSIONDIVISION = "classroomSessionDivision";
 	
 }
