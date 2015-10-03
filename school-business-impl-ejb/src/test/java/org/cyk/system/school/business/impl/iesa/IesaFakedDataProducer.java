@@ -1,4 +1,4 @@
-package org.cyk.system.school.business.impl.integration;
+package org.cyk.system.school.business.impl.iesa;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
