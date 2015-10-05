@@ -33,8 +33,8 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionResultReport;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionResultReportSubjectDetail;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -63,8 +63,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override 
-	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionResultReport> resultsReportByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean print) {
-		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionResultReport> report = new ReportBasedOnTemplateFile<>();
+	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> resultsReportByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean print) {
+		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = new ReportBasedOnTemplateFile<>();
 		/*
 		 * Data loading
 		 */
@@ -100,10 +100,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		return report;
 	}
 	
-	private void resultsReport(ReportBasedOnTemplateFile<StudentClassroomSessionDivisionResultReport> report,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Boolean print) {
-		
+	private void resultsReport(ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Boolean print) {
+		/*
 		for(StudentClassroomSessionDivision s : studentClassroomSessionDivisions){
-			StudentClassroomSessionDivisionResultReport r = new StudentClassroomSessionDivisionResultReport();
+			StudentClassroomSessionDivisionReport r = new StudentClassroomSessionDivisionReport();
 			ClassroomSessionDivision csd = s.getClassroomSessionDivision();
 			ClassroomSession cs = s.getClassroomSessionDivision().getClassroomSession();
 			AcademicSession as = s.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
@@ -119,7 +119,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			r.setClassroomSessionAverageLowest(results.getAverageLowest().toString());
 			r.setDateOfBirth(timeBusiness.formatDate(s.getStudent().getPerson().getBirthDate()));
 			r.setFooter("Infos sur contacts ici");
-			r.setGovernmentMinistryInfos(/*cs.getLevelTimeDivision().getLevel().getName().getStudentClassroomSessionDivisionResultsReportHeadRight()*/"!!! NOT SET !!!");
+			
 			r.setNames(s.getStudent().getPerson().getNames());
 			r.setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
 			r.setOrderNumber(s.getStudent().getRegistration().getCode());
@@ -145,7 +145,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			r.setTotalMissedHoursJustified((s.getResults().getLectureAttendance().getMissedDurationJustified()/DateUtils.MILLIS_PER_HOUR)+"");
 			
 			for(StudentSubject studentSubject : s.getDetails()){
-				StudentClassroomSessionDivisionResultReportSubjectDetail sr = new StudentClassroomSessionDivisionResultReportSubjectDetail();
+				StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport();
 				sr.setReport(r);
 				sr.setAppreciation(studentSubject.getResults().getAppreciation());
 				sr.setAverage(studentSubject.getResults().getEvaluationSort().getAverage().getValue().toString());
@@ -158,12 +158,13 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			}
 			report.getDataSource().add(r);
 		}
+		*/
 		report.setTemplateFile(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionResultsReportFile());
 		report.setFileExtension("pdf");
 		resultsReport(report, print);
 	}
 		
-	private void resultsReport(ReportBasedOnTemplateFile<StudentClassroomSessionDivisionResultReport> aReport,Boolean print) {
+	private void resultsReport(ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> aReport,Boolean print) {
 		String fileName = /*languageBusiness.findText("school.student.results.report")*/"StudReport"+" "+System.currentTimeMillis();
 		aReport.setFileName(fileName);
 		//aReport.setTemplateFile(aReport.getDataSource().iterator().next().gets);

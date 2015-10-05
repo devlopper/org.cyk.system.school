@@ -42,12 +42,14 @@ public class ReportCardBusinessIT extends AbstractBusinessIT {
     	, new ClassroomSessionDivisionSubject[]{dataProducer.getSubjectEnglishLanguage(),dataProducer.getSubjectFrench(),dataProducer.getSubjectMathematics()
     			,dataProducer.getSubjectPhysics(),dataProducer.getSubjectChemistry()}); 
     	
-    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameTest1(), new String[][]{
-    		{"STUD1","60","60","2"},{"STUD2","90","90","1"},{"STUD3","40","40","4"},{"STUD4","45","45","3"},{"STUD5","20","20","5"}
-    	});
-    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameTest2(), new String[][]{
-    		{"STUD1","50","55","3"},{"STUD2","30","60","1"},{"STUD3","60","50","4"},{"STUD4","45","45","5"},{"STUD5","95","57.5","2"}
-    	});
+    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameTest1(), 
+    			new String[][]{{"STUD1","60","60","2"},{"STUD2","90","90","1"},{"STUD3","40","40","4"},{"STUD4","45","45","3"},{"STUD5","20","20","5"}});
+    	
+    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameTest2(), 
+    			new String[][]{{"STUD1","50","55","3"},{"STUD2","30","60","1"},{"STUD3","60","50","4"},{"STUD4","45","45","5"},{"STUD5","95","57.5","2"}});
+    	
+    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameExam(), 
+    			new String[][]{{"STUD1","70","65.5","2"},{"STUD2","60","60","3"},{"STUD3","40","43","5"},{"STUD4","80","69.5","1"},{"STUD5","55","55.75","4"}});
     }
     
     
