@@ -9,35 +9,44 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
+import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.party.person.ActorReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
-import org.cyk.utility.common.generator.AbstractGeneratable;
 
 @Getter @Setter @NoArgsConstructor
-public class StudentClassroomSessionDivisionReport extends AbstractGeneratable<StudentClassroomSessionDivisionReport> implements Serializable {
+public class StudentClassroomSessionDivisionReport extends AbstractReportTemplateFile<StudentClassroomSessionDivisionReport> implements Serializable {
 
 	private static final long serialVersionUID = -6025941646465245555L;
 	
-	private String name,totalMissedTime,totalMissedTimeJustified,average,rank,appreciation,appreciationComments,
-		appreciationCommentedBy,totalAverage,totalCoefficient,totalAverageCoefficiented,footer;
+	private String name,totalMissedTime,totalMissedTimeJustified,average,rank,
+		commentedBy,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,classCoordinatorComments,
+		comments,subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
 	private List<String> markTotals = new ArrayList<>();
 	private ClassroomSessionDivisionReport classroomSessionDivision = new ClassroomSessionDivisionReport();
 	
 	private Collection<StudentClassroomSessionDivisionSubjectReport> subjects = new ArrayList<>();
 	private Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects;
-	/*
-	private LabelValueCollection headerInfos = new LabelValueCollection();
-	private LabelValueCollection paymentInfos = new LabelValueCollection();
-	private LabelValueCollection taxInfos = new LabelValueCollection();
-	*/
 	
+	//private List<LabelValueCollectionReport> labelValueCollections = new ArrayList<>();
+	private LabelValueCollectionReport pupilLabelValueCollection,attendanceLabelValueCollection,overallResultlLabelValueCollection
+		,behaviorLabelValueCollection,gradingScaleLabelValueCollection,effortLevelLabelValueCollection,informationLabelValueCollection;
+		
 	private AcademicSessionReport academicSession = new AcademicSessionReport();
 	private ActorReport student = new ActorReport();
 	private ActorReport signer = new ActorReport();
 
 	@Override
 	public void generate() {
+		comments = provider.randomWord(10, 30);
+		subjectsBlockTitle = provider.randomWord(10, 30);
+		commentsBlockTitle = provider.randomWord(10, 30);
+		schoolStampBlockTitle = provider.randomWord(10, 30);
+		
+		
+		academicSession.getCompany().setGenerateImage(Boolean.TRUE);
 		academicSession.generate();
+		student.getPerson().setGenerateImage(Boolean.TRUE);
 		student.generate();
 		signer.getPerson().setGenerateSignatureSpecimen(Boolean.TRUE);
 		signer.generate();
@@ -67,6 +76,18 @@ public class StudentClassroomSessionDivisionReport extends AbstractGeneratable<S
 		
 		for(int i=0;i<3;i++)
 			markTotals.add(positiveFloatNumber(20, 0, 99));
+		
+		pupilLabelValueCollection = randomLabelValueCollection();
+		attendanceLabelValueCollection = randomLabelValueCollection();
+		overallResultlLabelValueCollection = randomLabelValueCollection();
+		behaviorLabelValueCollection = randomLabelValueCollection();
+		gradingScaleLabelValueCollection = randomLabelValueCollection();
+		effortLevelLabelValueCollection = randomLabelValueCollection();
+		informationLabelValueCollection = randomLabelValueCollection();
 	}
+	/*
+	public LabelValueCollectionReport getLabelValueCollectionByIndex(Integer index){
+		return labelValueCollections.get(index);
+	}*/
 
 }
