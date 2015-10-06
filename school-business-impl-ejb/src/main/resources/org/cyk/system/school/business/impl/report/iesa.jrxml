@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="105"/>
+	<property name="ireport.y" value="23"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -219,22 +219,22 @@
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{pupilLabelValueCollection}.getCollection())]]></dataSourceExpression>
 						</datasetRun>
 						<jr:column width="65" uuid="d486f9b0-675b-4e4e-ba2b-4fb2c41a735e">
-							<jr:detailCell height="12" rowSpan="1">
+							<jr:detailCell height="18" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="65" height="12" uuid="09b84705-e307-4e6a-b2a0-bcffc1aaabdb"/>
+									<reportElement x="0" y="0" width="65" height="14" uuid="09b84705-e307-4e6a-b2a0-bcffc1aaabdb"/>
 									<textElement>
-										<font fontName="Times New Roman"/>
+										<font fontName="Tin Doghouse"/>
 									</textElement>
 									<textFieldExpression><![CDATA[$F{label}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="90" uuid="9f81b8f3-735f-4452-8ba7-80f2f9b41974">
-							<jr:detailCell height="12" rowSpan="1">
+							<jr:detailCell height="18" rowSpan="1">
 								<textField>
 									<reportElement x="0" y="0" width="90" height="12" uuid="fce6d6af-3c36-4ce8-8caf-c432e71c0410"/>
 									<textElement>
-										<font fontName="Batang"/>
+										<font fontName="Agency FB"/>
 									</textElement>
 									<textFieldExpression><![CDATA[$F{value}]]></textFieldExpression>
 								</textField>
