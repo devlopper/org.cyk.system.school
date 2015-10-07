@@ -18,15 +18,15 @@ public class StudentClassroomSessionDivisionSubjectReport extends AbstractGenera
 
 	private static final long serialVersionUID = 7672451415743549818L;
 
-	private StudentClassroomSessionDivisionReport studentClassroomSessionDivision;
+	private AbstractStudentClassroomSessionDivisionReport studentClassroomSessionDivision;
 	private ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject;
 	
-	private String name,average,coefficient,averageCoefficiented,rank;
+	private String average,averageCoefficiented,rank;
 	private IntervalReport averageScale = new IntervalReport();
 	private List<String> marks = new ArrayList<>();
 	private ActorReport teacher = new ActorReport();
 	
-	public StudentClassroomSessionDivisionSubjectReport(StudentClassroomSessionDivisionReport studentClassroomSessionDivision,ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject) {
+	public StudentClassroomSessionDivisionSubjectReport(AbstractStudentClassroomSessionDivisionReport studentClassroomSessionDivision,ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject) {
 		super();
 		this.studentClassroomSessionDivision = studentClassroomSessionDivision;
 		this.classroomSessionDivisionSubject = classroomSessionDivisionSubject;
@@ -34,8 +34,6 @@ public class StudentClassroomSessionDivisionSubjectReport extends AbstractGenera
 	
 	@Override
 	public void generate() {
-		name = provider.randomWord(6, 10);
-		coefficient = positiveFloatNumber(999, 0, 99);
 		average = positiveFloatNumber(999, 0, 99);
 		averageCoefficiented = positiveFloatNumber(999, 0, 99);
 		rank = positiveFloatNumber(999, 0, 99);
@@ -43,11 +41,5 @@ public class StudentClassroomSessionDivisionSubjectReport extends AbstractGenera
 			marks.add(positiveFloatNumber(999, 0, 99));
 		teacher.generate();
 		averageScale.generate();
-	
 	}
-
-
-
-	
-	
 }
