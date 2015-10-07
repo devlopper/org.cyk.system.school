@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="179"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -32,10 +32,10 @@
 	<style name="subjects table td" mode="Opaque" forecolor="#000000" backcolor="#FFFFFF" hAlign="Center" fontName="Times New Roman" fontSize="10"/>
 	<style name="block header" mode="Opaque" forecolor="#FFFFFF" backcolor="#3399FF" hAlign="Center" fontName="Times New Roman">
 		<box>
-			<topPen lineWidth="1.25" lineColor="#0066CC"/>
-			<leftPen lineWidth="1.25" lineColor="#0066CC"/>
-			<bottomPen lineWidth="1.25" lineColor="#0066CC"/>
-			<rightPen lineWidth="1.25" lineColor="#0066CC"/>
+			<topPen lineWidth="1.5" lineColor="#003366"/>
+			<leftPen lineWidth="1.5" lineColor="#003366"/>
+			<bottomPen lineWidth="1.5" lineColor="#003366"/>
+			<rightPen lineWidth="1.5" lineColor="#003366"/>
 		</box>
 	</style>
 	<style name="title" mode="Opaque" forecolor="#FFFFFF" backcolor="#3399FF" fontName="Times New Roman"/>
@@ -87,6 +87,38 @@
 			<fieldDescription><![CDATA[classroomSessionDivisionSubject]]></fieldDescription>
 		</field>
 	</subDataset>
+	<subDataset name="PupilDetailsDataSet" uuid="aa2e9b2a-d015-432d-933b-79346095fbd6">
+		<parameter name="CYK_TEXT_STATIC_FONT_NAME" class="java.lang.String" isForPrompting="false">
+			<parameterDescription><![CDATA[]]></parameterDescription>
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="CYK_TEXT_DYNAMIC_FONT_NAME" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="label" class="java.lang.String">
+			<fieldDescription><![CDATA[label]]></fieldDescription>
+		</field>
+		<field name="value" class="java.lang.String">
+			<fieldDescription><![CDATA[value]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="AttendanceDataset" uuid="0759b528-361f-4cb7-927e-04046622cbc6">
+		<parameter name="CYK_TEXT_STATIC_FONT_NAME" class="java.lang.String" isForPrompting="false">
+			<parameterDescription><![CDATA[]]></parameterDescription>
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="CYK_TEXT_DYNAMIC_FONT_NAME" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="label" class="java.lang.String">
+			<fieldDescription><![CDATA[label]]></fieldDescription>
+		</field>
+		<field name="value" class="java.lang.String">
+			<fieldDescription><![CDATA[value]]></fieldDescription>
+		</field>
+	</subDataset>
 	<subDataset name="LabelValueDataset" uuid="7032dce2-86ec-46c7-9c95-702d82563ed2">
 		<parameter name="CYK_TEXT_STATIC_FONT_NAME" class="java.lang.String" isForPrompting="false"/>
 		<parameter name="CYK_TEXT_DYNAMIC_FONT_NAME" class="java.lang.String"/>
@@ -94,7 +126,6 @@
 			<defaultValueExpression><![CDATA[14]]></defaultValueExpression>
 		</parameter>
 		<parameter name="CYK_TEXT_DYNAMIC_FONT_SIZE" class="java.lang.String"/>
-		<parameter name="CYK_LABEL_VALUE_HEIGHT" class="java.lang.Integer" isForPrompting="false"/>
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
@@ -119,7 +150,6 @@
 	<parameter name="CYK_TEXT_DYNAMIC_FONT_SIZE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["9"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="CYK_LABEL_VALUE_HEIGHT" class="java.lang.Integer" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -237,18 +267,18 @@
 				</textField>
 			</frame>
 		</band>
-		<band height="97">
+		<band height="93">
 			<frame>
-				<reportElement mode="Transparent" x="0" y="0" width="228" height="95" backcolor="#33FFFF" uuid="6b6c63bd-9412-43cd-aff6-b9bdc4d25e8a"/>
+				<reportElement mode="Transparent" x="0" y="0" width="256" height="93" backcolor="#33FFFF" uuid="6b6c63bd-9412-43cd-aff6-b9bdc4d25e8a"/>
 				<textField>
-					<reportElement style="block header" x="0" y="1" width="228" height="14" uuid="97c5bac7-e1c0-4d7b-8629-33858d604173"/>
+					<reportElement style="block header" x="0" y="0" width="256" height="12" uuid="97c5bac7-e1c0-4d7b-8629-33858d604173"/>
 					<textElement markup="styled"/>
 					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{pupilLabelValueCollection}.getName()+"</font>"]]></textFieldExpression>
 				</textField>
 				<componentElement>
-					<reportElement key="table 1" x="68" y="18" width="160" height="76" backcolor="#FF66CC" uuid="711cc9eb-d9e1-40ef-8d1d-c907bf767ba5"/>
+					<reportElement key="table 1" x="81" y="13" width="175" height="80" backcolor="#FF66CC" uuid="711cc9eb-d9e1-40ef-8d1d-c907bf767ba5"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="LabelValueDataset" uuid="8679ee7e-164d-4edc-9a19-719ec8341c5d">
+						<datasetRun subDataset="LabelValueDataset" uuid="eedc0ffc-ec61-4a01-a303-5ddfff31d5f0">
 							<datasetParameter name="CYK_TEXT_STATIC_FONT_NAME">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_STATIC_FONT_NAME}]]></datasetParameterExpression>
 							</datasetParameter>
@@ -261,15 +291,12 @@
 							<datasetParameter name="CYK_TEXT_DYNAMIC_FONT_SIZE">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_DYNAMIC_FONT_SIZE}]]></datasetParameterExpression>
 							</datasetParameter>
-							<datasetParameter name="CYK_LABEL_VALUE_HEIGHT">
-								<datasetParameterExpression><![CDATA[$P{CYK_LABEL_VALUE_HEIGHT}]]></datasetParameterExpression>
-							</datasetParameter>
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{pupilLabelValueCollection}.getCollection())]]></dataSourceExpression>
 						</datasetRun>
-						<jr:column width="81" uuid="d486f9b0-675b-4e4e-ba2b-4fb2c41a735e">
+						<jr:column width="113" uuid="d486f9b0-675b-4e4e-ba2b-4fb2c41a735e">
 							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="81" height="14" uuid="09b84705-e307-4e6a-b2a0-bcffc1aaabdb"/>
+									<reportElement x="0" y="0" width="113" height="14" uuid="09b84705-e307-4e6a-b2a0-bcffc1aaabdb"/>
 									<textElement markup="styled">
 										<font fontName="DejaVu Sans"/>
 									</textElement>
@@ -277,10 +304,10 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="78" uuid="9f81b8f3-735f-4452-8ba7-80f2f9b41974">
+						<jr:column width="39" uuid="9f81b8f3-735f-4452-8ba7-80f2f9b41974">
 							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="78" height="14" uuid="fce6d6af-3c36-4ce8-8caf-c432e71c0410"/>
+									<reportElement x="0" y="0" width="39" height="14" uuid="fce6d6af-3c36-4ce8-8caf-c432e71c0410"/>
 									<textElement markup="styled">
 										<font fontName="DejaVu Sans"/>
 									</textElement>
@@ -292,14 +319,14 @@
 				</componentElement>
 			</frame>
 			<frame>
-				<reportElement mode="Transparent" x="368" y="3" width="164" height="91" backcolor="#9999FF" uuid="bf83ef15-2e50-4240-8be7-a63480bbc3e5"/>
+				<reportElement mode="Transparent" x="368" y="0" width="164" height="91" backcolor="#9999FF" uuid="bf83ef15-2e50-4240-8be7-a63480bbc3e5"/>
 				<textField>
-					<reportElement style="block header" x="0" y="0" width="164" height="14" uuid="b8fc6e14-637d-4b6d-b607-86077c604b2c"/>
+					<reportElement style="block header" x="0" y="0" width="164" height="12" uuid="b8fc6e14-637d-4b6d-b607-86077c604b2c"/>
 					<textElement markup="styled"/>
 					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{attendanceLabelValueCollection}.getName()+"</font>"]]></textFieldExpression>
 				</textField>
 				<componentElement>
-					<reportElement key="table 1" style="table label column" x="0" y="15" width="142" height="20" uuid="51685db0-98f3-436f-bb95-d65fa5a6a3ff"/>
+					<reportElement key="table 1" style="table label column" x="0" y="13" width="142" height="20" uuid="51685db0-98f3-436f-bb95-d65fa5a6a3ff"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="LabelValueDataset" uuid="c28c9ed7-b9d1-4360-8bb7-a7ae0ef46b9c">
 							<datasetParameter name="CYK_TEXT_STATIC_FONT_NAME">
@@ -336,7 +363,7 @@
 				</componentElement>
 			</frame>
 			<image>
-				<reportElement x="2" y="19" width="64" height="70" uuid="1e10220e-5880-4b76-a166-a93abc111a9b"/>
+				<reportElement x="9" y="19" width="64" height="70" uuid="1e10220e-5880-4b76-a166-a93abc111a9b"/>
 				<imageExpression><![CDATA[$F{student}.getPerson().getImage()]]></imageExpression>
 			</image>
 		</band>
@@ -370,12 +397,12 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(0)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="14" height="14" uuid="3672685e-ff14-4dd3-bf0f-8871acf1041c"/>
+									<reportElement style="subjects table td" x="0" y="0" width="14" height="20" uuid="3672685e-ff14-4dd3-bf0f-8871acf1041c"/>
 									<textElement markup="styled">
-										<font size="9" isBold="false"/>
+										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$V{REPORT_COUNT}+"</font>"]]></textFieldExpression>
 								</textField>
@@ -391,14 +418,14 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(1)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="90" height="14" uuid="8ee61231-c414-4fb7-b63e-41beed402b39"/>
+									<reportElement style="subjects table td" x="0" y="0" width="90" height="20" uuid="8ee61231-c414-4fb7-b63e-41beed402b39"/>
 									<textElement textAlignment="Left" markup="styled">
-										<font size="9" isBold="false"/>
+										<font size="9"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +net.sf.jasperreports.engine.util.JRStringUtil.xmlEncode($F{classroomSessionDivisionSubject}.getName())+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getName()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -412,19 +439,17 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(2)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter style="table_td_borders" height="15" rowSpan="1">
+							<jr:columnFooter style="table_td_borders" height="30" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="38" height="14" uuid="11fadfae-ab47-4bc8-bf43-91ecbbb583a9"/>
-									<textElement textAlignment="Center" markup="styled">
-										<font isBold="true"/>
-									</textElement>
+									<reportElement x="0" y="0" width="38" height="30" uuid="11fadfae-ab47-4bc8-bf43-91ecbbb583a9"/>
+									<textElement textAlignment="Center" markup="styled"/>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getMarkTotals().get(0)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnFooter>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="38" height="14" uuid="51bae1b0-69ef-47fa-a12c-f102cd6c2556"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="38" height="20" uuid="51bae1b0-69ef-47fa-a12c-f102cd6c2556"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{marks}.get(0)+"</font>"]]></textFieldExpression>
@@ -441,19 +466,17 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(3)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter style="table_td_borders" height="15" rowSpan="1">
+							<jr:columnFooter style="table_td_borders" height="30" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="38" height="14" uuid="dfa581e5-1bf2-4e76-a467-fb72bf2b2335"/>
-									<textElement textAlignment="Center" markup="styled">
-										<font isBold="true"/>
-									</textElement>
+									<reportElement x="0" y="0" width="38" height="30" uuid="dfa581e5-1bf2-4e76-a467-fb72bf2b2335"/>
+									<textElement textAlignment="Center" markup="styled"/>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getMarkTotals().get(1)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnFooter>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="38" height="14" uuid="13d0013b-2c26-4fa7-8c35-49aa97d5199f"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="38" height="20" uuid="13d0013b-2c26-4fa7-8c35-49aa97d5199f"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{marks}.get(1)+"</font>"]]></textFieldExpression>
@@ -470,19 +493,17 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(4)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter style="table_td_borders" height="15" rowSpan="1">
+							<jr:columnFooter style="table_td_borders" height="30" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="38" height="14" uuid="cc291aab-e625-4cc3-af4e-9708727a399e"/>
-									<textElement textAlignment="Center" markup="styled">
-										<font isBold="true"/>
-									</textElement>
+									<reportElement x="0" y="0" width="38" height="30" uuid="cc291aab-e625-4cc3-af4e-9708727a399e"/>
+									<textElement textAlignment="Center" markup="styled"/>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getMarkTotals().get(2)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnFooter>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="38" height="14" uuid="42cacb33-c900-4c24-a915-698ad1c1f08f"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="38" height="20" uuid="42cacb33-c900-4c24-a915-698ad1c1f08f"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{marks}.get(2)+"</font>"]]></textFieldExpression>
@@ -499,19 +520,17 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(5)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter style="table_td_borders" height="15" rowSpan="1">
+							<jr:columnFooter style="table_td_borders" height="30" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="38" height="14" uuid="a76eaddb-5875-4d30-a90c-f6c68ec1bc37"/>
-									<textElement textAlignment="Center" markup="styled">
-										<font isBold="true"/>
-									</textElement>
+									<reportElement x="0" y="0" width="38" height="30" uuid="a76eaddb-5875-4d30-a90c-f6c68ec1bc37"/>
+									<textElement textAlignment="Center" markup="styled"/>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getTotalAverage()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnFooter>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="38" height="14" uuid="e618a5b4-9a41-416c-b4d1-df1f7f0f8e54"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="38" height="20" uuid="e618a5b4-9a41-416c-b4d1-df1f7f0f8e54"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{average}+"</font>"]]></textFieldExpression>
@@ -528,11 +547,11 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(6)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="24" height="14" uuid="ce859b96-6ebe-4671-817f-f853b0406d0d"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="24" height="20" uuid="ce859b96-6ebe-4671-817f-f853b0406d0d"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{averageScale}.getCode()+"</font>"]]></textFieldExpression>
@@ -549,11 +568,11 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(7)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="24" height="14" uuid="832e772d-5249-4e8d-9e13-6e02e9cac1e2"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="24" height="20" uuid="832e772d-5249-4e8d-9e13-6e02e9cac1e2"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{rank}+"</font>"]]></textFieldExpression>
@@ -570,11 +589,11 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(8)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="24" height="14" uuid="90cf1bcb-ce22-483f-9279-dfe4f4961797"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="24" height="20" uuid="90cf1bcb-ce22-483f-9279-dfe4f4961797"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getNumberOfStudents()+"</font>"]]></textFieldExpression>
@@ -591,11 +610,11 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(9)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="34" height="14" uuid="8826f9a6-57ee-4065-b4f3-9e5f77c33226"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="34" height="20" uuid="8826f9a6-57ee-4065-b4f3-9e5f77c33226"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getHighestAverage()+"</font>"]]></textFieldExpression>
@@ -612,11 +631,11 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(10)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="34" height="14" uuid="a9af4d02-8f4d-4a6f-a248-d97794bb2080"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="34" height="20" uuid="a9af4d02-8f4d-4a6f-a248-d97794bb2080"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getAverage()+"</font>"]]></textFieldExpression>
@@ -633,11 +652,11 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(11)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="59" height="14" uuid="129a9ae8-f330-454b-bdf3-a7d7d316f025"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="59" height="20" uuid="129a9ae8-f330-454b-bdf3-a7d7d316f025"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{averageScale}.getName()+"</font>"]]></textFieldExpression>
@@ -654,11 +673,11 @@
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsTableColumnNames().get(12)+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnHeader>
-							<jr:columnFooter height="15" rowSpan="1"/>
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+							<jr:columnFooter height="30" rowSpan="1"/>
+							<jr:detailCell style="table_td_underline" height="20" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="99" height="14" uuid="b5bc5b8c-4a88-4851-bdeb-00bd274d0585"/>
-									<textElement textAlignment="Center" markup="styled">
+									<reportElement style="subjects table td" x="0" y="0" width="99" height="20" uuid="b5bc5b8c-4a88-4851-bdeb-00bd274d0585"/>
+									<textElement markup="styled">
 										<font size="9"/>
 									</textElement>
 									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{teacher}.getPerson().getTitle()+" "+$F{teacher}.getPerson().getNames()+"</font>"]]></textFieldExpression>
@@ -671,16 +690,16 @@
 		</band>
 		<band height="56">
 			<frame>
-				<reportElement x="86" y="0" width="142" height="52" uuid="3ec0fde6-dfd4-4d8d-bb03-cae95d383f9d"/>
+				<reportElement x="6" y="0" width="133" height="52" uuid="3ec0fde6-dfd4-4d8d-bb03-cae95d383f9d"/>
 				<textField>
-					<reportElement style="block header" x="0" y="0" width="142" height="12" uuid="a4b0b3c4-6d6b-4ba5-aac4-0b901bbd5dd8"/>
+					<reportElement style="block header" x="0" y="0" width="132" height="12" uuid="a4b0b3c4-6d6b-4ba5-aac4-0b901bbd5dd8"/>
 					<textElement markup="styled"/>
 					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{attendanceLabelValueCollection}.getName()+"</font>"]]></textFieldExpression>
 				</textField>
 				<componentElement>
-					<reportElement key="table 1" style="table label column" x="0" y="12" width="142" height="20" uuid="bb3db9cf-5add-4454-819d-7dfcd77d83fa"/>
+					<reportElement key="table 1" style="table label column" x="0" y="13" width="132" height="20" uuid="a716d59b-c66c-412d-b491-ccb76681cf1e"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="LabelValueDataset" uuid="ac0d9372-c94e-4784-bd13-e01a2ba201f5">
+						<datasetRun subDataset="LabelValueDataset" uuid="d8cc8a77-8e1f-429d-a4ab-8dd62bbc4b05">
 							<datasetParameter name="CYK_TEXT_STATIC_FONT_NAME">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_STATIC_FONT_NAME}]]></datasetParameterExpression>
 							</datasetParameter>
@@ -689,10 +708,10 @@
 							</datasetParameter>
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{overallResultlLabelValueCollection}.getCollection())]]></dataSourceExpression>
 						</datasetRun>
-						<jr:column width="166" uuid="963d9a91-9b2c-4fbb-9739-548b72c5831e">
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+						<jr:column width="93" uuid="d3731ca6-e8e9-46ff-b4e0-167bfe1b346f">
+							<jr:detailCell style="table_td_underline" height="19" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="166" height="14" uuid="ebd22194-5221-4d69-989d-617f41cc1278"/>
+									<reportElement x="0" y="0" width="93" height="19" uuid="1d7ad4e8-a1c0-49a2-8a4c-bbfd510c2ee8"/>
 									<textElement markup="styled">
 										<font fontName="Times New Roman"/>
 									</textElement>
@@ -700,58 +719,14 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="23" uuid="02c70011-75d4-4442-ad70-efd1a5e56e7d">
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
+						<jr:column width="39" uuid="3c18324a-7ebc-4d40-b015-2e922dcf8cd8">
+							<jr:detailCell style="table_td_underline" height="19" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="23" height="14" uuid="44cbcff6-009f-426f-a79a-09de6a4adfa6"/>
+									<reportElement x="0" y="0" width="39" height="19" uuid="62ffc6dc-8c18-49fc-a78f-7762166828f8"/>
 									<textElement markup="styled">
 										<font fontName="Batang"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{value}+"</font>"]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-					</jr:table>
-				</componentElement>
-			</frame>
-			<frame>
-				<reportElement x="257" y="0" width="298" height="52" uuid="cd3e47e6-f802-4c2a-ba8b-80ca4e07fbfe"/>
-				<textField>
-					<reportElement style="block header" x="0" y="0" width="142" height="12" uuid="2413016b-250e-46f6-bc91-1a7fb2fc74ac"/>
-					<textElement markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{attendanceLabelValueCollection}.getName()+"</font>"]]></textFieldExpression>
-				</textField>
-				<componentElement>
-					<reportElement key="table 1" style="table label column" x="0" y="12" width="142" height="20" uuid="e310ad24-2198-4d5e-ada3-68b91afb2796"/>
-					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="LabelValueDataset" uuid="122619fc-4e3d-4da1-8bbd-feb45e5efa8e">
-							<datasetParameter name="CYK_TEXT_STATIC_FONT_NAME">
-								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_STATIC_FONT_NAME}]]></datasetParameterExpression>
-							</datasetParameter>
-							<datasetParameter name="CYK_TEXT_DYNAMIC_FONT_NAME">
-								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_DYNAMIC_FONT_NAME}]]></datasetParameterExpression>
-							</datasetParameter>
-							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{behaviorLabelValueCollection}.getCollection())]]></dataSourceExpression>
-						</datasetRun>
-						<jr:column width="166" uuid="e0639a7d-11a4-450b-ba5d-b830a895e8b1">
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="166" height="14" uuid="2599d2cb-db5e-42a5-93d5-bfc252b5df54"/>
-									<textElement markup="styled">
-										<font fontName="Times New Roman"/>
-									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{label}+"</font>"]]></textFieldExpression>
-								</textField>
-							</jr:detailCell>
-						</jr:column>
-						<jr:column width="23" uuid="3131dcc1-a94f-4325-acf8-ca637dc2d71f">
-							<jr:detailCell style="table_td_underline" height="14" rowSpan="1">
-								<textField>
-									<reportElement x="0" y="0" width="23" height="14" uuid="0f443419-b6d7-4c9d-8d13-5618debd0768"/>
-									<textElement markup="styled">
-										<font fontName="Batang"/>
-									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{value}+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{value}+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
