@@ -18,7 +18,7 @@ public class AcademicSessionReport extends AbstractGeneratable<AcademicSessionRe
 	
 	@Override
 	public void generate() {
-		fromDateToDate = "2014-2015";
+		fromDateToDate = "2014/2015 ACADEMIC SESSION";
 		company.generate();
 	}
 	

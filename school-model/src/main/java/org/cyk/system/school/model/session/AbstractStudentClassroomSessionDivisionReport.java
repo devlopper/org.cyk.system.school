@@ -19,8 +19,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 
 	private static final long serialVersionUID = -6025941646465245555L;
 	
-	private String name,totalMissedTime,totalMissedTimeJustified,average,rank,
-		commentedBy,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,classCoordinatorComments,
+	private String name,totalMissedTime,totalMissedTimeJustified,average,rank,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,
 		comments,subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
 	private List<String> markTotals = new ArrayList<>();
 	private ClassroomSessionDivisionReport classroomSessionDivision = new ClassroomSessionDivisionReport();
@@ -30,19 +29,20 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 	private Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects;
 	
 	//private List<LabelValueCollectionReport> labelValueCollections = new ArrayList<>();
-	private LabelValueCollectionReport pupilLabelValueCollection,attendanceLabelValueCollection,overallResultlLabelValueCollection
+	private LabelValueCollectionReport studentLabelValueCollection,attendanceLabelValueCollection,overallResultlLabelValueCollection
 		,behaviorLabelValueCollection,gradingScaleLabelValueCollection,effortLevelLabelValueCollection,informationLabelValueCollection;
 		
 	private AcademicSessionReport academicSession = new AcademicSessionReport();
 	private ActorReport student = new ActorReport();
 	private ActorReport signer = new ActorReport();
+	private ActorReport commentator = new ActorReport();
 
 	@Override
 	public void generate() {
 		comments = provider.randomWord(10, 30);
-		subjectsBlockTitle = provider.randomWord(10, 30);
-		commentsBlockTitle = provider.randomWord(10, 30);
-		schoolStampBlockTitle = provider.randomWord(10, 30);
+		subjectsBlockTitle = "COGNITIVE ASSESSMENT";
+		commentsBlockTitle = "CLASS TEACHER COMMENTS AND SIGNATURE";
+		schoolStampBlockTitle = "SCHOOL STAMP AND SIGNATURE";
 	
 		academicSession.getCompany().setGenerateImage(Boolean.TRUE);
 		academicSession.generate();
@@ -53,9 +53,13 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		student.generate();
 		signer.getPerson().setGenerateSignatureSpecimen(Boolean.TRUE);
 		signer.generate();
+		
+		commentator.getPerson().setGenerateSignatureSpecimen(Boolean.TRUE);
+		commentator.generate();
+		
 		classroomSessionDivision.generate();
 		
-		name = "Report card";
+		name = "THIRD TERM PRIMARY REPORT CARD";
 		totalMissedTime = positiveFloatNumber(999, 0, 99);
 		totalMissedTimeJustified = positiveFloatNumber(999, 0, 99); 
 		totalAverage = positiveFloatNumber(999, 0, 99);
@@ -80,48 +84,55 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		for(int i=0;i<3;i++)
 			markTotals.add(positiveFloatNumber(20, 0, 99));
 		
-		pupilLabelValueCollection = new LabelValueCollectionReport();
-		pupilLabelValueCollection.add("Formname(s)", student.getPerson().getNames());
-		pupilLabelValueCollection.add("Surname", student.getPerson().getSurname());
-		pupilLabelValueCollection.add("Date of birth", student.getPerson().getBirthDate());
-		pupilLabelValueCollection.add("Place of birth", student.getPerson().getBirthLocation());
-		pupilLabelValueCollection.add("Admission No", student.getRegistrationCode());
-		pupilLabelValueCollection.add("Class", classroomSessionDivision.getClassroomSession().getName());
-		pupilLabelValueCollection.add("Gender", student.getPerson().getSex());
+		studentLabelValueCollection = new LabelValueCollectionReport();
+		studentLabelValueCollection.setName("PUPIL'S DETAILS");
+		studentLabelValueCollection.add("Formname(s)", student.getPerson().getNames());
+		studentLabelValueCollection.add("Surname", student.getPerson().getSurname());
+		studentLabelValueCollection.add("Date of birth", student.getPerson().getBirthDate());
+		studentLabelValueCollection.add("Place of birth", student.getPerson().getBirthLocation());
+		studentLabelValueCollection.add("Admission No", student.getRegistrationCode());
+		studentLabelValueCollection.add("Class", classroomSessionDivision.getClassroomSession().getName());
+		studentLabelValueCollection.add("Gender", student.getPerson().getSex());
 		
 		attendanceLabelValueCollection = new LabelValueCollectionReport();
-		attendanceLabelValueCollection.add("Number of times school opened");
-		attendanceLabelValueCollection.add("Number of times present");
-		attendanceLabelValueCollection.add("Number of times absent");
+		attendanceLabelValueCollection.setName("SCHOOL ATTENDANCE");
+		attendanceLabelValueCollection.add("Number of times school opened","999");
+		attendanceLabelValueCollection.add("Number of times present","999");
+		attendanceLabelValueCollection.add("Number of times absent","999");
 		
 		overallResultlLabelValueCollection = new LabelValueCollectionReport();
-		overallResultlLabelValueCollection.add("Average");
-		overallResultlLabelValueCollection.add("Grade");
-		overallResultlLabelValueCollection.add("Rank");
+		overallResultlLabelValueCollection.setName("OVERALL RESULT");
+		overallResultlLabelValueCollection.add("Average","78.15");
+		overallResultlLabelValueCollection.add("Grade","A+");
+		overallResultlLabelValueCollection.add("Rank","24");
 		
 		behaviorLabelValueCollection = new LabelValueCollectionReport();
+		behaviorLabelValueCollection.setName("BEHAVIOUR,STUDY AND WORK HABITS");
 		for(int i=1;i<=12;i++)
 			behaviorLabelValueCollection.add("B"+i);
 		
 		gradingScaleLabelValueCollection = new LabelValueCollectionReport();
-		gradingScaleLabelValueCollection.add("A+", "");
-		gradingScaleLabelValueCollection.add("A", "");
-		gradingScaleLabelValueCollection.add("B+", "");
-		gradingScaleLabelValueCollection.add("B", "");
-		gradingScaleLabelValueCollection.add("C+", "");
-		gradingScaleLabelValueCollection.add("C", "");
-		gradingScaleLabelValueCollection.add("E", "");
+		gradingScaleLabelValueCollection.setName("GRADING SCALE");
+		gradingScaleLabelValueCollection.add("A+", "90 - 100 Excellent");
+		gradingScaleLabelValueCollection.add("A",  "80 - 89  Very Good");
+		gradingScaleLabelValueCollection.add("B+", "70 - 79  Good");
+		gradingScaleLabelValueCollection.add("B",  "60 - 69  Fair");
+		gradingScaleLabelValueCollection.add("C+", "55 - 59  Satisfactory");
+		gradingScaleLabelValueCollection.add("C",  "50 - 54  Barely satisfactory");
+		gradingScaleLabelValueCollection.add("E",  " 0 - 49  Fail");
 		
 		effortLevelLabelValueCollection = new LabelValueCollectionReport();
+		effortLevelLabelValueCollection.setName("EFFORT LEVELS");
 		for(int i=1;i<=5;i++)
-			effortLevelLabelValueCollection.add("E"+i);
+			effortLevelLabelValueCollection.add("E"+i,provider.randomWord(10, 20));
 		
 		informationLabelValueCollection = new LabelValueCollectionReport();
-		informationLabelValueCollection.add("Annual average");
-		informationLabelValueCollection.add("Annual grade");
-		informationLabelValueCollection.add("Annual rank");
-		informationLabelValueCollection.add("Promotion information");
-		informationLabelValueCollection.add("Next academic year");
+		informationLabelValueCollection.setName("HOME/SCHOOL COMMUNICATIONS");
+		informationLabelValueCollection.add("Annual average","90");
+		informationLabelValueCollection.add("Annual grade","B+");
+		informationLabelValueCollection.add("Annual rank","25");
+		informationLabelValueCollection.add("Promotion information","PROMOTED");
+		informationLabelValueCollection.add("Next academic year","7Th SEPTEMBER 2015");
 		
 		subjectsTableColumnNames.add("No.");
 		subjectsTableColumnNames.add("SUBJECTS");
