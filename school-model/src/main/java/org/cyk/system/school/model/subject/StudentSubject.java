@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,7 @@ public class StudentSubject extends AbstractStudentResult<ClassroomSessionDivisi
 
 	private static final long serialVersionUID = 2742833783679362737L;
 	
-	@ManyToOne
-	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
+	@ManyToOne @NotNull private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	
 	public StudentSubject(Student student, ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		super();

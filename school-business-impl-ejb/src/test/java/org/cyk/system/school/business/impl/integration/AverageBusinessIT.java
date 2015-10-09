@@ -216,7 +216,7 @@ public class AverageBusinessIT extends AbstractBusinessIT {
         assertStudentClassroomSessionDivisionAttendance(classroomSessionDivision1,new Object[]{student1,165l,45l,0l,student2,180l,30l,0l,student3,150l,60l,0l});
         assertStudentClassroomSessionDivisionAttendance(classroomSessionDivision2,new Object[]{student1,240l,60l,0l,student2,225l,75l,0l,student3,300l,0l,0l});
         
-        ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = studentClassroomSessionDivisionBusiness.resultsReportByClassroomSessionDivisions(
+        ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = studentClassroomSessionDivisionBusiness.buildReport(
         		Arrays.asList(classroomSessionDivision1,classroomSessionDivision2,classroomSessionDivision3), Boolean.FALSE);
         //reportBusiness.write(new java.io.File("h:\\"), report);
         

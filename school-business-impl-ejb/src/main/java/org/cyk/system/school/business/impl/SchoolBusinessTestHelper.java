@@ -16,13 +16,17 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOpti
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
+import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -38,6 +42,8 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	@Inject private StudentBusiness studentBusiness;
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentSubjectEvaluationBusiness studentSubjectEvaluationBusiness;
+	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
+	//private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
 	@Inject private SubjectEvaluationTypeBusiness evaluationTypeBusiness;
 	
@@ -98,6 +104,14 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	}
 	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName,String[][] details){
 		evaluateStudents(subject, evaluationTypeName, coefficientApplied,details);
+	}
+	
+	public void generateStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
+		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> reportBasedOnTemplateFile = studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions, false);
+		
+		//if(Boolean.TRUE.equals(printPos)){
+    		//writeReport(studentClassroomSessionDivisionBusiness.findReport(saleCashRegisterMovement));
+    	//}
 	}
 	
 	/**/

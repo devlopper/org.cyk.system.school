@@ -13,10 +13,13 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 
 @Stateless
@@ -24,9 +27,25 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
+	@Inject private StudentClassroomSessionDivisionDao studentClassroomSessionDivisionDao;
+	
 	@Inject
 	public StudentSubjectBusinessImpl(StudentSubjectDao dao) {
 		super(dao); 
+	}
+	
+	@Override
+	public StudentSubject create(StudentSubject studentSubject) {
+		studentSubject = super.create(studentSubject);
+		logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
+		Student student = studentSubject.getStudent();
+		ClassroomSessionDivision classroomSessionDivision = studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
+		StudentClassroomSessionDivision studentClassroomSessionDivision = studentClassroomSessionDivisionDao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
+		if(studentClassroomSessionDivision==null){
+			studentClassroomSessionDivision = studentClassroomSessionDivisionDao.create(new StudentClassroomSessionDivision(student, classroomSessionDivision));
+			logTrace("Student {} for classroomsession division {}", student,classroomSessionDivision);
+		}
+		return studentSubject;
 	}
 		 
 	/**/

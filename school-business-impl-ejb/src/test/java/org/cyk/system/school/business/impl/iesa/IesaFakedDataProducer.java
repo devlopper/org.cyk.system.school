@@ -12,14 +12,11 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
-import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.session.SchoolBusinessImpl;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -29,10 +26,10 @@ import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.School;
-import org.cyk.system.school.model.subject.SubjectEvaluationType;
-import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.Constant;
 
 @Singleton @Getter
@@ -95,7 +92,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		intervalGradingScaleC = createInterval(intervalCollection,"C", "Good", "60", "69");
 		intervalGradingScaleD = createInterval(intervalCollection,"D", "Satisfactory", "50", "59");
 		intervalGradingScaleE = createInterval(intervalCollection,"E", "Fail", "0", "49"); 
-		commonNodeInformations = new CommonNodeInformations(intervalCollection,createFile("report/model1.jrxml", "model1.jrxml"));
+		commonNodeInformations = new CommonNodeInformations(intervalCollection,createFile("report/iesa.jrxml", "reportcard.jrxml"));
 		
 		//Level names
 		levelNameG1 = createLevelName("Grade 1");
@@ -130,12 +127,16 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     			,new Period(new Date(), new Date()),new BigDecimal("1")));
     	
     	subjectEnglishLanguage = createSubject(classroomSessionDivision1,subjectNameEnglishLanguage,null);
+    	/*
     	subjectFrench = createSubject(classroomSessionDivision1,subjectNameFrench,null);
-    	subjectBiology = createSubject(classroomSessionDivision1,subjectNameBiology,null);
+    	subjectMathematics = createSubject(classroomSessionDivision1,subjectNameMathematics,null);
+    	subjectPhysics = createSubject(classroomSessionDivision1,subjectNamePhysics,null);
     	subjectChemistry = createSubject(classroomSessionDivision1,subjectNameChemistry,null);
-    	subjectGeography = createSubject(classroomSessionDivision1,subjectNameGeography,null);
+    	*/
+    	//subjectBiology = createSubject(classroomSessionDivision1,subjectNameBiology,null);
+    	//subjectGeography = createSubject(classroomSessionDivision1,subjectNameGeography,null);
     	
-    	for(ClassroomSessionDivisionSubject subject : new ClassroomSessionDivisionSubject[]{subjectEnglishLanguage,subjectFrench,subjectBiology,subjectChemistry,subjectGeography}){
+    	for(ClassroomSessionDivisionSubject subject : new ClassroomSessionDivisionSubject[]{subjectEnglishLanguage/*,subjectFrench,subjectBiology,subjectChemistry,subjectGeography*/}){
     		createEvaluationType(subject, evaluationTypeNameTest1,new BigDecimal(".15"));
     		createEvaluationType(subject, evaluationTypeNameTest2,new BigDecimal(".15"));
     		createEvaluationType(subject, evaluationTypeNameExam,new BigDecimal(".7"));

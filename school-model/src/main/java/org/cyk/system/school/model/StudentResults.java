@@ -7,6 +7,7 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
+import javax.persistence.OneToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.system.root.model.AbstractModelElement;
+import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.mathematics.Sort;
 import org.cyk.system.root.model.time.Attendance;
 
@@ -52,6 +54,8 @@ public class StudentResults extends AbstractModelElement implements Serializable
 	@Embedded private Attendance lectureAttendance = new Attendance();
 	
 	private String appreciation;
+	
+	@OneToOne private File report;
 	
 	/**/
 	

@@ -26,6 +26,7 @@ import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusine
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Student;
@@ -62,13 +63,86 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		super(dao); 
 	}
 	
+	private void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		logTrace("Computing Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+		StudentClassroomSessionDivisionReport r = new StudentClassroomSessionDivisionReport();
+		StudentClassroomSessionDivision s = studentClassroomSessionDivision;
+		ClassroomSessionDivision csd = s.getClassroomSessionDivision();
+		ClassroomSession cs = s.getClassroomSessionDivision().getClassroomSession();
+		AcademicSession as = s.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
+		NodeResults results = csd.getResults();
+		
+		r.getAcademicSession().setFromDateToDate(timeBusiness.formatPeriodFromTo(as.getPeriod()));
+		r.setComments(s.getResults().getAppreciation());
+		r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
+		r.setAverage(s.getResults().getEvaluationSort().getAverage().getValue().toString());
+		/*
+		r.setClassroomSession(cs.getUiString());
+		r.setClassroomSessionAverage(results.getAverage().toString());
+		r.setClassroomSessionAverageHighest(results.getAverageHighest().toString());
+		r.setClassroomSessionAverageLowest(results.getAverageLowest().toString());
+		r.setDateOfBirth(timeBusiness.formatDate(s.getStudent().getPerson().getBirthDate()));
+		r.setFooter("Infos sur contacts ici");
+		
+		r.setNames(s.getStudent().getPerson().getNames());
+		r.setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
+		r.setOrderNumber(s.getStudent().getRegistration().getCode());
+		
+		if(s.getStudent().getPerson().getImage()==null)
+			;
+		else
+			r.setPhoto(fileBusiness.findInputStream(s.getStudent().getPerson().getImage()));
+		
+		r.setRank(mathematicsBusiness.format(s.getResults().getEvaluationSort().getRank()));
+		r.setSchoolLogo(fileBusiness.findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
+		
+		r.setSchoolName(as.getSchool().getOwnedCompany().getCompany().getName());
+		r.setSignatureInfos(timeBusiness.formatDate(new Date()));
+		r.setStaffPerson("PersonWhoSign");
+		r.setStaffTitle(languageBusiness.findText("school.report.student.division.results.staff.title"));
+		r.setTitle(languageBusiness.findText("school.report.student.division.results.title",new Object[]{csd.getUiString()}));
+		
+		r.setTotalCoefficient(s.getResults().getEvaluationSort().getAverage().getDivisor().toString());
+		r.setTotalAverageCoefficiented(s.getResults().getEvaluationSort().getAverage().getDividend().toString());
+		
+		r.setTotalMissedHours((s.getResults().getLectureAttendance().getMissedDuration()/DateUtils.MILLIS_PER_HOUR) +"");
+		r.setTotalMissedHoursJustified((s.getResults().getLectureAttendance().getMissedDurationJustified()/DateUtils.MILLIS_PER_HOUR)+"");
+		
+		for(StudentSubject studentSubject : s.getDetails()){
+			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport();
+			sr.setReport(r);
+			sr.setAppreciation(studentSubject.getResults().getAppreciation());
+			sr.setAverage(studentSubject.getResults().getEvaluationSort().getAverage().getValue().toString());
+			sr.setCoefficient(studentSubject.getClassroomSessionDivisionSubject().getCoefficient().toString());
+			sr.setAverageCoefficiented(studentSubject.getResults().getEvaluationSort().getAverage().getValue().multiply(studentSubject.getClassroomSessionDivisionSubject().getCoefficient()).toString());
+			sr.setName(studentSubject.getClassroomSessionDivisionSubject().getSubject().getName());
+			sr.setRank(mathematicsBusiness.format(studentSubject.getResults().getEvaluationSort().getRank()));
+			sr.setTeacherNames(studentSubject.getClassroomSessionDivisionSubject().getTeacher().getPerson().getNames());
+			r.getSubjects().add(sr);
+		}
+		report.getDataSource().add(r);
+		*/
+		
+		SchoolBusinessLayer.getInstance().createReport("markscard", null, r
+				, cs.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionResultsReportFile(), "pdf");
+		
+		StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
+		SchoolBusinessLayer.getInstance().persistStudentClassroomSessionDivisionReport(studentClassroomSessionDivision, report); 
+	}
+	
+	@Override
+	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		return null;
+	}
+	
 	@Override 
-	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> resultsReportByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean print) {
+	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean print) {
+		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision", classroomSessionDivisions.size());
 		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = new ReportBasedOnTemplateFile<>();
 		/*
 		 * Data loading
 		 */
-		Collection<StudentSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentSubjectEvaluation> studentSubjectEvaluations = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		
@@ -78,11 +152,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		Collection<EventMissed> eventMisseds = eventMissedDao.readByEventParticipations(participations);
 		
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
-		
+		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={} , Lecture={}"
+				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size(),lectures.size());
 		/*
 		 * Data computing
 		 */
-		studentSubjectBusiness.average(subjects, studentSubjects, evaluatedStudents, Boolean.FALSE);
+		studentSubjectBusiness.average(subjects, studentSubjects, studentSubjectEvaluations, Boolean.FALSE);
 		average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, Boolean.FALSE);
 		
 		attendance(classroomSessionDivisions, studentClassroomSessionDivisions, lectures, participations, eventMisseds);
@@ -159,6 +234,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			report.getDataSource().add(r);
 		}
 		*/
+		
 		report.setTemplateFile(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionResultsReportFile());
 		report.setFileExtension("pdf");
 		resultsReport(report, print);

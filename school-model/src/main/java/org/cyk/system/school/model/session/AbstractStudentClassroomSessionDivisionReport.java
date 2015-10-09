@@ -102,14 +102,24 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		
 		overallResultlLabelValueCollection = new LabelValueCollectionReport();
 		overallResultlLabelValueCollection.setName("OVERALL RESULT");
-		overallResultlLabelValueCollection.add("Average","78.15");
-		overallResultlLabelValueCollection.add("Grade","A+");
-		overallResultlLabelValueCollection.add("Rank","24");
+		overallResultlLabelValueCollection.add("AVERAGE","78.15");
+		overallResultlLabelValueCollection.add("GRADE","A+");
+		overallResultlLabelValueCollection.add("RANK","24");
 		
 		behaviorLabelValueCollection = new LabelValueCollectionReport();
 		behaviorLabelValueCollection.setName("BEHAVIOUR,STUDY AND WORK HABITS");
-		for(int i=1;i<=12;i++)
-			behaviorLabelValueCollection.add("B"+i);
+		behaviorLabelValueCollection.add("Respects authority", "4");
+		behaviorLabelValueCollection.add("Works independently and neatly", "2");
+		behaviorLabelValueCollection.add("Completes homework and class work on time", "3");
+		behaviorLabelValueCollection.add("Shows social courtesies", "4");
+		behaviorLabelValueCollection.add("Demonstrates self-control", "3");
+		behaviorLabelValueCollection.add("Takes care of school and others materials", "2");
+		behaviorLabelValueCollection.add("Game/Sport", "4");
+		behaviorLabelValueCollection.add("Handwriting", "3");
+		behaviorLabelValueCollection.add("Drawing/Painting", "4");
+		behaviorLabelValueCollection.add("Punctuality/Regularity", "4");
+		behaviorLabelValueCollection.add("Works cooperatively in groups", "2");
+		behaviorLabelValueCollection.add("Listens and follows directions", "2");
 		
 		gradingScaleLabelValueCollection = new LabelValueCollectionReport();
 		gradingScaleLabelValueCollection.setName("GRADING SCALE");
@@ -123,16 +133,19 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		
 		effortLevelLabelValueCollection = new LabelValueCollectionReport();
 		effortLevelLabelValueCollection.setName("EFFORT LEVELS");
-		for(int i=1;i<=5;i++)
-			effortLevelLabelValueCollection.add("E"+i,provider.randomWord(10, 20));
+		effortLevelLabelValueCollection.add("1", "Has no regard for the observable traits");
+		effortLevelLabelValueCollection.add("2", "Shows minimal regard for the observable traits");
+		effortLevelLabelValueCollection.add("3", "Acceptable level of observable traits");
+		effortLevelLabelValueCollection.add("4", "Maintains high level of observable traits");
+		effortLevelLabelValueCollection.add("5", "Maintains an excellent degree of observable traits");
 		
 		informationLabelValueCollection = new LabelValueCollectionReport();
 		informationLabelValueCollection.setName("HOME/SCHOOL COMMUNICATIONS");
-		informationLabelValueCollection.add("Annual average","90");
-		informationLabelValueCollection.add("Annual grade","B+");
-		informationLabelValueCollection.add("Annual rank","25");
-		informationLabelValueCollection.add("Promotion information","PROMOTED");
-		informationLabelValueCollection.add("Next academic year","7Th SEPTEMBER 2015");
+		informationLabelValueCollection.add("ANNUAL AVERAGE","90");
+		informationLabelValueCollection.add("ANNUAL GRADE","B+");
+		informationLabelValueCollection.add("ANNUAL RANK","25");
+		informationLabelValueCollection.add("PROMOTION INFORMATION","PROMOTED");
+		informationLabelValueCollection.add("NEXT ACADEMIC YEAR","7Th SEPTEMBER 2015");
 		
 		subjectsTableColumnNames.add("No.");
 		subjectsTableColumnNames.add("SUBJECTS");

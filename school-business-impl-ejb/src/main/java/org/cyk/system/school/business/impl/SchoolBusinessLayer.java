@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
@@ -17,19 +18,25 @@ import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.Script;
+import org.cyk.system.root.model.file.report.AbstractReport;
+import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.session.ReportProducer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelName;
-import org.cyk.system.school.model.subject.SubjectEvaluationType;
-import org.cyk.system.school.model.subject.EvaluationType;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 
@@ -39,6 +46,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	private static final long serialVersionUID = -7434478805525552120L;
 	public static final int DEPLOYMENT_ORDER = CompanyBusinessLayer.DEPLOYMENT_ORDER+1;
 	
+	private static SchoolBusinessLayer INSTANCE;
+	
 	//@Inject private TeacherBusiness teacherBusiness;
 	@Inject private FileBusiness fileBusiness;
 	@Inject private CompanyBusiness companyBusiness;
@@ -47,13 +56,32 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Getter @Setter private AverageComputationListener averageComputationListener;
 	@Getter @Setter private Script averageComputationScript;
+	@Getter @Setter private ReportProducer reportProducer = new DefaultReportProducer();
 	
 	@Override
 	protected void initialisation() {
+		INSTANCE = this;
 		super.initialisation();
 		registerResourceBundle("org.cyk.system.school.model.resources.entity",getClass().getClassLoader());
 		registerResourceBundle("org.cyk.system.school.business.message",getClass().getClassLoader());
 		registerResourceBundle("org.cyk.system.school.business.ui",getClass().getClassLoader());
+	}
+	
+	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> createReport(String name,File file,StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport,File template,String fileExtension){
+		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = new ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport>();
+		report.setTitle(name);
+		report.setFileExtension(StringUtils.isBlank(fileExtension)?"pdf":fileExtension);
+		//report.setFileName(RootBusinessLayer.getInstance().buildReportFileName(report) /*pointOfSaleReportName*/);
+		RootBusinessLayer.getInstance().prepareReport(report);
+		
+		if(studentClassroomSessionDivisionReport==null){
+			report.setBytes(file.getBytes());
+		}else{
+			report.getDataSource().add(studentClassroomSessionDivisionReport);
+			report.setTemplateFile(template);
+			reportBusiness.build(report, Boolean.FALSE);
+		}
+		return report;
 	}
 
 	@Override
@@ -227,5 +255,42 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     	*/
     	return levelName;
     }
+    
+    public static SchoolBusinessLayer getInstance() {
+		return INSTANCE;
+	}
+
+	public void persistStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,StudentClassroomSessionDivisionReport report) {
+		// TODO Auto-generated method stub	
+	}
+	
+	public void persistPointOfSale(StudentClassroomSessionDivision sale,StudentClassroomSessionDivisionReport saleReport){
+		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = createReport(pointOfSaleInvoiceReportName+sale.getIdentifier(),
+				sale.getReport(), saleReport,sale.getAccountingPeriod().getPointOfSaleReportFile(),
+				pointOfSaleReportExtension);
+		if(sale.getReport()==null)
+			sale.setReport(new File());
+		
+		persistReport(sale.getReport(), report);
+	}
+	
+	
+	
+	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> createReport(String name,File file,StudentClassroomSessionDivisionReport saleReport,File template,String fileExtension){
+		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = new ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport>();
+		report.setTitle(name);
+		report.setFileExtension(StringUtils.isBlank(fileExtension)?"pdf":fileExtension);
+		//report.setFileName(RootBusinessLayer.getInstance().buildReportFileName(report) /*pointOfSaleReportName*/);
+		RootBusinessLayer.getInstance().prepareReport(report);
+		
+		if(saleReport==null){
+			report.setBytes(file.getBytes());
+		}else{
+			report.getDataSource().add(saleReport);
+			report.setTemplateFile(template);
+			reportBusiness.build(report, Boolean.FALSE);
+		}
+		return report;
+	}
 	
 }

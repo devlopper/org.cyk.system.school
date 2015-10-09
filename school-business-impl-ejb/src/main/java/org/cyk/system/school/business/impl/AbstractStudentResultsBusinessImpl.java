@@ -71,7 +71,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	
 	@Override
 	public void average(Collection<RESULT> results,Collection<DETAIL> details,Boolean keepDetails) {
-		logTrace("Computing average. Results={} Details={} KeepDetails={}", results.size(),details.size(),keepDetails);
+		logTrace("Computing average in module {} . Results={} Details={} KeepDetails={}",getClazz().getName(), results.size(),details.size(),keepDetails);
 		for(RESULT result : results){
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
@@ -81,15 +81,19 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 					weightedValues.add(weightedValue(detail));
 				}
 			//computation
-			
-			Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
-			//setting
-			result.getResults().getEvaluationSort().setAverage(average); 
-			Interval interval = intervalBusiness.findByCollectionByValue(averageIntervalCollection(level(result)),average.getValue(), 2);
-			if(interval==null)
-				;
-			else
-				result.getResults().setAppreciation(interval.getName());
+			//Is there any weighted values
+			if(weightedValues.isEmpty()){
+				logTrace("No weighted values found for {}.  No average will be computed", result);
+			}else{
+				Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
+				//setting
+				result.getResults().getEvaluationSort().setAverage(average); 
+				Interval interval = intervalBusiness.findByCollectionByValue(averageIntervalCollection(level(result)),average.getValue(), 2);
+				if(interval==null)
+					;
+				else
+					result.getResults().setAppreciation(interval.getName());
+			}
 		}
 		
 	}

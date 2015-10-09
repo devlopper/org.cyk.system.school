@@ -20,13 +20,13 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentClassr
 		super.generate();
 		behaviorLabelValueCollection1 = new LabelValueCollectionReport();
 		behaviorLabelValueCollection1.setName("BEHAVIOUR,STUDY AND WORK HABITS");
-		for(int i=1;i<=6;i++)
-			behaviorLabelValueCollection1.add("B"+i);
+		for(int i=0;i<=5;i++)
+			behaviorLabelValueCollection1.getCollection().add(getBehaviorLabelValueCollection().getCollection().get(i));
 		
 		behaviorLabelValueCollection2 = new LabelValueCollectionReport();
 		behaviorLabelValueCollection2.setName("BEHAVIOUR,STUDY AND WORK HABITS");
-		for(int i=1;i<=6;i++)
-			behaviorLabelValueCollection2.add("B"+i);
+		for(int i=6;i<=11;i++)
+			behaviorLabelValueCollection2.getCollection().add(getBehaviorLabelValueCollection().getCollection().get(i));
 	}
 	
 }
