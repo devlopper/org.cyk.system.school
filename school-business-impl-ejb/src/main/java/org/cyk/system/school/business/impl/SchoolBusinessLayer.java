@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
@@ -22,7 +21,6 @@ import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.Script;
-import org.cyk.system.root.model.file.report.AbstractReport;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
@@ -67,23 +65,6 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		registerResourceBundle("org.cyk.system.school.business.ui",getClass().getClassLoader());
 	}
 	
-	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> createReport(String name,File file,StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport,File template,String fileExtension){
-		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = new ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport>();
-		report.setTitle(name);
-		report.setFileExtension(StringUtils.isBlank(fileExtension)?"pdf":fileExtension);
-		//report.setFileName(RootBusinessLayer.getInstance().buildReportFileName(report) /*pointOfSaleReportName*/);
-		RootBusinessLayer.getInstance().prepareReport(report);
-		
-		if(studentClassroomSessionDivisionReport==null){
-			report.setBytes(file.getBytes());
-		}else{
-			report.getDataSource().add(studentClassroomSessionDivisionReport);
-			report.setTemplateFile(template);
-			reportBusiness.build(report, Boolean.FALSE);
-		}
-		return report;
-	}
-
 	@Override
 	protected void persistData() {
 		
@@ -260,37 +241,18 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		return INSTANCE;
 	}
 
-	public void persistStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,StudentClassroomSessionDivisionReport report) {
-		// TODO Auto-generated method stub	
-	}
 	
-	public void persistPointOfSale(StudentClassroomSessionDivision sale,StudentClassroomSessionDivisionReport saleReport){
-		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = createReport(pointOfSaleInvoiceReportName+sale.getIdentifier(),
-				sale.getReport(), saleReport,sale.getAccountingPeriod().getPointOfSaleReportFile(),
-				pointOfSaleReportExtension);
-		if(sale.getReport()==null)
-			sale.setReport(new File());
+	
+	public void persistStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,StudentClassroomSessionDivisionReport reportModel){
+		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = RootBusinessLayer.getInstance().createReport("testname",
+				studentClassroomSessionDivision.getResults().getReport(), reportModel,
+				studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionResultsReportFile(),
+				"pdf");
+		if(studentClassroomSessionDivision.getResults().getReport()==null)
+			studentClassroomSessionDivision.getResults().setReport(new File());
 		
-		persistReport(sale.getReport(), report);
+		RootBusinessLayer.getInstance().persistReport(studentClassroomSessionDivision.getResults().getReport(), report);
 	}
 	
-	
-	
-	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> createReport(String name,File file,StudentClassroomSessionDivisionReport saleReport,File template,String fileExtension){
-		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = new ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport>();
-		report.setTitle(name);
-		report.setFileExtension(StringUtils.isBlank(fileExtension)?"pdf":fileExtension);
-		//report.setFileName(RootBusinessLayer.getInstance().buildReportFileName(report) /*pointOfSaleReportName*/);
-		RootBusinessLayer.getInstance().prepareReport(report);
 		
-		if(saleReport==null){
-			report.setBytes(file.getBytes());
-		}else{
-			report.getDataSource().add(saleReport);
-			report.setTemplateFile(template);
-			reportBusiness.build(report, Boolean.FALSE);
-		}
-		return report;
-	}
-	
 }

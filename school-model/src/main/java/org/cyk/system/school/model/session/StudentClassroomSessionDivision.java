@@ -25,8 +25,8 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 	
 	/**/
 	
-	@Lob @Basic(fetch=FetchType.LAZY)
-	private byte[] resultsReport;
+	//@Lob @Basic(fetch=FetchType.LAZY)
+	//private byte[] resultsReport;
 	
 	public StudentClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision) {
 		super();
