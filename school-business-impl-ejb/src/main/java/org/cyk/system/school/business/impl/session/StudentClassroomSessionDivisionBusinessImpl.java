@@ -15,6 +15,7 @@ import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.jasper.JasperReportBusinessImpl;
 import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
@@ -123,7 +124,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		report.getDataSource().add(r);
 		*/
 		
-		SchoolBusinessLayer.getInstance().createReport("markscard", null, r
+		RootBusinessLayer.getInstance().createReport("markscard", null, r
 				, cs.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionResultsReportFile(), "pdf");
 		
 		StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
@@ -132,7 +133,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return null;
+		return RootBusinessLayer.getInstance().createReport("markscard",
+				studentClassroomSessionDivision.getResults().getReport(), null, null,null);//TODO many receipt print must be handled
 	}
 	
 	@Override 

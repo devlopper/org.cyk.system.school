@@ -110,7 +110,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> reportBasedOnTemplateFile = studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions, false);
 		
 		//if(Boolean.TRUE.equals(printPos)){
-    		//writeReport(studentClassroomSessionDivisionBusiness.findReport(saleCashRegisterMovement));
+    		writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivisionBusiness.findAll().iterator().next()));
     	//}
 	}
 	
