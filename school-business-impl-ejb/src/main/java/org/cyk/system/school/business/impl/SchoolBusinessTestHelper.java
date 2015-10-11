@@ -107,7 +107,9 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	}
 	
 	public void generateStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
-		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> reportBasedOnTemplateFile = studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions, false);
+		System.out.println(studentClassroomSessionDivisionBusiness.findAll().iterator().next().getStudent());
+		debug(studentClassroomSessionDivisionBusiness.findAll().iterator().next().getResults());
+		studentClassroomSessionDivisionBusiness.buildReport(studentClassroomSessionDivisionBusiness.findAll().iterator().next());
 		
 		//if(Boolean.TRUE.equals(printPos)){
     		writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivisionBusiness.findAll().iterator().next()));

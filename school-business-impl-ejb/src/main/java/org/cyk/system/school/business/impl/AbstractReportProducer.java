@@ -27,8 +27,8 @@ public abstract class AbstractReportProducer extends AbstractRootBusinessBean im
 		
 		r.getAcademicSession().setFromDateToDate(timeBusiness.formatPeriodFromTo(as.getPeriod()));
 		r.setComments(s.getResults().getAppreciation());
-		r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
-		r.setAverage(s.getResults().getEvaluationSort().getAverage().getValue().toString());
+		//r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
+		//r.setAverage(s.getResults().getEvaluationSort().getAverage().getValue().toString());
 		
 		/*
 		r.setClassroomSession(cs.getUiString());
