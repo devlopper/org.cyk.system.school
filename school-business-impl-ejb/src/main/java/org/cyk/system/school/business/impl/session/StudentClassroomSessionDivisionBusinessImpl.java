@@ -59,7 +59,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		logTrace("Computing Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
 		StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
-		reportManager.buildBinaryContent(studentClassroomSessionDivision,report
+		reportManager.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
 				,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
 				.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);
 		dao.update(studentClassroomSessionDivision);

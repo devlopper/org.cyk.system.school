@@ -16,7 +16,6 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOpti
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
-import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -26,7 +25,6 @@ import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -107,13 +105,11 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	}
 	
 	public void generateStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
-		System.out.println(studentClassroomSessionDivisionBusiness.findAll().iterator().next().getStudent());
-		debug(studentClassroomSessionDivisionBusiness.findAll().iterator().next().getResults());
 		studentClassroomSessionDivisionBusiness.buildReport(studentClassroomSessionDivisionBusiness.findAll().iterator().next());
 		
-		//if(Boolean.TRUE.equals(printPos)){
+		if(Boolean.TRUE.equals(createFileOnDisk)){
     		writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivisionBusiness.findAll().iterator().next()));
-    	//}
+    	}
 	}
 	
 	/**/

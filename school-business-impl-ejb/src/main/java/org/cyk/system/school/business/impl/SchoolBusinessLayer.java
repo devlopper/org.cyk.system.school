@@ -240,20 +240,5 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     public static SchoolBusinessLayer getInstance() {
 		return INSTANCE;
 	}
-
-	
-	/*
-	public void persistStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,StudentClassroomSessionDivisionReport reportModel){
-		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = RootBusinessLayer.getInstance().createReport("testname",
-				studentClassroomSessionDivision.getResults().getReport(), reportModel,
-				studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionResultsReportFile(),
-				"pdf");
-		if(studentClassroomSessionDivision.getResults().getReport()==null)
-			studentClassroomSessionDivision.getResults().setReport(new File());
-		
-		RootBusinessLayer.getInstance().persistReport(studentClassroomSessionDivision.getResults().getReport(), report);
-	}
-	*/
-	
 		
 }
