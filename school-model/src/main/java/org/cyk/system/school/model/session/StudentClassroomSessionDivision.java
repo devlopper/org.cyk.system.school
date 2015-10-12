@@ -2,10 +2,7 @@ package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import lombok.Getter;
@@ -24,10 +21,7 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 	@ManyToOne private ClassroomSessionDivision classroomSessionDivision;
 	
 	/**/
-	
-	//@Lob @Basic(fetch=FetchType.LAZY)
-	//private byte[] resultsReport;
-	
+		
 	public StudentClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision) {
 		super();
 		this.student = student;
