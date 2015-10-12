@@ -12,7 +12,7 @@ import org.cyk.system.school.model.subject.StudentSubject;
 
 public interface StudentClassroomSessionDivisionBusiness extends AbstractStudentResultsBusiness<ClassroomSessionDivision,StudentClassroomSessionDivision,StudentSubject> {
 
-	//void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
+	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
 	ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
 	
 	ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean print);

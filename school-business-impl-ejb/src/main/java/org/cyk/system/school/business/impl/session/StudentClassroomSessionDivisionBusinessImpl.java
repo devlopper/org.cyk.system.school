@@ -55,17 +55,19 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		super(dao); 
 	}
 	
-	private void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		logTrace("Computing Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());		
+	@Override
+	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		logTrace("Computing Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
 		StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
 		reportManager.buildBinaryContent(studentClassroomSessionDivision,report
 				,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
 				.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);
+		dao.update(studentClassroomSessionDivision);
 	}
 	
 	@Override
 	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return null;
+		return reportManager.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), "ReportCard");
 	}
 	
 	@Override 
@@ -119,6 +121,11 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		aReport.setFileName(fileName);
 		//aReport.setTemplateFile(aReport.getDataSource().iterator().next().gets);
 		reportBusiness.build(aReport, print);
+		/*
+		if(saleCashRegisterMovement.getReport()==null)
+			saleCashRegisterMovement.setReport(new File());
+		RootBusinessLayer.getInstance().persistReport(saleCashRegisterMovement.getReport(), report);
+		*/
 	}
 	
 	@Override

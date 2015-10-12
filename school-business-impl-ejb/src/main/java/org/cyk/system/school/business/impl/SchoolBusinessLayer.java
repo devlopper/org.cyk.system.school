@@ -242,7 +242,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	}
 
 	
-	
+	/*
 	public void persistStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,StudentClassroomSessionDivisionReport reportModel){
 		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = RootBusinessLayer.getInstance().createReport("testname",
 				studentClassroomSessionDivision.getResults().getReport(), reportModel,
@@ -253,6 +253,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		
 		RootBusinessLayer.getInstance().persistReport(studentClassroomSessionDivision.getResults().getReport(), report);
 	}
+	*/
 	
 		
 }
