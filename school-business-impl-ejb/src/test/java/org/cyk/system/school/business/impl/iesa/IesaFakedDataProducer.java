@@ -14,8 +14,10 @@ import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.school.business.impl.AbstractReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -26,6 +28,9 @@ import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.School;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
@@ -112,12 +117,14 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformations);
     	create(school);
     	
-    	AcademicSession academicSession; 
-    	create(academicSession = new AcademicSession(school,new Period(new Date(), new Date())));
+    	rootRandomDataProvider.createActor(Teacher.class, 20);
     	
-    	classroomSessionG1 = create(new ClassroomSession(academicSession, levelTimeDivisionG1, new Period(new Date(), new Date()), null));
-    	classroomSessionG2 = create(new ClassroomSession(academicSession, levelTimeDivisionG2, new Period(new Date(), new Date()), null));
-    	classroomSessionG3 = create(new ClassroomSession(academicSession, levelTimeDivisionG3, new Period(new Date(), new Date()), null));
+    	AcademicSession academicSession; 
+    	create(academicSession = new AcademicSession(school,new Period(new Date(), new Date()),rootRandomDataProvider.oneFromDatabase(Person.class)));
+    	
+    	classroomSessionG1 = create(new ClassroomSession(academicSession, levelTimeDivisionG1, new Period(new Date(), new Date()), rootRandomDataProvider.oneFromDatabase(Teacher.class)));
+    	classroomSessionG2 = create(new ClassroomSession(academicSession, levelTimeDivisionG2, new Period(new Date(), new Date()), rootRandomDataProvider.oneFromDatabase(Teacher.class)));
+    	classroomSessionG3 = create(new ClassroomSession(academicSession, levelTimeDivisionG3, new Period(new Date(), new Date()), rootRandomDataProvider.oneFromDatabase(Teacher.class)));
     	
     	classroomSessionDivision1 = create(new ClassroomSessionDivision(classroomSessionG1,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new Period(new Date(), new Date()),new BigDecimal("1")));
@@ -161,5 +168,45 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	}
 	
 	/**/
+	
+	public static class ReportProducer extends AbstractReportProducer{
+		private static final long serialVersionUID = 246685915578107971L;
+    	
+		@Override
+		public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
+			r.getSubjectsTableColumnNames().add("No.");
+			r.getSubjectsTableColumnNames().add("SUBJECTS");
+			r.getSubjectsTableColumnNames().add("Test 1 15%");
+			r.getSubjectsTableColumnNames().add("Test 2 15%");
+			r.getSubjectsTableColumnNames().add("Exam 70%");
+			r.getSubjectsTableColumnNames().add("TOTAL");
+			r.getSubjectsTableColumnNames().add("GRADE");
+			r.getSubjectsTableColumnNames().add("RANK");
+			r.getSubjectsTableColumnNames().add("OUT OF");
+			r.getSubjectsTableColumnNames().add("MAX");
+			r.getSubjectsTableColumnNames().add("CLASS AVERAGE");
+			r.getSubjectsTableColumnNames().add("REMARKS");
+			r.getSubjectsTableColumnNames().add("TEACHER");
+			for(StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubjectReport : r.getSubjects()){
+				//studentClassroomSessionDivisionSubjectReport.getStudentClassroomSessionDivision().get
+				studentClassroomSessionDivisionSubjectReport.getMarks().add("");
+				studentClassroomSessionDivisionSubjectReport.getMarks().add("");
+				studentClassroomSessionDivisionSubjectReport.getMarks().add("");
+			}
+			r.getMarkTotals().add("A");
+			r.getMarkTotals().add("B");
+			r.getMarkTotals().add("C");
+			
+			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "???");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "???");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "???");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", "???");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", "???");
+			
+			return r;
+		}
+    }
 
 }

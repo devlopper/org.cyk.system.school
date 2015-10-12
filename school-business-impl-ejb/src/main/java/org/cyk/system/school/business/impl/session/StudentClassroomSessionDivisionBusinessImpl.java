@@ -12,7 +12,6 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOpti
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.file.report.ReportManager;
-import org.cyk.system.root.business.impl.file.report.jasper.JasperReportBusinessImpl;
 import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
 import org.cyk.system.root.model.event.EventParticipation;
@@ -44,7 +43,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
-	@Inject private JasperReportBusinessImpl reportBusiness;
 	@Inject private ReportManager reportManager;
 	
 	@Inject private StudentSubjectDao studentSubjectDao;
@@ -67,13 +65,13 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return reportManager.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), "ReportCard");
+		return reportManager.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), 
+				studentClassroomSessionDivision.getStudent().getRegistration().getCode());
 	}
 	
 	@Override 
-	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean print) {
-		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision", classroomSessionDivisions.size());
-		ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report = new ReportBasedOnTemplateFile<>();
+	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions) {
+		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		/*
 		 * Data loading
 		 */
@@ -106,28 +104,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		classroomSessionDivisionBusiness.results(classroomSessionDivisions, studentClassroomSessionDivisions);
 		
-		resultsReport(report, studentClassroomSessionDivisions, print);
-		return report;
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
+			buildReport(studentClassroomSessionDivision);
 	}
-	
-	private void resultsReport(ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> report,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Boolean print) {		
-		report.setTemplateFile(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionResultsReportFile());
-		report.setFileExtension("pdf");
-		resultsReport(report, print);
-	}
-		
-	private void resultsReport(ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> aReport,Boolean print) {
-		String fileName = /*languageBusiness.findText("school.student.results.report")*/"StudReport"+" "+System.currentTimeMillis();
-		aReport.setFileName(fileName);
-		//aReport.setTemplateFile(aReport.getDataSource().iterator().next().gets);
-		reportBusiness.build(aReport, print);
-		/*
-		if(saleCashRegisterMovement.getReport()==null)
-			saleCashRegisterMovement.setReport(new File());
-		RootBusinessLayer.getInstance().persistReport(saleCashRegisterMovement.getReport(), report);
-		*/
-	}
-	
+			
 	@Override
 	protected WeightedValue weightedValue(StudentSubject detail) {
 		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getClassroomSessionDivisionSubject().getCoefficient(),Boolean.FALSE);

@@ -2,6 +2,7 @@ package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
@@ -9,6 +10,7 @@ import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 
+@Stateless
 public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubject, ClassroomSessionDivisionSubjectDao> implements ClassroomSessionDivisionSubjectBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
@@ -17,8 +19,5 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {
 		super(dao); 
 	}
-
-	
-
     
 }

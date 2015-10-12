@@ -10,27 +10,21 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.company.business.api.structure.CompanyBusiness;
-import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.api.TypedBusiness;
-import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.Script;
-import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ReportProducer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelName;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
@@ -46,10 +40,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	private static SchoolBusinessLayer INSTANCE;
 	
-	//@Inject private TeacherBusiness teacherBusiness;
-	@Inject private FileBusiness fileBusiness;
-	@Inject private CompanyBusiness companyBusiness;
-	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
+	@Inject private TeacherBusiness teacherBusiness;
 	@Inject private StudentBusiness studentBusiness;
 	
 	@Getter @Setter private AverageComputationListener averageComputationListener;
@@ -79,7 +70,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     @Override
     public void registerTypedBusinessBean(Map<Class<AbstractIdentifiable>, TypedBusiness<AbstractIdentifiable>> beansMap) {
         beansMap.put((Class)Student.class, (TypedBusiness)studentBusiness);
-        
+        beansMap.put((Class)Teacher.class, (TypedBusiness)teacherBusiness);
         
         
     }

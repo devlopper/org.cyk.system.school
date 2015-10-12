@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
@@ -17,7 +16,6 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 
-@Stateless
 public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivision, ClassroomSessionDivisionDao> implements ClassroomSessionDivisionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
@@ -28,7 +26,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	public ClassroomSessionDivisionBusinessImpl(ClassroomSessionDivisionDao dao) {
 		super(dao);  
 	}
-
+	
 	@Override
 	public void results(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
@@ -54,7 +52,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 			classroomSessionDivision.getResults().setAverage(average.getValue());
 			classroomSessionDivision.getResults().setNumberOfStudent(numberOfStudent);
 		}
-	}  
+	}
 
-    
+	
+
 }

@@ -5,6 +5,4 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 
 public interface ClassroomSessionDivisionSubjectBusiness extends TypedBusiness<ClassroomSessionDivisionSubject> {
 
-	
-	
 }

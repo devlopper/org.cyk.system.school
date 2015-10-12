@@ -20,11 +20,11 @@ import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
-import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -39,9 +39,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	
 	@Inject private StudentBusiness studentBusiness;
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
-	@Inject private StudentSubjectEvaluationBusiness studentSubjectEvaluationBusiness;
 	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
-	//private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
 	@Inject private SubjectEvaluationTypeBusiness evaluationTypeBusiness;
 	
@@ -105,10 +103,12 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	}
 	
 	public void generateStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
-		studentClassroomSessionDivisionBusiness.buildReport(studentClassroomSessionDivisionBusiness.findAll().iterator().next());
+		studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
 		
 		if(Boolean.TRUE.equals(createFileOnDisk)){
-    		writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivisionBusiness.findAll().iterator().next()));
+			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
+				for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision))
+					writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
     	}
 	}
 	

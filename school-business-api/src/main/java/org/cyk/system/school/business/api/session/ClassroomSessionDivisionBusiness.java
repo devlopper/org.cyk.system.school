@@ -9,5 +9,5 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 public interface ClassroomSessionDivisionBusiness extends TypedBusiness<ClassroomSessionDivision> {
 
 	void results(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions);
-	
+
 }

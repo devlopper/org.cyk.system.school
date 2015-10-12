@@ -5,6 +5,7 @@ import java.util.Arrays;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -35,6 +36,7 @@ public class ReportCardBusinessIT extends AbstractBusinessIT {
 				dataProducer.produce();
 			}
     	}.run();
+    	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
     	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
     	
     	schoolBusinessTestHelper.registerStudents(new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
