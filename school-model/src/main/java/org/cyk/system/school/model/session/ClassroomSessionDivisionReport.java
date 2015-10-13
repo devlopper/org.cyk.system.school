@@ -16,7 +16,7 @@ public class ClassroomSessionDivisionReport extends AbstractGeneratable<Classroo
 	private static final long serialVersionUID = -6025941646465245555L;
 	
 	private ClassroomSessionReport classroomSession = new ClassroomSessionReport();
-	private String name,numberOfStudents,average,highestAverage,lowestAverage;
+	private String name,numberOfStudents,average,highestAverage,lowestAverage,openedTime;
 	
 	@Override
 	public void generate() {

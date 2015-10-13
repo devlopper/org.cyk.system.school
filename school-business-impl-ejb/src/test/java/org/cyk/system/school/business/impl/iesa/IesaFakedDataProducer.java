@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import lombok.Getter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.mathematics.Interval;
@@ -17,7 +18,7 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.time.TimeDivisionType;
-import org.cyk.system.school.business.impl.AbstractReportProducer;
+import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -44,6 +45,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 
 	@Inject private SchoolBusinessLayer schoolBusinessLayer;
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
+	@Inject private CompanyBusiness companyBusiness;
 	
 	private Subject subjectNameEnglishLanguage,subjectNameLiteratureInEnglish,subjectNameHistory,subjectNameGeography
 		,subjectNameSocialStudies,subjectNameReligiousStudies,subjectNameMathematics,subjectNamePhysics,subjectNameChemistry,subjectNameBiology,subjectNameFrench
@@ -92,11 +94,11 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		//Grades
 		IntervalCollection intervalCollection = new IntervalCollection();
 		intervalGradingScaleAStar = createInterval(intervalCollection,"A*", "Outstanding", "90", "100");
-		intervalGradingScaleA = createInterval(intervalCollection,"A", "Excellent", "80", "89");
-		intervalGradingScaleB = createInterval(intervalCollection,"B", "Very Good", "70", "79");
-		intervalGradingScaleC = createInterval(intervalCollection,"C", "Good", "60", "69");
-		intervalGradingScaleD = createInterval(intervalCollection,"D", "Satisfactory", "50", "59");
-		intervalGradingScaleE = createInterval(intervalCollection,"E", "Fail", "0", "49"); 
+		intervalGradingScaleA = createInterval(intervalCollection,"A", "Excellent", "80", "89.99");
+		intervalGradingScaleB = createInterval(intervalCollection,"B", "Very Good", "70", "79.99");
+		intervalGradingScaleC = createInterval(intervalCollection,"C", "Good", "60", "69.99");
+		intervalGradingScaleD = createInterval(intervalCollection,"D", "Satisfactory", "50", "59.99");
+		intervalGradingScaleE = createInterval(intervalCollection,"E", "Fail", "0", "49.99"); 
 		commonNodeInformations = new CommonNodeInformations(intervalCollection,createFile("report/iesa.jrxml", "reportcard.jrxml"));
 		
 		//Level names
@@ -114,13 +116,15 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		
 		/**/
 		
+		rootRandomDataProvider.createActor(Teacher.class, 20);
+		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformations);
     	create(school);
     	
-    	rootRandomDataProvider.createActor(Teacher.class, 20);
+    	school.getOwnedCompany().getCompany().setManager(rootRandomDataProvider.oneFromDatabase(Person.class));
+    	companyBusiness.update(school.getOwnedCompany().getCompany());
     	
-    	AcademicSession academicSession; 
-    	create(academicSession = new AcademicSession(school,new Period(new Date(), new Date()),rootRandomDataProvider.oneFromDatabase(Person.class)));
+    	AcademicSession academicSession = create(academicSession = new AcademicSession(school,new Period(new Date(), new Date()),commonNodeInformations));
     	
     	classroomSessionG1 = create(new ClassroomSession(academicSession, levelTimeDivisionG1, new Period(new Date(), new Date()), rootRandomDataProvider.oneFromDatabase(Teacher.class)));
     	classroomSessionG2 = create(new ClassroomSession(academicSession, levelTimeDivisionG2, new Period(new Date(), new Date()), rootRandomDataProvider.oneFromDatabase(Teacher.class)));
@@ -133,7 +137,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	classroomSessionDivision3 = create(new ClassroomSessionDivision(classroomSessionG1,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new Period(new Date(), new Date()),new BigDecimal("1")));
     	
-    	subjectEnglishLanguage = createSubject(classroomSessionDivision1,subjectNameEnglishLanguage,null);
+    	subjectEnglishLanguage = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameEnglishLanguage,rootRandomDataProvider.oneFromDatabase(Teacher.class));
     	/*
     	subjectFrench = createSubject(classroomSessionDivision1,subjectNameFrench,null);
     	subjectMathematics = createSubject(classroomSessionDivision1,subjectNameMathematics,null);
@@ -159,7 +163,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		return create(levelName);
 	}
 	
-	private ClassroomSessionDivisionSubject createSubject(ClassroomSessionDivision classroomSessionDivision,Subject subjectName,Teacher teacher){
+	private ClassroomSessionDivisionSubject createClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subjectName,Teacher teacher){
 		return create(new ClassroomSessionDivisionSubject(classroomSessionDivision,subjectName,BigDecimal.ONE,teacher));
 	}
 	
@@ -169,7 +173,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	
 	/**/
 	
-	public static class ReportProducer extends AbstractReportProducer{
+	public static class ReportProducer extends AbstractSchoolReportProducer{
 		private static final long serialVersionUID = 246685915578107971L;
     	
 		@Override
@@ -194,9 +198,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 				studentClassroomSessionDivisionSubjectReport.getMarks().add("");
 				studentClassroomSessionDivisionSubjectReport.getMarks().add("");
 			}
-			r.getMarkTotals().add("A");
-			r.getMarkTotals().add("B");
-			r.getMarkTotals().add("C");
+			r.getMarkTotals().add("tosum");
+			r.getMarkTotals().add("tosum");
+			r.getMarkTotals().add("tosum");
 			
 			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
 			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "???");

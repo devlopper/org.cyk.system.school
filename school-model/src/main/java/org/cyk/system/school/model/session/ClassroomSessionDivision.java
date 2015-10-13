@@ -28,8 +28,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiable implements Se
 	
 	@ManyToOne private TimeDivisionType timeDivisionType;
 	
-	@Column(precision=5,scale=FLOAT_SCALE)
-	private BigDecimal duration;
+	private Long duration;
 	
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE)
 	private BigDecimal coefficient;

@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.Period;
 
 @Getter @Setter @Entity @NoArgsConstructor
@@ -25,13 +24,11 @@ public class AcademicSession extends AbstractIdentifiable implements Serializabl
 	
 	@Embedded private CommonNodeInformations nodeInformations;
 	
-	@ManyToOne private Person staffPersonSigner;
-	
-	public AcademicSession(School school,Period period,Person staffPersonSigner) {
+	public AcademicSession(School school,Period period,CommonNodeInformations nodeInformations) {
 		super();
 		this.school = school;
 		this.period = period;
-		this.staffPersonSigner = staffPersonSigner;
+		this.nodeInformations = nodeInformations;
 	} 
 	
 }

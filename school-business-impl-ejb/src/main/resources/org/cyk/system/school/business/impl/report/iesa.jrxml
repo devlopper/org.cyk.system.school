@@ -147,14 +147,14 @@
 	<field name="academicSession" class="org.cyk.system.school.model.session.AcademicSessionReport">
 		<fieldDescription><![CDATA[academicSession]]></fieldDescription>
 	</field>
-	<field name="totalMissedTime" class="java.lang.String">
-		<fieldDescription><![CDATA[totalMissedTime]]></fieldDescription>
+	<field name="missedTime" class="java.lang.String">
+		<fieldDescription><![CDATA[missedTime]]></fieldDescription>
 	</field>
 	<field name="student" class="org.cyk.system.root.model.party.person.ActorReport">
 		<fieldDescription><![CDATA[student]]></fieldDescription>
 	</field>
-	<field name="totalMissedTimeJustified" class="java.lang.String">
-		<fieldDescription><![CDATA[totalMissedTimeJustified]]></fieldDescription>
+	<field name="missedTimeJustified" class="java.lang.String">
+		<fieldDescription><![CDATA[missedTimeJustified]]></fieldDescription>
 	</field>
 	<field name="totalCoefficient" class="java.lang.String">
 		<fieldDescription><![CDATA[totalCoefficient]]></fieldDescription>

@@ -19,7 +19,6 @@ import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
 import org.cyk.system.root.model.event.EventParticipation;
 import org.cyk.system.root.model.mathematics.Average;
-import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.time.Attendance;
 import org.cyk.system.root.persistence.api.TypedDao;
@@ -30,8 +29,8 @@ import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.Lecture;
-import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
+import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 
 public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractIdentifiable,RESULT extends AbstractStudentResult<LEVEL,DETAIL>,DAO extends TypedDao<RESULT>,DETAIL> extends AbstractTypedBusinessService<RESULT,DAO> implements AbstractStudentResultsBusiness<LEVEL,RESULT,DETAIL>,Serializable {
 
@@ -88,11 +87,8 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
 				//setting
 				result.getResults().getEvaluationSort().setAverage(average); 
-				Interval interval = intervalBusiness.findByCollectionByValue(averageIntervalCollection(level(result)),average.getValue(), 2);
-				if(interval==null)
-					;
-				else
-					result.getResults().setAppreciation(interval.getName());
+				result.getResults().getEvaluationSort().setAverageInterval(intervalBusiness.findByCollectionByValue(averageIntervalCollection(level(result)),average.getValue(), 2));
+				logTrace("Average {} , Interval {}",result.getResults().getEvaluationSort().getAverage(),result.getResults().getEvaluationSort().getAverageInterval());
 			}
 		}
 		

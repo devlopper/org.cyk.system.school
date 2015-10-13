@@ -8,10 +8,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.file.report.ReportBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
-import org.cyk.system.root.business.impl.file.report.ReportManager;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
 import org.cyk.system.root.model.event.EventParticipation;
@@ -43,7 +44,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
-	@Inject private ReportManager reportManager;
+	private ReportBusiness reportBusiness = RootBusinessLayer.getInstance().getReportBusiness();
 	
 	@Inject private StudentSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao; 
@@ -57,7 +58,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		logTrace("Computing Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
 		StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
-		reportManager.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
+		reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
 				,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
 				.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);
 		dao.update(studentClassroomSessionDivision);
@@ -65,7 +66,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return reportManager.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), 
+		return reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), 
 				studentClassroomSessionDivision.getStudent().getRegistration().getCode());
 	}
 	

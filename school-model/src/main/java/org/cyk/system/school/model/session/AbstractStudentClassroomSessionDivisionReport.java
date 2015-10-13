@@ -19,7 +19,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 
 	private static final long serialVersionUID = -6025941646465245555L;
 	
-	private String name,totalMissedTime,totalMissedTimeJustified,average,rank,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,
+	private String name,attendedTime,missedTime,missedTimeJustified,average,averageScale,rank,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,
 		comments,subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
 	private List<String> markTotals = new ArrayList<>();
 	private ClassroomSessionDivisionReport classroomSessionDivision = new ClassroomSessionDivisionReport();
@@ -60,8 +60,9 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		classroomSessionDivision.generate();
 		
 		name = "THIRD TERM PRIMARY REPORT CARD";
-		totalMissedTime = positiveFloatNumber(999, 0, 99);
-		totalMissedTimeJustified = positiveFloatNumber(999, 0, 99); 
+		attendedTime = positiveFloatNumber(999, 0, 99);
+		missedTime = positiveFloatNumber(999, 0, 99);
+		missedTimeJustified = positiveFloatNumber(999, 0, 99); 
 		totalAverage = positiveFloatNumber(999, 0, 99);
 		totalCoefficient = positiveFloatNumber(999, 0, 99);
 		totalAverageCoefficiented = positiveFloatNumber(999, 0, 99);
