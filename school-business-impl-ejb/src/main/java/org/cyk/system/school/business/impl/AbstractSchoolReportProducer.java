@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
+import org.cyk.system.root.model.file.report.LabelValueReport;
+import org.cyk.system.root.model.mathematics.Interval;
+import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Student;
@@ -26,6 +29,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	@Override
 	public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		StudentClassroomSessionDivisionReport r = new StudentClassroomSessionDivisionReport();
+		r.setSource(studentClassroomSessionDivision);
 		Student student = studentClassroomSessionDivision.getStudent();
 		StudentClassroomSessionDivision s = studentClassroomSessionDivision;
 		ClassroomSessionDivision csd = s.getClassroomSessionDivision();
@@ -48,12 +52,13 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
 		
 		set(student, r.getStudent());
+		
 		set(cs.getCoordinator(), r.getCommentator());
 		set(as.getSchool().getOwnedCompany().getCompany().getManager(), r.getSigner());
 		
 		r.setComments(s.getResults().getAppreciation());
 		r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
-		r.setAverageScale(s.getResults().getEvaluationSort().getAverageInterval().getName());
+		r.setAverageScale(s.getResults().getEvaluationSort().getAverageInterval().getCode());
 		r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.title",new Object[]{csd.getUiString()}));
 		r.setSubjectsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.subject"));
@@ -114,6 +119,17 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.average", r.getAverage());
 		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.grade", r.getAverageScale());
 		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.rank", r.getRank());
+		
+		r.setGradingScaleLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.gradingscale"));
+		IntervalCollection evaluationIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
+				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
+		rootBusinessLayer.getIntervalCollectionBusiness().load(evaluationIntervalCollection);
+		
+		for(Interval interval : evaluationIntervalCollection.getIntervals()){
+			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
+			labelValueReport.addExtendedValues(format(interval.getLow())+" - "+format(interval.getHigh()));
+			currentLabelValueCollection.getCollection().add(labelValueReport);
+		}
 	}
 
 }

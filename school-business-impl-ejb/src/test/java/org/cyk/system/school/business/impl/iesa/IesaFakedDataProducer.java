@@ -2,6 +2,7 @@ package org.cyk.system.school.business.impl.iesa;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -13,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
+import org.cyk.system.root.model.mathematics.Evaluation;
+import org.cyk.system.root.model.mathematics.EvaluationItem;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.party.person.Person;
@@ -53,6 +56,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameScience;
 	private EvaluationType evaluationTypeNameTest1,evaluationTypeNameTest2,evaluationTypeNameExam;
 	private Interval intervalGradingScaleAStar,intervalGradingScaleA,intervalGradingScaleB,intervalGradingScaleC,intervalGradingScaleD,intervalGradingScaleE;
+	private Interval intervalEffortLevel1,intervalEffortLevel2,intervalEffortLevel3,intervalEffortLevel4,intervalEffortLevel5;
 	private LevelName levelNameG1,levelNameG2,levelNameG3;
 	private Level levelG1,levelG2,levelG3;
 	private LevelTimeDivision levelTimeDivisionG1,levelTimeDivisionG2,levelTimeDivisionG3;
@@ -62,6 +66,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	,subjectSocialStudies,subjectReligiousStudies,subjectMathematics,subjectPhysics,subjectChemistry,subjectBiology,subjectFrench
 	,subjectArtAndCraft,subjectMusic,subjectICT,subjectPhysicalEducation,subjectGrammar,subjectReadingComprehension,subjectHandWriting,
 	subjectSpelling,subjectPhonics,subjectCreativeWriting,subjectMoralEducation,subjectScience;
+	
+	private Evaluation evaluationStudentWork;
 	
 	private CommonNodeInformations commonNodeInformations;
 	
@@ -99,7 +105,32 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		intervalGradingScaleC = createInterval(intervalCollection,"C", "Good", "60", "69.99");
 		intervalGradingScaleD = createInterval(intervalCollection,"D", "Satisfactory", "50", "59.99");
 		intervalGradingScaleE = createInterval(intervalCollection,"E", "Fail", "0", "49.99"); 
-		commonNodeInformations = new CommonNodeInformations(intervalCollection,createFile("report/iesa.jrxml", "reportcard.jrxml"));
+		
+		//Effort
+		IntervalCollection effortLevelIntervalCollection = new IntervalCollection();
+		intervalEffortLevel1 = createInterval(intervalCollection,"1", "Has no regard for the observable trais", "1", "1");
+		intervalEffortLevel2 = createInterval(intervalCollection,"2", "E2", "2", "2");
+		intervalEffortLevel3 = createInterval(intervalCollection,"3", "E3", "3", "3");
+		intervalEffortLevel4 = createInterval(intervalCollection,"4", "E4", "4", "4");
+		intervalEffortLevel5 = createInterval(intervalCollection,"5", "E5", "5", "5"); 
+		
+		evaluationStudentWork = new Evaluation(effortLevelIntervalCollection,"BSWH","Behaviour,Study and Work Habits");
+		evaluationStudentWork.setItems(new ArrayList<EvaluationItem>());
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"1","Respect authority"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"2","Works"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"3","Completes"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"4","Shows"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"5","Demonstrates"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"6","Takes"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"7","Game"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"8","Handwriting"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"9","Drawing"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"10","Punctionality"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"11","Works coop"));
+		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"12","Listens"));
+		create(evaluationStudentWork);
+		
+		commonNodeInformations = new CommonNodeInformations(intervalCollection,evaluationStudentWork,createFile("report/iesa.jrxml", "reportcard.jrxml"));
 		
 		//Level names
 		levelNameG1 = createLevelName("Grade 1");

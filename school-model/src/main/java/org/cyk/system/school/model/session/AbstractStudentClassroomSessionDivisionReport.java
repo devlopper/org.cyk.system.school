@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
+import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.party.person.ActorReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 
@@ -124,13 +125,26 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		
 		gradingScaleLabelValueCollection = new LabelValueCollectionReport();
 		gradingScaleLabelValueCollection.setName("GRADING SCALE");
-		gradingScaleLabelValueCollection.add("A+", "90 - 100 Excellent");
-		gradingScaleLabelValueCollection.add("A",  "80 - 89  Very Good");
-		gradingScaleLabelValueCollection.add("B+", "70 - 79  Good");
-		gradingScaleLabelValueCollection.add("B",  "60 - 69  Fair");
-		gradingScaleLabelValueCollection.add("C+", "55 - 59  Satisfactory");
-		gradingScaleLabelValueCollection.add("C",  "50 - 54  Barely satisfactory");
-		gradingScaleLabelValueCollection.add("E",  " 0 - 49  Fail");
+		LabelValueReport labelValueReport = gradingScaleLabelValueCollection.add("A+", "Excellent");
+		labelValueReport.addExtendedValues("90 - 100");
+		
+		labelValueReport = gradingScaleLabelValueCollection.add("A",  "Very Good");
+		labelValueReport.addExtendedValues("80 - 89.99");
+		
+		labelValueReport = gradingScaleLabelValueCollection.add("B+", "Good");
+		labelValueReport.addExtendedValues("70 - 79.99");
+		
+		labelValueReport = gradingScaleLabelValueCollection.add("B",  "Fair");
+		labelValueReport.addExtendedValues("60 - 69.99");
+		
+		labelValueReport = gradingScaleLabelValueCollection.add("C+", "Satisfactory");
+		labelValueReport.addExtendedValues("55 - 59.99");
+		
+		labelValueReport = gradingScaleLabelValueCollection.add("C",  "Barely satisfactory");
+		labelValueReport.addExtendedValues("50 - 54.99");
+		
+		labelValueReport = gradingScaleLabelValueCollection.add("E",  "Fail");
+		labelValueReport.addExtendedValues("00 - 49.99");
 		
 		effortLevelLabelValueCollection = new LabelValueCollectionReport();
 		effortLevelLabelValueCollection.setName("EFFORT LEVELS");

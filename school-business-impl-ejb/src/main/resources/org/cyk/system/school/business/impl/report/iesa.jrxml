@@ -104,6 +104,9 @@
 		<field name="value" class="java.lang.String">
 			<fieldDescription><![CDATA[value]]></fieldDescription>
 		</field>
+		<field name="extendedValues" class="java.lang.String[]">
+			<fieldDescription><![CDATA[extendedValues]]></fieldDescription>
+		</field>
 	</subDataset>
 	<parameter name="CYK_TEXT_STATIC_FONT_NAME" class="java.lang.String" isForPrompting="false">
 		<parameterDescription><![CDATA[Font name of static text]]></parameterDescription>
@@ -936,10 +939,21 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="123" uuid="8ed595b5-dc1c-4c81-96b4-72db06a304ee">
+						<jr:column width="51" uuid="8ed595b5-dc1c-4c81-96b4-72db06a304ee">
 							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="123" height="12" uuid="c91c90ee-b736-41e7-989d-e0b6449d2a45"/>
+									<reportElement x="0" y="0" width="51" height="12" uuid="780ccea7-c51c-4372-91cc-cbdcf9e0f3b5"/>
+									<textElement markup="styled">
+										<font fontName="Batang"/>
+									</textElement>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "' size='"+$P{CYK_TEXT_STATIC_FONT_SIZE}+ "'>" +$F{extendedValues}[0]+"</font>"]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="74" uuid="64468f46-cdb5-4b7a-b949-bc0ac2bc9299">
+							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="74" height="12" uuid="c91c90ee-b736-41e7-989d-e0b6449d2a45"/>
 									<textElement markup="styled">
 										<font fontName="Batang"/>
 									</textElement>

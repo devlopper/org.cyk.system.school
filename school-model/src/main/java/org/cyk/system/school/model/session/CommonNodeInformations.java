@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractModelElement;
 import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.mathematics.Evaluation;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 
 @Embeddable @Getter @Setter @NoArgsConstructor
@@ -24,12 +25,15 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private IntervalCollection studentClassroomSessionDivisionAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionAverageScale;
 	
-	public CommonNodeInformations(IntervalCollection intervalCollection,File studentClassroomSessionDivisionResultsReportFile) {
+	@ManyToOne private Evaluation studentWorkEvaluation;
+	
+	public CommonNodeInformations(IntervalCollection intervalCollection,Evaluation studentWorkEvaluation,File studentClassroomSessionDivisionResultsReportFile) {
 		super();
 		this.studentClassroomSessionDivisionResultsReportFile = studentClassroomSessionDivisionResultsReportFile;
 		this.studentSubjectAverageScale = intervalCollection;
 		this.studentClassroomSessionDivisionAverageScale = intervalCollection;
 		this.studentClassroomSessionAverageScale = intervalCollection;
+		this.studentWorkEvaluation = studentWorkEvaluation;
 	}
 	
 	@Override
