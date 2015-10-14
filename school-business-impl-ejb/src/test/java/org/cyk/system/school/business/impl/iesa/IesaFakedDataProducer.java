@@ -98,21 +98,16 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		evaluationTypeNameExam = createEnumeration(EvaluationType.class,"Exam");
 		
 		//Grades
-		IntervalCollection intervalCollection = new IntervalCollection();
-		intervalGradingScaleAStar = createInterval(intervalCollection,"A*", "Outstanding", "90", "100");
-		intervalGradingScaleA = createInterval(intervalCollection,"A", "Excellent", "80", "89.99");
-		intervalGradingScaleB = createInterval(intervalCollection,"B", "Very Good", "70", "79.99");
-		intervalGradingScaleC = createInterval(intervalCollection,"C", "Good", "60", "69.99");
-		intervalGradingScaleD = createInterval(intervalCollection,"D", "Satisfactory", "50", "59.99");
-		intervalGradingScaleE = createInterval(intervalCollection,"E", "Fail", "0", "49.99"); 
+		IntervalCollection intervalCollection = createIntervalCollection(new String[][]{
+			{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
+			,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}
+		});
 		
 		//Effort
-		IntervalCollection effortLevelIntervalCollection = new IntervalCollection();
-		intervalEffortLevel1 = createInterval(intervalCollection,"1", "Has no regard for the observable trais", "1", "1");
-		intervalEffortLevel2 = createInterval(intervalCollection,"2", "E2", "2", "2");
-		intervalEffortLevel3 = createInterval(intervalCollection,"3", "E3", "3", "3");
-		intervalEffortLevel4 = createInterval(intervalCollection,"4", "E4", "4", "4");
-		intervalEffortLevel5 = createInterval(intervalCollection,"5", "E5", "5", "5"); 
+		IntervalCollection effortLevelIntervalCollection = createIntervalCollection(new String[][]{
+			{"1", "Has no regard for the observable trais", "1", "1"},{"2", "E2", "2", "2"},{"3", "E3", "3", "3"},{"4", "E4", "4", "4"}
+			,{"5", "E5", "5", "5"}
+		},Boolean.FALSE);
 		
 		evaluationStudentWork = new Evaluation(effortLevelIntervalCollection,"BSWH","Behaviour,Study and Work Habits");
 		evaluationStudentWork.setItems(new ArrayList<EvaluationItem>());

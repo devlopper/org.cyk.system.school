@@ -58,6 +58,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		r.setComments(s.getResults().getAppreciation());
 		r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
+		
 		r.setAverageScale(s.getResults().getEvaluationSort().getAverageInterval().getCode());
 		r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.title",new Object[]{csd.getUiString()}));
@@ -101,6 +102,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r){
+		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
+		
 		r.setStudentLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.student"));
 		labelValue("school.report.studentclassroomsessiondivision.block.student.names", r.getStudent().getPerson().getNames());
 		labelValue("school.report.studentclassroomsessiondivision.block.student.surname", r.getStudent().getPerson().getSurname());
@@ -124,8 +127,17 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		IntervalCollection evaluationIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
 		rootBusinessLayer.getIntervalCollectionBusiness().load(evaluationIntervalCollection);
-		
 		for(Interval interval : evaluationIntervalCollection.getIntervals()){
+			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
+			labelValueReport.addExtendedValues(format(interval.getLow())+" - "+format(interval.getHigh()));
+			currentLabelValueCollection.getCollection().add(labelValueReport);
+		}
+		
+		r.setEffortLevelLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.effort"));
+		IntervalCollection effortLevelIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
+				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkEvaluation().getIntervalCollection();
+		rootBusinessLayer.getIntervalCollectionBusiness().load(effortLevelIntervalCollection);
+		for(Interval interval : effortLevelIntervalCollection.getIntervals()){
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
 			labelValueReport.addExtendedValues(format(interval.getLow())+" - "+format(interval.getHigh()));
 			currentLabelValueCollection.getCollection().add(labelValueReport);
