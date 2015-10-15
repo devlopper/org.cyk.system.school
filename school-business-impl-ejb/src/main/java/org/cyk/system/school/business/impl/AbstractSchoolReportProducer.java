@@ -9,6 +9,9 @@ import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.Metric;
+import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Student;
@@ -102,7 +105,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r){
-		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
+		//StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
 		
 		r.setStudentLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.student"));
 		labelValue("school.report.studentclassroomsessiondivision.block.student.names", r.getStudent().getPerson().getNames());
@@ -127,19 +130,31 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		IntervalCollection evaluationIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
 		rootBusinessLayer.getIntervalCollectionBusiness().load(evaluationIntervalCollection);
-		for(Interval interval : evaluationIntervalCollection.getIntervals()){
+		for(Interval interval : evaluationIntervalCollection.getCollection()){
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
-			labelValueReport.addExtendedValues(format(interval.getLow())+" - "+format(interval.getHigh()));
+			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}
 		
 		r.setEffortLevelLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.effort"));
-		IntervalCollection effortLevelIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
-				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkEvaluation().getIntervalCollection();
-		rootBusinessLayer.getIntervalCollectionBusiness().load(effortLevelIntervalCollection);
-		for(Interval interval : effortLevelIntervalCollection.getIntervals()){
+		IntervalCollection intervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
+				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection().getValueIntervalCollection();
+		rootBusinessLayer.getIntervalCollectionBusiness().load(intervalCollection);
+		for(Interval interval : intervalCollection.getCollection()){
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
-			labelValueReport.addExtendedValues(format(interval.getLow())+" - "+format(interval.getHigh()));
+			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
+			currentLabelValueCollection.getCollection().add(labelValueReport);
+		}
+		
+		r.setBehaviorLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.behaviour"));
+		MetricCollection metricCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
+				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection();
+		rootBusinessLayer.getMetricCollectionBusiness().load(metricCollection);
+		for(Metric metric : metricCollection.getCollection()){
+			String value = "";
+			for(MetricValue metricValue : )
+			if(MetricValue  labelValueReport.)
+			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, metric.getName(), value);
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}
 	}

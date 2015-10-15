@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl.iesa;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -14,10 +13,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
-import org.cyk.system.root.model.mathematics.Evaluation;
-import org.cyk.system.root.model.mathematics.EvaluationItem;
+import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.time.TimeDivisionType;
@@ -67,7 +66,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	,subjectArtAndCraft,subjectMusic,subjectICT,subjectPhysicalEducation,subjectGrammar,subjectReadingComprehension,subjectHandWriting,
 	subjectSpelling,subjectPhonics,subjectCreativeWriting,subjectMoralEducation,subjectScience;
 	
-	private Evaluation evaluationStudentWork;
+	private MetricCollection studentWorkMetricCollection;
 	
 	private CommonNodeInformations commonNodeInformations;
 	
@@ -98,34 +97,36 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		evaluationTypeNameExam = createEnumeration(EvaluationType.class,"Exam");
 		
 		//Grades
-		IntervalCollection intervalCollection = createIntervalCollection(new String[][]{
+		
+		IntervalCollection intervalCollection = createIntervalCollection("ICEV1",new String[][]{
 			{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
 			,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}
 		});
 		
-		//Effort
-		IntervalCollection effortLevelIntervalCollection = createIntervalCollection(new String[][]{
-			{"1", "Has no regard for the observable trais", "1", "1"},{"2", "E2", "2", "2"},{"3", "E3", "3", "3"},{"4", "E4", "4", "4"}
-			,{"5", "E5", "5", "5"}
-		},Boolean.FALSE);
+		studentWorkMetricCollection = new MetricCollection("BSWH","Behaviour,Study and Work Habits");
+		studentWorkMetricCollection.addItem("1","Respect authority");
+		studentWorkMetricCollection.addItem("2","Works independently and neatly");
+		studentWorkMetricCollection.addItem("3","Completes homework and class work on time");
+		studentWorkMetricCollection.addItem("4","Shows social courtesies");
+		studentWorkMetricCollection.addItem("5","Demonstrates self-control");
+		studentWorkMetricCollection.addItem("6","Takes care of school and others materials");
+		studentWorkMetricCollection.addItem("7","Game/Sport");
+		studentWorkMetricCollection.addItem("8","Handwriting");
+		studentWorkMetricCollection.addItem("9","Drawing/Painting");
+		studentWorkMetricCollection.addItem("10","Punctionality/Regularity");
+		studentWorkMetricCollection.addItem("11","Works cooperatively in groups");
+		studentWorkMetricCollection.addItem("12","Listens and follows directions");
 		
-		evaluationStudentWork = new Evaluation(effortLevelIntervalCollection,"BSWH","Behaviour,Study and Work Habits");
-		evaluationStudentWork.setItems(new ArrayList<EvaluationItem>());
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"1","Respect authority"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"2","Works"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"3","Completes"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"4","Shows"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"5","Demonstrates"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"6","Takes"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"7","Game"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"8","Handwriting"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"9","Drawing"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"10","Punctionality"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"11","Works coop"));
-		evaluationStudentWork.getItems().add(new EvaluationItem(evaluationStudentWork,"12","Listens"));
-		create(evaluationStudentWork);
+		studentWorkMetricCollection.setValueIntervalCollection(new IntervalCollection("BSWH_METRIC_IC"));
+		studentWorkMetricCollection.getValueIntervalCollection().addItem("1", "Has no regard for the observable traits", "1", "1");
+		studentWorkMetricCollection.getValueIntervalCollection().addItem("2", "Shows minimal regard for the observable traits", "2", "2");
+		studentWorkMetricCollection.getValueIntervalCollection().addItem("3", "Acceptable level of observable traits", "3", "3");
+		studentWorkMetricCollection.getValueIntervalCollection().addItem("4", "Maintains high level of observable traits", "4", "4");
+		studentWorkMetricCollection.getValueIntervalCollection().addItem("5", "Maintains an excellent degree of observable traits", "5", "5");
 		
-		commonNodeInformations = new CommonNodeInformations(intervalCollection,evaluationStudentWork,createFile("report/iesa.jrxml", "reportcard.jrxml"));
+		create(studentWorkMetricCollection);
+		
+		commonNodeInformations = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection,createFile("report/iesa.jrxml", "reportcard.jrxml"));
 		
 		//Level names
 		levelNameG1 = createLevelName("Grade 1");
@@ -234,6 +235,16 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "???");
 			labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", "???");
 			labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", "???");
+			
+			r.setBehaviorLabelValueCollection1(new LabelValueCollectionReport());
+			r.getBehaviorLabelValueCollection1().setName("BEHAVIOUR,STUDY AND WORK HABITS");
+			for(int i=0;i<=5;i++)
+				r.getBehaviorLabelValueCollection1().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
+			
+			r.setBehaviorLabelValueCollection2(new LabelValueCollectionReport());
+			r.getBehaviorLabelValueCollection2().setName("BEHAVIOUR,STUDY AND WORK HABITS");
+			for(int i=6;i<=11;i++)
+				r.getBehaviorLabelValueCollection2().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
 			
 			return r;
 		}
