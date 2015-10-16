@@ -2,8 +2,10 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -49,6 +51,9 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	@Getter @Setter private Boolean coefficientApplied = Boolean.TRUE;
 	@Getter @Setter private RankOptions<SortableStudentResults> rankOptions;
 	
+	@Getter @Setter private List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>();
+	@Getter @Setter private List<EvaluationType> evaluationTypes = new ArrayList<>();
+	
 	/**/
 	
 	@Override
@@ -80,8 +85,8 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		
 		//System.out.println(studentSubjectEvaluationBusiness.findAll());
 	}
-	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName,String[][] details){
-		evaluateStudents(subject, evaluationTypeName, coefficientApplied,details);
+	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,String[][] details){
+		evaluateStudents(subject, evaluationType, coefficientApplied,details);
 	}
 	
 	public void generateStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
@@ -140,6 +145,25 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	
 	public void assertClassroomSessionDivisionSubjectAfterEvaluation(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,EvaluationType evaluationType, String[][] details){
 		assertClassroomSessionDivisionSubjectAfterEvaluation(classroomSessionDivisionSubject, evaluationType, details, rankOptions);
+	}
+	
+	public void assertClassroomSessionDivisionAfterEvaluation(List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,List<EvaluationType> evaluationTypes,String[][] details){
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
+			int i = 1;
+			for(EvaluationType evaluationType : evaluationTypes){
+				evaluateStudents(classroomSessionDivisionSubject, evaluationType, extract(details, i++));
+			}
+		}
+		
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
+			int i = evaluationTypes.size()+1;
+			assertClassroomSessionDivisionSubjectAverage(classroomSessionDivisionSubject, extract(details, i++));    	
+	    	assertClassroomSessionDivisionSubjectRank(classroomSessionDivisionSubject,extract(details, i),rankOptions);
+		}
+	}
+	
+	public void assertClassroomSessionDivisionAfterEvaluation(String[][] details){
+		assertClassroomSessionDivisionAfterEvaluation(classroomSessionDivisionSubjects,evaluationTypes, details);
 	}
 	
 	private String[][] extract(String[][] details,Integer columnIndex){

@@ -14,7 +14,7 @@ import org.cyk.utility.test.Transaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 
-public class ReportCardBusinessIT extends AbstractBusinessIT {
+public class ReportCardInputAllAtATimeBusinessIT extends AbstractBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
  
@@ -47,17 +47,22 @@ public class ReportCardBusinessIT extends AbstractBusinessIT {
     	
     	schoolBusinessTestHelper.randomMetricValues(Arrays.asList(dataProducer.getClassroomSessionDivision1()));
     	
-    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameTest1(), 
-    			new String[][]{{"STUD1","60","60","2"},{"STUD2","90","90","1"},{"STUD3","40","40","4"},{"STUD4","45","45","3"},{"STUD5","20","20","5"}});
+    	schoolBusinessTestHelper.getEvaluationTypes().add(dataProducer.getEvaluationTypeNameTest1());
+    	schoolBusinessTestHelper.getEvaluationTypes().add(dataProducer.getEvaluationTypeNameTest2());
+    	schoolBusinessTestHelper.getEvaluationTypes().add(dataProducer.getEvaluationTypeNameExam());
     	
-    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameTest2(), 
-    			new String[][]{{"STUD1","50","55","3"},{"STUD2","30","60","1"},{"STUD3","60","50","4"},{"STUD4","45","45","5"},{"STUD5","95","57.5","2"}});
+    	schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().add(dataProducer.getSubjectEnglishLanguage());
     	
-    	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameExam(), 
-    			new String[][]{{"STUD1","70","65.5","2"},{"STUD2","60","60","3"},{"STUD3","40","43","5"},{"STUD4","80","69.5","1"},{"STUD5","55","55.75","4"}});
+    	schoolBusinessTestHelper.assertClassroomSessionDivisionAfterEvaluation( 
+    			new String[][]{{"STUD1","60","50","70","65.5","2"}
+    			              ,{"STUD2","90","30","60","60","3"}
+    			              ,{"STUD3","40","60","40","43","5"}
+    			              ,{"STUD4","45","45","80","69.5","1"}
+    			              ,{"STUD5","20","95","55","55.75","4"}});
     	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(Arrays.asList(dataProducer.getClassroomSessionDivision1()), Boolean.TRUE);
-    	
     }
+    
+    
     
 }
