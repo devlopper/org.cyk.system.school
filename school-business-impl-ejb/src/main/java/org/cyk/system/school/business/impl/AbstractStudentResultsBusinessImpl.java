@@ -38,7 +38,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	
 	@Inject protected MathematicsBusiness mathematicsBusiness;
 	@Inject protected IntervalBusiness intervalBusiness;
-	@Inject protected SchoolBusinessLayer schoolBusinessLayer;
+	protected SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 	@Inject protected EventBusiness eventBusiness;
 	@Inject protected EventMissedBusiness eventMissedBusiness;
 	

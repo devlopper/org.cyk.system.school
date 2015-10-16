@@ -21,6 +21,9 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -42,6 +45,9 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Inject private TeacherBusiness teacherBusiness;
 	@Inject private StudentBusiness studentBusiness;
+	@Inject @Getter private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject @Getter private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
+	@Inject @Getter private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
 	
 	@Getter @Setter private AverageComputationListener averageComputationListener;
 	@Getter @Setter private Script averageComputationScript;

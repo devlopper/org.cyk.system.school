@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
@@ -24,6 +25,7 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.utility.common.Constant;
 
 public abstract class AbstractSchoolReportProducer extends AbstractCompanyReportProducer implements SchoolReportProducer,Serializable {
 
@@ -49,9 +51,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getClassroomSessionDivision().getClassroomSession().setName(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getUiString());
 		
 		r.getClassroomSessionDivision().setName(cs.getUiString());
-		r.getClassroomSessionDivision().setAverage(results.getAverage().toString());
-		r.getClassroomSessionDivision().setHighestAverage(results.getAverageHighest().toString());
-		r.getClassroomSessionDivision().setLowestAverage(results.getAverageLowest().toString());
+		r.getClassroomSessionDivision().setAverage(format(results.getAverage()));
+		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
+		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
 		
 		set(student, r.getStudent());
@@ -69,12 +71,21 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setCommentsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.comments"));
 		r.setSchoolStampBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.schoolstamp"));
 		
-		r.setTotalCoefficient(s.getResults().getEvaluationSort().getAverage().getDivisor().toString());
-		r.setTotalAverageCoefficiented(s.getResults().getEvaluationSort().getAverage().getDividend().toString());
+		r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
+		r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
+		r.setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
 		
 		r.setMissedTime((s.getResults().getLectureAttendance().getMissedDuration()/DateUtils.MILLIS_PER_HOUR) +"");
 		r.setMissedTimeJustified((s.getResults().getLectureAttendance().getMissedDurationJustified()/DateUtils.MILLIS_PER_HOUR)+"");
 		
+		processStudentSubjects(r, s);
+				
+		produceStudentClassroomSessionDivisionReportLabelValueCollections(r);
+			
+		return r;
+	}
+	
+	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s){
 		for(StudentSubject studentSubject : s.getDetails()){
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport();
 			classroomSessionDivisionSubjectReport.setAverage("???");
@@ -90,22 +101,41 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
 			sr.setRank(rootBusinessLayer.getMathematicsBusiness().format(studentSubject.getResults().getEvaluationSort().getRank()));
 			set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(), sr.getTeacher());
+			BigDecimal studentSubjectEvaluationMarkValueTotal = BigDecimal.ZERO;
 			for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
-				BigDecimal value = studentSubjectEvaluation.getValue();
-				if(Boolean.FALSE.equals(studentSubjectEvaluation.getSubjectEvaluation().getCoefficientApplied()))
-					value = value.multiply(studentSubjectEvaluation.getSubjectEvaluation().getType().getCoefficient());
+				BigDecimal value = getMarkValue(studentSubjectEvaluation);
 				sr.getMarks().add(format(value));
+				markAdded(studentSubject, studentSubjectEvaluation, value);
+				studentSubjectEvaluationMarkValueTotal = studentSubjectEvaluationMarkValueTotal.add(value);
 			}
+			//r.getMarkTotals().add(format(studentSubjectEvaluationMarkValueTotal));
 			r.getSubjects().add(sr);
 		}
-				
-		produceStudentClassroomSessionDivisionReportLabelValueCollections(r);
-			
-		return r;
+	}
+	
+	protected BigDecimal getMarkValue(StudentSubjectEvaluation studentSubjectEvaluation){
+		BigDecimal value = studentSubjectEvaluation.getValue();
+		if(Boolean.FALSE.equals(studentSubjectEvaluation.getSubjectEvaluation().getCoefficientApplied()))
+			value = value.multiply(studentSubjectEvaluation.getSubjectEvaluation().getType().getCoefficient());
+		return value;
+	}
+	
+	protected void markAdded(StudentSubject studentSubject,StudentSubjectEvaluation studentSubjectEvaluation,BigDecimal value){}
+	
+	protected void sumMarks(StudentClassroomSessionDivisionReport r,Integer numberOfColumns){
+		r.getMarkTotals().clear();
+		//TODO must improved for performance issue
+		for(int i=0;i<numberOfColumns;i++){
+			r.getMarkTotals().add("0");
+			for(StudentClassroomSessionDivisionSubjectReport cr : r.getSubjects()){
+				r.getMarkTotals().set(i, format(new BigDecimal(StringUtils.replace(cr.getMarks().get(i), Constant.CHARACTER_COMA.toString(), Constant.CHARACTER_DOT.toString()))
+					.add(new BigDecimal(StringUtils.replace(r.getMarkTotals().get(i), Constant.CHARACTER_COMA.toString(), Constant.CHARACTER_DOT.toString())))));
+			}
+		}
 	}
 	
 	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r){
-		//StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
+		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
 		
 		r.setStudentLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.student"));
 		labelValue("school.report.studentclassroomsessiondivision.block.student.names", r.getStudent().getPerson().getNames());
@@ -152,8 +182,11 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		rootBusinessLayer.getMetricCollectionBusiness().load(metricCollection);
 		for(Metric metric : metricCollection.getCollection()){
 			String value = "";
-			for(MetricValue metricValue : )
-			if(MetricValue  labelValueReport.)
+			for(MetricValue metricValue : studentClassroomSessionDivision.getResults().getMetricValues())
+				if(metricValue.getMetric().equals(metric)){
+					value = format(metricValue.getValue());
+					break;
+				}
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, metric.getName(), value);
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}

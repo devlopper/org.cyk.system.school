@@ -2,6 +2,8 @@ package org.cyk.system.school.business.impl.iesa;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -33,7 +35,6 @@ import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
@@ -65,6 +66,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	,subjectSocialStudies,subjectReligiousStudies,subjectMathematics,subjectPhysics,subjectChemistry,subjectBiology,subjectFrench
 	,subjectArtAndCraft,subjectMusic,subjectICT,subjectPhysicalEducation,subjectGrammar,subjectReadingComprehension,subjectHandWriting,
 	subjectSpelling,subjectPhonics,subjectCreativeWriting,subjectMoralEducation,subjectScience;
+	
+	private Collection<ClassroomSessionDivisionSubject> grade1Subjects = new ArrayList<>();
 	
 	private MetricCollection studentWorkMetricCollection;
 	
@@ -164,7 +167,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	classroomSessionDivision3 = create(new ClassroomSessionDivision(classroomSessionG1,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new Period(new Date(), new Date()),new BigDecimal("1")));
     	
-    	subjectEnglishLanguage = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameEnglishLanguage,rootRandomDataProvider.oneFromDatabase(Teacher.class));
+    	grade1Subjects.add(subjectEnglishLanguage = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameEnglishLanguage,rootRandomDataProvider.oneFromDatabase(Teacher.class)));
     	/*
     	subjectFrench = createSubject(classroomSessionDivision1,subjectNameFrench,null);
     	subjectMathematics = createSubject(classroomSessionDivision1,subjectNameMathematics,null);
@@ -219,22 +222,15 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			r.getSubjectsTableColumnNames().add("CLASS AVERAGE");
 			r.getSubjectsTableColumnNames().add("REMARKS");
 			r.getSubjectsTableColumnNames().add("TEACHER");
-			for(StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubjectReport : r.getSubjects()){
-				//studentClassroomSessionDivisionSubjectReport.getStudentClassroomSessionDivision().get
-				studentClassroomSessionDivisionSubjectReport.getMarks().add("");
-				studentClassroomSessionDivisionSubjectReport.getMarks().add("");
-				studentClassroomSessionDivisionSubjectReport.getMarks().add("");
-			}
-			r.getMarkTotals().add("tosum");
-			r.getMarkTotals().add("tosum");
-			r.getMarkTotals().add("tosum");
+			
+			sumMarks(r, 3);
 			
 			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "???");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "???");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "???");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", "???");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", "???");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", "To Compute");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", "To Compute");
 			
 			r.setBehaviorLabelValueCollection1(new LabelValueCollectionReport());
 			r.getBehaviorLabelValueCollection1().setName("BEHAVIOUR,STUDY AND WORK HABITS");

@@ -8,6 +8,7 @@ import javax.transaction.UserTransaction;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.utility.test.Transaction;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -39,11 +40,12 @@ public class ReportCardBusinessIT extends AbstractBusinessIT {
     	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
     	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
     	
-    	schoolBusinessTestHelper.registerStudents(new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
+    	schoolBusinessTestHelper.registerActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
     	
     	schoolBusinessTestHelper.takeSubjects(new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"}
-    	, new ClassroomSessionDivisionSubject[]{dataProducer.getSubjectEnglishLanguage()/*,dataProducer.getSubjectFrench(),dataProducer.getSubjectMathematics()
-    			,dataProducer.getSubjectPhysics(),dataProducer.getSubjectChemistry()*/}); 
+    		,dataProducer.getGrade1Subjects().toArray(new ClassroomSessionDivisionSubject[]{})); 
+    	
+    	schoolBusinessTestHelper.randomMetricValues(Arrays.asList(dataProducer.getClassroomSessionDivision1()));
     	
     	schoolBusinessTestHelper.assertClassroomSessionDivisionSubjectAfterEvaluation(dataProducer.getSubjectEnglishLanguage(), dataProducer.getEvaluationTypeNameTest1(), 
     			new String[][]{{"STUD1","60","60","2"},{"STUD2","90","90","1"},{"STUD3","40","40","4"},{"STUD4","45","45","3"},{"STUD5","20","20","5"}});

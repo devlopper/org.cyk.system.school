@@ -12,6 +12,7 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
+import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -37,14 +38,16 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	@Override
 	public StudentSubject create(StudentSubject studentSubject) {
 		studentSubject = super.create(studentSubject);
-		logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
 		Student student = studentSubject.getStudent();
 		ClassroomSessionDivision classroomSessionDivision = studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
+		if(studentSubject.getResults()==null)
+			studentSubject.setResults(new StudentResults());
+		
 		StudentClassroomSessionDivision studentClassroomSessionDivision = studentClassroomSessionDivisionDao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 		if(studentClassroomSessionDivision==null){
-			studentClassroomSessionDivision = studentClassroomSessionDivisionDao.create(new StudentClassroomSessionDivision(student, classroomSessionDivision));
-			logTrace("Student {} for classroomsession division {}", student,classroomSessionDivision);
+			schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().create(new StudentClassroomSessionDivision(student, classroomSessionDivision));
 		}
+		logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
 		return studentSubject;
 	}
 		 

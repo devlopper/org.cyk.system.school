@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -15,7 +14,10 @@ import lombok.Setter;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
-import org.cyk.system.root.business.impl.RootRandomDataProvider;
+import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.Metric;
+import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -30,6 +32,7 @@ import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractTestHelper implements Serializable {
@@ -55,28 +58,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
         rankOptions.setType(RankType.EXAEQUO); 
         rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 	}
-	
-	public Student registerStudent(String code,String[] names){
-		Student student = RootRandomDataProvider.getInstance().actor(Student.class);
-		student.getRegistration().setCode(code);
-		if(names!=null){
-			if(names.length>0)
-				student.getPerson().setName(names[0]);
-			if(names.length>1)
-				student.getPerson().setLastName(names[1]);
-			if(names.length>2)
-				student.getPerson().setSurname(names[2]);
-		}
-		return studentBusiness.create(student);
-	}
-	
-	public Collection<Student> registerStudents(String[] codes){
-		Collection<Student> students = new ArrayList<>();
-		for(String code : codes)
-			students.add(registerStudent(code, null));
-		return students;
-	}
-	
+
 	public void takeSubjects(String[] studentRegistrationCodes,ClassroomSessionDivisionSubject[] classroomSessionDivisionSubjects){
 		for(String studentRegistrationCode : studentRegistrationCodes){
 			Student student = studentBusiness.findByRegistrationCode(studentRegistrationCode);
@@ -104,12 +86,25 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	
 	public void generateStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
 		studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
-		
 		if(Boolean.TRUE.equals(createFileOnDisk)){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
 				for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision))
 					writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
     	}
+	}
+	
+	public void randomMetricValues(Collection<ClassroomSessionDivision> classroomSessionDivisions){
+		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
+			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
+				MetricCollection metricCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations().getStudentWorkMetricCollection();
+				metricCollectionBusiness.load(metricCollection);
+				IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
+				intervalCollectionBusiness.load(intervalCollection);
+				for(Metric metric : metricCollection.getCollection())
+					studentClassroomSessionDivision.getResults().getMetricValues()
+						.add(new MetricValue(metric, new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue()))));
+				studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
+			}
 	}
 	
 	/**/

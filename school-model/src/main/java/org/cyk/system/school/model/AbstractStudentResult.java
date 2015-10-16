@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.Embedded;
+import javax.persistence.CascadeType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import lombok.Getter;
@@ -22,7 +23,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 
 	@ManyToOne protected Student student;
 	
-	@Embedded protected StudentResults results = new StudentResults();
+	@OneToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval=true) protected StudentResults results;
 	
 	@Transient protected Collection<DETAIL> details = new ArrayList<>();
 	

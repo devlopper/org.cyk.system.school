@@ -45,7 +45,14 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Inject
 	public StudentClassroomSessionBusinessImpl(StudentClassroomSessionDao dao) {
 		super(dao); 
-	} 
+	}
+	
+	@Override
+	public StudentClassroomSession create(StudentClassroomSession studentClassroomSession) {
+		super.create(studentClassroomSession);
+		logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
+		return studentClassroomSession;
+	}
 	
 	@Override
 	protected WeightedValue weightedValue(StudentClassroomSessionDivision detail) {

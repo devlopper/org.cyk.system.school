@@ -25,14 +25,18 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
+import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
@@ -44,6 +48,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
+	@Inject private StudentClassroomSessionDao studentClassroomSessionDao;
 	private ReportBusiness reportBusiness = RootBusinessLayer.getInstance().getReportBusiness();
 	
 	@Inject private StudentSubjectDao studentSubjectDao;
@@ -52,6 +57,22 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Inject 
 	public StudentClassroomSessionDivisionBusinessImpl(StudentClassroomSessionDivisionDao dao) {
 		super(dao); 
+	}
+	
+	@Override
+	public StudentClassroomSessionDivision create(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		super.create(studentClassroomSessionDivision);
+		Student student = studentClassroomSessionDivision.getStudent();
+		ClassroomSessionDivision classroomSessionDivision = studentClassroomSessionDivision.getClassroomSessionDivision();
+		ClassroomSession classroomSession = classroomSessionDivision.getClassroomSession();
+		if(studentClassroomSessionDivision.getResults()==null)
+			studentClassroomSessionDivision.setResults(new StudentResults());
+		StudentClassroomSession studentClassroomSession = studentClassroomSessionDao.readByStudentByClassroomSession(student, classroomSession);
+		if(studentClassroomSession==null){
+			schoolBusinessLayer.getStudentClassroomSessionBusiness().create(new StudentClassroomSession(student, classroomSession));
+		}
+		logTrace("Student {} for classroomsession division {} registered", student,classroomSessionDivision);
+		return studentClassroomSessionDivision;
 	}
 	
 	@Override
