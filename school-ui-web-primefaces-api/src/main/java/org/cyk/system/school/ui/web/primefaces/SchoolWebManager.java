@@ -8,6 +8,8 @@ import lombok.Getter;
 
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.command.UICommandable;
@@ -41,6 +43,18 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 		
 		UICommandable group = uiProvider.createCommandable("fonctionnalities", null);
+		
+		group.addChild(menuManager.crudMany(Teacher.class, null));
+		group.addChild(menuManager.crudMany(ClassroomSession.class, null));
+		group.addChild(menuManager.crudMany(Student.class, null));
+		/*
+		group.addChild(menuManager.crudMany(Student.class, null));
+		group.addChild(menuManager.crudMany(Teacher.class, null));
+		group.addChild(menuManager.crudMany(Teacher.class, null));
+		group.addChild(menuManager.crudMany(Teacher.class, null));
+		
+		group.addChild(uiProvider.createCommandable("dashboard", null, outcomeSaleDashBoard));
+		*/
 		
 		group.addChild(menuManager.crudMany(Student.class, null));	
 		

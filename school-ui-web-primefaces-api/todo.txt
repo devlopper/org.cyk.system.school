@@ -1,0 +1,13 @@
+User Interfaces:
+	0 - CRUD teacher (CRUD actor)
+	0 - CRUD classroom session
+	1 - CRUD student (CRUD actor)
+	2 - CRUD student classroom session division subject
+	3 - Create student subject evaluation
+	4 - Create student lecture participation(person event participation)
+	5 - Update student classroom session division metric 
+	6 - Create student classroom session division report
+	7 - Download student classroom session division report
+	8 - 
+	9 - 
+	
