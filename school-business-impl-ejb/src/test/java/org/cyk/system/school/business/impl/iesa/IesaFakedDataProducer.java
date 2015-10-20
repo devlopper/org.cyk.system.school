@@ -46,7 +46,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 
 	private static final long serialVersionUID = -1832900422621121762L;
 
-	@Inject private SchoolBusinessLayer schoolBusinessLayer;
+	private SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private CompanyBusiness companyBusiness;
 	
@@ -144,8 +144,6 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		levelTimeDivisionG2 = create(new LevelTimeDivision(levelG2, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
 		levelTimeDivisionG3 = create(new LevelTimeDivision(levelG3, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
 		
-		/**/
-		
 		rootRandomDataProvider.createActor(Teacher.class, 20);
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformations);
@@ -168,21 +166,12 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     			,new Period(new Date(), new Date()),new BigDecimal("1")));
     	
     	grade1Subjects.add(subjectEnglishLanguage = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameEnglishLanguage,rootRandomDataProvider.oneFromDatabase(Teacher.class)));
-    	/*
-    	subjectFrench = createSubject(classroomSessionDivision1,subjectNameFrench,null);
-    	subjectMathematics = createSubject(classroomSessionDivision1,subjectNameMathematics,null);
-    	subjectPhysics = createSubject(classroomSessionDivision1,subjectNamePhysics,null);
-    	subjectChemistry = createSubject(classroomSessionDivision1,subjectNameChemistry,null);
-    	*/
-    	//subjectBiology = createSubject(classroomSessionDivision1,subjectNameBiology,null);
-    	//subjectGeography = createSubject(classroomSessionDivision1,subjectNameGeography,null);
     	
-    	for(ClassroomSessionDivisionSubject subject : new ClassroomSessionDivisionSubject[]{subjectEnglishLanguage/*,subjectFrench,subjectBiology,subjectChemistry,subjectGeography*/}){
+    	for(ClassroomSessionDivisionSubject subject : new ClassroomSessionDivisionSubject[]{subjectEnglishLanguage}){
     		createEvaluationType(subject, evaluationTypeNameTest1,new BigDecimal(".15"));
     		createEvaluationType(subject, evaluationTypeNameTest2,new BigDecimal(".15"));
     		createEvaluationType(subject, evaluationTypeNameExam,new BigDecimal(".7"));
     	}
-    	
 	}
 	
 	private LevelName createLevelName(String name){

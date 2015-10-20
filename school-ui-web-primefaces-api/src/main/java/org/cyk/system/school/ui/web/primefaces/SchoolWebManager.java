@@ -42,11 +42,11 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		SystemMenu systemMenu = new SystemMenu();
 		
 		
-		UICommandable group = uiProvider.createCommandable("fonctionnalities", null);
-		
+		UICommandable group = uiProvider.createCommandable("fonctionnalities", null);		
 		group.addChild(menuManager.crudMany(Teacher.class, null));
-		group.addChild(menuManager.crudMany(ClassroomSession.class, null));
 		group.addChild(menuManager.crudMany(Student.class, null));
+		group.addChild(menuManager.crudMany(ClassroomSession.class, null));
+		
 		/*
 		group.addChild(menuManager.crudMany(Student.class, null));
 		group.addChild(menuManager.crudMany(Teacher.class, null));
@@ -55,8 +55,6 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 		group.addChild(uiProvider.createCommandable("dashboard", null, outcomeSaleDashBoard));
 		*/
-		
-		group.addChild(menuManager.crudMany(Student.class, null));	
 		
 		systemMenu.getBusinesses().add(group);
 					

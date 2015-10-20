@@ -31,4 +31,8 @@ public class AcademicSession extends AbstractIdentifiable implements Serializabl
 		this.nodeInformations = nodeInformations;
 	} 
 	
+	@Override
+	public String getUiString() {
+		return period.getUiString();
+	}
 }

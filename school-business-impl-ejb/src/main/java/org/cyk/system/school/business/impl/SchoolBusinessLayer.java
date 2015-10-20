@@ -20,6 +20,7 @@ import org.cyk.system.root.model.file.Script;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -48,18 +49,18 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject @Getter private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject @Getter private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
 	@Inject @Getter private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
+	@Inject @Getter private ClassroomSessionBusiness classroomSessionBusiness;
 	
 	@Getter @Setter private AverageComputationListener averageComputationListener;
 	@Getter @Setter private Script averageComputationScript;
-	@Getter @Setter private SchoolReportProducer reportProducer = new DefaultReportProducer();
+	@Getter @Setter private SchoolReportProducer reportProducer;
+	
+	//@Inject private IesaFakedDataProducer iesaFakedDataProducer;
 	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
-		registerResourceBundle("org.cyk.system.school.model.resources.entity",getClass().getClassLoader());
-		registerResourceBundle("org.cyk.system.school.business.message",getClass().getClassLoader());
-		registerResourceBundle("org.cyk.system.school.business.ui",getClass().getClassLoader());
 	}
 	
 	@Override
@@ -83,6 +84,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 
 	@Override
 	protected void fakeTransactions() {
+		//iesaFakedDataProducer.produce();
 		/*
 		School highSchool;
 		File studentClassroomSessionDivisionResultsReportFile;

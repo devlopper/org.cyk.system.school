@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
@@ -12,6 +14,7 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
@@ -52,6 +55,12 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 			classroomSessionDivision.getResults().setAverage(average.getValue());
 			classroomSessionDivision.getResults().setNumberOfStudent(numberOfStudent);
 		}
+	}
+
+	
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession) {
+		return dao.readByClassroomSession(classroomSession);
 	}
 
 	

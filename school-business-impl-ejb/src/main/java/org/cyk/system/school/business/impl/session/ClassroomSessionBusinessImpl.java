@@ -18,4 +18,9 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		super(dao);  
 	}
 
+	@Override
+	public String format(ClassroomSession classroomSession) {
+		return classroomSession.getLevelTimeDivision().getLevel().getName().getName();
+	}
+
 }

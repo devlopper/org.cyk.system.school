@@ -24,6 +24,22 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>classroomSessionEditView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/classroomsession_edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionConsultView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/classroomsession_consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionListView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/classroomsession_list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>
 
 </faces-config>

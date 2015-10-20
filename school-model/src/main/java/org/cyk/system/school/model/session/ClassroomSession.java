@@ -13,17 +13,17 @@ import lombok.Setter;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.time.Period;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.utility.common.annotation.ModelBean;
+import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 
-@Getter @Setter @Entity @NoArgsConstructor
+@Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS)
 public class ClassroomSession extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne
-	private AcademicSession academicSession;
+	@ManyToOne private AcademicSession academicSession;
 	
-	@ManyToOne
-	private LevelTimeDivision levelTimeDivision;
+	@ManyToOne private LevelTimeDivision levelTimeDivision;
 	
 	@Embedded private Period period;
 
@@ -41,5 +41,10 @@ public class ClassroomSession extends AbstractIdentifiable implements Serializab
 	public String getUiString() {
 		return levelTimeDivision.getUiString();
 	}
+	
+	public static final String FIELD_ACADEMIC_DIVISION = "academicSession";
+	public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";
+	public static final String FIELD_PERIOD = "period";
+	public static final String FIELD_COORDINATOR = "coordinator";
 	
 }

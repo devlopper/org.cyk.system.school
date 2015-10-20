@@ -5,4 +5,6 @@ import org.cyk.system.school.model.session.ClassroomSession;
 
 public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession> {
 
+	String format(ClassroomSession classroomSession);
+	
 }
