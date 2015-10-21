@@ -11,16 +11,21 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.company.business.impl.CompanyReportRepository;
+import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.ui.api.UIProvider;
+import org.cyk.ui.api.command.CommandAdapter;
+import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.ui.api.command.UICommandable.CommandRequestType;
-import org.cyk.ui.api.command.UICommandable.ViewType;
 import org.cyk.ui.api.model.AbstractOutputDetails;
+import org.cyk.ui.api.model.table.Row;
+import org.cyk.ui.api.model.table.RowAdapter;
+import org.cyk.ui.web.primefaces.Table;
+import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
@@ -33,40 +38,84 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	
+	private FormOneData<Details> classroomSessionDetails;
+	private Table<DivisionDetails> classroomSessionDivisionTable;
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		contentTitle = languageBusiness.findClassLabelText(ClassroomSession.class)+" : "+classroomSessionBusiness.format(identifiable);
+		
+		classroomSessionDetails = (FormOneData<Details>) createFormOneData(new Details(identifiable), Crud.READ);
+		configureDetailsForm(classroomSessionDetails);
+		
+		classroomSessionDivisionTable = (Table<DivisionDetails>) createTable(DivisionDetails.class, null, null);
+		configureDetailsTable(classroomSessionDivisionTable, "model.entity.classroomSessionDivision");
+		
+		classroomSessionDivisionTable.setShowAddRemoveColumn(Boolean.TRUE);
+		classroomSessionDivisionTable.setShowOpenCommand(Boolean.TRUE);
+		
+		classroomSessionDivisionTable.getRowListeners().add(new RowAdapter<DivisionDetails>(){
+			@Override
+			public void added(Row<DivisionDetails> row) {
+				super.added(row);
+				row.setOpenable(Boolean.TRUE);
+			}
+		});
+		
+		classroomSessionDivisionTable.getOpenRowCommandable().getCommand().getCommandListeners().add(new CommandAdapter(){
+			private static final long serialVersionUID = 8640883295366346645L;
+			@Override
+			public void serve(UICommand command, Object parameter) {
+				System.out
+						.println("ClassroomSessionConsultPage.initialisation().new CommandAdapter() {...}.serve()");
+			}
+		});
 	}
 	
 	@Override
-	protected Class<?> __formModelClass__() {
-		return Form.class;
+	protected void afterInitialisation() {
+		super.afterInitialisation();
+		for(ClassroomSessionDivision classroomSessionDivision : identifiable.getDivisions())
+			classroomSessionDivisionTable.addRow(new DivisionDetails(classroomSessionDivision));
 	}
 	
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
+		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
 		contextualMenu.setLabel(contentTitle); 
-		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionBusiness.findByClassroomSession(identifiable)){
-			UICommandable division = UIProvider.getInstance().createCommandable("command.see.receipt", null);
-			division.setCommandRequestType(CommandRequestType.UI_VIEW);
-			division.setViewType(ViewType.TOOLS_REPORT);
-			division.getParameters().addAll(navigationManager.reportParameters(identifiable, CompanyReportRepository.getInstance().getReportPointOfSale(),Boolean.FALSE));
-			contextualMenu.getChildren().add(division);
+		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
+		contextualMenu.getChildren().add(commandable);
+		for(ClassroomSessionDivision classroomSessionDivision : identifiable.getDivisions()){
+			commandable = navigationManager.createUpdateCommandable(classroomSessionDivision,"button",null);
+			commandable.setLabel(classroomSessionDivisionBusiness.format(classroomSessionDivision));
+			contextualMenu.getChildren().add(commandable);
 		}
 		return Arrays.asList(contextualMenu);
 	}
 	
-	public static class Form extends AbstractOutputDetails<ClassroomSession> implements Serializable{
+	public static class Details extends AbstractOutputDetails<ClassroomSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		
-		@Input @InputText private String academicSession,coordinator;
+		@Input @InputText private String name,coordinator;
 		
-		public Form(ClassroomSession classroomSession) {
+		public Details(ClassroomSession classroomSession) {
 			super(classroomSession);
-			academicSession = classroomSession.getAcademicSession().getUiString();
+			name = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(classroomSession);
 			coordinator = classroomSession.getCoordinator().getPerson().getNames();
+		}
+		
+	}
+	
+	public static class DivisionDetails extends AbstractOutputDetails<ClassroomSessionDivision> implements Serializable{
+		private static final long serialVersionUID = -4741435164709063863L;
+		
+		@Input @InputText private String name;
+		
+		public DivisionDetails(ClassroomSessionDivision classroomSessionDivision) {
+			super(classroomSessionDivision);
+			name = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision);
 		}
 		
 	}

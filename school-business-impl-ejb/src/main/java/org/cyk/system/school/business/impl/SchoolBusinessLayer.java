@@ -21,12 +21,15 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -50,6 +53,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject @Getter private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
 	@Inject @Getter private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
 	@Inject @Getter private ClassroomSessionBusiness classroomSessionBusiness;
+	@Inject @Getter private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
+	@Inject @Getter private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	
 	@Getter @Setter private AverageComputationListener averageComputationListener;
 	@Getter @Setter private Script averageComputationScript;
@@ -78,7 +83,9 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     public void registerTypedBusinessBean(Map<Class<AbstractIdentifiable>, TypedBusiness<AbstractIdentifiable>> beansMap) {
         beansMap.put((Class)Student.class, (TypedBusiness)studentBusiness);
         beansMap.put((Class)Teacher.class, (TypedBusiness)teacherBusiness);
-        
+        beansMap.put((Class)ClassroomSession.class, (TypedBusiness)classroomSessionBusiness);
+        beansMap.put((Class)ClassroomSessionDivision.class, (TypedBusiness)classroomSessionDivisionBusiness);
+        beansMap.put((Class)ClassroomSessionDivisionSubject.class, (TypedBusiness)classroomSessionDivisionSubjectBusiness);
         
     }
 

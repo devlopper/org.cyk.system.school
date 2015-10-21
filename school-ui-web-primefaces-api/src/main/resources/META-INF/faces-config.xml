@@ -26,17 +26,39 @@
 		
 		<navigation-case>
 			<from-outcome>classroomSessionEditView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsession_edit.jsf</to-view-id>
+			<to-view-id>/private/__role__/__manager__/classroomsession/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>classroomSessionConsultView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsession_consult.jsf</to-view-id>
+			<to-view-id>/private/__role__/__manager__/classroomsession/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>classroomSessionListView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsession_list.jsf</to-view-id>
+			<to-view-id>/private/__role__/__manager__/classroomsession/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionEditView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/classroomsessiondivision/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionConsultView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/classroomsessiondivision/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionSubjectEditView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/classroomsessiondivisionsubject/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionSubjectConsultView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/classroomsessiondivisionsubject/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

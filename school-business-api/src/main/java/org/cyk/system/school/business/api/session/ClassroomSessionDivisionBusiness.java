@@ -13,4 +13,6 @@ public interface ClassroomSessionDivisionBusiness extends TypedBusiness<Classroo
 
 	Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession);
 	
+	String format(ClassroomSessionDivision classroomSessionDivision);
+	
 }

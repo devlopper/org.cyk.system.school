@@ -1,10 +1,13 @@
 package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +31,8 @@ public class ClassroomSession extends AbstractIdentifiable implements Serializab
 	@Embedded private Period period;
 
 	@ManyToOne private Teacher coordinator;
+	
+	@Transient private Collection<ClassroomSessionDivision> divisions = new ArrayList<>();
 	
 	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Period period,Teacher coordinator) {
 		super();

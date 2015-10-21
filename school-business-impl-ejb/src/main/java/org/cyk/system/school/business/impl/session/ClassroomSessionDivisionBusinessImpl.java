@@ -63,6 +63,15 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		return dao.readByClassroomSession(classroomSession);
 	}
 
-	
+	@Override
+	public String format(ClassroomSessionDivision classroomSessionDivision) {
+		Integer index = 0;
+		for(ClassroomSessionDivision c : dao.readByClassroomSession(classroomSessionDivision.getClassroomSession())){
+			index++;
+			if(classroomSessionDivision.equals(c))
+				break;
+		}
+		return classroomSessionDivision.getTimeDivisionType().getUiString()+" "+index;
+	}
 
 }
