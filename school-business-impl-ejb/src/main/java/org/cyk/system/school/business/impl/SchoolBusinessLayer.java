@@ -27,6 +27,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
+import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -35,6 +36,7 @@ import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
@@ -55,6 +57,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject @Getter private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject @Getter private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject @Getter private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
+	@Inject @Getter private SubjectEvaluationBusiness subjectEvaluationBusiness;
 	
 	@Getter @Setter private AverageComputationListener averageComputationListener;
 	@Getter @Setter private Script averageComputationScript;
@@ -86,7 +89,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
         beansMap.put((Class)ClassroomSession.class, (TypedBusiness)classroomSessionBusiness);
         beansMap.put((Class)ClassroomSessionDivision.class, (TypedBusiness)classroomSessionDivisionBusiness);
         beansMap.put((Class)ClassroomSessionDivisionSubject.class, (TypedBusiness)classroomSessionDivisionSubjectBusiness);
-        
+        beansMap.put((Class)SubjectEvaluation.class, (TypedBusiness)subjectEvaluationBusiness);
     }
 
 	@Override

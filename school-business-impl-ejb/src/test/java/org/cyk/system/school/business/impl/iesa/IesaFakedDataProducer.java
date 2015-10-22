@@ -82,10 +82,10 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	
 	private CommonNodeInformations commonNodeInformations;
 	
-	private Integer numbreOfTeachers = 0;
-	private Integer numbreOfStudents = 0;
+	private Integer numbreOfTeachers = 20;
+	private Integer numbreOfStudents = 20;
 	
-	private Boolean generateCompleteAcademicSession = Boolean.FALSE;
+	private Boolean generateCompleteAcademicSession = Boolean.TRUE;
 	
 	@Override
 	public void produce() {
@@ -217,8 +217,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	}
 	
 	private ClassroomSessionDivision createClassroomSessionDivision(ClassroomSession classroomSession){
-		ClassroomSessionDivision classroomSessionDivision = create(new ClassroomSessionDivision(classroomSession,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
-    			,new BigDecimal("1")));
+		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
+    			,new BigDecimal("1"));
 		classroomSessionDivision.getPeriod().setFromDate(new Date());
 		classroomSessionDivision.getPeriod().setToDate(new Date());
 		return create(classroomSessionDivision);
