@@ -2,10 +2,13 @@ package org.cyk.system.school.ui.web.primefaces;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import lombok.Getter;
+import lombok.Setter;
 
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -27,12 +30,16 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	private static SchoolWebManager INSTANCE;
 	
 	private final String outcomeConfigureLevels = "configureLevels";
+	@Getter @Setter private String academicSessionInfos;
+	
+	@Inject private AcademicSessionBusiness academicSessionBusiness;
 	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation(); 
 		identifier = "school";
+		academicSessionInfos = academicSessionBusiness.findCurrent(null).getUiString();
 	}
 		
 	@Override

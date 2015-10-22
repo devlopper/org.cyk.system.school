@@ -16,6 +16,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.ui.web.api.AbstractWebPage;
 import org.cyk.ui.web.primefaces.AbstractContextListener;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 
@@ -28,7 +29,13 @@ public abstract class AbstractSchoolContextListener extends AbstractContextListe
 	@Inject protected StudentBusiness studentBusiness;
 	@Inject protected TeacherBusiness teacherBusiness;
 	@Inject protected ClassroomSessionBusiness classroomSessionBusiness;
-		
+	
+	@Override
+	protected void initialisation() {
+		super.initialisation();
+		AbstractWebPage.DEFAULT_LAYOUT.setWest("/org.cyk.ui.web.primefaces.school/include/layout/westtop.xhtml");
+	}
+	
 	@Override
 	protected void businessAdapters(ServletContextEvent event) {
 		super.businessAdapters(event);

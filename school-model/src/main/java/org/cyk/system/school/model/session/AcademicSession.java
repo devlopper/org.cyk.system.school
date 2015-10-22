@@ -10,24 +10,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.time.Period;
+import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
 
 @Getter @Setter @Entity @NoArgsConstructor
-public class AcademicSession extends AbstractIdentifiable implements Serializable {
+public class AcademicSession extends AbstractIdentifiablePeriod implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 	
 	@ManyToOne private School school;
-	
-	@Embedded private Period period;
-	
+		
 	@Embedded private CommonNodeInformations nodeInformations;
 	
-	public AcademicSession(School school,Period period,CommonNodeInformations nodeInformations) {
+	public AcademicSession(School school,CommonNodeInformations nodeInformations) {
 		super();
 		this.school = school;
-		this.period = period;
 		this.nodeInformations = nodeInformations;
 	} 
 	

@@ -13,6 +13,10 @@
  		<ui:param name="pageController" value="#{classroomSessionDivisionConsultPage}" />
  		<ui:define name="body">
  			
+ 			<cyk:formOneData value="#{classroomSessionDivisionConsultPage.classroomSessionDivisionDetails}" />
+			<p:separator/>
+			<cyk:table value="#{classroomSessionDivisionConsultPage.classroomSessionDivisionSubjectTable}" />
+			
  		</ui:define>
  	</ui:decorate>
  

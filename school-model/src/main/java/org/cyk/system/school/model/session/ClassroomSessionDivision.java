@@ -15,8 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.time.Period;
+import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -24,30 +23,24 @@ import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS)
-public class ClassroomSessionDivision extends AbstractIdentifiable implements Serializable {
+public class ClassroomSessionDivision extends AbstractIdentifiablePeriod implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne private ClassroomSession classroomSession;
 	
-	@Embedded private Period period;
-	
 	@ManyToOne private TimeDivisionType timeDivisionType;
 	
-	private Long duration;
-	
-	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE)
-	private BigDecimal coefficient;
+	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE) private BigDecimal coefficient;
 	
 	@Embedded private NodeResults results = new NodeResults();
 
 	@Transient private Collection<ClassroomSessionDivisionSubject> subjects = new ArrayList<>();
 	
-	public ClassroomSessionDivision(ClassroomSession classroomSession,TimeDivisionType timeDivisionType,Period period, BigDecimal coefficient) {
+	public ClassroomSessionDivision(ClassroomSession classroomSession,TimeDivisionType timeDivisionType, BigDecimal coefficient) {
 		super();
 		this.timeDivisionType = timeDivisionType;
 		this.classroomSession = classroomSession;
-		this.period = period;
 		this.coefficient = coefficient;
 	}
 	
@@ -57,9 +50,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiable implements Se
 	}
 	
 	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
-	public static final String FIELD_PERIOD = "period";
 	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
-	public static final String FIELD_DURATION = "duration";
 	public static final String FIELD_COEFFICIENT = "coefficient";
 	public static final String FIELD_RESULTS = "results";
 	

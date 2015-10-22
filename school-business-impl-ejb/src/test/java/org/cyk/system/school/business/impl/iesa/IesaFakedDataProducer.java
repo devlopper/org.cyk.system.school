@@ -20,10 +20,11 @@ import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.party.person.Person;
-import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -37,9 +38,14 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
+import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
+import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractFakedDataProducer implements Serializable {
@@ -49,6 +55,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	private SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private CompanyBusiness companyBusiness;
+	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
+	@Inject private StudentSubjectDao studentSubjectDao;
 	
 	private Subject subjectNameEnglishLanguage,subjectNameLiteratureInEnglish,subjectNameHistory,subjectNameGeography
 		,subjectNameSocialStudies,subjectNameReligiousStudies,subjectNameMathematics,subjectNamePhysics,subjectNameChemistry,subjectNameBiology,subjectNameFrench
@@ -68,10 +76,16 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	subjectSpelling,subjectPhonics,subjectCreativeWriting,subjectMoralEducation,subjectScience;
 	
 	private Collection<ClassroomSessionDivisionSubject> grade1Subjects = new ArrayList<>();
+	private Collection<SubjectEvaluationType> subjectEvaluationTypes = new ArrayList<>();
 	
 	private MetricCollection studentWorkMetricCollection;
 	
 	private CommonNodeInformations commonNodeInformations;
+	
+	private Integer numbreOfTeachers = 0;
+	private Integer numbreOfStudents = 0;
+	
+	private Boolean generateCompleteAcademicSession = Boolean.FALSE;
 	
 	@Override
 	public void produce() {
@@ -144,7 +158,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		levelTimeDivisionG2 = create(new LevelTimeDivision(levelG2, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
 		levelTimeDivisionG3 = create(new LevelTimeDivision(levelG3, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
 		
-		rootRandomDataProvider.createActor(Teacher.class, 20);
+		rootRandomDataProvider.createActor(Teacher.class, numbreOfTeachers);
+		rootRandomDataProvider.createActor(Student.class, numbreOfStudents);
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformations);
     	create(school);
@@ -152,18 +167,18 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	school.getOwnedCompany().getCompany().setManager(rootRandomDataProvider.oneFromDatabase(Person.class));
     	companyBusiness.update(school.getOwnedCompany().getCompany());
     	
-    	AcademicSession academicSession = create(academicSession = new AcademicSession(school,new Period(new Date(), new Date()),commonNodeInformations));
+    	AcademicSession academicSession = new AcademicSession(school,commonNodeInformations);
+    	academicSession.getPeriod().setFromDate(new Date());
+    	academicSession.getPeriod().setToDate(new Date());
+    	academicSession = create(academicSession);
     	
-    	classroomSessionG1 = create(new ClassroomSession(academicSession, levelTimeDivisionG1, new Period(new Date(), new Date()), rootRandomDataProvider.oneFromDatabase(Teacher.class)));
-    	classroomSessionG2 = create(new ClassroomSession(academicSession, levelTimeDivisionG2, new Period(new Date(), new Date()), rootRandomDataProvider.oneFromDatabase(Teacher.class)));
-    	classroomSessionG3 = create(new ClassroomSession(academicSession, levelTimeDivisionG3, new Period(new Date(), new Date()), rootRandomDataProvider.oneFromDatabase(Teacher.class)));
+    	classroomSessionG1 = createClassroomSession(academicSession, levelTimeDivisionG1);
+    	classroomSessionG2 = createClassroomSession(academicSession, levelTimeDivisionG2);
+    	classroomSessionG3 = createClassroomSession(academicSession, levelTimeDivisionG3);
     	
-    	classroomSessionDivision1 = create(new ClassroomSessionDivision(classroomSessionG1,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
-    			,new Period(new Date(), new Date()),new BigDecimal("1")));
-    	classroomSessionDivision2 = create(new ClassroomSessionDivision(classroomSessionG1,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
-    			,new Period(new Date(), new Date()),new BigDecimal("1")));
-    	classroomSessionDivision3 = create(new ClassroomSessionDivision(classroomSessionG1,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
-    			,new Period(new Date(), new Date()),new BigDecimal("1")));
+    	classroomSessionDivision1 = createClassroomSessionDivision(classroomSessionG1);
+    	classroomSessionDivision2 = createClassroomSessionDivision(classroomSessionG1);
+    	classroomSessionDivision3 = createClassroomSessionDivision(classroomSessionG1);
     	
     	grade1Subjects.add(subjectEnglishLanguage = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameEnglishLanguage,rootRandomDataProvider.oneFromDatabase(Teacher.class)));
     	
@@ -171,6 +186,18 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     		createEvaluationType(subject, evaluationTypeNameTest1,new BigDecimal(".15"));
     		createEvaluationType(subject, evaluationTypeNameTest2,new BigDecimal(".15"));
     		createEvaluationType(subject, evaluationTypeNameExam,new BigDecimal(".7"));
+    	}
+    	
+    	if(Boolean.TRUE.equals(generateCompleteAcademicSession)){
+    		for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
+    			SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType, Boolean.FALSE);
+    			for(StudentSubject studentSubject :studentSubjectDao.readBySubject(subjectEvaluationType.getSubject()) ){
+    				StudentSubjectEvaluation studentSubjectEvaluation = new StudentSubjectEvaluation(subjectEvaluation, studentSubject
+    						, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue())));
+    				subjectEvaluation.getStudentSubjectEvaluations().add(studentSubjectEvaluation);
+    			}
+    			subjectEvaluationBusiness.create(subjectEvaluation);
+    		}
     	}
 	}
 	
@@ -182,12 +209,29 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		return create(levelName);
 	}
 	
+	private ClassroomSession createClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision){
+		ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision, rootRandomDataProvider.oneFromDatabase(Teacher.class));
+		classroomSession.getPeriod().setFromDate(new Date());
+		classroomSession.getPeriod().setToDate(new Date());
+		return create(classroomSession);
+	}
+	
+	private ClassroomSessionDivision createClassroomSessionDivision(ClassroomSession classroomSession){
+		ClassroomSessionDivision classroomSessionDivision = create(new ClassroomSessionDivision(classroomSession,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
+    			,new BigDecimal("1")));
+		classroomSessionDivision.getPeriod().setFromDate(new Date());
+		classroomSessionDivision.getPeriod().setToDate(new Date());
+		return create(classroomSessionDivision);
+	}
+	
 	private ClassroomSessionDivisionSubject createClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subjectName,Teacher teacher){
 		return create(new ClassroomSessionDivisionSubject(classroomSessionDivision,subjectName,BigDecimal.ONE,teacher));
 	}
 	
 	private SubjectEvaluationType createEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient){
-		return create(new SubjectEvaluationType(subject,name,coefficient,new BigDecimal("100")));
+		SubjectEvaluationType subjectEvaluationType = create(new SubjectEvaluationType(subject,name,coefficient,new BigDecimal("100")));
+		subjectEvaluationTypes.add(subjectEvaluationType);
+		return subjectEvaluationType;
 	}
 	
 	/**/

@@ -9,15 +9,24 @@ import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.SubjectEvaluationDao;
 
 @Stateless
 public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubject, ClassroomSessionDivisionSubjectDao> implements ClassroomSessionDivisionSubjectBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
+	@Inject private SubjectEvaluationDao subjectEvaluationDao;
+	
 	@Inject
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {
 		super(dao); 
 	}
     
+	@Override
+	protected void __load__(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		super.__load__(classroomSessionDivisionSubject);
+		classroomSessionDivisionSubject.setEvaluations(subjectEvaluationDao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
+	}
+	
 }

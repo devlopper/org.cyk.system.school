@@ -18,8 +18,6 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.ui.api.UIProvider;
-import org.cyk.ui.api.command.CommandAdapter;
-import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.model.AbstractOutputDetails;
 import org.cyk.ui.api.model.table.Row;
@@ -51,27 +49,17 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		configureDetailsForm(classroomSessionDetails);
 		
 		classroomSessionDivisionTable = (Table<DivisionDetails>) createTable(DivisionDetails.class, null, null);
-		configureDetailsTable(classroomSessionDivisionTable, "model.entity.classroomSessionDivision");
-		
-		classroomSessionDivisionTable.setShowAddRemoveColumn(Boolean.TRUE);
-		classroomSessionDivisionTable.setShowOpenCommand(Boolean.TRUE);
+		configureDetailsTable(classroomSessionDivisionTable, "model.entity.classroomSessionDivision",Boolean.TRUE);
 		
 		classroomSessionDivisionTable.getRowListeners().add(new RowAdapter<DivisionDetails>(){
 			@Override
 			public void added(Row<DivisionDetails> row) {
 				super.added(row);
 				row.setOpenable(Boolean.TRUE);
+				row.setUpdatable(Boolean.TRUE);
 			}
 		});
 		
-		classroomSessionDivisionTable.getOpenRowCommandable().getCommand().getCommandListeners().add(new CommandAdapter(){
-			private static final long serialVersionUID = 8640883295366346645L;
-			@Override
-			public void serve(UICommand command, Object parameter) {
-				System.out
-						.println("ClassroomSessionConsultPage.initialisation().new CommandAdapter() {...}.serve()");
-			}
-		});
 	}
 	
 	@Override
@@ -79,6 +67,8 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		super.afterInitialisation();
 		for(ClassroomSessionDivision classroomSessionDivision : identifiable.getDivisions())
 			classroomSessionDivisionTable.addRow(new DivisionDetails(classroomSessionDivision));
+		
+		classroomSessionDivisionTable.setShowEditColumn(Boolean.TRUE);
 	}
 	
 	@Override
@@ -88,12 +78,14 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
 		for(ClassroomSessionDivision classroomSessionDivision : identifiable.getDivisions()){
-			commandable = navigationManager.createUpdateCommandable(classroomSessionDivision,"button",null);
+			commandable = navigationManager.createConsultCommandable(classroomSessionDivision,"button",null);
 			commandable.setLabel(classroomSessionDivisionBusiness.format(classroomSessionDivision));
 			contextualMenu.getChildren().add(commandable);
 		}
 		return Arrays.asList(contextualMenu);
 	}
+	
+	/**/
 	
 	public static class Details extends AbstractOutputDetails<ClassroomSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
@@ -111,11 +103,12 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	public static class DivisionDetails extends AbstractOutputDetails<ClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		
-		@Input @InputText private String name;
+		@Input @InputText private String name,duration;
 		
 		public DivisionDetails(ClassroomSessionDivision classroomSessionDivision) {
 			super(classroomSessionDivision);
 			name = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision);
+			duration = timeBusiness.formatDuration(classroomSessionDivision.getDuration());
 		}
 		
 	}

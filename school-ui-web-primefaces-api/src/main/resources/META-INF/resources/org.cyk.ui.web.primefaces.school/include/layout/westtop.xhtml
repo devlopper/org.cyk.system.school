@@ -4,18 +4,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"   
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:pe="http://primefaces.org/ui/extensions"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
-
-    <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
- 		<ui:param name="pageController" value="#{classroomSessionDivisionSubjectConsultPage}" />
- 		<ui:define name="body">
- 			<cyk:formOneData value="#{classroomSessionDivisionSubjectConsultPage.classroomSessionDivisionSubjectDetails}" />
-			<p:separator/>
-			<cyk:table value="#{classroomSessionDivisionSubjectConsultPage.evaluationTable}" />
- 		</ui:define>
- 	</ui:decorate>
- 
+      
+    <div class="ui-state-highlight" >
+    	<h:outputText value="#{uiManager.text('academic.session')}" />
+    	<h:outputText value="#{schoolWebManager.academicSessionInfos}" />
+    </div>
+	
 </html>
