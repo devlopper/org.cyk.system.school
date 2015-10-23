@@ -16,7 +16,6 @@ import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
-import org.cyk.system.school.ui.web.primefaces.stucture.ClassroomSessionDivisionConsultPage.DivisionSubjectDetails;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.model.AbstractOutputDetails;
@@ -50,7 +49,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		classroomSessionDivisionSubjectDetails = (FormOneData<Details>) createFormOneData(new Details(identifiable), Crud.READ);
 		configureDetailsForm(classroomSessionDivisionSubjectDetails);
 		
-		evaluationTable = (Table<EvaluationDetails>) createTable(DivisionSubjectDetails.class, null, null);
+		evaluationTable = (Table<EvaluationDetails>) createTable(EvaluationDetails.class, null, null);
 		configureDetailsTable(evaluationTable, "model.entity.classroomSessionDivisionSubject",Boolean.TRUE);
 		
 		evaluationTable.getRowListeners().add(new RowAdapter<EvaluationDetails>(){

@@ -63,7 +63,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Getter @Setter private Script averageComputationScript;
 	@Getter @Setter private SchoolReportProducer reportProducer;
 	
-	//@Inject private IesaFakedDataProducer iesaFakedDataProducer;
+	//@Inject private org.cyk.system.school.business.impl.iesa.IesaFakedDataProducer iesaFakedDataProducer;
 	
 	@Override
 	protected void initialisation() {
