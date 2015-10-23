@@ -65,6 +65,11 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 	protected Collection<UICommandable> contextualCommandables() {
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
 		contextualMenu.setLabel(contentTitle); 
+		
+		commandable = navigationManager.createConsultCommandable(identifiable.getType().getSubject(), "button", null);
+		commandable.setLabel(identifiable.getType().getSubject().getSubject().getName());
+		contextualMenu.getChildren().add(commandable);
+		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
 		

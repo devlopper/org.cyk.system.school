@@ -22,6 +22,7 @@ import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
@@ -61,6 +62,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	@Inject private StudentSubjectDao studentSubjectDao;
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentBusiness studentBusiness;
+	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	
 	private Subject subjectNameEnglishLanguage,subjectNameLiteratureInEnglish,subjectNameHistory,subjectNameGeography
 		,subjectNameSocialStudies,subjectNameReligiousStudies,subjectNameMathematics,subjectNamePhysics,subjectNameChemistry,subjectNameBiology,subjectNameFrench
@@ -87,8 +89,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	private CommonNodeInformations commonNodeInformations;
 	
 	private Integer numbreOfTeachers = 20;
-	private Integer numbreOfStudents = 100;
-	private Integer numbreOfStudentsByClassroomSession = 20;
+	private Integer numbreOfStudents = 250;
+	private Integer numbreOfStudentsByClassroomSession = 25;
 	
 	private Boolean generateCompleteAcademicSession = Boolean.TRUE;
 	
@@ -185,7 +187,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	classroomSessionDivision2 = createClassroomSessionDivision(classroomSessionG1);
     	classroomSessionDivision3 = createClassroomSessionDivision(classroomSessionG1);
     	
-    	grade1Subjects.add(subjectEnglishLanguage = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameEnglishLanguage,rootRandomDataProvider.oneFromDatabase(Teacher.class)));
+    	grade1Subjects.add(subjectEnglishLanguage = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameEnglishLanguage));
+    	grade1Subjects.add(subjectFrench = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameFrench));
     	
     	for(ClassroomSessionDivisionSubject subject : new ClassroomSessionDivisionSubject[]{subjectEnglishLanguage}){
     		createEvaluationType(subject, evaluationTypeNameTest1,new BigDecimal(".15"));
@@ -194,23 +197,30 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	}
     	
     	if(Boolean.TRUE.equals(generateCompleteAcademicSession)){
-    		for(Student student : studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession)){
-    			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : grade1Subjects){
-    				studentSubjectBusiness.create(new StudentSubject(student, classroomSessionDivisionSubject));
-    			}
-    		}
-    		
-    		for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
-    			SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType, Boolean.FALSE);
-    			for(StudentSubject studentSubject :studentSubjectDao.readBySubject(subjectEvaluationType.getSubject()) ){
-    				StudentSubjectEvaluation studentSubjectEvaluation = new StudentSubjectEvaluation(subjectEvaluation, studentSubject
-    						, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue())));
-    				subjectEvaluation.getStudentSubjectEvaluations().add(studentSubjectEvaluation);
-    			}
-    			subjectEvaluationBusiness.create(subjectEvaluation);
-    		}
+    		doBusiness();
     	}
 	}
+	
+	private void doBusiness(){
+		for(Student student : studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession)){
+			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjectBusiness.findAll()){
+				StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
+				studentSubjectBusiness.create(studentSubject);
+			}
+		}
+		
+		for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
+			SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType, Boolean.FALSE);
+			for(StudentSubject studentSubject :studentSubjectDao.readBySubject(subjectEvaluationType.getSubject()) ){
+				StudentSubjectEvaluation studentSubjectEvaluation = new StudentSubjectEvaluation(subjectEvaluation, studentSubject
+						, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue())));
+				subjectEvaluation.getStudentSubjectEvaluations().add(studentSubjectEvaluation);
+			}
+			subjectEvaluationBusiness.create(subjectEvaluation);
+		}
+	}
+	
+	/**/
 	
 	private LevelName createLevelName(String name){
 		LevelName levelName = new LevelName();
@@ -235,8 +245,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		return create(classroomSessionDivision);
 	}
 	
-	private ClassroomSessionDivisionSubject createClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subjectName,Teacher teacher){
-		return create(new ClassroomSessionDivisionSubject(classroomSessionDivision,subjectName,BigDecimal.ONE,teacher));
+	private ClassroomSessionDivisionSubject createClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subjectName){
+		return create(new ClassroomSessionDivisionSubject(classroomSessionDivision,subjectName,BigDecimal.ONE,rootRandomDataProvider.oneFromDatabase(Teacher.class)));
 	}
 	
 	private SubjectEvaluationType createEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient){
@@ -246,7 +256,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	}
 	
 	/**/
-	
+		
 	public static class ReportProducer extends AbstractSchoolReportProducer{
 		private static final long serialVersionUID = 246685915578107971L;
     	

@@ -76,6 +76,11 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 	protected Collection<UICommandable> contextualCommandables() {
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
 		contextualMenu.setLabel(contentTitle); 
+		
+		commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision(), "button", null);
+		commandable.setLabel(classroomSessionDivisionBusiness.format(identifiable.getClassroomSessionDivision()));
+		contextualMenu.getChildren().add(commandable);
+		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
 		
