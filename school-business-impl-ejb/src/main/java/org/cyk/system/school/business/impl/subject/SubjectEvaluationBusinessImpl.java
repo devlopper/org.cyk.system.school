@@ -38,4 +38,10 @@ public class SubjectEvaluationBusinessImpl extends AbstractTypedBusinessService<
 		return subjectEvaluation;
 	}
 	
+	@Override
+	protected void __load__(SubjectEvaluation subjectEvaluation) {
+		super.__load__(subjectEvaluation);
+		subjectEvaluation.setStudentSubjectEvaluations(studentSubjectEvaluationDao.readBySubjectEvaluation(subjectEvaluation));
+	}
+	
 }

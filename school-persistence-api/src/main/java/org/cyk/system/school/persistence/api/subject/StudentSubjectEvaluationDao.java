@@ -8,12 +8,14 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.SubjectEvaluation;
 
 public interface StudentSubjectEvaluationDao extends TypedDao<StudentSubjectEvaluation> {
 
 	Collection<StudentSubjectEvaluation> readByStudentSubject(StudentSubject studentSubject);
 	Long countByStudentSubject(StudentSubject studentSubject);
 
+	Collection<StudentSubjectEvaluation> readBySubjectEvaluation(SubjectEvaluation subjectEvaluation);
 	Collection<StudentSubjectEvaluation> readBySubject(ClassroomSessionDivisionSubject subject);
 	Collection<StudentSubjectEvaluation> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 	Collection<StudentSubjectEvaluation> readByClassroomSession(ClassroomSession classroomSession);

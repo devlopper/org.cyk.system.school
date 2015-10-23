@@ -67,9 +67,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		for(SubjectEvaluation evaluation : identifiable.getEvaluations()){
-			evaluationTable.addRow(new EvaluationDetails(evaluation));
-			
-			
+			evaluationTable.addRow(new EvaluationDetails(evaluation));	
 		}
 		//classroomSessionDivisionSubjectTable.setShowEditColumn(Boolean.TRUE);
 	}

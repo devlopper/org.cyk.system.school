@@ -43,8 +43,6 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		System.out
-				.println("ClassroomSessionDivisionConsultPage.initialisation()");
 		contentTitle = classroomSessionBusiness.format(identifiable.getClassroomSession())+" : "+classroomSessionDivisionBusiness.format(identifiable);
 		
 		classroomSessionDivisionDetails = (FormOneData<Details>) createFormOneData(new Details(identifiable), Crud.READ);

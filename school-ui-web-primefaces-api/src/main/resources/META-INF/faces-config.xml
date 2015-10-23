@@ -62,6 +62,17 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>subjectEvaluationEditView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/subjectevaluation/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>subjectEvaluationConsultView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/subjectevaluation/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>
 
 </faces-config>

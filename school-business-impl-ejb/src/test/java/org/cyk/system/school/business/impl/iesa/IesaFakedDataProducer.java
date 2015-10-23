@@ -21,6 +21,8 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
@@ -57,6 +59,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	@Inject private CompanyBusiness companyBusiness;
 	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
 	@Inject private StudentSubjectDao studentSubjectDao;
+	@Inject private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject private StudentBusiness studentBusiness;
 	
 	private Subject subjectNameEnglishLanguage,subjectNameLiteratureInEnglish,subjectNameHistory,subjectNameGeography
 		,subjectNameSocialStudies,subjectNameReligiousStudies,subjectNameMathematics,subjectNamePhysics,subjectNameChemistry,subjectNameBiology,subjectNameFrench
@@ -83,7 +87,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	private CommonNodeInformations commonNodeInformations;
 	
 	private Integer numbreOfTeachers = 20;
-	private Integer numbreOfStudents = 20;
+	private Integer numbreOfStudents = 100;
+	private Integer numbreOfStudentsByClassroomSession = 20;
 	
 	private Boolean generateCompleteAcademicSession = Boolean.TRUE;
 	
@@ -189,6 +194,12 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	}
     	
     	if(Boolean.TRUE.equals(generateCompleteAcademicSession)){
+    		for(Student student : studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession)){
+    			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : grade1Subjects){
+    				studentSubjectBusiness.create(new StudentSubject(student, classroomSessionDivisionSubject));
+    			}
+    		}
+    		
     		for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
     			SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType, Boolean.FALSE);
     			for(StudentSubject studentSubject :studentSubjectDao.readBySubject(subjectEvaluationType.getSubject()) ){

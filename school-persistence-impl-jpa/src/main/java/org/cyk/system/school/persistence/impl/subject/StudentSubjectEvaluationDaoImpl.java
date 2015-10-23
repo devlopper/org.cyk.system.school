@@ -9,6 +9,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 
 public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSubjectEvaluation> implements StudentSubjectEvaluationDao,Serializable {
@@ -16,7 +17,7 @@ public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSub
 	private static final long serialVersionUID = 6306356272165070761L;
 	
     private String readByStudentSubject,countByStudentSubject,readBySubject,readByClassroomSessionDivision,readByClassroomSession
-    	,readByClassroomSessionDivisions,readBySubjects,readByClassroomSessions;
+    	,readByClassroomSessionDivisions,readBySubjects,readByClassroomSessions,readBySubjectEvaluation;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -29,6 +30,7 @@ public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSub
         registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(commonUtils.attributePath(StudentSubjectEvaluation.FIELD_STUDENT_SUBJECT, StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT,ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION)));
         registerNamedQuery(readBySubjects, _select().whereIdentifierIn(commonUtils.attributePath(StudentSubjectEvaluation.FIELD_STUDENT_SUBJECT, StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT)));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(commonUtils.attributePath(StudentSubjectEvaluation.FIELD_STUDENT_SUBJECT, StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT,ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION,ClassroomSessionDivision.FIELD_CLASSROOMSESSION)));
+        registerNamedQuery(readBySubjectEvaluation, _select().where(StudentSubjectEvaluation.FIELD_EVALUATION));
     }
     
 	@Override
@@ -74,6 +76,11 @@ public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSub
 	@Override
 	public Collection<StudentSubjectEvaluation> readByClassroomSessions(Collection<ClassroomSession> levels) {
 		return namedQuery(readByClassroomSessions).parameterIdentifiers(levels).resultMany();
+	}
+
+	@Override
+	public Collection<StudentSubjectEvaluation> readBySubjectEvaluation(SubjectEvaluation subjectEvaluation) {
+		return namedQuery(readBySubjectEvaluation).parameter(StudentSubjectEvaluation.FIELD_EVALUATION, subjectEvaluation).resultMany();
 	}
 }
  
