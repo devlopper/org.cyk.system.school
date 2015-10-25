@@ -10,9 +10,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
@@ -27,6 +24,7 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -34,7 +32,11 @@ import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.generator.RandomDataProvider;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractTestHelper implements Serializable {
@@ -73,9 +75,12 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			}
 		}
 	}
+	public void takeSubjects(String[] studentRegistrationCodes){
+		takeSubjects(studentRegistrationCodes, classroomSessionDivisionSubjects.toArray(new ClassroomSessionDivisionSubject[]{}));
+	}
 	
-	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName,Boolean coefficientApplied,String[][] details){
-		SubjectEvaluation subjectEvaluation = new SubjectEvaluation(evaluationTypeBusiness.findBySubjectByEvaluationType(subject, evaluationTypeName),coefficientApplied);
+	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,Boolean coefficientApplied,String[][] details){
+		SubjectEvaluation subjectEvaluation = new SubjectEvaluation(evaluationTypeBusiness.findBySubjectByEvaluationType(subject, evaluationType),coefficientApplied);
 		for(String[] detail : details){
 			Student student = studentBusiness.findByRegistrationCode(detail[0]);
 			StudentSubject studentSubject = studentSubjectBusiness.findByStudentBySubject(student, subjectEvaluation.getType().getSubject());
@@ -86,6 +91,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		//System.out.println(studentSubjectEvaluationBusiness.findAll());
 	}
 	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,String[][] details){
+		
 		evaluateStudents(subject, evaluationType, coefficientApplied,details);
 	}
 	
@@ -179,5 +185,65 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	public static SchoolBusinessTestHelper getInstance() {
 		return INSTANCE;
 	}
+
+	/**/
 	
+	@Getter @Setter
+	public static class ClassroomSessionInfos{
+		private ClassroomSession classroomSession;
+		private List<ClassroomSessionDivisionInfos> divisions = new ArrayList<>(); 
+		
+		public ClassroomSessionInfos(ClassroomSession classroomSession) {
+			super();
+			this.classroomSession = classroomSession;
+		}
+		
+		public ClassroomSessionDivisionInfos division(Integer index){
+			return divisions.get(index);
+		}
+		
+		public ClassroomSessionDivisionSubject subject(Integer index,Integer subjectIndex){
+			return division(index).getSubjects().get(subjectIndex).getClassroomSessionDivisionSubject();
+		}
+		
+	}
+	
+	@Getter @Setter
+	public static class ClassroomSessionDivisionInfos{
+		private ClassroomSessionDivision classroomSessionDivision; 
+		private List<ClassroomSessionDivisionSubjectInfos> subjects = new ArrayList<>();
+		
+		public ClassroomSessionDivisionInfos(ClassroomSessionDivision classroomSessionDivision) {
+			super();
+			this.classroomSessionDivision = classroomSessionDivision;
+		}
+		
+		public ClassroomSessionDivisionSubjectInfos subject(Integer index){
+			return subjects.get(index);
+		}
+		
+		public List<ClassroomSessionDivisionSubject> getClassroomSessionDivisionSubjects(){
+			List<ClassroomSessionDivisionSubject> list = new ArrayList<>();
+			for(ClassroomSessionDivisionSubjectInfos classroomSessionDivisionSubjectInfos : subjects)
+				list.add(classroomSessionDivisionSubjectInfos.getClassroomSessionDivisionSubject());
+			return list;
+		}
+		
+	}
+	
+	@Getter @Setter
+	public static class ClassroomSessionDivisionSubjectInfos{
+		private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
+		private List<SubjectEvaluationType> evaluationTypes = new ArrayList<>();
+		
+		public ClassroomSessionDivisionSubjectInfos(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+			super();
+			this.classroomSessionDivisionSubject = classroomSessionDivisionSubject;
+		}
+		
+		public SubjectEvaluationType evaluationType(Integer index){
+			return evaluationTypes.get(index);
+		}
+		
+	}
 }

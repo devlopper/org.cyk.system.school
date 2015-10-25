@@ -9,8 +9,6 @@ import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
@@ -27,6 +25,9 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionInfos;
+import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionSubjectInfos;
+import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionInfos;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -50,6 +51,9 @@ import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.generator.RandomDataProvider;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractFakedDataProducer implements Serializable {
 
@@ -68,7 +72,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		,subjectNameSocialStudies,subjectNameReligiousStudies,subjectNameMathematics,subjectNamePhysics,subjectNameChemistry,subjectNameBiology,subjectNameFrench
 		,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation,subjectNameGrammar,subjectNameReadingComprehension,subjectNameHandWriting,
 		subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameScience;
-	private EvaluationType evaluationTypeNameTest1,evaluationTypeNameTest2,evaluationTypeNameExam;
+	private EvaluationType evaluationTypeTest1,evaluationTypeTest2,evaluationTypeExam;
 	private Interval intervalGradingScaleAStar,intervalGradingScaleA,intervalGradingScaleB,intervalGradingScaleC,intervalGradingScaleD,intervalGradingScaleE;
 	private Interval intervalEffortLevel1,intervalEffortLevel2,intervalEffortLevel3,intervalEffortLevel4,intervalEffortLevel5;
 	private LevelName levelNameG1,levelNameG2,levelNameG3;
@@ -81,18 +85,21 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	,subjectArtAndCraft,subjectMusic,subjectICT,subjectPhysicalEducation,subjectGrammar,subjectReadingComprehension,subjectHandWriting,
 	subjectSpelling,subjectPhonics,subjectCreativeWriting,subjectMoralEducation,subjectScience;
 	
+	private ClassroomSessionInfos grade1;
+	
 	private Collection<ClassroomSessionDivisionSubject> grade1Subjects = new ArrayList<>();
+	private Collection<EvaluationType> evaluationTypes = new ArrayList<>();
 	private Collection<SubjectEvaluationType> subjectEvaluationTypes = new ArrayList<>();
 	
 	private MetricCollection studentWorkMetricCollection;
 	
 	private CommonNodeInformations commonNodeInformations;
 	
-	private Integer numbreOfTeachers = 20;
-	private Integer numbreOfStudents = 250;
-	private Integer numbreOfStudentsByClassroomSession = 25;
+	@Setter private Integer numbreOfTeachers = 20;
+	@Setter private Integer numbreOfStudents = 250;
+	@Setter private Integer numbreOfStudentsByClassroomSession = 25;
 	
-	private Boolean generateCompleteAcademicSession = Boolean.TRUE;
+	@Setter private Boolean generateCompleteAcademicSession = Boolean.FALSE;
 	
 	@Override
 	public void produce() {
@@ -100,6 +107,14 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		//schoolBusinessLayer.setAverageComputationListener(new Averagec);
 		// Subjects
 		subjectNameEnglishLanguage = createEnumeration(Subject.class,"English Language");
+		subjectNameGrammar = createEnumeration(Subject.class,"Grammar");
+		subjectNameReadingComprehension = createEnumeration(Subject.class,"Reading & Comprehension");
+		subjectNameHandWriting = createEnumeration(Subject.class,"Hand writing");
+		subjectNameSpelling = createEnumeration(Subject.class,"Spelling");
+		subjectNamePhonics = createEnumeration(Subject.class,"Phonics");
+		subjectNameCreativeWriting = createEnumeration(Subject.class,"Creative writing");
+		subjectNameMoralEducation = createEnumeration(Subject.class,"Moral education");
+		subjectNameScience = createEnumeration(Subject.class,"Science");
 		subjectNameLiteratureInEnglish = createEnumeration(Subject.class,"Literature in english");
 		subjectNameHistory = createEnumeration(Subject.class,"History");
 		subjectNameGeography = createEnumeration(Subject.class,"Geography");
@@ -116,9 +131,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		subjectNamePhysicalEducation = createEnumeration(Subject.class,"Physical education");
 		
 		//Evaluation Type
-		evaluationTypeNameTest1 = createEnumeration(EvaluationType.class,"Test 1");
-		evaluationTypeNameTest2 = createEnumeration(EvaluationType.class,"Test 2");
-		evaluationTypeNameExam = createEnumeration(EvaluationType.class,"Exam");
+		evaluationTypes.add(evaluationTypeTest1 = createEnumeration(EvaluationType.class,"Test 1"));
+		evaluationTypes.add(evaluationTypeTest2 = createEnumeration(EvaluationType.class,"Test 2"));
+		evaluationTypes.add(evaluationTypeExam = createEnumeration(EvaluationType.class,"Exam"));
 		
 		//Grades
 		
@@ -179,26 +194,25 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	academicSession.getPeriod().setToDate(new Date());
     	academicSession = create(academicSession);
     	
-    	classroomSessionG1 = createClassroomSession(academicSession, levelTimeDivisionG1);
+    	
     	classroomSessionG2 = createClassroomSession(academicSession, levelTimeDivisionG2);
     	classroomSessionG3 = createClassroomSession(academicSession, levelTimeDivisionG3);
     	
-    	classroomSessionDivision1 = createClassroomSessionDivision(classroomSessionG1);
-    	classroomSessionDivision2 = createClassroomSessionDivision(classroomSessionG1);
-    	classroomSessionDivision3 = createClassroomSessionDivision(classroomSessionG1);
-    	
-    	grade1Subjects.add(subjectEnglishLanguage = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameEnglishLanguage));
-    	grade1Subjects.add(subjectFrench = createClassroomSessionDivisionSubject(classroomSessionDivision1,subjectNameFrench));
-    	
-    	for(ClassroomSessionDivisionSubject subject : new ClassroomSessionDivisionSubject[]{subjectEnglishLanguage}){
-    		createEvaluationType(subject, evaluationTypeNameTest1,new BigDecimal(".15"));
-    		createEvaluationType(subject, evaluationTypeNameTest2,new BigDecimal(".15"));
-    		createEvaluationType(subject, evaluationTypeNameExam,new BigDecimal(".7"));
-    	}
+    	grade1 = grade(academicSession, levelTimeDivisionG1,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
+    			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
+    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation});
     	
     	if(Boolean.TRUE.equals(generateCompleteAcademicSession)){
     		doBusiness();
     	}
+	}
+	
+	private ClassroomSessionInfos grade(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Subject[] subjects){
+		ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(createClassroomSession(academicSession, levelTimeDivision));
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionInfos.getClassroomSession(),subjects));
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionInfos.getClassroomSession(),subjects));
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionInfos.getClassroomSession(),subjects));
+		return classroomSessionInfos;
 	}
 	
 	private void doBusiness(){
@@ -237,19 +251,34 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		return create(classroomSession);
 	}
 	
-	private ClassroomSessionDivision createClassroomSessionDivision(ClassroomSession classroomSession){
+	private ClassroomSessionDivisionInfos createClassroomSessionDivision(ClassroomSession classroomSession,Subject[] subjects){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));
 		classroomSessionDivision.getPeriod().setFromDate(new Date());
 		classroomSessionDivision.getPeriod().setToDate(new Date());
-		return create(classroomSessionDivision);
+		ClassroomSessionDivisionInfos classroomSessionDivisionInfos = new ClassroomSessionDivisionInfos(create(classroomSessionDivision));
+		
+		for(Subject subject : subjects){
+			classroomSessionDivisionInfos.getSubjects().add(createClassroomSessionDivisionSubject(classroomSessionDivision,subject,new Object[][]{
+				{evaluationTypeTest1,"0.15"},{evaluationTypeTest2,"0.15"},{evaluationTypeExam,"0.7"}
+			}));
+    	}
+    	
+		return classroomSessionDivisionInfos;
 	}
 	
-	private ClassroomSessionDivisionSubject createClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subjectName){
-		return create(new ClassroomSessionDivisionSubject(classroomSessionDivision,subjectName,BigDecimal.ONE,rootRandomDataProvider.oneFromDatabase(Teacher.class)));
+	private ClassroomSessionDivisionSubjectInfos createClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subject,Object[][] evaluationTypes){
+		ClassroomSessionDivisionSubject classroomSessionDivisionSubject = new ClassroomSessionDivisionSubject(classroomSessionDivision,subject,BigDecimal.ONE,rootRandomDataProvider.oneFromDatabase(Teacher.class));
+		classroomSessionDivisionSubject = create(classroomSessionDivisionSubject);
+		ClassroomSessionDivisionSubjectInfos classroomSessionDivisionSubjectInfos = new ClassroomSessionDivisionSubjectInfos(classroomSessionDivisionSubject);
+		for(Object[] evaluationType : evaluationTypes){
+			Object[] infos = evaluationType;
+			classroomSessionDivisionSubjectInfos.getEvaluationTypes().add(createSubjectEvaluationType(classroomSessionDivisionSubject, (EvaluationType)infos[0], new BigDecimal((String)infos[1])));
+		}
+		return classroomSessionDivisionSubjectInfos;
 	}
 	
-	private SubjectEvaluationType createEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient){
+	private SubjectEvaluationType createSubjectEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient){
 		SubjectEvaluationType subjectEvaluationType = create(new SubjectEvaluationType(subject,name,coefficient,new BigDecimal("100")));
 		subjectEvaluationTypes.add(subjectEvaluationType);
 		return subjectEvaluationType;
@@ -299,5 +328,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			return r;
 		}
     }
+	
+	
 
 }
