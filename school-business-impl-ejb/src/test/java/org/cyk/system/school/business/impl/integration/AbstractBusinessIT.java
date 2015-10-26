@@ -10,6 +10,8 @@ import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessTestHelper;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.party.ApplicationBusiness;
+import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
+import org.cyk.system.root.business.impl.AbstractFakedDataProducer.FakedDataProducerAdapter;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
 import org.cyk.system.root.business.impl.BusinessIntegrationTestHelper;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
@@ -26,6 +28,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
 import org.cyk.utility.common.test.DefaultTestEnvironmentAdapter;
 import org.cyk.utility.test.ArchiveBuilder;
+import org.cyk.utility.test.Transaction;
 import org.cyk.utility.test.integration.AbstractIntegrationTestJpaBased;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -84,6 +87,11 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     
     protected void installApplication(){
     	installApplication(Boolean.TRUE);
+    	produce(getFakedDataProducer());
+    }
+    
+    protected AbstractFakedDataProducer getFakedDataProducer(){
+    	return null;
     }
     
 	@Override
@@ -142,25 +150,30 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
                 ;
     } 
     
-    @Override
-    protected void create() {
-        
-    }
+    @Override protected void create() {}
+    @Override protected void delete() {}
+    @Override protected void read() {}
+    @Override protected void update() {}
 
-    @Override
-    protected void delete() {
-        
+    protected FakedDataProducerAdapter fakedDataProducerAdapter(){
+    	return new FakedDataProducerAdapter(){
+    		@Override
+    		public void flush() {
+    			super.flush();
+    			getEntityManager().flush();
+    		}
+    	};
     }
-
     
-
-    @Override
-    protected void read() {
-        
+    protected void produce(final AbstractFakedDataProducer fakedDataProducer){
+    	if(fakedDataProducer==null)
+    		return ;
+    	new Transaction(this,userTransaction,null){
+			@Override
+			public void _execute_() {
+				fakedDataProducer.produce(fakedDataProducerAdapter());
+			}
+    	}.run();
     }
 
-    @Override
-    protected void update() {
-        
-    }
 }

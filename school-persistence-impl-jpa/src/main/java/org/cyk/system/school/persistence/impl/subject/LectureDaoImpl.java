@@ -1,6 +1,7 @@
 package org.cyk.system.school.persistence.impl.subject;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -44,6 +45,11 @@ public class LectureDaoImpl extends AbstractTypedDao<Lecture> implements Lecture
 	@Override
 	public Collection<Lecture> readByClassroomSessions(Collection<ClassroomSession> levels) {
 		return namedQuery(readByClassroomSessions).parameterIdentifiers(levels).resultMany();
+	}
+	
+	@Override
+	public Collection<Lecture> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		return readBySubjects(Arrays.asList(classroomSessionDivisionSubject));
 	}
 
 	@Override

@@ -73,6 +73,17 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>lectureEditView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/lecture/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>lectureConsultView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/lecture/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>
 
 </faces-config>

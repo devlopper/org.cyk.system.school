@@ -56,6 +56,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	@ManyToOne private ScheduleCollection scheduleCollection;
 	
 	@Transient private Collection<SubjectEvaluation> evaluations = new ArrayList<>();
+	@Transient private Collection<Lecture> lectures = new ArrayList<>();
 	
 	public ClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subject, BigDecimal coefficient,Teacher teacher) {
 		super();

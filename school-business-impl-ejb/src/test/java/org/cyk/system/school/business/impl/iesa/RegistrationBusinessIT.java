@@ -32,7 +32,7 @@ public class RegistrationBusinessIT extends AbstractBusinessIT {
     	new Transaction(this,userTransaction,null){
 			@Override
 			public void _execute_() {
-				iesaFakedDataProducer.produce();
+				iesaFakedDataProducer.produce(null);
 			}
     	}.run();
     	

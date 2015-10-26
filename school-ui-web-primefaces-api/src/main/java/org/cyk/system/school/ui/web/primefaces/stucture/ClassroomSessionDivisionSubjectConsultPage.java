@@ -8,13 +8,11 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
@@ -27,6 +25,9 @@ import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultPage<ClassroomSessionDivisionSubject> implements Serializable {
 
@@ -37,6 +38,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 	
 	private FormOneData<Details> classroomSessionDivisionSubjectDetails;
 	private Table<EvaluationDetails> evaluationTable;
+	private Table<LectureDetails> lectureTable;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -50,11 +52,23 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		configureDetailsForm(classroomSessionDivisionSubjectDetails);
 		
 		evaluationTable = (Table<EvaluationDetails>) createTable(EvaluationDetails.class, null, null);
-		configureDetailsTable(evaluationTable, "model.entity.classroomSessionDivisionSubject",Boolean.TRUE);
+		configureDetailsTable(evaluationTable, "model.entity.subjectEvaluation",Boolean.TRUE);
 		
 		evaluationTable.getRowListeners().add(new RowAdapter<EvaluationDetails>(){
 			@Override
 			public void added(Row<EvaluationDetails> row) {
+				super.added(row);
+				row.setOpenable(Boolean.TRUE);
+				row.setUpdatable(Boolean.TRUE);
+			}
+		});
+		
+		lectureTable = (Table<LectureDetails>) createTable(LectureDetails.class, null, null);
+		configureDetailsTable(lectureTable, "model.entity.lecture",Boolean.TRUE);
+		
+		lectureTable.getRowListeners().add(new RowAdapter<LectureDetails>(){
+			@Override
+			public void added(Row<LectureDetails> row) {
 				super.added(row);
 				row.setOpenable(Boolean.TRUE);
 				row.setUpdatable(Boolean.TRUE);
@@ -68,6 +82,9 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		super.afterInitialisation();
 		for(SubjectEvaluation evaluation : identifiable.getEvaluations()){
 			evaluationTable.addRow(new EvaluationDetails(evaluation));	
+		}
+		for(Lecture lecture  : identifiable.getLectures()){
+			lectureTable.addRow(new LectureDetails(lecture));	
 		}
 		//classroomSessionDivisionSubjectTable.setShowEditColumn(Boolean.TRUE);
 	}
@@ -84,6 +101,9 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
 		
+		commandable = navigationManager.createCreateCommandable(Lecture.class, uiManager.businessEntityInfos(Lecture.class).getUiLabelId(), null);
+		contextualMenu.getChildren().add(commandable);
+		
 		return Arrays.asList(contextualMenu);
 	}
 	
@@ -98,7 +118,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			super(classroomSessionDivisionSubject);
 			name = classroomSessionDivisionSubject.getSubject().getName();
 			coefficient = numberBusiness.format(classroomSessionDivisionSubject.getCoefficient());
-			teacher = classroomSessionDivisionSubject.getSubject().getName();
+			teacher = classroomSessionDivisionSubject.getTeacher().getPerson().getNames();
 		}
 		
 	}
@@ -112,6 +132,18 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			super(subjectEvaluation);
 			name = subjectEvaluation.getType().getName().getName();
 			coefficient = numberBusiness.format(subjectEvaluation.getType().getCoefficient());
+		}
+		
+	}
+	
+	public static class LectureDetails extends AbstractOutputDetails<Lecture> implements Serializable{
+		private static final long serialVersionUID = -4741435164709063863L;
+		
+		@Input @InputText private String date;
+		
+		public LectureDetails(Lecture lecture) {
+			super(lecture);
+			date = timeBusiness.formatDate(lecture.getEvent().getPeriod().getFromDate());
 		}
 		
 	}

@@ -5,9 +5,6 @@ import java.io.Serializable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
@@ -20,6 +17,9 @@ import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.web.primefaces.AbstractPrimefacesManager;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {

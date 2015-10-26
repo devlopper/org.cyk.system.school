@@ -2,9 +2,9 @@ package org.cyk.system.school.business.impl.iesa;
 
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
-import org.cyk.utility.test.Transaction;
 
 public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
 
@@ -14,15 +14,13 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
      
     protected void installApplication(Boolean fake){
     	super.installApplication(fake);
-    	new Transaction(this,userTransaction,null){
-			@Override
-			public void _execute_() {
-				dataProducer.produce();
-			}
-    	}.run();
-    	
     	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
     	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
+    }
+    
+    @Override
+    protected AbstractFakedDataProducer getFakedDataProducer() {
+    	return dataProducer;
     }
     
 }
