@@ -46,6 +46,12 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     	});
 	}
 	
+	@Deployment
+    public static Archive<?> createDeployment() {
+    	Archive<?> archive = createRootDeployment();
+    	return archive;
+    }
+	
 	private static final long serialVersionUID = -5752455124275831171L;
 	@Inject protected ExceptionUtils exceptionUtils; 
 	@Inject protected DefaultValidator defaultValidator;
