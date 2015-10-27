@@ -5,9 +5,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
@@ -21,10 +26,13 @@ import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
+import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionInfos;
@@ -52,10 +60,8 @@ import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractFakedDataProducer implements Serializable {
@@ -66,9 +72,12 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private CompanyBusiness companyBusiness;
 	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
+	@Inject private SubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
 	@Inject private StudentSubjectDao studentSubjectDao;
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentBusiness studentBusiness;
+	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
+	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	@Inject private LectureBusiness lectureBusiness;
 	
@@ -106,10 +115,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	
 	@Setter private Boolean generateCompleteAcademicSession = Boolean.FALSE;
 	
-	@Override
-	public void produce(FakedDataProducerListener listener) {
-		rootDataProducerHelper.setBasePackage(SchoolBusinessLayer.class.getPackage());
-		//schoolBusinessLayer.setAverageComputationListener(new Averagec);
+	private void structure(){
 		// Subjects
 		subjectNameEnglishLanguage = createEnumeration(Subject.class,"English Language");
 		subjectNameGrammar = createEnumeration(Subject.class,"Grammar");
@@ -182,12 +188,12 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		levelTimeDivisionG1 = create(new LevelTimeDivision(levelG1, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
 		levelTimeDivisionG2 = create(new LevelTimeDivision(levelG2, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
 		levelTimeDivisionG3 = create(new LevelTimeDivision(levelG3, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
-		flush(listener,"Before actors");
+		flush("Before actors");
 		
 		rootRandomDataProvider.createActor(Teacher.class, numbreOfTeachers);
-		flush(listener,"Teachers");
+		flush("Teachers");
 		rootRandomDataProvider.createActor(Student.class, numbreOfStudents);
-		flush(listener,"Students");
+		flush("Students");
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformations);
     	create(school);
@@ -199,70 +205,117 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	academicSession.getPeriod().setFromDate(new Date());
     	academicSession.getPeriod().setToDate(new Date());
     	academicSession = create(academicSession);
-    	flush(listener,"Academic session");
+    	flush("Academic session");
     	
-    	grade1 = grade(academicSession, levelTimeDivisionG1,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
+    	Collection<ClassroomSession> classroomSessions = new ArrayList<>(); 
+    	Collection<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>(); 
+    	Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>();
+    	Collection<SubjectEvaluationType> subjectEvaluationTypes = new ArrayList<>(); 
+    	
+    	grade1 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession, levelTimeDivisionG1,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
     			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
     			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation},listener);
     	
-    	grade2 = grade(academicSession, levelTimeDivisionG2,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
+    	grade2 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession, levelTimeDivisionG2,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
     			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
     			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation},listener);
     	
-    	grade3 = grade(academicSession, levelTimeDivisionG3,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
+    	grade3 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession, levelTimeDivisionG3,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
     			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
     			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation},listener);
+    	
+    	flush(ClassroomSession.class, classroomSessionBusiness, classroomSessions);
+    	flush(ClassroomSessionDivision.class, classroomSessionDivisionBusiness, classroomSessionDivisions);
+    	flush(ClassroomSessionDivisionSubject.class, classroomSessionDivisionSubjectBusiness, classroomSessionDivisionSubjects);
+    	flush(SubjectEvaluationType.class, subjectEvaluationTypeBusiness, subjectEvaluationTypes);
+	}
+	
+	@Override
+	public void produce(FakedDataProducerListener listener) {
+		this.listener =listener;
+		rootDataProducerHelper.setBasePackage(SchoolBusinessLayer.class.getPackage());
+		//schoolBusinessLayer.setAverageComputationListener(new Averagec);
+		
+    	structure();
     	
     	if(Boolean.TRUE.equals(generateCompleteAcademicSession)){
     		doBusiness(listener);
     	}
 	}
-	
-	private ClassroomSessionInfos grade(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Subject[] subjects,FakedDataProducerListener listener){
-		ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(createClassroomSession(academicSession, levelTimeDivision));
-		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionInfos.getClassroomSession(),subjects));
-		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionInfos.getClassroomSession(),subjects));
-		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionInfos.getClassroomSession(),subjects));
-		flush(listener,"Grade");
-		return classroomSessionInfos;
-	}
-	
+		
 	private void doBusiness(FakedDataProducerListener listener){
+		ExecutorService executor = Executors.newFixedThreadPool(5);
+        
+		
+		Collection<StudentSubject> studentSubjects = new ArrayList<>();
+		
 		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{grade1,grade2,grade3}){
-			for(Student student : studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession)){
+			
+			executor.execute(
+					new ClassroomsessionBusinessProducer(classroomSessionInfos, listener, studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession),studentSubjects));
+			
+			//createStudentSubjects(studentSubjects, classroomSessionInfos,studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession));
+			
+			/*
+			Collection<Student> students = studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession);
+			System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
+			
+			for(Student student : students){
 				for(ClassroomSessionDivisionInfos classroomSessionDivisionInfos : classroomSessionInfos.getDivisions()){
 					for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionInfos.getClassroomSessionDivisionSubjects()){
 						StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
-						studentSubjectBusiness.create(studentSubject);
+						studentSubjects.add(studentSubject);
+						//flush(StudentSubject.class,studentSubjectBusiness,studentSubjects,10000l);
 					}
-				}
-				
+				}	
 			}
-			flush(listener,"Student subjects "+classroomSessionInfos.getClassroomSession());
+			flush(StudentSubject.class,studentSubjectBusiness,studentSubjects);
+			*/
 		}
+		executor.shutdown();
+        while (!executor.isTerminated()) {}
 		
+		flush(StudentSubject.class,studentSubjectBusiness,studentSubjects);
 		
-		for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
+		Collection<SubjectEvaluation> subjectEvaluations = new ArrayList<>();
+		for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypeBusiness.findAll()){
 			SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType, Boolean.FALSE);
 			for(StudentSubject studentSubject :studentSubjectDao.readBySubject(subjectEvaluationType.getSubject()) ){
 				StudentSubjectEvaluation studentSubjectEvaluation = new StudentSubjectEvaluation(subjectEvaluation, studentSubject
 						, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue())));
 				subjectEvaluation.getStudentSubjectEvaluations().add(studentSubjectEvaluation);
 			}
-			subjectEvaluationBusiness.create(subjectEvaluation);
+			subjectEvaluations.add(subjectEvaluation);
+			flush(SubjectEvaluation.class,subjectEvaluationBusiness,subjectEvaluations,10000l);
 		}
-		flush(listener,"Student subject evaluations");
+		flush(SubjectEvaluation.class,subjectEvaluationBusiness,subjectEvaluations);
 		
+		Collection<Lecture> lectures = new ArrayList<>();
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjectBusiness.findAll()){
 			for(int i=0;i<numbreOfLecturesByClassroomSessionDivisionSubject;i++){
 				Event event = new Event();
 				event.getPeriod().setFromDate(new Date());
 				event.getPeriod().setToDate(new Date());
 				Lecture lecture = new Lecture(classroomSessionDivisionSubject, event);
-				lectureBusiness.create(lecture);
+				lectures.add(lecture);
+				flush(Lecture.class,lectureBusiness,lectures,10000l);
 			}
 		}
-		flush(listener,"Lectures");
+		flush(Lecture.class,lectureBusiness,lectures);
+		
+	}
+	
+	private void createStudentSubjects(Collection<StudentSubject> studentSubjects,ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){
+		System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
+		for(Student student : students){
+			for(ClassroomSessionDivisionInfos classroomSessionDivisionInfos : classroomSessionInfos.getDivisions()){
+				for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionInfos.getClassroomSessionDivisionSubjects()){
+					StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
+					studentSubjects.add(studentSubject);
+					//flush(StudentSubject.class,studentSubjectBusiness,studentSubjects,10000l);
+				}
+			}	
+		}
 	}
 	
 	/**/
@@ -275,22 +328,28 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		return create(levelName);
 	}
 	
-	private ClassroomSession createClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision){
+	private ClassroomSessionInfos grade(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<SubjectEvaluationType> subjectEvaluationTypes,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Subject[] subjects,FakedDataProducerListener listener){
 		ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision, rootRandomDataProvider.oneFromDatabase(Teacher.class));
 		classroomSession.getPeriod().setFromDate(new Date());
 		classroomSession.getPeriod().setToDate(new Date());
-		return create(classroomSession);
+		classroomSessions.add(classroomSession);
+		ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(classroomSession);
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession(),subjects));
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession(),subjects));
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession(),subjects));
+		return classroomSessionInfos;
 	}
 	
-	private ClassroomSessionDivisionInfos createClassroomSessionDivision(ClassroomSession classroomSession,Subject[] subjects){
+	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<SubjectEvaluationType> subjectEvaluationTypes,ClassroomSession classroomSession,Subject[] subjects){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));
+		classroomSessionDivisions.add(classroomSessionDivision);
 		classroomSessionDivision.getPeriod().setFromDate(new Date());
 		classroomSessionDivision.getPeriod().setToDate(new Date());
-		ClassroomSessionDivisionInfos classroomSessionDivisionInfos = new ClassroomSessionDivisionInfos(create(classroomSessionDivision));
+		ClassroomSessionDivisionInfos classroomSessionDivisionInfos = new ClassroomSessionDivisionInfos(classroomSessionDivision);
 		
 		for(Subject subject : subjects){
-			classroomSessionDivisionInfos.getSubjects().add(createClassroomSessionDivisionSubject(classroomSessionDivision,subject,new Object[][]{
+			classroomSessionDivisionInfos.getSubjects().add(createClassroomSessionDivisionSubject(classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionDivision,subject,new Object[][]{
 				{evaluationTypeTest1,"0.15"},{evaluationTypeTest2,"0.15"},{evaluationTypeExam,"0.7"}
 			}));
     	}
@@ -298,19 +357,19 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		return classroomSessionDivisionInfos;
 	}
 	
-	private ClassroomSessionDivisionSubjectInfos createClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subject,Object[][] evaluationTypes){
+	private ClassroomSessionDivisionSubjectInfos createClassroomSessionDivisionSubject(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<SubjectEvaluationType> subjectEvaluationTypes,ClassroomSessionDivision classroomSessionDivision,Subject subject,Object[][] evaluationTypes){
 		ClassroomSessionDivisionSubject classroomSessionDivisionSubject = new ClassroomSessionDivisionSubject(classroomSessionDivision,subject,BigDecimal.ONE,rootRandomDataProvider.oneFromDatabase(Teacher.class));
-		classroomSessionDivisionSubject = create(classroomSessionDivisionSubject);
+		classroomSessionDivisionSubjects.add(classroomSessionDivisionSubject);
 		ClassroomSessionDivisionSubjectInfos classroomSessionDivisionSubjectInfos = new ClassroomSessionDivisionSubjectInfos(classroomSessionDivisionSubject);
 		for(Object[] evaluationType : evaluationTypes){
 			Object[] infos = evaluationType;
-			classroomSessionDivisionSubjectInfos.getEvaluationTypes().add(createSubjectEvaluationType(classroomSessionDivisionSubject, (EvaluationType)infos[0], new BigDecimal((String)infos[1])));
+			classroomSessionDivisionSubjectInfos.getEvaluationTypes().add(createSubjectEvaluationType(subjectEvaluationTypes,classroomSessionDivisionSubject, (EvaluationType)infos[0], new BigDecimal((String)infos[1])));
 		}
 		return classroomSessionDivisionSubjectInfos;
 	}
 	
-	private SubjectEvaluationType createSubjectEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient){
-		SubjectEvaluationType subjectEvaluationType = create(new SubjectEvaluationType(subject,name,coefficient,new BigDecimal("100")));
+	private SubjectEvaluationType createSubjectEvaluationType(Collection<SubjectEvaluationType> subjectEvaluationTypes,ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient){
+		SubjectEvaluationType subjectEvaluationType = new SubjectEvaluationType(subject,name,coefficient,new BigDecimal("100"));
 		subjectEvaluationTypes.add(subjectEvaluationType);
 		return subjectEvaluationType;
 	}
@@ -360,6 +419,34 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		}
     }
 	
+	/**/
 	
+	@Getter @Setter
+	public class ClassroomsessionBusinessProducer extends AbstractBean implements Runnable {
+
+		private static final long serialVersionUID = 925442738199260331L;
+		private ClassroomSessionInfos classroomSessionInfos;
+		private FakedDataProducerListener listener;
+		private Collection<StudentSubject> studentSubjects;
+		private Collection<Student> students;
+		
+		public ClassroomsessionBusinessProducer(ClassroomSessionInfos classroomSessionInfos,FakedDataProducerListener listener,Collection<Student> students,Collection<StudentSubject> studentSubjects) {
+			super();
+			this.classroomSessionInfos = classroomSessionInfos;
+			this.listener = listener;
+			this.students = students;
+			this.studentSubjects = studentSubjects;
+		}
+		
+		@Override
+		public void run() {
+			
+			//Collection<StudentSubject> studentSubjects = new ArrayList<>();
+			//createStudentSubjects(studentSubjects, classroomSessionInfos,students);
+			//flush(StudentSubject.class,studentSubjectBusiness,studentSubjects);	
+				
+			createStudentSubjects(studentSubjects, classroomSessionInfos,students);
+		}
+	}
 
 }

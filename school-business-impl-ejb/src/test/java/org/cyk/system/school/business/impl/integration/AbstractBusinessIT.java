@@ -86,8 +86,10 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     }
     
     protected void installApplication(){
+    	long t = System.currentTimeMillis();
     	installApplication(Boolean.TRUE);
     	produce(getFakedDataProducer());
+    	System.out.println( ((System.currentTimeMillis()-t)/1000)+" s" );
     }
     
     protected AbstractFakedDataProducer getFakedDataProducer(){

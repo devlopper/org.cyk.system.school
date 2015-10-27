@@ -130,7 +130,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		
 		public EvaluationDetails(SubjectEvaluation subjectEvaluation) {
 			super(subjectEvaluation);
-			name = subjectEvaluation.getType().getName().getName();
+			name = subjectEvaluation.getType().getType().getName();
 			coefficient = numberBusiness.format(subjectEvaluation.getType().getCoefficient());
 		}
 		

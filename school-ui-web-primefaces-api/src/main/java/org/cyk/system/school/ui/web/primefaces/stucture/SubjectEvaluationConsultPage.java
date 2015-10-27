@@ -84,7 +84,7 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 		public Details(SubjectEvaluation subjectEvaluation) {
 			super(subjectEvaluation);
 			date = timeBusiness.formatDate(subjectEvaluation.getDate());
-			type = subjectEvaluation.getType().getName().getName();
+			type = subjectEvaluation.getType().getType().getName();
 			coefficient = numberBusiness.format(subjectEvaluation.getType().getCoefficient());
 		}
 	}

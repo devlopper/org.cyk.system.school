@@ -19,12 +19,12 @@ public class SubjectEvaluationTypeDaoImpl extends AbstractTypedDao<SubjectEvalua
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
-		registerNamedQuery(readBySubjectByEvaluationType, _select().where(SubjectEvaluationType.FIELD_SUBJECT).and(SubjectEvaluationType.FIELD_NAME));
+		registerNamedQuery(readBySubjectByEvaluationType, _select().where(SubjectEvaluationType.FIELD_SUBJECT).and(SubjectEvaluationType.FIELD_TYPE));
 	}
 	
 	@Override
 	public SubjectEvaluationType readBySubjectByEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName) {
-		return namedQuery(readBySubjectByEvaluationType).parameter(SubjectEvaluationType.FIELD_SUBJECT, subject).parameter(SubjectEvaluationType.FIELD_NAME, evaluationTypeName)
+		return namedQuery(readBySubjectByEvaluationType).parameter(SubjectEvaluationType.FIELD_SUBJECT, subject).parameter(SubjectEvaluationType.FIELD_TYPE, evaluationTypeName)
 				.ignoreThrowable(NoResultException.class).resultOne();
 	}
 	

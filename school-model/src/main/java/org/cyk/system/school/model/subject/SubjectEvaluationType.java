@@ -20,7 +20,7 @@ public class SubjectEvaluationType extends AbstractIdentifiable implements Seria
 
 	@ManyToOne private ClassroomSessionDivisionSubject subject;
 	
-	@ManyToOne private EvaluationType name;
+	@ManyToOne private EvaluationType type;
 	
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE)
 	private BigDecimal coefficient;
@@ -28,15 +28,15 @@ public class SubjectEvaluationType extends AbstractIdentifiable implements Seria
 	@Column(precision=COEFFICIENT_PRECISION*2,scale=FLOAT_SCALE)
 	private BigDecimal maximumValue;
 
-	public SubjectEvaluationType(ClassroomSessionDivisionSubject subject, EvaluationType name,BigDecimal coefficient, BigDecimal maximumValue) {
+	public SubjectEvaluationType(ClassroomSessionDivisionSubject subject, EvaluationType type,BigDecimal coefficient, BigDecimal maximumValue) {
 		super();
 		this.subject = subject;
-		this.name = name;
+		this.type = type;
 		this.coefficient = coefficient;
 		this.maximumValue = maximumValue;
 	}
 	
 	public static final String FIELD_SUBJECT = "subject";
-	public static final String FIELD_NAME = "name";
+	public static final String FIELD_TYPE = "type";
 	
 }
