@@ -101,12 +101,12 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	
 	/**/
 	
-	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<StudentSubject> findBySubject(ClassroomSessionDivisionSubject subject) {
 		return dao.readBySubject(subject);
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public StudentSubject findByStudentBySubject(Student student,ClassroomSessionDivisionSubject subject) {
 		return dao.readByStudentBySubject(student, subject);
 	}

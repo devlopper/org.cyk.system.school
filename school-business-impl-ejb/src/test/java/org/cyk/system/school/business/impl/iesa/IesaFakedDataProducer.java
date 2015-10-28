@@ -15,10 +15,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.event.Event;
+import org.cyk.system.root.model.event.EventMissed;
+import org.cyk.system.root.model.event.EventMissedReason;
+import org.cyk.system.root.model.event.EventParticipation;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
@@ -298,6 +302,14 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 				event.getPeriod().setToDate(new Date());
 				Lecture lecture = new Lecture(classroomSessionDivisionSubject, event);
 				lectures.add(lecture);
+				for(StudentSubject studentSubject : studentSubjectBusiness.findBySubject(classroomSessionDivisionSubject)){
+					EventParticipation eventParticipation = new EventParticipation(studentSubject.getStudent().getPerson());
+					if(RandomDataProvider.getInstance().randomInt(1, 5)==3){
+						EventMissed eventMissed = new EventMissed(eventParticipation, rootRandomDataProvider.oneFromDatabase(EventMissedReason.class),DateUtils.MILLIS_PER_DAY);
+						eventParticipation.setMissed(eventMissed);
+					}
+					event.getEventParticipations().add(eventParticipation);
+				}
 				flush(Lecture.class,lectureBusiness,lectures,10000l);
 			}
 		}
@@ -312,7 +324,6 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 				for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionInfos.getClassroomSessionDivisionSubjects()){
 					StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
 					studentSubjects.add(studentSubject);
-					//flush(StudentSubject.class,studentSubjectBusiness,studentSubjects,10000l);
 				}
 			}	
 		}
