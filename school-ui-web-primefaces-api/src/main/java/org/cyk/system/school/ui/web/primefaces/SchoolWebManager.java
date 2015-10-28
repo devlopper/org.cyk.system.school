@@ -3,6 +3,7 @@ package org.cyk.system.school.ui.web.primefaces;
 import java.io.Serializable;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
@@ -21,7 +22,7 @@ import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 import lombok.Getter;
 import lombok.Setter;
 
-@Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
+@Named @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {
 
 	public static final int DEPLOYMENT_ORDER = SchoolBusinessLayer.DEPLOYMENT_ORDER+1;
@@ -30,7 +31,11 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	private static SchoolWebManager INSTANCE;
 	
 	private final String outcomeConfigureLevels = "configureLevels";
-	@Getter @Setter private String academicSessionInfos;
+	@Getter @Setter private String academicSessionInfos="INFOS TO SET";
+	private String outcomeClassroomSessionMainDetails;
+	private String outcomeClassroomSessionDivisionDetails;
+	private String outcomeClassroomSessionSubjectDetails;
+	private String outcomeClassroomSessionStudentDetails;
 	
 	@Inject private AcademicSessionBusiness academicSessionBusiness;
 	

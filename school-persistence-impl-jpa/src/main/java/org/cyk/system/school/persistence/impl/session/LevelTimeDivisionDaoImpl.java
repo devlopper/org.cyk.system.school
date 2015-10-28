@@ -12,7 +12,7 @@ public class LevelTimeDivisionDaoImpl extends AbstractTypedDao<LevelTimeDivision
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readByClassroomSession;
+	//private String readByClassroomSession;
 	
 	@Override
 	protected void namedQueriesInitialisation() {

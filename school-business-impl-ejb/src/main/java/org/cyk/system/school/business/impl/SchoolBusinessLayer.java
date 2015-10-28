@@ -44,8 +44,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	private static SchoolBusinessLayer INSTANCE;
 	
-	@Inject private TeacherBusiness teacherBusiness;
-	@Inject private StudentBusiness studentBusiness;
+	@Inject @Getter private TeacherBusiness teacherBusiness;
+	@Inject @Getter private StudentBusiness studentBusiness;
 	@Inject @Getter private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject @Getter private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
 	@Inject @Getter private StudentClassroomSessionBusiness studentClassroomSessionBusiness;

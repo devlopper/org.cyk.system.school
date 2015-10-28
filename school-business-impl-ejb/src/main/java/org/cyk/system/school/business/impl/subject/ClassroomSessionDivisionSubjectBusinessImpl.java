@@ -7,7 +7,9 @@ import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
 import org.cyk.system.school.persistence.api.subject.SubjectEvaluationDao;
@@ -19,10 +21,23 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	
 	@Inject private SubjectEvaluationDao subjectEvaluationDao;
 	@Inject private LectureDao lectureDao;
+	@Inject SubjectClassroomSessionDao subjectClassroomSessionDao;
 	
 	@Inject
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {
 		super(dao); 
+	}
+	
+	@Override
+	public ClassroomSessionDivisionSubject create(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		super.create(classroomSessionDivisionSubject);
+		SubjectClassroomSession subjectClassroomSession = subjectClassroomSessionDao.readBySubjectByClassroomSession(
+				classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
+		if(subjectClassroomSession==null){
+			subjectClassroomSession = new SubjectClassroomSession(classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
+			subjectClassroomSessionDao.create(subjectClassroomSession);
+		}
+		return classroomSessionDivisionSubject;
 	}
     
 	@Override
