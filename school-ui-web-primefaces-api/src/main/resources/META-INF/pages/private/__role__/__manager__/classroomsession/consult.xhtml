@@ -17,18 +17,10 @@
 				<ui:param name="menu" value="#{classroomSessionConsultPage.detailsMenu}" />
 			</ui:include>
 			
-			<ui:fragment rendered="#{classroomSessionConsultPage.detailsMenu.requestedCommandableIndex == 0}" >
-				<cyk:formOneData value="#{classroomSessionConsultPage.details}" />	
-				<cyk:table value="#{classroomSessionConsultPage.divisionTable}" />
-			</ui:fragment>
-			
-			<ui:fragment rendered="#{classroomSessionConsultPage.detailsMenu.requestedCommandableIndex == 1}" >
-				<cyk:table value="#{classroomSessionConsultPage.subjectTable}" />	
-			</ui:fragment>
-			
-			<ui:fragment rendered="#{classroomSessionConsultPage.detailsMenu.requestedCommandableIndex == 2}" >
-				<cyk:table value="#{classroomSessionConsultPage.studentTable}" />	
-			</ui:fragment>
+			<cyk:formOneData value="#{classroomSessionConsultPage.details}" />	
+			<cyk:table value="#{classroomSessionConsultPage.divisionTable}" />
+			<cyk:table value="#{classroomSessionConsultPage.subjectTable}" />	
+			<cyk:table value="#{classroomSessionConsultPage.studentTable}" />
 			
  		</ui:define>
  	</ui:decorate>

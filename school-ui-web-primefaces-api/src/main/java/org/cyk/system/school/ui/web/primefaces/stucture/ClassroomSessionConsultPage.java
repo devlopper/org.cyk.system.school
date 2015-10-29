@@ -11,7 +11,6 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.company.ui.web.primefaces.CompanyWebManager;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
@@ -21,8 +20,6 @@ import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.ui.api.command.menu.DefaultMenu;
-import org.cyk.ui.api.command.menu.UIMenu.RenderType;
 import org.cyk.ui.api.model.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
@@ -42,52 +39,74 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	private Table<SubjectDetails> subjectTable;
 	private Table<StudentDetails> studentTable;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
 		
 		details = (FormOneData<Details>) createFormOneData(new Details(identifiable), Crud.READ);
-		configureDetailsForm(details);
+		configureDetailsForm(details,new DetailsFormOneDataConfigurationAdapter<ClassroomSession,Details>(ClassroomSession.class, Details.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getTitleId() {
+				return "model.entity.classroomSession";
+			}
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+		});
 		
-		divisionTable = (Table<DivisionDetails>) createTable(DivisionDetails.class, null, null);
-		configureDetailsTable(divisionTable, "model.entity.classroomSessionDivision",new Crud[]{Crud.READ,Crud.UPDATE});
-		for(ClassroomSessionDivision classroomSessionDivision : identifiable.getDivisions())
-			divisionTable.getInitialData().add(new DivisionDetails(classroomSessionDivision));
+		divisionTable = (Table<DivisionDetails>) createDetailsTable(DivisionDetails.class, new DetailsTableConfigurationAdapter<ClassroomSessionDivision,DivisionDetails>(ClassroomSessionDivision.class, DivisionDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getTitleId() {
+				return "model.entity.classroomSessionDivision";
+			}
+			@Override
+			public Collection<ClassroomSessionDivision> getIdentifiables() {
+				return identifiable.getDivisions();
+			}
+			@Override
+			public Crud[] getCruds() {
+				return new Crud[]{Crud.READ,Crud.UPDATE};
+			}
+		});
 		
-		subjectTable = (Table<SubjectDetails>) createTable(SubjectDetails.class, null, null);
-		configureDetailsTable(subjectTable, "model.entity.subject");
-		for(SubjectClassroomSession subjectClassroomSession : subjectClassroomSessionBusiness.findByClassroomSession(identifiable))
-			subjectTable.getInitialData().add(new SubjectDetails(subjectClassroomSession));
+		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsTableConfigurationAdapter<SubjectClassroomSession,SubjectDetails>(SubjectClassroomSession.class, SubjectDetails.class){
+				private static final long serialVersionUID = 1L;
+				@Override
+				public String getTitleId() {
+					return "model.entity.subject";
+				}
+				@Override
+				public Collection<SubjectClassroomSession> getIdentifiables() {
+					return subjectClassroomSessionBusiness.findByClassroomSession(identifiable);
+				}
+				@Override
+				public Crud[] getCruds() {
+					return new Crud[]{Crud.READ,Crud.UPDATE};
+				}
+			});
 		
-		studentTable = (Table<StudentDetails>) createTable(StudentDetails.class, null, null);
-		configureDetailsTable(studentTable, "model.entity.subject");
-		for(StudentClassroomSession studentClassroomSession : SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().findByClassroomSession(identifiable))
-			studentTable.getInitialData().add(new StudentDetails(studentClassroomSession));
-		
-		detailsMenu = new DefaultMenu();
-		detailsMenu.addCommandable("t1", null, CompanyWebManager.getInstance().getOutcomeCustomerBalance());
-		detailsMenu.addCommandable("t2", null, CompanyWebManager.getInstance().getOutcomeCustomerSaleStock());
-		detailsMenu.addCommandable("t3", null, CompanyWebManager.getInstance().getOutcomeEditSaleDeliveryDetails());
-		
-		
+		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsTableConfigurationAdapter<StudentClassroomSession,StudentDetails>(StudentClassroomSession.class, StudentDetails.class){
+				private static final long serialVersionUID = 1L;
+				@Override
+				public String getTitleId() {
+					return "model.entity.student";
+				}
+				@Override
+				public Collection<StudentClassroomSession> getIdentifiables() {
+					return SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().findByClassroomSession(identifiable);
+				}
+				@Override
+				public Crud[] getCruds() {
+					return new Crud[]{Crud.CREATE,Crud.READ,Crud.UPDATE,Crud.DELETE};
+				}
+			});
+					
 	}
-	
-	@Override
-	protected void afterInitialisation() {
-		// TODO Auto-generated method stub
-		super.afterInitialisation();
-		
-	}
-	
-	@Override
-	public void targetDependentInitialisation() {
-		// TODO Auto-generated method stub
-		super.targetDependentInitialisation();
-		//detailsMenu.setRenderType(RenderType.PLAIN);
-	}
-		
+			
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
@@ -126,10 +145,10 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	
 	public static class SubjectDetails extends AbstractOutputDetails<SubjectClassroomSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String names;
+		@Input @InputText private String name;
 		public SubjectDetails(SubjectClassroomSession subjectClassroomSession) {
 			super(subjectClassroomSession);
-			names = subjectClassroomSession.getSubject().getName();
+			name = subjectClassroomSession.getSubject().getName();
 		}
 	}
 	
