@@ -16,7 +16,7 @@ public interface StudentSubjectEvaluationDao extends TypedDao<StudentSubjectEval
 	Long countByStudentSubject(StudentSubject studentSubject);
 
 	Collection<StudentSubjectEvaluation> readBySubjectEvaluation(SubjectEvaluation subjectEvaluation);
-	Collection<StudentSubjectEvaluation> readBySubject(ClassroomSessionDivisionSubject subject);
+	Collection<StudentSubjectEvaluation> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject subject);
 	Collection<StudentSubjectEvaluation> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 	Collection<StudentSubjectEvaluation> readByClassroomSession(ClassroomSession classroomSession);
 	Collection<StudentSubjectEvaluation> readByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions);

@@ -16,14 +16,14 @@ public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSub
 
 	private static final long serialVersionUID = 6306356272165070761L;
 	
-    private String readByStudentSubject,countByStudentSubject,readBySubject,readByClassroomSessionDivision,readByClassroomSession
+    private String readByStudentSubject,countByStudentSubject,readByClassroomSessionDivisionSubject,readByClassroomSessionDivision,readByClassroomSession
     	,readByClassroomSessionDivisions,readBySubjects,readByClassroomSessions,readBySubjectEvaluation;
     
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
         registerNamedQuery(readByStudentSubject, _select().where(StudentSubjectEvaluation.FIELD_STUDENT_SUBJECT));
-        registerNamedQuery(readBySubject, _select().where(commonUtils.attributePath(StudentSubjectEvaluation.FIELD_STUDENT_SUBJECT,StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT),
+        registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(commonUtils.attributePath(StudentSubjectEvaluation.FIELD_STUDENT_SUBJECT,StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT),
         		StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT));
         registerNamedQuery(readByClassroomSessionDivision, _select().where(commonUtils.attributePath(StudentSubjectEvaluation.FIELD_STUDENT_SUBJECT, StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT,ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION), ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION));
         registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentSubjectEvaluation.FIELD_STUDENT_SUBJECT, StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT,ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION,ClassroomSessionDivision.FIELD_CLASSROOMSESSION) , ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
@@ -46,8 +46,8 @@ public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSub
 	}
 
 	@Override
-	public Collection<StudentSubjectEvaluation> readBySubject(ClassroomSessionDivisionSubject subject) {
-		return namedQuery(readBySubject).parameter(ClassroomSessionDivisionSubject.FIELD_SUBJECT, subject)
+	public Collection<StudentSubjectEvaluation> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		return namedQuery(readByClassroomSessionDivisionSubject).parameter(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, classroomSessionDivisionSubject)
                 .resultMany();
 	}
 

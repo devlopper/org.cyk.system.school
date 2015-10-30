@@ -22,6 +22,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -47,6 +48,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject @Getter private TeacherBusiness teacherBusiness;
 	@Inject @Getter private StudentBusiness studentBusiness;
 	@Inject @Getter private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject @Getter private StudentSubjectEvaluationBusiness studentSubjectEvaluationBusiness;
 	@Inject @Getter private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
 	@Inject @Getter private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
 	@Inject @Getter private ClassroomSessionBusiness classroomSessionBusiness;

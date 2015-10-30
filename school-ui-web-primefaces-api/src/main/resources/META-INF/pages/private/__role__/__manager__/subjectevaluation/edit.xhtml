@@ -13,6 +13,17 @@
  		<ui:param name="pageController" value="#{subjectEvaluationEditPage}" />
  		<ui:define name="body">
  			<cyk:formOneData value="#{subjectEvaluationEditPage.form}"/>
+ 			<cyk:itemCollection value="#{subjectEvaluationEditPage.markCollection}" >
+ 				<p:column headerText="#{uiManager.text('field.registration.code')}" >
+ 					<h:outputText value="#{item.registrationCode}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('field.names')}" >
+ 					<h:outputText value="#{item.names}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('mark')}" >
+ 					<cyk:inputText value="#{item.form.findInputByFieldName('value')}"/>
+ 				</p:column>
+ 			</cyk:itemCollection>
  		</ui:define>
  		
  		<ui:define name="contentMenuBar">

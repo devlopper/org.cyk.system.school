@@ -28,8 +28,8 @@ public class StudentSubjectEvaluationBusinessImpl extends AbstractTypedBusinessS
 	}
 	
 	@Override
-	public Collection<StudentSubjectEvaluation> findBySubject(ClassroomSessionDivisionSubject subject) {
-		return dao.readBySubject(subject);
+	public Collection<StudentSubjectEvaluation> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		return dao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 	}
 	/*
 	@Override

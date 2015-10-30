@@ -12,7 +12,7 @@ public interface StudentSubjectEvaluationBusiness extends TypedBusiness<StudentS
 
 	Collection<StudentSubjectEvaluation> find(StudentSubject studentSubject);
 	
-	Collection<StudentSubjectEvaluation> findBySubject(ClassroomSessionDivisionSubject subject);
+	Collection<StudentSubjectEvaluation> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
 	
 	Collection<StudentSubjectEvaluation> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 	

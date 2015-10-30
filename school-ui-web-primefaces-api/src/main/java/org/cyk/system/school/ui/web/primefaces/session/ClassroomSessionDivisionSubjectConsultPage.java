@@ -54,7 +54,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			}
 			@Override
 			public Crud[] getCruds() {
-				return new Crud[]{Crud.READ,Crud.UPDATE};
+				return new Crud[]{Crud.CREATE,Crud.READ,Crud.UPDATE,Crud.DELETE};
 			}
 		});
 		
@@ -66,7 +66,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			}
 			@Override
 			public Crud[] getCruds() {
-				return new Crud[]{Crud.READ,Crud.UPDATE};
+				return new Crud[]{Crud.CREATE,Crud.READ,Crud.UPDATE,Crud.DELETE};
 			}
 		});
 	}

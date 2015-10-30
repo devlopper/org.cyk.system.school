@@ -5,14 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.ui.api.UIProvider;
@@ -28,9 +25,6 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEvaluation> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
-	
-	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
-	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	
 	private FormOneData<Details> details;
 	private Table<MarkDetails> markTable;
