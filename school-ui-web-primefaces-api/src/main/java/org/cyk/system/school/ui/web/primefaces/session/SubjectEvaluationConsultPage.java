@@ -1,4 +1,4 @@
-package org.cyk.system.school.ui.web.primefaces.stucture;
+package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -11,7 +11,6 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
@@ -33,10 +32,9 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	
-	private FormOneData<Details> subjectEvaluationDetails;
+	private FormOneData<Details> details;
 	private Table<MarkDetails> markTable;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialisation() {
 		super.initialisation();
@@ -44,23 +42,31 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 				+" : "+classroomSessionDivisionBusiness.format(identifiable.getClassroomSessionDivision())
 				+" : "+identifiable.getSubject().getName();*/
 		
-		subjectEvaluationDetails = (FormOneData<Details>) createFormOneData(new Details(identifiable), Crud.READ);
-		configureDetailsForm(subjectEvaluationDetails);
+		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<SubjectEvaluation,Details>(SubjectEvaluation.class, Details.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+		});
 		
-		markTable = (Table<MarkDetails>) createTable(MarkDetails.class, null, null);
-		configureDetailsTable(markTable, "model.entity.studentSubjectEvaluation");
-		
+		markTable = (Table<MarkDetails>) createDetailsTable(MarkDetails.class, new DetailsTableConfigurationAdapter<StudentSubjectEvaluation,MarkDetails>(StudentSubjectEvaluation.class, MarkDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Collection<StudentSubjectEvaluation> getIdentifiables() {
+				return identifiable.getStudentSubjectEvaluations();
+			}
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+			@Override
+			public String getTabId() {
+				return super.getTabId();
+			}
+		});
 	}
-	
-	@Override
-	protected void afterInitialisation() {
-		super.afterInitialisation();
-		for(StudentSubjectEvaluation studentSubjectEvaluation : identifiable.getStudentSubjectEvaluations()){
-			markTable.addRow(new MarkDetails(studentSubjectEvaluation));	
-		}
-		//classroomSessionDivisionSubjectTable.setShowEditColumn(Boolean.TRUE);
-	}
-	
+
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;

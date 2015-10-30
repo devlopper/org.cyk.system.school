@@ -1,4 +1,4 @@
-package org.cyk.system.school.ui.web.primefaces.stucture;
+package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -44,13 +44,8 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		super.initialisation();
 		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
 		
-		details = (FormOneData<Details>) createFormOneData(new Details(identifiable), Crud.READ);
-		configureDetailsForm(details,new DetailsFormOneDataConfigurationAdapter<ClassroomSession,Details>(ClassroomSession.class, Details.class){
+		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<ClassroomSession,Details>(ClassroomSession.class, Details.class){
 			private static final long serialVersionUID = 1L;
-			@Override
-			public String getTitleId() {
-				return "model.entity.classroomSession";
-			}
 			@Override
 			public Boolean getEnabledInDefaultTab() {
 				return Boolean.TRUE;
@@ -59,10 +54,6 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		
 		divisionTable = (Table<DivisionDetails>) createDetailsTable(DivisionDetails.class, new DetailsTableConfigurationAdapter<ClassroomSessionDivision,DivisionDetails>(ClassroomSessionDivision.class, DivisionDetails.class){
 			private static final long serialVersionUID = 1L;
-			@Override
-			public String getTitleId() {
-				return "model.entity.classroomSessionDivision";
-			}
 			@Override
 			public Collection<ClassroomSessionDivision> getIdentifiables() {
 				return identifiable.getDivisions();
@@ -76,10 +67,6 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsTableConfigurationAdapter<SubjectClassroomSession,SubjectDetails>(SubjectClassroomSession.class, SubjectDetails.class){
 				private static final long serialVersionUID = 1L;
 				@Override
-				public String getTitleId() {
-					return "model.entity.subject";
-				}
-				@Override
 				public Collection<SubjectClassroomSession> getIdentifiables() {
 					return subjectClassroomSessionBusiness.findByClassroomSession(identifiable);
 				}
@@ -91,10 +78,6 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		
 		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsTableConfigurationAdapter<StudentClassroomSession,StudentDetails>(StudentClassroomSession.class, StudentDetails.class){
 				private static final long serialVersionUID = 1L;
-				@Override
-				public String getTitleId() {
-					return "model.entity.student";
-				}
 				@Override
 				public Collection<StudentClassroomSession> getIdentifiables() {
 					return SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().findByClassroomSession(identifiable);

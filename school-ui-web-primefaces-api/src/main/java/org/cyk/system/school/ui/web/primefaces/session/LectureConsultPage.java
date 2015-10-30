@@ -1,4 +1,4 @@
-package org.cyk.system.school.ui.web.primefaces.stucture;
+package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -8,7 +8,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.cyk.system.root.business.api.Crud;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.business.api.event.EventBusiness;
 import org.cyk.system.root.model.event.EventParticipation;
 import org.cyk.system.root.model.party.person.Person;
@@ -18,16 +20,11 @@ import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.model.AbstractOutputDetails;
-import org.cyk.ui.api.model.table.Row;
-import org.cyk.ui.api.model.table.RowAdapter;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class LectureConsultPage extends AbstractConsultPage<Lecture> implements Serializable {
@@ -38,10 +35,9 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private EventBusiness eventBusiness;
 	
-	private FormOneData<Details> lectureDetails;
+	private FormOneData<Details> details;
 	private Table<ParticipantDetails> participationTable;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialisation() {
 		super.initialisation();
@@ -49,34 +45,30 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 				+" : "+classroomSessionDivisionBusiness.format(identifiable.getClassroomSessionDivision())
 				+" : "+identifiable.getSubject().getName();*/
 		
-		eventBusiness.load(identifiable.getEvent());
 		
-		lectureDetails = (FormOneData<Details>) createFormOneData(new Details(identifiable), Crud.READ);
-		configureDetailsForm(lectureDetails);
 		
-		participationTable = (Table<ParticipantDetails>) createTable(ParticipantDetails.class, null, null);
-		configureDetailsTable(participationTable, "model.entity.student",Boolean.TRUE);
-		
-		participationTable.getRowListeners().add(new RowAdapter<ParticipantDetails>(){
+		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<Lecture,Details>(Lecture.class, Details.class){
+			private static final long serialVersionUID = 1L;
 			@Override
-			public void added(Row<ParticipantDetails> row) {
-				super.added(row);
-				row.setOpenable(Boolean.TRUE);
-				row.setUpdatable(Boolean.TRUE);
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
 			}
 		});
 		
+		participationTable = (Table<ParticipantDetails>) createDetailsTable(ParticipantDetails.class, new DetailsTableConfigurationAdapter<EventParticipation,ParticipantDetails>(EventParticipation.class, ParticipantDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Collection<EventParticipation> getIdentifiables() {
+				eventBusiness.load(identifiable.getEvent());
+				return identifiable.getEvent().getEventParticipations();
+			}	
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+		});
+
 	}
-	
-	@Override
-	protected void afterInitialisation() {
-		super.afterInitialisation();
-		for(EventParticipation eventParticipation : identifiable.getEvent().getEventParticipations()){
-			participationTable.addRow(new ParticipantDetails(eventParticipation));	
-		}
-		//classroomSessionDivisionSubjectTable.setShowEditColumn(Boolean.TRUE);
-	}
-	
+
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
@@ -100,26 +92,20 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 	
 	public static class Details extends AbstractOutputDetails<Lecture> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		
 		@Input @InputText private String date;
-		
 		public Details(Lecture lecture) {
 			super(lecture);
 			date = timeBusiness.formatDate(lecture.getEvent().getPeriod().getFromDate());
 		}
-		
 	}
 	
 	public static class ParticipantDetails extends AbstractOutputDetails<EventParticipation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		
 		@Input @InputText private String names,present;
-		
 		public ParticipantDetails(EventParticipation eventParticipation) {
 			super(eventParticipation);
 			names = ((Person)eventParticipation.getParty()).getNames();
 		}
-		
 	}
 
 }

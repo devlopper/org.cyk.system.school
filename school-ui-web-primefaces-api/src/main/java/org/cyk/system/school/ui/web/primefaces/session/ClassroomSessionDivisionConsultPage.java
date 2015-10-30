@@ -1,27 +1,23 @@
-package org.cyk.system.school.ui.web.primefaces.stucture;
+package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.model.AbstractOutputDetails;
-import org.cyk.ui.api.model.table.Row;
-import org.cyk.ui.api.model.table.RowAdapter;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
@@ -33,40 +29,47 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
-	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
+	private FormOneData<Details> details;
+	private Table<SubjectDetails> subjectTable;
+	private Table<StudentDetails> studentTable;
 	
-	private FormOneData<Details> classroomSessionDivisionDetails;
-	private Table<DivisionSubjectDetails> classroomSessionDivisionSubjectTable;
-	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = classroomSessionBusiness.format(identifiable.getClassroomSession())+" : "+classroomSessionDivisionBusiness.format(identifiable);
+		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable);
 		
-		classroomSessionDivisionDetails = (FormOneData<Details>) createFormOneData(new Details(identifiable), Crud.READ);
-		configureDetailsForm(classroomSessionDivisionDetails);
-		
-		classroomSessionDivisionSubjectTable = (Table<DivisionSubjectDetails>) createTable(DivisionSubjectDetails.class, null, null);
-		configureDetailsTable(classroomSessionDivisionSubjectTable, "model.entity.classroomSessionDivisionSubject",Boolean.TRUE);
-		
-		classroomSessionDivisionSubjectTable.getRowListeners().add(new RowAdapter<DivisionSubjectDetails>(){
+		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<ClassroomSessionDivision,Details>(ClassroomSessionDivision.class, Details.class){
+			private static final long serialVersionUID = 1L;
 			@Override
-			public void added(Row<DivisionSubjectDetails> row) {
-				super.added(row);
-				row.setOpenable(Boolean.TRUE);
-				row.setUpdatable(Boolean.TRUE);
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
 			}
 		});
-	}
-	
-	@Override
-	protected void afterInitialisation() {
-		super.afterInitialisation();
-		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : identifiable.getSubjects())
-			classroomSessionDivisionSubjectTable.addRow(new DivisionSubjectDetails(classroomSessionDivisionSubject));
-		classroomSessionDivisionSubjectTable.setShowEditColumn(Boolean.TRUE);
+		
+		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsTableConfigurationAdapter<ClassroomSessionDivisionSubject,SubjectDetails>(ClassroomSessionDivisionSubject.class, SubjectDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Collection<ClassroomSessionDivisionSubject> getIdentifiables() {
+				return identifiable.getSubjects();
+			}
+			@Override
+			public Crud[] getCruds() {
+				return new Crud[]{Crud.READ,Crud.UPDATE};
+			}
+		});
+		
+		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsTableConfigurationAdapter<StudentClassroomSessionDivision,StudentDetails>(StudentClassroomSessionDivision.class, StudentDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Collection<StudentClassroomSessionDivision> getIdentifiables() {
+				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivision(identifiable);
+			}
+			@Override
+			public Crud[] getCruds() {
+				return new Crud[]{Crud.READ};
+			}
+		});
+		
 	}
 	
 	@Override
@@ -75,7 +78,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		contextualMenu.setLabel(contentTitle); 
 		
 		commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSession(), "button", null);
-		commandable.setLabel(classroomSessionBusiness.format(identifiable.getClassroomSession()));
+		commandable.setLabel(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable.getClassroomSession()));
 		contextualMenu.getChildren().add(commandable);
 		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
@@ -88,29 +91,32 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	
 	public static class Details extends AbstractOutputDetails<ClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		
 		@Input @InputText private String name,duration;
-		
 		public Details(ClassroomSessionDivision classroomSessionDivision) {
 			super(classroomSessionDivision);
 			name = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision);
 			duration = timeBusiness.formatDuration(classroomSessionDivision.getDuration());
 		}
-		
 	}
 	
-	public static class DivisionSubjectDetails extends AbstractOutputDetails<ClassroomSessionDivisionSubject> implements Serializable{
+	public static class SubjectDetails extends AbstractOutputDetails<ClassroomSessionDivisionSubject> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		
 		@Input @InputText private String name,coefficient,teacher;
-		
-		public DivisionSubjectDetails(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		public SubjectDetails(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 			super(classroomSessionDivisionSubject);
 			name = classroomSessionDivisionSubject.getSubject().getName();
 			coefficient = numberBusiness.format(classroomSessionDivisionSubject.getCoefficient());
 			teacher = classroomSessionDivisionSubject.getTeacher().getPerson().getNames();
 		}
-		
+	}
+	
+	public static class StudentDetails extends AbstractOutputDetails<StudentClassroomSessionDivision> implements Serializable{
+		private static final long serialVersionUID = -4741435164709063863L;
+		@Input @InputText private String names;
+		public StudentDetails(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+			super(studentClassroomSessionDivision);
+			names = studentClassroomSessionDivision.getStudent().getPerson().getNames();
+		}
 	}
 
 }
