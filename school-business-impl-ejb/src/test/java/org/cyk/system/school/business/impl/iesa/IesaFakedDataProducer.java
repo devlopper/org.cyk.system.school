@@ -284,7 +284,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		Collection<SubjectEvaluation> subjectEvaluations = new ArrayList<>();
 		for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypeBusiness.findAll()){
 			SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType, Boolean.FALSE);
-			for(StudentSubject studentSubject :studentSubjectDao.readBySubject(subjectEvaluationType.getSubject()) ){
+			for(StudentSubject studentSubject :studentSubjectDao.readByClassroomSessionDivisionSubject(subjectEvaluationType.getSubject()) ){
 				StudentSubjectEvaluation studentSubjectEvaluation = new StudentSubjectEvaluation(subjectEvaluation, studentSubject
 						, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue())));
 				subjectEvaluation.getStudentSubjectEvaluations().add(studentSubjectEvaluation);

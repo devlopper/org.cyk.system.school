@@ -13,7 +13,7 @@ public interface StudentSubjectDao extends TypedDao<StudentSubject> {
 
 	StudentSubject readByStudentBySubject(Student student, ClassroomSessionDivisionSubject subject);
 
-	Collection<StudentSubject> readBySubject(ClassroomSessionDivisionSubject subject);
+	Collection<StudentSubject> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject subject);
 	
 	Collection<StudentSubject> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 

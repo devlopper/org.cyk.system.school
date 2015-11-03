@@ -1,6 +1,7 @@
 package org.cyk.system.school.persistence.impl.subject;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.persistence.NoResultException;
 
@@ -14,18 +15,24 @@ public class SubjectEvaluationTypeDaoImpl extends AbstractTypedDao<SubjectEvalua
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readBySubjectByEvaluationType;
+	private String readBySubjectByEvaluationType,readByClassroomSessionDivisionSubject;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
 		registerNamedQuery(readBySubjectByEvaluationType, _select().where(SubjectEvaluationType.FIELD_SUBJECT).and(SubjectEvaluationType.FIELD_TYPE));
+		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(SubjectEvaluationType.FIELD_SUBJECT));
 	}
 	
 	@Override
 	public SubjectEvaluationType readBySubjectByEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName) {
 		return namedQuery(readBySubjectByEvaluationType).parameter(SubjectEvaluationType.FIELD_SUBJECT, subject).parameter(SubjectEvaluationType.FIELD_TYPE, evaluationTypeName)
 				.ignoreThrowable(NoResultException.class).resultOne();
+	}
+
+	@Override
+	public Collection<SubjectEvaluationType> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		return namedQuery(readByClassroomSessionDivisionSubject).parameter(SubjectEvaluationType.FIELD_SUBJECT, classroomSessionDivisionSubject).resultMany();
 	}
 	
 }

@@ -21,7 +21,11 @@
  					<h:outputText value="#{item.names}" />
  				</p:column>
  				<p:column headerText="#{uiManager.text('mark')}" >
- 					<cyk:inputText value="#{item.form.findInputByFieldName('value')}"/>
+ 					<!--cyk:inputNumber value="#{item.form.findInputByFieldName('value')}"/-->
+ 					<!--cyk:inputText value="#{item.form.findInputByFieldName('type1')}"/-->
+ 					
+ 					<pe:inputNumber value="#{item.value}" />
+ 					
  				</p:column>
  			</cyk:itemCollection>
  		</ui:define>

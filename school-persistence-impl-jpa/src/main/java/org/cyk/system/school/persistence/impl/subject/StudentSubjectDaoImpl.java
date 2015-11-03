@@ -46,7 +46,7 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentSubject> impl
     }
 
 	@Override
-	public Collection<StudentSubject> readBySubject(ClassroomSessionDivisionSubject subject) {
+	public Collection<StudentSubject> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject subject) {
 		return namedQuery(readBySubject).parameter(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, subject).resultMany();
 	}
 

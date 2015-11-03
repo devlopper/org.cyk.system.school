@@ -6,6 +6,9 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
@@ -24,6 +27,7 @@ import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
+import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -31,11 +35,9 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER)
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
@@ -55,6 +57,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject @Getter private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject @Getter private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	@Inject @Getter private SubjectEvaluationBusiness subjectEvaluationBusiness;
+	@Inject @Getter private SubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
 	@Inject @Getter private LectureBusiness lectureBusiness;
 	
 	@Getter @Setter private AverageComputationListener averageComputationListener;
@@ -82,6 +85,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
         beansMap.put((Class)ClassroomSessionDivision.class, (TypedBusiness)classroomSessionDivisionBusiness);
         beansMap.put((Class)ClassroomSessionDivisionSubject.class, (TypedBusiness)classroomSessionDivisionSubjectBusiness);
         beansMap.put((Class)SubjectEvaluation.class, (TypedBusiness)subjectEvaluationBusiness);
+        beansMap.put((Class)SubjectEvaluationType.class, (TypedBusiness)subjectEvaluationTypeBusiness);
         beansMap.put((Class)Lecture.class, (TypedBusiness)lectureBusiness);
     }
 

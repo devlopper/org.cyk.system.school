@@ -1,6 +1,7 @@
 package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -27,6 +28,11 @@ public class SubjectEvaluationTypeBusinessImpl extends AbstractTypedBusinessServ
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public SubjectEvaluationType findBySubjectByEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName) {
 		return dao.readBySubjectByEvaluationType(subject, evaluationTypeName);
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<SubjectEvaluationType> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		return dao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 	}
 
 	

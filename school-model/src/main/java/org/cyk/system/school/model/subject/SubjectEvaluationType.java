@@ -39,4 +39,13 @@ public class SubjectEvaluationType extends AbstractIdentifiable implements Seria
 	public static final String FIELD_SUBJECT = "subject";
 	public static final String FIELD_TYPE = "type";
 	
+	@Override
+	public String getUiString() {
+		return type.getUiString();
+	}
+	
+	@Override
+	public String toString() {
+		return type.toString();
+	}
 }
