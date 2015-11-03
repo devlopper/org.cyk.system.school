@@ -56,6 +56,10 @@ public class SubjectEvaluationBusinessImpl extends AbstractTypedBusinessService<
 		subjectEvaluation = dao.update(subjectEvaluation);
 		subjectEvaluation.setStudentSubjectEvaluations(studentSubjectEvaluations);
 		Collection<StudentSubjectEvaluation> database = studentSubjectEvaluationDao.readBySubjectEvaluation(subjectEvaluation);
+		
+		delete(StudentSubjectEvaluation.class,studentSubjectEvaluationDao,database, subjectEvaluation.getStudentSubjectEvaluations());
+		
+		/*
 		Set<StudentSubjectEvaluation> deleted = new HashSet<>();
 		// Remove what is in database but not in user
 		for(StudentSubjectEvaluation dbStudentSubjectEvaluation : database){
@@ -72,6 +76,7 @@ public class SubjectEvaluationBusinessImpl extends AbstractTypedBusinessService<
 
 		for(StudentSubjectEvaluation studentSubjectEvaluation : deleted)
 			studentSubjectEvaluationDao.delete(studentSubjectEvaluation);
+		*/
 		
 		save(subjectEvaluation);
 		return subjectEvaluation;
