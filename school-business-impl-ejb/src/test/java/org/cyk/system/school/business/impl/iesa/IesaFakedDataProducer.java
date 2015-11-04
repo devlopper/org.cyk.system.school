@@ -395,6 +395,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		@Override
 		public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
+			r.getAcademicSession().getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
+					+ " OF <style forecolor=\"red\">A</style>BIDJAN");
+			
 			r.getSubjectsTableColumnNames().add("No.");
 			r.getSubjectsTableColumnNames().add("SUBJECTS");
 			r.getSubjectsTableColumnNames().add("Test 1 15%");

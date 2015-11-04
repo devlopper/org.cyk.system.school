@@ -1,5 +1,6 @@
 package org.cyk.system.school.business.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.io.IOUtils;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.root.business.api.TypedBusiness;
@@ -89,7 +91,14 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			
 			@Override
 			public byte[] getCompanyLogoBytes() {
-				return getResourceAsBytes("image/iesa.png");
+				try {
+					//TODO why root method not working ? class loader ?
+					return IOUtils.toByteArray(SchoolBusinessLayer.class.getResourceAsStream("image/iesa.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				}
+				//return getResourceAsBytes("image/iesa.png");
 			}
 
 		});

@@ -47,6 +47,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 	
 		academicSession.getCompany().setGenerateImage(Boolean.TRUE);
 		academicSession.generate();
+		//TODO to be moved
 		academicSession.getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
 				+ " OF <style forecolor=\"red\">A</style>BIDJAN");
 		
