@@ -102,13 +102,21 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			sr.setRank(rootBusinessLayer.getMathematicsBusiness().format(studentSubject.getResults().getEvaluationSort().getRank()));
 			set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(), sr.getTeacher());
 			BigDecimal studentSubjectEvaluationMarkValueTotal = BigDecimal.ZERO;
+			
+			//System.out.print(studentSubject.getStudent().getRegistration().getCode()+" , "+studentSubject.getClassroomSessionDivisionSubject().getSubject().getCode()+" : ");
 			for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
-				BigDecimal value = getMarkValue(studentSubjectEvaluation);
-				sr.getMarks().add(format(value));
-				markAdded(studentSubject, studentSubjectEvaluation, value);
-				studentSubjectEvaluationMarkValueTotal = studentSubjectEvaluationMarkValueTotal.add(value);
+				//System.out.println("EQ : "+studentSubjectEvaluation.getStudentSubject().getIdentifier()+"="+studentSubject.getIdentifier()+" : "+studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()));
+				if(studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier())){
+					BigDecimal value = getMarkValue(studentSubjectEvaluation);
+					sr.getMarks().add(format(value));
+					markAdded(studentSubject, studentSubjectEvaluation, value);
+					studentSubjectEvaluationMarkValueTotal = studentSubjectEvaluationMarkValueTotal.add(value);
+					//System.out.print(value+" - ");
+				}
 			}
+			//System.out.println("OK");
 			//r.getMarkTotals().add(format(studentSubjectEvaluationMarkValueTotal));
+			
 			r.getSubjects().add(sr);
 		}
 	}

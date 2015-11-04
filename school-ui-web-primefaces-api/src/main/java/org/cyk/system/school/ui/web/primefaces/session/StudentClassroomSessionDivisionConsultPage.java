@@ -1,6 +1,7 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
@@ -9,11 +10,17 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.company.business.impl.CompanyReportRepository;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.SchoolReportRepository;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.ui.api.UIProvider;
+import org.cyk.ui.api.command.UICommandable;
+import org.cyk.ui.api.command.UICommandable.CommandRequestType;
+import org.cyk.ui.api.command.UICommandable.ViewType;
 import org.cyk.ui.api.model.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
@@ -33,6 +40,8 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	private FormOneData<Details> details;
 	private Table<AbstractSubjectDetails> subjectTable;
 	private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
+	private String tab1TitleId="tab1",tab2TitleId="tab2";
+	private Boolean showReport = Boolean.FALSE;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -59,6 +68,10 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			public Boolean getEnabledInDefaultTab() {
 				return Boolean.TRUE;
 			}
+			@Override
+			public String getTitleId() {
+				return tab1TitleId;
+			}
 		});
 		
 		subjectTable = (Table<AbstractSubjectDetails>) createDetailsTable(SUBJECT_DETAILS_CLASS, 
@@ -75,25 +88,30 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			public Boolean getEnabledInDefaultTab() {
 				return Boolean.TRUE;
 			}
+			@Override
+			public String getTitleId() {
+				return tab1TitleId;
+			}
 		});
 		
-		
+		addDetailsMenuCommandable(tab2TitleId, null);
+	
+		//showReport = detailsMenu.getRequestedCommandable().getIdentifier().equals(tab2TitleId);
 	}
-	/*
+	
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
 		contextualMenu.setLabel(contentTitle); 
 		
-		commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSession(), "button", null);
-		commandable.setLabel(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable.getClassroomSession()));
-		contextualMenu.getChildren().add(commandable);
-		
-		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
-		contextualMenu.getChildren().add(commandable);
+		UICommandable printReceipt = UIProvider.getInstance().createCommandable("command.see.report", null);
+		printReceipt.setCommandRequestType(CommandRequestType.UI_VIEW);
+		printReceipt.setViewType(ViewType.TOOLS_REPORT);
+		printReceipt.getParameters().addAll(navigationManager.reportParameters(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision(),Boolean.FALSE));
+		contextualMenu.getChildren().add(printReceipt);
 		
 		return Arrays.asList(contextualMenu);
-	}*/
+	}
 	
 	/**/
 	

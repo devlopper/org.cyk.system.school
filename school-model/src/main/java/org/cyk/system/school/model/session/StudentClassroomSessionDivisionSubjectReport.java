@@ -42,4 +42,9 @@ public class StudentClassroomSessionDivisionSubjectReport extends AbstractGenera
 		teacher.generate();
 		averageScale.generate();
 	}
+	
+	@Override
+	public String toString() {
+		return classroomSessionDivisionSubject.getName()+" | "+marks;
+	}
 }

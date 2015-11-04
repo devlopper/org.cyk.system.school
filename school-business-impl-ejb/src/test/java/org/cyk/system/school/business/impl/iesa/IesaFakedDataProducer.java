@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl.iesa;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -118,6 +119,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	@Setter private Integer numbreOfStudentsByClassroomSession = 25;
 	
 	@Setter private Boolean generateCompleteAcademicSession = Boolean.FALSE;
+	@Setter private Boolean generateStudentClassroomSessionDivisionReport = Boolean.FALSE;
 	
 	private void structure(){
 		// Subjects
@@ -249,12 +251,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		
 	private void doBusiness(FakedDataProducerListener listener){
 		ExecutorService executor = Executors.newFixedThreadPool(5);
-        
-		
 		Collection<StudentSubject> studentSubjects = new ArrayList<>();
-		
 		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{grade1,grade2,grade3}){
-			
+	
 			executor.execute(
 					new ClassroomsessionBusinessProducer(classroomSessionInfos, listener, studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession),studentSubjects));
 			
@@ -314,7 +313,10 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			}
 		}
 		flush(Lecture.class,lectureBusiness,lectures);
-		
+	
+		if(Boolean.TRUE.equals(generateStudentClassroomSessionDivisionReport)){
+			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(grade1.division(0).getClassroomSessionDivision()));
+		}
 	}
 	
 	private void createStudentSubjects(Collection<StudentSubject> studentSubjects,ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){

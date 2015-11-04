@@ -31,7 +31,7 @@ public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT 
     			              ,{"STUD4","45","45","80","69.5","1"}
     			              ,{"STUD5","20","95","55","55.75","4"}});
     	
-    	//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(Arrays.asList(dataProducer.getClassroomSessionDivision1()), Boolean.TRUE);
+    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(Arrays.asList(dataProducer.getGrade1().division(0).getClassroomSessionDivision()), Boolean.TRUE);
     }
     
 }

@@ -13,6 +13,7 @@ import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
+import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
@@ -63,11 +64,17 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Getter @Setter private AverageComputationListener averageComputationListener;
 	@Getter @Setter private Script averageComputationScript;
 	@Getter @Setter private SchoolReportProducer reportProducer;
+	@Inject private SchoolReportRepository schoolReportRepository;
 	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+	}
+	
+	@Override
+	protected AbstractReportRepository getReportRepository() {
+		return schoolReportRepository;
 	}
 	
 	@Override

@@ -79,16 +79,23 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		logTrace("Computing Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
 		StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
+		
 		reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
 				,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
 				.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);
 		dao.update(studentClassroomSessionDivision);
 	}
 	
-	@Override
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		return reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), 
 				studentClassroomSessionDivision.getStudent().getRegistration().getCode());
+	}
+	
+	@Override
+	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
+		// TODO Many report as one document must be handled
+		return findReport(studentClassroomSessionDivisions.iterator().next());
 	}
 	
 	@Override 
