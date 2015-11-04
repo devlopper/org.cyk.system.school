@@ -2,8 +2,6 @@ package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;

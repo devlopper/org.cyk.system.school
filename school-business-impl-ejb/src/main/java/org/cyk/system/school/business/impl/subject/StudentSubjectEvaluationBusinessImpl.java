@@ -7,10 +7,11 @@ import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 
 public class StudentSubjectEvaluationBusinessImpl extends AbstractTypedBusinessService<StudentSubjectEvaluation, StudentSubjectEvaluationDao> implements StudentSubjectEvaluationBusiness,Serializable {
@@ -45,6 +46,11 @@ public class StudentSubjectEvaluationBusinessImpl extends AbstractTypedBusinessS
 	@Override
 	public Collection<StudentSubjectEvaluation> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByClassroomSessionDivision(classroomSessionDivision);
+	}
+
+	@Override
+	public Collection<StudentSubjectEvaluation> findByStudentByClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision) {
+		return dao.readByStudentByClassroomSessionDivision(student,classroomSessionDivision);
 	}
 
 	

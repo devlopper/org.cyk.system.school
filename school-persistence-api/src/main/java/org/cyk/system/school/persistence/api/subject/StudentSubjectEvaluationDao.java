@@ -3,6 +3,7 @@ package org.cyk.system.school.persistence.api.subject;
 import java.util.Collection;
 
 import org.cyk.system.root.persistence.api.TypedDao;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
@@ -22,5 +23,6 @@ public interface StudentSubjectEvaluationDao extends TypedDao<StudentSubjectEval
 	Collection<StudentSubjectEvaluation> readByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions);
 	Collection<StudentSubjectEvaluation> readBySubjects(Collection<ClassroomSessionDivisionSubject> levels);
 	Collection<StudentSubjectEvaluation> readByClassroomSessions(Collection<ClassroomSession> levels);
+	Collection<StudentSubjectEvaluation> readByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision);
 	
 }

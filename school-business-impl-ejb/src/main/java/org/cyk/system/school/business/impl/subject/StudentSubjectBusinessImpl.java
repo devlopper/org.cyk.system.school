@@ -110,6 +110,16 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	public StudentSubject findByStudentBySubject(Student student,ClassroomSessionDivisionSubject subject) {
 		return dao.readByStudentBySubject(student, subject);
 	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<StudentSubject> findByStudent(Student student) {
+		return dao.readByStudent(student);
+	}
+
+	@Override
+	public Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision) {
+		return dao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
+	}
 	 
 	/**/
 	

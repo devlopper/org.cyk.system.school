@@ -12,6 +12,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 public interface StudentSubjectDao extends TypedDao<StudentSubject> {
 
 	StudentSubject readByStudentBySubject(Student student, ClassroomSessionDivisionSubject subject);
+	Collection<StudentSubject> readByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision);
 
 	Collection<StudentSubject> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject subject);
 	
@@ -25,5 +26,7 @@ public interface StudentSubjectDao extends TypedDao<StudentSubject> {
 	Collection<StudentSubject> readBySubjects(Collection<ClassroomSessionDivisionSubject> subjects);
 
 	Collection<StudentSubject> readByClassroomSessions(Collection<ClassroomSession> levels);
+
+	Collection<StudentSubject> readByStudent(Student student);
 	
 }
