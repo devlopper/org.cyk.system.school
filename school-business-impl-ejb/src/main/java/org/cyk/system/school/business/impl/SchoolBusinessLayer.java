@@ -10,9 +10,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
+import org.cyk.system.root.business.impl.RootDataProducerHelper;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.Script;
@@ -66,10 +69,30 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Getter @Setter private SchoolReportProducer reportProducer;
 	@Inject private SchoolReportRepository schoolReportRepository;
 	
+	@Inject private RootBusinessLayer rootBusinessLayer;
+	@Inject private RootDataProducerHelper rootDataProducerHelper;
+	@Inject private CompanyBusinessLayer companyBusinessLayer;
+	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+		rootDataProducerHelper.setBasePackage(SchoolBusinessLayer.class.getPackage());
+		companyBusinessLayer.getCompanyBusinessLayerListeners().add(new CompanyBusinessLayerAdapter() {
+			
+			private static final long serialVersionUID = 5179809445850168706L;
+
+			@Override
+			public String getCompanyName() {
+				return "IESA";
+			}
+			
+			@Override
+			public byte[] getCompanyLogoBytes() {
+				return getResourceAsBytes("image/iesa.png");
+			}
+
+		});
 	}
 	
 	@Override
