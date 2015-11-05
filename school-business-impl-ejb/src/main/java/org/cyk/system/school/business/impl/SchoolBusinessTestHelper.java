@@ -10,19 +10,20 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
-import org.cyk.system.root.model.mathematics.Metric;
-import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
+import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -34,9 +35,6 @@ import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.generator.RandomDataProvider;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractTestHelper implements Serializable {
@@ -91,7 +89,6 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		//System.out.println(studentSubjectEvaluationBusiness.findAll());
 	}
 	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,String[][] details){
-		
 		evaluateStudents(subject, evaluationType, coefficientApplied,details);
 	}
 	
@@ -107,14 +104,12 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	public void randomMetricValues(Collection<ClassroomSessionDivision> classroomSessionDivisions){
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
-				MetricCollection metricCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations().getStudentWorkMetricCollection();
-				metricCollectionBusiness.load(metricCollection);
-				IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
-				intervalCollectionBusiness.load(intervalCollection);
-				for(Metric metric : metricCollection.getCollection())
-					studentClassroomSessionDivision.getResults().getMetricValues()
-						.add(new MetricValue(metric, new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue()))));
-				studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
+				studentClassroomSessionDivisionBusiness.prepareUpdateOfMetricValues(studentClassroomSessionDivision);				
+				IntervalCollection intervalCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
+						.getStudentWorkMetricCollection().getValueIntervalCollection();
+				for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
+					studentResultsMetricValue.getMetricValue().setValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+				studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
 			}
 	}
 	

@@ -18,11 +18,8 @@
 			</ui:include>
 			
 			<cyk:formOneData value="#{studentClassroomSessionDivisionConsultPage.details}" />	
-			<cyk:table value="#{studentClassroomSessionDivisionConsultPage.subjectTable}" />	
-			
-			<ui:fragment rendered="#{studentClassroomSessionDivisionConsultPage.showReport}">
-				REPORT
-			</ui:fragment>
+			<cyk:table value="#{studentClassroomSessionDivisionConsultPage.subjectTable}" />
+			<cyk:table value="#{studentClassroomSessionDivisionConsultPage.metricTable}" />	
 			
  		</ui:define>
  	</ui:decorate>

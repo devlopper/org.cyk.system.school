@@ -5,18 +5,21 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.company.business.impl.CompanyReportRepository;
+import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
+import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.UICommandable.CommandRequestType;
@@ -39,9 +42,12 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	
 	private FormOneData<Details> details;
 	private Table<AbstractSubjectDetails> subjectTable;
+	private Table<StudentResultsMetricValueDetails> metricTable;
 	private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
 	private String tab1TitleId="tab1",tab2TitleId="tab2";
 	private Boolean showReport = Boolean.FALSE;
+	
+	@Inject private StudentResultsMetricValueBusiness studentResultsMetricValueBusiness;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -89,14 +95,29 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				return Boolean.TRUE;
 			}
 			@Override
-			public String getTitleId() {
+			public String getTabId() {
 				return tab1TitleId;
 			}
 		});
 		
-		addDetailsMenuCommandable(tab2TitleId, null);
-	
-		//showReport = detailsMenu.getRequestedCommandable().getIdentifier().equals(tab2TitleId);
+		metricTable = (Table<StudentResultsMetricValueDetails>) createDetailsTable(StudentResultsMetricValueDetails.class, 
+				new DetailsTableConfigurationAdapter<StudentResultsMetricValue,StudentResultsMetricValueDetails>(StudentResultsMetricValue.class, StudentResultsMetricValueDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Collection<StudentResultsMetricValue> getIdentifiables() {
+				return studentResultsMetricValueBusiness.findByStudentResults(identifiable.getResults());
+			}
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+			@Override
+			public String getTabId() {
+				return tab1TitleId;
+			}
+		});
+		
+		
 	}
 	
 	@Override

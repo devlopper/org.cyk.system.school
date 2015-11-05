@@ -1,6 +1,7 @@
 package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -18,6 +19,9 @@ import org.cyk.system.root.model.event.EventMissed;
 import org.cyk.system.root.model.event.EventParticipation;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.Metric;
+import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -26,6 +30,7 @@ import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.model.StudentResults;
+import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -36,10 +41,12 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.persistence.api.StudentResultsMetricValueDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
+import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Stateless
 public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
@@ -53,6 +60,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Inject private StudentSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao; 
+	@Inject private StudentResultsMetricValueDao studentResultsMetricValueDao;
+	
 	
 	@Inject 
 	public StudentClassroomSessionDivisionBusinessImpl(StudentClassroomSessionDivisionDao dao) {
@@ -178,12 +187,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<StudentClassroomSessionDivision> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByClassroomSessionDivision(classroomSessionDivision);
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public StudentClassroomSessionDivision findByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 	} 
@@ -198,6 +207,40 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override
 	protected ClassroomSessionDivision level(Lecture lecture) {
 		return lecture.getSubject().getClassroomSessionDivision();
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public StudentClassroomSessionDivision prepareUpdateOfMetricValues(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		studentClassroomSessionDivision.getResults()
+			.setStudentResultsMetricValues(studentResultsMetricValueDao.readByStudentResults(studentClassroomSessionDivision.getResults()));
+		if(studentClassroomSessionDivision.getResults().getStudentResultsMetricValues().isEmpty()){
+			MetricCollection metricCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
+					.getStudentWorkMetricCollection();
+			RootBusinessLayer.getInstance().getMetricCollectionBusiness().load(metricCollection);
+			IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
+			RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
+			for(Metric metric : metricCollection.getCollection())
+				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
+					.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults()
+							, new MetricValue(metric, new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())))));
+		}
+		return studentClassroomSessionDivision;
+	}
+	
+	@Override
+	public StudentClassroomSessionDivision update(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues) {
+		dao.update(studentClassroomSessionDivision);
+		studentClassroomSessionDivision.getResults().setStudentResultsMetricValues(studentResultsMetricValues);
+		delete(StudentResultsMetricValue.class,studentResultsMetricValueDao,studentResultsMetricValueDao.readByStudentResults(studentClassroomSessionDivision.getResults()),
+				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
+		for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
+			if(studentResultsMetricValue.getIdentifier()==null){
+				if(studentResultsMetricValue.getMetricValue().getIdentifier()==null)
+					genericDao.create(studentResultsMetricValue.getMetricValue());
+				studentResultsMetricValueDao.create(studentResultsMetricValue);
+			}else
+				studentResultsMetricValueDao.update(studentResultsMetricValue);
+		return studentClassroomSessionDivision;
 	}
 	
 }

@@ -66,7 +66,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 			@Override
 			public Crud[] getCruds() {
-				return new Crud[]{Crud.READ};
+				return new Crud[]{Crud.READ,Crud.UPDATE};
 			}
 		});
 		

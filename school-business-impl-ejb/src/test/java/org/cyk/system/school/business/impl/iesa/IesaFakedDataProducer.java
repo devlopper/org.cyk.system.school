@@ -19,6 +19,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
+import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
+import org.cyk.system.root.business.api.BusinessLayer;
+import org.cyk.system.root.business.api.BusinessLayerListener;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
@@ -29,6 +33,7 @@ import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -43,6 +48,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionInfos;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionSubjectInfos;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionInfos;
+import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -76,6 +82,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	private SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private CompanyBusiness companyBusiness;
+	@Inject private CompanyBusinessLayer companyBusinessLayer;
 	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
 	@Inject private SubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
 	@Inject private StudentSubjectDao studentSubjectDao;
@@ -120,6 +127,34 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	
 	@Setter private Boolean generateCompleteAcademicSession = Boolean.FALSE;
 	@Setter private Boolean generateStudentClassroomSessionDivisionReport = Boolean.FALSE;
+	
+	@Override
+	protected void initialisation() {
+		super.initialisation();
+		rootBusinessLayer.getBusinessLayerListeners().add(new BusinessLayerListener.BusinessLayerListenerAdapter(){
+			private static final long serialVersionUID = -9212697312172717454L;
+			@Override
+			public void beforeInstall(BusinessLayer businessLayer,Installation installation) {
+				installation.getApplication().setName("IESA WebApp");
+				super.beforeInstall(businessLayer, installation);
+			}
+		});
+		
+		companyBusinessLayer.getCompanyBusinessLayerListeners().add(new CompanyBusinessLayerAdapter() {
+			private static final long serialVersionUID = 5179809445850168706L;
+
+			@Override
+			public String getCompanyName() {
+				return "IESA";
+			}
+			
+			@Override
+			public byte[] getCompanyLogoBytes() {
+				return getResourceAsBytes(SchoolBusinessLayer.class.getPackage(),"image/iesa.png");
+			}
+
+		});
+	}
 	
 	private void structure(){
 		// Subjects
@@ -253,27 +288,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		ExecutorService executor = Executors.newFixedThreadPool(5);
 		Collection<StudentSubject> studentSubjects = new ArrayList<>();
 		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{grade1,grade2,grade3}){
-	
 			executor.execute(
 					new ClassroomsessionBusinessProducer(classroomSessionInfos, listener, studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession),studentSubjects));
-			
-			//createStudentSubjects(studentSubjects, classroomSessionInfos,studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession));
-			
-			/*
-			Collection<Student> students = studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession);
-			System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
-			
-			for(Student student : students){
-				for(ClassroomSessionDivisionInfos classroomSessionDivisionInfos : classroomSessionInfos.getDivisions()){
-					for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionInfos.getClassroomSessionDivisionSubjects()){
-						StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
-						studentSubjects.add(studentSubject);
-						//flush(StudentSubject.class,studentSubjectBusiness,studentSubjects,10000l);
-					}
-				}	
-			}
-			flush(StudentSubject.class,studentSubjectBusiness,studentSubjects);
-			*/
 		}
 		executor.shutdown();
         while (!executor.isTerminated()) {}
@@ -315,7 +331,20 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		flush(Lecture.class,lectureBusiness,lectures);
 	
 		if(Boolean.TRUE.equals(generateStudentClassroomSessionDivisionReport)){
-			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(grade1.division(0).getClassroomSessionDivision()));
+			System.out.println("Updating metric value");
+			ClassroomSessionInfos classroomSessionInfos = grade1;
+			for(StudentClassroomSessionDivision studentClassroomSessionDivision : SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+					.findByClassroomSessionDivision(classroomSessionInfos.division(0).getClassroomSessionDivision())){
+				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().prepareUpdateOfMetricValues(studentClassroomSessionDivision);				
+				IntervalCollection intervalCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
+						.getStudentWorkMetricCollection().getValueIntervalCollection();
+				for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
+					studentResultsMetricValue.getMetricValue().setValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+					.update(studentClassroomSessionDivision,studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
+			}
+			System.out.println("Generating report");
+			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(classroomSessionInfos.division(0).getClassroomSessionDivision()));
 		}
 	}
 	

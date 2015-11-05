@@ -12,9 +12,9 @@ import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.model.NodeResults;
+import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -190,9 +190,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		rootBusinessLayer.getMetricCollectionBusiness().load(metricCollection);
 		for(Metric metric : metricCollection.getCollection()){
 			String value = "";
-			for(MetricValue metricValue : studentClassroomSessionDivision.getResults().getMetricValues())
-				if(metricValue.getMetric().equals(metric)){
-					value = format(metricValue.getValue());
+			for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
+				if(studentResultsMetricValue.getMetricValue().getMetric().getIdentifier().equals(metric.getIdentifier())){
+					value = format(studentResultsMetricValue.getMetricValue().getValue());
 					break;
 				}
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, metric.getName(), value);

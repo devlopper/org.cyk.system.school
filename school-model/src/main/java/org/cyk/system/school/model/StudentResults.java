@@ -6,13 +6,11 @@ import java.util.Collection;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +20,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
-import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.model.mathematics.Sort;
 import org.cyk.system.root.model.time.Attendance;
 
@@ -61,23 +58,19 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	
 	private String appreciation;
 	
-	@OneToMany(fetch=FetchType.EAGER,cascade={CascadeType.ALL}) 
-	private Collection<MetricValue> metricValues = new ArrayList<>();
-	
 	@OneToOne private File report;
+	
+	@Transient private Collection<StudentResultsMetricValue> studentResultsMetricValues;
 	
 	/**/
 	
-	@Override
-	public String getUiString() {
-		return toString();
+	public Collection<StudentResultsMetricValue> getStudentResultsMetricValues(){
+		if(studentResultsMetricValues==null)
+			studentResultsMetricValues = new ArrayList<>();
+		return studentResultsMetricValues;
 	}
 	
-	/*
-	@Override
-	public String toString() {
-		return evaluationSort+" , "+lectureAttendanceSort;
-	}*/
+	/**/
 	
 	@Override
 	public String toString() {
