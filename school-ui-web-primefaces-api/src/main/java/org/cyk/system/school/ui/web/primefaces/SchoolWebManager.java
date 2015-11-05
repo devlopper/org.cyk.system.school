@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
@@ -44,7 +45,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		INSTANCE = this;
 		super.initialisation(); 
 		identifier = "school";
-		academicSessionInfos = academicSessionBusiness.findCurrent(null).getUiString();
+		academicSessionInfos = RootBusinessLayer.getInstance().getTimeBusiness().formatPeriodFromTo(academicSessionBusiness.findCurrent(null).getPeriod());
 	}
 		
 	@Override

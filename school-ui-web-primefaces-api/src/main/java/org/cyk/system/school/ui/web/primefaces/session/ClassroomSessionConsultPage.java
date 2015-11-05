@@ -137,9 +137,11 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	
 	public static class StudentDetails extends AbstractOutputDetails<StudentClassroomSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
+		@Input @InputText private String registrationCode;
 		@Input @InputText private String names;
 		public StudentDetails(StudentClassroomSession studentClassroomSession) {
 			super(studentClassroomSession);
+			registrationCode = studentClassroomSession.getStudent().getRegistration().getCode();
 			names = studentClassroomSession.getStudent().getPerson().getNames();
 		}
 	}
