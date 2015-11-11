@@ -66,8 +66,7 @@ public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSub
 
 	@Override
 	public Collection<StudentSubjectEvaluation> readByClassroomSession(ClassroomSession classroomSession) {
-		return namedQuery(readByClassroomSession).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
-                .resultMany();
+		return namedQuery(readByClassroomSession).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
 	}
 	
 	@Override

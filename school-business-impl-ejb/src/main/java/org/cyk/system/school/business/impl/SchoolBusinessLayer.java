@@ -40,7 +40,7 @@ import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 
-@Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER)
+@Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER) @Getter
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
 
 	private static final long serialVersionUID = -7434478805525552120L;

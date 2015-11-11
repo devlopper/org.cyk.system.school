@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
@@ -80,6 +81,8 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,Boolean coefficientApplied,String[][] details){
 		SubjectEvaluation subjectEvaluation = new SubjectEvaluation(evaluationTypeBusiness.findBySubjectByEvaluationType(subject, evaluationType),coefficientApplied);
 		for(String[] detail : details){
+			if(StringUtils.isBlank(detail[1]))
+				continue;
 			Student student = studentBusiness.findByRegistrationCode(detail[0]);
 			StudentSubject studentSubject = studentSubjectBusiness.findByStudentBySubject(student, subjectEvaluation.getType().getSubject());
 			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
@@ -222,6 +225,13 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			for(ClassroomSessionDivisionSubjectInfos classroomSessionDivisionSubjectInfos : subjects)
 				list.add(classroomSessionDivisionSubjectInfos.getClassroomSessionDivisionSubject());
 			return list;
+		}
+
+		public Collection<SubjectEvaluationType> getEvaluationTypes() {
+			Collection<SubjectEvaluationType> evaluationTypes = new ArrayList<>();
+			for(ClassroomSessionDivisionSubjectInfos classroomSessionDivisionSubjectInfos : subjects)
+				evaluationTypes.addAll(classroomSessionDivisionSubjectInfos.evaluationTypes);
+			return evaluationTypes;
 		}
 		
 	}

@@ -32,7 +32,7 @@ public class StudentSubjectEvaluation extends AbstractIdentifiable implements Se
 	
 	@Override
 	public String toString() {
-		return subjectEvaluation.getType().getSubject().getSubject().getCode()+":"+studentSubject.getStudent().getRegistration().getCode()+":"+value;
+		return subjectEvaluation.getType().getSubject().getIdentifier()+":"+studentSubject.getStudent().getRegistration().getCode()+":"+value;
 	}
 	
 	public static final String FIELD_EVALUATION = "subjectEvaluation";

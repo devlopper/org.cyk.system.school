@@ -77,13 +77,18 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 			for(DETAIL detail : details)
 				if(result.getStudent().equals(student(detail))){
 					result.getDetails().add(detail);
-					weightedValues.add(weightedValue(detail));
+					WeightedValue weightedValue = weightedValue(detail);
+					if(weightedValue.getValue()==null)
+						;
+					else
+						weightedValues.add(weightedValue);
 				}
 			//computation
 			//Is there any weighted values
 			if(weightedValues.isEmpty()){
 				logTrace("No weighted values found for {}.  No average will be computed", result);
 			}else{
+				
 				Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
 				//setting
 				result.getResults().getEvaluationSort().setAverage(average); 

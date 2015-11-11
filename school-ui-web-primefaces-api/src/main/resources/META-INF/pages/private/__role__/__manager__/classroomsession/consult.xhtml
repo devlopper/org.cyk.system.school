@@ -12,12 +12,7 @@
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
  		<ui:param name="pageController" value="#{classroomSessionConsultPage}" />
  		<ui:define name="body">
- 			<ui:include src="/org.cyk.ui.web.primefaces/include/menu/menu.xhtml" >
-				<ui:param name="model" value="#{classroomSessionConsultPage.detailsMenuModel}" />
-				<ui:param name="menu" value="#{classroomSessionConsultPage.detailsMenu}" />
-			</ui:include>
-			
-			<cyk:formOneData value="#{classroomSessionConsultPage.details}" />	
+ 			<cyk:formOneData value="#{classroomSessionConsultPage.details}" />	
 			<cyk:table value="#{classroomSessionConsultPage.divisionTable}" />
 			<cyk:table value="#{classroomSessionConsultPage.subjectTable}" />	
 			<cyk:table value="#{classroomSessionConsultPage.studentTable}" />
