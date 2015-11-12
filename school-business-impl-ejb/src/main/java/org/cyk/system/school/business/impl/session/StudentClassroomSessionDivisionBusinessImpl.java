@@ -142,10 +142,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		studentSubjectBusiness.rank(subjects, studentSubjects,rankOptions);
 		rank(classroomSessionDivisions, studentClassroomSessionDivisions,rankOptions);
 		
-		classroomSessionDivisionBusiness.results(classroomSessionDivisions, studentClassroomSessionDivisions);
+		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
 		
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
 			buildReport(studentClassroomSessionDivision);
+		
+		classroomSessionDivisionBusiness.results(classroomSessionDivisions, studentClassroomSessionDivisions);
 	}
 			
 	@Override

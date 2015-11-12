@@ -1,14 +1,21 @@
 package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
@@ -47,4 +54,39 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		classroomSessionDivisionSubject.setLectures(lectureDao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
 	
+	@Override
+	public void computeResults(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<StudentSubject> studentSubjects) {
+		logTrace("Computing node results of {} Classroom Session Division Subject(s). Number of students={}", classroomSessionDivisionSubjects.size(),studentSubjects.size());
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
+			NodeResults results = classroomSessionDivisionSubject.getResults();
+			results.setAverageLowest(BigDecimal.ZERO);
+			results.setAverage(BigDecimal.ZERO);
+			results.setAverageHighest(BigDecimal.ZERO);
+			Collection<WeightedValue> weightedValues = new ArrayList<>();
+			for(StudentSubject studentSubject : studentSubjects){
+				if(studentSubject.getClassroomSessionDivisionSubject().equals(classroomSessionDivisionSubject)){
+					BigDecimal value = studentSubject.getResults().getEvaluationSort().getAverage().getValue();
+					if(value==null){
+						
+					}else{
+						weightedValues.add(new WeightedValue(value,BigDecimal.ONE));
+						if(value.compareTo(results.getAverageLowest())==-1){
+							results.setAverageLowest(value);
+						}
+						if(value.compareTo(results.getAverageHighest())==1){
+							results.setAverageHighest(value);
+						}
+					}
+				}else{
+					
+				}
+			}
+			results.setNumberOfStudent(weightedValues.size());
+			results.setAverage(RootBusinessLayer.getInstance().getMathematicsBusiness().average(weightedValues, null, null).getValue());
+			logTrace("Node result of {} are : Average={}, High={}, Low={}, Students={}",classroomSessionDivisionSubject.getSubject().getName() ,results.getAverage()
+					,results.getAverageHighest(),results.getAverageLowest(),results.getNumberOfStudent());
+			dao.update(classroomSessionDivisionSubject);
+		}
+	}
+
 }

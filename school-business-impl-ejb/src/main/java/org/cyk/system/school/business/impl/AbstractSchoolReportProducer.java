@@ -101,15 +101,13 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
 		for(StudentSubject studentSubject : s.getDetails()){
-			//if(studentSubject.getResults().getEvaluationSort().getAverage().getValue()==null)
-			//	continue;
+			
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport();
-			classroomSessionDivisionSubjectReport.setAverage("???");
-			classroomSessionDivisionSubjectReport.setCoefficient(RootBusinessLayer.getInstance().getNumberBusiness()
-					.format(studentSubject.getClassroomSessionDivisionSubject().getCoefficient()));
-			classroomSessionDivisionSubjectReport.setHighestAverage("???");
+			classroomSessionDivisionSubjectReport.setAverage(format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverage()));
+			classroomSessionDivisionSubjectReport.setCoefficient(format(studentSubject.getClassroomSessionDivisionSubject().getCoefficient()));
+			classroomSessionDivisionSubjectReport.setHighestAverage(format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverageHighest()));
 			classroomSessionDivisionSubjectReport.setName(studentSubject.getClassroomSessionDivisionSubject().getSubject().getName());
-			classroomSessionDivisionSubjectReport.setNumberOfStudents("???");
+			classroomSessionDivisionSubjectReport.setNumberOfStudents(format(studentSubject.getClassroomSessionDivisionSubject().getResults().getNumberOfStudent()));
 			
 			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r,classroomSessionDivisionSubjectReport);
 			r.getSubjects().add(sr);
