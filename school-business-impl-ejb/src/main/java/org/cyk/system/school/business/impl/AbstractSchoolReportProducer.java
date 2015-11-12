@@ -2,10 +2,8 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
@@ -15,7 +13,6 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
-import org.cyk.system.school.business.api.session.SchoolReportProducer.StudentClassroomSessionDivisionReportParameters;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
@@ -28,14 +25,11 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.utility.common.Constant;
 
 public abstract class AbstractSchoolReportProducer extends AbstractCompanyReportProducer implements SchoolReportProducer,Serializable {
 
 	private static final long serialVersionUID = 4631829200070130087L;
 
-	public static String NOT_APPLICABLE = "NA";
-	
 	@Override
 	public String getEvaluationTypeCode(StudentSubjectEvaluation studentSubjectEvaluation) {
 		return studentSubjectEvaluation.getSubjectEvaluation().getType().getType().getCode();
@@ -101,13 +95,14 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
 		for(StudentSubject studentSubject : s.getDetails()){
+			Boolean applicable = studentSubject.getResults().getEvaluationSort().getAverage().getValue()!=null;
 			
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport();
-			classroomSessionDivisionSubjectReport.setAverage(format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverage()));
-			classroomSessionDivisionSubjectReport.setCoefficient(format(studentSubject.getClassroomSessionDivisionSubject().getCoefficient()));
-			classroomSessionDivisionSubjectReport.setHighestAverage(format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverageHighest()));
+			classroomSessionDivisionSubjectReport.setAverage(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverage()):NOT_APPLICABLE);
+			classroomSessionDivisionSubjectReport.setCoefficient(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getCoefficient()):NOT_APPLICABLE);
+			classroomSessionDivisionSubjectReport.setHighestAverage(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverageHighest()):NOT_APPLICABLE);
 			classroomSessionDivisionSubjectReport.setName(studentSubject.getClassroomSessionDivisionSubject().getSubject().getName());
-			classroomSessionDivisionSubjectReport.setNumberOfStudents(format(studentSubject.getClassroomSessionDivisionSubject().getResults().getNumberOfStudent()));
+			classroomSessionDivisionSubjectReport.setNumberOfStudents(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getNumberOfStudent()):NOT_APPLICABLE);
 			
 			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r,classroomSessionDivisionSubjectReport);
 			r.getSubjects().add(sr);
@@ -120,40 +115,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			}
 			set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(), sr.getTeacher());
 			
-			if(studentSubject.getResults().getEvaluationSort().getAverage().getValue()==null){
-				sr.setAverage(NOT_APPLICABLE);
-				sr.setAverageCoefficiented(NOT_APPLICABLE);
-				//set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
-				sr.setRank(NOT_APPLICABLE);
-			}else{
-				sr.setAverage(format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()));
-				sr.setAverageCoefficiented(format(studentSubject.getResults().getEvaluationSort().getAverage().getValue().multiply(studentSubject.getClassroomSessionDivisionSubject().getCoefficient())));
-				set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
-				sr.setRank(rootBusinessLayer.getMathematicsBusiness().format(studentSubject.getResults().getEvaluationSort().getRank()));	
-				
-				BigDecimal studentSubjectEvaluationMarkValueTotal = BigDecimal.ZERO;
-				
-				//System.out.print(studentSubject.getStudent().getRegistration().getCode()+" , "+studentSubject.getClassroomSessionDivisionSubject().getSubject().getCode()+" : ");
-				//FIXME when inspecting details , there are too much data
-				//System.out.println(studentSubject.getDetails());
-				/*for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
-					//System.out.println("EQ : "+studentSubjectEvaluation.getStudentSubject().getIdentifier()+"="+studentSubject.getIdentifier()+" : "+studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()));
-					if(studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier())){
-						BigDecimal value = getMarkValue(studentSubjectEvaluation);
-						sr.getMarks().add(format(value));
-						markAdded(studentSubject, studentSubjectEvaluation, value);
-						studentSubjectEvaluationMarkValueTotal = studentSubjectEvaluationMarkValueTotal.add(value);
-						//System.out.print(value+" - ");
-					}
-				}*/
-				
-				
-				
-				//System.out.println("OK");
-				//r.getMarkTotals().add(format(studentSubjectEvaluationMarkValueTotal));
-				
-				
-			}
+			sr.setAverage(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()):NOT_APPLICABLE);
+			sr.setAverageCoefficiented(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()
+					.multiply(studentSubject.getClassroomSessionDivisionSubject().getCoefficient())):NOT_APPLICABLE);
+			sr.setRank(applicable?rootBusinessLayer.getMathematicsBusiness().format(studentSubject.getResults().getEvaluationSort().getRank()):NOT_APPLICABLE);	
+			
+			set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
 			
 			BigDecimal[] results = new BigDecimal[]{BigDecimal.ZERO};
 			studentSubjectEvaluation(sr, studentSubject, studentSubject.getDetails(), results,parameters);
@@ -167,13 +134,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	protected void studentSubjectEvaluation(StudentClassroomSessionDivisionSubjectReport sr,StudentSubject studentSubject,Collection<StudentSubjectEvaluation> studentSubjectEvaluations,BigDecimal[] results
 			,StudentClassroomSessionDivisionReportParameters parameters){
-		Collection<StudentSubjectEvaluation> processed = new ArrayList<>();
-		//FIXME when inspecting details , there are too much data
-		//System.out.println("E : "+studentSubjectEvaluations);
 		int i = 0;
 		for(String evaluationTypeCode : parameters.getEvaluationTypeCodes()){
 			for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
-				//System.out.println("EQ : "+studentSubjectEvaluation.getStudentSubject().getIdentifier()+"="+studentSubject.getIdentifier()+" : "+studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()));
 				if(getEvaluationTypeCode(studentSubjectEvaluation).equals(evaluationTypeCode) 
 						//&& studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()) // TODO is it necessary
 						){
@@ -185,7 +148,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					sr.getMarks().set(i,format(value));
 					
 					//markAdded(studentSubject, studentSubjectEvaluation, value);
-					results[0] = results[0].add(value);
+					//results[0] = results[0].add(value);
 					//System.out.print(value+" - ");
 				}
 			}
