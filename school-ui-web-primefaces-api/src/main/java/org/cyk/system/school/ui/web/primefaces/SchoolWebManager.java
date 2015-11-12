@@ -33,10 +33,11 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	private final String outcomeConfigureLevels = "configureLevels";
 	@Getter @Setter private String academicSessionInfos="INFOS TO SET";
-	private String outcomeClassroomSessionMainDetails;
+	private String outcomeGenerateStudentClassroomSessionDivisionReport = "classroomSessionDivisionUpdateStudentReport";
+	/*private String outcomeClassroomSessionMainDetails;
 	private String outcomeClassroomSessionDivisionDetails;
 	private String outcomeClassroomSessionSubjectDetails;
-	private String outcomeClassroomSessionStudentDetails;
+	private String outcomeClassroomSessionStudentDetails;*/
 	
 	@Inject private AcademicSessionBusiness academicSessionBusiness;
 	
@@ -59,6 +60,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		group.addChild(menuManager.crudMany(Teacher.class, null));
 		group.addChild(menuManager.crudMany(Student.class, null));
 		group.addChild(menuManager.crudMany(ClassroomSession.class, null));
+		//group.addChild(uiProvider.createCommandable("dashboard", null, outcomeGenerateStudentClassroomSessionDivisionReport));
 		
 		/*
 		group.addChild(menuManager.crudMany(Student.class, null));

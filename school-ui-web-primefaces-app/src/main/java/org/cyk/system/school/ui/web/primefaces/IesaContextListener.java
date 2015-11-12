@@ -1,14 +1,21 @@
 package org.cyk.system.school.ui.web.primefaces;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.party.person.AbstractActor;
+import org.cyk.system.school.business.api.session.SchoolReportProducer;
+import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionConsultPage;
@@ -34,6 +41,10 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		super.contextInitialized(event);
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = SubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
+		
+		SchoolBusinessLayer.getInstance().setReportProducer(new ReportProducer());
+		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
+    	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
 	}
 	
 	@Override
@@ -92,5 +103,53 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		public static final String FIELD_TEST2 = "test2";
 		public static final String FIELD_EXAM = "exam";
 	}
+	
+	public static class ReportProducer extends AbstractSchoolReportProducer{
+		private static final long serialVersionUID = 246685915578107971L;
+    	
+		@Override
+		public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
+				StudentClassroomSessionDivisionReportParameters parameters) {
+			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
+			r.getAcademicSession().getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
+					+ " OF <style forecolor=\"red\">A</style>BIDJAN");
+			
+			r.getSubjectsTableColumnNames().add("No.");
+			r.getSubjectsTableColumnNames().add("SUBJECTS");
+			r.getSubjectsTableColumnNames().add("Test 1 15%");
+			r.getSubjectsTableColumnNames().add("Test 2 15%");
+			r.getSubjectsTableColumnNames().add("Exam 70%");
+			r.getSubjectsTableColumnNames().add("TOTAL");
+			r.getSubjectsTableColumnNames().add("GRADE");
+			r.getSubjectsTableColumnNames().add("RANK");
+			r.getSubjectsTableColumnNames().add("OUT OF");
+			r.getSubjectsTableColumnNames().add("MAX");
+			r.getSubjectsTableColumnNames().add("CLASS AVERAGE");
+			r.getSubjectsTableColumnNames().add("REMARKS");
+			r.getSubjectsTableColumnNames().add("TEACHER");
+			
+			//sumMarks(r, 3);
+			
+			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", "To Compute");
+			labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", "To Compute");
+			
+			r.setBehaviorLabelValueCollection1(new LabelValueCollectionReport());
+			r.getBehaviorLabelValueCollection1().setName("BEHAVIOUR,STUDY AND WORK HABITS");
+			for(int i=0;i<=5;i++)
+				r.getBehaviorLabelValueCollection1().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
+			
+			r.setBehaviorLabelValueCollection2(new LabelValueCollectionReport());
+			r.getBehaviorLabelValueCollection2().setName("BEHAVIOUR,STUDY AND WORK HABITS");
+			for(int i=6;i<=11;i++)
+				r.getBehaviorLabelValueCollection2().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
+			
+			return r;
+		}
+		
+    }
 	
 }

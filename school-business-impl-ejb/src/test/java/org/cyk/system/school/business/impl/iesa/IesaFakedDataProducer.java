@@ -38,6 +38,7 @@ import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
@@ -276,6 +277,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	public void produce(FakedDataProducerListener listener) {
 		this.listener =listener;
 		rootDataProducerHelper.setBasePackage(SchoolBusinessLayer.class.getPackage());
+		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
+    	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
 		//schoolBusinessLayer.setAverageComputationListener(new Averagec);
 		
     	structure();

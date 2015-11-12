@@ -64,7 +64,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			results.setAverageHighest(BigDecimal.ZERO);
 			Collection<WeightedValue> weightedValues = new ArrayList<>();
 			for(StudentSubject studentSubject : studentSubjects){
-				if(studentSubject.getClassroomSessionDivisionSubject().equals(classroomSessionDivisionSubject)){
+				if(studentSubject.getClassroomSessionDivisionSubject().getIdentifier().equals(classroomSessionDivisionSubject.getIdentifier())){
 					BigDecimal value = studentSubject.getResults().getEvaluationSort().getAverage().getValue();
 					if(value==null){
 						

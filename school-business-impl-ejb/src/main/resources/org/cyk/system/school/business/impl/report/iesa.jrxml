@@ -207,7 +207,7 @@
 	</background>
 	<pageHeader>
 		<band height="93" splitType="Stretch">
-			<image hAlign="Center">
+			<image hAlign="Center" isUsingCache="false" onErrorType="Blank">
 				<reportElement x="245" y="0" width="64" height="64" uuid="002be5f5-52d2-48f3-b556-b337746ea1b4"/>
 				<imageExpression><![CDATA[$F{academicSession}.getCompany().getImage()]]></imageExpression>
 			</image>
@@ -255,7 +255,7 @@
 					<textElement markup="styled"/>
 					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentLabelValueCollection}.getName()+"</font>"]]></textFieldExpression>
 				</textField>
-				<image>
+				<image isUsingCache="false" onErrorType="Blank">
 					<reportElement x="2" y="19" width="64" height="70" uuid="1e10220e-5880-4b76-a166-a93abc111a9b"/>
 					<imageExpression><![CDATA[$F{student}.getPerson().getImage()]]></imageExpression>
 				</image>
@@ -867,7 +867,7 @@
 					<textElement markup="styled"/>
 					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{commentsBlockTitle}+"</font>"]]></textFieldExpression>
 				</textField>
-				<image>
+				<image isUsingCache="false" onErrorType="Blank">
 					<reportElement x="113" y="27" width="50" height="40" uuid="5df88f9c-cfd0-4d8c-99f8-46f7e049db74"/>
 					<imageExpression><![CDATA[$F{commentator}.getPerson().getSignatureSpecimen()]]></imageExpression>
 				</image>
@@ -891,7 +891,7 @@
 					<textElement markup="styled"/>
 					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{schoolStampBlockTitle}+"</font>"]]></textFieldExpression>
 				</textField>
-				<image scaleImage="RetainShape">
+				<image scaleImage="RetainShape" isUsingCache="false" onErrorType="Blank">
 					<reportElement x="107" y="27" width="50" height="40" uuid="8cdb6d70-e6da-41ae-863b-41162f2f9736"/>
 					<imageExpression><![CDATA[$F{signer}.getPerson().getSignatureSpecimen()]]></imageExpression>
 				</image>

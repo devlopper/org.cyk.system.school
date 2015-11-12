@@ -15,6 +15,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.model.AbstractOutputDetails;
@@ -82,6 +83,10 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		contextualMenu.getChildren().add(commandable);
 		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
+		contextualMenu.getChildren().add(commandable);
+		
+		commandable = navigationManager.createUpdateCommandable(identifiable, "updatereport", null,
+				SchoolWebManager.getInstance().getOutcomeGenerateStudentClassroomSessionDivisionReport());
 		contextualMenu.getChildren().add(commandable);
 		
 		return Arrays.asList(contextualMenu);

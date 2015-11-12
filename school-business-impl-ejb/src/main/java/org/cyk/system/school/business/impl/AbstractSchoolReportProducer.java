@@ -138,18 +138,13 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		for(String evaluationTypeCode : parameters.getEvaluationTypeCodes()){
 			for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
 				if(getEvaluationTypeCode(studentSubjectEvaluation).equals(evaluationTypeCode) 
-						//&& studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()) // TODO is it necessary
+						&& studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()) 
 						){
-					//processed.add(studentSubjectEvaluation);
 					BigDecimal value = getMarkValue(studentSubjectEvaluation);
 					if(Boolean.TRUE.equals(parameters.getSumMarks()))
 						sr.getStudentClassroomSessionDivision().getTempMarkTotals().set(i, sr.getStudentClassroomSessionDivision().getTempMarkTotals().get(i).add(value));
 					
 					sr.getMarks().set(i,format(value));
-					
-					//markAdded(studentSubject, studentSubjectEvaluation, value);
-					//results[0] = results[0].add(value);
-					//System.out.print(value+" - ");
 				}
 			}
 			i++;
