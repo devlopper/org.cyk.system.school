@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -20,6 +21,7 @@ import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.time.ScheduleCollection;
+import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.utility.common.annotation.ModelBean;
@@ -41,6 +43,8 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	@ManyToOne private Teacher teacher;
 	
 	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal duration;
+	
+	@Embedded private NodeResults results = new NodeResults();
 	
 	//TODO /* I think can be modeled using automated finite state machine */
 	

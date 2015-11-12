@@ -15,6 +15,7 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
+import org.cyk.system.school.business.api.session.SchoolReportProducer.StudentClassroomSessionDivisionReportParameters;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
@@ -36,7 +37,13 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	public static String NOT_APPLICABLE = "NA";
 	
 	@Override
-	public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+	public String getEvaluationTypeCode(StudentSubjectEvaluation studentSubjectEvaluation) {
+		return studentSubjectEvaluation.getSubjectEvaluation().getType().getType().getCode();
+	}
+	
+	@Override
+	public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
+			StudentClassroomSessionDivisionReportParameters parameters) {
 		StudentClassroomSessionDivisionReport r = new StudentClassroomSessionDivisionReport();
 		r.setSource(studentClassroomSessionDivision);
 		Student student = studentClassroomSessionDivision.getStudent();
@@ -85,14 +92,14 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		if(s.getResults().getEvaluationSort().getRank()==null)
 			;
 		else
-			processStudentSubjects(r, s);
+			processStudentSubjects(r, s,parameters);
 				
 		produceStudentClassroomSessionDivisionReportLabelValueCollections(r);
 			
 		return r;
 	}
 	
-	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s){
+	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
 		for(StudentSubject studentSubject : s.getDetails()){
 			//if(studentSubject.getResults().getEvaluationSort().getAverage().getValue()==null)
 			//	continue;
@@ -106,9 +113,14 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			
 			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r,classroomSessionDivisionSubjectReport);
 			r.getSubjects().add(sr);
+			for(int i=0;i<parameters.getEvaluationTypeCodes().size();i++){
+				sr.getMarks().add(NOT_APPLICABLE);
+				if(Boolean.TRUE.equals(parameters.getSumMarks())){
+					r.getTempMarkTotals().add(BigDecimal.ZERO);
+					r.getMarkTotals().add(NOT_APPLICABLE);
+				}
+			}
 			set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(), sr.getTeacher());
-			
-			System.out.println("SSE : "+studentSubject.getDetails());
 			
 			if(studentSubject.getResults().getEvaluationSort().getAverage().getValue()==null){
 				sr.setAverage(NOT_APPLICABLE);
@@ -146,48 +158,48 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			}
 			
 			BigDecimal[] results = new BigDecimal[]{BigDecimal.ZERO};
-			studentSubjectEvaluation(sr, studentSubject, studentSubject.getDetails(), results);
+			studentSubjectEvaluation(sr, studentSubject, studentSubject.getDetails(), results,parameters);
+		}
+		
+		if(Boolean.TRUE.equals(parameters.getSumMarks())){
+			for(int i=0;i<parameters.getEvaluationTypeCodes().size();i++)
+				r.getMarkTotals().set(i,format(r.getTempMarkTotals().get(i)));
 		}
 	}
 	
-	protected void studentSubjectEvaluation(StudentClassroomSessionDivisionSubjectReport sr,StudentSubject studentSubject,Collection<StudentSubjectEvaluation> studentSubjectEvaluations,BigDecimal[] results){
+	protected void studentSubjectEvaluation(StudentClassroomSessionDivisionSubjectReport sr,StudentSubject studentSubject,Collection<StudentSubjectEvaluation> studentSubjectEvaluations,BigDecimal[] results
+			,StudentClassroomSessionDivisionReportParameters parameters){
 		Collection<StudentSubjectEvaluation> processed = new ArrayList<>();
-		for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
-			//System.out.println("EQ : "+studentSubjectEvaluation.getStudentSubject().getIdentifier()+"="+studentSubject.getIdentifier()+" : "+studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()));
-			if(studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier())){
-				processed.add(studentSubjectEvaluation);
-				BigDecimal value = getMarkValue(studentSubjectEvaluation);
-				sr.getMarks().add(format(value));
-				markAdded(studentSubject, studentSubjectEvaluation, value);
-				results[0] = results[0].add(value);
-				//System.out.print(value+" - ");
+		//FIXME when inspecting details , there are too much data
+		//System.out.println("E : "+studentSubjectEvaluations);
+		int i = 0;
+		for(String evaluationTypeCode : parameters.getEvaluationTypeCodes()){
+			for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
+				//System.out.println("EQ : "+studentSubjectEvaluation.getStudentSubject().getIdentifier()+"="+studentSubject.getIdentifier()+" : "+studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()));
+				if(getEvaluationTypeCode(studentSubjectEvaluation).equals(evaluationTypeCode) 
+						//&& studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()) // TODO is it necessary
+						){
+					//processed.add(studentSubjectEvaluation);
+					BigDecimal value = getMarkValue(studentSubjectEvaluation);
+					if(Boolean.TRUE.equals(parameters.getSumMarks()))
+						sr.getStudentClassroomSessionDivision().getTempMarkTotals().set(i, sr.getStudentClassroomSessionDivision().getTempMarkTotals().get(i).add(value));
+					
+					sr.getMarks().set(i,format(value));
+					
+					//markAdded(studentSubject, studentSubjectEvaluation, value);
+					results[0] = results[0].add(value);
+					//System.out.print(value+" - ");
+				}
 			}
+			i++;
 		}
-		studentSubjectEvaluationsProcessed(sr, studentSubject, processed);
 	}
-	
-	protected void studentSubjectEvaluationsProcessed(StudentClassroomSessionDivisionSubjectReport sr,StudentSubject studentSubject,Collection<StudentSubjectEvaluation> studentSubjectEvaluations){}
 	
 	protected BigDecimal getMarkValue(StudentSubjectEvaluation studentSubjectEvaluation){
 		BigDecimal value = studentSubjectEvaluation.getValue();
 		if(Boolean.FALSE.equals(studentSubjectEvaluation.getSubjectEvaluation().getCoefficientApplied()))
 			value = value.multiply(studentSubjectEvaluation.getSubjectEvaluation().getType().getCoefficient());
 		return value;
-	}
-	
-	protected void markAdded(StudentSubject studentSubject,StudentSubjectEvaluation studentSubjectEvaluation,BigDecimal value){}
-	
-	protected void sumMarks(StudentClassroomSessionDivisionReport r,Integer numberOfColumns){
-		r.getMarkTotals().clear();
-		//TODO must improved for performance issue
-		for(int i=0;i<numberOfColumns;i++){
-			r.getMarkTotals().add("0");
-			for(StudentClassroomSessionDivisionSubjectReport cr : r.getSubjects()){
-				r.getMarkTotals().set(i,"TC");
-				//r.getMarkTotals().set(i, format(new BigDecimal(StringUtils.replace(cr.getMarks().get(i), Constant.CHARACTER_COMA.toString(), Constant.CHARACTER_DOT.toString()))
-				//	.add(new BigDecimal(StringUtils.replace(r.getMarkTotals().get(i), Constant.CHARACTER_COMA.toString(), Constant.CHARACTER_DOT.toString())))));
-			}
-		}
 	}
 	
 	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r){

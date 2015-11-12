@@ -20,7 +20,7 @@ public class ReportCardBusinessInputOneAtATimeIT extends AbstractIesaBusinessIT 
     	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
     	
     	schoolBusinessTestHelper.registerActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
-    	
+    	/*
     	schoolBusinessTestHelper.takeSubjects(new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"}
     		,dataProducer.getGrade1Subjects().toArray(new ClassroomSessionDivisionSubject[]{})); 
     	
@@ -36,6 +36,8 @@ public class ReportCardBusinessInputOneAtATimeIT extends AbstractIesaBusinessIT 
     			new String[][]{{"STUD1","70","65.5","2"},{"STUD2","60","60","3"},{"STUD3","40","43","5"},{"STUD4","80","69.5","1"},{"STUD5","55","55.75","4"}});
     	    	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(Arrays.asList(dataProducer.getClassroomSessionDivision1()), Boolean.TRUE);
+    
+    	*/
     }
     
     

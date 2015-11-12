@@ -61,7 +61,6 @@ import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Lecture;
@@ -255,9 +254,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	Collection<SubjectEvaluationType> subjectEvaluationTypes = new ArrayList<>(); 
     	
     	grade1 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession, levelTimeDivisionG1,new Subject[]{
-    			subjectNameMathematics,subjectNameGrammar/*,subjectNameReadingComprehension
+    			subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
     			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
-    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation*/},listener);
+    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation},listener);
     	
     	grade2 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession, levelTimeDivisionG2,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
     			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
@@ -424,8 +423,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		private static final long serialVersionUID = 246685915578107971L;
     	
 		@Override
-		public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision);
+		public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
+				StudentClassroomSessionDivisionReportParameters parameters) {
+			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
 			r.getAcademicSession().getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
 					+ " OF <style forecolor=\"red\">A</style>BIDJAN");
 			
@@ -443,7 +443,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			r.getSubjectsTableColumnNames().add("REMARKS");
 			r.getSubjectsTableColumnNames().add("TEACHER");
 			
-			sumMarks(r, 3);
+			//sumMarks(r, 3);
 			
 			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
 			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
@@ -463,27 +463,6 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 				r.getBehaviorLabelValueCollection2().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
 			
 			return r;
-		}
-		
-		@Override
-		protected void studentSubjectEvaluation(StudentClassroomSessionDivisionSubjectReport sr,StudentSubject studentSubject,Collection<StudentSubjectEvaluation> studentSubjectEvaluations,BigDecimal[] results) {
-			super.studentSubjectEvaluation(sr, studentSubject, studentSubjectEvaluations,results);
-		}
-		
-		@Override
-		protected void studentSubjectEvaluationsProcessed(StudentClassroomSessionDivisionSubjectReport sr,StudentSubject studentSubject,Collection<StudentSubjectEvaluation> studentSubjectEvaluations) {
-			super.studentSubjectEvaluationsProcessed(sr, studentSubject,studentSubjectEvaluations);
-			for(String code : new String[]{"Test1","Test2","Exam"}){
-				Boolean found = Boolean.FALSE;
-				for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations)
-					if(code.equals(studentSubjectEvaluation.getSubjectEvaluation().getType().getType().getCode())){
-						found = Boolean.TRUE;
-						break;
-					}
-				if(Boolean.FALSE.equals(found))
-					sr.getMarks().add(NOT_APPLICABLE);
-				
-			}
 		}
 		
     }

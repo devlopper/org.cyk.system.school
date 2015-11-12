@@ -52,7 +52,6 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	@Getter @Setter private Boolean coefficientApplied = Boolean.TRUE;
 	@Getter @Setter private RankOptions<SortableStudentResults> rankOptions;
 	
-	@Getter @Setter private List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>();
 	@Getter @Setter private List<EvaluationType> evaluationTypes = new ArrayList<>();
 	
 	/**/
@@ -65,7 +64,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
         rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 	}
 
-	public void takeSubjects(String[] studentRegistrationCodes,ClassroomSessionDivisionSubject[] classroomSessionDivisionSubjects){
+	public void createStudentClassroomSessionDivisionSubjects(String[] studentRegistrationCodes,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects){
 		for(String studentRegistrationCode : studentRegistrationCodes){
 			Student student = studentBusiness.findByRegistrationCode(studentRegistrationCode);
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
@@ -74,12 +73,9 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			}
 		}
 	}
-	public void takeSubjects(String[] studentRegistrationCodes){
-		takeSubjects(studentRegistrationCodes, classroomSessionDivisionSubjects.toArray(new ClassroomSessionDivisionSubject[]{}));
-	}
 	
-	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,Boolean coefficientApplied,String[][] details){
-		SubjectEvaluation subjectEvaluation = new SubjectEvaluation(evaluationTypeBusiness.findBySubjectByEvaluationType(subject, evaluationType),coefficientApplied);
+	public void createSubjectEvaluation(SubjectEvaluationType subjectEvaluationType,String[][] details){
+		SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType,coefficientApplied);
 		for(String[] detail : details){
 			if(StringUtils.isBlank(detail[1]))
 				continue;
@@ -88,14 +84,13 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
 		}
 		subjectEvaluationBusiness.create(subjectEvaluation);
-		
-		//System.out.println(studentSubjectEvaluationBusiness.findAll());
 	}
-	public void evaluateStudents(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,String[][] details){
-		evaluateStudents(subject, evaluationType, coefficientApplied,details);
+
+	public void createSubjectEvaluation(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,String[][] details){
+		createSubjectEvaluation(evaluationTypeBusiness.findBySubjectByEvaluationType(subject, evaluationType),details);
 	}
 	
-	public void generateStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
+	public void createStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
 		studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
 		if(Boolean.TRUE.equals(createFileOnDisk)){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
@@ -141,33 +136,45 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		}
 	}
 	
+	/*
 	public void assertClassroomSessionDivisionSubjectAfterEvaluation(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,EvaluationType evaluationType, String[][] details,RankOptions<SortableStudentResults> rankOptions){
-		evaluateStudents(classroomSessionDivisionSubject, evaluationType,extract(details, 1));
+		createSubjectEvaluations(classroomSessionDivisionSubject, evaluationType,extract(details, 1));
     	assertClassroomSessionDivisionSubjectAverage(classroomSessionDivisionSubject, extract(details, 2));    	
     	assertClassroomSessionDivisionSubjectRank(classroomSessionDivisionSubject,extract(details, 3),rankOptions);
 	}
 	
 	public void assertClassroomSessionDivisionSubjectAfterEvaluation(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,EvaluationType evaluationType, String[][] details){
 		assertClassroomSessionDivisionSubjectAfterEvaluation(classroomSessionDivisionSubject, evaluationType, details, rankOptions);
-	}
+	}*/
 	
-	public void assertClassroomSessionDivisionAfterEvaluation(List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,List<EvaluationType> evaluationTypes,String[][] details){
-		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
-			int i = 1;
-			for(EvaluationType evaluationType : evaluationTypes){
-				evaluateStudents(classroomSessionDivisionSubject, evaluationType, extract(details, i++));
-			}
+	public void createSubjectEvaluations(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details,Boolean assertAverage,Boolean assertRank){
+		int i = 1;
+		for(EvaluationType evaluationType : evaluationTypes){
+			createSubjectEvaluation(classroomSessionDivisionSubject, evaluationType, extract(details, i++));
 		}
 		
-		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
-			int i = evaluationTypes.size()+1;
-			assertClassroomSessionDivisionSubjectAverage(classroomSessionDivisionSubject, extract(details, i++));    	
-	    	assertClassroomSessionDivisionSubjectRank(classroomSessionDivisionSubject,extract(details, i),rankOptions);
+		asserts(classroomSessionDivisionSubject, details, evaluationTypes.size()+1, assertAverage, assertRank);
+	}
+	
+	public void createSubjectEvaluations(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details){
+		createSubjectEvaluations(classroomSessionDivisionSubject,details, Boolean.FALSE, Boolean.FALSE);
+	}
+	
+	public void asserts(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details,Integer index,Boolean assertAverage,Boolean assertRank){
+		if(Boolean.TRUE.equals(assertAverage) || Boolean.TRUE.equals(assertRank)){
+			if(Boolean.TRUE.equals(assertAverage))
+				assertClassroomSessionDivisionSubjectAverage(classroomSessionDivisionSubject, extract(details, index++));    	
+			if(Boolean.TRUE.equals(assertRank))
+				assertClassroomSessionDivisionSubjectRank(classroomSessionDivisionSubject,extract(details, index),rankOptions);
 		}
 	}
 	
-	public void assertClassroomSessionDivisionAfterEvaluation(String[][] details){
-		assertClassroomSessionDivisionAfterEvaluation(classroomSessionDivisionSubjects,evaluationTypes, details);
+	public void asserts(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details,Boolean assertAverage,Boolean assertRank){
+		asserts(classroomSessionDivisionSubject, details, 1, assertAverage, assertRank);
+	}
+	
+	public void asserts(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details){
+		asserts(classroomSessionDivisionSubject, details, Boolean.TRUE, Boolean.TRUE);
 	}
 	
 	private String[][] extract(String[][] details,Integer columnIndex){

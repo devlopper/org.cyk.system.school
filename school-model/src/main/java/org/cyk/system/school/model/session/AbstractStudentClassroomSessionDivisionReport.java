@@ -1,6 +1,7 @@
 package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +24,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 	private String name,attendedTime,missedTime,missedTimeJustified,average,averageScale,rank,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,
 		comments,subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
 	private List<String> markTotals = new ArrayList<>();
+	private List<BigDecimal> tempMarkTotals = new ArrayList<>();
 	private ClassroomSessionDivisionReport classroomSessionDivision = new ClassroomSessionDivisionReport();
 	
 	private List<String> subjectsTableColumnNames = new ArrayList<>();
