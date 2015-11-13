@@ -74,8 +74,9 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		for(RESULT result : results){
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
+			result.getDetails().clear();
 			for(DETAIL detail : details)
-				if(result.getStudent().equals(student(detail))){
+				if(result.getStudent().getIdentifier().equals(student(detail).getIdentifier())){
 					result.getDetails().add(detail);
 					WeightedValue weightedValue = weightedValue(detail);
 					if(weightedValue.getValue()==null)

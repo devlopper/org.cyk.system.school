@@ -38,6 +38,8 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 			,@AttributeOverride(name="rank.exaequo",column=@Column(name="evaluationRankExaequo"))
 			
 			,@AttributeOverride(name="comments",column=@Column(name="evaluationComments"))
+			
+			//,@AttributeOverride(name="averageInterval",column=@Column(name="evaluationAverageInterval"))
 	})
 	private Sort evaluationSort = new Sort();
 	
@@ -51,6 +53,8 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 			,@AttributeOverride(name="rank.exaequo",column=@Column(name="lectureAttendanceRankExaequo"))
 			
 			,@AttributeOverride(name="comments",column=@Column(name="lectureAttendanceComments"))
+			
+			//,@AttributeOverride(name="averageInterval",column=@Column(name="lectureAttendanceAverageInterval"))
 	})
 	private Sort lectureAttendanceSort = new Sort();
 		

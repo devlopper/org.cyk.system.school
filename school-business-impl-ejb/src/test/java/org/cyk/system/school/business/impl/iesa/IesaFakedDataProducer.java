@@ -46,10 +46,10 @@ import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionInfos;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionSubjectInfos;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionInfos;
-import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -74,6 +74,7 @@ import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
+import org.joda.time.DateTimeConstants;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractFakedDataProducer implements Serializable {
@@ -209,6 +210,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		studentWorkMetricCollection.addItem("12","Listens and follows directions");
 		
 		studentWorkMetricCollection.setValueIntervalCollection(new IntervalCollection("BSWH_METRIC_IC"));
+		//studentWorkMetricCollection.getValueIntervalCollection().setLowestValue(new BigDecimal("1"));
+		//studentWorkMetricCollection.getValueIntervalCollection().setHighestValue(new BigDecimal("5"));
 		studentWorkMetricCollection.getValueIntervalCollection().addItem("1", "Has no regard for the observable traits", "1", "1");
 		studentWorkMetricCollection.getValueIntervalCollection().addItem("2", "Shows minimal regard for the observable traits", "2", "2");
 		studentWorkMetricCollection.getValueIntervalCollection().addItem("3", "Acceptable level of observable traits", "3", "3");
@@ -216,7 +219,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		studentWorkMetricCollection.getValueIntervalCollection().addItem("5", "Maintains an excellent degree of observable traits", "5", "5");
 		
 		create(studentWorkMetricCollection);
-		commonNodeInformations = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection,createFile("report/iesa.jrxml", "reportcard.jrxml"));
+		commonNodeInformations = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection,createFile("report/iesa.jrxml", "reportcard.jrxml")
+				,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
 		
 		//Level names
 		levelNameG1 = createLevelName("Grade 1");
@@ -337,6 +341,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		if(Boolean.TRUE.equals(generateStudentClassroomSessionDivisionReport)){
 			System.out.println("Updating metric value");
 			ClassroomSessionInfos classroomSessionInfos = grade1;
+			SchoolBusinessTestHelper.getInstance().randomValues(Arrays.asList(classroomSessionInfos.division(0).getClassroomSessionDivision()), Boolean.TRUE, Boolean.TRUE);
+			/*
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
 					.findByClassroomSessionDivision(classroomSessionInfos.division(0).getClassroomSessionDivision())){
 				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().prepareUpdateOfMetricValues(studentClassroomSessionDivision);				
@@ -347,6 +353,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
 					.update(studentClassroomSessionDivision,studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
 			}
+			*/
 			System.out.println("Generating report");
 			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(classroomSessionInfos.division(0).getClassroomSessionDivision()));
 		}
@@ -389,6 +396,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<SubjectEvaluationType> subjectEvaluationTypes,ClassroomSession classroomSession,Subject[] subjects){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));
+		classroomSessionDivision.setDuration(DateTimeConstants.MILLIS_PER_DAY * 45l);
 		classroomSessionDivisions.add(classroomSessionDivision);
 		classroomSessionDivision.getPeriod().setFromDate(new Date());
 		classroomSessionDivision.getPeriod().setToDate(new Date());

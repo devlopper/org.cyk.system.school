@@ -47,7 +47,6 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
-import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Stateless
 public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
@@ -72,21 +71,39 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override
 	public StudentClassroomSessionDivision create(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		super.create(studentClassroomSessionDivision);
+		
+		if(studentClassroomSessionDivision.getResults()==null)
+			studentClassroomSessionDivision.setResults(new StudentResults());
+		
 		Student student = studentClassroomSessionDivision.getStudent();
 		ClassroomSessionDivision classroomSessionDivision = studentClassroomSessionDivision.getClassroomSessionDivision();
 		ClassroomSession classroomSession = classroomSessionDivision.getClassroomSession();
-		if(studentClassroomSessionDivision.getResults()==null)
-			studentClassroomSessionDivision.setResults(new StudentResults());
+		
 		StudentClassroomSession studentClassroomSession = studentClassroomSessionDao.readByStudentByClassroomSession(student, classroomSession);
 		if(studentClassroomSession==null){
 			schoolBusinessLayer.getStudentClassroomSessionBusiness().create(new StudentClassroomSession(student, classroomSession));
 		}
+		
+		MetricCollection metricCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
+				.getStudentWorkMetricCollection();
+		RootBusinessLayer.getInstance().getMetricCollectionBusiness().load(metricCollection);
+		IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
+		RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
+		for(Metric metric : metricCollection.getCollection()){
+			studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
+				.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO)));
+		}
+		for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()){
+			genericDao.create(studentResultsMetricValue.getMetricValue());
+			studentResultsMetricValueDao.create(studentResultsMetricValue);
+		}
+		
 		logTrace("Student {} for classroomsession division {} registered", student,classroomSessionDivision);
 		return studentClassroomSessionDivision;
 	}
 	
 	@Override
-	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportOptions options) {
 		logTrace("Computing Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
 		StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
 				,SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
@@ -104,13 +121,23 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
+	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		buildReport(studentClassroomSessionDivision, StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS);
+	}
+	
+	@Override
 	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		// TODO Many report as one document must be handled
 		return findReport(studentClassroomSessionDivisions.iterator().next());
 	}
 	
-	@Override 
+	@Override
 	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions) {
+		buildReport(classroomSessionDivisions, StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS);
+	}
+	
+	@Override 
+	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportOptions options) {
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		/*
 		 * Data loading
@@ -133,8 +160,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		studentSubjectBusiness.average(subjects, studentSubjects, studentSubjectEvaluations, Boolean.FALSE);
 		average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, Boolean.FALSE);
 		
-		attendance(classroomSessionDivisions, studentClassroomSessionDivisions, lectures, participations, eventMisseds);
-		
+		if(Boolean.TRUE.equals(options.getAttendance())){
+			attendance(classroomSessionDivisions, studentClassroomSessionDivisions, lectures, participations, eventMisseds);
+		}
 		//rank
 		RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
         rankOptions.setType(RankType.EXAEQUO); 
@@ -213,6 +241,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		return lecture.getSubject().getClassroomSessionDivision();
 	}
 
+	/*
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public StudentClassroomSessionDivision prepareUpdateOfMetricValues(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		studentClassroomSessionDivision.getResults()
@@ -229,11 +258,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 							, new MetricValue(metric, new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())))));
 		}
 		return studentClassroomSessionDivision;
-	}
+	}*/
 	
+
 	@Override
 	public StudentClassroomSessionDivision update(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues) {
-		dao.update(studentClassroomSessionDivision);
+		update(studentClassroomSessionDivision);
 		studentClassroomSessionDivision.getResults().setStudentResultsMetricValues(studentResultsMetricValues);
 		delete(StudentResultsMetricValue.class,studentResultsMetricValueDao,studentResultsMetricValueDao.readByStudentResults(studentClassroomSessionDivision.getResults()),
 				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());

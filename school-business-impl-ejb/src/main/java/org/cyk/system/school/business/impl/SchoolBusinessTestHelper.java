@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
@@ -36,6 +37,7 @@ import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.generator.RandomDataProvider;
+import org.joda.time.DateTimeConstants;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractTestHelper implements Serializable {
@@ -99,15 +101,29 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
     	}
 	}
 	
-	public void randomMetricValues(Collection<ClassroomSessionDivision> classroomSessionDivisions){
+	public void randomValues(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean metric,Boolean attendance){
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
-				studentClassroomSessionDivisionBusiness.prepareUpdateOfMetricValues(studentClassroomSessionDivision);				
-				IntervalCollection intervalCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
-						.getStudentWorkMetricCollection().getValueIntervalCollection();
-				for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
-					studentResultsMetricValue.getMetricValue().setValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
-				studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
+				
+				if(Boolean.TRUE.equals(attendance)){
+					studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(RandomDataProvider.getInstance().randomInt(DateTimeConstants.MILLIS_PER_DAY, DateTimeConstants.MILLIS_PER_DAY*20)*1l);
+					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(RandomDataProvider.getInstance().randomInt(DateTimeConstants.MILLIS_PER_DAY, DateTimeConstants.MILLIS_PER_DAY*20)*1l);
+					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDurationJustified(RandomDataProvider.getInstance().randomInt(DateTimeConstants.MILLIS_PER_DAY, DateTimeConstants.MILLIS_PER_DAY*20)*1l);
+					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
+				}
+				
+				if(Boolean.TRUE.equals(metric)){				
+					IntervalCollection intervalCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
+							.getStudentWorkMetricCollection().getValueIntervalCollection();
+					RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
+					Collection<StudentResultsMetricValue> studentResultsMetricValues = SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness()
+							.findByStudentResults(studentClassroomSessionDivision.getResults());
+					for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
+						studentResultsMetricValue.getMetricValue().setValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+					}
+					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);
+				}
+				
 			}
 	}
 	

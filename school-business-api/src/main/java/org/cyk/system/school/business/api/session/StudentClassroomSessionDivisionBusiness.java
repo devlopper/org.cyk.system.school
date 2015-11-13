@@ -1,6 +1,10 @@
 package org.cyk.system.school.business.api.session;
 
+import java.io.Serializable;
 import java.util.Collection;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
@@ -13,7 +17,9 @@ import org.cyk.system.school.model.subject.StudentSubject;
 
 public interface StudentClassroomSessionDivisionBusiness extends AbstractStudentResultsBusiness<ClassroomSessionDivision,StudentClassroomSessionDivision,StudentSubject> {
 
+	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportOptions options);
 	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
+	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportOptions options);
 	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions);
 	
 	ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
@@ -22,8 +28,16 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	Collection<StudentClassroomSessionDivision> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 	StudentClassroomSessionDivision findByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision);
 	
-	StudentClassroomSessionDivision prepareUpdateOfMetricValues(StudentClassroomSessionDivision studentClassroomSessionDivision);
+	//StudentClassroomSessionDivision prepareUpdateOfMetricValues(StudentClassroomSessionDivision studentClassroomSessionDivision);
 	StudentClassroomSessionDivision update(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues);
 	
 	// TODO some methods here can go up
+	
+	@Getter @Setter
+	public static class BuildReportOptions implements Serializable{
+		private static final long serialVersionUID = 7151479991050865862L;
+		private Boolean attendance = Boolean.TRUE;
+	}
+	
+	BuildReportOptions DEFAULT_BUILD_REPORT_OPTIONS = new BuildReportOptions();
 }

@@ -16,10 +16,10 @@ import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 
@@ -45,7 +45,9 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 		
 		StudentClassroomSessionDivision studentClassroomSessionDivision = studentClassroomSessionDivisionDao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 		if(studentClassroomSessionDivision==null){
-			schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().create(new StudentClassroomSessionDivision(student, classroomSessionDivision));
+			studentClassroomSessionDivision = new StudentClassroomSessionDivision(student, classroomSessionDivision);
+			
+			schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().create(studentClassroomSessionDivision);
 		}
 		logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
 		return studentSubject;

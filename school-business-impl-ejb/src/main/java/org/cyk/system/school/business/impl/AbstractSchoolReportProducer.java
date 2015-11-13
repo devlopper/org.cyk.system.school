@@ -60,6 +60,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
 		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
+		r.getClassroomSessionDivision().setOpenedTime(format(csd.getDuration() / as.getNodeInformations().getAttendanceTimeDivisionType().getDuration() ));
+		r.setAttendedTime(format(s.getResults().getLectureAttendance().getAttendedDuration() / as.getNodeInformations().getAttendanceTimeDivisionType().getDuration() ));
+		r.setMissedTime(format(s.getResults().getLectureAttendance().getMissedDuration() / as.getNodeInformations().getAttendanceTimeDivisionType().getDuration() ));
+		
 		
 		set(student, r.getStudent());
 		
@@ -94,6 +98,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
+		logTrace("Number of student subjects = {}", s.getDetails().size());
 		for(StudentSubject studentSubject : s.getDetails()){
 			Boolean applicable = studentSubject.getResults().getEvaluationSort().getAverage().getValue()!=null;
 			

@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
 
-import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionInfos;
 import org.cyk.system.school.model.actor.Student;
 
@@ -44,7 +43,7 @@ public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT 
     			});*/
     	
     	if(Boolean.TRUE.equals(generateReport)){
-    		schoolBusinessTestHelper.randomMetricValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()));
+    		schoolBusinessTestHelper.randomValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),Boolean.TRUE,Boolean.TRUE);
     		//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),printReport);
     	}
     }
@@ -126,7 +125,7 @@ public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT 
     			});*/
     	
     	if(Boolean.TRUE.equals(generateReport)){
-    		schoolBusinessTestHelper.randomMetricValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()));
+    		schoolBusinessTestHelper.randomValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),Boolean.TRUE,Boolean.TRUE);
     		schoolBusinessTestHelper.createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),printReport);
     	}
     }

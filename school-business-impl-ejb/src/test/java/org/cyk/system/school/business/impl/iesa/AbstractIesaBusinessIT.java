@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl.iesa;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 
@@ -16,6 +17,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     	super.installApplication(fake);
     	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
     	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
+    	StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS.setAttendance(Boolean.FALSE);
     }
     
     @Override

@@ -16,6 +16,7 @@ import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.Script;
+import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -48,22 +49,23 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	private static SchoolBusinessLayer INSTANCE;
 	
-	@Inject @Getter private TeacherBusiness teacherBusiness;
-	@Inject @Getter private StudentBusiness studentBusiness;
-	@Inject @Getter private StudentSubjectBusiness studentSubjectBusiness;
-	@Inject @Getter private StudentSubjectEvaluationBusiness studentSubjectEvaluationBusiness;
-	@Inject @Getter private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
-	@Inject @Getter private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
-	@Inject @Getter private ClassroomSessionBusiness classroomSessionBusiness;
-	@Inject @Getter private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
-	@Inject @Getter private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
-	@Inject @Getter private SubjectEvaluationBusiness subjectEvaluationBusiness;
-	@Inject @Getter private SubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
-	@Inject @Getter private LectureBusiness lectureBusiness;
+	@Inject private TeacherBusiness teacherBusiness;
+	@Inject private StudentBusiness studentBusiness;
+	@Inject private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject private StudentResultsMetricValueBusiness studentResultsMetricValueBusiness;
+	@Inject private StudentSubjectEvaluationBusiness studentSubjectEvaluationBusiness;
+	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
+	@Inject private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
+	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
+	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
+	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
+	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
+	@Inject private SubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
+	@Inject private LectureBusiness lectureBusiness;
 	
-	@Getter @Setter private AverageComputationListener averageComputationListener;
-	@Getter @Setter private Script averageComputationScript;
-	@Getter @Setter private SchoolReportProducer reportProducer;
+	@Setter private AverageComputationListener averageComputationListener;
+	@Setter private Script averageComputationScript;
+	@Setter private SchoolReportProducer reportProducer;
 	@Inject private SchoolReportRepository schoolReportRepository;
 	
 	@Override
