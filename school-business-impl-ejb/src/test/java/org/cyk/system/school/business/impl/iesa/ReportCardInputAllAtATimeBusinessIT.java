@@ -43,7 +43,7 @@ public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT 
     			});*/
     	
     	if(Boolean.TRUE.equals(generateReport)){
-    		schoolBusinessTestHelper.randomValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),Boolean.TRUE,Boolean.TRUE);
+    		schoolBusinessTestHelper.randomValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     		//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),printReport);
     	}
     }
@@ -125,7 +125,7 @@ public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT 
     			});*/
     	
     	if(Boolean.TRUE.equals(generateReport)){
-    		schoolBusinessTestHelper.randomValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),Boolean.TRUE,Boolean.TRUE);
+    		schoolBusinessTestHelper.randomValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     		schoolBusinessTestHelper.createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),printReport);
     	}
     }

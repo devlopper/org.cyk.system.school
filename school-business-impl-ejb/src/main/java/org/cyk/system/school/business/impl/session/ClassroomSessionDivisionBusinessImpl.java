@@ -66,15 +66,20 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		return dao.readByClassroomSession(classroomSession);
 	}
 
-	@Override
-	public String format(ClassroomSessionDivision classroomSessionDivision) {
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Integer findIndex(ClassroomSessionDivision classroomSessionDivision) {
 		Integer index = 0;
 		for(ClassroomSessionDivision c : dao.readByClassroomSession(classroomSessionDivision.getClassroomSession())){
 			index++;
 			if(classroomSessionDivision.equals(c))
 				break;
 		}
-		return classroomSessionDivision.getTimeDivisionType().getUiString()+" "+index;
+		return index;
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public String format(ClassroomSessionDivision classroomSessionDivision) {
+		return classroomSessionDivision.getTimeDivisionType().getUiString()+" "+findIndex(classroomSessionDivision);
 	}
 	
 	@Override
@@ -82,5 +87,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		super.__load__(classroomSessionDivision);
 		classroomSessionDivision.setSubjects(classroomSessionDivisionSubjectDao.readByClassroomSessionDivision(classroomSessionDivision));
 	}
+
+	
+	
 
 }

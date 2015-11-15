@@ -50,7 +50,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getAcademicSession().setFromDateToDate(timeBusiness.formatPeriodFromTo(as.getPeriod()));
 		r.getAcademicSession().getCompany().setImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
 		r.getAcademicSession().getCompany().setName(as.getSchool().getOwnedCompany().getCompany().getName());
-		
+		RootBusinessLayer.getInstance().getContactCollectionBusiness().load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
+		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContact());
 		r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
 		
 		r.getClassroomSessionDivision().getClassroomSession().setName(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getUiString());
@@ -188,8 +189,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setGradingScaleLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.gradingscale"));
 		IntervalCollection evaluationIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
-		rootBusinessLayer.getIntervalCollectionBusiness().load(evaluationIntervalCollection);
-		for(Interval interval : evaluationIntervalCollection.getCollection()){
+		//rootBusinessLayer.getIntervalCollectionBusiness().load(evaluationIntervalCollection);
+		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(evaluationIntervalCollection, Boolean.FALSE)){
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
 			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
 			currentLabelValueCollection.getCollection().add(labelValueReport);
@@ -198,8 +199,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setEffortLevelLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.effort"));
 		IntervalCollection intervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection().getValueIntervalCollection();
-		rootBusinessLayer.getIntervalCollectionBusiness().load(intervalCollection);
-		for(Interval interval : intervalCollection.getCollection()){
+		//rootBusinessLayer.getIntervalCollectionBusiness().load(intervalCollection);
+		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(intervalCollection, Boolean.TRUE)){
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
 			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
 			currentLabelValueCollection.getCollection().add(labelValueReport);
@@ -211,7 +212,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		rootBusinessLayer.getMetricCollectionBusiness().load(metricCollection);
 		for(Metric metric : metricCollection.getCollection()){
 			String value = "";
-			for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
+			for(StudentResultsMetricValue studentResultsMetricValue : SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults()))
 				if(studentResultsMetricValue.getMetricValue().getMetric().getIdentifier().equals(metric.getIdentifier())){
 					value = format(studentResultsMetricValue.getMetricValue().getValue());
 					break;

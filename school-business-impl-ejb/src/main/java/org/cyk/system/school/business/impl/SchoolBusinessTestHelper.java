@@ -10,9 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
@@ -21,6 +19,7 @@ import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
@@ -29,6 +28,7 @@ import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.EvaluationType;
@@ -39,6 +39,9 @@ import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTimeConstants;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractTestHelper implements Serializable {
 
@@ -48,6 +51,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	@Inject private StudentBusiness studentBusiness;
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
+	@Inject private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
 	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
 	@Inject private SubjectEvaluationTypeBusiness evaluationTypeBusiness;
 	
@@ -101,7 +105,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
     	}
 	}
 	
-	public void randomValues(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean metric,Boolean attendance){
+	public void randomValues(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean metric,Boolean attendance,Boolean appreciation){
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 				
@@ -124,7 +128,16 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);
 				}
 				
+				if(Boolean.TRUE.equals(appreciation)){
+					studentClassroomSessionDivision.getResults().setAppreciation(RandomStringUtils.randomAlphabetic(50));
+					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
+				}
 			}
+	}
+	
+	public void createStudentClassroomSession(String registrationCode,ClassroomSession classroomSession){
+		StudentClassroomSession studentClassroomSession = new StudentClassroomSession(studentBusiness.findByRegistrationCode(registrationCode), classroomSession);
+		studentClassroomSessionBusiness.create(studentClassroomSession);
 	}
 	
 	/**/

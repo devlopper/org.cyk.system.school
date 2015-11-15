@@ -35,10 +35,9 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		super.initialisation();
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
 		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
-		
-		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().prepareUpdateOfMetricValues(identifiable);
-		
-		metricValueCollection = createItemCollection(form, "qwerty", MetricValueItem.class, StudentResultsMetricValue.class, identifiable.getResults().getStudentResultsMetricValues(),new ItemCollectionAdapter<MetricValueItem,StudentResultsMetricValue>(){
+			
+		metricValueCollection = createItemCollection(form, "qwerty", MetricValueItem.class, StudentResultsMetricValue.class, 
+				SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults()),new ItemCollectionAdapter<MetricValueItem,StudentResultsMetricValue>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public void instanciated(AbstractItemCollection<MetricValueItem, StudentResultsMetricValue> itemCollection,MetricValueItem item) {

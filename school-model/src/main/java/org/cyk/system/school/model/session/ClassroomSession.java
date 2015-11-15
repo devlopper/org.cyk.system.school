@@ -37,12 +37,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 		this.coordinator = coordinator;
 	}
 	
-	@Override
-	public String getUiString() {
-		return levelTimeDivision.getUiString();
-	}
-	
-	public static final String FIELD_ACADEMIC_DIVISION = "academicSession";
+	public static final String FIELD_ACADEMIC_SESSION = "academicSession";
 	public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";
 	public static final String FIELD_COORDINATOR = "coordinator";
 	

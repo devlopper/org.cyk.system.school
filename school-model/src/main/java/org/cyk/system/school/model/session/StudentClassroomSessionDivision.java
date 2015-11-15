@@ -20,6 +20,8 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 
 	@ManyToOne private ClassroomSessionDivision classroomSessionDivision;
 	
+	//@ManyToOne private StudentClassroomSession studentClassroomSession;
+	
 	/**/
 		
 	public StudentClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision) {

@@ -14,6 +14,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -51,6 +52,8 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	public StudentClassroomSession create(StudentClassroomSession studentClassroomSession) {
 		super.create(studentClassroomSession);
 		logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
+		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
+			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().create(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
 		return studentClassroomSession;
 	}
 	

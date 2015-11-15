@@ -2,6 +2,7 @@ package org.cyk.system.school.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -23,7 +24,7 @@ public class StudentResultsMetricValue extends AbstractIdentifiable implements S
 
 	@ManyToOne @NotNull private StudentResults studentResults;
 	
-	@OneToOne @NotNull private MetricValue metricValue;
+	@OneToOne(cascade={CascadeType.ALL}) @NotNull private MetricValue metricValue;
 	
 	public StudentResultsMetricValue(StudentResults studentResults,MetricValue metricValue) {
 		super();

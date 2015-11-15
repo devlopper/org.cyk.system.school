@@ -12,15 +12,13 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
+import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.api.BusinessLayer;
 import org.cyk.system.root.business.api.BusinessLayerListener;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
@@ -75,6 +73,9 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTimeConstants;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractFakedDataProducer implements Serializable {
@@ -153,6 +154,13 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			@Override
 			public byte[] getCompanyLogoBytes() {
 				return getResourceAsBytes(SchoolBusinessLayer.class.getPackage(),"image/iesa.png");
+			}
+			
+			@Override
+			public void handleCompanyToInstall(Company company) {
+				super.handleCompanyToInstall(company);
+				addContacts(company.getContactCollection(), new String[]{"RueJ7 1-II Plateux Vallon, Cocody"}, new String[]{"22417217","21014459"}
+				, new String[]{"05996283","49925138","06173731"}, new String[]{"08 BP 1828 Abidjan 08"}, new String[]{"iesa@aviso.ci"}, new String[]{"http://www.iesaci.com"});
 			}
 
 		});
@@ -247,7 +255,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     	school.getOwnedCompany().getCompany().setManager(rootRandomDataProvider.oneFromDatabase(Person.class));
     	companyBusiness.update(school.getOwnedCompany().getCompany());
     	
-    	AcademicSession academicSession = new AcademicSession(school,commonNodeInformations);
+    	AcademicSession academicSession = new AcademicSession(school,commonNodeInformations,new Date());
     	academicSession.getPeriod().setFromDate(new Date());
     	academicSession.getPeriod().setToDate(new Date());
     	academicSession = create(academicSession);
@@ -341,7 +349,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		if(Boolean.TRUE.equals(generateStudentClassroomSessionDivisionReport)){
 			System.out.println("Updating metric value");
 			ClassroomSessionInfos classroomSessionInfos = grade1;
-			SchoolBusinessTestHelper.getInstance().randomValues(Arrays.asList(classroomSessionInfos.division(0).getClassroomSessionDivision()), Boolean.TRUE, Boolean.TRUE);
+			SchoolBusinessTestHelper.getInstance().randomValues(Arrays.asList(classroomSessionInfos.division(0).getClassroomSessionDivision()), Boolean.TRUE, Boolean.TRUE,Boolean.TRUE);
 			/*
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
 					.findByClassroomSessionDivision(classroomSessionInfos.division(0).getClassroomSessionDivision())){
@@ -445,7 +453,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			r.getSubjectsTableColumnNames().add("Test 1 15%");
 			r.getSubjectsTableColumnNames().add("Test 2 15%");
 			r.getSubjectsTableColumnNames().add("Exam 70%");
-			r.getSubjectsTableColumnNames().add("TOTAL");
+			r.getSubjectsTableColumnNames().add("TOTAL 100%");
 			r.getSubjectsTableColumnNames().add("GRADE");
 			r.getSubjectsTableColumnNames().add("RANK");
 			r.getSubjectsTableColumnNames().add("OUT OF");
@@ -454,22 +462,25 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			r.getSubjectsTableColumnNames().add("REMARKS");
 			r.getSubjectsTableColumnNames().add("TEACHER");
 			
-			//sumMarks(r, 3);
-			
 			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", "To Compute");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", "To Compute");
+			if(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findIndex(studentClassroomSessionDivision.getClassroomSessionDivision())==3){
+				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
+				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
+				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
+				//labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", 
+				//		studentClassroomSessionDivision.get "To Compute");
+			}else{
+				labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", 
+						format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNextStartingDate()));
+			}
 			
 			r.setBehaviorLabelValueCollection1(new LabelValueCollectionReport());
-			r.getBehaviorLabelValueCollection1().setName("BEHAVIOUR,STUDY AND WORK HABITS");
+			r.getBehaviorLabelValueCollection1().setName("school.report.studentclassroomsessiondivision.block.behaviour");
 			for(int i=0;i<=5;i++)
 				r.getBehaviorLabelValueCollection1().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
 			
 			r.setBehaviorLabelValueCollection2(new LabelValueCollectionReport());
-			r.getBehaviorLabelValueCollection2().setName("BEHAVIOUR,STUDY AND WORK HABITS");
+			r.getBehaviorLabelValueCollection2().setName("school.report.studentclassroomsessiondivision.block.behaviour");
 			for(int i=6;i<=11;i++)
 				r.getBehaviorLabelValueCollection2().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
 			

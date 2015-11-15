@@ -119,7 +119,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			r.getSubjectsTableColumnNames().add("Test 1 15%");
 			r.getSubjectsTableColumnNames().add("Test 2 15%");
 			r.getSubjectsTableColumnNames().add("Exam 70%");
-			r.getSubjectsTableColumnNames().add("TOTAL");
+			r.getSubjectsTableColumnNames().add("TOTAL 100%");
 			r.getSubjectsTableColumnNames().add("GRADE");
 			r.getSubjectsTableColumnNames().add("RANK");
 			r.getSubjectsTableColumnNames().add("OUT OF");
@@ -128,22 +128,25 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			r.getSubjectsTableColumnNames().add("REMARKS");
 			r.getSubjectsTableColumnNames().add("TEACHER");
 			
-			//sumMarks(r, 3);
-			
 			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", "To Compute");
-			labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", "To Compute");
+			if(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findIndex(studentClassroomSessionDivision.getClassroomSessionDivision())==3){
+				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
+				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
+				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
+				//labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", 
+				//		studentClassroomSessionDivision.get "To Compute");
+			}else{
+				labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", 
+						format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNextStartingDate()));
+			}
 			
 			r.setBehaviorLabelValueCollection1(new LabelValueCollectionReport());
-			r.getBehaviorLabelValueCollection1().setName("BEHAVIOUR,STUDY AND WORK HABITS");
+			r.getBehaviorLabelValueCollection1().setName("school.report.studentclassroomsessiondivision.block.behaviour");
 			for(int i=0;i<=5;i++)
 				r.getBehaviorLabelValueCollection1().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
 			
 			r.setBehaviorLabelValueCollection2(new LabelValueCollectionReport());
-			r.getBehaviorLabelValueCollection2().setName("BEHAVIOUR,STUDY AND WORK HABITS");
+			r.getBehaviorLabelValueCollection2().setName("school.report.studentclassroomsessiondivision.block.behaviour");
 			for(int i=6;i<=11;i++)
 				r.getBehaviorLabelValueCollection2().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
 			

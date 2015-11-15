@@ -1,11 +1,13 @@
 package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
@@ -19,6 +21,11 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Inject
 	public ClassroomSessionBusinessImpl(ClassroomSessionDao dao) {
 		super(dao);  
+	}
+	
+	@Override
+	public Collection<ClassroomSession> findByAcademicSession(AcademicSession academicSession) {
+		return dao.readByAcademicSession(academicSession);
 	}
 
 	@Override

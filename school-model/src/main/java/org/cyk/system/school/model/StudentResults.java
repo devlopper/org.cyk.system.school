@@ -64,6 +64,8 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	
 	@OneToOne private File report;
 	
+	private Boolean promoted;
+	
 	@Transient private Collection<StudentResultsMetricValue> studentResultsMetricValues;
 	
 	/**/

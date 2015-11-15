@@ -99,6 +99,11 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		}
 		
 		logTrace("Student {} for classroomsession division {} registered", student,classroomSessionDivision);
+		
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
+			SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().create(new StudentSubject(student, classroomSessionDivisionSubject));
+		}
+		
 		return studentClassroomSessionDivision;
 	}
 	
@@ -269,11 +274,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
 		for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
 			if(studentResultsMetricValue.getIdentifier()==null){
-				if(studentResultsMetricValue.getMetricValue().getIdentifier()==null)
-					genericDao.create(studentResultsMetricValue.getMetricValue());
 				studentResultsMetricValueDao.create(studentResultsMetricValue);
-			}else
+			}else{
 				studentResultsMetricValueDao.update(studentResultsMetricValue);
+			}
 		return studentClassroomSessionDivision;
 	}
 	

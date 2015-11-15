@@ -6,19 +6,19 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
+import org.cyk.system.root.business.impl.AbstractFormatter;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
@@ -34,12 +34,18 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
+import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER) @Getter
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
@@ -49,6 +55,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	private static SchoolBusinessLayer INSTANCE;
 	
+	@Inject private AcademicSessionBusiness academicSessionBusiness;
 	@Inject private TeacherBusiness teacherBusiness;
 	@Inject private StudentBusiness studentBusiness;
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
@@ -72,6 +79,14 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+		
+		registerFormatter(ClassroomSession.class, new AbstractFormatter<ClassroomSession>() {
+			private static final long serialVersionUID = -4793331650394948152L;
+			@Override
+			public String format(ClassroomSession classroomSession, ContentType contentType) {
+				return classroomSessionBusiness.format(classroomSession);
+			}
+		});
 	}
 	
 	@Override
@@ -96,6 +111,9 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
         beansMap.put((Class)SubjectEvaluation.class, (TypedBusiness)subjectEvaluationBusiness);
         beansMap.put((Class)SubjectEvaluationType.class, (TypedBusiness)subjectEvaluationTypeBusiness);
         beansMap.put((Class)Lecture.class, (TypedBusiness)lectureBusiness);
+        beansMap.put((Class)StudentClassroomSession.class, (TypedBusiness)studentClassroomSessionBusiness);
+        beansMap.put((Class)StudentClassroomSessionDivision.class, (TypedBusiness)studentClassroomSessionDivisionBusiness);
+        beansMap.put((Class)StudentSubject.class, (TypedBusiness)studentClassroomSessionDivisionBusiness);
     }
 
 	@Override
