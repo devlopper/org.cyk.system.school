@@ -76,11 +76,19 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 		return studentResultsMetricValues;
 	}
 	
+	public Attendance getLectureAttendance(){
+		if(lectureAttendance==null)
+			lectureAttendance = new Attendance();
+		return lectureAttendance;
+	}
+	
 	/**/
 	
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.SHORT_PREFIX_STYLE);
 	}
+	
+	
 
 }

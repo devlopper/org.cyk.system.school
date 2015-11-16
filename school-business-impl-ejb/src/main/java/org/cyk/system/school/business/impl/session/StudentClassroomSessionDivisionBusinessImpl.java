@@ -2,6 +2,7 @@ package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -9,6 +10,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.file.report.ReportBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
@@ -23,6 +25,7 @@ import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.school.business.api.SortableStudentResults;
+import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -93,18 +96,36 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
 				.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO)));
 		}
-		for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()){
-			genericDao.create(studentResultsMetricValue.getMetricValue());
-			studentResultsMetricValueDao.create(studentResultsMetricValue);
-		}
 		
 		logTrace("Student {} for classroomsession division {} registered", student,classroomSessionDivision);
 		
+		Collection<StudentSubject> studentSubjects = new ArrayList<>();
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
-			SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().create(new StudentSubject(student, classroomSessionDivisionSubject));
+			studentSubjects.add(new StudentSubject(student, classroomSessionDivisionSubject));
 		}
 		
+		cascade(studentClassroomSessionDivision, studentClassroomSessionDivision.getResults().getStudentResultsMetricValues(), studentSubjects, Crud.CREATE);
+		
 		return studentClassroomSessionDivision;
+	}
+	
+	private void cascade(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues
+			,Collection<StudentSubject> studentSubjects,Crud crud){
+
+		new CascadeOperationListener.Adapter.Default<StudentResultsMetricValue,StudentResultsMetricValueDao,StudentResultsMetricValueBusiness>(studentResultsMetricValueDao,null)
+			.operate(studentResultsMetricValues, crud);
+	
+		logTrace("Student classroomsession division. {} , {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+		
+		new CascadeOperationListener.Adapter.Default<StudentSubject,StudentSubjectDao,StudentSubjectBusiness>(null,SchoolBusinessLayer.getInstance().getStudentSubjectBusiness())
+			.operate(studentSubjects, crud);
+	}
+	
+	@Override
+	public StudentClassroomSessionDivision delete(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		cascade(studentClassroomSessionDivision, studentResultsMetricValueDao.readByStudentResults(studentClassroomSessionDivision.getResults())
+				, studentSubjectDao.readByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision()), Crud.DELETE);
+		return super.delete(studentClassroomSessionDivision);
 	}
 	
 	@Override
@@ -271,14 +292,17 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		update(studentClassroomSessionDivision);
 		studentClassroomSessionDivision.getResults().setStudentResultsMetricValues(studentResultsMetricValues);
 		delete(StudentResultsMetricValue.class,studentResultsMetricValueDao,studentResultsMetricValueDao.readByStudentResults(studentClassroomSessionDivision.getResults()),
-				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
-		for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
-			if(studentResultsMetricValue.getIdentifier()==null){
-				studentResultsMetricValueDao.create(studentResultsMetricValue);
-			}else{
-				studentResultsMetricValueDao.update(studentResultsMetricValue);
-			}
+			studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
+		for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()){
+			studentResultsMetricValueDao.update(studentResultsMetricValue);
+		}
+			
 		return studentClassroomSessionDivision;
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<StudentClassroomSessionDivision> findByStudentByClassroomSession(Student student,ClassroomSession classroomSession) {
+		return dao.readByStudentByClassroomSession(student,classroomSession);
 	}
 	
 }

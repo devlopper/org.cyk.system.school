@@ -13,5 +13,7 @@ public interface StudentClassroomSessionBusiness extends AbstractStudentResultsB
 	Collection<StudentClassroomSession> findByClassroomSession(ClassroomSession classroomSession);
 
 	StudentClassroomSession finddByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
-	
+
+	StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
+
 }

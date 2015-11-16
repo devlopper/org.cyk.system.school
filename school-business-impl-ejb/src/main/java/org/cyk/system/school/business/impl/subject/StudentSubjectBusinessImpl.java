@@ -14,6 +14,7 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -51,6 +52,16 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 		}
 		logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
 		return studentSubject;
+	}
+	
+	private void cascade(StudentSubject studentSubject){
+		
+	}
+
+	@Override
+	public StudentSubject delete(StudentSubject studentSubject) {
+		cascade(studentSubject);
+		return super.delete(studentSubject);
 	}
 		 
 	/**/
@@ -121,6 +132,11 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	@Override
 	public Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
+	}
+
+	@Override
+	public Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student, ClassroomSession classroomSession) {
+		return dao.readByStudentByClassroomSession(student, classroomSession);
 	}
 	 
 	/**/

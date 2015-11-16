@@ -20,4 +20,6 @@ public interface StudentClassroomSessionDivisionDao extends TypedDao<StudentClas
 
 	Collection<StudentClassroomSessionDivision> readByClassroomSessions(Collection<ClassroomSession> levels);
 
+	Collection<StudentClassroomSessionDivision> readByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
+
 }

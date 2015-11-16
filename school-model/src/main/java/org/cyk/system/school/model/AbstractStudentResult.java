@@ -31,6 +31,11 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	
 	public abstract LEVEL getLevel();
 	
+	@Override
+	public String toString() {
+		return "("+identifier+","+student.getIdentifier()+","+((AbstractIdentifiable)getLevel()).getIdentifier()+")";
+	}
+	
 	public static final String FIELD_STUDENT = "student";
 
 }

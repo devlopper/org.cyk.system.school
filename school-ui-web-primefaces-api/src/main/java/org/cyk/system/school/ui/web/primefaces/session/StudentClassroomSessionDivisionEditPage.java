@@ -35,7 +35,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		super.initialisation();
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
 		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
-			
+		
 		metricValueCollection = createItemCollection(form, "qwerty", MetricValueItem.class, StudentResultsMetricValue.class, 
 				SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults()),new ItemCollectionAdapter<MetricValueItem,StudentResultsMetricValue>(){
 			private static final long serialVersionUID = -3872058204105902514L;
@@ -45,19 +45,25 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 				item.setName(item.getIdentifiable().getMetricValue().getMetric().getName());
 				item.setValue(item.getIdentifiable().getMetricValue().getValue());
 			}	
+			@Override
+			public void write(MetricValueItem item) {
+				super.write(item);
+				item.getIdentifiable().getMetricValue().setValue(item.getValue());
+			}
 		});
 	}
 	
 	@Override
 	public void transfer(UICommand command, Object object) throws Exception {
 		super.transfer(command, object);
-		for(MetricValueItem item : metricValueCollection.getItems())
-			item.getIdentifiable().getMetricValue().setValue(item.getValue());
+		metricValueCollection.write();
+		//for(MetricValueItem item : metricValueCollection.getItems())
+			//item.getIdentifiable().getMetricValue().setValue(item.getValue());
 	}
 	
 	@Override
 	protected void update() {
-		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().update(identifiable, identifiable.getResults().getStudentResultsMetricValues());
+		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().update(identifiable, metricValueCollection.getIdentifiables());
 	}
 	
 	@Override
@@ -69,6 +75,23 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputNumber private BigDecimal numberOfTimeAbsent;
 		@Input @InputText private String appreciation;
+		
+		@Override
+		public void read() {
+			super.read();
+			if(identifiable.getResults().getLectureAttendance().getAttendedDuration()!=null)
+				numberOfTimeAbsent = new BigDecimal(identifiable.getResults().getLectureAttendance().getAttendedDuration() / identifiable.getClassroomSessionDivision().getClassroomSession()
+					.getAcademicSession().getNodeInformations().getAttendanceTimeDivisionType().getDuration());
+			appreciation = identifiable.getResults().getAppreciation();
+		}
+		
+		@Override
+		public void write() {
+			super.write();
+			identifiable.getResults().setAppreciation(appreciation);
+			identifiable.getResults().getLectureAttendance().setAttendedDuration(numberOfTimeAbsent.multiply(new BigDecimal( identifiable.getClassroomSessionDivision().getClassroomSession()
+					.getAcademicSession().getNodeInformations().getAttendanceTimeDivisionType().getDuration())).longValue());
+		}
 	}
 	
 	@Getter @Setter

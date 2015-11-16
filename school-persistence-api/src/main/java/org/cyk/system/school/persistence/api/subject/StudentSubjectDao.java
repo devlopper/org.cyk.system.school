@@ -18,8 +18,7 @@ public interface StudentSubjectDao extends TypedDao<StudentSubject> {
 	
 	Collection<StudentSubject> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 
-	Collection<StudentSubject> readByClassroomSession(
-			ClassroomSession classroomSession);
+	Collection<StudentSubject> readByClassroomSession(ClassroomSession classroomSession);
 
 	Collection<StudentSubject> readByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions);
 
@@ -28,5 +27,6 @@ public interface StudentSubjectDao extends TypedDao<StudentSubject> {
 	Collection<StudentSubject> readByClassroomSessions(Collection<ClassroomSession> levels);
 
 	Collection<StudentSubject> readByStudent(Student student);
+	Collection<StudentSubject> readByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
 	
 }

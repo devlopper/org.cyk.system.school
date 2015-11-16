@@ -135,9 +135,77 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			}
 	}
 	
-	public void createStudentClassroomSession(String registrationCode,ClassroomSession classroomSession){
+	public StudentClassroomSession createStudentClassroomSession(String registrationCode,ClassroomSession classroomSession,Object[][] expected){
 		StudentClassroomSession studentClassroomSession = new StudentClassroomSession(studentBusiness.findByRegistrationCode(registrationCode), classroomSession);
-		studentClassroomSessionBusiness.create(studentClassroomSession);
+		studentClassroomSession = studentClassroomSessionBusiness.create(studentClassroomSession);
+		assertStudentClassroomSession(studentClassroomSession, expected);
+		return studentClassroomSession;
+	}
+	
+	private void assertStudentClassroomSession(StudentClassroomSession studentClassroomSession,Object[][] expected){
+		assertEquals("Student classroom session division count", expected.length, 
+				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
+		
+		int i=0;
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()))
+			assertStudentClassroomSessionDivision(studentClassroomSessionDivision, expected[i++]);
+		
+	}
+	
+	private void assertStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Object[] expected){
+		assertEquals("Student classroom session division subject count", (Integer)expected[0], 
+				SchoolBusinessLayer.getInstance().getStudentSubjectBusiness()
+				.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision()).size());
+	}
+	
+	public void updateStudentClassroomSession(StudentClassroomSession studentClassroomSession,ClassroomSession classroomSession){
+		Integer oldStudentClassroomSessionDivisionCount = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size();
+		
+		studentClassroomSession.setClassroomSession(classroomSession);
+		
+		studentClassroomSessionBusiness.update(studentClassroomSession);
+		
+		Integer newStudentClassroomSessionDivisionCount = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size();
+		
+		assertEquals("Student classroom session division count", oldStudentClassroomSessionDivisionCount, newStudentClassroomSessionDivisionCount);
+	}
+	
+	public void deleteStudentClassroomSession(StudentClassroomSession studentClassroomSession,Object[][] expected){
+		studentClassroomSessionBusiness.delete(studentClassroomSession);
+		if(expected==null){
+			assertEquals("Student classroom session division count", 0, SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+					.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
+			
+			assertEquals("Student classroom session division subject count", 0, SchoolBusinessLayer.getInstance().getStudentSubjectBusiness()
+					.findByStudentByClassroomSessionDivision(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
+		}else{
+			assertStudentClassroomSession(studentClassroomSession, expected);
+		}
+		
+	}
+	
+	public void deleteStudentClassroomSession(StudentClassroomSession studentClassroomSession){
+		deleteStudentClassroomSession(studentClassroomSession, null);
+	}
+	
+	public void updateStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues,String[] values) {
+		int i = 0;
+		for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues)
+			studentResultsMetricValue.getMetricValue().setValue(new BigDecimal(values[i++]));
+		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().update(studentClassroomSessionDivision, new ArrayList<>(studentResultsMetricValues));
+		Collection<StudentResultsMetricValue> updateStudentResultsMetricValues = SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults());
+		assertEquals("Student classroom session division metrics count", studentResultsMetricValues.size(), updateStudentResultsMetricValues.size());
+		
+		for(StudentResultsMetricValue u : studentResultsMetricValues)
+			for(StudentResultsMetricValue s : updateStudentResultsMetricValues)
+				if(u.getIdentifier().equals(s.getIdentifier())){
+					assertEquals("Student results identifier", u.getIdentifier(), s.getIdentifier());
+					assertEquals("Student results metric value", u.getMetricValue().getValue(), s.getMetricValue().getValue());
+				}
 	}
 	
 	/**/

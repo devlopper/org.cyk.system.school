@@ -86,8 +86,13 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			@Override
 			public Collection<StudentSubject> getIdentifiables() {
 				Collection<StudentSubject> studentSubjects = SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByStudentByClassroomSessionDivision(identifiable.getStudent(),identifiable.getClassroomSessionDivision());
-				for(StudentSubject studentSubject : studentSubjects)
-					studentSubject.setDetails(studentSubjectEvaluations);
+				for(StudentSubject studentSubject : studentSubjects){
+					studentSubject.getDetails().clear();
+					for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations)
+						if(studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier())){
+							studentSubject.getDetails().add(studentSubjectEvaluation);
+						}
+				}
 				return studentSubjects;
 			}
 			@Override

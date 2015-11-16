@@ -101,6 +101,17 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>studentClassroomSessionDivisionEditView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/studentclassroomsessiondivision/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionDivisionConsultView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/studentclassroomsessiondivision/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>
 
 </faces-config>

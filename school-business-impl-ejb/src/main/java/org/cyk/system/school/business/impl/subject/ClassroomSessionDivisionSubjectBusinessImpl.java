@@ -46,6 +46,16 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		}
 		return classroomSessionDivisionSubject;
 	}
+	
+	private void cascade(ClassroomSessionDivisionSubject classroomSessionDivisionSubject){
+		
+	}
+	
+	@Override
+	public ClassroomSessionDivisionSubject delete(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		cascade(classroomSessionDivisionSubject);
+		return super.delete(classroomSessionDivisionSubject);
+	}
     
 	@Override
 	protected void __load__(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {

@@ -1,6 +1,7 @@
 package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -8,6 +9,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
@@ -20,15 +22,15 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
-import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 
 @Stateless
 public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSession, StudentClassroomSession, StudentClassroomSessionDao, StudentClassroomSessionDivision> implements StudentClassroomSessionBusiness,Serializable {
@@ -52,9 +54,35 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	public StudentClassroomSession create(StudentClassroomSession studentClassroomSession) {
 		super.create(studentClassroomSession);
 		logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
+		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
-			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().create(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
+			studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
+		cascade(studentClassroomSession, studentClassroomSessionDivisions, Crud.CREATE);
 		return studentClassroomSession;
+	}
+	
+	private void cascade(StudentClassroomSession studentClassroomSession,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Crud crud){
+		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness())
+			.operate(studentClassroomSessionDivisions, crud);
+	}
+	
+	@Override
+	public StudentClassroomSession update(StudentClassroomSession studentClassroomSession) {
+		StudentClassroomSession currentStudentClassroomSession = dao.read(studentClassroomSession.getIdentifier());
+		if(currentStudentClassroomSession.getClassroomSession().equals(studentClassroomSession.getClassroomSession())){
+			
+		}else{
+			//logTrace("Moving student from classroom session {} to {}", currentStudentClassroomSession.getClassroomSession(),studentClassroomSession.getClassroomSession());
+			
+		}
+		return super.update(studentClassroomSession);
+	}
+	
+	@Override
+	public StudentClassroomSession delete(StudentClassroomSession studentClassroomSession) {
+		cascade(studentClassroomSession, studentClassroomSessionDivisionDao.readByStudentByClassroomSession(studentClassroomSession.getStudent()
+				, studentClassroomSession.getClassroomSession()), Crud.DELETE);
+		return super.delete(studentClassroomSession);
 	}
 	
 	@Override
@@ -104,12 +132,12 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		return classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAverageScale();
 	}
 
-	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<StudentClassroomSession> findByClassroomSession(ClassroomSession classroomSession) {
 		return dao.readByClassroomSession(classroomSession);
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public StudentClassroomSession finddByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student, classroomSession);
 	}
@@ -148,5 +176,13 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		return lecture.getSubject().getClassroomSessionDivision().getClassroomSession();
 	}
 
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
+		return dao.readByStudentByClassroomSession(student,classroomSession);
+	}
+
+	/**/
+	
+	
 
 }
