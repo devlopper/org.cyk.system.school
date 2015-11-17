@@ -91,6 +91,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 			}else{
 				
 				Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
+				//debug(result.getResults());
 				//setting
 				result.getResults().getEvaluationSort().setAverage(average); 
 				result.getResults().getEvaluationSort().setAverageInterval(intervalBusiness.findByCollectionByValue(averageIntervalCollection(level(result)),average.getValue(), 2));

@@ -44,7 +44,6 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	private Table<AbstractSubjectDetails> subjectTable;
 	private Table<StudentResultsMetricValueDetails> metricTable;
 	private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
-	private String tab1TitleId="tab1",tab2TitleId="tab2";
 	private Boolean showReport = Boolean.FALSE;
 	
 	@Inject private StudentResultsMetricValueBusiness studentResultsMetricValueBusiness;
@@ -76,7 +75,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			}
 			@Override
 			public String getTitleId() {
-				return tab1TitleId;
+				return "model.entity.student";
 			}
 		});
 		
@@ -96,12 +95,8 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				return studentSubjects;
 			}
 			@Override
-			public Boolean getEnabledInDefaultTab() {
-				return Boolean.TRUE;
-			}
-			@Override
-			public String getTabId() {
-				return tab1TitleId;
+			public String getTitleId() {
+				return "model.entity.subject";
 			}
 		});
 		
@@ -113,12 +108,8 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				return studentResultsMetricValueBusiness.findByStudentResults(identifiable.getResults());
 			}
 			@Override
-			public Boolean getEnabledInDefaultTab() {
-				return Boolean.TRUE;
-			}
-			@Override
-			public String getTabId() {
-				return tab1TitleId;
+			public String getTitleId() {
+				return "model.entity.metric";
 			}
 		});
 		
@@ -127,14 +118,20 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
+		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
 		contextualMenu.setLabel(contentTitle); 
 		
-		UICommandable printReceipt = UIProvider.getInstance().createCommandable("command.see.report", null);
-		printReceipt.setCommandRequestType(CommandRequestType.UI_VIEW);
-		printReceipt.setViewType(ViewType.TOOLS_REPORT);
-		printReceipt.getParameters().addAll(navigationManager.reportParameters(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision(),Boolean.FALSE));
-		contextualMenu.getChildren().add(printReceipt);
+		contextualMenu.getChildren().add(navigationManager.createUpdateCommandable(identifiable, "command.edit", null));
+		
+		UICommandable showReport = UIProvider.getInstance().createCommandable("school.markscard", null);
+		showReport.setCommandRequestType(CommandRequestType.UI_VIEW);
+		showReport.setViewType(ViewType.TOOLS_REPORT);
+		showReport.getParameters().addAll(navigationManager.reportParameters(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision(),Boolean.FALSE));
+		contextualMenu.getChildren().add(showReport);
+		
+		if(identifiable.getResults().getReport()!=null)
+			contextualMenu.getChildren().add(primefacesManager.createReportCommandable(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision(), 
+				"school.markscard", null));
 		
 		return Arrays.asList(contextualMenu);
 	}
@@ -143,24 +140,26 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	
 	public static class Details extends AbstractOutputDetails<StudentClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String registrationCode,names,classroomSession,classroomSessionDivision,numberOfTimeSchoolOpened,numberOfTimePresent,numberOfTimeAbsent;
+		@Input @InputText private String registrationCode,names,numberOfTimeAbsent,globalAppreciation;
 		public Details(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 			super(studentClassroomSessionDivision);
 			registrationCode = studentClassroomSessionDivision.getStudent().getRegistration().getCode();
 			names = studentClassroomSessionDivision.getStudent().getPerson().getNames();
-			classroomSession = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession());
-			classroomSessionDivision = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision());
+			globalAppreciation = studentClassroomSessionDivision.getResults().getAppreciation();
+			if(studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()!=null)
+				numberOfTimeAbsent = numberBusiness.format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(
+					studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()));
 		}
 	}
 	
 	public static abstract class AbstractSubjectDetails extends AbstractOutputDetails<StudentSubject> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText protected String subject,total/*,coefficient/*,grade,rank,outof,max,classAverage,remarks*/,teacher;
+		@Input @InputText protected String subject/*,total*//*,coefficient/*,grade,rank,outof,max,classAverage,remarks*//*,teacher*/;
 		public AbstractSubjectDetails(StudentSubject studentSubject) {
 			super(studentSubject);
 			subject = studentSubject.getClassroomSessionDivisionSubject().getSubject().getName();
 			//coefficient = numberBusiness.format(studentSubject.getClassroomSessionDivisionSubject().getCoefficient());
-			teacher = studentSubject.getClassroomSessionDivisionSubject().getTeacher().getPerson().getNames();
+			//teacher = studentSubject.getClassroomSessionDivisionSubject().getTeacher().getPerson().getNames();
 			
 		}
 		

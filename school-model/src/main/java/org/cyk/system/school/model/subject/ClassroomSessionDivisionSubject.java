@@ -70,6 +70,12 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 		this.teacher = teacher;
 	}
 	
+	public NodeResults getResults(){
+		if(results==null)
+			results = new NodeResults();
+		return results;
+	}
+	
 	@Override
 	public String toString() {
 		return subject.toString();

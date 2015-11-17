@@ -56,15 +56,15 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		r.getClassroomSessionDivision().getClassroomSession().setName(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getUiString());
 		
+		debug(results);
 		r.getClassroomSessionDivision().setName(cs.getUiString());
 		r.getClassroomSessionDivision().setAverage(format(results.getAverage()));
 		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
 		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
-		r.getClassroomSessionDivision().setOpenedTime(format(csd.getDuration() / as.getNodeInformations().getAttendanceTimeDivisionType().getDuration() ));
-		r.setAttendedTime(format(s.getResults().getLectureAttendance().getAttendedDuration() / as.getNodeInformations().getAttendanceTimeDivisionType().getDuration() ));
-		r.setMissedTime(format(s.getResults().getLectureAttendance().getMissedDuration() / as.getNodeInformations().getAttendanceTimeDivisionType().getDuration() ));
-		
+		r.getClassroomSessionDivision().setOpenedTime(format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(csd.getDuration())));
+		r.setAttendedTime(format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(s.getResults().getLectureAttendance().getAttendedDuration())));
+		r.setMissedTime(format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(s.getResults().getLectureAttendance().getMissedDuration())));
 		
 		set(student, r.getStudent());
 		
@@ -74,6 +74,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setComments(s.getResults().getAppreciation());
 		r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
 		
+		debug(s.getResults().getEvaluationSort());
 		r.setAverageScale(s.getResults().getEvaluationSort().getAverageInterval().getCode());
 		r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.title",new Object[]{csd.getUiString()}));

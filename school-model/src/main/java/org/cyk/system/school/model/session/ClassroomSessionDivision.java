@@ -44,6 +44,12 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 		this.coefficient = coefficient;
 	}
 	
+	public NodeResults getResults(){
+		if(results==null)
+			results = new NodeResults();
+		return results;
+	}
+	
 	@Override
 	public String getUiString() {
 		return timeDivisionType.getUiString();

@@ -57,8 +57,6 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	public void transfer(UICommand command, Object object) throws Exception {
 		super.transfer(command, object);
 		metricValueCollection.write();
-		//for(MetricValueItem item : metricValueCollection.getItems())
-			//item.getIdentifiable().getMetricValue().setValue(item.getValue());
 	}
 	
 	@Override
@@ -80,8 +78,9 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		public void read() {
 			super.read();
 			if(identifiable.getResults().getLectureAttendance().getAttendedDuration()!=null)
-				numberOfTimeAbsent = new BigDecimal(identifiable.getResults().getLectureAttendance().getAttendedDuration() / identifiable.getClassroomSessionDivision().getClassroomSession()
-					.getAcademicSession().getNodeInformations().getAttendanceTimeDivisionType().getDuration());
+				numberOfTimeAbsent = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getResults()
+						.getLectureAttendance().getMissedDuration() / identifiable.getClassroomSessionDivision().getClassroomSession()
+						.getAcademicSession().getNodeInformations().getAttendanceTimeDivisionType().getDuration());
 			appreciation = identifiable.getResults().getAppreciation();
 		}
 		
@@ -89,8 +88,8 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		public void write() {
 			super.write();
 			identifiable.getResults().setAppreciation(appreciation);
-			identifiable.getResults().getLectureAttendance().setAttendedDuration(numberOfTimeAbsent.multiply(new BigDecimal( identifiable.getClassroomSessionDivision().getClassroomSession()
-					.getAcademicSession().getNodeInformations().getAttendanceTimeDivisionType().getDuration())).longValue());
+			identifiable.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness()
+					.convertAttendanceTimeToMillisecond(numberOfTimeAbsent));
 		}
 	}
 	

@@ -254,7 +254,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public StudentClassroomSessionDivision findByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 	} 
-
+	
 	/**/
 	
 	@Override

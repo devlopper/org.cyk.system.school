@@ -76,6 +76,12 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 		return studentResultsMetricValues;
 	}
 	
+	public Sort getEvaluationSort(){
+		if(evaluationSort==null)
+			evaluationSort = new Sort();
+		return evaluationSort;
+	}
+	
 	public Attendance getLectureAttendance(){
 		if(lectureAttendance==null)
 			lectureAttendance = new Attendance();
