@@ -130,7 +130,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 		contextualMenu.getChildren().add(showReport);
 		
 		if(identifiable.getResults().getReport()!=null)
-			contextualMenu.getChildren().add(primefacesManager.createReportCommandable(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision(), 
+			contextualMenu.getChildren().add(navigationManager.createReportCommandable(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision(), 
 				"school.markscard", null));
 		
 		return Arrays.asList(contextualMenu);
