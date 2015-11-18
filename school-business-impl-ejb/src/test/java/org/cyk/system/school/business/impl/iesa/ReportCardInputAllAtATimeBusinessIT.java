@@ -18,8 +18,8 @@ public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT 
     	schoolBusinessTestHelper.registerActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
     	
     	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().addAll(dataProducer.getGrade1().division(0).getClassroomSessionDivisionSubjects());
-    	schoolBusinessTestHelper.createStudentClassroomSessionDivisionSubjects(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
-    		dataProducer.getGrade1().division(0).getClassroomSessionDivisionSubjects()); 
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
+    			dataProducer.getGrade1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
     	
     	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().clear();
     	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().add(dataProducer.getGrade1().division(0).subject(0).getClassroomSessionDivisionSubject());
@@ -30,24 +30,7 @@ public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT 
     	trimesterEverybodyHaveNotAllEvaluations(dataProducer.getGrade1().division(0),Boolean.TRUE,Boolean.TRUE);
     }
     
-    private void trimesterEverybodyHaveAllEvaluations(ClassroomSessionDivisionInfos classroomSessionDivisionInfos,Boolean generateReport,Boolean printReport){
-    	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().clear();
-    	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().add(classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject());
-    	/*schoolBusinessTestHelper.assertClassroomSessionDivisionAfterEvaluation( 
-    			new String[][]{{"STUD1","60","50","70","65.5",/*"2""1"}
-    			              /*,{"STUD2","90","30","60","60","3"}
-    			              ,{"STUD3","40","60","40","43","5"}
-    			              ,{"STUD4","45","45","80","69.5","1"}
-    			              ,{"STUD5","20","95","55","55.75","4"}
-    			              
-    			});*/
-    	
-    	if(Boolean.TRUE.equals(generateReport)){
-    		schoolBusinessTestHelper.randomValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
-    		//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),printReport);
-    	}
-    }
-    
+  
     private void trimesterEverybodyHaveNotAllEvaluations(ClassroomSessionDivisionInfos classroomSessionDivisionInfos,Boolean generateReport,Boolean printReport){
     	schoolBusinessTestHelper.createSubjectEvaluations(classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     		{"STUD1","90","30","60"}

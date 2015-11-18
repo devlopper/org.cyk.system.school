@@ -55,14 +55,17 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		super.create(studentClassroomSession);
 		logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
-		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
-			studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
+		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeTopDownOnCreate())){
+			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
+				studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
+		}
 		cascade(studentClassroomSession, studentClassroomSessionDivisions, Crud.CREATE);
 		return studentClassroomSession;
 	}
 	
 	private void cascade(StudentClassroomSession studentClassroomSession,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Crud crud){
-		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness())
+		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null
+				,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness())
 			.operate(studentClassroomSessionDivisions, crud);
 	}
 	

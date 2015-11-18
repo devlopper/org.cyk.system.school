@@ -22,8 +22,6 @@ import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.ui.api.command.UICommandable.CommandRequestType;
-import org.cyk.ui.api.command.UICommandable.ViewType;
 import org.cyk.ui.api.model.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
@@ -122,16 +120,10 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 		contextualMenu.setLabel(contentTitle); 
 		
 		contextualMenu.getChildren().add(navigationManager.createUpdateCommandable(identifiable, "command.edit", null));
-		
-		UICommandable showReport = UIProvider.getInstance().createCommandable("school.markscard", null);
-		showReport.setCommandRequestType(CommandRequestType.UI_VIEW);
-		showReport.setViewType(ViewType.TOOLS_REPORT);
-		showReport.getParameters().addAll(navigationManager.reportParameters(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision(),Boolean.FALSE));
-		contextualMenu.getChildren().add(showReport);
-		
+				
 		if(identifiable.getResults().getReport()!=null)
-			contextualMenu.getChildren().add(primefacesManager.createReportCommandable(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision(), 
-				"school.markscard", null));
+			contextualMenu.getChildren().add(navigationManager.createReportCommandable(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision()
+					,"school.markscard", null));
 		
 		return Arrays.asList(contextualMenu);
 	}

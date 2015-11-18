@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.file.report.LabelValueReport;
@@ -56,7 +55,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		r.getClassroomSessionDivision().getClassroomSession().setName(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getUiString());
 		
-		debug(results);
+		//debug(results);
 		r.getClassroomSessionDivision().setName(cs.getUiString());
 		r.getClassroomSessionDivision().setAverage(format(results.getAverage()));
 		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
@@ -74,7 +73,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setComments(s.getResults().getAppreciation());
 		r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
 		
-		debug(s.getResults().getEvaluationSort());
+		//debug(s.getResults().getEvaluationSort());
 		r.setAverageScale(s.getResults().getEvaluationSort().getAverageInterval().getCode());
 		r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.title",new Object[]{csd.getUiString()}));
@@ -86,8 +85,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
 		r.setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
 		
-		r.setMissedTime((s.getResults().getLectureAttendance().getMissedDuration()/DateUtils.MILLIS_PER_HOUR) +"");
-		r.setMissedTimeJustified((s.getResults().getLectureAttendance().getMissedDurationJustified()/DateUtils.MILLIS_PER_HOUR)+"");
+		//r.setMissedTime((s.getResults().getLectureAttendance().getMissedDuration()/DateUtils.MILLIS_PER_HOUR) +"");
+		//r.setMissedTimeJustified((s.getResults().getLectureAttendance().getMissedDurationJustified()/DateUtils.MILLIS_PER_HOUR)+"");
 		
 		if(s.getResults().getEvaluationSort().getRank()==null)
 			;

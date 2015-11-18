@@ -9,7 +9,8 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 
 public interface ClassroomSessionDivisionBusiness extends TypedBusiness<ClassroomSessionDivision> {
 
-	void results(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions);
+	// should be moved to a super interface
+	void computeResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions);
 
 	Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession);
 	

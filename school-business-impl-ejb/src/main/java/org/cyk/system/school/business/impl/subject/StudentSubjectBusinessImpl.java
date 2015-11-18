@@ -44,11 +44,14 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 		if(studentSubject.getResults()==null)
 			studentSubject.setResults(new StudentResults());
 		
-		StudentClassroomSessionDivision studentClassroomSessionDivision = studentClassroomSessionDivisionDao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
-		if(studentClassroomSessionDivision==null){
-			studentClassroomSessionDivision = new StudentClassroomSessionDivision(student, classroomSessionDivision);
-			
-			schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().create(studentClassroomSessionDivision);
+		if(Boolean.TRUE.equals(studentSubject.getCascadeBottomUpOnCreate())){
+			StudentClassroomSessionDivision studentClassroomSessionDivision = studentClassroomSessionDivisionDao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
+			if(studentClassroomSessionDivision==null){
+				studentClassroomSessionDivision = new StudentClassroomSessionDivision(student, classroomSessionDivision);
+				studentClassroomSessionDivision.setCascadeTopDownOnCreate(studentSubject.getCascadeTopDownOnCreate());
+				studentClassroomSessionDivision.setCascadeBottomUpOnCreate(studentSubject.getCascadeBottomUpOnCreate());
+				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().create(studentClassroomSessionDivision);
+			}
 		}
 		logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
 		return studentSubject;

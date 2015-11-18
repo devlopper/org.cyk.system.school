@@ -10,6 +10,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
@@ -37,10 +40,6 @@ import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.generator.RandomDataProvider;
-import org.joda.time.DateTimeConstants;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractTestHelper implements Serializable {
@@ -64,6 +63,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	
 	@Override
 	protected void initialisation() {
+		INSTANCE = this;
 		super.initialisation();
 		rankOptions = new RankOptions<>();
         rankOptions.setType(RankType.EXAEQUO); 
@@ -100,19 +100,24 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
 		if(Boolean.TRUE.equals(createFileOnDisk)){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
-				for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision))
+				for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 					writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
+				}
     	}
+	}
+	public void createStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Boolean createFileOnDisk){
+		createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivision), createFileOnDisk);
 	}
 	
 	public void randomValues(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean metric,Boolean attendance,Boolean appreciation){
-		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
+		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
+			Long t = classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations().getAttendanceTimeDivisionType().getDuration();
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 				
 				if(Boolean.TRUE.equals(attendance)){
-					studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(RandomDataProvider.getInstance().randomInt(DateTimeConstants.MILLIS_PER_DAY, DateTimeConstants.MILLIS_PER_DAY*20)*1l);
-					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(RandomDataProvider.getInstance().randomInt(DateTimeConstants.MILLIS_PER_DAY, DateTimeConstants.MILLIS_PER_DAY*20)*1l);
-					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDurationJustified(RandomDataProvider.getInstance().randomInt(DateTimeConstants.MILLIS_PER_DAY, DateTimeConstants.MILLIS_PER_DAY*20)*1l);
+					studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(randomDataProvider.randomInt(0, 1)*t);
+					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(randomDataProvider.randomInt(0, 1)*t);
+					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDurationJustified(randomDataProvider.randomInt(0, 1)*t);
 					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
 				}
 				
@@ -133,6 +138,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
 				}
 			}
+		}
 	}
 	
 	public StudentClassroomSession createStudentClassroomSession(String registrationCode,ClassroomSession classroomSession,Object[][] expected){
@@ -142,7 +148,20 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		return studentClassroomSession;
 	}
 	
-	private void assertStudentClassroomSession(StudentClassroomSession studentClassroomSession,Object[][] expected){
+	public void createStudentClassroomSessions(String[] registrationCodes,ClassroomSession classroomSession,Object[][] expected){
+		for(String code : registrationCodes)
+			createStudentClassroomSession(code, classroomSession, expected);
+	}
+	
+	public StudentSubject createStudentSubject(String registrationCode,ClassroomSessionDivisionSubject classroomSessionDivisionSubject,Object[][] expected){
+		StudentSubject studentSubject = new StudentSubject(studentBusiness.findByRegistrationCode(registrationCode), classroomSessionDivisionSubject);
+		studentSubject = studentSubjectBusiness.create(studentSubject);
+		assertStudentClassroomSession(studentClassroomSessionBusiness.findByStudentByClassroomSession(studentSubject.getStudent()
+				, studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()), expected);
+		return studentSubject;
+	}
+	
+	public void assertStudentClassroomSession(StudentClassroomSession studentClassroomSession,Object[][] expected){
 		assertEquals("Student classroom session division count", expected.length, 
 				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
 				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
@@ -154,7 +173,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		
 	}
 	
-	private void assertStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Object[] expected){
+	public void assertStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Object[] expected){
 		assertEquals("Student classroom session division subject count", (Integer)expected[0], 
 				SchoolBusinessLayer.getInstance().getStudentSubjectBusiness()
 				.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision()).size());

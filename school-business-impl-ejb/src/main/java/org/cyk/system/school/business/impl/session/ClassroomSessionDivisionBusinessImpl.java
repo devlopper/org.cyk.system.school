@@ -34,13 +34,12 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 	
 	@Override
-	public void results(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
+	public void computeResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
-			//Collection<StudentClassroomSessionDivision> lStudentClassroomSessionDivisions = new ArrayList<>();
 			Collection<WeightedValue> weightedValues = new ArrayList<>();
 			Integer numberOfStudent = 0;
 			for(StudentClassroomSessionDivision s : studentClassroomSessionDivisions){
-				if(!s.getClassroomSessionDivision().equals(classroomSessionDivision))
+				if(!s.getClassroomSessionDivision().equals(classroomSessionDivision) || s.getResults().getEvaluationSort().getAverage().getValue()==null)
 					continue;
 				
 				s.setClassroomSessionDivision(classroomSessionDivision);
@@ -54,9 +53,14 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 				if(classroomSessionDivision.getResults().getAverageLowest()==null || s.getResults().getEvaluationSort().getAverage().getValue().compareTo(classroomSessionDivision.getResults().getAverageLowest())<0)
 					classroomSessionDivision.getResults().setAverageLowest(s.getResults().getEvaluationSort().getAverage().getValue());	
 			}
-			Average average = mathematicsBusiness.average(weightedValues, null, null);
-			classroomSessionDivision.getResults().setAverage(average.getValue());
-			classroomSessionDivision.getResults().setNumberOfStudent(numberOfStudent);
+			if(weightedValues.isEmpty()){
+				
+			}else{
+				Average average = mathematicsBusiness.average(weightedValues, null, null);
+				classroomSessionDivision.getResults().setAverage(average.getValue());
+				classroomSessionDivision.getResults().setNumberOfStudent(numberOfStudent);
+			}
+			
 		}
 	}
 

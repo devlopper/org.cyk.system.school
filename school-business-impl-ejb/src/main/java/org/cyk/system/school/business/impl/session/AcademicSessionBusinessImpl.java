@@ -34,12 +34,13 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 
 	@Override
 	public BigDecimal convertAttendanceTimeToDivisionDuration(Long millisecond) {
-		return timeDivisionTypeBusiness.convertToDivisionDuration(findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType(), millisecond);
+		return millisecond==null?BigDecimal.ZERO
+				:timeDivisionTypeBusiness.convertToDivisionDuration(findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType(), millisecond);
 	}
 
 	@Override
 	public Long convertAttendanceTimeToMillisecond(BigDecimal duration) {
-		return timeDivisionTypeBusiness.convertToMillisecond(findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType(), duration);
+		return duration==null?0:timeDivisionTypeBusiness.convertToMillisecond(findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType(), duration);
 	}
 
 }

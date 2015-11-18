@@ -84,7 +84,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		StudentClassroomSession studentClassroomSession = studentClassroomSessionDao.readByStudentByClassroomSession(student, classroomSession);
 		if(studentClassroomSession==null){
-			schoolBusinessLayer.getStudentClassroomSessionBusiness().create(new StudentClassroomSession(student, classroomSession));
+			studentClassroomSession = new StudentClassroomSession(student, classroomSession);
+			studentClassroomSession.setCascadeTopDownOnCreate(studentClassroomSessionDivision.getCascadeTopDownOnCreate());
+			studentClassroomSession.setCascadeBottomUpOnCreate(studentClassroomSessionDivision.getCascadeBottomUpOnCreate());
+			schoolBusinessLayer.getStudentClassroomSessionBusiness().create(studentClassroomSession);
 		}
 		
 		MetricCollection metricCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
@@ -97,13 +100,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO)));
 		}
 		
-		logTrace("Student {} for classroomsession division {} registered", student,classroomSessionDivision);
-		
 		Collection<StudentSubject> studentSubjects = new ArrayList<>();
-		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
-			studentSubjects.add(new StudentSubject(student, classroomSessionDivisionSubject));
+		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeTopDownOnCreate())){
+			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
+				studentSubjects.add(new StudentSubject(student, classroomSessionDivisionSubject));
+			}
 		}
-		
 		cascade(studentClassroomSessionDivision, studentClassroomSessionDivision.getResults().getStudentResultsMetricValues(), studentSubjects, Crud.CREATE);
 		
 		return studentClassroomSessionDivision;
@@ -115,7 +117,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		new CascadeOperationListener.Adapter.Default<StudentResultsMetricValue,StudentResultsMetricValueDao,StudentResultsMetricValueBusiness>(studentResultsMetricValueDao,null)
 			.operate(studentResultsMetricValues, crud);
 	
-		logTrace("Student classroomsession division. {} , {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+		logTrace("Student classroomsession division. {} , {} : {}", studentClassroomSessionDivision.getStudent().getRegistration().getCode(),studentClassroomSessionDivision.getClassroomSessionDivision().getIdentifier(),crud);
 		
 		new CascadeOperationListener.Adapter.Default<StudentSubject,StudentSubjectDao,StudentSubjectBusiness>(null,SchoolBusinessLayer.getInstance().getStudentSubjectBusiness())
 			.operate(studentSubjects, crud);
@@ -130,14 +132,22 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportOptions options) {
-		logTrace("Computing Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
-		StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
-				,SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
-		
-		reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
-				,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
-				.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);
-		dao.update(studentClassroomSessionDivision);
+		logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+		if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
+			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+		}else{
+			StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
+					,SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
+			
+			if(report==null){
+				
+			}else{
+				reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
+					,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
+					.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);
+				dao.update(studentClassroomSessionDivision);
+			}	
+		}
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -198,10 +208,15 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
 		
-		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
-			buildReport(studentClassroomSessionDivision);
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
+			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
+				logTrace("Building of Student ClassroomSessionDivision Report will be skipped for of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+			}else{
+				buildReport(studentClassroomSessionDivision);
+			}
+		}
 		
-		classroomSessionDivisionBusiness.results(classroomSessionDivisions, studentClassroomSessionDivisions);
+		classroomSessionDivisionBusiness.computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
 	}
 			
 	@Override

@@ -58,6 +58,7 @@ import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.School;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -304,13 +305,14 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		ExecutorService executor = Executors.newFixedThreadPool(5);
 		Collection<StudentSubject> studentSubjects = new ArrayList<>();
 		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{grade1,grade2,grade3}){
-			executor.execute(
-					new ClassroomsessionBusinessProducer(classroomSessionInfos, listener, studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession),studentSubjects));
+			Collection<Student> students = studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession);
+			createStudentClassroomSessions(classroomSessionInfos, students);	
+			//executor.execute(new ClassroomsessionBusinessProducer(classroomSessionInfos, listener, students,studentSubjects));
 		}
-		executor.shutdown();
-        while (!executor.isTerminated()) {}
+		//executor.shutdown();
+        //while (!executor.isTerminated()) {}
 		
-		flush(StudentSubject.class,studentSubjectBusiness,studentSubjects);
+		//flush(StudentSubject.class,studentSubjectBusiness,studentSubjects);
 		
 		Collection<SubjectEvaluation> subjectEvaluations = new ArrayList<>();
 		for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypeBusiness.findAll()){
@@ -373,9 +375,17 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			for(ClassroomSessionDivisionInfos classroomSessionDivisionInfos : classroomSessionInfos.getDivisions()){
 				for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionInfos.getClassroomSessionDivisionSubjects()){
 					StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
+					//studentSubject.setCascadeBottomUpOnCreate(Boolean.TRUE);
 					studentSubjects.add(studentSubject);
 				}
 			}	
+		}
+	}
+	
+	private void createStudentClassroomSessions(ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){
+		System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
+		for(Student student : students){
+			SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().create(new StudentClassroomSession(student, classroomSessionInfos.getClassroomSession()));	
 		}
 	}
 	
@@ -514,8 +524,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			//Collection<StudentSubject> studentSubjects = new ArrayList<>();
 			//createStudentSubjects(studentSubjects, classroomSessionInfos,students);
 			//flush(StudentSubject.class,studentSubjectBusiness,studentSubjects);	
-				
-			createStudentSubjects(studentSubjects, classroomSessionInfos,students);
+			createStudentClassroomSessions(classroomSessionInfos, students);	
+			//createStudentSubjects(studentSubjects, classroomSessionInfos,students);
 		}
 	}
 
