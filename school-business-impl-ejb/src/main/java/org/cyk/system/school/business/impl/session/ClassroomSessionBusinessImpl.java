@@ -5,12 +5,14 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.utility.common.Constant;
 
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
 
@@ -30,7 +32,8 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 
 	@Override
 	public String format(ClassroomSession classroomSession) {
-		return classroomSession.getLevelTimeDivision().getLevel().getName().getName();
+		return classroomSession.getLevelTimeDivision().getLevel().getName().getName()
+				+(StringUtils.isBlank(classroomSession.getSuffix())?Constant.EMPTY_STRING:Constant.CHARACTER_SPACE+classroomSession.getSuffix());
 	}
 	
 	@Override

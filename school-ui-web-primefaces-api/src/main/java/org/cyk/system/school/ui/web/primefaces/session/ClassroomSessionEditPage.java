@@ -17,6 +17,7 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSession> implements Serializable {
@@ -37,6 +38,7 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 	public static class Form extends AbstractFormModel<ClassroomSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		
+		@Input @InputText private String suffix;
 		@Input @InputChoice @InputOneChoice @InputOneCombo private Teacher coordinator;
 		
 	}

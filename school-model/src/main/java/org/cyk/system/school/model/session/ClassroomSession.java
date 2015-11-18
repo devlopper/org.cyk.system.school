@@ -26,6 +26,8 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	
 	@ManyToOne private LevelTimeDivision levelTimeDivision;
 	
+	private String suffix;
+	
 	@ManyToOne private Teacher coordinator;
 	
 	@Transient private Collection<ClassroomSessionDivision> divisions = new ArrayList<>();
