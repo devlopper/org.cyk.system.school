@@ -29,7 +29,7 @@ public class SubjectEvaluation extends AbstractIdentifiable implements Serializa
 
 	@JoinColumn(name="subjectEvaluationType") @ManyToOne @NotNull private SubjectEvaluationType type;
 	@Temporal(TemporalType.TIMESTAMP) @Column(name="happeningDate") @NotNull private Date date;
-	@NotNull private Boolean coefficientApplied = Boolean.TRUE;
+	@NotNull private Boolean coefficientApplied = Boolean.FALSE;
 	
 	/**/
 	

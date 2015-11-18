@@ -7,7 +7,7 @@ public class PopulateWithFakedDataBusinessIT extends AbstractIesaBusinessIT {
  
     @Override
     protected void businesses() {
-    	dataProducer.setGenerateCompleteAcademicSession(Boolean.TRUE);
+    	dataProducer.setGenerateCompleteAcademicSession(Boolean.FALSE);
     	dataProducer.setGenerateStudentClassroomSessionDivisionReport(Boolean.TRUE);
     	dataProducer.setNumbreOfLecturesByClassroomSessionDivisionSubject(0);
     	dataProducer.setNumbreOfTeachers(12/* * 5*/);
