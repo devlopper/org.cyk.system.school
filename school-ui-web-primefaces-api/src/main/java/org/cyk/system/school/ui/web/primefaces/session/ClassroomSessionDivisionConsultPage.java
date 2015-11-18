@@ -85,7 +85,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
 		
-		commandable = navigationManager.createUpdateCommandable(identifiable, "updatereport", null,
+		commandable = navigationManager.createUpdateCommandable(identifiable, "school.markscard.generate", null,
 				SchoolWebManager.getInstance().getOutcomeGenerateStudentClassroomSessionDivisionReport());
 		contextualMenu.getChildren().add(commandable);
 		
@@ -100,7 +100,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		public Details(ClassroomSessionDivision classroomSessionDivision) {
 			super(classroomSessionDivision);
 			name = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision);
-			duration = timeBusiness.formatDuration(classroomSessionDivision.getDuration());
+			duration = numberBusiness.format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(classroomSessionDivision.getDuration()));
 		}
 	}
 	

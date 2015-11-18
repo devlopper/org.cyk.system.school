@@ -1,6 +1,7 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -34,7 +35,26 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 	public static class Form extends AbstractFormModel<ClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		
-		@Input @InputNumber private Long duration;
+		@Input @InputNumber private BigDecimal duration;
+		
+		@Override
+		public void read() {
+			super.read();
+			if(identifiable.getDuration()==null)
+				;
+			else
+				duration = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getDuration());
+
+		}
+		
+		@Override
+		public void write() {
+			super.write();
+			if(duration==null)
+				identifiable.setDuration(null);
+			else
+				identifiable.setDuration(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToMillisecond(duration));
+		}
 			
 	}
 

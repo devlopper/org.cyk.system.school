@@ -79,8 +79,8 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			super.read();
 			if(identifiable.getResults().getLectureAttendance().getAttendedDuration()!=null)
 				numberOfTimeAbsent = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getResults()
-						.getLectureAttendance().getMissedDuration() / identifiable.getClassroomSessionDivision().getClassroomSession()
-						.getAcademicSession().getNodeInformations().getAttendanceTimeDivisionType().getDuration());
+						.getLectureAttendance().getMissedDuration());
+			
 			appreciation = identifiable.getResults().getAppreciation();
 		}
 		
@@ -88,8 +88,15 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		public void write() {
 			super.write();
 			identifiable.getResults().setAppreciation(appreciation);
-			identifiable.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness()
-					.convertAttendanceTimeToMillisecond(numberOfTimeAbsent));
+			if(numberOfTimeAbsent==null){
+				
+			}else{
+				identifiable.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness()
+						.convertAttendanceTimeToMillisecond(numberOfTimeAbsent));
+				identifiable.getResults().getLectureAttendance().setAttendedDuration(identifiable.getClassroomSessionDivision().getDuration()-
+						identifiable.getResults().getLectureAttendance().getMissedDuration());
+			}
+			
 		}
 	}
 	

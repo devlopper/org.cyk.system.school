@@ -19,6 +19,7 @@ import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
 import org.cyk.system.root.model.event.EventParticipation;
+import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
@@ -142,10 +143,13 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			if(report==null){
 				
 			}else{
+				if(studentClassroomSessionDivision.getResults().getReport()==null)
+					studentClassroomSessionDivision.getResults().setReport(new File());
 				reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
 					,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
-					.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);
-				dao.update(studentClassroomSessionDivision);
+					.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);				
+				//dao.update(studentClassroomSessionDivision);
+				genericDao.update(studentClassroomSessionDivision.getResults());
 			}	
 		}
 	}

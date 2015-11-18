@@ -101,6 +101,8 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		if(Boolean.TRUE.equals(createFileOnDisk)){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
 				for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
+					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
+					assertThat("Report built", studentClassroomSessionDivision.getResults().getReport()!=null);
 					writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
 				}
     	}

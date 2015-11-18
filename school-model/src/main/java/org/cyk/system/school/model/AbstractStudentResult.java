@@ -25,7 +25,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 
 	@ManyToOne protected Student student;
 	
-	@OneToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval=true) protected StudentResults results;
+	@OneToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE}) protected StudentResults results;
 	
 	@Transient protected Collection<DETAIL> details = new ArrayList<>();
 	
