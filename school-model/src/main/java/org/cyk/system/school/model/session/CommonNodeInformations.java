@@ -29,6 +29,8 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private MetricCollection studentWorkMetricCollection;
 	@ManyToOne private TimeDivisionType attendanceTimeDivisionType;
 	
+	private Boolean aggregateAttendance = Boolean.TRUE;
+	
 	public CommonNodeInformations(IntervalCollection intervalCollection,MetricCollection studentWorkMetricCollection,File studentClassroomSessionDivisionResultsReportFile,
 			TimeDivisionType attendanceTimeDivisionType) {
 		super();
