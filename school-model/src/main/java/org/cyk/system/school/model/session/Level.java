@@ -32,6 +32,10 @@ public class Level extends AbstractIdentifiable implements Serializable {
 		this.speciality = speciality;
 	}
 	
+	public Level(LevelName name) {
+		this(name,null);
+	}
+	
 	@Override
 	public String getUiString() {
 		return name+(speciality==null?"":(" "+speciality));
