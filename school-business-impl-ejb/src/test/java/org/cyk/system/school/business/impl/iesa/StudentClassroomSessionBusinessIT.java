@@ -20,7 +20,7 @@ public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	
     	schoolBusinessTestHelper.getEvaluationTypes().addAll(dataProducer.getEvaluationTypes());
     	
-    	schoolBusinessTestHelper.registerActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
+    	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
     	ClassroomSessionInfos grade = dataProducer.getGrade1();
     	StudentClassroomSession studentClassroomSession = schoolBusinessTestHelper.createStudentClassroomSession("STUD1", grade.getClassroomSession()
     			,new Object[][]{ {15},{15},{15} });

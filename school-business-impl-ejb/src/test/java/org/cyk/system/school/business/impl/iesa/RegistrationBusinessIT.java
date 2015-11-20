@@ -14,7 +14,7 @@ public class RegistrationBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	schoolBusinessTestHelper.registerActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
+    	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
     	StudentClassroomSession studentClassroomSession = schoolBusinessTestHelper.createStudentClassroomSession("STUD1", dataProducer.getGrade1().getClassroomSession()
     			,new Object[][]{ {15},{15},{15} });
     	schoolBusinessTestHelper.deleteStudentClassroomSession(studentClassroomSession);

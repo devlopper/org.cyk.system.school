@@ -68,6 +68,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		set(student, r.getStudent());
 		
 		set(cs.getCoordinator(), r.getCommentator());
+		//debug(as.getSchool().getOwnedCompany().getCompany());
 		set(as.getSchool().getOwnedCompany().getCompany().getManager(), r.getSigner());
 		
 		r.setComments(s.getResults().getAppreciation());

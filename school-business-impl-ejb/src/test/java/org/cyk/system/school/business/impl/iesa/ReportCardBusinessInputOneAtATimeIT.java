@@ -19,7 +19,7 @@ public class ReportCardBusinessInputOneAtATimeIT extends AbstractIesaBusinessIT 
     	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
     	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
     	
-    	schoolBusinessTestHelper.registerActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
+    	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
     	/*
     	schoolBusinessTestHelper.takeSubjects(new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"}
     		,dataProducer.getGrade1Subjects().toArray(new ClassroomSessionDivisionSubject[]{})); 

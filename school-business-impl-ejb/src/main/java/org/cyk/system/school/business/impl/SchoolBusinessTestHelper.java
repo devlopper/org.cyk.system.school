@@ -19,6 +19,7 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOpti
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractTestHelper;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
+import org.cyk.system.root.business.impl.RootRandomDataProvider;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
@@ -29,6 +30,7 @@ import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -69,6 +71,56 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
         rankOptions.setType(RankType.EXAEQUO); 
         rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 	}
+	
+	public void randomSetActor(Boolean classCoordinator,Boolean teacher){
+		if(Boolean.TRUE.equals(classCoordinator)){
+			Collection<ClassroomSession> classroomSessions = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
+			for(ClassroomSession classroomSession : classroomSessions)
+				classroomSession.setCoordinator(RootRandomDataProvider.getInstance().oneFromDatabase(Teacher.class));
+			SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().update(classroomSessions);
+		}
+		if(Boolean.TRUE.equals(teacher)){
+			Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findAll();
+			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects)
+				classroomSessionDivisionSubject.setTeacher(RootRandomDataProvider.getInstance().oneFromDatabase(Teacher.class));
+			SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().update(classroomSessionDivisionSubjects);
+		}
+	}
+	
+	public Collection<ClassroomSession> createStudentClassroomSessions(Integer generateStudentInClassroomSessionCount,Integer studentByClassroomSessionCount){
+		Collection<ClassroomSession> classroomSessions = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findManyRandomly(generateStudentInClassroomSessionCount);
+		Collection<Student> students = SchoolBusinessLayer.getInstance().getStudentBusiness().findManyRandomly(studentByClassroomSessionCount);
+		Collection<StudentClassroomSession> studentClassroomSessions = new ArrayList<>();
+		
+		for(ClassroomSession classroomSession : classroomSessions)
+			for(Student student : students)
+				studentClassroomSessions.add(new StudentClassroomSession(student, classroomSession));
+				
+		SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().create(studentClassroomSessions);
+		return classroomSessions;
+	}
+	
+	public void createSubjectEvaluations(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Boolean coefficientApplied){
+		Collection<SubjectEvaluation> subjectEvaluations = new ArrayList<>();
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
+			Collection<SubjectEvaluationType> subjectEvaluationTypes = SchoolBusinessLayer.getInstance().getSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+			Collection<StudentSubject> studentSubjects = SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findBySubject(classroomSessionDivisionSubject);
+			if(studentSubjects.isEmpty())
+				continue;
+			for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
+				SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType, coefficientApplied);
+				subjectEvaluations.add(subjectEvaluation);
+				for(StudentSubject studentSubject : studentSubjects ){
+					subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation, studentSubject
+							, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue()))));
+				}
+			}
+		}
+		SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().create(subjectEvaluations);
+	}
+	public void createSubjectEvaluations(Boolean coefficientApplied){
+		createSubjectEvaluations(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findAll(), coefficientApplied);
+	}
 
 	public void createStudentClassroomSessionDivisionSubjects(String[] studentRegistrationCodes,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects){
 		for(String studentRegistrationCode : studentRegistrationCodes){
@@ -107,6 +159,9 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 				}
     	}
 	}
+	public void createStudentClassroomSessionDivisionReport(Boolean createFileOnDisk){
+		createStudentClassroomSessionDivisionReport(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findAll(),createFileOnDisk);
+	}
 	public void createStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Boolean createFileOnDisk){
 		createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivision), createFileOnDisk);
 	}
@@ -141,6 +196,9 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 				}
 			}
 		}
+	}
+	public void randomValues(Boolean metric,Boolean attendance,Boolean appreciation){
+		randomValues(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findAll(), metric, attendance, appreciation);
 	}
 	
 	public StudentClassroomSession createStudentClassroomSession(String registrationCode,ClassroomSession classroomSession,Object[][] expected){
@@ -302,6 +360,40 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			data[rowIndex][1] = details[rowIndex][columnIndex];
 		}
 		return data;
+	}
+	
+	/**/
+	
+	public void simulate(Integer teacherCount,Integer studentCount,Integer generateStudentInClassroomSessionCount,Integer studentByClassroomSessionCount,Boolean coefficientApplied,Boolean attendanceAggregated){
+		System.out.println("School business simulation started");
+		
+		coefficientApplied = Boolean.FALSE;
+    	StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS.setAttendance(attendanceAggregated);
+		
+    	System.out.println("Creating teachers");
+		RootRandomDataProvider.getInstance().createActor(Teacher.class, 10);
+		System.out.println("Creating students");
+		RootRandomDataProvider.getInstance().createActor(Student.class, 10);
+    	
+		System.out.println("Creating setting class coordinators , subject teachers");
+    	randomSetActor(Boolean.TRUE, Boolean.TRUE);
+    	
+    	System.out.println("Creating student classroom session");
+    	Collection<ClassroomSession> classroomSessions = createStudentClassroomSessions(generateStudentInClassroomSessionCount,studentByClassroomSessionCount);
+    	
+    	System.out.println("Creating subject evaluations");
+    	createSubjectEvaluations(coefficientApplied);
+    	
+    	System.out.println("Setting student metric , attendance , appreciation");
+    	randomValues(Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
+    	
+    	Collection<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>();
+    	for(ClassroomSession classroomSession : classroomSessions)
+    		classroomSessionDivisions.addAll(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
+    	System.out.println("Creating student classroom session reports");
+		createStudentClassroomSessionDivisionReport(classroomSessionDivisions,Boolean.TRUE);
+		
+		System.out.println("School business simulation ended");
 	}
 	
 	/**/

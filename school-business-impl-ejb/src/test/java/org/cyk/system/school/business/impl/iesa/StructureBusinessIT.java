@@ -13,7 +13,7 @@ public class StructureBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	schoolBusinessTestHelper.registerActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
+    	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
     	
     	
     	assertEquals("No student classroom session division", 0l, SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().countAll());

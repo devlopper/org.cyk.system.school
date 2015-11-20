@@ -15,7 +15,7 @@ public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT 
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	schoolBusinessTestHelper.registerActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
+    	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
     	
     	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().addAll(dataProducer.getGrade1().division(0).getClassroomSessionDivisionSubjects());
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
