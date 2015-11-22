@@ -236,9 +236,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		levelNameG2 = createLevelName("Grade 2");
 		levelNameG3 = createLevelName("Grade 3");
 		
-		levelG1 = create(new Level(levelNameG1, null));
-		levelG2 = create(new Level(levelNameG2, null));
-		levelG3 = create(new Level(levelNameG3, null));
+		levelG1 = create(new Level(null,levelNameG1, null));
+		levelG2 = create(new Level(null,levelNameG2, null));
+		levelG3 = create(new Level(null,levelNameG3, null));
 		
 		levelTimeDivisionG1 = create(new LevelTimeDivision(levelG1, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
 		levelTimeDivisionG2 = create(new LevelTimeDivision(levelG2, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
@@ -473,7 +473,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			r.getSubjectsTableColumnNames().add("TEACHER");
 			
 			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
-			if(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findIndex(studentClassroomSessionDivision.getClassroomSessionDivision())==3){
+			if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");

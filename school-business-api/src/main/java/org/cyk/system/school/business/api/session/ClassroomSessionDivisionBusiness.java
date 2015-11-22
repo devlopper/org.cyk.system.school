@@ -16,6 +16,4 @@ public interface ClassroomSessionDivisionBusiness extends TypedBusiness<Classroo
 	
 	String format(ClassroomSessionDivision classroomSessionDivision);
 	
-	Integer findIndex(ClassroomSessionDivision classroomSessionDivision);
-	
 }

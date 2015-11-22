@@ -23,11 +23,8 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne private AcademicSession academicSession;
-	
 	@ManyToOne private LevelTimeDivision levelTimeDivision;
-	
 	private String suffix;
-	
 	@ManyToOne private Teacher coordinator;
 	
 	@Transient private Collection<ClassroomSessionDivision> divisions = new ArrayList<>();

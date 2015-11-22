@@ -12,4 +12,6 @@ public interface ClassroomSessionDivisionDao extends TypedDao<ClassroomSessionDi
 
 	Collection<ClassroomSessionDivision> readByClassroomSessions(Collection<ClassroomSession> levels);
 
+	Long countByClassroomSession(ClassroomSession classroomSession);
+
 }

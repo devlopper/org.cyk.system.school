@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 
+@Stateless
 public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivision, ClassroomSessionDivisionDao> implements ClassroomSessionDivisionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
@@ -31,6 +33,12 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Inject
 	public ClassroomSessionDivisionBusinessImpl(ClassroomSessionDivisionDao dao) {
 		super(dao);  
+	}
+	
+	@Override
+	public ClassroomSessionDivision create(ClassroomSessionDivision classroomSessionDivision) {
+		classroomSessionDivision.setIndex(dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()).byteValue());
+		return super.create(classroomSessionDivision);
 	}
 	
 	@Override
@@ -71,19 +79,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public Integer findIndex(ClassroomSessionDivision classroomSessionDivision) {
-		Integer index = 0;
-		for(ClassroomSessionDivision c : dao.readByClassroomSession(classroomSessionDivision.getClassroomSession())){
-			index++;
-			if(classroomSessionDivision.equals(c))
-				break;
-		}
-		return index;
-	}
-	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public String format(ClassroomSessionDivision classroomSessionDivision) {
-		return classroomSessionDivision.getTimeDivisionType().getUiString()+" "+findIndex(classroomSessionDivision);
+		return classroomSessionDivision.getTimeDivisionType().getUiString()+" "+(classroomSessionDivision.getIndex()+1);
 	}
 	
 	@Override
