@@ -131,7 +131,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			r.getSubjectsTableColumnNames().add("TEACHER");
 			
 			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
-			if(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findIndex(studentClassroomSessionDivision.getClassroomSessionDivision())==3){
+			if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
