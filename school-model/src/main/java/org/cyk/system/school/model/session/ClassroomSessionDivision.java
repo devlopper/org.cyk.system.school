@@ -30,7 +30,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	@ManyToOne private ClassroomSession classroomSession;
 	@ManyToOne private TimeDivisionType timeDivisionType;
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE) private BigDecimal coefficient;
-	private Byte index;
+	@Column(name="order_index") private Byte index;
 	@Embedded private NodeResults results = new NodeResults();
 
 	@Transient private Collection<ClassroomSessionDivisionSubject> subjects = new ArrayList<>();

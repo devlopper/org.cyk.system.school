@@ -36,7 +36,7 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 				+" : "+classroomSessionDivisionBusiness.format(identifiable.getClassroomSessionDivision())
 				+" : "+identifiable.getSubject().getName();*/
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<SubjectEvaluation,Details>(SubjectEvaluation.class, Details.class){
+		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<SubjectEvaluation,Details>(SubjectEvaluation.class, Details.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -44,7 +44,7 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 			}
 		});
 		
-		markTable = (Table<MarkDetails>) createDetailsTable(MarkDetails.class, new DetailsTableConfigurationAdapter<StudentSubjectEvaluation,MarkDetails>(StudentSubjectEvaluation.class, MarkDetails.class){
+		markTable = (Table<MarkDetails>) createDetailsTable(MarkDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentSubjectEvaluation,MarkDetails>(StudentSubjectEvaluation.class, MarkDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentSubjectEvaluation> getIdentifiables() {

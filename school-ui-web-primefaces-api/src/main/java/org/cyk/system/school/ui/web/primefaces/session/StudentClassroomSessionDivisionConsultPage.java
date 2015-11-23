@@ -15,7 +15,6 @@ import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
 import org.cyk.system.school.model.StudentResultsMetricValue;
-import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
@@ -65,7 +64,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 					identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 		}
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<ClassroomSessionDivision,Details>(ClassroomSessionDivision.class, Details.class){
+		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<StudentClassroomSessionDivision,Details>(StudentClassroomSessionDivision.class, Details.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -78,7 +77,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 		});
 		
 		subjectTable = (Table<AbstractSubjectDetails>) createDetailsTable(SUBJECT_DETAILS_CLASS, 
-				new DetailsTableConfigurationAdapter<StudentSubject,AbstractSubjectDetails>(StudentSubject.class, SUBJECT_DETAILS_CLASS){
+				new DetailsConfigurationListener.Table.Adapter<StudentSubject,AbstractSubjectDetails>(StudentSubject.class, SUBJECT_DETAILS_CLASS){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentSubject> getIdentifiables() {
@@ -99,7 +98,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 		});
 		
 		metricTable = (Table<StudentResultsMetricValueDetails>) createDetailsTable(StudentResultsMetricValueDetails.class, 
-				new DetailsTableConfigurationAdapter<StudentResultsMetricValue,StudentResultsMetricValueDetails>(StudentResultsMetricValue.class, StudentResultsMetricValueDetails.class){
+				new DetailsConfigurationListener.Table.Adapter<StudentResultsMetricValue,StudentResultsMetricValueDetails>(StudentResultsMetricValue.class, StudentResultsMetricValueDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentResultsMetricValue> getIdentifiables() {

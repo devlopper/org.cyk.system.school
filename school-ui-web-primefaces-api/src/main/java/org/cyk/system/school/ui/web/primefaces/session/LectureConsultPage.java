@@ -47,7 +47,7 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 		
 		
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<Lecture,Details>(Lecture.class, Details.class){
+		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<Lecture,Details>(Lecture.class, Details.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -55,7 +55,7 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 			}
 		});
 		
-		participationTable = (Table<ParticipantDetails>) createDetailsTable(ParticipantDetails.class, new DetailsTableConfigurationAdapter<EventParticipation,ParticipantDetails>(EventParticipation.class, ParticipantDetails.class){
+		participationTable = (Table<ParticipantDetails>) createDetailsTable(ParticipantDetails.class, new DetailsConfigurationListener.Table.Adapter<EventParticipation,ParticipantDetails>(EventParticipation.class, ParticipantDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<EventParticipation> getIdentifiables() {

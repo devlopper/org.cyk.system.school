@@ -39,7 +39,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		super.initialisation();
 		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable);
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<ClassroomSessionDivision,Details>(ClassroomSessionDivision.class, Details.class){
+		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivision,Details>(ClassroomSessionDivision.class, Details.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -47,7 +47,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 		});
 		
-		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsTableConfigurationAdapter<ClassroomSessionDivisionSubject,SubjectDetails>(ClassroomSessionDivisionSubject.class, SubjectDetails.class){
+		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionDivisionSubject,SubjectDetails>(ClassroomSessionDivisionSubject.class, SubjectDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<ClassroomSessionDivisionSubject> getIdentifiables() {
@@ -59,7 +59,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 		});
 		
-		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsTableConfigurationAdapter<StudentClassroomSessionDivision,StudentDetails>(StudentClassroomSessionDivision.class, StudentDetails.class){
+		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivision,StudentDetails>(StudentClassroomSessionDivision.class, StudentDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentClassroomSessionDivision> getIdentifiables() {

@@ -16,7 +16,6 @@ public class ReportCardBusinessInputOneAtATimeIT extends AbstractIesaBusinessIT 
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
     	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
     	
     	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});

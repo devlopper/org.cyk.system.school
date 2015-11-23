@@ -44,7 +44,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		super.initialisation();
 		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<ClassroomSession,Details>(ClassroomSession.class, Details.class){
+		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSession,Details>(ClassroomSession.class, Details.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -52,7 +52,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 			}
 		});
 		
-		divisionTable = (Table<DivisionDetails>) createDetailsTable(DivisionDetails.class, new DetailsTableConfigurationAdapter<ClassroomSessionDivision,DivisionDetails>(ClassroomSessionDivision.class, DivisionDetails.class){
+		divisionTable = (Table<DivisionDetails>) createDetailsTable(DivisionDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionDivision,DivisionDetails>(ClassroomSessionDivision.class, DivisionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<ClassroomSessionDivision> getIdentifiables() {
@@ -64,7 +64,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 			}
 		});
 		
-		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsTableConfigurationAdapter<SubjectClassroomSession,SubjectDetails>(SubjectClassroomSession.class, SubjectDetails.class){
+		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<SubjectClassroomSession,SubjectDetails>(SubjectClassroomSession.class, SubjectDetails.class){
 				private static final long serialVersionUID = 1L;
 				@Override
 				public Collection<SubjectClassroomSession> getIdentifiables() {
@@ -76,7 +76,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 				}
 			});
 		
-		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsTableConfigurationAdapter<StudentClassroomSession,StudentDetails>(StudentClassroomSession.class, StudentDetails.class){
+		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSession,StudentDetails>(StudentClassroomSession.class, StudentDetails.class){
 				private static final long serialVersionUID = 1L;
 				@Override
 				public Collection<StudentClassroomSession> getIdentifiables() {

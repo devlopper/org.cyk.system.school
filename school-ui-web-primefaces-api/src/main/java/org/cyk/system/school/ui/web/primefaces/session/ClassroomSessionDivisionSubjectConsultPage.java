@@ -38,7 +38,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		super.initialisation();
 		contentTitle = identifiable.getSubject().getName();
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsFormOneDataConfigurationAdapter<ClassroomSessionDivisionSubject,Details>(ClassroomSessionDivisionSubject.class, Details.class){
+		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivisionSubject,Details>(ClassroomSessionDivisionSubject.class, Details.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -46,7 +46,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			}
 		});
 		
-		evaluationTable = (Table<EvaluationDetails>) createDetailsTable(EvaluationDetails.class, new DetailsTableConfigurationAdapter<SubjectEvaluation,EvaluationDetails>(SubjectEvaluation.class, EvaluationDetails.class){
+		evaluationTable = (Table<EvaluationDetails>) createDetailsTable(EvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<SubjectEvaluation,EvaluationDetails>(SubjectEvaluation.class, EvaluationDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<SubjectEvaluation> getIdentifiables() {
@@ -58,7 +58,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			}
 		});
 		
-		lectureTable = (Table<LectureDetails>) createDetailsTable(LectureDetails.class, new DetailsTableConfigurationAdapter<Lecture,LectureDetails>(Lecture.class, LectureDetails.class){
+		lectureTable = (Table<LectureDetails>) createDetailsTable(LectureDetails.class, new DetailsConfigurationListener.Table.Adapter<Lecture,LectureDetails>(Lecture.class, LectureDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<Lecture> getIdentifiables() {
