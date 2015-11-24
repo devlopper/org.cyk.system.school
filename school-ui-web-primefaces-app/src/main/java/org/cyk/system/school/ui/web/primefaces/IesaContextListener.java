@@ -65,6 +65,11 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addFieldNames(DefaultPersonEditFormModel.FIELD_SURNAME
 					,DefaultPersonEditFormModel.FIELD_BIRTH_DATE,DefaultPersonEditFormModel.FIELD_BIRTH_LOCATION
 					,DefaultPersonEditFormModel.FIELD_SEX,DefaultPersonEditFormModel.FIELD_IMAGE);
+			
+			listener.getFormConfigurationMap().get(Crud.UPDATE).get(DefaultPersonEditFormModel.TAB_PERSON_ID).addFieldNames(
+					DefaultActorEditFormModel.FIELD_REGISTRATION_CODE,DefaultPersonEditFormModel.FIELD_SURNAME
+					,DefaultPersonEditFormModel.FIELD_BIRTH_DATE,DefaultPersonEditFormModel.FIELD_BIRTH_LOCATION
+					,DefaultPersonEditFormModel.FIELD_SEX,DefaultPersonEditFormModel.FIELD_IMAGE);
 		}
 	}
 	
