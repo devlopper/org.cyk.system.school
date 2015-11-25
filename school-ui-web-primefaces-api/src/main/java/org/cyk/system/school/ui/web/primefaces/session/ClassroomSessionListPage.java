@@ -8,7 +8,6 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudManyPage;
 
@@ -29,10 +28,5 @@ public class ClassroomSessionListPage extends AbstractCrudManyPage<ClassroomSess
 		super.afterInitialisation();
 		table.setShowOpenCommand(Boolean.TRUE);
 	}
-	/*
-	@Override
-	protected Class<?> __formModelClass__() {
-		return ClassroomSessionDetails.class;
-	}*/
 	
 }
