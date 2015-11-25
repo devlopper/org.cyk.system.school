@@ -41,8 +41,8 @@ public abstract class AbstractSchoolContextListener extends AbstractContextListe
 	@Override
 	protected void identifiableConfiguration(ServletContextEvent event) {
 		super.identifiableConfiguration(event);
-		IdentifiableConfiguration identifiableConfiguration = new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
-		uiManager.registerConfiguration(identifiableConfiguration);
+		//uiManager.businessEntityInfos(ClassroomSession.class).setUiConsultViewId("");
+		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class));
 	}
 	
 	@Override
