@@ -14,13 +14,14 @@ import lombok.Setter;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.ui.api.model.AbstractOutputDetails;
+import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
@@ -34,7 +35,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	
 	@Inject private SubjectClassroomSessionBusiness subjectClassroomSessionBusiness;
 	
-	private FormOneData<Details> details;
+	private FormOneData<ClassroomSessionDetails> details;
 	private Table<DivisionDetails> divisionTable;
 	private Table<SubjectDetails> subjectTable;
 	private Table<StudentDetails> studentTable;
@@ -44,7 +45,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		super.initialisation();
 		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSession,Details>(ClassroomSession.class, Details.class){
+		details = createDetailsForm(ClassroomSessionDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSession,ClassroomSessionDetails>(ClassroomSession.class, ClassroomSessionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -105,16 +106,6 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	}
 	
 	/**/
-	
-	public static class Details extends AbstractOutputDetails<ClassroomSession> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String name,coordinator;
-		public Details(ClassroomSession classroomSession) {
-			super(classroomSession);
-			name = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(classroomSession);
-			coordinator = classroomSession.getCoordinator().getPerson().getNames();
-		}
-	}
 	
 	public static class DivisionDetails extends AbstractOutputDetails<ClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;

@@ -1,6 +1,7 @@
 package org.cyk.system.school.ui.web.primefaces;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import javax.servlet.ServletContextEvent;
@@ -9,6 +10,7 @@ import javax.servlet.annotation.WebListener;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.party.person.AbstractActor;
+import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
@@ -25,12 +27,17 @@ import org.cyk.ui.api.data.collector.form.FormConfiguration;
 import org.cyk.ui.api.model.party.DefaultActorEditFormModel;
 import org.cyk.ui.api.model.party.DefaultActorReadFormModel;
 import org.cyk.ui.api.model.party.DefaultPersonEditFormModel;
+import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.BusinessEntityFormManyPageListener;
 import org.cyk.ui.web.primefaces.page.BusinessEntityFormOnePageListener;
+import org.cyk.ui.web.primefaces.page.crud.AbstractActorConsultPage;
+import org.cyk.ui.web.primefaces.page.crud.AbstractActorConsultPage.MainDetails;
+import org.cyk.ui.web.primefaces.page.tools.AbstractActorConsultPageAdapter;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
+import org.cyk.utility.common.cdi.AbstractBean;
 
 @WebListener
 public class IesaContextListener extends AbstractSchoolContextListener implements Serializable {
@@ -47,6 +54,13 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
     	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
     	StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS.setAttendance(Boolean.FALSE);
+	}
+	
+	@Override
+	protected void applicationUImanagers(ServletContextEvent event) {
+		super.applicationUImanagers(event);
+		uiManager.registerApplicationUImanager(RootWebManager.getInstance());
+		uiManager.registerApplicationUImanager(SchoolWebManager.getInstance());
 	}
 	
 	@Override
@@ -166,5 +180,84 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		}
 		
     }
+	
+	/**/
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected <ACTOR extends AbstractActor> AbstractActorConsultPageAdapter<ACTOR> getActorConsultPageAdapter(Class<ACTOR> actorClass) {
+		if(actorClass.equals(Student.class))
+			return (AbstractActorConsultPageAdapter<ACTOR>) new StudentConsultPageAdapter();
+		else if(actorClass.equals(Teacher.class))
+			return (AbstractActorConsultPageAdapter<ACTOR>) new TeacherConsultPageAdapter();
+		return super.getActorConsultPageAdapter(actorClass);
+	}
+	
+	private static class TeacherConsultPageAdapter extends AbstractActorConsultPage.Adapter<Teacher>{
+
+		private static final long serialVersionUID = -5657492205127185872L;
+
+		public TeacherConsultPageAdapter() {
+			super(Teacher.class);
+		}
+		
+		@Override
+		public void initialisationEnded(AbstractBean bean) {
+			super.initialisationEnded(bean);
+			((AbstractActorConsultPage<?>)bean).removeDetailsMenuCommandable(DefaultPersonEditFormModel.TAB_CONTACT_ID);
+			((AbstractActorConsultPage<?>)bean).removeDetailsMenuCommandable(DefaultPersonEditFormModel.TAB_SIGNATURE_ID);
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public <DETAILS> ControlSetAdapter<DETAILS> getControlSetAdapter(Class<DETAILS> detailsClass) {
+			if(MainDetails.class.equals(detailsClass)){
+				return (ControlSetAdapter<DETAILS>) new ControlSetAdapter<MainDetails>(){
+					@Override
+					public Boolean build(Field field) {
+						return field.getName().equals(MainDetails.FIELD_TITLE) || field.getName().equals(MainDetails.FIELD_FIRSTNAME) 
+								|| field.getName().equals(MainDetails.FIELD_LASTNAMES) || field.getName().equals(MainDetails.FIELD_REGISTRATION_CODE)
+								|| field.getName().equals(MainDetails.FIELD_REGISTRATION_DATE);
+					}
+				};
+			}
+			return super.getControlSetAdapter(detailsClass);
+		}
+		
+	}
+	
+	private static class StudentConsultPageAdapter extends AbstractActorConsultPage.Adapter<Student>{
+
+		private static final long serialVersionUID = -5657492205127185872L;
+
+		public StudentConsultPageAdapter() {
+			super(Student.class);
+		}
+				
+		@Override
+		public void initialisationEnded(AbstractBean bean) {
+			super.initialisationEnded(bean);
+			((AbstractActorConsultPage<?>)bean).removeDetailsMenuCommandable(DefaultPersonEditFormModel.TAB_CONTACT_ID);
+			((AbstractActorConsultPage<?>)bean).removeDetailsMenuCommandable(DefaultPersonEditFormModel.TAB_SIGNATURE_ID);
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public <DETAILS> ControlSetAdapter<DETAILS> getControlSetAdapter(Class<DETAILS> detailsClass) {
+			if(MainDetails.class.equals(detailsClass)){
+				return (ControlSetAdapter<DETAILS>) new ControlSetAdapter<MainDetails>(){
+					@Override
+					public Boolean build(Field field) {
+						return field.getName().equals(MainDetails.FIELD_BIRTHDATE) || field.getName().equals(MainDetails.FIELD_FIRSTNAME) 
+								|| field.getName().equals(MainDetails.FIELD_LASTNAMES) || field.getName().equals(MainDetails.FIELD_REGISTRATION_CODE)
+								|| field.getName().equals(MainDetails.FIELD_REGISTRATION_DATE) || field.getName().equals(MainDetails.FIELD_BIRTHLOCATION)
+								|| field.getName().equals(MainDetails.FIELD_SEX) || field.getName().equals(MainDetails.FIELD_SURNAME);
+					}
+				};
+			}
+			return super.getControlSetAdapter(detailsClass);
+		}
+		
+	}
 	
 }

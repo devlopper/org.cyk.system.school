@@ -8,12 +8,9 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.model.session.ClassroomSession;
-import org.cyk.ui.api.model.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudManyPage;
-import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionListPage extends AbstractCrudManyPage<ClassroomSession> implements Serializable {
@@ -32,22 +29,10 @@ public class ClassroomSessionListPage extends AbstractCrudManyPage<ClassroomSess
 		super.afterInitialisation();
 		table.setShowOpenCommand(Boolean.TRUE);
 	}
-	
+	/*
 	@Override
 	protected Class<?> __formModelClass__() {
-		return Form.class;
-	}
+		return ClassroomSessionDetails.class;
+	}*/
 	
-	public static class Form extends AbstractOutputDetails<ClassroomSession> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		
-		@Input @InputText private String name,coordinator;
-		
-		public Form(ClassroomSession classroomSession) {
-			super(classroomSession);
-			name = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(classroomSession);
-			coordinator = classroomSession.getCoordinator().getPerson().getNames();
-		}
-	}
-
 }

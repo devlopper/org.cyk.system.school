@@ -8,14 +8,16 @@ import javax.servlet.ServletContextEvent;
 
 import org.cyk.system.root.business.api.BusinessAdapter;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
+import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
 import org.cyk.ui.web.primefaces.AbstractContextListener;
 import org.cyk.utility.common.computation.DataReadConfiguration;
@@ -34,6 +36,13 @@ public abstract class AbstractSchoolContextListener extends AbstractContextListe
 	protected void initialisation() {
 		super.initialisation();
 		AbstractWebPage.DEFAULT_LAYOUT.setWest("/org.cyk.ui.web.primefaces.school/include/layout/westtop.xhtml");
+	}
+	
+	@Override
+	protected void identifiableConfiguration(ServletContextEvent event) {
+		super.identifiableConfiguration(event);
+		IdentifiableConfiguration identifiableConfiguration = new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
+		uiManager.registerConfiguration(identifiableConfiguration);
 	}
 	
 	@Override
@@ -68,11 +77,6 @@ public abstract class AbstractSchoolContextListener extends AbstractContextListe
 		});	
 	}
 	
-	@Override
-	protected void applicationUImanagers(ServletContextEvent event) {
-		super.applicationUImanagers(event);
-		uiManager.registerApplicationUImanager(RootWebManager.getInstance());
-		uiManager.registerApplicationUImanager(SchoolWebManager.getInstance());
-	}
+	
 	
 }

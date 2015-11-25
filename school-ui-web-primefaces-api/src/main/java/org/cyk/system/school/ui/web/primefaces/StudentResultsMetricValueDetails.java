@@ -3,7 +3,7 @@ package org.cyk.system.school.ui.web.primefaces;
 import java.io.Serializable;
 
 import org.cyk.system.school.model.StudentResultsMetricValue;
-import org.cyk.ui.api.model.AbstractOutputDetails;
+import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 

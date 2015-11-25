@@ -48,6 +48,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		identifier = "school";
 		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(academicSessionBusiness.findCurrent(null).getPeriod());
 	}
+	
+	
 		
 	@Override
 	public SystemMenu systemMenu(AbstractUserSession userSession) {
