@@ -13,9 +13,15 @@ import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
@@ -42,7 +48,18 @@ public abstract class AbstractSchoolContextListener extends AbstractContextListe
 	protected void identifiableConfiguration(ServletContextEvent event) {
 		super.identifiableConfiguration(event);
 		//uiManager.businessEntityInfos(ClassroomSession.class).setUiConsultViewId("");
+		//IdentifiableConfiguration identifiableConfiguration = uiManager.findConfiguration(ClassroomSession.class);
+		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
+		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class));
+		uiManager.configBusinessIdentifiable(ClassroomSession.class, null);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivision.class, ClassroomSessionDivisionEditPage.Form.class, ClassroomSessionDivisionDetails.class));
+		uiManager.configBusinessIdentifiable(ClassroomSessionDivision.class, null);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectEditPage.Form.class, ClassroomSessionDivisionSubjectDetails.class));
+		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionSubject.class, null);
+	
 	}
 	
 	@Override
@@ -76,7 +93,5 @@ public abstract class AbstractSchoolContextListener extends AbstractContextListe
 			}
 		});	
 	}
-	
-	
 	
 }

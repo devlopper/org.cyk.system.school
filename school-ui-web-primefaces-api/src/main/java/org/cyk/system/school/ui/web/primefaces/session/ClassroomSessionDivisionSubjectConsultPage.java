@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
@@ -29,7 +30,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private FormOneData<Details> details;
+	private FormOneData<ClassroomSessionDivisionSubjectDetails> details;
 	private Table<EvaluationDetails> evaluationTable;
 	private Table<LectureDetails> lectureTable;
 	
@@ -38,7 +39,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		super.initialisation();
 		contentTitle = identifiable.getSubject().getName();
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivisionSubject,Details>(ClassroomSessionDivisionSubject.class, Details.class){
+		details = createDetailsForm(ClassroomSessionDivisionSubjectDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivisionSubject,ClassroomSessionDivisionSubjectDetails>(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -90,17 +91,6 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 	}
 	
 	/**/
-	
-	public static class Details extends AbstractOutputDetails<ClassroomSessionDivisionSubject> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String name,coefficient,teacher;
-		public Details(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-			super(classroomSessionDivisionSubject);
-			name = classroomSessionDivisionSubject.getSubject().getName();
-			coefficient = numberBusiness.format(classroomSessionDivisionSubject.getCoefficient());
-			teacher = classroomSessionDivisionSubject.getTeacher().getPerson().getNames();
-		}
-	}
 	
 	public static class EvaluationDetails extends AbstractOutputDetails<SubjectEvaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;

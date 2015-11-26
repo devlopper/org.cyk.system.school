@@ -27,11 +27,6 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable);
 	}
 	
-	@Override
-	protected Class<?> __formModelClass__() {
-		return Form.class;
-	}
-	
 	public static class Form extends AbstractFormModel<ClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		

@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -74,9 +75,6 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTimeConstants;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractFakedDataProducer implements Serializable {
@@ -302,8 +300,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	}
 		
 	private void doBusiness(FakedDataProducerListener listener){
-		ExecutorService executor = Executors.newFixedThreadPool(5);
-		Collection<StudentSubject> studentSubjects = new ArrayList<>();
+		//ExecutorService executor = Executors.newFixedThreadPool(5);
+		//Collection<StudentSubject> studentSubjects = new ArrayList<>();
 		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{grade1,grade2,grade3}){
 			Collection<Student> students = studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession);
 			createStudentClassroomSessions(classroomSessionInfos, students);	
@@ -368,7 +366,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(classroomSessionInfos.division(0).getClassroomSessionDivision()));
 		}
 	}
-	
+	/*
 	private void createStudentSubjects(Collection<StudentSubject> studentSubjects,ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){
 		System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
 		for(Student student : students){
@@ -381,7 +379,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			}	
 		}
 	}
-	
+	*/
 	private void createStudentClassroomSessions(ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){
 		System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
 		for(Student student : students){

@@ -3,7 +3,6 @@ package org.cyk.system.school.business.impl.iesa;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionInfos;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.junit.Assert;
@@ -22,7 +21,7 @@ public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	
     	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
     	ClassroomSessionInfos grade = dataProducer.getGrade1();
-    	StudentClassroomSession studentClassroomSession = schoolBusinessTestHelper.createStudentClassroomSession("STUD1", grade.getClassroomSession()
+    	/*StudentClassroomSession studentClassroomSession = */schoolBusinessTestHelper.createStudentClassroomSession("STUD1", grade.getClassroomSession()
     			,new Object[][]{ {15},{15},{15} });
     	
     	StudentClassroomSessionDivision studentClassroomSessionDivision = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()

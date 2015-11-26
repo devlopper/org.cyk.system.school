@@ -12,6 +12,8 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -30,8 +32,8 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private FormOneData<Details> details;
-	private Table<SubjectDetails> subjectTable;
+	private FormOneData<ClassroomSessionDivisionDetails> details;
+	private Table<ClassroomSessionDivisionSubjectDetails> subjectTable;
 	private Table<StudentDetails> studentTable;
 	
 	@Override
@@ -39,7 +41,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		super.initialisation();
 		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable);
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivision,Details>(ClassroomSessionDivision.class, Details.class){
+		details = createDetailsForm(ClassroomSessionDivisionDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivision,ClassroomSessionDivisionDetails>(ClassroomSessionDivision.class, ClassroomSessionDivisionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -47,7 +49,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 		});
 		
-		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionDivisionSubject,SubjectDetails>(ClassroomSessionDivisionSubject.class, SubjectDetails.class){
+		subjectTable = (Table<ClassroomSessionDivisionSubjectDetails>) createDetailsTable(ClassroomSessionDivisionSubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionDivisionSubject,ClassroomSessionDivisionSubjectDetails>(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<ClassroomSessionDivisionSubject> getIdentifiables() {
@@ -93,27 +95,6 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	}
 	
 	/**/
-	
-	public static class Details extends AbstractOutputDetails<ClassroomSessionDivision> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String name,duration;
-		public Details(ClassroomSessionDivision classroomSessionDivision) {
-			super(classroomSessionDivision);
-			name = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision);
-			duration = numberBusiness.format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(classroomSessionDivision.getDuration()));
-		}
-	}
-	
-	public static class SubjectDetails extends AbstractOutputDetails<ClassroomSessionDivisionSubject> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String name,coefficient,teacher;
-		public SubjectDetails(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-			super(classroomSessionDivisionSubject);
-			name = classroomSessionDivisionSubject.getSubject().getName();
-			coefficient = numberBusiness.format(classroomSessionDivisionSubject.getCoefficient());
-			teacher = classroomSessionDivisionSubject.getTeacher().getPerson().getNames();
-		}
-	}
 	
 	public static class StudentDetails extends AbstractOutputDetails<StudentClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
