@@ -6,6 +6,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.cyk.system.company.model.structure.Company;
+import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
@@ -59,6 +61,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 		
 		UICommandable group = uiProvider.createCommandable("fonctionnalities", null);		
+		group.addChild(menuManager.crudMany(Company.class, null));
+		group.addChild(menuManager.crudMany(Employee.class, null));
 		group.addChild(menuManager.crudMany(Teacher.class, null));
 		group.addChild(menuManager.crudMany(Student.class, null));
 		group.addChild(menuManager.crudMany(ClassroomSession.class, null));

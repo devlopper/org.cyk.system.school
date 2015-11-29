@@ -6,11 +6,9 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
 
+import org.cyk.system.company.ui.web.primefaces.AbstractCompanyContextListener;
 import org.cyk.system.root.business.api.BusinessAdapter;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.school.business.api.actor.StudentBusiness;
-import org.cyk.system.school.business.api.actor.TeacherBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
@@ -25,19 +23,14 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionS
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
-import org.cyk.ui.web.primefaces.AbstractContextListener;
 import org.cyk.utility.common.computation.DataReadConfiguration;
 
-public abstract class AbstractSchoolContextListener extends AbstractContextListener implements Serializable {
+public abstract class AbstractSchoolContextListener extends AbstractCompanyContextListener implements Serializable {
 
 	private static final long serialVersionUID = -9042005596731665575L;
 
 	@Inject protected SchoolBusinessLayer schoolBusinessLayer;
-	
-	@Inject protected StudentBusiness studentBusiness;
-	@Inject protected TeacherBusiness teacherBusiness;
-	@Inject protected ClassroomSessionBusiness classroomSessionBusiness;
-	
+		
 	@Override
 	protected void initialisation() {
 		super.initialisation();
@@ -71,11 +64,11 @@ public abstract class AbstractSchoolContextListener extends AbstractContextListe
 			@Override
 			public <T extends AbstractIdentifiable> Collection<T> find(Class<T> dataClass, DataReadConfiguration configuration) {
 				if(Student.class.equals(dataClass)){
-					return (Collection<T>) studentBusiness.findAll();
+					return (Collection<T>) schoolBusinessLayer.getStudentBusiness().findAll();
 				}else if(Teacher.class.equals(dataClass)){
-					return (Collection<T>) teacherBusiness.findAll();
+					return (Collection<T>) schoolBusinessLayer.getTeacherBusiness().findAll();
 				}else if(ClassroomSession.class.equals(dataClass)){
-					return (Collection<T>) classroomSessionBusiness.findAll();
+					return (Collection<T>) schoolBusinessLayer.getClassroomSessionBusiness().findAll();
 				}
 				return super.find(dataClass, configuration);
 			}
@@ -83,11 +76,11 @@ public abstract class AbstractSchoolContextListener extends AbstractContextListe
 			@Override
 			public <T extends AbstractIdentifiable> Long count(Class<T> dataClass, DataReadConfiguration configuration) {
 				if(Student.class.equals(dataClass)){
-					return studentBusiness.countAll();
+					return schoolBusinessLayer.getStudentBusiness().countAll();
 				}else if(Teacher.class.equals(dataClass)){
-					return teacherBusiness.countAll();
+					return schoolBusinessLayer.getTeacherBusiness().countAll();
 				}else if(ClassroomSession.class.equals(dataClass)){
-					return classroomSessionBusiness.countAll();
+					return schoolBusinessLayer.getClassroomSessionBusiness().countAll();
 				}
 				return super.count(dataClass, configuration);
 			}
