@@ -16,6 +16,7 @@ public class ClassroomSessionDivisionSubjectDetails extends AbstractOutputDetail
 		super(classroomSessionDivisionSubject);
 		name = classroomSessionDivisionSubject.getSubject().getName();
 		coefficient = numberBusiness.format(classroomSessionDivisionSubject.getCoefficient());
-		teacher = classroomSessionDivisionSubject.getTeacher().getPerson().getNames();
+		if(classroomSessionDivisionSubject.getTeacher()!=null)
+			teacher = classroomSessionDivisionSubject.getTeacher().getPerson().getNames();
 	}
 }

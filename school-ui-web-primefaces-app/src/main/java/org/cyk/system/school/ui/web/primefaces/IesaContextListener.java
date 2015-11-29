@@ -8,6 +8,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.party.person.AbstractActor;
 import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
@@ -64,9 +65,9 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 	}
 	
 	@Override
-	protected <ACTOR extends AbstractActor> void registerBusinessEntityFormOnePageListener(Class<ACTOR> actorClass,BusinessEntityFormOnePageListener<?> listener) {
-		super.registerBusinessEntityFormOnePageListener(actorClass, listener);
-		if(actorClass.equals(Teacher.class)){
+	protected <IDENTIFIABLE extends AbstractIdentifiable> void registerBusinessEntityFormOnePageListener(Class<IDENTIFIABLE> aClass,BusinessEntityFormOnePageListener<?> listener) {
+		super.registerBusinessEntityFormOnePageListener(aClass, listener);
+		if(aClass.equals(Teacher.class)){
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorEditFormModel.FIELD_REGISTRATION_CODE);
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addFieldNames(DefaultPersonEditFormModel.FIELD_TITLE
 					,DefaultPersonEditFormModel.FIELD_SIGNATURE_SPECIMEN);
@@ -74,7 +75,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			listener.getFormConfigurationMap().get(Crud.UPDATE).get(DefaultPersonEditFormModel.TAB_PERSON_ID).addFieldNames(
 					DefaultActorEditFormModel.FIELD_REGISTRATION_CODE,DefaultPersonEditFormModel.FIELD_TITLE);
 			
-		}else if(actorClass.equals(Student.class)){
+		}else if(aClass.equals(Student.class)){
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorEditFormModel.FIELD_REGISTRATION_CODE);
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addFieldNames(DefaultPersonEditFormModel.FIELD_SURNAME
 					,DefaultPersonEditFormModel.FIELD_BIRTH_DATE,DefaultPersonEditFormModel.FIELD_BIRTH_LOCATION
@@ -88,13 +89,13 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 	}
 	
 	@Override
-	protected <ACTOR extends AbstractActor> void registerBusinessEntityFormManyPageListener(Class<ACTOR> actorClass,BusinessEntityFormManyPageListener<?> listener) {
-		if(actorClass.equals(Teacher.class)){
+	protected <IDENTIFIABLE extends AbstractIdentifiable> void registerBusinessEntityFormManyPageListener(Class<IDENTIFIABLE> aClass,BusinessEntityFormManyPageListener<?> listener) {
+		if(aClass.equals(Teacher.class)){
 			listener.getFormConfigurationMap().get(Crud.READ).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorReadFormModel.FIELD_REGISTRATION_CODE);
-		}else if(actorClass.equals(Student.class)){
+		}else if(aClass.equals(Student.class)){
 			listener.getFormConfigurationMap().get(Crud.READ).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorReadFormModel.FIELD_REGISTRATION_CODE);
 		}
-		super.registerBusinessEntityFormManyPageListener(actorClass, listener);
+		super.registerBusinessEntityFormManyPageListener(aClass, listener);
 	}
 	
 	@Override
