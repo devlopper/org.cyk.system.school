@@ -193,6 +193,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		//rootBusinessLayer.getIntervalCollectionBusiness().load(evaluationIntervalCollection);
 		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(evaluationIntervalCollection, Boolean.FALSE)){
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
+			processGradingScaleLabelValueReport(labelValueReport);
 			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}
@@ -221,6 +222,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, metric.getName(), value);
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}
+	}
+
+	protected void processGradingScaleLabelValueReport(LabelValueReport labelValueReport) {
+		
 	}
 
 }
