@@ -350,36 +350,12 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 			System.out.println("Updating metric value");
 			ClassroomSessionInfos classroomSessionInfos = grade1;
 			SchoolBusinessTestHelper.getInstance().randomValues(Arrays.asList(classroomSessionInfos.division(0).getClassroomSessionDivision()), Boolean.TRUE, Boolean.TRUE,Boolean.TRUE);
-			/*
-			for(StudentClassroomSessionDivision studentClassroomSessionDivision : SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
-					.findByClassroomSessionDivision(classroomSessionInfos.division(0).getClassroomSessionDivision())){
-				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().prepareUpdateOfMetricValues(studentClassroomSessionDivision);				
-				IntervalCollection intervalCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
-						.getStudentWorkMetricCollection().getValueIntervalCollection();
-				for(StudentResultsMetricValue studentResultsMetricValue : studentClassroomSessionDivision.getResults().getStudentResultsMetricValues())
-					studentResultsMetricValue.getMetricValue().setValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
-				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
-					.update(studentClassroomSessionDivision,studentClassroomSessionDivision.getResults().getStudentResultsMetricValues());
-			}
-			*/
+			
 			System.out.println("Generating report");
 			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(classroomSessionInfos.division(0).getClassroomSessionDivision()));
 		}
 	}
-	/*
-	private void createStudentSubjects(Collection<StudentSubject> studentSubjects,ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){
-		System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
-		for(Student student : students){
-			for(ClassroomSessionDivisionInfos classroomSessionDivisionInfos : classroomSessionInfos.getDivisions()){
-				for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionInfos.getClassroomSessionDivisionSubjects()){
-					StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
-					//studentSubject.setCascadeBottomUpOnCreate(Boolean.TRUE);
-					studentSubjects.add(studentSubject);
-				}
-			}	
-		}
-	}
-	*/
+
 	private void createStudentClassroomSessions(ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){
 		System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
 		for(Student student : students){

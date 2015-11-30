@@ -13,6 +13,7 @@ import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.utility.common.Constant;
@@ -40,10 +41,22 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 				+(StringUtils.isBlank(classroomSession.getSuffix())?Constant.EMPTY_STRING:Constant.CHARACTER_SPACE+classroomSession.getSuffix());
 	}
 	
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public CommonNodeInformations findCommonNodeInformations(ClassroomSession classroomSession) {
+		CommonNodeInformations commonNodeInformations = classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations();
+		if(commonNodeInformations==null)
+			commonNodeInformations = classroomSession.getAcademicSession().getNodeInformations();
+		if(commonNodeInformations==null)
+			commonNodeInformations = classroomSession.getAcademicSession().getSchool().getNodeInformations();
+		return commonNodeInformations;
+	}
+	
 	@Override
 	protected void __load__(ClassroomSession classroomSession) {
 		super.__load__(classroomSession);
 		classroomSession.setDivisions(classroomSessionDivisionDao.readByClassroomSession(classroomSession));
 	}
+
+	
 
 }

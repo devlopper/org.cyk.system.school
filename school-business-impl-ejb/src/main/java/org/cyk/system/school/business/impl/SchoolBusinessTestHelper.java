@@ -184,7 +184,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	
 	public void randomValues(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean metric,Boolean attendance,Boolean appreciation){
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
-			Long t = classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations().getAttendanceTimeDivisionType().getDuration();
+			Long t = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(classroomSessionDivision.getClassroomSession()).getAttendanceTimeDivisionType().getDuration();
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 				
 				if(Boolean.TRUE.equals(attendance)){
@@ -195,7 +195,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 				}
 				
 				if(Boolean.TRUE.equals(metric)){				
-					IntervalCollection intervalCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
+					IntervalCollection intervalCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(classroomSessionDivision.getClassroomSession())
 							.getStudentWorkMetricCollection().getValueIntervalCollection();
 					RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
 					Collection<StudentResultsMetricValue> studentResultsMetricValues = SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness()

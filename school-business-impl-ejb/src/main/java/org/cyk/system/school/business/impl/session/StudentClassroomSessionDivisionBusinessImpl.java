@@ -91,8 +91,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			schoolBusinessLayer.getStudentClassroomSessionBusiness().create(studentClassroomSession);
 		}
 		
-		MetricCollection metricCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
-				.getStudentWorkMetricCollection();
+		MetricCollection metricCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+				.findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getStudentWorkMetricCollection();
 		RootBusinessLayer.getInstance().getMetricCollectionBusiness().load(metricCollection);
 		IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
 		RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
@@ -285,26 +285,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	protected ClassroomSessionDivision level(Lecture lecture) {
 		return lecture.getSubject().getClassroomSessionDivision();
 	}
-
-	/*
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public StudentClassroomSessionDivision prepareUpdateOfMetricValues(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		studentClassroomSessionDivision.getResults()
-			.setStudentResultsMetricValues(studentResultsMetricValueDao.readByStudentResults(studentClassroomSessionDivision.getResults()));
-		if(studentClassroomSessionDivision.getResults().getStudentResultsMetricValues().isEmpty()){
-			MetricCollection metricCollection = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNodeInformations()
-					.getStudentWorkMetricCollection();
-			RootBusinessLayer.getInstance().getMetricCollectionBusiness().load(metricCollection);
-			IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
-			RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
-			for(Metric metric : metricCollection.getCollection())
-				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
-					.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults()
-							, new MetricValue(metric, new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())))));
-		}
-		return studentClassroomSessionDivision;
-	}*/
-	
 
 	@Override
 	public StudentClassroomSessionDivision update(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues) {
