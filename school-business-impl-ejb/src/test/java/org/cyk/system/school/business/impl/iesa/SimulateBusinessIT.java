@@ -1,5 +1,7 @@
 package org.cyk.system.school.business.impl.iesa;
 
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.SchoolBusinessSimulationParameters;
 
 public class SimulateBusinessIT extends AbstractIesaBusinessIT {
 
@@ -11,7 +13,15 @@ public class SimulateBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
 
-    	schoolBusinessTestHelper.simulate(3, 3, 1,1, Boolean.FALSE,Boolean.FALSE);
+    	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
+    	StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS.setAttendance(Boolean.FALSE);
+    	
+    	SchoolBusinessSimulationParameters parameters = new SchoolBusinessSimulationParameters();
+    	parameters.setTeacherCount(3);
+    	parameters.setStudentCount(3);
+    	parameters.setGeneratedStudentInClassroomSessionCount(1);
+    	parameters.setStudentByClassroomSessionCount(1);
+    	schoolBusinessTestHelper.simulate(parameters);
     }
     
 }

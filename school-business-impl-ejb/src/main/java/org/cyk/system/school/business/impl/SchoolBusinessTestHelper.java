@@ -88,8 +88,15 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	}
 	
 	public Collection<ClassroomSession> createStudentClassroomSessions(Integer generateStudentInClassroomSessionCount,Integer studentByClassroomSessionCount){
-		Collection<ClassroomSession> classroomSessions = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findManyRandomly(generateStudentInClassroomSessionCount);
+		Collection<ClassroomSession> classroomSessions = generateStudentInClassroomSessionCount==null?
+				SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll():
+					SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findManyRandomly(generateStudentInClassroomSessionCount);
 		Collection<Student> students = SchoolBusinessLayer.getInstance().getStudentBusiness().findManyRandomly(studentByClassroomSessionCount);
+
+		return createStudentClassroomSessions(students,classroomSessions);
+	}
+	
+	public Collection<ClassroomSession> createStudentClassroomSessions(Collection<Student> students,Collection<ClassroomSession> classroomSessions){
 		Collection<StudentClassroomSession> studentClassroomSessions = new ArrayList<>();
 		
 		for(ClassroomSession classroomSession : classroomSessions)
@@ -364,23 +371,25 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	
 	/**/
 	
-	public void simulate(Integer teacherCount,Integer studentCount,Integer generateStudentInClassroomSessionCount,Integer studentByClassroomSessionCount,Boolean coefficientApplied,Boolean attendanceAggregated){
+	public void simulate(SchoolBusinessSimulationParameters parameters){
 		System.out.println("School business simulation started");
 		
-		coefficientApplied = Boolean.FALSE;
-    	StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS.setAttendance(attendanceAggregated);
-		
     	System.out.println("Creating teachers");
-		RootRandomDataProvider.getInstance().createActor(Teacher.class, 10);
+		RootRandomDataProvider.getInstance().createActor(Teacher.class, parameters.getTeacherCount());
 		System.out.println("Creating students");
-		RootRandomDataProvider.getInstance().createActor(Student.class, 10);
+		RootRandomDataProvider.getInstance().createActor(Student.class, parameters.getStudentCount());
     	
-		System.out.println("Creating setting class coordinators , subject teachers");
+		System.out.println("Setting class coordinators , subject teachers");
     	randomSetActor(Boolean.TRUE, Boolean.TRUE);
     	
     	System.out.println("Creating student classroom session");
-    	Collection<ClassroomSession> classroomSessions = createStudentClassroomSessions(generateStudentInClassroomSessionCount,studentByClassroomSessionCount);
-    	
+    	Collection<ClassroomSession> classroomSessions;
+    	if(parameters.getGeneratedClassroomSessionCountByLevel()==null)
+    		classroomSessions = createStudentClassroomSessions(parameters.getGeneratedStudentInClassroomSessionCount(),
+    			parameters.getStudentByClassroomSessionCount());
+    	else{
+    		classroomSessions = new ArrayList<>();
+    	}
     	System.out.println("Creating subject evaluations");
     	createSubjectEvaluations(coefficientApplied);
     	
@@ -402,6 +411,15 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	}
 
 	/**/
+	
+	@Getter @Setter
+	public static class SchoolBusinessSimulationParameters{
+		private Integer teacherCount=1,studentCount=1,generatedStudentInClassroomSessionCount=1,studentByClassroomSessionCount=1,
+			generatedClassroomSessionCountByLevel=1;
+		
+		private Boolean createStudentClassroomSessionForAllLevel;
+		private Boolean createFileOnDiskOfOneStudentClassroomSessionDivisionReportForAllLevel;
+	}
 	
 	@Getter @Setter
 	public static class ClassroomSessionInfos{
