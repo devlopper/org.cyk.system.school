@@ -17,10 +17,9 @@ public class SimulateBusinessIT extends AbstractIesaBusinessIT {
     	StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS.setAttendance(Boolean.FALSE);
     	
     	SchoolBusinessSimulationParameters parameters = new SchoolBusinessSimulationParameters();
-    	parameters.setTeacherCount(3);
-    	parameters.setStudentCount(3);
-    	parameters.setGeneratedStudentInClassroomSessionCount(1);
-    	parameters.setStudentByClassroomSessionCount(1);
+
+    	parameters.setGeneratedClassroomSessionCountByLevel(null);
+    	parameters.getClassroomSessionDivisionIndexes().add(1);
     	schoolBusinessTestHelper.simulate(parameters);
     }
     

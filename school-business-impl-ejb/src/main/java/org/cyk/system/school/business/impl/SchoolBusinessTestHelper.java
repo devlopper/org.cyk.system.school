@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -91,9 +93,11 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		Collection<ClassroomSession> classroomSessions = generateStudentInClassroomSessionCount==null?
 				SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll():
 					SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findManyRandomly(generateStudentInClassroomSessionCount);
-		Collection<Student> students = SchoolBusinessLayer.getInstance().getStudentBusiness().findManyRandomly(studentByClassroomSessionCount);
-
-		return createStudentClassroomSessions(students,classroomSessions);
+		return createStudentClassroomSessions(SchoolBusinessLayer.getInstance().getStudentBusiness().findManyRandomly(studentByClassroomSessionCount),classroomSessions);
+	}
+	
+	public Collection<ClassroomSession> createStudentClassroomSessions(Integer studentByClassroomSessionCount,Collection<ClassroomSession> classroomSessions){
+		return createStudentClassroomSessions(SchoolBusinessLayer.getInstance().getStudentBusiness().findManyRandomly(studentByClassroomSessionCount),classroomSessions);
 	}
 	
 	public Collection<ClassroomSession> createStudentClassroomSessions(Collection<Student> students,Collection<ClassroomSession> classroomSessions){
@@ -155,16 +159,21 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		createSubjectEvaluation(evaluationTypeBusiness.findBySubjectByEvaluationType(subject, evaluationType),details);
 	}
 	
-	public void createStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
+	public void createStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean createFileOnDisk){
 		studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
 		if(Boolean.TRUE.equals(createFileOnDisk)){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
-				for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
-					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
-					assertThat("Report built", studentClassroomSessionDivision.getResults().getReport()!=null);
-					writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
-				}
+				if(classroomSessionDivisionIndexes==null || classroomSessionDivisionIndexes.isEmpty()
+					|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) )
+					for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
+						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
+						assertThat("Report built", studentClassroomSessionDivision.getResults().getReport()!=null);
+						writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
+					}
     	}
+	}
+	public void createStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
+		createStudentClassroomSessionDivisionReport(classroomSessionDivisions, null, createFileOnDisk);
 	}
 	public void createStudentClassroomSessionDivisionReport(Boolean createFileOnDisk){
 		createStudentClassroomSessionDivisionReport(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findAll(),createFileOnDisk);
@@ -389,6 +398,13 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
     			parameters.getStudentByClassroomSessionCount());
     	else{
     		classroomSessions = new ArrayList<>();
+    		Set<String> levelNames = new HashSet<>();
+    		for(ClassroomSession classroomSession : SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll()){
+    			if(levelNames.add(classroomSession.getLevelTimeDivision().getLevel().getName().getCode())){
+    				classroomSessions.add(classroomSession);
+    			}
+    		}
+    		createStudentClassroomSessions(parameters.getStudentByClassroomSessionCount(),classroomSessions);
     	}
     	System.out.println("Creating subject evaluations");
     	createSubjectEvaluations(coefficientApplied);
@@ -400,7 +416,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
     	for(ClassroomSession classroomSession : classroomSessions)
     		classroomSessionDivisions.addAll(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
     	System.out.println("Creating student classroom session reports");
-		createStudentClassroomSessionDivisionReport(classroomSessionDivisions,Boolean.TRUE);
+		createStudentClassroomSessionDivisionReport(classroomSessionDivisions,parameters.getClassroomSessionDivisionIndexes(),Boolean.TRUE);
 		
 		System.out.println("School business simulation ended");
 	}
@@ -416,9 +432,11 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	public static class SchoolBusinessSimulationParameters{
 		private Integer teacherCount=1,studentCount=1,generatedStudentInClassroomSessionCount=1,studentByClassroomSessionCount=1,
 			generatedClassroomSessionCountByLevel=1;
+		private Set<Integer> classroomSessionDivisionIndexes = new HashSet<>();
 		
 		private Boolean createStudentClassroomSessionForAllLevel;
 		private Boolean createFileOnDiskOfOneStudentClassroomSessionDivisionReportForAllLevel;
+		
 	}
 	
 	@Getter @Setter
