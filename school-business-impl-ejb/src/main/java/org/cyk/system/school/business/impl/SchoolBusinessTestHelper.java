@@ -406,6 +406,9 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
     		}
     		createStudentClassroomSessions(parameters.getStudentByClassroomSessionCount(),classroomSessions);
     	}
+    	
+    	System.out.println(classroomSessions.size()+" classroom session(s) created");
+    	
     	System.out.println("Creating subject evaluations");
     	createSubjectEvaluations(coefficientApplied);
     	

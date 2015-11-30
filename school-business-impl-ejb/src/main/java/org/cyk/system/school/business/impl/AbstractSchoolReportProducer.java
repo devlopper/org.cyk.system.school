@@ -61,14 +61,18 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
 		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
-		r.getClassroomSessionDivision().setOpenedTime(format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(csd.getDuration())));
-		r.setAttendedTime(format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(s.getResults().getLectureAttendance().getAttendedDuration())));
-		r.setMissedTime(format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(s.getResults().getLectureAttendance().getMissedDuration())));
+		r.getClassroomSessionDivision().setOpenedTime(format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getDuration())));
+		r.setAttendedTime(format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getAttendedDuration())));
+		r.setMissedTime(format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getMissedDuration())));
 		
 		set(student, r.getStudent());
 		
-		set(cs.getCoordinator(), r.getCommentator());
-		//debug(as.getSchool().getOwnedCompany().getCompany());
+		if(cs.getCoordinator()!=null)
+			set(cs.getCoordinator(), r.getCommentator());
+		
 		if(as.getSchool().getOwnedCompany().getCompany().getSigner()!=null)
 			set(as.getSchool().getOwnedCompany().getCompany().getSigner(), r.getSigner());
 		
@@ -76,6 +80,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
 		
 		//debug(s.getResults().getEvaluationSort());
+		//debug(s.getResults());
+		//debug(s.getResults().getEvaluationSort());
+		//debug(s.getResults().getEvaluationSort().getAverageInterval());
+		
 		r.setAverageScale(s.getResults().getEvaluationSort().getAverageInterval().getCode());
 		r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.title",new Object[]{csd.getUiString()}));
@@ -121,7 +129,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					r.getMarkTotals().add(NOT_APPLICABLE);
 				}
 			}
-			set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(), sr.getTeacher());
+			if(studentSubject.getClassroomSessionDivisionSubject().getTeacher()!=null)
+				set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(), sr.getTeacher());
 			
 			sr.setAverage(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()):NOT_APPLICABLE);
 			sr.setAverageCoefficiented(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()
@@ -225,8 +234,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 	}
 
-	protected void processGradingScaleLabelValueReport(LabelValueReport labelValueReport) {
-		
-	}
+	protected void processGradingScaleLabelValueReport(LabelValueReport labelValueReport) {}
 
 }

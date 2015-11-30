@@ -32,6 +32,9 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE) private BigDecimal coefficient;
 	@Column(name="order_index") private Byte index;
 	@Embedded private NodeResults results = new NodeResults();
+	
+	//@Temporal(value=TemporalType.DATE) private Date nextStartingDate;
+	//@Temporal(value=TemporalType.DATE) private Date nextStartingDate;
 
 	@Transient private Collection<ClassroomSessionDivisionSubject> subjects = new ArrayList<>();
 	
