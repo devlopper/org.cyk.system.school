@@ -92,8 +92,8 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			if(numberOfTimeAbsent==null){
 				
 			}else{
-				identifiable.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness()
-						.convertAttendanceTimeToMillisecond(numberOfTimeAbsent));
+				identifiable.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+						.convertAttendanceTimeToMillisecond(identifiable.getClassroomSessionDivision().getClassroomSession(),numberOfTimeAbsent));
 				identifiable.getResults().getLectureAttendance().setAttendedDuration(identifiable.getClassroomSessionDivision().getDuration()-
 						identifiable.getResults().getLectureAttendance().getMissedDuration());
 			}
