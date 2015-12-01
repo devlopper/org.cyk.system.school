@@ -51,7 +51,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getAcademicSession().getCompany().setName(as.getSchool().getOwnedCompany().getCompany().getName());
 		RootBusinessLayer.getInstance().getContactCollectionBusiness().load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
 		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContact());
-		r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
+		if(cs.getCoordinator()!=null)
+			r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
 		
 		r.getClassroomSessionDivision().getClassroomSession().setName(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(cs));
 		
