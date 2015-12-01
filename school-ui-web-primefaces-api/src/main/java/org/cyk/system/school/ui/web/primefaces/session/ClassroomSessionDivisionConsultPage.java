@@ -80,9 +80,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
 		contextualMenu.setLabel(contentTitle); 
 		
-		commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSession(), "button", null);
-		commandable.setLabel(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable.getClassroomSession()));
-		contextualMenu.getChildren().add(commandable);
+		contextualMenu.getChildren().add(commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSession(), null));
 		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);

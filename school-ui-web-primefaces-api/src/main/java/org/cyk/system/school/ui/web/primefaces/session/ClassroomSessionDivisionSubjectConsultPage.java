@@ -7,23 +7,22 @@ import java.util.Collection;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultPage<ClassroomSessionDivisionSubject> implements Serializable {
@@ -77,9 +76,9 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
 		contextualMenu.setLabel(contentTitle); 
 		
-		commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision(), "button", null);
-		commandable.setLabel(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable.getClassroomSessionDivision()));
-		contextualMenu.getChildren().add(commandable);
+		contextualMenu.getChildren().add(commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision().getClassroomSession(), null));
+		
+		contextualMenu.getChildren().add(commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision(), null));
 		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);

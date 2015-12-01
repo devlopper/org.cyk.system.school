@@ -98,9 +98,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
 		for(ClassroomSessionDivision classroomSessionDivision : identifiable.getDivisions()){
-			commandable = navigationManager.createConsultCommandable(classroomSessionDivision,"button",null);
-			commandable.setLabel(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision));
-			contextualMenu.getChildren().add(commandable);
+			contextualMenu.getChildren().add(navigationManager.createConsultCommandable(classroomSessionDivision,null));
 		}
 		return Arrays.asList(contextualMenu);
 	}
