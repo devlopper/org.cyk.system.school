@@ -29,6 +29,10 @@ public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCru
 	protected void initialisation() {
 		super.initialisation();
 		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable);
+		text = languageBusiness.findText("org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionUpdateStudentReportPage.text", new Object[]{
+				SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable.getClassroomSession()),
+				SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable)
+		});
 	}
 	
 	@Override

@@ -63,7 +63,7 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 			if(identifiable.getDuration()==null)
 				;
 			else
-				duration = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getDuration());
+				duration = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getDuration());
 			
 			fromDate = identifiable.getPeriod().getFromDate();
 			toDate = identifiable.getPeriod().getToDate();
@@ -75,7 +75,7 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 			if(duration==null)
 				identifiable.setDuration(null);
 			else
-				identifiable.setDuration(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToMillisecond(duration));
+				identifiable.setDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),duration));
 			
 			identifiable.getPeriod().setFromDate(fromDate);
 			identifiable.getPeriod().setToDate(toDate);

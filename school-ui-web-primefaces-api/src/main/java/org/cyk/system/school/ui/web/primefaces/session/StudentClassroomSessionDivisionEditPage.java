@@ -78,7 +78,8 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		public void read() {
 			super.read();
 			if(identifiable.getResults().getLectureAttendance().getAttendedDuration()!=null)
-				numberOfTimeAbsent = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getResults()
+				numberOfTimeAbsent = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSessionDivision().getClassroomSession(),identifiable.getResults()
 						.getLectureAttendance().getMissedDuration());
 			
 			appreciation = identifiable.getResults().getAppreciation();

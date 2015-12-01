@@ -138,8 +138,8 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			names = studentClassroomSessionDivision.getStudent().getPerson().getNames();
 			globalAppreciation = studentClassroomSessionDivision.getResults().getAppreciation();
 			if(studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()!=null)
-				numberOfTimeAbsent = numberBusiness.format(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().convertAttendanceTimeToDivisionDuration(
-					studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()));
+				numberOfTimeAbsent = numberBusiness.format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(
+						studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()));
 		}
 	}
 	

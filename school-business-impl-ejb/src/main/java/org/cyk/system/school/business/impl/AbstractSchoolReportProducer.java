@@ -194,7 +194,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		r.setOverallResultlLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.overallresult"));
 		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.average", r.getAverage());
-		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.grade", r.getAverageScale());
+		labelValue(LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID, r.getAverageScale());
 		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.rank", r.getRank());
 		
 		r.setGradingScaleLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.gradingscale"));
@@ -236,4 +236,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 
 	protected void processGradingScaleLabelValueReport(LabelValueReport labelValueReport) {}
 
+	/**/
+	
+	public static final String LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID = "school.report.studentclassroomsessiondivision.block.overallresult.grade";
+	
 }
