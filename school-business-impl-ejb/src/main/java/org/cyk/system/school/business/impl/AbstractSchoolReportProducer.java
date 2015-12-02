@@ -85,7 +85,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		//debug(s.getResults().getEvaluationSort());
 		//debug(s.getResults().getEvaluationSort().getAverageInterval());
 		
-		r.setAverageScale(s.getResults().getEvaluationSort().getAverageInterval().getCode());
+		r.setAverageScale(getGradeScaleCode(s.getResults().getEvaluationSort().getAverageInterval()));
 		r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.title",new Object[]{csd.getUiString()}));
 		r.setSubjectsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.subject"));
@@ -138,7 +138,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					.multiply(studentSubject.getClassroomSessionDivisionSubject().getCoefficient())):NOT_APPLICABLE);
 			sr.setRank(applicable?rootBusinessLayer.getMathematicsBusiness().format(studentSubject.getResults().getEvaluationSort().getRank()):NOT_APPLICABLE);	
 			
-			set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
+			if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
+				set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
+				sr.getAverageScale().setCode(getGradeScaleCode(studentSubject.getResults().getEvaluationSort().getAverageInterval()));
+			}
 			
 			BigDecimal[] results = new BigDecimal[]{BigDecimal.ZERO};
 			studentSubjectEvaluation(sr, studentSubject, studentSubject.getDetails(), results,parameters);
@@ -203,8 +206,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
 		//rootBusinessLayer.getIntervalCollectionBusiness().load(evaluationIntervalCollection);
 		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(evaluationIntervalCollection, Boolean.FALSE)){
-			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
-			processGradingScaleLabelValueReport(labelValueReport);
+			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, getGradeScaleCode(interval), interval.getName());
 			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}
@@ -235,8 +237,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 	}
 
-	protected void processGradingScaleLabelValueReport(LabelValueReport labelValueReport) {}
-
+	protected String getGradeScaleCode(Interval interval){
+		return interval.getCode();
+	}
+	
 	/**/
 	
 	public static final String LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID = "school.report.studentclassroomsessiondivision.block.overallresult.grade";
