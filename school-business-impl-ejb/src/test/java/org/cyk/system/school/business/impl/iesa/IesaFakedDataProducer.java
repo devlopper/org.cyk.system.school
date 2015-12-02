@@ -28,6 +28,7 @@ import org.cyk.system.root.model.event.EventMissed;
 import org.cyk.system.root.model.event.EventMissedReason;
 import org.cyk.system.root.model.event.EventParticipation;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
+import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
@@ -226,8 +227,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		studentWorkMetricCollection.getValueIntervalCollection().addItem("5", "Maintains an excellent degree of observable traits", "5", "5");
 		
 		create(studentWorkMetricCollection);
-		commonNodeInformations = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection,createFile("report/iesa.jrxml", "reportcard.jrxml")
-				,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
+		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa.jrxml", "reportcard.jrxml"),null);
+		create(reportTemplate);
+		commonNodeInformations = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
 		
 		//Level names
 		levelNameG1 = createLevelName("Grade 1");

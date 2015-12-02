@@ -6,22 +6,22 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.cyk.system.root.model.AbstractModelElement;
-import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable @Getter @Setter @NoArgsConstructor
 public class CommonNodeInformations extends AbstractModelElement implements Serializable {
 
 	private static final long serialVersionUID = 3372342222993865767L;
 	
-	@ManyToOne @JoinColumn(name="resultsReportFile") private File studentClassroomSessionDivisionResultsReportFile;
+	@ManyToOne @JoinColumn(name="resultsReportTemplate") private ReportTemplate studentClassroomSessionDivisionResultsReportTemplate;
 	@ManyToOne private IntervalCollection studentSubjectAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionDivisionAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionAverageScale;
@@ -31,10 +31,10 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	
 	private Boolean aggregateAttendance = Boolean.TRUE;
 	
-	public CommonNodeInformations(IntervalCollection intervalCollection,MetricCollection studentWorkMetricCollection,File studentClassroomSessionDivisionResultsReportFile,
-			TimeDivisionType attendanceTimeDivisionType) {
+	public CommonNodeInformations(IntervalCollection intervalCollection,MetricCollection studentWorkMetricCollection,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate
+			,TimeDivisionType attendanceTimeDivisionType) {
 		super();
-		this.studentClassroomSessionDivisionResultsReportFile = studentClassroomSessionDivisionResultsReportFile;
+		this.studentClassroomSessionDivisionResultsReportTemplate = studentClassroomSessionDivisionResultsReportTemplate;
 		this.studentSubjectAverageScale = intervalCollection;
 		this.studentClassroomSessionDivisionAverageScale = intervalCollection;
 		this.studentClassroomSessionAverageScale = intervalCollection;

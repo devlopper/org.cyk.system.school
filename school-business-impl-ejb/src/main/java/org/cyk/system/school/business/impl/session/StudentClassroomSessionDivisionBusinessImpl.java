@@ -147,7 +147,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					studentClassroomSessionDivision.getResults().setReport(new File());
 				reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
 					,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
-					.getStudentClassroomSessionDivisionResultsReportFile(),Boolean.TRUE);				
+					.getStudentClassroomSessionDivisionResultsReportTemplate().getTemplate(),Boolean.TRUE);				
 				//dao.update(studentClassroomSessionDivision);
 				genericDao.update(studentClassroomSessionDivision.getResults());
 			}	
