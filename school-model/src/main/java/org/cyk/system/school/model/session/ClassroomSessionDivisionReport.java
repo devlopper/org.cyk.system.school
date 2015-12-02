@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cyk.utility.common.generator.AbstractGeneratable;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import org.cyk.utility.common.generator.AbstractGeneratable;
 
 @Getter @Setter @NoArgsConstructor
 public class ClassroomSessionDivisionReport extends AbstractGeneratable<ClassroomSessionDivisionReport> implements Serializable {
@@ -17,6 +17,7 @@ public class ClassroomSessionDivisionReport extends AbstractGeneratable<Classroo
 	
 	private ClassroomSessionReport classroomSession = new ClassroomSessionReport();
 	private String name,numberOfStudents,average,highestAverage,lowestAverage,openedTime;
+	
 	
 	@Override
 	public void generate() {

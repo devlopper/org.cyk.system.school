@@ -1,5 +1,6 @@
 package org.cyk.system.school.model.session;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 	private List<String> markTotals = new ArrayList<>();
 	private List<BigDecimal> tempMarkTotals = new ArrayList<>();
 	private ClassroomSessionDivisionReport classroomSessionDivision = new ClassroomSessionDivisionReport();
+	private Boolean generateBackgroundImage=Boolean.TRUE;
+	private InputStream backgroundImage;
 	
 	private List<String> subjectsTableColumnNames = new ArrayList<>();
 	private Collection<StudentClassroomSessionDivisionSubjectReport> subjects = new ArrayList<>();
@@ -58,6 +61,9 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 				+ "<style forecolor=\"red\">S</style>"
 				+ "CHOOL OF "
 				+ "<style forecolor=\"red\">A</style>BIDJAN");
+		
+		if(Boolean.TRUE.equals(generateBackgroundImage))
+			backgroundImage = inputStream(provider.companyLogo().getBytes());
 		
 		student.getPerson().setGenerateImage(Boolean.TRUE);
 		student.generate();
