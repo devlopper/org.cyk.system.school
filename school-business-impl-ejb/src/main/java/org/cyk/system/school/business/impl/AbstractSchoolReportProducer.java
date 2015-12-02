@@ -29,6 +29,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 
 	private static final long serialVersionUID = 4631829200070130087L;
 
+	private SchoolBusinessLayer schoolBusinessLayer;
+	
+	public AbstractSchoolReportProducer() {
+		schoolBusinessLayer = SchoolBusinessLayer.getInstance();
+	}
+	
 	@Override
 	public String getEvaluationTypeCode(StudentSubjectEvaluation studentSubjectEvaluation) {
 		return studentSubjectEvaluation.getSubjectEvaluation().getType().getType().getCode();
@@ -49,25 +55,29 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getAcademicSession().setFromDateToDate(timeBusiness.formatPeriodFromTo(as.getPeriod()));
 		r.getAcademicSession().getCompany().setImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
 		r.getAcademicSession().getCompany().setName(as.getSchool().getOwnedCompany().getCompany().getName());
-		r.setBackgroundImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
+		
+		//debug(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs));
+		//debug(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate());
+		
+		r.setBackgroundImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate().getBackgroundImage()));
 		RootBusinessLayer.getInstance().getContactCollectionBusiness().load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
 		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContact());
 		if(cs.getCoordinator()!=null)
 			r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
 		
-		r.getClassroomSessionDivision().getClassroomSession().setName(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(cs));
+		r.getClassroomSessionDivision().getClassroomSession().setName(schoolBusinessLayer.getClassroomSessionBusiness().format(cs));
 		
 		//debug(results);
-		r.getClassroomSessionDivision().setName(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(csd));
+		r.getClassroomSessionDivision().setName(schoolBusinessLayer.getClassroomSessionDivisionBusiness().format(csd));
 		r.getClassroomSessionDivision().setAverage(format(results.getAverage()));
 		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
 		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
-		r.getClassroomSessionDivision().setOpenedTime(format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+		r.getClassroomSessionDivision().setOpenedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getDuration())));
-		r.setAttendedTime(format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+		r.setAttendedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getAttendedDuration())));
-		r.setMissedTime(format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+		r.setMissedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getMissedDuration())));
 		
 		set(student, r.getStudent());
@@ -228,7 +238,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		rootBusinessLayer.getMetricCollectionBusiness().load(metricCollection);
 		for(Metric metric : metricCollection.getCollection()){
 			String value = "";
-			for(StudentResultsMetricValue studentResultsMetricValue : SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults()))
+			for(StudentResultsMetricValue studentResultsMetricValue : schoolBusinessLayer.getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults()))
 				if(studentResultsMetricValue.getMetricValue().getMetric().getIdentifier().equals(metric.getIdentifier())){
 					value = format(studentResultsMetricValue.getMetricValue().getValue());
 					break;
