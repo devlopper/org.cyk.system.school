@@ -11,11 +11,13 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class ClassroomSessionDivisionDetails extends AbstractOutputDetails<ClassroomSessionDivision> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private String name,duration;
+	@Input @InputText private String name,fromDate,toDate,duration;
 	
 	public ClassroomSessionDivisionDetails(ClassroomSessionDivision classroomSessionDivision) {
 		super(classroomSessionDivision);
 		name = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision);
+		fromDate = timeBusiness.formatDate(classroomSessionDivision.getPeriod().getFromDate());
+		toDate = timeBusiness.formatDate(classroomSessionDivision.getPeriod().getToDate());
 		duration = numberBusiness.format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
 				.convertAttendanceTimeToDivisionDuration(classroomSessionDivision.getClassroomSession(),classroomSessionDivision.getDuration()));
 	}
