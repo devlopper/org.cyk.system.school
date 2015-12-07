@@ -12,16 +12,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
@@ -36,7 +37,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	@Inject private SubjectClassroomSessionBusiness subjectClassroomSessionBusiness;
 	
 	private FormOneData<ClassroomSessionDetails> details;
-	private Table<DivisionDetails> divisionTable;
+	private Table<ClassroomSessionDivisionDetails> divisionTable;
 	private Table<SubjectDetails> subjectTable;
 	private Table<StudentDetails> studentTable;
 	
@@ -53,7 +54,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 			}
 		});
 		
-		divisionTable = (Table<DivisionDetails>) createDetailsTable(DivisionDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionDivision,DivisionDetails>(ClassroomSessionDivision.class, DivisionDetails.class){
+		divisionTable = (Table<ClassroomSessionDivisionDetails>) createDetailsTable(ClassroomSessionDivisionDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionDivision,ClassroomSessionDivisionDetails>(ClassroomSessionDivision.class, ClassroomSessionDivisionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<ClassroomSessionDivision> getIdentifiables() {
@@ -104,16 +105,6 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	}
 	
 	/**/
-	
-	public static class DivisionDetails extends AbstractOutputDetails<ClassroomSessionDivision> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String name,duration;
-		public DivisionDetails(ClassroomSessionDivision classroomSessionDivision) {
-			super(classroomSessionDivision);
-			name = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision);
-			duration = timeBusiness.formatDuration(classroomSessionDivision.getDuration());
-		}
-	}
 	
 	public static class SubjectDetails extends AbstractOutputDetails<SubjectClassroomSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;

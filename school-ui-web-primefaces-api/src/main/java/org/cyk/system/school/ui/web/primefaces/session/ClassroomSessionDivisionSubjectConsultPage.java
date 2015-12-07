@@ -57,7 +57,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 				return new Crud[]{Crud.CREATE,Crud.READ,Crud.UPDATE,Crud.DELETE};
 			}
 		});
-		
+		/*
 		lectureTable = (Table<LectureDetails>) createDetailsTable(LectureDetails.class, new DetailsConfigurationListener.Table.Adapter<Lecture,LectureDetails>(Lecture.class, LectureDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -68,7 +68,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			public Crud[] getCruds() {
 				return new Crud[]{Crud.CREATE,Crud.READ,Crud.UPDATE,Crud.DELETE};
 			}
-		});
+		});*/
 	}
 	
 	@Override

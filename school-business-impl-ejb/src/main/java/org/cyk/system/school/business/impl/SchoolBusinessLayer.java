@@ -90,6 +90,13 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				return classroomSessionBusiness.format(classroomSession);
 			}
 		});
+		registerFormatter(ClassroomSessionDivision.class, new AbstractFormatter<ClassroomSessionDivision>() {
+			private static final long serialVersionUID = -4793331650394948152L;
+			@Override
+			public String format(ClassroomSessionDivision classroomSessionDivision, ContentType contentType) {
+				return classroomSessionDivisionBusiness.format(classroomSessionDivision);
+			}
+		});
 	}
 	
 	@Override

@@ -21,6 +21,8 @@ public class ClassroomSessionListPage extends AbstractCrudManyPage<ClassroomSess
 		super.initialisation();
 		rowAdapter.setOpenable(Boolean.TRUE);
 		rowAdapter.setUpdatable(Boolean.TRUE);
+		table.setShowHeader(Boolean.FALSE);
+		table.setShowToolBar(Boolean.FALSE);
 	}
 	
 	@Override
