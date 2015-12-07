@@ -141,18 +141,20 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					r.getMarkTotals().add(NOT_APPLICABLE);
 				}
 			}
-			if(studentSubject.getClassroomSessionDivisionSubject().getTeacher()!=null)
-				set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(), sr.getTeacher());
+			
+			set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(), sr.getTeacher());
 			
 			sr.setAverage(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()):NOT_APPLICABLE);
 			sr.setAverageCoefficiented(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()
 					.multiply(studentSubject.getClassroomSessionDivisionSubject().getCoefficient())):NOT_APPLICABLE);
 			sr.setRank(applicable?rootBusinessLayer.getMathematicsBusiness().format(studentSubject.getResults().getEvaluationSort().getRank()):NOT_APPLICABLE);	
 			
-			if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
+			//if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
 				set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
-				sr.getAverageScale().setCode(getGradeScaleCode(studentSubject.getResults().getEvaluationSort().getAverageInterval()));
-			}
+				if(applicable)
+					sr.getAverageScale().setCode(getGradeScaleCode(studentSubject.getResults().getEvaluationSort().getAverageInterval()));
+			//}else
+				//sr.getAverageScale().setCode(NOT_APPLICABLE);
 			
 			BigDecimal[] results = new BigDecimal[]{BigDecimal.ZERO};
 			studentSubjectEvaluation(sr, studentSubject, studentSubject.getDetails(), results,parameters);
