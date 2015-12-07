@@ -28,8 +28,22 @@ public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<Student
 	protected void initialisation() {
 		super.initialisation();
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
-		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
-			
+		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);	
+	}
+	
+	@Override
+	protected StudentClassroomSession instanciateIdentifiable() {
+		StudentClassroomSession studentClassroomSession = super.instanciateIdentifiable();
+		if(studentClassroomSession.getClassroomSession()==null){
+			Long classroomSessionIdentifier = requestParameterLong(ClassroomSession.class);
+			if(classroomSessionIdentifier==null)
+				;
+			else{
+				studentClassroomSession.setClassroomSession(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().find(classroomSessionIdentifier));
+				
+			}
+		}
+		return studentClassroomSession;
 	}
 	
 	@Override
