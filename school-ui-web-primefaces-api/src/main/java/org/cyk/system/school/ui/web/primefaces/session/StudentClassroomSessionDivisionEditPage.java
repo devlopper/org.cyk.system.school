@@ -20,6 +20,7 @@ import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
+import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
@@ -73,6 +74,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputNumber private BigDecimal numberOfTimeAbsent;
 		@Input @InputText private String appreciation;
+		@Input @InputBooleanButton private Boolean conferenceRequested;
 		
 		@Override
 		public void read() {
@@ -83,12 +85,14 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 						.getLectureAttendance().getMissedDuration());
 			
 			appreciation = identifiable.getResults().getAppreciation();
+			conferenceRequested = identifiable.getResults().getConferenceRequested();
 		}
 		
 		@Override
 		public void write() {
 			super.write();
 			identifiable.getResults().setAppreciation(appreciation);
+			identifiable.getResults().setConferenceRequested(conferenceRequested);
 			if(numberOfTimeAbsent==null){
 				
 			}else{

@@ -196,8 +196,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
 		
 		r.setStudentLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.student"));
-		labelValue("school.report.studentclassroomsessiondivision.block.student.names", r.getStudent().getPerson().getNames());
-		labelValue("school.report.studentclassroomsessiondivision.block.student.surname", r.getStudent().getPerson().getSurname());
+		labelValue("school.report.studentclassroomsessiondivision.block.student.lastnames", r.getStudent().getPerson().getLastName());
+		labelValue("school.report.studentclassroomsessiondivision.block.student.firstname", r.getStudent().getPerson().getName());
 		labelValue("school.report.studentclassroomsessiondivision.block.student.birthdate", r.getStudent().getPerson().getBirthDate());
 		labelValue("school.report.studentclassroomsessiondivision.block.student.birthlocation", r.getStudent().getPerson().getBirthLocation());
 		labelValue("school.report.studentclassroomsessiondivision.block.student.registrationcode", r.getStudent().getRegistrationCode());

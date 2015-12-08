@@ -133,12 +133,13 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	
 	public static class Details extends AbstractOutputDetails<StudentClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String registrationCode,names,numberOfTimeAbsent,globalAppreciation;
+		@Input @InputText private String registrationCode,names,numberOfTimeAbsent,globalAppreciation,conferenceRequested;
 		public Details(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 			super(studentClassroomSessionDivision);
 			registrationCode = studentClassroomSessionDivision.getStudent().getRegistration().getCode();
 			names = studentClassroomSessionDivision.getStudent().getPerson().getNames();
 			globalAppreciation = studentClassroomSessionDivision.getResults().getAppreciation();
+			conferenceRequested = formatResponse(studentClassroomSessionDivision.getResults().getConferenceRequested());
 			if(studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()!=null)
 				numberOfTimeAbsent = numberBusiness.format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(
 						studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()));
