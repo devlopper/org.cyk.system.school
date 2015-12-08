@@ -66,6 +66,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		group.addChild(menuManager.crudMany(Teacher.class, null));
 		group.addChild(menuManager.crudMany(Student.class, null));
 		group.addChild(menuManager.crudMany(ClassroomSession.class, null));
+		group.addChild(uiProvider.createCommandable("AddManyStudClass", null, "studentClassroomSessionCreateManyView"));
 		//group.addChild(uiProvider.createCommandable("dashboard", null, outcomeGenerateStudentClassroomSessionDivisionReport));
 		
 		/*

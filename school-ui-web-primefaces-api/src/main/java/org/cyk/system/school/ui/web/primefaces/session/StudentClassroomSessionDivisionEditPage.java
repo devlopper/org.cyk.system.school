@@ -52,6 +52,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 				item.getIdentifiable().getMetricValue().setValue(item.getValue());
 			}
 		});
+		metricValueCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
 	}
 	
 	@Override

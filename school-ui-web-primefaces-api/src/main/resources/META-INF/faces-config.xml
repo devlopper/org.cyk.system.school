@@ -96,6 +96,11 @@
 			<redirect />
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>studentClassroomSessionCreateManyView</from-outcome>
+			<to-view-id>/private/__role__/__manager__/studentclassroomsession/createmany.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>studentClassroomSessionConsultView</from-outcome>
 			<to-view-id>/private/__role__/__manager__/studentclassroomsession/consult.jsf</to-view-id>
 			<redirect />

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
@@ -75,12 +76,13 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	protected SubjectEvaluation instanciateIdentifiable() {
 		return SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
 	}
-	
+		
 	@Override
-	protected String getChoiceLabel(Object object) {
+	protected SelectItem getSelectItem(Object object) {
+		SelectItem selectItem = super.getSelectItem(object);
 		if(object instanceof SubjectEvaluationType)
-			return ((SubjectEvaluationType)object).getType().getName();
-		return super.getChoiceLabel(object);
+			selectItem.setLabel(((SubjectEvaluationType)object).getType().getName());
+		return selectItem;
 	}
 	
 	@Override

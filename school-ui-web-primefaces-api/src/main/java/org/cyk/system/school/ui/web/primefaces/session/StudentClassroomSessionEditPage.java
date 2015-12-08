@@ -54,14 +54,6 @@ public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<Student
 	}
 	
 	@Override
-	protected String getChoiceLabel(Object object) {
-		if(object instanceof ClassroomSession){
-			return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format((ClassroomSession) object);
-		}
-		return super.getChoiceLabel(object);
-	}
-
-	@Override
 	protected Class<?> __formModelClass__() {
 		return Form.class;
 	}
