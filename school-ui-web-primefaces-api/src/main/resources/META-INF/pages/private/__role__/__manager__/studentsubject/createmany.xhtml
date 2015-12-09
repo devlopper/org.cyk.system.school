@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
+
+    <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
+ 		<ui:param name="pageController" value="#{studentClassroomSessionDivisionSubjectCreateManyPage}" />
+ 		
+ 		<ui:define name="body">
+ 			<cyk:formOneData value="#{studentClassroomSessionDivisionSubjectCreateManyPage.form}"/>
+ 			<cyk:itemCollection value="#{studentClassroomSessionDivisionSubjectCreateManyPage.studentSubjectCollection}" >
+ 				<p:column headerText="#{uiManager.text('field.registration.code')}" >
+ 					<h:outputText value="#{item.registrationCode}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('field.names')}" >
+ 					<h:outputText value="#{item.names}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('model.entity.classroomSession')}" >
+ 					<h:outputText value="#{item.classroomSession}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('model.entity.classroomSessionDivision')}" >
+ 					<h:outputText value="#{item.classroomSessionDivision}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('model.entity.classroomSessionDivisionSubject')}" >
+ 					<h:outputText value="#{item.classroomSessionDivisionSubject}" />
+ 				</p:column>
+ 			</cyk:itemCollection>
+ 		</ui:define>
+ 		
+ 		<ui:define name="contentMenuBar">
+ 			<cyk:command value="#{studentClassroomSessionDivisionSubjectCreateManyPage.form.submitCommandable}" executeParameter="#{studentClassroomSessionDivisionSubjectCreateManyPage.form.data}" />
+ 		</ui:define>
+ 	</ui:decorate>
+ 
+</html>

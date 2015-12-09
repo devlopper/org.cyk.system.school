@@ -14,6 +14,8 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.LevelName;
+import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.command.UICommandable;
@@ -59,14 +61,14 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 		SystemMenu systemMenu = new SystemMenu();
 		
-		
 		UICommandable group = uiProvider.createCommandable("fonctionnalities", null);		
 		group.addChild(menuManager.crudMany(Company.class, null));
 		group.addChild(menuManager.crudMany(Employee.class, null));
 		group.addChild(menuManager.crudMany(Teacher.class, null));
 		group.addChild(menuManager.crudMany(Student.class, null));
 		group.addChild(menuManager.crudMany(ClassroomSession.class, null));
-		group.addChild(uiProvider.createCommandable("AddManyStudClass", null, "studentClassroomSessionCreateManyView"));
+		group.addChild(menuManager.createMany(StudentClassroomSession.class, null));
+		group.addChild(menuManager.createMany(StudentSubject.class, null));
 		//group.addChild(uiProvider.createCommandable("dashboard", null, outcomeGenerateStudentClassroomSessionDivisionReport));
 		
 		/*
