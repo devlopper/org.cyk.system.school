@@ -12,7 +12,8 @@
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
  		<ui:param name="pageController" value="#{classroomSessionDivisionSubjectConsultPage}" />
  		<ui:define name="body">
- 			<cyk:formOneData value="#{classroomSessionDivisionSubjectConsultPage.details}" />	
+ 			<cyk:formOneData value="#{classroomSessionDivisionSubjectConsultPage.details}" />
+ 			<cyk:table value="#{classroomSessionDivisionSubjectConsultPage.studentTable}" />	
 			<cyk:table value="#{classroomSessionDivisionSubjectConsultPage.lectureTable}" />	
 			<cyk:table value="#{classroomSessionDivisionSubjectConsultPage.evaluationTable}" />	
 			

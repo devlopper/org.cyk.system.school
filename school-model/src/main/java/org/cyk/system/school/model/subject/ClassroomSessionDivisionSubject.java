@@ -81,6 +81,11 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 		return subject.toString();
 	}
 	
+	@Override
+	public String getUiString() {
+		return subject.getUiString();
+	}
+	
 	/**/
 
 	public static final String FIELD_CLASSROOMSESSIONDIVISION = "classroomSessionDivision";

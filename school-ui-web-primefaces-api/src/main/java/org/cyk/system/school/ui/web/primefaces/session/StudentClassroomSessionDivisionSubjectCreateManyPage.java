@@ -23,6 +23,7 @@ import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
+import org.cyk.ui.web.api.AjaxListener.ListenValueMethod;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
@@ -48,10 +49,16 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 			@Override
 			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentSubject> itemCollection,StudentSubjectItem item) {
 				super.instanciated(itemCollection, item);
+				item.getIdentifiable().setCascadeBottomUpOnCreate(Boolean.TRUE);
+				item.getIdentifiable().setCascadeTopDownOnCreate(Boolean.FALSE);
 				item.getIdentifiable().setStudent(((Form)form.getData()).getStudent());
 				item.getIdentifiable().setClassroomSessionDivisionSubject(((Form)form.getData()).getClassroomSessionDivisionSubject());
 				item.setRegistrationCode(item.getIdentifiable().getStudent().getRegistration().getCode());
 				item.setNames(item.getIdentifiable().getStudent().getPerson().getNames());
+				item.setClassroomSession(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivisionSubject()
+						.getClassroomSessionDivision().getClassroomSession()));
+				item.setClassroomSessionDivision(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivisionSubject()
+						.getClassroomSessionDivision()));
 				item.setClassroomSessionDivisionSubject(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivisionSubject()));
 			}	
 		});
@@ -62,7 +69,40 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 		super.afterInitialisation();
 		setChoices(Form.CLASSROOM_SESSION, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
 				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
+		
+		createAjaxBuilder(Form.CLASSROOM_SESSION).updatedFieldNames(Form.CLASSROOM_SESSION_DIVISION)
+		.method(ClassroomSession.class,new ListenValueMethod<ClassroomSession>() {
+			@Override
+			public void execute(ClassroomSession value) {
+				selectClassroomSession(value);
+			}
+		}).build();
+		
+		createAjaxBuilder(Form.CLASSROOM_SESSION_DIVISION).updatedFieldNames(Form.CLASSROOM_SESSION_DIVISION_SUBJECT)
+		.method(ClassroomSessionDivision.class,new ListenValueMethod<ClassroomSessionDivision>() {
+			@Override
+			public void execute(ClassroomSessionDivision value) {
+				selectClassroomSessionDivision(value);
+			}
+		}).build();
 
+	}
+	
+	private void selectClassroomSession(ClassroomSession classroomSession){
+		if(classroomSession==null)
+			setChoices(Form.CLASSROOM_SESSION_DIVISION,null);
+		else
+			setChoices(Form.CLASSROOM_SESSION_DIVISION, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
+		
+		selectClassroomSessionDivision(null);
+	}
+	private void selectClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision){
+		if(classroomSessionDivision==null){
+			setChoices(Form.CLASSROOM_SESSION_DIVISION_SUBJECT, null);
+		}else{
+			setChoices(Form.CLASSROOM_SESSION_DIVISION_SUBJECT, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()
+					.findByClassroomSessionDivision(classroomSessionDivision));
+		}
 	}
 	
 	@Override

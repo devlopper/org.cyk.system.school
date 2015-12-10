@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.file.report.LabelValueReport;
+import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
@@ -59,7 +60,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		//debug(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs));
 		//debug(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate());
 		
-		r.setBackgroundImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate().getBackgroundImage()));
+		ReportTemplate reportTemplate = schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate();
+		if(reportTemplate.getBackgroundImage()!=null)
+			r.setBackgroundImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(reportTemplate.getBackgroundImage()));
 		RootBusinessLayer.getInstance().getContactCollectionBusiness().load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
 		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContact());
 		if(cs.getCoordinator()!=null)

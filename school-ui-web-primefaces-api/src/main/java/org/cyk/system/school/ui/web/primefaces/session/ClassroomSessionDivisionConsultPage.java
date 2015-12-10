@@ -14,18 +14,16 @@ import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<ClassroomSessionDivision> implements Serializable {
@@ -34,7 +32,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	
 	private FormOneData<ClassroomSessionDivisionDetails> details;
 	private Table<ClassroomSessionDivisionSubjectDetails> subjectTable;
-	private Table<StudentDetails> studentTable;
+	private Table<StudentClassroomSessionDivisionDetails> studentTable;
 	
 	@Override
 	protected void initialisation() {
@@ -61,7 +59,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 		});
 		
-		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivision,StudentDetails>(StudentClassroomSessionDivision.class, StudentDetails.class){
+		studentTable = (Table<StudentClassroomSessionDivisionDetails>) createDetailsTable(StudentClassroomSessionDivisionDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails>(StudentClassroomSessionDivision.class, StudentClassroomSessionDivisionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentClassroomSessionDivision> getIdentifiables() {
@@ -90,17 +88,6 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		contextualMenu.getChildren().add(commandable);
 		
 		return Arrays.asList(contextualMenu);
-	}
-	
-	/**/
-	
-	public static class StudentDetails extends AbstractOutputDetails<StudentClassroomSessionDivision> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String names;
-		public StudentDetails(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-			super(studentClassroomSessionDivision);
-			names = studentClassroomSessionDivision.getStudent().getPerson().getNames();
-		}
 	}
 
 }

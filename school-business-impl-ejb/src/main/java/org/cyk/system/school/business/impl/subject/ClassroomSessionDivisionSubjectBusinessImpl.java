@@ -13,6 +13,7 @@ import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -99,4 +100,8 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		}
 	}
 
+	@Override
+	public Collection<ClassroomSessionDivisionSubject> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
+		return dao.readByClassroomSessionDivision(classroomSessionDivision);
+	}
 }

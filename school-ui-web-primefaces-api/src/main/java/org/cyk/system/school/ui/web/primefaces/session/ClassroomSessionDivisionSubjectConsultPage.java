@@ -7,11 +7,17 @@ import java.util.Collection;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
+import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
@@ -21,15 +27,13 @@ import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultPage<ClassroomSessionDivisionSubject> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	private FormOneData<ClassroomSessionDivisionSubjectDetails> details;
+	private Table<StudentClassroomSessionDivisionSubjectDetails> studentTable;
 	private Table<EvaluationDetails> evaluationTable;
 	private Table<LectureDetails> lectureTable;
 	
@@ -43,6 +47,18 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			@Override
 			public Boolean getEnabledInDefaultTab() {
 				return Boolean.TRUE;
+			}
+		});
+		
+		studentTable = (Table<StudentClassroomSessionDivisionSubjectDetails>) createDetailsTable(StudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentSubject,StudentClassroomSessionDivisionSubjectDetails>(StudentSubject.class, StudentClassroomSessionDivisionSubjectDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override 
+			public Collection<StudentSubject> getIdentifiables() {
+				return SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findBySubject(identifiable);
+			}
+			@Override
+			public Crud[] getCruds() {
+				return new Crud[]{/*Crud.CREATE*/};
 			}
 		});
 		
