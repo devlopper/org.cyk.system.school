@@ -29,11 +29,11 @@ public class StudentSubjectEvaluation extends AbstractIdentifiable implements Se
 		this.studentSubject = studentSubject;
 		this.value = value;
 	}
-	
+	/*
 	@Override
 	public String toString() {
 		return subjectEvaluation.getType().getSubject().getIdentifier()+":"+studentSubject.getStudent().getRegistration().getCode()+":"+value;
-	}
+	}*/
 	
 	public static final String FIELD_EVALUATION = "subjectEvaluation";
 	public static final String FIELD_STUDENT_SUBJECT = "studentSubject";

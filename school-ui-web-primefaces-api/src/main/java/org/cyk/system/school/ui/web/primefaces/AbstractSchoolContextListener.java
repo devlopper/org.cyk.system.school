@@ -39,12 +39,6 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 	}
 	
 	@Override
-	public void contextInitialized(ServletContextEvent event) {
-		super.contextInitialized(event);
-		primefacesManager.getSelectPageListeners().add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
-	}
-	
-	@Override
 	protected void identifiableConfiguration(ServletContextEvent event) {
 		super.identifiableConfiguration(event);
 		//uiManager.businessEntityInfos(ClassroomSession.class).setUiConsultViewId("");
@@ -61,6 +55,8 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 				,ClassroomSessionDivisionSubjectQueryFormModel.class));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionSubject.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSessionDivisionSubject.class);
+		
+		primefacesManager.getSelectPageListeners().add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
 	}
 	
 	@Override

@@ -24,7 +24,8 @@
  					<!--cyk:inputNumber value="#{item.form.findInputByFieldName('value')}"/-->
  					<!--cyk:inputText value="#{item.form.findInputByFieldName('type1')}"/-->
  					
- 					<pe:inputNumber value="#{item.value}" required="true" />
+ 					<pe:inputNumber value="#{item.value}" required="true" autocomplete="false" minValue="0" maxValue="#{subjectEvaluationEditPage.maximumValue}" 
+ 						decimalPlaces="#{subjectEvaluationEditPage.decimalPlaces}"  requiredMessage="#{uiManager.textInputValueRequired('school.mark')}"/>
  					
  				</p:column>
  			</cyk:itemCollection>

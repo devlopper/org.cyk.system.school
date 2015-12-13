@@ -1,6 +1,7 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
 import javax.faces.view.ViewScoped;
@@ -19,6 +20,7 @@ import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
+import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
@@ -34,14 +36,28 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
+	private SubjectEvaluationType subjectEvaluationType;
 	private ItemCollection<Mark,StudentSubjectEvaluation> markCollection;
+	private BigDecimal maximumValue;
+	private Integer decimalPlaces = 0;
 	
 	@Override
 	protected void initialisation() {
 		Long classroomSessionDivisionSubjectIdentifier = requestParameterLong(uiManager.businessEntityInfos(ClassroomSessionDivisionSubject.class).getIdentifier());
 		if(classroomSessionDivisionSubjectIdentifier!=null)
 			classroomSessionDivisionSubject = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().find(classroomSessionDivisionSubjectIdentifier);
+		
+		Long subjectEvaluationTypeIdentifier = requestParameterLong(uiManager.businessEntityInfos(SubjectEvaluationType.class).getIdentifier());
+		if(subjectEvaluationTypeIdentifier!=null)
+			subjectEvaluationType = SchoolBusinessLayer.getInstance().getSubjectEvaluationTypeBusiness().find(subjectEvaluationTypeIdentifier);
+		
 		super.initialisation();
+		identifiable.setType(subjectEvaluationType);
+		if(identifiable.getType()!=null){
+			maximumValue = identifiable.getType().getMaximumValue();
+		}
+		contentTitle = formatUsingBusiness(new Object[]{identifiable.getType().getSubject().getClassroomSessionDivision().getClassroomSession(),
+				identifiable.getType().getSubject().getClassroomSessionDivision(),identifiable.getType().getSubject(),identifiable.getType()});
 		if(Crud.CREATE.equals(crud)){
 			
 		}else
@@ -57,6 +73,16 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 				mark.setValue(mark.getIdentifiable().getValue());
 			}	
 		});
+		markCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
+		markCollection.setShowApplicable(Boolean.TRUE);
+		form.getControlSetListeners().add(new ControlSetAdapter<Object>(){
+			@Override
+			public Boolean build(Field field) {
+				if(field.getName().equals(Form.FIELD_TYPE))
+					return subjectEvaluationType == null;
+				return false;
+			}
+		});
 	}
 	
 	@Override
@@ -71,7 +97,8 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	}
 	
 	protected SubjectEvaluation instanciateIdentifiable() {
-		return SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
+		return SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness()
+				.newInstance(subjectEvaluationType==null?classroomSessionDivisionSubject:subjectEvaluationType.getSubject());
 	}
 		
 	@Override
@@ -101,6 +128,8 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 		private String registrationCode;
 		private String names;
 		private BigDecimal value;
+		
+		
 		@Override
 		public String toString() {
 			return registrationCode+" "+names+" "+value;

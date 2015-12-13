@@ -93,43 +93,62 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	/**/
 	
 	public void initialiseSelectClassroomSessionDivisionSubject(final AbstractBusinessEntityFormOnePage<?> page,final String classroomSessionFieldName,final String classroomSessionDivisionFieldName
-			,final String classroomSessionDivisionSubjectFieldName) {
+			,final String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName) {
 		page.setChoices(classroomSessionFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
 				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
 		
-		page.createAjaxBuilder(classroomSessionFieldName).updatedFieldNames(classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName)
+		page.createAjaxBuilder(classroomSessionFieldName).updatedFieldNames(classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName)
 		.method(ClassroomSession.class,new ListenValueMethod<ClassroomSession>() {
 			@Override
 			public void execute(ClassroomSession value) {
-				selectClassroomSession(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName);
+				selectClassroomSession(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 			}
 		}).build();
 		
-		page.createAjaxBuilder(classroomSessionDivisionFieldName).updatedFieldNames(classroomSessionDivisionSubjectFieldName)
+		page.createAjaxBuilder(classroomSessionDivisionFieldName).updatedFieldNames(classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName)
 		.method(ClassroomSessionDivision.class,new ListenValueMethod<ClassroomSessionDivision>() {
 			@Override
 			public void execute(ClassroomSessionDivision value) {
-				selectClassroomSessionDivision(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName);
+				selectClassroomSessionDivision(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 			}
 		}).build();
+		
+		if(subjectEvaluationTypeFieldName!=null)
+			page.createAjaxBuilder(classroomSessionDivisionSubjectFieldName).updatedFieldNames(subjectEvaluationTypeFieldName)
+			.method(ClassroomSessionDivisionSubject.class,new ListenValueMethod<ClassroomSessionDivisionSubject>() {
+				@Override
+				public void execute(ClassroomSessionDivisionSubject value) {
+					selectClassroomSessionDivisionSubject(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
+				}
+			}).build();
 	}
 	
 	public static void selectClassroomSession(AbstractBusinessEntityFormOnePage<?> page,ClassroomSession classroomSession,String classroomSessionFieldName,String classroomSessionDivisionFieldName
-			,String classroomSessionDivisionSubjectFieldName){
+			,String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName){
 		if(classroomSession==null)
 			page.setChoices(classroomSessionDivisionFieldName,null);
 		else
 			page.setChoices(classroomSessionDivisionFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
 		
-		selectClassroomSessionDivision(page,null,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName);
+		selectClassroomSessionDivision(page,null,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 	}
 	public static void selectClassroomSessionDivision(AbstractBusinessEntityFormOnePage<?> page,ClassroomSessionDivision classroomSessionDivision,String classroomSessionFieldName,String classroomSessionDivisionFieldName
-			,String classroomSessionDivisionSubjectFieldName){
+			,String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName){
 		if(classroomSessionDivision==null){
 			page.setChoices(classroomSessionDivisionSubjectFieldName, null);
 		}else{
 			page.setChoices(classroomSessionDivisionSubjectFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()
 					.findByClassroomSessionDivision(classroomSessionDivision));
+		}
+		selectClassroomSessionDivisionSubject(page, null, classroomSessionFieldName, classroomSessionDivisionFieldName, classroomSessionDivisionSubjectFieldName, subjectEvaluationTypeFieldName);
+	}
+	public static void selectClassroomSessionDivisionSubject(AbstractBusinessEntityFormOnePage<?> page,ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String classroomSessionFieldName,String classroomSessionDivisionFieldName
+			,String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName){
+		if(classroomSessionDivisionSubject==null){
+			page.setChoices(subjectEvaluationTypeFieldName, null);
+		}else{
+			page.setChoices(subjectEvaluationTypeFieldName, SchoolBusinessLayer.getInstance().getSubjectEvaluationTypeBusiness()
+					.findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 		}
 	}
 	

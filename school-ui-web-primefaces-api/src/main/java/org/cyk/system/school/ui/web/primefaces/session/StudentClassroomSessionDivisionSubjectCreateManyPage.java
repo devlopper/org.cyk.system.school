@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
@@ -19,20 +16,20 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
-import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionSubjectCreateManyPage.Form;
 import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
-import org.cyk.ui.api.model.AbstractQueryFormModel;
 import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
-import org.cyk.ui.web.api.AjaxListener.ListenValueMethod;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionSubjectCreateManyPage extends AbstractCrudOnePage<StudentSubject> implements Serializable {
@@ -71,46 +68,8 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		SchoolWebManager.getInstance().initialiseSelectClassroomSessionDivisionSubject(this, Form.CLASSROOM_SESSION, Form.CLASSROOM_SESSION_DIVISION
-				, Form.CLASSROOM_SESSION_DIVISION_SUBJECT);
-		/*
-		setChoices(Form.CLASSROOM_SESSION, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
-				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
-		
-		createAjaxBuilder(Form.CLASSROOM_SESSION).updatedFieldNames(Form.CLASSROOM_SESSION_DIVISION)
-		.method(ClassroomSession.class,new ListenValueMethod<ClassroomSession>() {
-			@Override
-			public void execute(ClassroomSession value) {
-				selectClassroomSession(value);
-			}
-		}).build();
-		
-		createAjaxBuilder(Form.CLASSROOM_SESSION_DIVISION).updatedFieldNames(Form.CLASSROOM_SESSION_DIVISION_SUBJECT)
-		.method(ClassroomSessionDivision.class,new ListenValueMethod<ClassroomSessionDivision>() {
-			@Override
-			public void execute(ClassroomSessionDivision value) {
-				selectClassroomSessionDivision(value);
-			}
-		}).build();
-		 */
+				, Form.CLASSROOM_SESSION_DIVISION_SUBJECT,null);
 	}
-	/*
-	private void selectClassroomSession(ClassroomSession classroomSession){
-		if(classroomSession==null)
-			setChoices(Form.CLASSROOM_SESSION_DIVISION,null);
-		else
-			setChoices(Form.CLASSROOM_SESSION_DIVISION, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
-		
-		selectClassroomSessionDivision(null);
-	}
-	private void selectClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision){
-		if(classroomSessionDivision==null){
-			setChoices(Form.CLASSROOM_SESSION_DIVISION_SUBJECT, null);
-		}else{
-			setChoices(Form.CLASSROOM_SESSION_DIVISION_SUBJECT, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()
-					.findByClassroomSessionDivision(classroomSessionDivision));
-		}
-	}
-	*/
 	
 	@Override
 	public void transfer(UICommand command, Object object) throws Exception {

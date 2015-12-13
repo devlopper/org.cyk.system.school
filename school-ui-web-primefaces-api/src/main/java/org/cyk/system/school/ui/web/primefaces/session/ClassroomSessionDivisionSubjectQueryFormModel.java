@@ -6,11 +6,11 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
-import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionSubjectCreateManyPage.Form;
 import org.cyk.ui.api.model.AbstractQueryFormModel;
-import org.cyk.ui.web.api.AjaxListener.ListenValueMethod;
-import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
+import org.cyk.ui.web.api.WebNavigationManager;
 import org.cyk.ui.web.primefaces.page.SelectPage;
 import org.cyk.ui.web.primefaces.page.SelectPageListener;
 import org.cyk.utility.common.annotation.user.interfaces.FieldOverride;
@@ -32,7 +32,9 @@ public class ClassroomSessionDivisionSubjectQueryFormModel extends AbstractQuery
 	
 	@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private ClassroomSession classroomSession;
 	@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private ClassroomSessionDivision classroomSessionDivision;
-	//@Inject @InputChoice(load=false) @InputOneChoice @InputOneCombo private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
+	
+	@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo @Sequence(direction=Direction.AFTER,field=AbstractQueryFormModel.FIELD_IDENTIFIABLE)
+	private SubjectEvaluationType subjectEvaluationType;
 	
 	@Override @Sequence(direction=Direction.AFTER,field=CLASSROOM_SESSION_DIVISION)
 	public ClassroomSessionDivisionSubject getIdentifiable() {
@@ -41,6 +43,7 @@ public class ClassroomSessionDivisionSubjectQueryFormModel extends AbstractQuery
 	
 	public static final String CLASSROOM_SESSION = "classroomSession";
 	public static final String CLASSROOM_SESSION_DIVISION = "classroomSessionDivision";
+	public static final String SUBJECT_EVALUATION_TYPE = "subjectEvaluationType";
 	
 	/**/
 	
@@ -51,52 +54,22 @@ public class ClassroomSessionDivisionSubjectQueryFormModel extends AbstractQuery
 		
 		public PageAdapter() {
 			super(ClassroomSessionDivisionSubject.class);
-			//type = SelectPageListener.Type.IDENTIFIER;
 		}
 		
 		@Override
 		public void afterInitialisationEnded(AbstractBean bean) {
 			super.afterInitialisationEnded(bean);
 			final SelectPage selectPage = (SelectPage) bean;
-			SchoolWebManager.getInstance().initialiseSelectClassroomSessionDivisionSubject(selectPage, Form.CLASSROOM_SESSION, Form.CLASSROOM_SESSION_DIVISION
-					, AbstractQueryFormModel.FIELD_IDENTIFIABLE);
-			/*
-			selectPage.setChoices(Form.CLASSROOM_SESSION, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
-					SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
-			
-			selectPage.createAjaxBuilder(Form.CLASSROOM_SESSION).updatedFieldNames(Form.CLASSROOM_SESSION_DIVISION,AbstractQueryFormModel.FIELD_IDENTIFIABLE)
-			.method(ClassroomSession.class,new ListenValueMethod<ClassroomSession>() {
-				@Override
-				public void execute(ClassroomSession value) {
-					selectClassroomSession(selectPage,value);
-				}
-			}).build();
-			
-			selectPage.createAjaxBuilder(Form.CLASSROOM_SESSION_DIVISION).updatedFieldNames(AbstractQueryFormModel.FIELD_IDENTIFIABLE)
-			.method(ClassroomSessionDivision.class,new ListenValueMethod<ClassroomSessionDivision>() {
-				@Override
-				public void execute(ClassroomSessionDivision value) {
-					selectClassroomSessionDivision(selectPage,value);
-				}
-			}).build();
-			*/
+			SchoolWebManager.getInstance().initialiseSelectClassroomSessionDivisionSubject(selectPage, CLASSROOM_SESSION, CLASSROOM_SESSION_DIVISION
+					, AbstractQueryFormModel.FIELD_IDENTIFIABLE,SUBJECT_EVALUATION_TYPE);
 		}
-		/*
-		public static void selectClassroomSession(AbstractBusinessEntityFormOnePage<?> page,ClassroomSession classroomSession){
-			if(classroomSession==null)
-				page.setChoices(Form.CLASSROOM_SESSION_DIVISION,null);
-			else
-				page.setChoices(Form.CLASSROOM_SESSION_DIVISION, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
-			
-			selectClassroomSessionDivision(page,null);
-		}
-		public static void selectClassroomSessionDivision(AbstractBusinessEntityFormOnePage<?> page,ClassroomSessionDivision classroomSessionDivision){
-			if(classroomSessionDivision==null){
-				page.setChoices(AbstractQueryFormModel.FIELD_IDENTIFIABLE, null);
-			}else{
-				page.setChoices(AbstractQueryFormModel.FIELD_IDENTIFIABLE, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()
-						.findByClassroomSessionDivision(classroomSessionDivision));
+		
+		@Override
+		public void serve(Object data, String actionIdentifier) {
+			if(SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation().equals(actionIdentifier)){
+				WebNavigationManager.getInstance().redirectToDynamicCreate(((ClassroomSessionDivisionSubjectQueryFormModel)data).getSubjectEvaluationType()
+						, SubjectEvaluation.class); 
 			}
-		}*/
+		}
 	}
 }
