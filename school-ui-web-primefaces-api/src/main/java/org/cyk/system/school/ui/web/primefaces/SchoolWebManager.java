@@ -13,14 +13,17 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
-import org.cyk.system.school.model.session.LevelName;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.menu.SystemMenu;
+import org.cyk.ui.web.api.AjaxListener.ListenValueMethod;
 import org.cyk.ui.web.primefaces.AbstractPrimefacesManager;
+import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 
@@ -57,9 +60,9 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 	@Override
 	public SystemMenu systemMenu(AbstractUserSession userSession) {
-		businessEntityInfos(LevelName.class).setUiEditViewId("editLevelName");
 		
 		SystemMenu systemMenu = new SystemMenu();
+		UICommandable commandable;
 		
 		UICommandable group = uiProvider.createCommandable("fonctionnalities", null);		
 		group.addChild(menuManager.crudMany(Company.class, null));
@@ -69,6 +72,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		group.addChild(menuManager.crudMany(ClassroomSession.class, null));
 		group.addChild(menuManager.createMany(StudentClassroomSession.class, null));
 		group.addChild(menuManager.createMany(StudentSubject.class, null));
+		group.addChild(commandable = menuManager.createSelect(ClassroomSessionDivisionSubject.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
+		commandable.setLabel("Create evaluation");
 		//group.addChild(uiProvider.createCommandable("dashboard", null, outcomeGenerateStudentClassroomSessionDivisionReport));
 		
 		/*
@@ -83,6 +88,49 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		systemMenu.getBusinesses().add(group);
 					
 		return systemMenu;
+	}
+	
+	/**/
+	
+	public void initialiseSelectClassroomSessionDivisionSubject(final AbstractBusinessEntityFormOnePage<?> page,final String classroomSessionFieldName,final String classroomSessionDivisionFieldName
+			,final String classroomSessionDivisionSubjectFieldName) {
+		page.setChoices(classroomSessionFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
+				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
+		
+		page.createAjaxBuilder(classroomSessionFieldName).updatedFieldNames(classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName)
+		.method(ClassroomSession.class,new ListenValueMethod<ClassroomSession>() {
+			@Override
+			public void execute(ClassroomSession value) {
+				selectClassroomSession(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName);
+			}
+		}).build();
+		
+		page.createAjaxBuilder(classroomSessionDivisionFieldName).updatedFieldNames(classroomSessionDivisionSubjectFieldName)
+		.method(ClassroomSessionDivision.class,new ListenValueMethod<ClassroomSessionDivision>() {
+			@Override
+			public void execute(ClassroomSessionDivision value) {
+				selectClassroomSessionDivision(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName);
+			}
+		}).build();
+	}
+	
+	public static void selectClassroomSession(AbstractBusinessEntityFormOnePage<?> page,ClassroomSession classroomSession,String classroomSessionFieldName,String classroomSessionDivisionFieldName
+			,String classroomSessionDivisionSubjectFieldName){
+		if(classroomSession==null)
+			page.setChoices(classroomSessionDivisionFieldName,null);
+		else
+			page.setChoices(classroomSessionDivisionFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
+		
+		selectClassroomSessionDivision(page,null,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName);
+	}
+	public static void selectClassroomSessionDivision(AbstractBusinessEntityFormOnePage<?> page,ClassroomSessionDivision classroomSessionDivision,String classroomSessionFieldName,String classroomSessionDivisionFieldName
+			,String classroomSessionDivisionSubjectFieldName){
+		if(classroomSessionDivision==null){
+			page.setChoices(classroomSessionDivisionSubjectFieldName, null);
+		}else{
+			page.setChoices(classroomSessionDivisionSubjectFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()
+					.findByClassroomSessionDivision(classroomSessionDivision));
+		}
 	}
 	
 	/**/

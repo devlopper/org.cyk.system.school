@@ -99,7 +99,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
 		
-		commandable = navigationManager.createCreateCommandable(Lecture.class, uiManager.businessEntityInfos(Lecture.class).getUiLabelId(), null);
+		commandable = navigationManager.createCreateCommandable(Lecture.class, uiManager.businessEntityInfos(Lecture.class).getUserInterface().getLabelId(), null);
 		contextualMenu.getChildren().add(commandable);
 		
 		return Arrays.asList(contextualMenu);

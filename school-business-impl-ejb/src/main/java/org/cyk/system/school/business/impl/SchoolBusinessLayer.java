@@ -78,6 +78,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Setter private SchoolReportProducer reportProducer;
 	@Inject private SchoolReportRepository schoolReportRepository;
 	
+	private String actionCreateSubjectEvaluation = "acse";
+	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;

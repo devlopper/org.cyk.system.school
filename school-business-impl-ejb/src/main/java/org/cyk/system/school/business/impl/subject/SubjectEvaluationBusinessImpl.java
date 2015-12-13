@@ -34,6 +34,7 @@ public class SubjectEvaluationBusinessImpl extends AbstractTypedBusinessService<
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public SubjectEvaluation newInstance(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		SubjectEvaluation subjectEvaluation = new SubjectEvaluation();
+		subjectEvaluation.setDate(universalTimeCoordinated());
 		for(StudentSubject studentSubject : studentSubjectDao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject)){
 			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation, studentSubject, null));
 		}

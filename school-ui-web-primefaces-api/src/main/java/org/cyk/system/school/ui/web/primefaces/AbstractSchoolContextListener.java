@@ -20,6 +20,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectQueryFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
@@ -38,21 +39,28 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 	}
 	
 	@Override
+	public void contextInitialized(ServletContextEvent event) {
+		super.contextInitialized(event);
+		primefacesManager.getSelectPageListeners().add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
+	}
+	
+	@Override
 	protected void identifiableConfiguration(ServletContextEvent event) {
 		super.identifiableConfiguration(event);
 		//uiManager.businessEntityInfos(ClassroomSession.class).setUiConsultViewId("");
 		//IdentifiableConfiguration identifiableConfiguration = uiManager.findConfiguration(ClassroomSession.class);
 		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class));
+		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class,null));
 		uiManager.configBusinessIdentifiable(ClassroomSession.class, null);
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivision.class, ClassroomSessionDivisionEditPage.Form.class, ClassroomSessionDivisionDetails.class));
+		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivision.class, ClassroomSessionDivisionEditPage.Form.class, ClassroomSessionDivisionDetails.class,null));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivision.class, null);
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectEditPage.Form.class, ClassroomSessionDivisionSubjectDetails.class));
+		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectEditPage.Form.class, ClassroomSessionDivisionSubjectDetails.class
+				,ClassroomSessionDivisionSubjectQueryFormModel.class));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionSubject.class, null);
-	
+		webNavigationManager.useDynamicSelectView(ClassroomSessionDivisionSubject.class);
 	}
 	
 	@Override

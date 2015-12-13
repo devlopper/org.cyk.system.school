@@ -18,10 +18,13 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
+import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionSubjectCreateManyPage.Form;
 import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
+import org.cyk.ui.api.model.AbstractQueryFormModel;
 import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
 import org.cyk.ui.web.api.AjaxListener.ListenValueMethod;
 import org.cyk.ui.web.primefaces.ItemCollection;
@@ -67,6 +70,9 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
+		SchoolWebManager.getInstance().initialiseSelectClassroomSessionDivisionSubject(this, Form.CLASSROOM_SESSION, Form.CLASSROOM_SESSION_DIVISION
+				, Form.CLASSROOM_SESSION_DIVISION_SUBJECT);
+		/*
 		setChoices(Form.CLASSROOM_SESSION, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
 				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
 		
@@ -85,9 +91,9 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 				selectClassroomSessionDivision(value);
 			}
 		}).build();
-
+		 */
 	}
-	
+	/*
 	private void selectClassroomSession(ClassroomSession classroomSession){
 		if(classroomSession==null)
 			setChoices(Form.CLASSROOM_SESSION_DIVISION,null);
@@ -104,6 +110,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 					.findByClassroomSessionDivision(classroomSessionDivision));
 		}
 	}
+	*/
 	
 	@Override
 	public void transfer(UICommand command, Object object) throws Exception {

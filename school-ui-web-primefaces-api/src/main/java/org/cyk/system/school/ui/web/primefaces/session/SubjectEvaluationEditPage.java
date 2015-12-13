@@ -2,14 +2,10 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
@@ -25,10 +21,12 @@ import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputCalendar;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvaluation> implements Serializable {
@@ -92,7 +90,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	public static class Form extends AbstractFormModel<SubjectEvaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private SubjectEvaluationType type;
-		@Input @InputCalendar @NotNull private Date date;
+		//@Input @InputCalendar @NotNull private Date date;
 		@NotNull private Boolean coefficientApplied = Boolean.TRUE;
 		public static final String FIELD_TYPE = "type";
 	}
