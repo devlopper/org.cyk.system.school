@@ -3,6 +3,7 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -20,7 +21,7 @@ import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
-import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
+import org.cyk.ui.web.api.ItemCollectionWebAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
@@ -44,10 +45,10 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
 		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
 		studentSubjectCollection = createItemCollection(StudentSubjectItem.class, StudentSubject.class, 
-				new ArrayList<StudentSubject>(),new ItemCollectionAdapter<StudentSubjectItem,StudentSubject>(){
+				new ArrayList<StudentSubject>(),new ItemCollectionWebAdapter<StudentSubjectItem,StudentSubject>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
-			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentSubject> itemCollection,StudentSubjectItem item) {
+			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentSubject,SelectItem> itemCollection,StudentSubjectItem item) {
 				super.instanciated(itemCollection, item);
 				item.getIdentifiable().setCascadeBottomUpOnCreate(Boolean.TRUE);
 				item.getIdentifiable().setCascadeTopDownOnCreate(Boolean.FALSE);

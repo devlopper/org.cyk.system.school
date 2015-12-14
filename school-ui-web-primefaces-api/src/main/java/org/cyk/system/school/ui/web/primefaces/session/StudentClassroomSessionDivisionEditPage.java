@@ -3,11 +3,9 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.StudentResultsMetricValue;
@@ -16,13 +14,16 @@ import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
-import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
+import org.cyk.ui.web.api.ItemCollectionWebAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage<StudentClassroomSessionDivision> implements Serializable {
@@ -38,10 +39,10 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
 		
 		metricValueCollection = createItemCollection(form, "qwerty", MetricValueItem.class, StudentResultsMetricValue.class, 
-				SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults()),new ItemCollectionAdapter<MetricValueItem,StudentResultsMetricValue>(){
+				SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults()),new ItemCollectionWebAdapter<MetricValueItem,StudentResultsMetricValue>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
-			public void instanciated(AbstractItemCollection<MetricValueItem, StudentResultsMetricValue> itemCollection,MetricValueItem item) {
+			public void instanciated(AbstractItemCollection<MetricValueItem, StudentResultsMetricValue,SelectItem> itemCollection,MetricValueItem item) {
 				super.instanciated(itemCollection, item);
 				item.setName(item.getIdentifiable().getMetricValue().getMetric().getName());
 				item.setValue(item.getIdentifiable().getMetricValue().getValue());

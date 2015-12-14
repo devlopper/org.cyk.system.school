@@ -18,30 +18,17 @@
  					<h:outputText value="#{item.registrationCode}" />
  				</p:column>
  				<p:column headerText="#{uiManager.text('field.names')}" >
- 					<h:outputText value="#{item.names}" /> - #{item.value}
+ 					<h:outputText value="#{item.names}" />
  				</p:column>
  				<p:column headerText="#{uiManager.text('school.mark')}" >
  					<!--cyk:inputNumber value="#{item.form.findInputByFieldName('value')}"/-->
  					<!--cyk:inputText value="#{item.form.findInputByFieldName('type1')}"/-->
  					
- 					<pe:inputNumber value="#{item.value}" required="#{true}" autocomplete="false" binding="#{mark}"
- 						minValue="0" maxValue="#{subjectEvaluationEditPage.maximumValue}"
+ 					<pe:inputNumber id="markValue" value="#{item.value}" required="#{true}" autocomplete="false" binding="#{mark}"
+ 						minValue="0" maxValue="#{subjectEvaluationEditPage.maximumValue}" disabled="#{not item.applicable}"
  						decimalPlaces="#{subjectEvaluationEditPage.decimalPlaces}"  requiredMessage="#{uiManager.textInputValueRequired('school.mark')}"/>
  					
  				</p:column>
- 				
- 				<!--p:column width="10%" headerText="#{uiManager.text('applicable')}" >
-	       			<h:selectBooleanCheckbox value="#{item.applicable}" binding="#{applicable}" onclick="alert('#{mark.disabled}');">
-						<f:selectItems value="#{subjectEvaluationEditPage.markCollection.applicableItems}" />
-					</h:selectBooleanCheckbox>	
-	       		</p:column-->
- 				
- 				<!--p:column width="10%" headerText="#{uiManager.text('applicable')}" >
-	       			<p:selectOneButton value="#{item.applicable}" binding="#{applicable}">
-						<f:selectItems value="#{subjectEvaluationEditPage.markCollection.applicableItems}" />
-					</p:selectOneButton>	
-	       		</p:column-->
- 				
  			</cyk:itemCollection>
  		</ui:define>
  		

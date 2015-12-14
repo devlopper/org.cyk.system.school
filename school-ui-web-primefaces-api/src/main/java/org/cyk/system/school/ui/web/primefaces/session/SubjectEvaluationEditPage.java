@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
@@ -14,11 +15,11 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
-import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
-import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
+import org.cyk.ui.web.api.AbstractWebApplicableValueQuestion;
+import org.cyk.ui.web.api.ItemCollectionWebAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -63,10 +64,10 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 		}else
 			classroomSessionDivisionSubject = identifiable.getType().getSubject();
 		
-		markCollection = createItemCollection(form, "qwerty", Mark.class, StudentSubjectEvaluation.class, identifiable.getStudentSubjectEvaluations(),new ItemCollectionAdapter<Mark,StudentSubjectEvaluation>(){
+		markCollection = createItemCollection(form, "qwerty", Mark.class, StudentSubjectEvaluation.class, identifiable.getStudentSubjectEvaluations(),new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
-			public void instanciated(AbstractItemCollection<Mark, StudentSubjectEvaluation> itemCollection,Mark mark) {
+			public void instanciated(AbstractItemCollection<Mark, StudentSubjectEvaluation,SelectItem> itemCollection,Mark mark) {
 				super.instanciated(itemCollection, mark);
 				mark.setRegistrationCode(mark.getIdentifiable().getStudentSubject().getStudent().getRegistration().getCode());
 				mark.setNames(mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
@@ -77,15 +78,11 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 				super.write(item);
 				item.getIdentifiable().setValue(item.getValue());
 			}
-			@Override
-			public void delete(AbstractItemCollection<Mark, StudentSubjectEvaluation> itemCollection, Mark item) {
-				markCollection.write();
-				super.delete(itemCollection, item);
-				debug(itemCollection.getItems().get(0));
-			}
 		});
-		//markCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
-		//markCollection.setShowApplicable(Boolean.TRUE);
+		((AbstractWebApplicableValueQuestion)markCollection.getApplicableValueQuestion()).setUpdate("markValue");
+		markCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
+		markCollection.getApplicableValueQuestion().setRendered(Boolean.TRUE);
+		markCollection.getAddCommandable().setRendered(Boolean.FALSE);
 		form.getControlSetListeners().add(new ControlSetAdapter<Object>(){
 			@Override
 			public Boolean build(Field field) {
@@ -103,26 +100,33 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	}
 	
 	@Override
+	protected void create() {
+		identifiable.setStudentSubjectEvaluations(markCollection.getIdentifiables());
+		super.create();
+	}
+	
+	@Override
 	protected void update() {
 		SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().save(identifiable,identifiable.getStudentSubjectEvaluations());
 	}
 	
 	protected SubjectEvaluation instanciateIdentifiable() {
-		return SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness()
+		SubjectEvaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness()
 				.newInstance(subjectEvaluationType==null?classroomSessionDivisionSubject:subjectEvaluationType.getSubject());
+		subjectEvaluation.setType(subjectEvaluationType);
+		return subjectEvaluation;
 	}
 		
 	@Override
 	protected Class<?> __formModelClass__() {
 		return Form.class;
 	}
-	
+	/*
 	@Override
-	public void transfer(UICommand arg0, Object arg1) throws Exception {
-		super.transfer(arg0, arg1);
-		System.out.println("SubjectEvaluationEditPage.transfer()");
+	public void transfer(UICommand command, Object object) throws Exception {
+		super.transfer(command, object);
 		markCollection.write();
-	}
+	}*/
 		
 	@Getter @Setter
 	public static class Form extends AbstractFormModel<SubjectEvaluation> implements Serializable{

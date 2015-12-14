@@ -3,11 +3,9 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
@@ -20,13 +18,16 @@ import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
-import org.cyk.ui.api.model.ItemCollectionListener.ItemCollectionAdapter;
+import org.cyk.ui.web.api.ItemCollectionWebAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionCreateManyPage extends AbstractCrudOnePage<StudentClassroomSession> implements Serializable {
@@ -41,10 +42,10 @@ public class StudentClassroomSessionCreateManyPage extends AbstractCrudOnePage<S
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
 		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
 		studentClassroomSessionCollection = createItemCollection(StudentClassroomSessionItem.class, StudentClassroomSession.class, 
-				new ArrayList<StudentClassroomSession>(),new ItemCollectionAdapter<StudentClassroomSessionItem,StudentClassroomSession>(){
+				new ArrayList<StudentClassroomSession>(),new ItemCollectionWebAdapter<StudentClassroomSessionItem,StudentClassroomSession>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
-			public void instanciated(AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession> itemCollection,StudentClassroomSessionItem item) {
+			public void instanciated(AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession,SelectItem> itemCollection,StudentClassroomSessionItem item) {
 				super.instanciated(itemCollection, item);
 				item.getIdentifiable().setStudent(((Form)form.getData()).getStudent());
 				item.getIdentifiable().setClassroomSession(((Form)form.getData()).getClassroomSession());
