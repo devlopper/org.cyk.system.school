@@ -72,9 +72,20 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 				mark.setNames(mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
 				mark.setValue(mark.getIdentifiable().getValue());
 			}	
+			@Override
+			public void write(Mark item) {
+				super.write(item);
+				item.getIdentifiable().setValue(item.getValue());
+			}
+			@Override
+			public void delete(AbstractItemCollection<Mark, StudentSubjectEvaluation> itemCollection, Mark item) {
+				markCollection.write();
+				super.delete(itemCollection, item);
+				debug(itemCollection.getItems().get(0));
+			}
 		});
-		markCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
-		markCollection.setShowApplicable(Boolean.TRUE);
+		//markCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
+		//markCollection.setShowApplicable(Boolean.TRUE);
 		form.getControlSetListeners().add(new ControlSetAdapter<Object>(){
 			@Override
 			public Boolean build(Field field) {
@@ -109,8 +120,8 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	@Override
 	public void transfer(UICommand arg0, Object arg1) throws Exception {
 		super.transfer(arg0, arg1);
-		for(Mark mark : markCollection.getItems())
-			mark.getIdentifiable().setValue(mark.getValue());
+		System.out.println("SubjectEvaluationEditPage.transfer()");
+		markCollection.write();
 	}
 		
 	@Getter @Setter
