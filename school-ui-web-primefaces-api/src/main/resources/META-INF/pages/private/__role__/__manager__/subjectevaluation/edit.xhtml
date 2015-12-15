@@ -26,7 +26,7 @@
  					
  					<pe:inputNumber id="markValue" value="#{item.value}" required="#{true}" autocomplete="false" binding="#{mark}"
  						minValue="0" maxValue="#{subjectEvaluationEditPage.maximumValue}" disabled="#{not item.applicable}"
- 						decimalPlaces="#{subjectEvaluationEditPage.decimalPlaces}"  requiredMessage="#{uiManager.textInputValueRequired('school.mark')}"/>
+ 						decimalPlaces="#{subjectEvaluationEditPage.decimalPlaces}"  requiredMessage="#{item.names} - #{uiManager.textInputValueRequired('school.mark')}"/>
  					
  				</p:column>
  			</cyk:itemCollection>

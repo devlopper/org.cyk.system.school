@@ -10,6 +10,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.ui.api.UIProvider;
@@ -32,9 +33,7 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		/*contentTitle = classroomSessionBusiness.format(identifiable.getClassroomSessionDivision().getClassroomSession())
-				+" : "+classroomSessionDivisionBusiness.format(identifiable.getClassroomSessionDivision())
-				+" : "+identifiable.getSubject().getName();*/
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
 		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<SubjectEvaluation,Details>(SubjectEvaluation.class, Details.class){
 			private static final long serialVersionUID = 1L;

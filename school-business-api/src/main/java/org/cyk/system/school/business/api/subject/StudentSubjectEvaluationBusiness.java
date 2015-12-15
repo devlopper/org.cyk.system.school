@@ -8,6 +8,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.SubjectEvaluation;
 
 public interface StudentSubjectEvaluationBusiness extends TypedBusiness<StudentSubjectEvaluation> {
 
@@ -19,6 +20,6 @@ public interface StudentSubjectEvaluationBusiness extends TypedBusiness<StudentS
 
 	Collection<StudentSubjectEvaluation> findByStudentByClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision);
 	
-	//Average average(Collection<EvaluatedStudent> evaluatedStudents);
+	Collection<StudentSubjectEvaluation> findBySubjectEvaluation(SubjectEvaluation subjectEvaluation,Boolean includeAll);
 	
 }

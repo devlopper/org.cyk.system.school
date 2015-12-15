@@ -15,6 +15,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -37,7 +38,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable);
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
 		details = createDetailsForm(ClassroomSessionDivisionDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivision,ClassroomSessionDivisionDetails>(ClassroomSessionDivision.class, ClassroomSessionDivisionDetails.class){
 			private static final long serialVersionUID = 1L;
@@ -82,6 +83,9 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
+		
+		contextualMenu.getChildren().add(navigationManager.createUpdateCommandable(identifiable, "command.selectclassroomsessiondivision.auscsdr", null,
+				SchoolWebManager.getInstance().getOutcomeUpdateStudentClassroomSessionDivisionResults()));
 		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "school.markscard.generate", null,
 				SchoolWebManager.getInstance().getOutcomeGenerateStudentClassroomSessionDivisionReport());

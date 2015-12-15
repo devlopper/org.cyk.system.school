@@ -68,7 +68,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
-		SchoolWebManager.getInstance().initialiseSelectClassroomSessionDivisionSubject(this, Form.CLASSROOM_SESSION, Form.CLASSROOM_SESSION_DIVISION
+		SchoolWebManager.getInstance().initialiseSelectClassroomSession(this, Form.CLASSROOM_SESSION, Form.CLASSROOM_SESSION_DIVISION
 				, Form.CLASSROOM_SESSION_DIVISION_SUBJECT,null);
 	}
 	

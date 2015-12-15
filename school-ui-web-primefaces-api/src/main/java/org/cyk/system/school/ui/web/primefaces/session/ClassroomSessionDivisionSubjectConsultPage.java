@@ -15,6 +15,7 @@ import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -40,7 +41,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = identifiable.getSubject().getName();
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
 		details = createDetailsForm(ClassroomSessionDivisionSubjectDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivisionSubject,ClassroomSessionDivisionSubjectDetails>(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectDetails.class){
 			private static final long serialVersionUID = 1L;

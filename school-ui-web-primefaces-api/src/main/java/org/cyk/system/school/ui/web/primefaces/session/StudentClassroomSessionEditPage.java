@@ -27,8 +27,7 @@ public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<Student
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
-		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);	
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);	
 	}
 	
 	@Override

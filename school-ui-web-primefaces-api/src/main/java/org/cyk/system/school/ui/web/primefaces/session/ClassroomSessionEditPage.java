@@ -8,7 +8,6 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -27,7 +26,7 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 	}
 	
 	public static class Form extends AbstractFormModel<ClassroomSession> implements Serializable{

@@ -6,6 +6,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
@@ -27,9 +30,6 @@ import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Named @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {
 
@@ -41,6 +41,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	private final String outcomeConfigureLevels = "configureLevels";
 	@Getter @Setter private String academicSessionInfos="INFOS TO SET";
 	private String outcomeGenerateStudentClassroomSessionDivisionReport = "classroomSessionDivisionUpdateStudentReport";
+	private String outcomeUpdateStudentClassroomSessionDivisionResults  = "classroomSessionDivisionUpdateStudentResults";
 	/*private String outcomeClassroomSessionMainDetails;
 	private String outcomeClassroomSessionDivisionDetails;
 	private String outcomeClassroomSessionSubjectDetails;
@@ -62,7 +63,6 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	public SystemMenu systemMenu(AbstractUserSession userSession) {
 		
 		SystemMenu systemMenu = new SystemMenu();
-		UICommandable commandable;
 		
 		UICommandable group = uiProvider.createCommandable("fonctionnalities", null);		
 		group.addChild(menuManager.crudMany(Company.class, null));
@@ -72,18 +72,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		group.addChild(menuManager.crudMany(ClassroomSession.class, null));
 		group.addChild(menuManager.createMany(StudentClassroomSession.class, null));
 		group.addChild(menuManager.createMany(StudentSubject.class, null));
-		group.addChild(commandable = menuManager.createSelect(ClassroomSessionDivisionSubject.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
-		commandable.setLabel("Create evaluation");
-		//group.addChild(uiProvider.createCommandable("dashboard", null, outcomeGenerateStudentClassroomSessionDivisionReport));
-		
-		/*
-		group.addChild(menuManager.crudMany(Student.class, null));
-		group.addChild(menuManager.crudMany(Teacher.class, null));
-		group.addChild(menuManager.crudMany(Teacher.class, null));
-		group.addChild(menuManager.crudMany(Teacher.class, null));
-		
-		group.addChild(uiProvider.createCommandable("dashboard", null, outcomeSaleDashBoard));
-		*/
+		group.addChild(menuManager.createSelect(ClassroomSessionDivisionSubject.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
+		group.addChild(menuManager.createSelect(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 		
 		systemMenu.getBusinesses().add(group);
 					
@@ -92,8 +82,9 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	/**/
 	
-	public void initialiseSelectClassroomSessionDivisionSubject(final AbstractBusinessEntityFormOnePage<?> page,final String classroomSessionFieldName,final String classroomSessionDivisionFieldName
+	public void initialiseSelectClassroomSession(final AbstractBusinessEntityFormOnePage<?> page,final String classroomSessionFieldName,final String classroomSessionDivisionFieldName
 			,final String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName) {
+		
 		page.setChoices(classroomSessionFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
 				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
 		
@@ -121,6 +112,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 					selectClassroomSessionDivisionSubject(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 				}
 			}).build();
+		
 	}
 	
 	public static void selectClassroomSession(AbstractBusinessEntityFormOnePage<?> page,ClassroomSession classroomSession,String classroomSessionFieldName,String classroomSessionDivisionFieldName
@@ -151,6 +143,9 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 					.findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 		}
 	}
+	
+	/**/
+	
 	
 	/**/
 	

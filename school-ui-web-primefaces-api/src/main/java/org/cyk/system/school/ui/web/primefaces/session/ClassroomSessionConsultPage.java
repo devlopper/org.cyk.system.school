@@ -44,7 +44,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
 		details = createDetailsForm(ClassroomSessionDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSession,ClassroomSessionDetails>(ClassroomSession.class, ClassroomSessionDetails.class){
 			private static final long serialVersionUID = 1L;

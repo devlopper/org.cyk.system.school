@@ -6,7 +6,11 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.root.business.api.ClazzBusiness;
 import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
@@ -46,9 +50,6 @@ import org.cyk.system.school.model.subject.SubjectEvaluationType;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER) @Getter
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
 
@@ -79,6 +80,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private SchoolReportRepository schoolReportRepository;
 	
 	private String actionCreateSubjectEvaluation = "acse";
+	private String actionUpdateStudentClassroomSessionDivisionResults = "auscsdr";
 	
 	@Override
 	protected void initialisation() {
@@ -97,6 +99,27 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			@Override
 			public String format(ClassroomSessionDivision classroomSessionDivision, ContentType contentType) {
 				return classroomSessionDivisionBusiness.format(classroomSessionDivision);
+			}
+		});
+		
+		ClazzBusiness.LISTENERS.add(new ClazzBusiness.ClazzBusinessListener.Adapter(){
+			private static final long serialVersionUID = -6563167908087619179L;
+			@Override
+			public Object getParentOf(Object object) {
+				
+				if(object instanceof ClassroomSession)
+					return ((ClassroomSession)object).getAcademicSession();
+				if(object instanceof ClassroomSessionDivision)
+					return ((ClassroomSessionDivision)object).getClassroomSession();
+				if(object instanceof ClassroomSessionDivisionSubject)
+					return ((ClassroomSessionDivisionSubject)object).getClassroomSessionDivision();
+				if(object instanceof SubjectEvaluationType)
+					return ((SubjectEvaluationType)object).getSubject();
+				
+				if(object instanceof StudentClassroomSessionDivision)
+					return ((StudentClassroomSessionDivision)object).getClassroomSessionDivision();
+				
+				return super.getParentOf(object);
 			}
 		});
 	}

@@ -51,6 +51,11 @@
 			<redirect />
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>classroomSessionDivisionUpdateStudentResults</from-outcome>
+			<to-view-id>/private/__role__/__manager__/classroomsessiondivision/updatestudentresults.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>classroomSessionDivisionUpdateStudentReport</from-outcome>
 			<to-view-id>/private/__role__/__manager__/classroomsessiondivision/updatestudentreport.jsf</to-view-id>
 			<redirect />

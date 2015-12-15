@@ -14,19 +14,20 @@ import lombok.Setter;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
+import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
+import org.cyk.system.school.business.impl.session.AbstractSubjectDetails.SubjectDetails;
+import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.StudentResultsMetricValue;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultPage<StudentClassroomSessionDivision> implements Serializable {
@@ -37,7 +38,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	public static Class<AbstractSubjectDetails> SUBJECT_DETAILS_CLASS;
 	public static Boolean LOAD_EVALUATIONS = Boolean.FALSE;
 	
-	private FormOneData<Details> details;
+	private FormOneData<StudentClassroomSessionDivisionDetails> details;
 	private Table<AbstractSubjectDetails> subjectTable;
 	private Table<StudentResultsMetricValueDetails> metricTable;
 	private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
@@ -49,8 +50,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable.getClassroomSessionDivision())+" : "
-				+identifiable.getStudent().getPerson().getNames();
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
 		if(SUBJECT_DETAILS_CLASS==null)
 			try {//TODO make it as util method
@@ -64,7 +64,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 					identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 		}
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<StudentClassroomSessionDivision,Details>(StudentClassroomSessionDivision.class, Details.class){
+		details = createDetailsForm(StudentClassroomSessionDivisionDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails>(StudentClassroomSessionDivision.class, StudentClassroomSessionDivisionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -128,43 +128,5 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 		
 		return Arrays.asList(contextualMenu);
 	}
-	
-	/**/
-	
-	public static class Details extends AbstractOutputDetails<StudentClassroomSessionDivision> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String registrationCode,names,numberOfTimeAbsent,globalAppreciation,conferenceRequested;
-		public Details(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-			super(studentClassroomSessionDivision);
-			registrationCode = studentClassroomSessionDivision.getStudent().getRegistration().getCode();
-			names = studentClassroomSessionDivision.getStudent().getPerson().getNames();
-			globalAppreciation = studentClassroomSessionDivision.getResults().getAppreciation();
-			conferenceRequested = formatResponse(studentClassroomSessionDivision.getResults().getConferenceRequested());
-			if(studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()!=null)
-				numberOfTimeAbsent = numberBusiness.format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(
-						studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()));
-		}
-	}
-	
-	public static abstract class AbstractSubjectDetails extends AbstractOutputDetails<StudentSubject> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText protected String subject/*,total*//*,coefficient/*,grade,rank,outof,max,classAverage,remarks*//*,teacher*/;
-		public AbstractSubjectDetails(StudentSubject studentSubject) {
-			super(studentSubject);
-			subject = studentSubject.getClassroomSessionDivisionSubject().getSubject().getName();
-			//coefficient = numberBusiness.format(studentSubject.getClassroomSessionDivisionSubject().getCoefficient());
-			//teacher = studentSubject.getClassroomSessionDivisionSubject().getTeacher().getPerson().getNames();
-			
-		}
-		
-		public static final String FILED_SUBJECT = "subject";
-	}
-	
-	public static class SubjectDetails extends AbstractSubjectDetails implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		public SubjectDetails(StudentSubject studentSubject) {
-			super(studentSubject);
-		}
-	}
-	
+
 }

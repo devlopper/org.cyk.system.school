@@ -54,28 +54,10 @@ public class SubjectEvaluationBusinessImpl extends AbstractTypedBusinessService<
 	public SubjectEvaluation save(SubjectEvaluation subjectEvaluation,Collection<StudentSubjectEvaluation> studentSubjectEvaluations) {
 		subjectEvaluation = dao.update(subjectEvaluation);
 		subjectEvaluation.setStudentSubjectEvaluations(studentSubjectEvaluations);
+		
 		Collection<StudentSubjectEvaluation> database = studentSubjectEvaluationDao.readBySubjectEvaluation(subjectEvaluation);
 		
 		delete(StudentSubjectEvaluation.class,studentSubjectEvaluationDao,database, subjectEvaluation.getStudentSubjectEvaluations());
-		
-		/*
-		Set<StudentSubjectEvaluation> deleted = new HashSet<>();
-		// Remove what is in database but not in user
-		for(StudentSubjectEvaluation dbStudentSubjectEvaluation : database){
-			Boolean found = Boolean.FALSE;
-			for(StudentSubjectEvaluation userStudentSubjectEvaluation : subjectEvaluation.getStudentSubjectEvaluations()){
-				if(dbStudentSubjectEvaluation.getIdentifier().equals(userStudentSubjectEvaluation.getIdentifier())){
-					found = Boolean.TRUE;
-					break;
-				}
-			}
-			if(Boolean.FALSE.equals(found))
-				deleted.add(dbStudentSubjectEvaluation);
-		}
-
-		for(StudentSubjectEvaluation studentSubjectEvaluation : deleted)
-			studentSubjectEvaluationDao.delete(studentSubjectEvaluation);
-		*/
 		
 		save(subjectEvaluation);
 		return subjectEvaluation;

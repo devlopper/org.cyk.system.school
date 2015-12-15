@@ -3,18 +3,26 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluationType;
+import org.cyk.ui.api.UIProvider;
+import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
@@ -27,9 +35,6 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvaluation> implements Serializable {
@@ -44,27 +49,33 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	
 	@Override
 	protected void initialisation() {
-		Long classroomSessionDivisionSubjectIdentifier = requestParameterLong(uiManager.businessEntityInfos(ClassroomSessionDivisionSubject.class).getIdentifier());
-		if(classroomSessionDivisionSubjectIdentifier!=null)
-			classroomSessionDivisionSubject = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().find(classroomSessionDivisionSubjectIdentifier);
-		
-		Long subjectEvaluationTypeIdentifier = requestParameterLong(uiManager.businessEntityInfos(SubjectEvaluationType.class).getIdentifier());
-		if(subjectEvaluationTypeIdentifier!=null)
+		Long subjectEvaluationTypeIdentifier = requestParameterLong(SubjectEvaluationType.class);
+		if(subjectEvaluationTypeIdentifier==null){
+			Long classroomSessionDivisionSubjectIdentifier = requestParameterLong(ClassroomSessionDivisionSubject.class);
+			if(classroomSessionDivisionSubjectIdentifier==null)
+				;
+			else
+				classroomSessionDivisionSubject = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().find(classroomSessionDivisionSubjectIdentifier);	
+		}else{
 			subjectEvaluationType = SchoolBusinessLayer.getInstance().getSubjectEvaluationTypeBusiness().find(subjectEvaluationTypeIdentifier);
-		
+			classroomSessionDivisionSubject = subjectEvaluationType.getSubject();
+		}
+			
 		super.initialisation();
-		identifiable.setType(subjectEvaluationType);
-		if(identifiable.getType()!=null){
+		if(subjectEvaluationType!=null){
 			maximumValue = identifiable.getType().getMaximumValue();
 		}
-		contentTitle = formatUsingBusiness(new Object[]{identifiable.getType().getSubject().getClassroomSessionDivision().getClassroomSession(),
-				identifiable.getType().getSubject().getClassroomSessionDivision(),identifiable.getType().getSubject(),identifiable.getType()});
 		if(Crud.CREATE.equals(crud)){
 			
-		}else
-			classroomSessionDivisionSubject = identifiable.getType().getSubject();
+		}else{
+			identifiable.setStudentSubjectEvaluations(SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness().findBySubjectEvaluation(identifiable,Crud.UPDATE.equals(crud)));
+			subjectEvaluationType = identifiable.getType();
+			classroomSessionDivisionSubject = subjectEvaluationType.getSubject();
+		}
+	
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
-		markCollection = createItemCollection(form, "qwerty", Mark.class, StudentSubjectEvaluation.class, identifiable.getStudentSubjectEvaluations(),new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
+		markCollection = createItemCollection(Mark.class, StudentSubjectEvaluation.class,identifiable.getStudentSubjectEvaluations(),new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public void instanciated(AbstractItemCollection<Mark, StudentSubjectEvaluation,SelectItem> itemCollection,Mark mark) {
@@ -107,12 +118,16 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	
 	@Override
 	protected void update() {
-		SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().save(identifiable,identifiable.getStudentSubjectEvaluations());
+		SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().save(identifiable,markCollection.getIdentifiables());
+	}
+	
+	@Override
+	protected Boolean consultOnSuccess() {
+		return Boolean.TRUE;
 	}
 	
 	protected SubjectEvaluation instanciateIdentifiable() {
-		SubjectEvaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness()
-				.newInstance(subjectEvaluationType==null?classroomSessionDivisionSubject:subjectEvaluationType.getSubject());
+		SubjectEvaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
 		subjectEvaluation.setType(subjectEvaluationType);
 		return subjectEvaluation;
 	}
@@ -121,12 +136,18 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	protected Class<?> __formModelClass__() {
 		return Form.class;
 	}
-	/*
+	
 	@Override
-	public void transfer(UICommand command, Object object) throws Exception {
-		super.transfer(command, object);
-		markCollection.write();
-	}*/
+	protected Collection<UICommandable> contextualCommandables() {
+		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
+		contextualMenu.setLabel(formatUsingBusiness(subjectEvaluationType)); 
+		
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getType().getSubject().getClassroomSessionDivision().getClassroomSession(), null));
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getType().getSubject().getClassroomSessionDivision(), null));
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(classroomSessionDivisionSubject, null));
+		
+		return Arrays.asList(contextualMenu);
+	}
 		
 	@Getter @Setter
 	public static class Form extends AbstractFormModel<SubjectEvaluation> implements Serializable{
@@ -143,8 +164,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 		private String registrationCode;
 		private String names;
 		private BigDecimal value;
-		
-		
+				
 		@Override
 		public String toString() {
 			return registrationCode+" "+names+" "+value;
