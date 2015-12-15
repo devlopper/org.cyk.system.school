@@ -7,11 +7,13 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
@@ -22,9 +24,6 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage<StudentClassroomSessionDivision> implements Serializable {
@@ -37,7 +36,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	protected void initialisation() {
 		super.initialisation();
 		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
-		metricValueCollection = createItemCollection(form, "qwerty", MetricValueItem.class, StudentResultsMetricValue.class, 
+		metricValueCollection = createItemCollection(MetricValueItem.class, StudentResultsMetricValue.class, 
 				SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults()),new ItemCollectionWebAdapter<MetricValueItem,StudentResultsMetricValue>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
@@ -54,13 +53,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		});
 		metricValueCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
 	}
-	
-	@Override
-	public void transfer(UICommand command, Object object) throws Exception {
-		super.transfer(command, object);
-		metricValueCollection.write();
-	}
-	
+		
 	@Override
 	protected void update() {
 		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().update(identifiable, metricValueCollection.getIdentifiables());
