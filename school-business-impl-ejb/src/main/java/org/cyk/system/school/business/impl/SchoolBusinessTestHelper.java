@@ -172,6 +172,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	}
 	
 	public void createStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean createFileOnDisk){
+		System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions : ");
 		studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
 		if(Boolean.TRUE.equals(createFileOnDisk)){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
@@ -181,6 +182,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 					for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
 						assertThat("Report built", studentClassroomSessionDivision.getResults().getReport()!=null);
+						System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent());
 						writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
 					}
 				}

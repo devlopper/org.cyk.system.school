@@ -47,6 +47,11 @@ public class SubjectEvaluation extends AbstractIdentifiable implements Serializa
 		return studentSubjectEvaluations;
 	}
 	
+	@Override
+	public String getUiString() {
+		return type.getUiString();
+	}
+	
 	public static final String FIELD_TYPE = "type";
 	public static final String FIELD_DATE = "date";
 	

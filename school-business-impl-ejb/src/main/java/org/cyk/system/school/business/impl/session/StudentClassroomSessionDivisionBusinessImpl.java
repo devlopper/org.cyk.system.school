@@ -134,9 +134,11 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportOptions options) {
-		logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+		logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
+				,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
-			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
+					,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		}else{
 			StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
 					,SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
@@ -150,7 +152,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
 					.getStudentClassroomSessionDivisionResultsReportTemplate().getTemplate(),Boolean.TRUE);				
 				//dao.update(studentClassroomSessionDivision);
-				
 				genericDao.update(studentClassroomSessionDivision.getResults());
 			}	
 		}
@@ -216,7 +217,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
-				logTrace("Building of Student ClassroomSessionDivision Report will be skipped for of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision());
+				logTrace("Building of Student ClassroomSessionDivision Report will be skipped for of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
+						,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 			}else{
 				buildReport(studentClassroomSessionDivision);
 			}
@@ -224,7 +226,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		classroomSessionDivisionBusiness.computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
 	}
-			
+				
 	@Override
 	protected WeightedValue weightedValue(StudentSubject detail) {
 		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getClassroomSessionDivisionSubject().getCoefficient(),Boolean.FALSE);

@@ -2,6 +2,7 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.faces.view.ViewScoped;
@@ -14,6 +15,8 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.ui.api.UIProvider;
+import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
@@ -34,6 +37,8 @@ public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCru
 				SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable.getClassroomSession()),
 				SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable)
 		});
+		form.getSubmitCommandable().setLabel(text("command.update"));
+		form.getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
 	}
 	
 	@Override
@@ -46,6 +51,16 @@ public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCru
 	@Override
 	protected void update() {
 		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(identifiable));
+	}
+	
+	@Override
+	protected Collection<UICommandable> contextualCommandables() {
+		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
+		contextualMenu.setLabel(formatUsingBusiness(identifiable)); 
+		
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSession(), null));
+		
+		return Arrays.asList(contextualMenu);
 	}
 		
 	@Override

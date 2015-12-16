@@ -33,13 +33,17 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable.getType());
 		
 		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<SubjectEvaluation,Details>(SubjectEvaluation.class, Details.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
 				return Boolean.TRUE;
+			}
+			@Override
+			public String getTabId() {
+				return "1";
 			}
 		});
 		
@@ -55,7 +59,7 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 			}
 			@Override
 			public String getTabId() {
-				return super.getTabId();
+				return "1";
 			}
 		});
 	}
