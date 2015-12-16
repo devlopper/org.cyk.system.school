@@ -51,6 +51,7 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
+import org.cyk.utility.common.Constant;
 
 @Stateless
 public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
@@ -98,7 +99,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
 		for(Metric metric : metricCollection.getCollection()){
 			studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
-				.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO)));
+				.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO,Constant.EMPTY_STRING.toString(),null)));
 		}
 		
 		Collection<StudentSubject> studentSubjects = new ArrayList<>();

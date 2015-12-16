@@ -216,7 +216,8 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 					Collection<StudentResultsMetricValue> studentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness()
 							.findByStudentResults(studentClassroomSessionDivision.getResults());
 					for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
-						studentResultsMetricValue.getMetricValue().setValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+						studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+						studentResultsMetricValue.getMetricValue().setStringValue(RandomStringUtils.randomAlphabetic(1));
 					}
 					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);
 				}
@@ -307,7 +308,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	public void updateStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues,String[] values) {
 		int i = 0;
 		for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues)
-			studentResultsMetricValue.getMetricValue().setValue(new BigDecimal(values[i++]));
+			studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(values[i++]));
 		schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().update(studentClassroomSessionDivision, new ArrayList<>(studentResultsMetricValues));
 		Collection<StudentResultsMetricValue> updateStudentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults());
 		assertEquals("Student classroom session division metrics count", studentResultsMetricValues.size(), updateStudentResultsMetricValues.size());
@@ -316,7 +317,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			for(StudentResultsMetricValue s : updateStudentResultsMetricValues)
 				if(u.getIdentifier().equals(s.getIdentifier())){
 					assertEquals("Student results identifier", u.getIdentifier(), s.getIdentifier());
-					assertEquals("Student results metric value", u.getMetricValue().getValue(), s.getMetricValue().getValue());
+					assertEquals("Student results metric value", u.getMetricValue().getNumberValue(), s.getMetricValue().getNumberValue());
 				}
 	}
 	

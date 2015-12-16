@@ -10,6 +10,8 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -32,10 +34,17 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	
 	private ItemCollection<MetricValueItem,StudentResultsMetricValue> metricValueCollection;
 	
+	private Boolean isNumberValueType,showNumberColumn,showStringColumn;
+	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
+		MetricCollection metricCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+				.findCommonNodeInformations(identifiable.getClassroomSessionDivision().getClassroomSession()).getStudentWorkMetricCollection();
+		isNumberValueType = MetricValueType.NUMBER.equals(metricCollection.getValueType());
+		showNumberColumn = isNumberValueType;
+		showStringColumn = !isNumberValueType;
 		metricValueCollection = createItemCollection(MetricValueItem.class, StudentResultsMetricValue.class, 
 				SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults()),new ItemCollectionWebAdapter<MetricValueItem,StudentResultsMetricValue>(){
 			private static final long serialVersionUID = -3872058204105902514L;
@@ -43,12 +52,14 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			public void instanciated(AbstractItemCollection<MetricValueItem, StudentResultsMetricValue,SelectItem> itemCollection,MetricValueItem item) {
 				super.instanciated(itemCollection, item);
 				item.setName(item.getIdentifiable().getMetricValue().getMetric().getName());
-				item.setValue(item.getIdentifiable().getMetricValue().getValue());
+				item.setNumberValue(item.getIdentifiable().getMetricValue().getNumberValue());
+				item.setStringValue(item.getIdentifiable().getMetricValue().getStringValue());
 			}	
 			@Override
 			public void write(MetricValueItem item) {
 				super.write(item);
-				item.getIdentifiable().getMetricValue().setValue(item.getValue());
+				item.getIdentifiable().getMetricValue().setNumberValue(item.getNumberValue());
+				item.getIdentifiable().getMetricValue().setStringValue(item.getStringValue());
 			}
 		});
 		metricValueCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
@@ -103,11 +114,8 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	public static class MetricValueItem extends AbstractItemCollectionItem<StudentResultsMetricValue> implements Serializable {
 		private static final long serialVersionUID = 3828481396841243726L;
 		private String name;
-		private BigDecimal value;
-		@Override
-		public String toString() {
-			return name+" "+value;
-		}
+		private BigDecimal numberValue;
+		private String stringValue;
 	}
 
 }

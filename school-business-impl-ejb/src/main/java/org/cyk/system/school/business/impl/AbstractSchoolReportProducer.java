@@ -245,7 +245,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			String value = "";
 			for(StudentResultsMetricValue studentResultsMetricValue : schoolBusinessLayer.getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults()))
 				if(studentResultsMetricValue.getMetricValue().getMetric().getIdentifier().equals(metric.getIdentifier())){
-					value = format(studentResultsMetricValue.getMetricValue().getValue());
+					value = formatUsingBusiness(studentResultsMetricValue.getMetricValue());
 					break;
 				}
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, metric.getName(), value);

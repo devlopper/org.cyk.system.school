@@ -13,6 +13,6 @@ public class StudentResultsMetricValueDetails extends AbstractOutputDetails<Stud
 	public StudentResultsMetricValueDetails(StudentResultsMetricValue studentResultsMetricValue) {
 		super(studentResultsMetricValue);
 		name = studentResultsMetricValue.getMetricValue().getMetric().getName();
-		value = numberBusiness.format(studentResultsMetricValue.getMetricValue().getValue());
+		value = formatUsingBusiness(studentResultsMetricValue.getMetricValue());
 	}
 }
