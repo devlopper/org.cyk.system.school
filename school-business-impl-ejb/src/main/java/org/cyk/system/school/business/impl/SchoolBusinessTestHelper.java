@@ -476,9 +476,10 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			}
 		}
 		createSubjectEvaluations(customClassroomSessionDivisionSubjects,coefficientApplied);
-		System.out.println("Creating student classroom session reports");
-		createStudentClassroomSessionDivisionReport(customClassroomSessionDivisions,parameters.getClassroomSessionDivisionIndexes(),Boolean.TRUE);
-		
+		if(Boolean.TRUE.equals(parameters.getCreateStudentClassroomSessionDivisionReport())){
+			System.out.println("Creating student classroom session reports");
+			createStudentClassroomSessionDivisionReport(customClassroomSessionDivisions,parameters.getClassroomSessionDivisionIndexes(),Boolean.TRUE);
+		}
 		System.out.println("School business simulation ended");
 	}
 	
@@ -495,7 +496,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			generatedClassroomSessionCountByLevel=1;
 		private Set<Integer> classroomSessionDivisionIndexes = new HashSet<>();
 		
-		private Boolean createStudentClassroomSessionForAllLevel;
+		private Boolean createStudentClassroomSessionForAllLevel,createStudentClassroomSessionDivisionReport=Boolean.TRUE;
 		private Boolean createFileOnDiskOfOneStudentClassroomSessionDivisionReportForAllLevel;
 		
 	}
