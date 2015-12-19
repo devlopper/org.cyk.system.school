@@ -107,7 +107,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setSchoolStampBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.schoolstamp"));
 		
 		r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
-		r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
+		r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
 		r.setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
 		
 		//r.setMissedTime((s.getResults().getLectureAttendance().getMissedDuration()/DateUtils.MILLIS_PER_HOUR) +"");
@@ -119,7 +119,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			processStudentSubjects(r, s,parameters);
 				
 		produceStudentClassroomSessionDivisionReportLabelValueCollections(r);
-			
+		
 		return r;
 	}
 	
@@ -167,6 +167,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			for(int i=0;i<parameters.getEvaluationTypeCodes().size();i++)
 				r.getMarkTotals().set(i,format(r.getTempMarkTotals().get(i)));
 		}
+		
+		
 	}
 	
 	protected void studentSubjectEvaluation(StudentClassroomSessionDivisionSubjectReport sr,StudentSubject studentSubject,Collection<StudentSubjectEvaluation> studentSubjectEvaluations,BigDecimal[] results

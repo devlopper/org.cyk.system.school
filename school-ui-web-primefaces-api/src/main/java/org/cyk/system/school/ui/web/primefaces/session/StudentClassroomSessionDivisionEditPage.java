@@ -7,9 +7,6 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
@@ -25,7 +22,10 @@ import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
+import org.cyk.utility.common.annotation.user.interfaces.InputTextarea;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage<StudentClassroomSessionDivision> implements Serializable {
@@ -79,7 +79,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	public static class Form extends AbstractFormModel<StudentClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputNumber private BigDecimal numberOfTimeAbsent;
-		@Input @InputText private String appreciation;
+		@Input @InputTextarea private String appreciation;
 		@Input @InputBooleanButton private Boolean conferenceRequested;
 		
 		@Override

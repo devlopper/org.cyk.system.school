@@ -81,4 +81,11 @@ public class SubjectEvaluationBusinessImpl extends AbstractTypedBusinessService<
 		subjectEvaluation.setStudentSubjectEvaluations(studentSubjectEvaluationDao.readBySubjectEvaluation(subjectEvaluation));
 	}
 	
+	@Override
+	public SubjectEvaluation delete(SubjectEvaluation subjectEvaluation) {
+		for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluationDao.readBySubjectEvaluation(subjectEvaluation))
+			studentSubjectEvaluationDao.delete(studentSubjectEvaluation);
+		return super.delete(subjectEvaluation);
+	}
+	
 }
