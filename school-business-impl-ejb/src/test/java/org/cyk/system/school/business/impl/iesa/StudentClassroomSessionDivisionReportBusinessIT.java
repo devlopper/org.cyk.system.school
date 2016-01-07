@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionInfos;
 import org.cyk.system.school.model.actor.Student;
 
-public class ReportCardInputAllAtATimeBusinessIT extends AbstractIesaBusinessIT {
+public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
  

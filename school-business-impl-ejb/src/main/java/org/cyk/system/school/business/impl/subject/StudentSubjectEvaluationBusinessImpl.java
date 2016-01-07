@@ -53,7 +53,8 @@ public class StudentSubjectEvaluationBusinessImpl extends AbstractTypedBusinessS
 	public Collection<StudentSubjectEvaluation> findBySubjectEvaluation(SubjectEvaluation subjectEvaluation,Boolean includeAll) {
 		Collection<StudentSubjectEvaluation> collection = dao.readBySubjectEvaluation(subjectEvaluation);
 		if(Boolean.TRUE.equals(includeAll)){
-			for(StudentSubject studentSubject : studentSubjectDao.readByClassroomSessionDivisionSubject(subjectEvaluation.getType().getSubject())){
+			for(StudentSubject studentSubject : studentSubjectDao.readByClassroomSessionDivisionSubject(subjectEvaluation
+					.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject())){
 				Boolean found = Boolean.FALSE;
 				for(StudentSubjectEvaluation s : collection){
 					if(s.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier())){

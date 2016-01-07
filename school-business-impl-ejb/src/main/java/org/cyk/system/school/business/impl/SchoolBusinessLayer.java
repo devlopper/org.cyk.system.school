@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.api.ClazzBusiness;
 import org.cyk.system.root.business.api.TypedBusiness;
@@ -34,7 +35,7 @@ import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
-import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -46,7 +47,8 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
-import org.cyk.system.school.model.subject.SubjectEvaluationType;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 
@@ -70,7 +72,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
-	@Inject private SubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
+	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
 	@Inject private LectureBusiness lectureBusiness;
 	@Inject private LevelGroupBusiness levelGroupBusiness;
 	
@@ -91,14 +93,15 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
 			public String format(ClassroomSession classroomSession, ContentType contentType) {
-				return classroomSessionBusiness.format(classroomSession);
+				return classroomSession.getLevelTimeDivision().getLevel().getName().getName()
+						+(StringUtils.isBlank(classroomSession.getSuffix())?Constant.EMPTY_STRING:Constant.CHARACTER_SPACE+classroomSession.getSuffix());
 			}
 		});
 		registerFormatter(ClassroomSessionDivision.class, new AbstractFormatter<ClassroomSessionDivision>() {
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
 			public String format(ClassroomSessionDivision classroomSessionDivision, ContentType contentType) {
-				return classroomSessionDivisionBusiness.format(classroomSessionDivision);
+				return classroomSessionDivision.getTimeDivisionType().getUiString()+" "+(classroomSessionDivision.getIndex()+1);
 			}
 		});
 		
@@ -113,8 +116,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 					return ((ClassroomSessionDivision)object).getClassroomSession();
 				if(object instanceof ClassroomSessionDivisionSubject)
 					return ((ClassroomSessionDivisionSubject)object).getClassroomSessionDivision();
-				if(object instanceof SubjectEvaluationType)
-					return ((SubjectEvaluationType)object).getSubject();
+				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType)
+					return ((ClassroomSessionDivisionSubjectEvaluationType)object).getClassroomSessionDivisionSubject();
 				
 				if(object instanceof StudentClassroomSessionDivision)
 					return ((StudentClassroomSessionDivision)object).getClassroomSessionDivision();
@@ -144,7 +147,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
         beansMap.put((Class)ClassroomSessionDivision.class, (TypedBusiness)classroomSessionDivisionBusiness);
         beansMap.put((Class)ClassroomSessionDivisionSubject.class, (TypedBusiness)classroomSessionDivisionSubjectBusiness);
         beansMap.put((Class)SubjectEvaluation.class, (TypedBusiness)subjectEvaluationBusiness);
-        beansMap.put((Class)SubjectEvaluationType.class, (TypedBusiness)subjectEvaluationTypeBusiness);
+        beansMap.put((Class)ClassroomSessionDivisionSubjectEvaluationType.class, (TypedBusiness)subjectEvaluationTypeBusiness);
         beansMap.put((Class)Lecture.class, (TypedBusiness)lectureBusiness);
         beansMap.put((Class)StudentClassroomSession.class, (TypedBusiness)studentClassroomSessionBusiness);
         beansMap.put((Class)StudentClassroomSessionDivision.class, (TypedBusiness)studentClassroomSessionDivisionBusiness);

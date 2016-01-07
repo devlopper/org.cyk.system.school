@@ -113,8 +113,8 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		@Input @InputText private String name,coefficient;
 		public EvaluationDetails(SubjectEvaluation subjectEvaluation) {
 			super(subjectEvaluation);
-			name = subjectEvaluation.getType().getType().getName();
-			coefficient = numberBusiness.format(subjectEvaluation.getType().getCoefficient());
+			name = subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getName();
+			coefficient = numberBusiness.format(subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());
 		}
 	}
 	

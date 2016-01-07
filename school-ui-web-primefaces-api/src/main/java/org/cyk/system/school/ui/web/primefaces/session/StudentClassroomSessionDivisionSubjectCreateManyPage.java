@@ -1,11 +1,13 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
@@ -29,9 +31,6 @@ import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionSubjectCreateManyPage extends AbstractCrudOnePage<StudentSubject> implements Serializable {
 
@@ -44,8 +43,8 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 		super.initialisation();
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
 		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
-		studentSubjectCollection = createItemCollection(StudentSubjectItem.class, StudentSubject.class, 
-				new ArrayList<StudentSubject>(),new ItemCollectionWebAdapter<StudentSubjectItem,StudentSubject>(){
+		studentSubjectCollection = createItemCollection(StudentSubjectItem.class, StudentSubject.class 
+				,new ItemCollectionWebAdapter<StudentSubjectItem,StudentSubject>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentSubject,SelectItem> itemCollection,StudentSubjectItem item) {

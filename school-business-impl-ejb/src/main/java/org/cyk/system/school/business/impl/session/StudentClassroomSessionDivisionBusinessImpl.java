@@ -217,6 +217,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
+				//debug(studentClassroomSessionDivision.getResults());
+				//debug(studentClassroomSessionDivision.getResults().getEvaluationSort());
+				//debug(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage());
 				logTrace("Building of Student ClassroomSessionDivision Report will be skipped for of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 						,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 			}else{

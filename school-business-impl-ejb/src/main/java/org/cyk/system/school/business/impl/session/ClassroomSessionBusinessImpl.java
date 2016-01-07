@@ -9,7 +9,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -18,7 +17,6 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
-import org.cyk.utility.common.Constant;
 
 @Stateless
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
@@ -35,12 +33,6 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<ClassroomSession> findByAcademicSession(AcademicSession academicSession) {
 		return dao.readByAcademicSession(academicSession);
-	}
-
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public String format(ClassroomSession classroomSession) {
-		return classroomSession.getLevelTimeDivision().getLevel().getName().getName()
-				+(StringUtils.isBlank(classroomSession.getSuffix())?Constant.EMPTY_STRING:Constant.CHARACTER_SPACE+classroomSession.getSuffix());
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)

@@ -41,8 +41,12 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 		super.initialisation();
 		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
-		resultCollection = createItemCollection(Result.class, StudentClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivision(identifiable),new ItemCollectionWebAdapter<Result,StudentClassroomSessionDivision>(){
+		resultCollection = createItemCollection(Result.class, StudentClassroomSessionDivision.class,new ItemCollectionWebAdapter<Result,StudentClassroomSessionDivision>(){
 			private static final long serialVersionUID = -3872058204105902514L;
+			@Override
+			public Collection<StudentClassroomSessionDivision> load() {
+				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivision(identifiable);
+			}
 			@Override
 			public void instanciated(AbstractItemCollection<Result, StudentClassroomSessionDivision,SelectItem> itemCollection,Result result) {
 				super.instanciated(itemCollection, result);

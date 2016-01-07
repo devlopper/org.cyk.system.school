@@ -38,7 +38,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	@Override
 	public String getEvaluationTypeCode(StudentSubjectEvaluation studentSubjectEvaluation) {
-		return studentSubjectEvaluation.getSubjectEvaluation().getType().getType().getCode();
+		return studentSubjectEvaluation.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode();
 	}
 	
 	@Override
@@ -68,10 +68,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		if(cs.getCoordinator()!=null)
 			r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
 		
-		r.getClassroomSessionDivision().getClassroomSession().setName(schoolBusinessLayer.getClassroomSessionBusiness().format(cs));
+		r.getClassroomSessionDivision().getClassroomSession().setName(formatUsingBusiness(cs));
 		
 		//debug(results);
-		r.getClassroomSessionDivision().setName(schoolBusinessLayer.getClassroomSessionDivisionBusiness().format(csd));
+		r.getClassroomSessionDivision().setName(formatUsingBusiness(csd));
 		r.getClassroomSessionDivision().setAverage(format(results.getAverage()));
 		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
 		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
@@ -193,7 +193,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	protected BigDecimal getMarkValue(StudentSubjectEvaluation studentSubjectEvaluation){
 		BigDecimal value = studentSubjectEvaluation.getValue();
 		if(Boolean.FALSE.equals(studentSubjectEvaluation.getSubjectEvaluation().getCoefficientApplied()))
-			value = value.multiply(studentSubjectEvaluation.getSubjectEvaluation().getType().getCoefficient());
+			value = value.multiply(studentSubjectEvaluation.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());
 		return value;
 	}
 	

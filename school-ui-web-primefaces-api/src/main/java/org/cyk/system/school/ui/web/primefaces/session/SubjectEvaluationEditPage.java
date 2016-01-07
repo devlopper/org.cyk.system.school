@@ -20,7 +20,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
-import org.cyk.system.school.model.subject.SubjectEvaluationType;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -42,14 +42,14 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
-	private SubjectEvaluationType subjectEvaluationType;
+	private ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType;
 	private ItemCollection<Mark,StudentSubjectEvaluation> markCollection;
 	private BigDecimal maximumValue;
 	private Integer decimalPlaces = 0;
 	
 	@Override
 	protected void initialisation() {
-		Long subjectEvaluationTypeIdentifier = requestParameterLong(SubjectEvaluationType.class);
+		Long subjectEvaluationTypeIdentifier = requestParameterLong(ClassroomSessionDivisionSubjectEvaluationType.class);
 		if(subjectEvaluationTypeIdentifier==null){
 			Long classroomSessionDivisionSubjectIdentifier = requestParameterLong(ClassroomSessionDivisionSubject.class);
 			if(classroomSessionDivisionSubjectIdentifier==null)
@@ -58,25 +58,29 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 				classroomSessionDivisionSubject = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().find(classroomSessionDivisionSubjectIdentifier);	
 		}else{
 			subjectEvaluationType = SchoolBusinessLayer.getInstance().getSubjectEvaluationTypeBusiness().find(subjectEvaluationTypeIdentifier);
-			classroomSessionDivisionSubject = subjectEvaluationType.getSubject();
+			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 			
 		super.initialisation();
 		if(subjectEvaluationType!=null){
-			maximumValue = identifiable.getType().getMaximumValue();
+			maximumValue = identifiable.getClassroomSessionDivisionSubjectEvaluationType().getMaximumValue();
 		}
 		if(Crud.CREATE.equals(crud)){
 			
 		}else{
 			identifiable.setStudentSubjectEvaluations(SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness().findBySubjectEvaluation(identifiable,Crud.UPDATE.equals(crud)));
-			subjectEvaluationType = identifiable.getType();
-			classroomSessionDivisionSubject = subjectEvaluationType.getSubject();
+			subjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
+			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 	
 		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
-		markCollection = createItemCollection(Mark.class, StudentSubjectEvaluation.class,identifiable.getStudentSubjectEvaluations(),new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
+		markCollection = createItemCollection(Mark.class, StudentSubjectEvaluation.class,new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
+			@Override
+			public Collection<StudentSubjectEvaluation> load() {
+				return identifiable.getStudentSubjectEvaluations();
+			}
 			@Override
 			public void instanciated(AbstractItemCollection<Mark, StudentSubjectEvaluation,SelectItem> itemCollection,Mark mark) {
 				super.instanciated(itemCollection, mark);
@@ -128,7 +132,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	
 	protected SubjectEvaluation instanciateIdentifiable() {
 		SubjectEvaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
-		subjectEvaluation.setType(subjectEvaluationType);
+		subjectEvaluation.setClassroomSessionDivisionSubjectEvaluationType(subjectEvaluationType);
 		return subjectEvaluation;
 	}
 		
@@ -142,8 +146,8 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
 		contextualMenu.setLabel(formatUsingBusiness(subjectEvaluationType)); 
 		
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getType().getSubject().getClassroomSessionDivision().getClassroomSession(), null));
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getType().getSubject().getClassroomSessionDivision(), null));
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession(), null));
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision(), null));
 		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(classroomSessionDivisionSubject, null));
 		
 		return Arrays.asList(contextualMenu);
@@ -152,7 +156,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	@Getter @Setter
 	public static class Form extends AbstractFormModel<SubjectEvaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private SubjectEvaluationType type;
+		@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private ClassroomSessionDivisionSubjectEvaluationType type;
 		//@Input @InputCalendar @NotNull private Date date;
 		@NotNull private Boolean coefficientApplied = Boolean.TRUE;
 		public static final String FIELD_TYPE = "type";

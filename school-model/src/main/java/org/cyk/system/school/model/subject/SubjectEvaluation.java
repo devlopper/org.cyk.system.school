@@ -27,7 +27,7 @@ public class SubjectEvaluation extends AbstractIdentifiable implements Serializa
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@JoinColumn(name="subjectEvaluationType") @ManyToOne @NotNull private SubjectEvaluationType type;
+	@JoinColumn(name="subjectEvaluationType") @ManyToOne @NotNull private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
 	@Temporal(TemporalType.TIMESTAMP) @Column(name="happeningDate") @NotNull private Date date;
 	@NotNull private Boolean coefficientApplied = Boolean.FALSE;
 	
@@ -35,9 +35,9 @@ public class SubjectEvaluation extends AbstractIdentifiable implements Serializa
 	
 	@Transient private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
 
-	public SubjectEvaluation(SubjectEvaluationType type,Boolean coefficientApplied) {
+	public SubjectEvaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,Boolean coefficientApplied) {
 		super();
-		this.type = type;
+		this.classroomSessionDivisionSubjectEvaluationType = classroomSessionDivisionSubjectEvaluationType;
 		this.coefficientApplied = coefficientApplied;
 	}
 	
@@ -49,10 +49,10 @@ public class SubjectEvaluation extends AbstractIdentifiable implements Serializa
 	
 	@Override
 	public String getUiString() {
-		return type.getUiString();
+		return classroomSessionDivisionSubjectEvaluationType.getUiString();
 	}
 	
-	public static final String FIELD_TYPE = "type";
+	public static final String FIELD_TYPE = "classroomSessionDivisionSubjectEvaluationType";
 	public static final String FIELD_DATE = "date";
 	
 }

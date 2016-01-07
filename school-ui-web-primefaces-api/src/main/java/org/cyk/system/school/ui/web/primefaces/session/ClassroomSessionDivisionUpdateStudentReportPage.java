@@ -34,8 +34,7 @@ public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCru
 		super.initialisation();
 		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		text = languageBusiness.findText("org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionUpdateStudentReportPage.text", new Object[]{
-				SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable.getClassroomSession()),
-				SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(identifiable)
+				formatUsingBusiness(identifiable.getClassroomSession()),formatUsingBusiness(identifiable)
 		});
 		form.getSubmitCommandable().setLabel(text("command.update"));
 		form.getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);

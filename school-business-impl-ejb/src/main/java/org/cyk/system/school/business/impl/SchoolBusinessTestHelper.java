@@ -20,9 +20,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
-import org.cyk.system.root.business.impl.AbstractTestHelper;
+import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
+import org.cyk.system.root.model.Mime;
+import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
@@ -32,7 +34,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectEvaluationBusiness;
-import org.cyk.system.school.business.api.subject.SubjectEvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -46,13 +48,13 @@ import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
-import org.cyk.system.school.model.subject.SubjectEvaluationType;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Singleton
-public class SchoolBusinessTestHelper extends AbstractTestHelper implements Serializable {
+public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper implements Serializable {
 
 	private static final long serialVersionUID = -6893154890151909538L;
 	private static SchoolBusinessTestHelper INSTANCE;
@@ -62,7 +64,8 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
 	@Inject private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
 	@Inject private SubjectEvaluationBusiness subjectEvaluationBusiness;
-	@Inject private SubjectEvaluationTypeBusiness evaluationTypeBusiness;
+	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness evaluationTypeBusiness;
+	
 	@Inject private LevelTimeDivisionDao levelTimeDivisionDao;
 	@Inject private TimeDivisionTypeDao timeDivisionTypeDao;
 	@Inject private SubjectDao subjectDao;
@@ -126,11 +129,11 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	public void createSubjectEvaluations(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Boolean coefficientApplied){
 		Collection<SubjectEvaluation> subjectEvaluations = new ArrayList<>();
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
-			Collection<SubjectEvaluationType> subjectEvaluationTypes = schoolBusinessLayer.getSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+			Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = schoolBusinessLayer.getSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 			Collection<StudentSubject> studentSubjects = schoolBusinessLayer.getStudentSubjectBusiness().findBySubject(classroomSessionDivisionSubject);
 			if(studentSubjects.isEmpty())
 				continue;
-			for(SubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
+			for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
 				SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType, coefficientApplied);
 				subjectEvaluations.add(subjectEvaluation);
 				for(StudentSubject studentSubject : studentSubjects ){
@@ -155,13 +158,13 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		}
 	}
 	
-	public void createSubjectEvaluation(SubjectEvaluationType subjectEvaluationType,String[][] details){
+	public void createSubjectEvaluation(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType,String[][] details){
 		SubjectEvaluation subjectEvaluation = new SubjectEvaluation(subjectEvaluationType,coefficientApplied);
 		for(String[] detail : details){
 			if(StringUtils.isBlank(detail[1]))
 				continue;
 			Student student = studentBusiness.findByRegistrationCode(detail[0]);
-			StudentSubject studentSubject = studentSubjectBusiness.findByStudentBySubject(student, subjectEvaluation.getType().getSubject());
+			StudentSubject studentSubject = studentSubjectBusiness.findByStudentBySubject(student, subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
 			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
 		}
 		subjectEvaluationBusiness.create(subjectEvaluation);
@@ -175,18 +178,21 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 		System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions : ");
 		studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
 		if(Boolean.TRUE.equals(createFileOnDisk)){
+			Collection<File> files = new ArrayList<>();
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
 				classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().find(classroomSessionDivision.getIdentifier());
 				if(classroomSessionDivisionIndexes==null || classroomSessionDivisionIndexes.isEmpty()
 					|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) ){
 					for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
-						assertThat("Report built", studentClassroomSessionDivision.getResults().getReport()!=null);
+						assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
 						System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent());
 						writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
+						files.add(studentClassroomSessionDivision.getResults().getReport());
 					}
 				}
 			}
+			writeStream(RootBusinessLayer.getInstance().getFileBusiness().merge(files, Mime.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
     	}
 	}
 	public void createStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){
@@ -465,7 +471,7 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 				EvaluationType evaluationType = (EvaluationType) customClassroomSessionDivisionSubjectEvaluationTypeInfos[i][0];
 				BigDecimal coefficient = new BigDecimal((String) customClassroomSessionDivisionSubjectEvaluationTypeInfos[i][1]);
 				BigDecimal maximumValue = new BigDecimal((String) customClassroomSessionDivisionSubjectEvaluationTypeInfos[i][2]);
-				SubjectEvaluationType subjectEvaluationType = new SubjectEvaluationType(classroomSessionDivisionSubject, evaluationType, coefficient,maximumValue);
+				ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType = new ClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubject, evaluationType, coefficient,maximumValue);
 				schoolBusinessLayer.getSubjectEvaluationTypeBusiness().create(subjectEvaluationType);
 			}
 			for(Student student : customStudents){
@@ -542,8 +548,8 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 			return list;
 		}
 
-		public Collection<SubjectEvaluationType> getEvaluationTypes() {
-			Collection<SubjectEvaluationType> evaluationTypes = new ArrayList<>();
+		public Collection<ClassroomSessionDivisionSubjectEvaluationType> getEvaluationTypes() {
+			Collection<ClassroomSessionDivisionSubjectEvaluationType> evaluationTypes = new ArrayList<>();
 			for(ClassroomSessionDivisionSubjectInfos classroomSessionDivisionSubjectInfos : subjects)
 				evaluationTypes.addAll(classroomSessionDivisionSubjectInfos.evaluationTypes);
 			return evaluationTypes;
@@ -554,14 +560,14 @@ public class SchoolBusinessTestHelper extends AbstractTestHelper implements Seri
 	@Getter @Setter
 	public static class ClassroomSessionDivisionSubjectInfos{
 		private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
-		private List<SubjectEvaluationType> evaluationTypes = new ArrayList<>();
+		private List<ClassroomSessionDivisionSubjectEvaluationType> evaluationTypes = new ArrayList<>();
 		
 		public ClassroomSessionDivisionSubjectInfos(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 			super();
 			this.classroomSessionDivisionSubject = classroomSessionDivisionSubject;
 		}
 		
-		public SubjectEvaluationType evaluationType(Integer index){
+		public ClassroomSessionDivisionSubjectEvaluationType evaluationType(Integer index){
 			return evaluationTypes.get(index);
 		}
 		

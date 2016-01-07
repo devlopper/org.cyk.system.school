@@ -71,7 +71,7 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	
 	@Override
 	protected WeightedValue weightedValue(StudentSubjectEvaluation detail) {
-		return new WeightedValue(detail.getValue(), detail.getSubjectEvaluation().getType().getCoefficient()
+		return new WeightedValue(detail.getValue(), detail.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getCoefficient()
 				, /*Boolean.TRUE*/ Boolean.TRUE.equals(detail.getSubjectEvaluation().getCoefficientApplied()));
 	}
 

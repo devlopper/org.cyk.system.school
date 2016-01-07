@@ -15,7 +15,7 @@ public class ClassroomSessionDivisionDetails extends AbstractOutputDetails<Class
 	
 	public ClassroomSessionDivisionDetails(ClassroomSessionDivision classroomSessionDivision) {
 		super(classroomSessionDivision);
-		name = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().format(classroomSessionDivision);
+		name = formatUsingBusiness(classroomSessionDivision);
 		fromDate = timeBusiness.formatDate(classroomSessionDivision.getPeriod().getFromDate());
 		toDate = timeBusiness.formatDate(classroomSessionDivision.getPeriod().getToDate());
 		duration = numberBusiness.format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()

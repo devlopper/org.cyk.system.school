@@ -7,7 +7,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.SubjectEvaluation;
-import org.cyk.system.school.model.subject.SubjectEvaluationType;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.model.AbstractQueryFormModel;
 import org.cyk.ui.web.api.WebNavigationManager;
@@ -34,7 +34,7 @@ public class ClassroomSessionDivisionSubjectQueryFormModel extends AbstractQuery
 	@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private ClassroomSessionDivision classroomSessionDivision;
 	
 	@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo @Sequence(direction=Direction.AFTER,field=AbstractQueryFormModel.FIELD_IDENTIFIABLE)
-	private SubjectEvaluationType subjectEvaluationType;
+	private ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType;
 	
 	@Override @Sequence(direction=Direction.AFTER,field=CLASSROOM_SESSION_DIVISION)
 	public ClassroomSessionDivisionSubject getIdentifiable() {

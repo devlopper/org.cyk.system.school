@@ -8,23 +8,27 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
+import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
 
 @Getter @Setter @Entity @NoArgsConstructor
 public class AcademicSession extends AbstractIdentifiablePeriod implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 	
-	@ManyToOne private School school;
+	@ManyToOne @NotNull private School school;
 		
 	@Embedded private CommonNodeInformations nodeInformations;
 	
 	@Temporal(value=TemporalType.DATE) private Date nextStartingDate;
+	
+	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
 	public AcademicSession(School school,CommonNodeInformations nodeInformations,Date nextStartingDate) {
 		super();

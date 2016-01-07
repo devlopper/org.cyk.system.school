@@ -2,9 +2,8 @@ package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
 
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
@@ -15,7 +14,7 @@ public class ClassroomSessionDetails extends AbstractOutputDetails<ClassroomSess
 	
 	public ClassroomSessionDetails(ClassroomSession classroomSession) {
 		super(classroomSession);
-		name = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(classroomSession);
+		name = formatUsingBusiness(classroomSession);
 		coordinator = classroomSession.getCoordinator()==null?"":classroomSession.getCoordinator().getPerson().getNames();
 	}
 }

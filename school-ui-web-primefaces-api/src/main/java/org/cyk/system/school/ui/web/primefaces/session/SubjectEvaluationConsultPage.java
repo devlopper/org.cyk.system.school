@@ -33,7 +33,7 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable.getType());
+		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable.getClassroomSessionDivisionSubjectEvaluationType());
 		
 		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<SubjectEvaluation,Details>(SubjectEvaluation.class, Details.class){
 			private static final long serialVersionUID = 1L;
@@ -69,9 +69,9 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
 		contextualMenu.setLabel(contentTitle); 
 		
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getType().getSubject().getClassroomSessionDivision().getClassroomSession(), null));
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getType().getSubject().getClassroomSessionDivision(), null));
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getType().getSubject(), null));
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession(), null));
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision(), null));
+		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject(), null));
 		
 		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
 		contextualMenu.getChildren().add(commandable);
@@ -87,8 +87,8 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 		public Details(SubjectEvaluation subjectEvaluation) {
 			super(subjectEvaluation);
 			date = timeBusiness.formatDate(subjectEvaluation.getDate());
-			type = subjectEvaluation.getType().getType().getName();
-			coefficient = numberBusiness.format(subjectEvaluation.getType().getCoefficient());
+			type = subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getName();
+			coefficient = numberBusiness.format(subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());
 		}
 	}
 	

@@ -2,6 +2,7 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
@@ -45,9 +46,13 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		isNumberValueType = MetricValueType.NUMBER.equals(metricCollection.getValueType());
 		showNumberColumn = isNumberValueType;
 		showStringColumn = !isNumberValueType;
-		metricValueCollection = createItemCollection(MetricValueItem.class, StudentResultsMetricValue.class, 
-				SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults()),new ItemCollectionWebAdapter<MetricValueItem,StudentResultsMetricValue>(){
+		metricValueCollection = createItemCollection(MetricValueItem.class, StudentResultsMetricValue.class 
+				,new ItemCollectionWebAdapter<MetricValueItem,StudentResultsMetricValue>(){
 			private static final long serialVersionUID = -3872058204105902514L;
+			@Override
+			public Collection<StudentResultsMetricValue> load() {
+				return SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults());
+			}
 			@Override
 			public void instanciated(AbstractItemCollection<MetricValueItem, StudentResultsMetricValue,SelectItem> itemCollection,MetricValueItem item) {
 				super.instanciated(itemCollection, item);

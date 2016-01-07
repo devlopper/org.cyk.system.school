@@ -7,12 +7,14 @@ import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
+import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
@@ -22,10 +24,12 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne private AcademicSession academicSession;
-	@ManyToOne private LevelTimeDivision levelTimeDivision;
+	@ManyToOne @NotNull private AcademicSession academicSession;
+	@ManyToOne @NotNull private LevelTimeDivision levelTimeDivision;
 	private String suffix;
 	@ManyToOne private Teacher coordinator;
+	
+	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
 	@Transient private Collection<ClassroomSessionDivision> divisions = new ArrayList<>();
 	

@@ -17,14 +17,11 @@ public class NodeResults extends AbstractModelElement implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 	
-	@Column(precision=5,scale=FLOAT_SCALE)
-	private BigDecimal average;
+	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal average;
 	
-	@Column(precision=5,scale=FLOAT_SCALE)
-	private BigDecimal averageHighest;
+	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal averageHighest;
 	
-	@Column(precision=5,scale=FLOAT_SCALE)
-	private BigDecimal averageLowest;
+	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal averageLowest;
 	
 	private Integer numberOfStudent;
 	

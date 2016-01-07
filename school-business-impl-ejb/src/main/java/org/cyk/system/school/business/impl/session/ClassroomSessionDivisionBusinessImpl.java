@@ -77,11 +77,6 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	public Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession) {
 		return dao.readByClassroomSession(classroomSession);
 	}
-
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public String format(ClassroomSessionDivision classroomSessionDivision) {
-		return classroomSessionDivision.getTimeDivisionType().getUiString()+" "+(classroomSessionDivision.getIndex()+1);
-	}
 	
 	@Override
 	protected void __load__(ClassroomSessionDivision classroomSessionDivision) {

@@ -4,14 +4,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
 import org.cyk.system.root.model.time.ScheduleCollection;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
@@ -36,7 +34,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	
 	@ManyToOne @NotNull private Subject subject;
 	
-	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE) @NotNull private BigDecimal coefficient;
+	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal coefficient;
 	
 	@ManyToOne private SubjectGroup group;
 	
@@ -46,13 +44,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	
 	@Embedded private NodeResults results = new NodeResults();
 	
-	//TODO /* I think can be modeled using automated finite state machine */
-	
-	@Temporal(TemporalType.TIMESTAMP) private Date closingDateOfEvaluations;
-	
-	@Temporal(TemporalType.TIMESTAMP) private Date closingDateOfLectures;
-	
-	@Temporal(TemporalType.TIMESTAMP) private Date computingDateOfResults;
+	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
 	/**
 	 * The time table
