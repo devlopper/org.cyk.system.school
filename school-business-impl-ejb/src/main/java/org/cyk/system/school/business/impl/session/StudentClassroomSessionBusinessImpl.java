@@ -53,7 +53,8 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Override
 	public StudentClassroomSession create(StudentClassroomSession studentClassroomSession) {
 		super.create(studentClassroomSession);
-		logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
+		logInstanceCreated(studentClassroomSession);
+		//logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeTopDownOnCreate())){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
@@ -86,6 +87,16 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		cascade(studentClassroomSession, studentClassroomSessionDivisionDao.readByStudentByClassroomSession(studentClassroomSession.getStudent()
 				, studentClassroomSession.getClassroomSession()), Crud.DELETE);
 		return super.delete(studentClassroomSession);
+	}
+	
+	@Override
+	protected Class<StudentClassroomSession> getResultClass() {
+		return StudentClassroomSession.class;
+	}
+	
+	@Override
+	protected Class<StudentClassroomSessionDivision> getDetailsClass() {
+		return StudentClassroomSessionDivision.class;
 	}
 	
 	@Override

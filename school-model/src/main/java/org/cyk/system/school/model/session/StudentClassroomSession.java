@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.utility.common.Constant;
 
 @Getter @Setter @Entity @NoArgsConstructor
 public class StudentClassroomSession extends AbstractStudentResult<ClassroomSession,StudentClassroomSessionDivision> implements Serializable {
@@ -29,6 +30,12 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 	public ClassroomSession getLevel() {
 		return classroomSession;
 	}
+	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, student.getRegistration().getCode(),classroomSession.getIdentifier(),results==null?Constant.EMPTY_STRING:results.getLogMessage());
+	}
+	private static final String LOG_FORMAT = StudentClassroomSession.class.getSimpleName()+"(STUD=%s CLASS=%s %s)";
 	
 	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
 }

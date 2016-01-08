@@ -70,7 +70,8 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	
 	@Override
 	public void average(Collection<RESULT> results,Collection<DETAIL> details,Boolean keepDetails) {
-		logTrace("Computing average in module {} . Results={} Details={} KeepDetails={}",getClazz().getName(), results.size(),details.size(),keepDetails);
+		logTrace("Computing average in module {} . {}={} {}={} KeepDetails={}",getClazz().getSimpleName(),getResultClass().getSimpleName() ,results.size()
+				,getDetailsClass().getSimpleName(),details.size(),keepDetails);
 		for(RESULT result : results){
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
@@ -87,15 +88,16 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 			//computation
 			//Is there any weighted values
 			if(weightedValues.isEmpty()){
-				logTrace("No weighted values found for {}.  No average will be computed", result);
+				logTrace("No {} found so no average will be computed", getDetailsClass().getSimpleName());
+				//logTrace("No weighted values found for {}.  No average will be computed", result);
 			}else{
-				
 				Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
 				//debug(result.getResults());
 				//setting
 				result.getResults().getEvaluationSort().setAverage(average); 
 				result.getResults().getEvaluationSort().setAverageInterval(intervalBusiness.findByCollectionByValue(averageIntervalCollection(level(result)),average.getValue(), 2));
-				logTrace("Average {} , Interval {}",result.getResults().getEvaluationSort().getAverage(),result.getResults().getEvaluationSort().getAverageInterval());
+				logIdentifiable("Average computed", result);
+				//logTrace("Average {} , Interval {}",result.getResults().getEvaluationSort().getAverage(),result.getResults().getEvaluationSort().getAverageInterval());
 			}
 		}
 		
@@ -180,6 +182,9 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	}
 	
 	/**/
+	
+	protected abstract Class<DETAIL> getDetailsClass();
+	protected abstract Class<RESULT> getResultClass();
 	
 	protected abstract WeightedValue weightedValue(DETAIL detail);
 

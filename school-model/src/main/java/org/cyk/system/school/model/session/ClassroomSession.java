@@ -16,6 +16,7 @@ import lombok.Setter;
 import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 
@@ -39,6 +40,12 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 		this.levelTimeDivision = levelTimeDivision;
 		this.coordinator = coordinator;
 	}
+	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, academicSession.getIdentifier(),levelTimeDivision.getUiString(),suffix,coordinator==null?Constant.EMPTY_STRING:coordinator.getRegistration().getCode(),duration);
+	}
+	private static final String LOG_FORMAT = ClassroomSession.class.getSimpleName()+"(AS=%s LEVEL=%s SUFFIX=%s COORDINATOR=%s DUR=%s)";
 	
 	public static final String FIELD_ACADEMIC_SESSION = "academicSession";
 	public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";

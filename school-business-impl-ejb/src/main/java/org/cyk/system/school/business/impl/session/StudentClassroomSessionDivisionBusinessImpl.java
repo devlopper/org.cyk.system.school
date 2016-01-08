@@ -134,8 +134,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportOptions options) {
-		logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
-				,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
+		//logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
+		//		,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
 			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 					,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
@@ -153,7 +153,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					.getStudentClassroomSessionDivisionResultsReportTemplate().getTemplate(),Boolean.TRUE);				
 				//dao.update(studentClassroomSessionDivision);
 				genericDao.update(studentClassroomSessionDivision.getResults());
-			}	
+				logIdentifiable("Report built",studentClassroomSessionDivision);
+			}
 		}
 	}
 	
@@ -214,20 +215,30 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		rank(classroomSessionDivisions, studentClassroomSessionDivisions,rankOptions);
 		
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
-		
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
+				logIdentifiable("Cannot build report", studentClassroomSessionDivision);
 				//debug(studentClassroomSessionDivision.getResults());
 				//debug(studentClassroomSessionDivision.getResults().getEvaluationSort());
 				//debug(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage());
-				logTrace("Building of Student ClassroomSessionDivision Report will be skipped for of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
-						,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
+				//logTrace("Building of Student ClassroomSessionDivision Report will be skipped for of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
+				//		,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 			}else{
 				buildReport(studentClassroomSessionDivision);
 			}
 		}
 		
 		classroomSessionDivisionBusiness.computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
+	}
+	
+	@Override
+	protected Class<StudentSubject> getDetailsClass() {
+		return StudentSubject.class;
+	}
+	
+	@Override
+	protected Class<StudentClassroomSessionDivision> getResultClass() {
+		return StudentClassroomSessionDivision.class;
 	}
 				
 	@Override

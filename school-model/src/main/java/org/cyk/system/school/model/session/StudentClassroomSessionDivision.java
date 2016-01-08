@@ -35,6 +35,12 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 		return classroomSessionDivision;
 	}
 	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, student.getRegistration().getCode(),classroomSessionDivision.getIdentifier(),results.getLogMessage());
+	}
+	private static final String LOG_FORMAT = StudentClassroomSessionDivision.class.getSimpleName()+"(STUD=%s DIV=%s %s)";
+	
 	public static final String FIELD_CLASSROOMSESSIONDIVISION = "classroomSessionDivision";
 	
 }

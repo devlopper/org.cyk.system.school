@@ -44,6 +44,8 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 		return student.getUiString();
 	}
 	
+	
+	
 	public static final String FIELD_STUDENT = "student";
 
 }

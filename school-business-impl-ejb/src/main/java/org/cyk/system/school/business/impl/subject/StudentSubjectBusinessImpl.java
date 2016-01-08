@@ -53,7 +53,8 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().create(studentClassroomSessionDivision);
 			}
 		}
-		logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
+		logInstanceCreated(studentSubject);
+		//logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
 		return studentSubject;
 	}
 	
@@ -70,9 +71,18 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	/**/
 	
 	@Override
+	protected Class<StudentSubject> getResultClass() {
+		return StudentSubject.class;
+	}
+	@Override
+	protected Class<StudentSubjectEvaluation> getDetailsClass() {
+		return StudentSubjectEvaluation.class;
+	}
+	
+	@Override
 	protected WeightedValue weightedValue(StudentSubjectEvaluation detail) {
 		return new WeightedValue(detail.getValue(), detail.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getCoefficient()
-				, /*Boolean.TRUE*/ Boolean.TRUE.equals(detail.getSubjectEvaluation().getCoefficientApplied()));
+				,Boolean.TRUE.equals(detail.getSubjectEvaluation().getCoefficientApplied()));
 	}
 
 	@Override
@@ -117,27 +127,27 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	
 	/**/
 	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentSubject> findBySubject(ClassroomSessionDivisionSubject subject) {
 		return dao.readByClassroomSessionDivisionSubject(subject);
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public StudentSubject findByStudentBySubject(Student student,ClassroomSessionDivisionSubject subject) {
 		return dao.readByStudentBySubject(student, subject);
 	}
 
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentSubject> findByStudent(Student student) {
 		return dao.readByStudent(student);
 	}
 
-	@Override
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 	}
 
-	@Override
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student, classroomSession);
 	}

@@ -94,8 +94,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			}
 			results.setNumberOfStudent(weightedValues.size());
 			results.setAverage(RootBusinessLayer.getInstance().getMathematicsBusiness().average(weightedValues, null, null).getValue());
-			logTrace("Node result of {} are : Average={}, High={}, Low={}, Students={}",classroomSessionDivisionSubject.getSubject().getName() ,results.getAverage()
-					,results.getAverageHighest(),results.getAverageLowest(),results.getNumberOfStudent());
+			logIdentifiable("Average computed", classroomSessionDivisionSubject);
 			dao.update(classroomSessionDivisionSubject);
 		}
 	}

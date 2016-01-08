@@ -96,6 +96,10 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.SHORT_PREFIX_STYLE);
 	}
 	
-	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, evaluationSort.getLogMessage(),lectureAttendance.getLogMessage(),lectureAttendanceSort.getLogMessage(),appreciation,promoted,conferenceRequested);
+	}
+	private static final String LOG_FORMAT = StudentResults.class.getSimpleName()+"(%s %s %s APP=%s PROM=%s CR=%s)";
 
 }

@@ -22,6 +22,7 @@ import org.cyk.system.root.model.time.ScheduleCollection;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 
@@ -77,6 +78,12 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	public String getUiString() {
 		return subject.getUiString();
 	}
+	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, classroomSessionDivision.getIdentifier(),subject.getCode(),coefficient,teacher==null?Constant.EMPTY_STRING:teacher.getRegistration().getCode(),duration,results.getLogMessage());
+	}
+	private static final String LOG_FORMAT = ClassroomSessionDivisionSubject.class.getSimpleName()+"(DIV=%s SUB=%s COEF=%s TEACH=%s DUR=%s %s)";
 	
 	/**/
 

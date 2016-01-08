@@ -57,6 +57,12 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 		return timeDivisionType.getUiString();
 	}
 	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, classroomSession.getIdentifier(),timeDivisionType.getCode(),coefficient,index,duration,results.getLogMessage());
+	}
+	private static final String LOG_FORMAT = ClassroomSessionDivision.class.getSimpleName()+"(CLASS=%s TIMDIV=%s COEF=%s INDEX=%s DUR=%s %s)";
+	
 	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
 	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
 	public static final String FIELD_COEFFICIENT = "coefficient";

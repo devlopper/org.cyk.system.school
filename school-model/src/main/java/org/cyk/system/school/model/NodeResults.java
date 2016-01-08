@@ -29,5 +29,11 @@ public class NodeResults extends AbstractModelElement implements Serializable {
 	public String getUiString() {
 		return average+" ";
 	}
+	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, average,averageHighest,averageLowest,numberOfStudent);
+	}
+	private static final String LOG_FORMAT = NodeResults.class.getSimpleName()+"(A=%s H=%s L=%s STUD=%s)";
 
 }
