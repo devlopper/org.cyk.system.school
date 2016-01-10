@@ -8,15 +8,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
+import org.cyk.system.school.business.impl.subject.SubjectClassroomSessionDetails;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -26,8 +24,9 @@ import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSession> implements Serializable {
@@ -38,8 +37,8 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	
 	private FormOneData<ClassroomSessionDetails> details;
 	private Table<ClassroomSessionDivisionDetails> divisionTable;
-	private Table<SubjectDetails> subjectTable;
-	private Table<StudentDetails> studentTable;
+	private Table<SubjectClassroomSessionDetails> subjectTable;
+	private Table<StudentClassroomSessionDetails> studentTable;
 	
 	@Override
 	protected void initialisation() {
@@ -66,7 +65,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 			}
 		});
 		
-		subjectTable = (Table<SubjectDetails>) createDetailsTable(SubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<SubjectClassroomSession,SubjectDetails>(SubjectClassroomSession.class, SubjectDetails.class){
+		subjectTable = (Table<SubjectClassroomSessionDetails>) createDetailsTable(SubjectClassroomSessionDetails.class, new DetailsConfigurationListener.Table.Adapter<SubjectClassroomSession,SubjectClassroomSessionDetails>(SubjectClassroomSession.class, SubjectClassroomSessionDetails.class){
 				private static final long serialVersionUID = 1L;
 				@Override
 				public Collection<SubjectClassroomSession> getIdentifiables() {
@@ -78,7 +77,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 				}
 			});
 		
-		studentTable = (Table<StudentDetails>) createDetailsTable(StudentDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSession,StudentDetails>(StudentClassroomSession.class, StudentDetails.class){
+		studentTable = (Table<StudentClassroomSessionDetails>) createDetailsTable(StudentClassroomSessionDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSession,StudentClassroomSessionDetails>(StudentClassroomSession.class, StudentClassroomSessionDetails.class){
 				private static final long serialVersionUID = 1L;
 				@Override
 				public Collection<StudentClassroomSession> getIdentifiables() {
@@ -105,25 +104,5 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	}
 	
 	/**/
-	
-	public static class SubjectDetails extends AbstractOutputDetails<SubjectClassroomSession> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String name;
-		public SubjectDetails(SubjectClassroomSession subjectClassroomSession) {
-			super(subjectClassroomSession);
-			name = subjectClassroomSession.getSubject().getName();
-		}
-	}
-	
-	public static class StudentDetails extends AbstractOutputDetails<StudentClassroomSession> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String registrationCode;
-		@Input @InputText private String names;
-		public StudentDetails(StudentClassroomSession studentClassroomSession) {
-			super(studentClassroomSession);
-			registrationCode = studentClassroomSession.getStudent().getRegistration().getCode();
-			names = studentClassroomSession.getStudent().getPerson().getNames();
-		}
-	}
 
 }

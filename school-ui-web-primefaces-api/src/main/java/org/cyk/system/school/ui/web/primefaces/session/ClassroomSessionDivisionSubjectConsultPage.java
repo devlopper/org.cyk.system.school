@@ -7,26 +7,25 @@ import java.util.Collection;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.business.impl.subject.EvaluationDetails;
+import org.cyk.system.school.business.impl.subject.LectureDetails;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultPage<ClassroomSessionDivisionSubject> implements Serializable {
@@ -104,27 +103,6 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 		contextualMenu.getChildren().add(commandable);
 		
 		return Arrays.asList(contextualMenu);
-	}
-	
-	/**/
-	
-	public static class EvaluationDetails extends AbstractOutputDetails<Evaluation> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String name,coefficient;
-		public EvaluationDetails(Evaluation subjectEvaluation) {
-			super(subjectEvaluation);
-			name = subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getName();
-			coefficient = numberBusiness.format(subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());
-		}
-	}
-	
-	public static class LectureDetails extends AbstractOutputDetails<Lecture> implements Serializable{
-		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText private String date;
-		public LectureDetails(Lecture lecture) {
-			super(lecture);
-			date = timeBusiness.formatDate(lecture.getEvent().getPeriod().getFromDate());
-		}
 	}
 
 }
