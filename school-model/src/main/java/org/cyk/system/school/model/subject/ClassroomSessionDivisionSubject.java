@@ -37,7 +37,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal coefficient;
 	
-	@ManyToOne private SubjectGroup group;
+	@ManyToOne private ClassroomSessionDivisionSubjectGroup group;
 	
 	@ManyToOne private Teacher teacher;
 	
@@ -52,7 +52,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	 */
 	@ManyToOne private ScheduleCollection scheduleCollection;
 	
-	@Transient private Collection<SubjectEvaluation> evaluations = new ArrayList<>();
+	@Transient private Collection<Evaluation> evaluations = new ArrayList<>();
 	@Transient private Collection<Lecture> lectures = new ArrayList<>();
 	
 	public ClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subject, BigDecimal coefficient,Teacher teacher) {

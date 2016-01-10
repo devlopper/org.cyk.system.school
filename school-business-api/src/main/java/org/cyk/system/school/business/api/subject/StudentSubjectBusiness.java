@@ -11,12 +11,10 @@ import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 
 public interface StudentSubjectBusiness extends AbstractStudentResultsBusiness<ClassroomSessionDivisionSubject,StudentSubject, StudentSubjectEvaluation> {
 	
-	Collection<StudentSubject> findBySubject(ClassroomSessionDivisionSubject subject);
-
-	StudentSubject findByStudentBySubject(Student student, ClassroomSessionDivisionSubject subject);
+	Collection<StudentSubject> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject subject);
 
 	Collection<StudentSubject> findByStudent(Student student);
+	StudentSubject findByStudentByClassroomSessionDivisionSubject(Student student, ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
 	Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision);
-
-	Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student, ClassroomSession classroomSession);
+	Collection<StudentSubject> findByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
 }

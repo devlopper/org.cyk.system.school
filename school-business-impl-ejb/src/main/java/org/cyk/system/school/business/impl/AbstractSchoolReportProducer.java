@@ -38,7 +38,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	@Override
 	public String getEvaluationTypeCode(StudentSubjectEvaluation studentSubjectEvaluation) {
-		return studentSubjectEvaluation.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode();
+		return studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode();
 	}
 	
 	@Override
@@ -192,8 +192,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	protected BigDecimal getMarkValue(StudentSubjectEvaluation studentSubjectEvaluation){
 		BigDecimal value = studentSubjectEvaluation.getValue();
-		if(Boolean.FALSE.equals(studentSubjectEvaluation.getSubjectEvaluation().getCoefficientApplied()))
-			value = value.multiply(studentSubjectEvaluation.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());
+		if(Boolean.FALSE.equals(studentSubjectEvaluation.getEvaluation().getCoefficientApplied()))
+			value = value.multiply(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());
 		return value;
 	}
 	

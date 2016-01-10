@@ -301,7 +301,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 
 	@Override
 	protected ClassroomSessionDivision level(Lecture lecture) {
-		return lecture.getSubject().getClassroomSessionDivision();
+		return lecture.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
 	}
 
 	@Override

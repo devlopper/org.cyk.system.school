@@ -19,7 +19,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
@@ -55,7 +55,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			private static final long serialVersionUID = 1L;
 			@Override 
 			public Collection<StudentSubject> getIdentifiables() {
-				return SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findBySubject(identifiable);
+				return SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivisionSubject(identifiable);
 			}
 			@Override
 			public Crud[] getCruds() {
@@ -63,10 +63,10 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			}
 		});
 		
-		evaluationTable = (Table<EvaluationDetails>) createDetailsTable(EvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<SubjectEvaluation,EvaluationDetails>(SubjectEvaluation.class, EvaluationDetails.class){
+		evaluationTable = (Table<EvaluationDetails>) createDetailsTable(EvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<Evaluation,EvaluationDetails>(Evaluation.class, EvaluationDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
-			public Collection<SubjectEvaluation> getIdentifiables() {
+			public Collection<Evaluation> getIdentifiables() {
 				return identifiable.getEvaluations();
 			}
 			@Override
@@ -108,10 +108,10 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 	
 	/**/
 	
-	public static class EvaluationDetails extends AbstractOutputDetails<SubjectEvaluation> implements Serializable{
+	public static class EvaluationDetails extends AbstractOutputDetails<Evaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputText private String name,coefficient;
-		public EvaluationDetails(SubjectEvaluation subjectEvaluation) {
+		public EvaluationDetails(Evaluation subjectEvaluation) {
 			super(subjectEvaluation);
 			name = subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getName();
 			coefficient = numberBusiness.format(subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());

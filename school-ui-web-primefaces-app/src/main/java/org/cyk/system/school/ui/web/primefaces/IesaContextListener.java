@@ -116,11 +116,11 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			super(studentSubject);
 			for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
 				if(studentSubjectEvaluation.getStudentSubject().equals(studentSubject)){
-					if(studentSubjectEvaluation.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Test1"))
+					if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Test1"))
 						test1 = numberBusiness.format(studentSubjectEvaluation.getValue());
-					else if(studentSubjectEvaluation.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Test2"))
+					else if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Test2"))
 						test2 = numberBusiness.format(studentSubjectEvaluation.getValue());
-					else if(studentSubjectEvaluation.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Exam"))
+					else if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Exam"))
 						exam = numberBusiness.format(studentSubjectEvaluation.getValue());
 				}
 					

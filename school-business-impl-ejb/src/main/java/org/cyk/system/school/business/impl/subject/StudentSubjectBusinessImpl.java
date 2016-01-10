@@ -81,8 +81,8 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	
 	@Override
 	protected WeightedValue weightedValue(StudentSubjectEvaluation detail) {
-		return new WeightedValue(detail.getValue(), detail.getSubjectEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getCoefficient()
-				,Boolean.TRUE.equals(detail.getSubjectEvaluation().getCoefficientApplied()));
+		return new WeightedValue(detail.getValue(), detail.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getCoefficient()
+				,Boolean.TRUE.equals(detail.getEvaluation().getCoefficientApplied()));
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 
 	@Override
 	protected Collection<StudentSubjectEvaluation> readDetails(Collection<ClassroomSessionDivisionSubject> levels,Boolean keepDetails) {
-		return evaluatedStudentDao.readBySubjects(levels);
+		return evaluatedStudentDao.readByClassroomSessionDivisionSubjects(levels);
 	}
 	 
 	@Override
@@ -117,7 +117,7 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 
 	@Override
 	protected ClassroomSessionDivisionSubject level(Lecture lecture) {
-		return lecture.getSubject();
+		return lecture.getClassroomSessionDivisionSubject();
 	}
 	
 	@Override
@@ -128,12 +128,12 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	/**/
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public Collection<StudentSubject> findBySubject(ClassroomSessionDivisionSubject subject) {
+	public Collection<StudentSubject> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject subject) {
 		return dao.readByClassroomSessionDivisionSubject(subject);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public StudentSubject findByStudentBySubject(Student student,ClassroomSessionDivisionSubject subject) {
+	public StudentSubject findByStudentByClassroomSessionDivisionSubject(Student student,ClassroomSessionDivisionSubject subject) {
 		return dao.readByStudentBySubject(student, subject);
 	}
 
@@ -148,7 +148,7 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student, ClassroomSession classroomSession) {
+	public Collection<StudentSubject> findByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student, classroomSession);
 	}
 	 

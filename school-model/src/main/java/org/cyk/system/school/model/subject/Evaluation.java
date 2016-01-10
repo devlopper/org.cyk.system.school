@@ -23,11 +23,11 @@ import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS)
-public class SubjectEvaluation extends AbstractIdentifiable implements Serializable {
+public class Evaluation extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@JoinColumn(name="subjectEvaluationType") @ManyToOne @NotNull private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
+	@JoinColumn(name="type") @ManyToOne @NotNull private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
 	@Temporal(TemporalType.TIMESTAMP) @Column(name="happeningDate") @NotNull private Date date;
 	@NotNull private Boolean coefficientApplied = Boolean.FALSE;
 	
@@ -35,7 +35,7 @@ public class SubjectEvaluation extends AbstractIdentifiable implements Serializa
 	
 	@Transient private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
 
-	public SubjectEvaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,Boolean coefficientApplied) {
+	public Evaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,Boolean coefficientApplied) {
 		super();
 		this.classroomSessionDivisionSubjectEvaluationType = classroomSessionDivisionSubjectEvaluationType;
 		this.coefficientApplied = coefficientApplied;

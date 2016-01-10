@@ -6,7 +6,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
-import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.model.AbstractQueryFormModel;
@@ -68,7 +68,7 @@ public class ClassroomSessionDivisionSubjectQueryFormModel extends AbstractQuery
 		public void serve(Object data, String actionIdentifier) {
 			if(SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation().equals(actionIdentifier)){
 				WebNavigationManager.getInstance().redirectToDynamicCreate(((ClassroomSessionDivisionSubjectQueryFormModel)data).getSubjectEvaluationType()
-						, SubjectEvaluation.class); 
+						, Evaluation.class); 
 			}
 		}
 	}

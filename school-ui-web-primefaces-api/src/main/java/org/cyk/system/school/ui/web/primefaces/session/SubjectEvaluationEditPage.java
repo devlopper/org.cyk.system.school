@@ -19,7 +19,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
@@ -37,7 +37,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
 @Named @ViewScoped @Getter @Setter
-public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvaluation> implements Serializable {
+public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
@@ -130,8 +130,8 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 		return Boolean.TRUE;
 	}
 	
-	protected SubjectEvaluation instanciateIdentifiable() {
-		SubjectEvaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
+	protected Evaluation instanciateIdentifiable() {
+		Evaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
 		subjectEvaluation.setClassroomSessionDivisionSubjectEvaluationType(subjectEvaluationType);
 		return subjectEvaluation;
 	}
@@ -154,7 +154,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<SubjectEvalua
 	}
 		
 	@Getter @Setter
-	public static class Form extends AbstractFormModel<SubjectEvaluation> implements Serializable{
+	public static class Form extends AbstractFormModel<Evaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private ClassroomSessionDivisionSubjectEvaluationType type;
 		//@Input @InputCalendar @NotNull private Date date;

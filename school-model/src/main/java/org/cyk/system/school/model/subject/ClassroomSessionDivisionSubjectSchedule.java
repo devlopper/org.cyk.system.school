@@ -13,12 +13,16 @@ import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.time.Schedule;
 
 @Getter @Setter @Entity
-public class SubjectSchedule extends AbstractIdentifiable implements Serializable {
+public class ClassroomSessionDivisionSubjectSchedule extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne private ClassroomSessionDivisionSubject subject;
+	@ManyToOne private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	
 	@OneToOne private Schedule schedule;
-		
+	
+	/**/
+	
+	public static final String FIELD_CLASSROOMSESSIONDIVISIONSUBJECT = "classroomSessionDivisionSubject";
+	public static final String FIELD_SCHEDULE = "schedule";
 }

@@ -187,7 +187,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 
 	@Override
 	protected ClassroomSession level(Lecture lecture) {
-		return lecture.getSubject().getClassroomSessionDivision().getClassroomSession();
+		return lecture.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession();
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)

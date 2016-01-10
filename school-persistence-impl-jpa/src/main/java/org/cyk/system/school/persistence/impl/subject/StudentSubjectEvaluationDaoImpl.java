@@ -10,7 +10,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 import org.cyk.utility.common.computation.ArithmeticOperator;
 
@@ -75,7 +75,7 @@ public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSub
 	}
 
 	@Override
-	public Collection<StudentSubjectEvaluation> readBySubjects(Collection<ClassroomSessionDivisionSubject> subjects) {
+	public Collection<StudentSubjectEvaluation> readByClassroomSessionDivisionSubjects(Collection<ClassroomSessionDivisionSubject> subjects) {
 		return namedQuery(readBySubjects).parameterIdentifiers(subjects).resultMany();
 	}
 
@@ -85,7 +85,7 @@ public class StudentSubjectEvaluationDaoImpl extends AbstractTypedDao<StudentSub
 	}
 
 	@Override
-	public Collection<StudentSubjectEvaluation> readBySubjectEvaluation(SubjectEvaluation subjectEvaluation) {
+	public Collection<StudentSubjectEvaluation> readByEvaluation(Evaluation subjectEvaluation) {
 		return namedQuery(readBySubjectEvaluation).parameter(StudentSubjectEvaluation.FIELD_EVALUATION, subjectEvaluation).resultMany();
 	}
 

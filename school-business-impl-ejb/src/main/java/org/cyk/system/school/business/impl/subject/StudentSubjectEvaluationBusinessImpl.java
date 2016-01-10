@@ -14,7 +14,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 
@@ -50,8 +50,8 @@ public class StudentSubjectEvaluationBusinessImpl extends AbstractTypedBusinessS
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public Collection<StudentSubjectEvaluation> findBySubjectEvaluation(SubjectEvaluation subjectEvaluation,Boolean includeAll) {
-		Collection<StudentSubjectEvaluation> collection = dao.readBySubjectEvaluation(subjectEvaluation);
+	public Collection<StudentSubjectEvaluation> findBySubjectEvaluation(Evaluation subjectEvaluation,Boolean includeAll) {
+		Collection<StudentSubjectEvaluation> collection = dao.readByEvaluation(subjectEvaluation);
 		if(Boolean.TRUE.equals(includeAll)){
 			for(StudentSubject studentSubject : studentSubjectDao.readByClassroomSessionDivisionSubject(subjectEvaluation
 					.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject())){

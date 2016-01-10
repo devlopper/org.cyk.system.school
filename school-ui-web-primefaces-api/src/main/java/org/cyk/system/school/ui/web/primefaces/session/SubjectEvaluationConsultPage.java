@@ -12,7 +12,7 @@ import lombok.Setter;
 
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.system.school.model.subject.SubjectEvaluation;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
@@ -23,7 +23,7 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
 @Named @ViewScoped @Getter @Setter
-public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEvaluation> implements Serializable {
+public class SubjectEvaluationConsultPage extends AbstractConsultPage<Evaluation> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
@@ -35,7 +35,7 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 		super.initialisation();
 		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable.getClassroomSessionDivisionSubjectEvaluationType());
 		
-		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<SubjectEvaluation,Details>(SubjectEvaluation.class, Details.class){
+		details = createDetailsForm(Details.class, identifiable, new DetailsConfigurationListener.Form.Adapter<Evaluation,Details>(Evaluation.class, Details.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -81,10 +81,10 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<SubjectEva
 	
 	/**/
 	
-	public static class Details extends AbstractOutputDetails<SubjectEvaluation> implements Serializable{
+	public static class Details extends AbstractOutputDetails<Evaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputText private String date,type,coefficient;
-		public Details(SubjectEvaluation subjectEvaluation) {
+		public Details(Evaluation subjectEvaluation) {
 			super(subjectEvaluation);
 			date = timeBusiness.formatDate(subjectEvaluation.getDate());
 			type = subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getName();

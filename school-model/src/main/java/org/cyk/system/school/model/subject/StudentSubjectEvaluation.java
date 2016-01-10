@@ -19,13 +19,13 @@ public class StudentSubjectEvaluation extends AbstractIdentifiable implements Se
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne @NotNull private SubjectEvaluation subjectEvaluation;
+	@ManyToOne @NotNull private Evaluation evaluation;
 	@ManyToOne @NotNull private StudentSubject studentSubject;
 	@Column(precision=5,scale=FLOAT_SCALE) @NotNull private BigDecimal value;
 
-	public StudentSubjectEvaluation(SubjectEvaluation subjectEvaluation,StudentSubject studentSubject, BigDecimal value) {
+	public StudentSubjectEvaluation(Evaluation evaluation,StudentSubject studentSubject, BigDecimal value) {
 		super();
-		this.subjectEvaluation = subjectEvaluation;
+		this.evaluation = evaluation;
 		this.studentSubject = studentSubject;
 		this.value = value;
 	}
@@ -35,7 +35,7 @@ public class StudentSubjectEvaluation extends AbstractIdentifiable implements Se
 		return subjectEvaluation.getType().getSubject().getIdentifier()+":"+studentSubject.getStudent().getRegistration().getCode()+":"+value;
 	}*/
 	
-	public static final String FIELD_EVALUATION = "subjectEvaluation";
+	public static final String FIELD_EVALUATION = "evaluation";
 	public static final String FIELD_STUDENT_SUBJECT = "studentSubject";
 	public static final String FIELD_VALUE = "value";
 }
