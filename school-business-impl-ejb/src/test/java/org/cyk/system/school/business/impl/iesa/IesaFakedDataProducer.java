@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
@@ -420,6 +421,10 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 	
 	private ClassroomSessionDivisionSubjectEvaluationType createSubjectEvaluationType(Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes,ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient){
 		ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType = new ClassroomSessionDivisionSubjectEvaluationType(subject,name,coefficient,new BigDecimal("100"));
+		Interval interval = new Interval(null, RandomStringUtils.randomAlphanumeric(10), "Count interval", new BigDecimal("1"), new BigDecimal("1"));
+		interval.getLow().setExcluded(Boolean.FALSE);
+		interval.getHigh().setExcluded(Boolean.FALSE);
+		subjectEvaluationType.setCountInterval(interval);
 		subjectEvaluationTypes.add(subjectEvaluationType);
 		return subjectEvaluationType;
 	}

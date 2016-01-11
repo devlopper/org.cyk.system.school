@@ -1,7 +1,6 @@
 package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -10,16 +9,14 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.system.school.model.subject.Evaluation;
+import org.cyk.system.school.persistence.api.subject.EvaluationDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
-import org.cyk.utility.common.computation.ArithmeticOperator;
-import org.cyk.system.school.persistence.api.subject.EvaluationDao;
 
 @Stateless
 public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluation, EvaluationDao> implements EvaluationBusiness,Serializable {
@@ -46,12 +43,8 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 
 	@Override
 	public Evaluation create(Evaluation evaluation) {
-		BigDecimal maximum = evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval()==null ? null
-				: evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval().getHigh().getValue();
-		exceptionUtils().comparison(maximum!=null &&
-				RootBusinessLayer.getInstance().getIntervalBusiness().isHigher(evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval()
-						, new BigDecimal(dao.countByClassroomSessionDivisionSubject(evaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject()))
-						, 0) , "number.of.evaluation", ArithmeticOperator.GTE, maximum);
+		exceptionUtils().cannotCreateMoreThan(dao.countByClassroomSessionDivisionSubject(evaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject())
+				,evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval(),  Evaluation.class);
 		if(evaluation.getDate()==null)
 			evaluation.setDate(universalTimeCoordinated());
 		evaluation = super.create(evaluation);

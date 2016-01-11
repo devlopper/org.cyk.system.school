@@ -9,6 +9,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.EvaluationType;
@@ -24,7 +25,14 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 	public ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl(ClassroomSessionDivisionSubjectEvaluationTypeDao dao) {
 		super(dao); 
 	}
-
+	
+	@Override
+	public ClassroomSessionDivisionSubjectEvaluationType create(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+		if(classroomSessionDivisionSubjectEvaluationType.getCountInterval()!=null)
+			RootBusinessLayer.getInstance().getIntervalBusiness().create(classroomSessionDivisionSubjectEvaluationType.getCountInterval());
+		return super.create(classroomSessionDivisionSubjectEvaluationType);
+	}
+	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public ClassroomSessionDivisionSubjectEvaluationType findBySubjectByEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName) {
 		return dao.readBySubjectByEvaluationType(subject, evaluationTypeName);
