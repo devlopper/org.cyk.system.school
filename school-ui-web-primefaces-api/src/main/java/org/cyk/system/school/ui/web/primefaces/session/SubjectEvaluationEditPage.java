@@ -16,11 +16,10 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.Evaluation;
+import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -73,8 +72,6 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 	
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
-		
 		markCollection = createItemCollection(Mark.class, StudentSubjectEvaluation.class,new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override

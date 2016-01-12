@@ -14,7 +14,6 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.data.collector.form.ControlSet;
@@ -36,7 +35,6 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		form.getControlSetListeners().add(new ControlSetAdapter<Object>(){
 			@Override
 			public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Field field) {

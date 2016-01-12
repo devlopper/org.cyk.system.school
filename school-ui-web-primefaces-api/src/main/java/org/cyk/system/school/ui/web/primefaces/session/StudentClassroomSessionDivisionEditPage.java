@@ -8,11 +8,13 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.StudentResultsMetricValue;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
@@ -24,9 +26,6 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputTextarea;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage<StudentClassroomSessionDivision> implements Serializable {
@@ -40,7 +39,6 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		MetricCollection metricCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
 				.findCommonNodeInformations(identifiable.getClassroomSessionDivision().getClassroomSession()).getStudentWorkMetricCollection();
 		isNumberValueType = MetricValueType.NUMBER.equals(metricCollection.getValueType());

@@ -23,13 +23,7 @@ import lombok.Setter;
 public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<StudentClassroomSession> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
-	
-	@Override
-	protected void initialisation() {
-		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);	
-	}
-	
+		
 	@Override
 	protected StudentClassroomSession instanciateIdentifiable() {
 		StudentClassroomSession studentClassroomSession = super.instanciateIdentifiable();

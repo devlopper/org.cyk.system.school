@@ -11,7 +11,6 @@ import lombok.Setter;
 
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.StudentSubjectEvaluationDetails;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.ui.web.primefaces.Table;
@@ -29,8 +28,6 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<Evaluation
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable.getClassroomSessionDivisionSubjectEvaluationType());
-		
 		details = createDetailsForm(EvaluationDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<Evaluation,EvaluationDetails>(Evaluation.class, EvaluationDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override

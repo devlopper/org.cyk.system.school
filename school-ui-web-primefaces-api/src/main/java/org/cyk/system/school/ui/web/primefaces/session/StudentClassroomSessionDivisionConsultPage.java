@@ -4,20 +4,17 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails.SubjectDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.StudentResultsMetricValue;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
@@ -42,13 +39,10 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
 	private Boolean showReport = Boolean.FALSE;
 	
-	@Inject private StudentResultsMetricValueBusiness studentResultsMetricValueBusiness;
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		
 		if(SUBJECT_DETAILS_CLASS==null)
 			try {//TODO make it as util method
@@ -100,7 +94,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentResultsMetricValue> getIdentifiables() {
-				return studentResultsMetricValueBusiness.findByStudentResults(identifiable.getResults());
+				return SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults());
 			}
 			@Override
 			public String getTitleId() {

@@ -4,14 +4,12 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
@@ -30,8 +28,6 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	@Inject private SubjectClassroomSessionBusiness subjectClassroomSessionBusiness;
-	
 	private FormOneData<ClassroomSessionDetails> details;
 	private Table<ClassroomSessionDivisionDetails> divisionTable;
 	private Table<SubjectClassroomSessionDetails> subjectTable;
@@ -40,8 +36,6 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
-		
 		details = createDetailsForm(ClassroomSessionDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSession,ClassroomSessionDetails>(ClassroomSession.class, ClassroomSessionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -66,7 +60,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 				private static final long serialVersionUID = 1L;
 				@Override
 				public Collection<SubjectClassroomSession> getIdentifiables() {
-					return subjectClassroomSessionBusiness.findByClassroomSession(identifiable);
+					return SchoolBusinessLayer.getInstance().getSubjectClassroomSessionBusiness().findByClassroomSession(identifiable);
 				}
 				@Override
 				public Crud[] getCruds() {

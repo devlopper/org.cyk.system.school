@@ -22,13 +22,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSession> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
-	
-	@Override
-	protected void initialisation() {
-		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
-	}
-	
+		
 	public static class Form extends AbstractFormModel<ClassroomSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		

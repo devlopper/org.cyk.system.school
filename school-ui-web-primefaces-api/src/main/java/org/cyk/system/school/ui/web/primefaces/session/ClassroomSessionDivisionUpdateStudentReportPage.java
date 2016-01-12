@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.UIProvider;
@@ -32,7 +31,6 @@ public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCru
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
 		text = languageBusiness.findText("org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionUpdateStudentReportPage.text", new Object[]{
 				formatUsingBusiness(identifiable.getClassroomSession()),formatUsingBusiness(identifiable)
 		});

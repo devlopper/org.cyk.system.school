@@ -15,7 +15,6 @@ import lombok.Setter;
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.UIProvider;
@@ -39,8 +38,6 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contentTitle = formatPathUsingBusiness(ClassroomSession.class,identifiable);
-		
 		resultCollection = createItemCollection(Result.class, StudentClassroomSessionDivision.class,new ItemCollectionWebAdapter<Result,StudentClassroomSessionDivision>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override

@@ -4,17 +4,13 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.root.business.api.event.EventBusiness;
 import org.cyk.system.root.business.impl.event.EventParticipationDetails;
 import org.cyk.system.root.model.event.EventParticipation;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.subject.LectureDetails;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.ui.web.primefaces.Table;
@@ -26,22 +22,12 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
-	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
-	@Inject private EventBusiness eventBusiness;
-	
 	private FormOneData<LectureDetails> details;
 	private Table<EventParticipationDetails> participationTable;
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		/*contentTitle = classroomSessionBusiness.format(identifiable.getClassroomSessionDivision().getClassroomSession())
-				+" : "+classroomSessionDivisionBusiness.format(identifiable.getClassroomSessionDivision())
-				+" : "+identifiable.getSubject().getName();*/
-		
-		
-		
 		details = createDetailsForm(LectureDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<Lecture,LectureDetails>(Lecture.class, LectureDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
