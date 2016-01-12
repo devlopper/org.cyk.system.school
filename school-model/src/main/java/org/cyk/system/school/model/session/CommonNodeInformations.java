@@ -6,15 +6,15 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.cyk.system.root.model.AbstractModelElement;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Embeddable @Getter @Setter @NoArgsConstructor
 public class CommonNodeInformations extends AbstractModelElement implements Serializable {
@@ -30,7 +30,10 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private TimeDivisionType attendanceTimeDivisionType;
 	
 	private Boolean aggregateAttendance = Boolean.TRUE;
-	
+	/*
+	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
+	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
+	*/
 	public CommonNodeInformations(IntervalCollection intervalCollection,MetricCollection studentWorkMetricCollection,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate
 			,TimeDivisionType attendanceTimeDivisionType) {
 		super();

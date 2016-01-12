@@ -19,17 +19,13 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
-import org.cyk.system.school.persistence.api.subject.LectureDao;
-import org.cyk.system.school.persistence.api.subject.EvaluationDao;
 
 @Stateless
 public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubject, ClassroomSessionDivisionSubjectDao> implements ClassroomSessionDivisionSubjectBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	@Inject private EvaluationDao subjectEvaluationDao;
-	@Inject private LectureDao lectureDao;
-	@Inject SubjectClassroomSessionDao subjectClassroomSessionDao;
+	private SubjectClassroomSessionDao subjectClassroomSessionDao;
 	
 	@Inject
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {
