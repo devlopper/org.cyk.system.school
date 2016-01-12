@@ -16,14 +16,11 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 
 @Stateless
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
-	
-	@Inject private ClassroomSessionDivisionDao classroomSessionDivisionDao;
 	
 	@Inject
 	public ClassroomSessionBusinessImpl(ClassroomSessionDao dao) {
@@ -56,12 +53,4 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		return duration==null?0l:RootBusinessLayer.getInstance().getTimeDivisionTypeBusiness().convertToMillisecond(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), duration);
 	}
 	
-	@Override
-	protected void __load__(ClassroomSession classroomSession) {
-		super.__load__(classroomSession);
-		classroomSession.setDivisions(classroomSessionDivisionDao.readByClassroomSession(classroomSession));
-	}
-
-	
-
 }

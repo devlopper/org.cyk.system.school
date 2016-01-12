@@ -52,6 +52,7 @@ import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.generator.RandomDataProvider;
+import org.cyk.utility.common.test.TestEnvironmentListener.Try;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper implements Serializable {
@@ -438,10 +439,11 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     	System.out.println("Creating subject evaluations");
     	createSubjectEvaluations(coefficientApplied);
     	
-    	/*new Try("Deux doit être supérieur à un"){ 
+    	System.out.println("Try to create more subject evaluations than allowed");
+    	new Try("Vous ne pouvez pas créer plus de 1 evaluation"){ 
 			private static final long serialVersionUID = -8176804174113453706L;
 			@Override protected void code() {createSubjectEvaluations(coefficientApplied);}
-		}.execute();*/
+		}.execute();
     	
     	System.out.println("Setting student metric , attendance , appreciation");
     	randomValues(Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);

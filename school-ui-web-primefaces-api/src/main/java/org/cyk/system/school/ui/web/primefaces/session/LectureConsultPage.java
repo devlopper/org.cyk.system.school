@@ -40,8 +40,7 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<EventParticipation> getIdentifiables() {
-				eventBusiness.load(identifiable.getEvent());
-				return identifiable.getEvent().getEventParticipations();
+				return rootBusinessLayer.getEventParticipationBusiness().findByEvent(identifiable.getEvent());
 			}	
 			public Boolean getEnabledInDefaultTab() {
 				return Boolean.TRUE;

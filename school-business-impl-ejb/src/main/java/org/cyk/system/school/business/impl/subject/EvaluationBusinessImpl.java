@@ -43,8 +43,10 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 
 	@Override
 	public Evaluation create(Evaluation evaluation) {
-		exceptionUtils().cannotCreateMoreThan(dao.countByClassroomSessionDivisionSubject(evaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject())
-				,evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval(),  Evaluation.class);
+		logIdentifiable("Creating evaluation", evaluation);
+		Long numberOfEvaluations = dao.countByClassroomSessionDivisionSubjectEvaluationType(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
+		logTrace("Number of evaluations found : {}", numberOfEvaluations);
+		exceptionUtils().cannotCreateMoreThan(numberOfEvaluations,evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval(),  Evaluation.class);
 		if(evaluation.getDate()==null)
 			evaluation.setDate(universalTimeCoordinated());
 		evaluation = super.create(evaluation);
@@ -73,12 +75,6 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 			else
 				studentSubjectEvaluationDao.update(studentSubjectEvaluation);		
 		}
-	}
-	
-	@Override
-	protected void __load__(Evaluation evaluation) {
-		super.__load__(evaluation);
-		evaluation.setStudentSubjectEvaluations(studentSubjectEvaluationDao.readByEvaluation(evaluation));
 	}
 	
 	@Override

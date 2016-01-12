@@ -13,13 +13,15 @@ public class EvaluationDaoImpl extends AbstractTypedDao<Evaluation> implements E
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readByClassroomSessionDivisionSubject,countByClassroomSessionDivisionSubject;
+	private String readByClassroomSessionDivisionSubject,countByClassroomSessionDivisionSubject,
+	readByClassroomSessionDivisionSubjectEvaluationType,countByClassroomSessionDivisionSubjectEvaluationType;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
 		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(commonUtils.attributePath(Evaluation.FIELD_TYPE
 				, ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT), ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT));
+		registerNamedQuery(readByClassroomSessionDivisionSubjectEvaluationType, _select().where(Evaluation.FIELD_TYPE));
 	}
 	
 	@Override
@@ -31,6 +33,18 @@ public class EvaluationDaoImpl extends AbstractTypedDao<Evaluation> implements E
 	public Long countByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		return countNamedQuery(countByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT, classroomSessionDivisionSubject).resultOne();
 	}
+
+	@Override
+	public Collection<Evaluation> readByClassroomSessionDivisionSubjectEvaluationType(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+		return namedQuery(readByClassroomSessionDivisionSubjectEvaluationType).parameter(Evaluation.FIELD_TYPE, classroomSessionDivisionSubjectEvaluationType).resultMany();
+	}
+	
+	@Override
+	public Long countByClassroomSessionDivisionSubjectEvaluationType(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+		return countNamedQuery(countByClassroomSessionDivisionSubjectEvaluationType).parameter(Evaluation.FIELD_TYPE, classroomSessionDivisionSubjectEvaluationType).resultOne();
+	}
+	
+	
 	
 }
  

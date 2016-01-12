@@ -57,14 +57,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		cascade(classroomSessionDivisionSubject);
 		return super.delete(classroomSessionDivisionSubject);
 	}
-    
-	@Override
-	protected void __load__(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-		super.__load__(classroomSessionDivisionSubject);
-		classroomSessionDivisionSubject.setEvaluations(subjectEvaluationDao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
-		classroomSessionDivisionSubject.setLectures(lectureDao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
-	}
-	
+    	
 	@Override
 	public void computeResults(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<StudentSubject> studentSubjects) {
 		logTrace("Computing node results of {} Classroom Session Division Subject(s). Number of students={}", classroomSessionDivisionSubjects.size(),studentSubjects.size());

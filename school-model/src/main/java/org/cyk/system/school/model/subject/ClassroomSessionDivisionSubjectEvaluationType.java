@@ -49,4 +49,10 @@ public class ClassroomSessionDivisionSubjectEvaluationType extends AbstractIdent
 	public String toString() {
 		return evaluationType.toString();
 	}
+	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, classroomSessionDivisionSubject.getIdentifier(),evaluationType.getIdentifier());
+	}
+	private static final String LOG_FORMAT = ClassroomSessionDivisionSubjectEvaluationType.class.getSimpleName()+"(SUBJECT=%s TYPE=%s)";
 }

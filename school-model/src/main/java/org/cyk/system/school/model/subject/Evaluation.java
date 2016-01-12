@@ -53,6 +53,12 @@ public class Evaluation extends AbstractIdentifiable implements Serializable {
 		return classroomSessionDivisionSubjectEvaluationType.getUiString();
 	}
 	
+	@Override
+	public String getLogMessage() {
+		return String.format(LOG_FORMAT, classroomSessionDivisionSubjectEvaluationType.getIdentifier(),date,coefficientApplied);
+	}
+	private static final String LOG_FORMAT = Evaluation.class.getSimpleName()+"(TYPE=%s date=%s COEF_APPLIED=%s)";
+	
 	public static final String FIELD_TYPE = "classroomSessionDivisionSubjectEvaluationType";
 	public static final String FIELD_DATE = "date";
 	

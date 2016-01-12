@@ -222,7 +222,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setGradingScaleLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.gradingscale"));
 		IntervalCollection evaluationIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
-		//rootBusinessLayer.getIntervalCollectionBusiness().load(evaluationIntervalCollection);
 		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(evaluationIntervalCollection, Boolean.FALSE)){
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, getGradeScaleCode(interval), interval.getName());
 			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
@@ -232,7 +231,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setEffortLevelLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.effort"));
 		IntervalCollection intervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection().getValueIntervalCollection();
-		//rootBusinessLayer.getIntervalCollectionBusiness().load(intervalCollection);
 		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(intervalCollection, Boolean.TRUE)){
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
 			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
@@ -242,8 +240,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setBehaviorLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.behaviour"));
 		MetricCollection metricCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection();
-		rootBusinessLayer.getMetricCollectionBusiness().load(metricCollection);
-		for(Metric metric : metricCollection.getCollection()){
+		for(Metric metric : rootBusinessLayer.getMetricBusiness().findByCollection(metricCollection)){
 			String value = "";
 			for(StudentResultsMetricValue studentResultsMetricValue : schoolBusinessLayer.getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults()))
 				if(studentResultsMetricValue.getMetricValue().getMetric().getIdentifier().equals(metric.getIdentifier())){

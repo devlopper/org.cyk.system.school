@@ -25,6 +25,7 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValue;
+import org.cyk.system.root.persistence.api.mathematics.MetricDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -66,6 +67,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Inject private StudentSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao; 
 	@Inject private StudentResultsMetricValueDao studentResultsMetricValueDao;
+	@Inject private MetricDao metricDao;
 	
 	
 	@Inject 
@@ -94,10 +96,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		MetricCollection metricCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
 				.findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getStudentWorkMetricCollection();
-		RootBusinessLayer.getInstance().getMetricCollectionBusiness().load(metricCollection);
-		IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
-		RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
-		for(Metric metric : metricCollection.getCollection()){
+		for(Metric metric : metricDao.readByCollection(metricCollection)){
 			studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
 				.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO,Constant.EMPTY_STRING.toString(),null)));
 		}
