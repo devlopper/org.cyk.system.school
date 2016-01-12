@@ -1,12 +1,14 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.system.root.business.api.event.EventBusiness;
 import org.cyk.system.root.business.impl.event.EventParticipationDetails;
@@ -15,14 +17,9 @@ import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.subject.LectureDetails;
 import org.cyk.system.school.model.subject.Lecture;
-import org.cyk.ui.api.UIProvider;
-import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class LectureConsultPage extends AbstractConsultPage<Lecture> implements Serializable {
@@ -66,26 +63,5 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 		});
 
 	}
-
-	@Override
-	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
-		contextualMenu.setLabel(contentTitle); 
-		
-		/*commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision(), "button", null);
-		commandable.setLabel(classroomSessionDivisionBusiness.format(identifiable.getClassroomSessionDivision()));
-		contextualMenu.getChildren().add(commandable);*/
-		
-		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
-		contextualMenu.getChildren().add(commandable);
-		
-		/*commandable = navigationManager.createCreateCommandable(Lecture.class, uiManager.businessEntityInfos(Lecture.class).getUiLabelId(), null);
-		commandable.getParameters().add(new Parameter(uiManager.businessEntityInfos(ClassroomSessionDivisionSubject.class), iden));
-		contextualMenu.getChildren().add(commandable);*/
-		
-		return Arrays.asList(contextualMenu);
-	}
-	
-	/**/
 
 }

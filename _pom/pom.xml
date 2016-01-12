@@ -27,7 +27,7 @@
 		<module>../school-application-resources</module>
 		
 		<module>../school-ui-web-primefaces-app</module>
-		<module>../application</module>
+		<!--module>../application</module-->
 	</modules>
 
 	<properties>

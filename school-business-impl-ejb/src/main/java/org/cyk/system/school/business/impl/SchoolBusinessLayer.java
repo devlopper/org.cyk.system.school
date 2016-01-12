@@ -14,8 +14,10 @@ import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.api.ClazzBusiness;
 import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
+import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFormatter;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
@@ -38,6 +40,7 @@ import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelGroup;
@@ -88,7 +91,13 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
-		
+		registerFormatter(AcademicSession.class, new AbstractFormatter<AcademicSession>() {
+			private static final long serialVersionUID = -4793331650394948152L;
+			@Override
+			public String format(AcademicSession academicSession, ContentType contentType) {
+				return RootBusinessLayer.getInstance().getTimeBusiness().formatDate(academicSession.getPeriod().getFromDate(), academicSession.getPeriod().getToDate(), TimeBusiness.DATE_SHORT_PATTERN) ;
+			}
+		});
 		registerFormatter(ClassroomSession.class, new AbstractFormatter<ClassroomSession>() {
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
@@ -111,7 +120,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			public Object getParentOf(Object object) {
 				
 				if(object instanceof ClassroomSession)
-					return ((ClassroomSession)object).getAcademicSession();
+					return null;//((ClassroomSession)object).getAcademicSession();
 				if(object instanceof ClassroomSessionDivision)
 					return ((ClassroomSessionDivision)object).getClassroomSession();
 				if(object instanceof ClassroomSessionDivisionSubject)

@@ -1,11 +1,13 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
@@ -16,16 +18,10 @@ import org.cyk.system.school.business.impl.subject.LectureDetails;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.ui.api.UIProvider;
-import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultPage<ClassroomSessionDivisionSubject> implements Serializable {
@@ -86,23 +82,4 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			}
 		});*/
 	}
-	
-	@Override
-	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
-		contextualMenu.setLabel(formatUsingBusiness(identifiable)); 
-		
-		contextualMenu.getChildren().add(commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision().getClassroomSession(), null));
-		
-		contextualMenu.getChildren().add(commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision(), null));
-		
-		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
-		contextualMenu.getChildren().add(commandable);
-		
-		commandable = navigationManager.createCreateCommandable(Lecture.class, uiManager.businessEntityInfos(Lecture.class).getUserInterface().getLabelId(), null);
-		contextualMenu.getChildren().add(commandable);
-		
-		return Arrays.asList(contextualMenu);
-	}
-
 }

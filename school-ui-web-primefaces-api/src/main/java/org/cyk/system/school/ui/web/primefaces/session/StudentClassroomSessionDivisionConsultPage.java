@@ -1,7 +1,6 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
@@ -23,7 +22,6 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
-import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
@@ -114,19 +112,11 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	}
 	
 	@Override
-	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
-		contextualMenu.setLabel(formatUsingBusiness(identifiable)); 
-		
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision().getClassroomSession(), null));
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivision(), null));
-		contextualMenu.getChildren().add(navigationManager.createUpdateCommandable(identifiable, "command.edit", null));
-				
+	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
+		super.processIdentifiableContextualCommandable(commandable);
 		if(identifiable.getResults().getReport()!=null)
-			contextualMenu.getChildren().add(navigationManager.createReportCommandable(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision()
+			commandable.addChild(navigationManager.createReportCommandable(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision()
 					,"school.markscard", null));
-		
-		return Arrays.asList(contextualMenu);
 	}
-
+	
 }

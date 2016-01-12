@@ -1,12 +1,14 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
@@ -19,14 +21,9 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
-import org.cyk.ui.api.UIProvider;
-import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSession> implements Serializable {
@@ -90,19 +87,5 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 			});
 					
 	}
-			
-	@Override
-	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
-		contextualMenu.setLabel(formatUsingBusiness(identifiable)); 
-		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
-		contextualMenu.getChildren().add(commandable);
-		for(ClassroomSessionDivision classroomSessionDivision : identifiable.getDivisions()){
-			contextualMenu.getChildren().add(navigationManager.createConsultCommandable(classroomSessionDivision,null));
-		}
-		return Arrays.asList(contextualMenu);
-	}
-	
-	/**/
 
 }

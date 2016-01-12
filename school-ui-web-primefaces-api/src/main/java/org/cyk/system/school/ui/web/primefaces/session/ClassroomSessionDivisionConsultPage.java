@@ -1,7 +1,6 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
@@ -20,7 +19,6 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
-import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
@@ -75,23 +73,13 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	}
 	
 	@Override
-	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null),commandable=null;
-		contextualMenu.setLabel(formatUsingBusiness(identifiable)); 
-		
-		contextualMenu.getChildren().add(commandable = navigationManager.createConsultCommandable(identifiable.getClassroomSession(), null));
-		
-		commandable = navigationManager.createUpdateCommandable(identifiable, "command.edit", null);
-		contextualMenu.getChildren().add(commandable);
-		
-		contextualMenu.getChildren().add(navigationManager.createUpdateCommandable(identifiable, "command.selectclassroomsessiondivision.auscsdr", null,
+	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
+		super.processIdentifiableContextualCommandable(commandable);
+		commandable.addChild(navigationManager.createUpdateCommandable(identifiable, "command.selectclassroomsessiondivision.auscsdr", null,
 				SchoolWebManager.getInstance().getOutcomeUpdateStudentClassroomSessionDivisionResults()));
 		
-		commandable = navigationManager.createUpdateCommandable(identifiable, "school.markscard.generate", null,
-				SchoolWebManager.getInstance().getOutcomeGenerateStudentClassroomSessionDivisionReport());
-		contextualMenu.getChildren().add(commandable);
-		
-		return Arrays.asList(contextualMenu);
+		commandable.addChild(navigationManager.createUpdateCommandable(identifiable, "school.markscard.generate", null,
+				SchoolWebManager.getInstance().getOutcomeGenerateStudentClassroomSessionDivisionReport()));
 	}
-
+	
 }
