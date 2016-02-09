@@ -144,13 +144,17 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	public static void selectClassroomSession(AbstractBusinessEntityFormOnePage<?> page,ClassroomSession classroomSession,String classroomSessionFieldName,String classroomSessionDivisionFieldName
 			,String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName){
+		ClassroomSessionDivision classroomSessionDivision = null;
 		if(classroomSession==null)
 			page.setChoices(classroomSessionDivisionFieldName,null);
-		else
-			page.setChoices(classroomSessionDivisionFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
-		
-		selectClassroomSessionDivision(page,null,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
+		else{
+			Collection<ClassroomSessionDivision> classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession);
+			page.setChoices(classroomSessionDivisionFieldName, classroomSessionDivisions);
+			//classroomSessionDivision = classroomSessionDivisions.iterator().next();
+		}
+		selectClassroomSessionDivision(page,classroomSessionDivision,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 	}
+	
 	public static void selectClassroomSessionDivision(AbstractBusinessEntityFormOnePage<?> page,ClassroomSessionDivision classroomSessionDivision,String classroomSessionFieldName,String classroomSessionDivisionFieldName
 			,String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName){
 		if(classroomSessionDivision==null){
@@ -161,6 +165,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		}
 		selectClassroomSessionDivisionSubject(page, null, classroomSessionFieldName, classroomSessionDivisionFieldName, classroomSessionDivisionSubjectFieldName, subjectEvaluationTypeFieldName);
 	}
+	
 	public static void selectClassroomSessionDivisionSubject(AbstractBusinessEntityFormOnePage<?> page,ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String classroomSessionFieldName,String classroomSessionDivisionFieldName
 			,String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName){
 		if(classroomSessionDivisionSubject==null){
