@@ -21,7 +21,6 @@ import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.company.model.structure.Company;
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImplListener;
 import org.cyk.system.root.model.event.Event;
@@ -40,16 +39,17 @@ import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
-import org.cyk.system.school.business.api.subject.EvaluationBusiness;
-import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionInfos;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionSubjectInfos;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionInfos;
+import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataProducer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -64,13 +64,13 @@ import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
-import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.Constant;
@@ -79,11 +79,10 @@ import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTimeConstants;
 
 @Singleton @Getter
-public class IesaFakedDataProducer extends AbstractFakedDataProducer implements Serializable {
+public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {
 
 	private static final long serialVersionUID = -1832900422621121762L;
 
-	private SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private CompanyBusiness companyBusiness;
 	@Inject private CompanyBusinessLayer companyBusinessLayer;
@@ -169,7 +168,8 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		});
 	}
 	
-	private void structure(){
+	@Override
+	protected void structure(){
 		// Subjects
 		subjectNameEnglishLanguage = createEnumeration(Subject.class,"English Language");
 		subjectNameGrammar = createEnumeration(Subject.class,"Grammar");
@@ -233,6 +233,7 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
 		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa.jrxml", "reportcard.jrxml"),null);
 		create(reportTemplate);
 		commonNodeInformations = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
+		commonNodeInformations.setClassroomSessionTimeDivisionType(rootBusinessLayer.getTimeDivisionTypeTrimester());
 		
 		//Level names
 		levelNameG1 = createLevelName("Grade 1");
@@ -303,8 +304,9 @@ public class IesaFakedDataProducer extends AbstractFakedDataProducer implements 
     		doBusiness(listener);
     	}
 	}
-		
-	private void doBusiness(FakedDataProducerListener listener){
+	
+	@Override
+	protected void doBusiness(FakedDataProducerListener listener){
 		//ExecutorService executor = Executors.newFixedThreadPool(5);
 		//Collection<StudentSubject> studentSubjects = new ArrayList<>();
 		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{grade1,grade2,grade3}){

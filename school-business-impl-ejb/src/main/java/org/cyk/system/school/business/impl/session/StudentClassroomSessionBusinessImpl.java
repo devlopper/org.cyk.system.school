@@ -26,6 +26,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
@@ -43,6 +44,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Inject private StudentSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao;
 	@Inject private StudentClassroomSessionDivisionDao studentClassroomSessionDivisionDao;
+	@Inject private ClassroomSessionDao classroomSessionDao;
 	@Inject private ClassroomSessionDivisionDao classroomSessionDivisionDao;
 	
 	@Inject
@@ -68,6 +70,9 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null
 				,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness())
 			.operate(studentClassroomSessionDivisions, crud);
+		commonUtils.increment(Long.class, studentClassroomSession.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_STUDENTS
+				, Crud.CREATE.equals(crud)?1l:Crud.DELETE.equals(crud)?-1l:0l);
+		classroomSessionDao.update(studentClassroomSession.getClassroomSession());
 	}
 	
 	@Override
@@ -146,40 +151,18 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		return classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAverageScale();
 	}
 
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentClassroomSession> findByClassroomSession(ClassroomSession classroomSession) {
 		return dao.readByClassroomSession(classroomSession);
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public StudentClassroomSession finddByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student, classroomSession);
 	}
 
 	/**/
-	/*
-    @AllArgsConstructor
-	private class StudentClassroomSessionDivisionWeight implements Weightable,Serializable {
-
-		private static final long serialVersionUID = -7151566926896987903L;
-		
-		private StudentClassroomSessionDivision studentClassroomSessionDivision;
-		
-		@Override
-		public BigDecimal getValue() {
-			if(studentClassroomSessionDivision.getResults().getAverage()==null)
-				return null;
-			return studentClassroomSessionDivision.getResults().getAverage().multiply(studentClassroomSessionDivision.getClassroomSessionDivision().getCoefficient());
-		}
-
-		@Override
-		public BigDecimal getWeight() {
-			return studentClassroomSessionDivision.getClassroomSessionDivision().getCoefficient();
-		}
-
-	}
-	*/
-
+	
 	@Override
 	protected Collection<Lecture> readLectures(Collection<ClassroomSession> levels) {
 		return lectureDao.readByClassroomSessions(levels);
@@ -190,7 +173,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		return lecture.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession();
 	}
 
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student,classroomSession);
 	}

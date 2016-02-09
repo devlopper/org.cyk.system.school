@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
@@ -19,8 +20,9 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
+import org.cyk.utility.common.annotation.ModelBean.GenderType;
 
-@Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS)
+@Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
 public class ClassroomSession extends AbstractIdentifiablePeriod implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
@@ -31,6 +33,8 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	@ManyToOne private Teacher coordinator;
 	
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
+	
+	@NotNull @Column(nullable=false) private Long numberOfStudents = 0l;
 	
 	@Transient private Collection<ClassroomSessionDivision> divisions = new ArrayList<>();
 	
@@ -50,5 +54,6 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	public static final String FIELD_ACADEMIC_SESSION = "academicSession";
 	public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";
 	public static final String FIELD_COORDINATOR = "coordinator";
+	public static final String FIELD_NUMBER_OF_STUDENTS = "numberOfStudents";
 	
 }

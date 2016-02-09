@@ -68,7 +68,7 @@ public class ClassroomSessionDivisionSubjectQueryFormModel extends AbstractQuery
 		public void serve(Object data, String actionIdentifier) {
 			if(SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation().equals(actionIdentifier)){
 				WebNavigationManager.getInstance().redirectToDynamicCreate(((ClassroomSessionDivisionSubjectQueryFormModel)data).getSubjectEvaluationType()
-						, Evaluation.class); 
+						, Evaluation.class,null); 
 			}
 		}
 	}

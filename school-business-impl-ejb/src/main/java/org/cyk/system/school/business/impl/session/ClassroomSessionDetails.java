@@ -16,5 +16,6 @@ public class ClassroomSessionDetails extends AbstractOutputDetails<ClassroomSess
 		super(classroomSession);
 		name = formatUsingBusiness(classroomSession);
 		coordinator = classroomSession.getCoordinator()==null?"":classroomSession.getCoordinator().getPerson().getNames();
+		numberOfStudents=formatNumber(classroomSession.getNumberOfStudents());
 	}
 }

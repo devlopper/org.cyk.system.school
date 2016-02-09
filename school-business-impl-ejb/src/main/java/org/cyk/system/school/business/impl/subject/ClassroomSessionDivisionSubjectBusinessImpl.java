@@ -25,7 +25,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	private SubjectClassroomSessionDao subjectClassroomSessionDao;
+	@Inject private SubjectClassroomSessionDao subjectClassroomSessionDao;
 	
 	@Inject
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {

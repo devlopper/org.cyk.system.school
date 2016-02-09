@@ -2,9 +2,11 @@ package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +31,11 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private MetricCollection studentWorkMetricCollection;
 	@ManyToOne private TimeDivisionType attendanceTimeDivisionType;
 	
-	private Boolean aggregateAttendance = Boolean.TRUE;
+	@NotNull @Column(nullable=false) private Boolean aggregateAttendance = Boolean.TRUE;
+	
+	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
+	@NotNull @Column(nullable=false) private Byte currentClassroomSessionDivisionIndex = 0;
+	
 	/*
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
