@@ -127,6 +127,10 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		return classroomSessions;
 	}
 	
+	public void deleteStudentClassroomSessions(String[] studentRegistrationCode,ClassroomSessionDivision classroomSessionDivision){
+		//schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().del
+	}
+	
 	public void createSubjectEvaluations(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Boolean coefficientApplied){
 		Collection<Evaluation> subjectEvaluations = new ArrayList<>();
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
@@ -143,7 +147,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				}
 			}
 		}
-		schoolBusinessLayer.getSubjectEvaluationBusiness().create(subjectEvaluations);
+		schoolBusinessLayer.getEvaluationBusiness().create(subjectEvaluations);
 	}
 	public void createSubjectEvaluations(Boolean coefficientApplied){
 		createSubjectEvaluations(schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findAll(), coefficientApplied);

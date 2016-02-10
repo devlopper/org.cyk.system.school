@@ -48,7 +48,7 @@ public class ClassroomSessionConsultPage extends AbstractConsultPage<ClassroomSe
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<ClassroomSessionDivision> getIdentifiables() {
-				return identifiable.getDivisions();
+				return SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(identifiable);
 			}
 			@Override
 			public Crud[] getCruds() {

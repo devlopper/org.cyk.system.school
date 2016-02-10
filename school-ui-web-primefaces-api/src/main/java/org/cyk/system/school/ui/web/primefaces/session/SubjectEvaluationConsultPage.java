@@ -9,6 +9,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.StudentSubjectEvaluationDetails;
 import org.cyk.system.school.model.subject.Evaluation;
@@ -44,7 +45,7 @@ public class SubjectEvaluationConsultPage extends AbstractConsultPage<Evaluation
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentSubjectEvaluation> getIdentifiables() {
-				return identifiable.getStudentSubjectEvaluations();
+				return SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness().findBySubjectEvaluation(identifiable, Boolean.FALSE);
 			}
 			@Override
 			public Boolean getEnabledInDefaultTab() {

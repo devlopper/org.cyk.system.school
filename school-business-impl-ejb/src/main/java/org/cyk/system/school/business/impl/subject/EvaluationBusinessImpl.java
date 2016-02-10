@@ -84,4 +84,8 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 		return super.delete(evaluation);
 	}
 	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<Evaluation> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		return dao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+	}
 }

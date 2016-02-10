@@ -34,7 +34,7 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@NotNull @Column(nullable=false) private Boolean aggregateAttendance = Boolean.TRUE;
 	
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
-	@NotNull @Column(nullable=false) private Byte currentClassroomSessionDivisionIndex = 0;
+	private Byte currentClassroomSessionDivisionIndex = 0;
 	
 	/*
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;

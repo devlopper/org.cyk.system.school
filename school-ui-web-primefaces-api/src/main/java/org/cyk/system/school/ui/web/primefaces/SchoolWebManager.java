@@ -7,9 +7,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.model.party.person.JobTitle;
@@ -21,8 +18,10 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.UIManager;
@@ -34,6 +33,9 @@ import org.cyk.ui.web.primefaces.AbstractPrimefacesManager;
 import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {
@@ -94,7 +96,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		module.addChild(menuManager.crudMany(ClassroomSession.class, null));
 		module.addChild(menuManager.createMany(StudentClassroomSession.class, null));
 		module.addChild(menuManager.createMany(StudentSubject.class, null));
-		module.addChild(menuManager.createSelect(ClassroomSessionDivisionSubject.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
+		module.addChild(menuManager.createSelect(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 		module.addChild(menuManager.createSelect(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 		return module;
 	}
@@ -150,7 +152,15 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		else{
 			Collection<ClassroomSessionDivision> classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession);
 			page.setChoices(classroomSessionDivisionFieldName, classroomSessionDivisions);
-			//classroomSessionDivision = classroomSessionDivisions.iterator().next();
+			CommonNodeInformations commonNodeInformations = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(classroomSession);
+			page.getForm().findInputByFieldName(classroomSessionDivisionFieldName).setDisabled(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null);
+			if(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null){
+				for(ClassroomSessionDivision c : classroomSessionDivisions)
+					if(c.getIndex().equals(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()) ){
+						classroomSessionDivision = c;
+						break;
+					}
+			}
 		}
 		selectClassroomSessionDivision(page,classroomSessionDivision,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 	}
@@ -161,7 +171,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			page.setChoices(classroomSessionDivisionSubjectFieldName, null);
 		}else{
 			page.setChoices(classroomSessionDivisionSubjectFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()
-					.findByClassroomSessionDivision(classroomSessionDivision));
+					.findByClassroomSessionDivision(classroomSessionDivision),classroomSessionDivision);
+			page.setFieldValue(classroomSessionDivisionFieldName, classroomSessionDivision);
 		}
 		selectClassroomSessionDivisionSubject(page, null, classroomSessionFieldName, classroomSessionDivisionFieldName, classroomSessionDivisionSubjectFieldName, subjectEvaluationTypeFieldName);
 	}

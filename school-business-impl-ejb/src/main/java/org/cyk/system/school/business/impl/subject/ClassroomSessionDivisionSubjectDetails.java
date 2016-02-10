@@ -1,4 +1,4 @@
-package org.cyk.system.school.business.impl.session;
+package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
 

@@ -12,4 +12,6 @@ public interface EvaluationBusiness extends TypedBusiness<Evaluation> {
 	Evaluation newInstance(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
 	
 	Evaluation save(Evaluation evaluation,Collection<StudentSubjectEvaluation> studentSubjectEvaluations);
+	
+	Collection<Evaluation> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
 }

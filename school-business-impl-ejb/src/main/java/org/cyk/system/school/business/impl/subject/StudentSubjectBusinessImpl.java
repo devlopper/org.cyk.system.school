@@ -8,6 +8,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
@@ -23,6 +24,7 @@ import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 
 @Stateless
 public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivisionSubject, StudentSubject, StudentSubjectDao, StudentSubjectEvaluation> implements StudentSubjectBusiness,Serializable {
@@ -30,6 +32,7 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	private static final long serialVersionUID = -3799482462496328200L;
 	
 	@Inject private StudentClassroomSessionDivisionDao studentClassroomSessionDivisionDao;
+	@Inject private StudentSubjectEvaluationDao studentSubjectEvaluationDao;
 	
 	@Inject
 	public StudentSubjectBusinessImpl(StudentSubjectDao dao) {
@@ -53,18 +56,21 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().create(studentClassroomSessionDivision);
 			}
 		}
+		cascade(studentSubject,Crud.CREATE);
 		logInstanceCreated(studentSubject);
 		//logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
 		return studentSubject;
 	}
 	
-	private void cascade(StudentSubject studentSubject){
+	private void cascade(StudentSubject studentSubject,Crud crud){
 		
 	}
 
 	@Override
 	public StudentSubject delete(StudentSubject studentSubject) {
-		cascade(studentSubject);
+		cascade(studentSubject,Crud.DELETE);
+		for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluationDao.readByStudentSubject(studentSubject))
+			studentSubjectEvaluationDao.delete(studentSubjectEvaluation);
 		return super.delete(studentSubject);
 	}
 		 

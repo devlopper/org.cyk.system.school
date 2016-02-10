@@ -71,13 +71,18 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 			subjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
 			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
-	
+		System.out.println("SubjectEvaluationEditPage.initialisation()");
 		markCollection = createItemCollection(Mark.class, StudentSubjectEvaluation.class,new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
+			@Override
+			public Collection<StudentSubjectEvaluation> create() {
+				return identifiable.getStudentSubjectEvaluations();
+			}
 			@Override
 			public Collection<StudentSubjectEvaluation> load() {
 				return identifiable.getStudentSubjectEvaluations();
 			}
+			
 			@Override
 			public void instanciated(AbstractItemCollection<Mark, StudentSubjectEvaluation,SelectItem> itemCollection,Mark mark) {
 				super.instanciated(itemCollection, mark);
@@ -119,7 +124,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 	
 	@Override
 	protected void update() {
-		SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().save(identifiable,markCollection.getIdentifiables());
+		SchoolBusinessLayer.getInstance().getEvaluationBusiness().save(identifiable,markCollection.getIdentifiables());
 	}
 	
 	@Override
@@ -128,7 +133,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 	}
 	
 	protected Evaluation instanciateIdentifiable() {
-		Evaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getSubjectEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
+		Evaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
 		subjectEvaluation.setClassroomSessionDivisionSubjectEvaluationType(subjectEvaluationType);
 		return subjectEvaluation;
 	}

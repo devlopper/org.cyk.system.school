@@ -22,6 +22,7 @@ import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.mathematics.Sort;
 import org.cyk.system.root.model.time.Attendance;
+import org.cyk.utility.common.Constant;
 
 @Getter @Setter @Entity @NoArgsConstructor
 public class StudentResults extends AbstractIdentifiable implements Serializable {
@@ -98,7 +99,9 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, evaluationSort.getLogMessage(),lectureAttendance.getLogMessage(),lectureAttendanceSort.getLogMessage(),appreciation,promoted,conferenceRequested);
+		return String.format(LOG_FORMAT, evaluationSort==null ?Constant.EMPTY_STRING:evaluationSort.getLogMessage()
+				,lectureAttendance==null ?Constant.EMPTY_STRING:lectureAttendance.getLogMessage()
+						,lectureAttendanceSort==null ?Constant.EMPTY_STRING:lectureAttendanceSort.getLogMessage(),appreciation,promoted,conferenceRequested);
 	}
 	private static final String LOG_FORMAT = StudentResults.class.getSimpleName()+"(%s %s %s APP=%s PROM=%s CR=%s)";
 

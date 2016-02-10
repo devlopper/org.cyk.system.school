@@ -233,7 +233,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa.jrxml", "reportcard.jrxml"),null);
 		create(reportTemplate);
 		commonNodeInformations = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
-		commonNodeInformations.setClassroomSessionTimeDivisionType(rootBusinessLayer.getTimeDivisionTypeTrimester());
+		commonNodeInformations.setClassroomSessionTimeDivisionType(getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER));
+		commonNodeInformations.setCurrentClassroomSessionDivisionIndex(new Byte("1"));
 		
 		//Level names
 		levelNameG1 = createLevelName("Grade 1");

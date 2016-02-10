@@ -12,8 +12,8 @@ import lombok.Setter;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
-import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -47,7 +47,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<ClassroomSessionDivisionSubject> getIdentifiables() {
-				return identifiable.getSubjects();
+				return SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(identifiable);
 			}
 			@Override
 			public Crud[] getCruds() {
