@@ -45,7 +45,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 
 	@Override
 	public void generate() {
-		comments = provider.randomWord(10, 30);
+		comments = provider.randomText(4, 6, 15, 20);
 		subjectsBlockTitle = "COGNITIVE ASSESSMENT";
 		commentsBlockTitle = "CLASS TEACHER COMMENTS AND SIGNATURE";
 		schoolStampBlockTitle = "SCHOOL STAMP AND SIGNATURE";
