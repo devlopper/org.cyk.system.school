@@ -1,10 +1,7 @@
 package org.cyk.system.school.business.impl.iesa;
 
-import java.awt.Color;
-
 import javax.inject.Inject;
 
-import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.cyk.system.root.business.api.markuplanguage.MarkupLanguageBusiness;
@@ -86,12 +83,13 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     					
     				}
     				
-    				if( classroomSession.getLevelTimeDivision().getLevel().getName().getCode().equals("Grade2") ){
+    				/* Color */
+    				/*if( classroomSession.getLevelTimeDivision().getLevel().getName().getCode().equals("Grade2") ){
     					jasperDesign.getStylesMap().get("title").setBackcolor(Color.ORANGE);
         				jasperDesign.getStylesMap().get("block header").setBackcolor(Color.ORANGE);
         				((JRBaseLineBox)jasperDesign.getStylesMap().get("block header").getLineBox()).getTopPen().setLineColor(Color.GREEN);
         				((JRBaseLineBox)jasperDesign.getStylesMap().get("block header").getLineBox()).getBottomPen().setLineColor(Color.GREEN);
-    				}
+    				}*/
     			}
     		}
     	});
