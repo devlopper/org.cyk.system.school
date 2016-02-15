@@ -49,6 +49,7 @@ import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.generator.RandomDataProvider;
@@ -70,6 +71,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Inject private LevelTimeDivisionDao levelTimeDivisionDao;
 	@Inject private TimeDivisionTypeDao timeDivisionTypeDao;
 	@Inject private SubjectDao subjectDao;
+	@Inject private TeacherDao teacherDao;
 	
 	@Inject private SchoolBusinessLayer schoolBusinessLayer;
 	
@@ -475,7 +477,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		Collection<ClassroomSessionDivisionSubject> customClassroomSessionDivisionSubjects = new ArrayList<>();
 		for(Subject subject : subjectDao.readManyRandomly(5)){
 			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = new ClassroomSessionDivisionSubject(customClassroomSessionDivision, subject
-					,BigDecimal.ONE , schoolBusinessLayer.getTeacherBusiness().findOneRandomly());
+					,BigDecimal.ONE , teacherDao.readOneRandomly());
 			customClassroomSessionDivisionSubjects.add(classroomSessionDivisionSubject);
 			schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().create(classroomSessionDivisionSubject);
 			for(int i = 0;i<customClassroomSessionDivisionSubjectEvaluationTypeInfos.length;i++){

@@ -383,6 +383,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	
 	private ClassroomSessionInfos grade(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Subject[] subjects,FakedDataProducerListener listener){
 		ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision, teacherDao.readOneRandomly());
+		classroomSession.setStudentClassroomSessionDivisionRankable(levelTimeDivision.getLevel().getName().getCode().equals("Grade1"));
 		classroomSession.getPeriod().setFromDate(new Date());
 		classroomSession.getPeriod().setToDate(new Date());
 		classroomSessions.add(classroomSession);
@@ -440,6 +441,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		@Override
 		public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
 				StudentClassroomSessionDivisionReportParameters parameters) {
+			parameters.setRankable(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getStudentClassroomSessionDivisionRankable());
 			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
 			r.getAcademicSession().getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
 					+ " OF <style forecolor=\"red\">A</style>BIDJAN");

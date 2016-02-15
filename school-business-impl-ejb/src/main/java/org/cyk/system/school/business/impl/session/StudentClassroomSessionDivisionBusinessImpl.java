@@ -30,6 +30,7 @@ import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
+import org.cyk.system.school.business.api.session.SchoolReportProducer.StudentClassroomSessionDivisionReportParameters;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
@@ -53,6 +54,7 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivi
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.cdi.BeanAdapter;
 
 @Stateless
 public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
@@ -132,15 +134,23 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportOptions options) {
+	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportArguments arguments) {
 		//logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 		//		,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
 			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 					,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		}else{
+			StudentClassroomSessionDivisionReportParameters parameters = 
+					new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
+			
+			if(arguments.getRankable()==null){
+				
+			}else
+				parameters.setRankable(arguments.getRankable());
+			
 			StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
-					,SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
+					,parameters);
 			
 			if(report==null){
 				
@@ -180,7 +190,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override 
-	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportOptions options) {
+	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportArguments options) {
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		/*
 		 * Data loading
@@ -319,6 +329,29 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<StudentClassroomSessionDivision> findByStudentByClassroomSession(Student student,ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student,classroomSession);
+	}
+	
+	/**/
+	
+	public static interface Listener{
+		
+		Collection<Listener> COLLECTION = new ArrayList<>();
+		
+		
+		
+		/**/
+		
+		public static class Adapter extends BeanAdapter implements Listener,Serializable{
+			private static final long serialVersionUID = -9048282379616583423L;
+			
+			
+			/**/
+			
+			public static class Default extends Adapter implements Serializable{
+				private static final long serialVersionUID = 2884910167320359611L;
+				
+			}
+		}
 	}
 	
 }

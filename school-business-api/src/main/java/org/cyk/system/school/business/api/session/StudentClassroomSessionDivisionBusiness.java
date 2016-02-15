@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
@@ -18,9 +19,9 @@ import org.cyk.system.school.model.subject.StudentSubject;
 
 public interface StudentClassroomSessionDivisionBusiness extends AbstractStudentResultsBusiness<ClassroomSessionDivision,StudentClassroomSessionDivision,StudentSubject> {
 
-	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportOptions options);
+	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportArguments options);
 	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
-	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportOptions options);
+	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportArguments options);
 	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions);
 	
 	ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
@@ -34,13 +35,18 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	
 	// TODO some methods here can go up
 	
-	@Getter @Setter
-	public static class BuildReportOptions implements Serializable{
+	@Getter @Setter @NoArgsConstructor
+	public static class BuildReportArguments implements Serializable{
 		private static final long serialVersionUID = 7151479991050865862L;
-		private Boolean attendance = Boolean.TRUE;
+		private Boolean attendance = Boolean.TRUE,rankable;
+		
+		public BuildReportArguments(BuildReportArguments buildReportOptions){
+			this.attendance = buildReportOptions.attendance;
+			this.rankable = buildReportOptions.rankable;
+		}
 	}
 	
-	BuildReportOptions DEFAULT_BUILD_REPORT_OPTIONS = new BuildReportOptions();
+	BuildReportArguments DEFAULT_BUILD_REPORT_OPTIONS = new BuildReportArguments();
 
 	Collection<StudentClassroomSessionDivision> findByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
 }

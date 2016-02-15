@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,7 +30,7 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private MetricCollection studentWorkMetricCollection;
 	@ManyToOne private TimeDivisionType attendanceTimeDivisionType;
 	
-	@NotNull @Column(nullable=false) private Boolean aggregateAttendance = Boolean.TRUE;
+	@Column private Boolean aggregateAttendance;
 	
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
 	private Byte currentClassroomSessionDivisionIndex = 0;

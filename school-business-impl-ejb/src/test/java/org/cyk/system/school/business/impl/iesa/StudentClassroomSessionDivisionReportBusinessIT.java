@@ -16,21 +16,23 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	installApplication();
     	
     	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
-    	
-    	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().addAll(dataProducer.getGrade1().division(0).getClassroomSessionDivisionSubjects());
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
     			dataProducer.getGrade1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
     	
-    	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().clear();
-    	//schoolBusinessTestHelper.getClassroomSessionDivisionSubjects().add(dataProducer.getGrade1().division(0).subject(0).getClassroomSessionDivisionSubject());
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
+    			dataProducer.getGrade2().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
+    	
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
+    			dataProducer.getGrade3().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
+    	
     	schoolBusinessTestHelper.getEvaluationTypes().addAll(dataProducer.getEvaluationTypes());
     	
     	//trimesterEverybodyHaveAllEvaluations(dataProducer.getGrade1().division(0),Boolean.TRUE,Boolean.TRUE);
     	
     	trimesterEverybodyHaveNotAllEvaluations(dataProducer.getGrade1().division(0),Boolean.TRUE,Boolean.TRUE);
+    	trimesterEverybodyHaveNotAllEvaluations(dataProducer.getGrade2().division(0),Boolean.TRUE,Boolean.TRUE);
     }
     
-  
     private void trimesterEverybodyHaveNotAllEvaluations(ClassroomSessionDivisionInfos classroomSessionDivisionInfos,Boolean generateReport,Boolean printReport){
     	schoolBusinessTestHelper.createSubjectEvaluations(classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     		{"STUD1","90","30","60"}
@@ -89,24 +91,6 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	});
 
     	 
-    	/*
-    	schoolBusinessTestHelper.asserts(classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{{
-    		"STUD1","66.47","1"}
-    		/*,{"STUD2","",""}
-              ,{"STUD3","",""}
-              ,{"STUD4","",""}
-              ,{"STUD5","",""}
-    	});*/
-    	
-    	/*schoolBusinessTestHelper.assertClassroomSessionDivisionAfterEvaluation( 
-    			new String[][]{{"STUD1",null,"50","70","66.47","1"}
-    			              ,{"STUD2","90","30","60","60","3"}
-    			              ,{"STUD3","40","60","40","43","5"}
-    			              ,{"STUD4","45","45","80","69.5","1"}
-    			              ,{"STUD5","20","95","55","55.75","4"}
-    			              
-    			});*/
-    	
     	if(Boolean.TRUE.equals(generateReport)){
     		schoolBusinessTestHelper.randomValues(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     		schoolBusinessTestHelper.createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivisionInfos.getClassroomSessionDivision()),printReport);

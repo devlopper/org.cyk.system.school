@@ -46,6 +46,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			StudentClassroomSessionDivisionReportParameters parameters) {
 		StudentClassroomSessionDivisionReport r = new StudentClassroomSessionDivisionReport();
 		r.setSource(studentClassroomSessionDivision);
+		
 		Student student = studentClassroomSessionDivision.getStudent();
 		StudentClassroomSessionDivision s = studentClassroomSessionDivision;
 		ClassroomSessionDivision csd = s.getClassroomSessionDivision();
@@ -118,7 +119,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		else
 			processStudentSubjects(r, s,parameters);
 				
-		produceStudentClassroomSessionDivisionReportLabelValueCollections(r);
+		produceStudentClassroomSessionDivisionReportLabelValueCollections(r,parameters);
 		
 		return r;
 	}
@@ -197,7 +198,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		return value;
 	}
 	
-	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r){
+	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivisionReportParameters parameters){
 		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
 		
 		r.setStudentLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.student"));
@@ -217,7 +218,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setOverallResultlLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.overallresult"));
 		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.average", r.getAverage());
 		labelValue(LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID, r.getAverageScale());
-		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.rank", r.getRank());
+		if(Boolean.TRUE.equals(parameters.getRankable()))
+			labelValue("school.report.studentclassroomsessiondivision.block.overallresult.rank", r.getRank());
 		
 		r.setGradingScaleLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.gradingscale"));
 		IntervalCollection evaluationIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
