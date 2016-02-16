@@ -46,10 +46,11 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	private static SchoolWebManager INSTANCE;
 	
 	private final String outcomeConfigureLevels = "configureLevels";
-	@Getter @Setter private String academicSessionInfos="ACA INFOS TO SET";
-	@Getter @Setter private String classroomSessionDivisionTypeName,classroomSessionDivisionInfos="CSD INFOS TO SET";
+	@Setter private String academicSessionInfos="ACA INFOS TO SET";
+	@Setter private String classroomSessionDivisionTypeName,classroomSessionDivisionInfos="CSD INFOS TO SET";
 	private String outcomeGenerateStudentClassroomSessionDivisionReport = "classroomSessionDivisionUpdateStudentReport";
 	private String outcomeUpdateStudentClassroomSessionDivisionResults  = "classroomSessionDivisionUpdateStudentResults";
+	private String outcomeStudentClassroomSessionDivisionMergeReport  = "studentClassroomSessionDivisionMergeReportView";
 	/*private String outcomeClassroomSessionMainDetails;
 	private String outcomeClassroomSessionDivisionDetails;
 	private String outcomeClassroomSessionSubjectDetails;
@@ -98,6 +99,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		module.addChild(menuManager.createMany(StudentSubject.class, null));
 		module.addChild(menuManager.createSelect(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 		module.addChild(menuManager.createSelect(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
+		module.addChild(uiProvider.createCommandable("command.school.downloadmarkscard", IconType.ACTION_DOWNLOAD,outcomeStudentClassroomSessionDivisionMergeReport));
 		return module;
 	}
 	

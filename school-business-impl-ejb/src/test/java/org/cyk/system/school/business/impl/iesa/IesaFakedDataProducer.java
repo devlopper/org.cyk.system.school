@@ -34,6 +34,7 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -96,6 +97,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	@Inject private LectureBusiness lectureBusiness;
 	@Inject private TeacherDao teacherDao;
+	@Inject private PersonDao personDao;
 	
 	private Subject subjectNameEnglishLanguage,subjectNameLiteratureInEnglish,subjectNameHistory,subjectNameGeography
 		,subjectNameSocialStudies,subjectNameReligiousStudies,subjectNameMathematics,subjectNamePhysics,subjectNameChemistry,subjectNameBiology,subjectNameFrench
@@ -258,8 +260,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformations);
     	create(school);
     	
-    	//school.getOwnedCompany().getCompany().setManager(rootRandomDataProvider.oneFromDatabase(Person.class));
-    	//companyBusiness.update(school.getOwnedCompany().getCompany());
+    	school.getOwnedCompany().getCompany().setManager(personDao.readOneRandomly());
+    	companyBusiness.update(school.getOwnedCompany().getCompany());
     	
     	AcademicSession academicSession = new AcademicSession(school,commonNodeInformations,new Date());
     	academicSession.getPeriod().setFromDate(new Date());

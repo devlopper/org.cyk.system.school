@@ -2,10 +2,10 @@ package org.cyk.system.school.business.impl.iesa;
 
 import javax.inject.Inject;
 
+import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.cyk.system.root.business.api.markuplanguage.MarkupLanguageBusiness;
-import org.cyk.system.root.business.api.markuplanguage.MarkupLanguageBusiness.UpdateTagArguments;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.file.report.jasper.JasperReportBusinessImpl;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
@@ -44,27 +44,8 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     		
     		@Override
     		public String processJrxml(ReportBasedOnTemplateFile<?> aReport,String jrxml) {
-    			UpdateTagArguments updateTagArguments;
-    			
-    			updateTagArguments = new UpdateTagArguments();
-    			updateTagArguments.getFindTagArguments().addTag("parameter",new String[]{"name","CYK_RANKABLE"}).addTag("defaultValueExpression");
-    			updateTagArguments.setText("false");  
-    			jrxml = markupLanguageBusiness.updateTag(jrxml, updateTagArguments);
-    			
-    			updateTagArguments = new UpdateTagArguments();
-    			updateTagArguments.getFindTagArguments().addTag("detail").addTag("band",2).addTag("frame",0).addTag("componentElement",0)
-    				.addTag("table","http://jasperreports.sourceforge.net/jasperreports/components",0)
-    				.addTag("column","http://jasperreports.sourceforge.net/jasperreports/components",11);
-    			updateTagArguments.setAttributes("width","124"); 
-    			jrxml = markupLanguageBusiness.updateTag(jrxml, updateTagArguments);
-    			
-    			updateTagArguments = new UpdateTagArguments();
-    			updateTagArguments.getFindTagArguments().addTag("detail").addTag("band",2).addTag("frame",0).addTag("componentElement",0)
-    				.addTag("table","http://jasperreports.sourceforge.net/jasperreports/components",0)
-    				.addTag("column","http://jasperreports.sourceforge.net/jasperreports/components",12);
-    			updateTagArguments.setAttributes("width","150"); 
-    			jrxml = markupLanguageBusiness.updateTag(jrxml, updateTagArguments);
-    			    			
+    			jrxml = updateTableColumn(jrxml,new Object[]{DETAIL,0,BAND,2,FRAME,0,COMPONENT_ELEMENT,0}, 0, 11, new String[]{WIDTH,"124"});
+    			jrxml = updateTableColumn(jrxml,new Object[]{DETAIL,0,BAND,2,FRAME,0,COMPONENT_ELEMENT,0}, 0, 12, new String[]{WIDTH,"150"});
     			return jrxml;
     		}
     		
@@ -76,6 +57,9 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     			if(object instanceof StudentClassroomSessionDivisionReport){
     				StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport = (StudentClassroomSessionDivisionReport) object;
     				ClassroomSession classroomSession = ((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getClassroomSession();
+    				
+    				((JRDesignExpression)jasperDesign.getParametersMap().get("CYK_RANKABLE").getDefaultValueExpression())
+    					.setText(classroomSession.getStudentClassroomSessionDivisionRankable().toString());
     				
     				if(Boolean.TRUE.equals(classroomSession.getStudentClassroomSessionDivisionRankable())){
     					

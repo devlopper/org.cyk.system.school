@@ -19,7 +19,7 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 	private static final long serialVersionUID = 6306356272165070761L;
 
     private String readByStudentClassroomSessionDivision,readByStudentByClassroomSessionDivision,readByClassroomSession
-    	,readByClassroomSessionDivisions,readByClassroomSessions,readByStudentByClassroomSession;
+    	,readByClassroomSessionDivisions,readByClassroomSessions,readByStudentByClassroomSession,readByClassroomSessionDivisionIndex;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -31,6 +31,10 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
         registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION));
         registerNamedQuery(readByStudentByClassroomSessionDivision, _select().where(StudentClassroomSessionDivision.FIELD_STUDENT)
         		.and(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION));
+        
+        registerNamedQuery(readByClassroomSessionDivisionIndex, _select()
+        		.where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION, ClassroomSessionDivision.FIELD_INDEX), ClassroomSessionDivision.FIELD_INDEX));
+        
         registerNamedQuery(readByStudentByClassroomSession, _select().where(StudentClassroomSessionDivision.FIELD_STUDENT)
         		.and(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION, StudentClassroomSession.FIELD_CLASSROOMSESSION)
         				, StudentClassroomSession.FIELD_CLASSROOMSESSION,ArithmeticOperator.EQ));
@@ -71,6 +75,11 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 	public Collection<StudentClassroomSessionDivision> readByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return namedQuery(readByStudentByClassroomSession).parameter(StudentClassroomSessionDivision.FIELD_STUDENT, student)
 				.parameter(StudentClassroomSession.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
+	}
+	
+	@Override
+	public Collection<StudentClassroomSessionDivision> readByClassroomSessionDivisionIndex(Byte classroomSessionDivisionIndex) {
+		return namedQuery(readByClassroomSessionDivisionIndex).parameter(ClassroomSessionDivision.FIELD_INDEX, classroomSessionDivisionIndex).resultMany();
 	}
 
 }

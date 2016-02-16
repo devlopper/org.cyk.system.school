@@ -301,6 +301,19 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		return dao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 	} 
 	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<File> findReportFiles(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
+		Collection<File> files = new ArrayList<>();
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
+			files.add(studentClassroomSessionDivision.getResults().getReport());
+		return files;
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionIndex(Byte classroomSessionDivisionIndex) {
+		return dao.readByClassroomSessionDivisionIndex(classroomSessionDivisionIndex);
+	}
+
 	/**/
 	
 	@Override

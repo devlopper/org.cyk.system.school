@@ -68,5 +68,6 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
 	public static final String FIELD_COEFFICIENT = "coefficient";
 	public static final String FIELD_RESULTS = "results";
+	public static final String FIELD_INDEX = "index";
 	
 }
