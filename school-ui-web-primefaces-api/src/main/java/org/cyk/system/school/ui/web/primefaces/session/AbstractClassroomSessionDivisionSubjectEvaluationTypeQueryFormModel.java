@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
-import org.cyk.ui.web.primefaces.page.SelectPageListener;
+import org.cyk.ui.web.primefaces.page.AbstractSelectOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter @Setter 
 public abstract class AbstractClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel<SESSION extends AbstractIdentifiable> extends AbstractClassroomSessionDivisionSubjectQueryFormModel<SESSION> implements Serializable {
@@ -27,7 +27,7 @@ public abstract class AbstractClassroomSessionDivisionSubjectEvaluationTypeQuery
 	/**/
 	
 	@Getter @Setter
-	public static abstract class AbstractClassroomSessionDivisionSubjectEvaluationTypePageAdapter<SESSION extends AbstractIdentifiable> extends SelectPageListener.Adapter.Default<SESSION,String> implements Serializable {
+	public static abstract class AbstractClassroomSessionDivisionSubjectEvaluationTypePageAdapter<SESSION extends AbstractIdentifiable> extends AbstractSelectOnePage.Listener.Adapter.Default<SESSION,String> implements Serializable {
 
 		private static final long serialVersionUID = -7392513843271510254L;
 		

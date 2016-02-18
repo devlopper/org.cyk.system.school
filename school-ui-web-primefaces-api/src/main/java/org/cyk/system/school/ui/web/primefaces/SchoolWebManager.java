@@ -7,6 +7,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.model.party.person.JobTitle;
@@ -20,6 +23,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -33,9 +37,6 @@ import org.cyk.ui.web.primefaces.AbstractPrimefacesManager;
 import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {
@@ -97,8 +98,9 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		module.addChild(menuManager.crudMany(ClassroomSession.class, null));
 		module.addChild(menuManager.createMany(StudentClassroomSession.class, null));
 		module.addChild(menuManager.createMany(StudentSubject.class, null));
-		module.addChild(menuManager.createSelect(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
-		module.addChild(menuManager.createSelect(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
+		module.addChild(menuManager.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
+		module.addChild(menuManager.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
+		module.addChild(menuManager.createSelectMany(StudentClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
 		module.addChild(uiProvider.createCommandable("command.school.downloadmarkscard", IconType.ACTION_DOWNLOAD,outcomeStudentClassroomSessionDivisionMergeReport));
 		return module;
 	}

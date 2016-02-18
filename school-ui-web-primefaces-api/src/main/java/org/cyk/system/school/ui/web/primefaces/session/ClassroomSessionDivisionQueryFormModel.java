@@ -2,22 +2,22 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.UIManager;
-import org.cyk.ui.api.model.AbstractQueryFormModel;
+import org.cyk.ui.api.model.AbstractQueryOneFormModel;
 import org.cyk.ui.web.api.WebNavigationManager;
-import org.cyk.ui.web.primefaces.page.SelectPage;
+import org.cyk.ui.web.primefaces.page.AbstractSelectOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.FieldOverride;
 import org.cyk.utility.common.annotation.user.interfaces.FieldOverrides;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryFormModel.FIELD_IDENTIFIABLE,type=ClassroomSessionDivision.class)})
+@Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryOneFormModel.FIELD_IDENTIFIABLE,type=ClassroomSessionDivision.class)})
 public class ClassroomSessionDivisionQueryFormModel extends AbstractClassroomSessionDivisionQueryFormModel<ClassroomSessionDivision> implements Serializable {
 	private static final long serialVersionUID = -3756660150800681378L;
 	
@@ -36,9 +36,9 @@ public class ClassroomSessionDivisionQueryFormModel extends AbstractClassroomSes
 			super(ClassroomSessionDivision.class);
 		}
 		
-		protected void initialiseSelect(SelectPage selectPage){
+		protected void initialiseSelect(AbstractSelectOnePage<?> selectPage){
 			super.initialiseSelect(selectPage);
-			SchoolWebManager.getInstance().initialiseSelectClassroomSession(selectPage, FIELD_CLASSROOM_SESSION, AbstractQueryFormModel.FIELD_IDENTIFIABLE,null,null);
+			SchoolWebManager.getInstance().initialiseSelectClassroomSession(selectPage, FIELD_CLASSROOM_SESSION, AbstractQueryOneFormModel.FIELD_IDENTIFIABLE,null,null);
 		}
 		
 		@Override

@@ -9,10 +9,12 @@ import org.cyk.system.company.ui.web.primefaces.AbstractCompanyContextListener;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
@@ -22,6 +24,7 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionS
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectQueryFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionEditPage;
 import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
 
@@ -44,27 +47,32 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		//IdentifiableConfiguration identifiableConfiguration = uiManager.findConfiguration(ClassroomSession.class);
 		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class,null));
+		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class,null,null));
 		uiManager.configBusinessIdentifiable(ClassroomSession.class, null);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivision.class, ClassroomSessionDivisionEditPage.Form.class, ClassroomSessionDivisionDetails.class
-				,ClassroomSessionDivisionQueryFormModel.class));
+				,ClassroomSessionDivisionQueryFormModel.class,null));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivision.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSessionDivision.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectEditPage.Form.class, ClassroomSessionDivisionSubjectDetails.class
-				,ClassroomSessionDivisionSubjectQueryFormModel.class));
+				,ClassroomSessionDivisionSubjectQueryFormModel.class,null));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionSubject.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSessionDivisionSubject.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionSubjectEvaluationType.class, ClassroomSessionDivisionSubjectEvaluationTypeEditPage.Form.class, ClassroomSessionDivisionSubjectEvaluationTypeDetails.class
-				,ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.class));
+				,ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.class,null));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionSubjectEvaluationType.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSessionDivisionSubjectEvaluationType.class);
 		
-		primefacesManager.getSelectPageListeners().add(new ClassroomSessionDivisionQueryFormModel.PageAdapter());
-		primefacesManager.getSelectPageListeners().add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
-		primefacesManager.getSelectPageListeners().add(new ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.PageAdapter());
+		uiManager.registerConfiguration(new IdentifiableConfiguration(StudentClassroomSessionDivision.class, StudentClassroomSessionDivisionEditPage.Form.class, StudentClassroomSessionDivisionDetails.class
+				,StudentClassroomSessionDivisionQueryFormModel.class,null));
+		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionSubjectEvaluationType.class, null);
+		webNavigationManager.useDynamicSelectView(ClassroomSessionDivisionSubjectEvaluationType.class);
+		
+		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionQueryFormModel.PageAdapter());
+		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
+		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.PageAdapter());
 		
 	}
 	
