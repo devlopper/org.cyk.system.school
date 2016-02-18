@@ -23,7 +23,6 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOpti
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
-import org.cyk.system.root.model.Mime;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
@@ -52,6 +51,7 @@ import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
+import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
 
@@ -199,7 +199,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					}
 				}
 			}
-			writeStream(RootBusinessLayer.getInstance().getFileBusiness().merge(files, Mime.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
+			writeStream(RootBusinessLayer.getInstance().getFileBusiness().merge(files, FileExtension.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
     	}
 	}
 	public void createStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean createFileOnDisk){

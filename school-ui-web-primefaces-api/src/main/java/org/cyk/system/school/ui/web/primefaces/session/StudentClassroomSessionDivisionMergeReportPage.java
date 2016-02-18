@@ -11,12 +11,11 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
-import org.cyk.system.root.model.Mime;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
+import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyChoice;
@@ -57,8 +56,8 @@ public class StudentClassroomSessionDivisionMergeReportPage extends AbstractCrud
 	
 	@Override
 	protected void create() {
-		RootBusinessLayer.getInstance().getFileBusiness().merge(SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
-				.findReportFiles( ((Form)form.getData()).getStudents() ), Mime.PDF);
+		navigationManager.redirectToFileConsultManyPage(SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+				.findReportFiles(((Form)form.getData()).getStudents()), FileExtension.PDF);
 	}
 	
 	@Getter

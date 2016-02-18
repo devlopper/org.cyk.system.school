@@ -305,7 +305,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public Collection<File> findReportFiles(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		Collection<File> files = new ArrayList<>();
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
-			files.add(studentClassroomSessionDivision.getResults().getReport());
+			if(studentClassroomSessionDivision.getResults().getReport()!=null)
+				files.add(studentClassroomSessionDivision.getResults().getReport());
 		return files;
 	}
 	
