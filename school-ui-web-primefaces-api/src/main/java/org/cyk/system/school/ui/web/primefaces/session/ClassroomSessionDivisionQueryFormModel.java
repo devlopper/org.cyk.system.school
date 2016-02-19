@@ -18,7 +18,7 @@ import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryOneFormModel.FIELD_IDENTIFIABLE,type=ClassroomSessionDivision.class)})
-public class ClassroomSessionDivisionQueryFormModel extends AbstractClassroomSessionDivisionQueryFormModel<ClassroomSessionDivision> implements Serializable {
+public class ClassroomSessionDivisionQueryFormModel extends AbstractClassroomSessionDivisionQueryOneFormModel<ClassroomSessionDivision> implements Serializable {
 	private static final long serialVersionUID = -3756660150800681378L;
 	
 	@Override @Sequence(direction=Direction.AFTER,field=FIELD_CLASSROOM_SESSION)
@@ -29,7 +29,7 @@ public class ClassroomSessionDivisionQueryFormModel extends AbstractClassroomSes
 	/**/
 	
 	@Getter @Setter
-	public static class PageAdapter extends AbstractClassroomSessionDivisionSelectPageAdapter<ClassroomSessionDivision> implements Serializable {
+	public static class PageAdapter extends AbstractClassroomSessionDivisionSelectOnePageAdapter<ClassroomSessionDivision> implements Serializable {
 		private static final long serialVersionUID = -7392513843271510254L;
 		
 		public PageAdapter() {

@@ -23,7 +23,6 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSession;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -51,6 +50,9 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	@Setter private String classroomSessionDivisionTypeName,classroomSessionDivisionInfos="CSD INFOS TO SET";
 	private String outcomeGenerateStudentClassroomSessionDivisionReport = "classroomSessionDivisionUpdateStudentReport";
 	private String outcomeUpdateStudentClassroomSessionDivisionResults  = "classroomSessionDivisionUpdateStudentResults";
+	private String outcomeConsultClassroomSessionStudentDivisionReportFile  = "classroomSessionConsultStudentDivisionReportFileView";
+	private String outcomeConsultSchoolStudentClassroomSessionDivisionReportFile  = "schoolConsultStudentClassroomSessionDivisionReportFileView";
+	
 	private String outcomeStudentClassroomSessionDivisionMergeReport  = "studentClassroomSessionDivisionMergeReportView";
 	/*private String outcomeClassroomSessionMainDetails;
 	private String outcomeClassroomSessionDivisionDetails;
@@ -77,6 +79,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 		systemMenu.getBusinesses().add(getRegistrationCommandable(userSession, null));
 		systemMenu.getBusinesses().add(getClassCommandable(userSession, null));			
+		systemMenu.getBusinesses().add(getMarksCardCommandable(userSession, null));
 		
 		systemMenu.getReferenceEntities().add(getControlPanelCommandable(userSession, null));
 		
@@ -100,8 +103,16 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		module.addChild(menuManager.createMany(StudentSubject.class, null));
 		module.addChild(menuManager.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 		module.addChild(menuManager.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
-		module.addChild(menuManager.createSelectMany(StudentClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
-		module.addChild(uiProvider.createCommandable("command.school.downloadmarkscard", IconType.ACTION_DOWNLOAD,outcomeStudentClassroomSessionDivisionMergeReport));
+		return module;
+	}
+	
+	public UICommandable getMarksCardCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
+		UICommandable module = uiProvider.createCommandable("school.markscard", null);
+		module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
+		module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
+		
+		//module.addChild(uiProvider.createCommandable("school", null,outcomeConsultSchoolStudentClassroomSessionDivisionReportFile));
+		//module.addChild(menuManager.createSelectOne(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
 		return module;
 	}
 	

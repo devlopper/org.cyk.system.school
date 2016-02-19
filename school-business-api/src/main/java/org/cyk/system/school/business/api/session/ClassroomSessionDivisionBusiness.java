@@ -13,6 +13,7 @@ public interface ClassroomSessionDivisionBusiness extends TypedBusiness<Classroo
 	void computeResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions);
 
 	Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession);
+	Collection<ClassroomSessionDivision> findByClassroomSessions(Collection<ClassroomSession> classroomSessions);
 	
 	
 }

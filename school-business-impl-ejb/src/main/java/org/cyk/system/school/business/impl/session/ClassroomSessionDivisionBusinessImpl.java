@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl.session;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -69,9 +70,14 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 
 	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession) {
-		return dao.readByClassroomSession(classroomSession);
+		return findByClassroomSessions(Arrays.asList(classroomSession));
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSessionDivision> findByClassroomSessions(Collection<ClassroomSession> classroomSessions) {
+		return dao.readByClassroomSessions(classroomSessions);
 	}
 	
 }

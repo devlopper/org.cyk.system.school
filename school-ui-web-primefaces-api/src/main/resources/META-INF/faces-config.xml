@@ -5,38 +5,31 @@
 
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
-		<!-- Stock Manager -->
-		<!--navigation-case>
-			<from-outcome>productCollectionEditView</from-outcome>
-			<to-view-id>/private/__role__/__stockmanager__/editoneproductcollection.xhtml</to-view-id>
-			<redirect />
-		</navigation-case-->
-		
+						
 		<navigation-case>
-			<from-outcome>configureLevels</from-outcome>
-			<to-view-id>/private/__role__/__manager__/configuration/level/index.xhtml</to-view-id>
-			<redirect />
-		</navigation-case>
-		
-		<navigation-case>
-			<from-outcome>editLevelName</from-outcome>
-			<to-view-id>/private/__role__/__manager__/crudOneLevelName.xhtml</to-view-id>
+			<from-outcome>schoolConsultStudentClassroomSessionDivisionReportFileView</from-outcome>
+			<to-view-id>/private/school/consultstudentclassroomsessiondivisionreportfile.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>classroomSessionEditView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsession/edit.jsf</to-view-id>
+			<to-view-id>/private/classroomsession/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>classroomSessionConsultView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsession/consult.jsf</to-view-id>
+			<to-view-id>/private/classroomsession/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>classroomSessionListView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsession/list.jsf</to-view-id>
+			<to-view-id>/private/classroomsession/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionConsultStudentDivisionReportFileView</from-outcome>
+			<to-view-id>/private/classroomsession/consultstudentdivisionreportfile.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

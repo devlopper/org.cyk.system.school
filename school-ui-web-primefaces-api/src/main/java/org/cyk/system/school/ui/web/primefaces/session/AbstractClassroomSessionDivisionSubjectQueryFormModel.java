@@ -16,7 +16,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
 @Getter @Setter 
-public abstract class AbstractClassroomSessionDivisionSubjectQueryFormModel<SESSION extends AbstractIdentifiable> extends AbstractClassroomSessionDivisionQueryFormModel<SESSION> implements Serializable {
+public abstract class AbstractClassroomSessionDivisionSubjectQueryFormModel<SESSION extends AbstractIdentifiable> extends AbstractClassroomSessionDivisionQueryOneFormModel<SESSION> implements Serializable {
 	private static final long serialVersionUID = -3756660150800681378L;
 	
 	@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private ClassroomSessionDivision classroomSessionDivision;

@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl.session;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -291,12 +292,17 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentClassroomSessionDivision> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
-		return dao.readByClassroomSessionDivision(classroomSessionDivision);
+		return findByClassroomSessionDivisions(Arrays.asList(classroomSessionDivision));
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions) {
+		return dao.readByClassroomSessionDivisions(classroomSessionDivisions);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public StudentClassroomSessionDivision findByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 	} 
@@ -340,7 +346,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		return studentClassroomSessionDivision;
 	}
 
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentClassroomSessionDivision> findByStudentByClassroomSession(Student student,ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student,classroomSession);
 	}
