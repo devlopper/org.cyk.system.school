@@ -10,9 +10,6 @@ import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -32,6 +29,8 @@ import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricValueInputted;
+import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
@@ -79,6 +78,9 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTimeConstants;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {
 
@@ -122,9 +124,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	private Collection<EvaluationType> evaluationTypes = new ArrayList<>();
 	private Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = new ArrayList<>();
 	
-	private MetricCollection studentWorkMetricCollection;
+	private MetricCollection studentWorkMetricCollection1,studentWorkMetricCollection2;
 	
-	private CommonNodeInformations commonNodeInformations;
+	private CommonNodeInformations commonNodeInformations1,commonNodeInformations2;
 	
 	@Setter private Integer numbreOfTeachers = 10;
 	@Setter private Integer numbreOfStudents = 10;
@@ -208,6 +210,24 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}
 		});
 		
+		studentWorkMetricCollection1 = rootDataProducerHelper.createMetricCollection("BSWHG1G6","Behaviour,Study and Work Habits",MetricValueType.NUMBER
+				,MetricValueInputted.VALUE_INTERVAL_VALUE,new Byte("0")
+    			, new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies","Demonstrates self-control"
+    					,"Takes care of school and others materials","Game/Sport","Handwriting","Drawing/Painting","Punctionality/Regularity","Works cooperatively in groups"
+    					,"Listens and follows directions"}
+    	, new String[][]{ {"1", "Has no regard for the observable traits", "1", "1"},{"2", "Shows minimal regard for the observable traits", "2", "2"}
+    	,{"3", "Acceptable level of observable traits", "3", "3"},{"4", "Maintains high level of observable traits", "4", "4"}
+    	,{"5", "Maintains an excellent degree of observable traits", "5", "5"} });
+   
+    	studentWorkMetricCollection2 = rootDataProducerHelper.createMetricCollection("BSWHG7G12","Behaviour,Study and Work Habits",MetricValueType.STRING
+    			,MetricValueInputted.VALUE_INTERVAL_CODE,new Byte("0")
+    			, new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies","Demonstrates self-control"
+    					,"Takes care of school and others materials","Game/Sport","Handwriting","Drawing/Painting","Punctionality/Regularity","Works cooperatively in groups"
+    					,"Listens and follows directions"}
+    	, new String[][]{ {"E1", "Excellent", "1", "1"},{"G", "Good", "2", "2"}
+    	,{"S", "Satisfactory", "3", "3"},{"N", "Needs Improvement", "4", "4"}
+    	,{"H", "Has no regard", "5", "5"} });
+		/*
 		studentWorkMetricCollection = new MetricCollection("BSWH","Behaviour,Study and Work Habits");
 		studentWorkMetricCollection.addItem("1","Respect authority");
 		studentWorkMetricCollection.addItem("2","Works independently and neatly");
@@ -232,16 +252,21 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		studentWorkMetricCollection.getValueIntervalCollection().addItem("5", "Maintains an excellent degree of observable traits", "5", "5");
 		
 		create(studentWorkMetricCollection);
+		*/
 		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa.jrxml", "reportcard.jrxml"),null);
 		create(reportTemplate);
-		commonNodeInformations = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
-		commonNodeInformations.setClassroomSessionTimeDivisionType(getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER));
-		commonNodeInformations.setCurrentClassroomSessionDivisionIndex(new Byte("1"));
+		commonNodeInformations1 = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection1,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
+		commonNodeInformations1.setClassroomSessionTimeDivisionType(getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER));
+		commonNodeInformations1.setCurrentClassroomSessionDivisionIndex(new Byte("1"));
+		
+		commonNodeInformations2 = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection2,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
+		commonNodeInformations2.setClassroomSessionTimeDivisionType(getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER));
+		commonNodeInformations2.setCurrentClassroomSessionDivisionIndex(new Byte("1"));
 		
 		//Level names
-		levelNameG1 = createLevelName("Grade 1");
-		levelNameG2 = createLevelName("Grade 2");
-		levelNameG3 = createLevelName("Grade 3");
+		levelNameG1 = createLevelName("Grade 1",commonNodeInformations1);
+		levelNameG2 = createLevelName("Grade 2",commonNodeInformations2);
+		levelNameG3 = createLevelName("Grade 3",commonNodeInformations1);
 		
 		levelG1 = create(new Level(null,levelNameG1, null));
 		levelG2 = create(new Level(null,levelNameG2, null));
@@ -257,13 +282,13 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		rootRandomDataProvider.createActor(Student.class, numbreOfStudents);
 		flush("Students");
 		
-		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformations);
+		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformations1);
     	create(school);
     	
     	school.getOwnedCompany().getCompany().setManager(personDao.readOneRandomly());
     	companyBusiness.update(school.getOwnedCompany().getCompany());
     	
-    	AcademicSession academicSession = new AcademicSession(school,commonNodeInformations,new Date());
+    	AcademicSession academicSession = new AcademicSession(school,commonNodeInformations1,new Date());
     	academicSession.getPeriod().setFromDate(new Date());
     	academicSession.getPeriod().setToDate(new Date());
     	academicSession = create(academicSession);
@@ -375,11 +400,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	
 	/**/
 	
-	private LevelName createLevelName(String name){
+	private LevelName createLevelName(String name,CommonNodeInformations classroomSessionDivisions){
 		LevelName levelName = new LevelName();
 		levelName.setCode(StringUtils.replace(name, Constant.CHARACTER_SPACE.toString(), Constant.EMPTY_STRING));
 		levelName.setName(name);
-		levelName.setNodeInformations(commonNodeInformations);
+		levelName.setNodeInformations(classroomSessionDivisions);
 		return create(levelName);
 	}
 	

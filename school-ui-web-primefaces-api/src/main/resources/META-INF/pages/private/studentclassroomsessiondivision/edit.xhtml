@@ -18,11 +18,25 @@
  					<h:outputText value="#{item.name}" />
  				</p:column>
  				<p:column headerText="#{uiManager.text('field.value')}" rendered="#{studentClassroomSessionDivisionEditPage.showNumberColumn}">
- 					<pe:inputNumber value="#{item.numberValue}" required="true" requiredMessage="#{item.name} - #{uiManager.textInputValueRequired('field.value')}" />
+ 					<pe:inputNumber value="#{item.numberValue}" required="true" requiredMessage="#{item.name} - #{uiManager.textInputValueRequired('field.value')}"
+ 						minValue="#{studentClassroomSessionDivisionEditPage.metricCollection.valueIntervalCollection.lowestValue}" 
+ 						maxValue="#{studentClassroomSessionDivisionEditPage.metricCollection.valueIntervalCollection.highestValue}"
+ 						decimalPlaces="#{studentClassroomSessionDivisionEditPage.metricCollection.valueIntervalCollection.numberOfDecimalAfterDot}"
+ 						rendered="#{not studentClassroomSessionDivisionEditPage.showCombobox}"   />
+ 					
+ 					<p:selectOneMenu value="#{item.numberValue}" rendered="#{studentClassroomSessionDivisionEditPage.showCombobox}" >
+ 						<f:selectItems value="#{studentClassroomSessionDivisionEditPage.metricValueCollectionChoices}" />
+ 					</p:selectOneMenu>	
  				</p:column>
  				<p:column headerText="#{uiManager.text('field.value')}" rendered="#{studentClassroomSessionDivisionEditPage.showStringColumn}">
- 					<p:inputText value="#{item.stringValue}" required="true" requiredMessage="#{item.name} - #{uiManager.textInputValueRequired('field.value')}"/>
+ 					<p:inputText value="#{item.stringValue}" required="true" requiredMessage="#{item.name} - #{uiManager.textInputValueRequired('field.value')}"
+ 					 rendered="#{not studentClassroomSessionDivisionEditPage.showCombobox}"/>
+ 					 
+ 					 <p:selectOneMenu value="#{item.stringValue}" rendered="#{studentClassroomSessionDivisionEditPage.showCombobox}" >
+ 						<f:selectItems value="#{studentClassroomSessionDivisionEditPage.metricValueCollectionChoices}" />
+ 					</p:selectOneMenu>
  				</p:column>
+ 				
  			</cyk:itemCollection>
  		</ui:define>
  		
