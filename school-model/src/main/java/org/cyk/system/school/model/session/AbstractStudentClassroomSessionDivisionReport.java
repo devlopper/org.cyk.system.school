@@ -103,7 +103,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		
 		labelValueCollectionReport = new LabelValueCollectionReport();
 		for(int i=0;i<60;i++)
-			studentLabelValueCollection.add("Label "+i, i+"");
+			labelValueCollectionReport.add("Label "+i, i+"");
 		
 		studentLabelValueCollection = new LabelValueCollectionReport();
 		studentLabelValueCollection.setName("PUPIL'S DETAILS");

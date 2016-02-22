@@ -209,6 +209,9 @@
 	<field name="backgroundImage" class="java.io.InputStream">
 		<fieldDescription><![CDATA[backgroundImage]]></fieldDescription>
 	</field>
+	<field name="labelValueCollectionReport" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
+		<fieldDescription><![CDATA[labelValueCollectionReport]]></fieldDescription>
+	</field>
 	<background>
 		<band height="802" splitType="Stretch">
 			<image>
@@ -314,7 +317,6 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="30"/>
 		<band height="97">
 			<frame>
 				<reportElement mode="Transparent" x="411" y="2" width="144" height="91" backcolor="#9999FF" uuid="bf83ef15-2e50-4240-8be7-a63480bbc3e5"/>
@@ -326,7 +328,7 @@
 				<componentElement>
 					<reportElement key="table 1" x="0" y="15" width="143" height="74" backcolor="#CC0033" uuid="51685db0-98f3-436f-bb95-d65fa5a6a3ff"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="LabelValueDataset" uuid="da26c47e-d3ef-43df-aca8-b5059e0a2748">
+						<datasetRun subDataset="LabelValueDataset" uuid="de09f2ff-1834-4230-9c2c-1c93952dc7bf">
 							<datasetParameter name="CYK_TEXT_STATIC_FONT_NAME">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_STATIC_FONT_NAME}]]></datasetParameterExpression>
 							</datasetParameter>
@@ -339,7 +341,7 @@
 							<datasetParameter name="CYK_TEXT_DYNAMIC_FONT_SIZE">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_DYNAMIC_FONT_SIZE}]]></datasetParameterExpression>
 							</datasetParameter>
-							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{attendanceLabelValueCollection}.getCollection())]]></dataSourceExpression>
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{labelValueCollectionReport}.getCollection())]]></dataSourceExpression>
 						</datasetRun>
 						<jr:column width="123" uuid="c98b16c3-be07-431d-81e9-3ea760273e5d">
 							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">
@@ -366,19 +368,17 @@
 					</jr:table>
 				</componentElement>
 			</frame>
-		</band>
-		<band height="53">
 			<frame>
-				<reportElement x="252" y="0" width="302" height="52" uuid="cd3e47e6-f802-4c2a-ba8b-80ca4e07fbfe"/>
+				<reportElement mode="Transparent" x="2" y="0" width="144" height="91" backcolor="#9999FF" uuid="40fac1f9-5da5-45f6-93c3-f781f7a6390e"/>
 				<textField>
-					<reportElement style="block header" x="1" y="0" width="301" height="13" uuid="2413016b-250e-46f6-bc91-1a7fb2fc74ac"/>
+					<reportElement style="block header" x="0" y="0" width="144" height="13" uuid="80495d10-2bc2-4b62-a285-3e502028ad1b"/>
 					<textElement markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{behaviorLabelValueCollection1}.getName()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{attendanceLabelValueCollection}.getName()+"</font>"]]></textFieldExpression>
 				</textField>
 				<componentElement>
-					<reportElement key="table 1" style="table label column" x="1" y="12" width="142" height="40" uuid="e310ad24-2198-4d5e-ada3-68b91afb2796"/>
+					<reportElement key="table 1" x="0" y="15" width="143" height="74" backcolor="#CC0033" uuid="c46b59ac-6672-4bef-9e94-783bfe78c9e7"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="LabelValueDataset" uuid="4230645b-0727-419b-b478-4eae5579aee8">
+						<datasetRun subDataset="LabelValueDataset" uuid="a5de86f9-a5d3-44e4-99ac-798affa6b747">
 							<datasetParameter name="CYK_TEXT_STATIC_FONT_NAME">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_STATIC_FONT_NAME}]]></datasetParameterExpression>
 							</datasetParameter>
@@ -391,12 +391,12 @@
 							<datasetParameter name="CYK_TEXT_DYNAMIC_FONT_SIZE">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_DYNAMIC_FONT_SIZE}]]></datasetParameterExpression>
 							</datasetParameter>
-							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{behaviorLabelValueCollection1}.getCollection())]]></dataSourceExpression>
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{labelValueCollectionReport}.getCollection())]]></dataSourceExpression>
 						</datasetRun>
-						<jr:column width="166" uuid="e0639a7d-11a4-450b-ba5d-b830a895e8b1">
+						<jr:column width="123" uuid="e44186d8-5dc9-4f6c-91c3-4ccafec19b44">
 							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="166" height="12" uuid="2599d2cb-db5e-42a5-93d5-bfc252b5df54"/>
+									<reportElement x="0" y="0" width="123" height="12" uuid="71a858f7-beb2-427f-a360-b5468dbfb586"/>
 									<textElement markup="styled">
 										<font fontName="Times New Roman"/>
 									</textElement>
@@ -404,10 +404,10 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="23" uuid="3131dcc1-a94f-4325-acf8-ca637dc2d71f">
+						<jr:column width="23" uuid="daa66d51-c85a-48a0-af61-b20d76430b41">
 							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="23" height="12" uuid="0f443419-b6d7-4c9d-8d13-5618debd0768"/>
+									<reportElement x="0" y="0" width="23" height="12" uuid="f92b06a4-2448-44e1-857b-af990f744cdb"/>
 									<textElement markup="styled">
 										<font fontName="Batang"/>
 									</textElement>
@@ -417,10 +417,18 @@
 						</jr:column>
 					</jr:table>
 				</componentElement>
+			</frame>
+			<frame>
+				<reportElement mode="Transparent" x="204" y="0" width="144" height="91" backcolor="#9999FF" uuid="54d9e248-f228-4961-b517-39078e5de454"/>
+				<textField>
+					<reportElement style="block header" x="0" y="0" width="144" height="13" uuid="0e83221d-6d7c-4123-a1e6-69f628fe2498"/>
+					<textElement markup="styled"/>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{attendanceLabelValueCollection}.getName()+"</font>"]]></textFieldExpression>
+				</textField>
 				<componentElement>
-					<reportElement key="table 1" style="table label column" x="176" y="12" width="126" height="39" uuid="dcba3c6d-f93b-4af7-9721-a50624efd1ad"/>
+					<reportElement key="table 1" x="0" y="15" width="143" height="74" backcolor="#CC0033" uuid="5c042a24-c9bb-4470-960f-7038cbc6ac52"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="LabelValueDataset" uuid="37b3c187-6f6d-4a1a-8c7b-1f54a37ca1b1">
+						<datasetRun subDataset="LabelValueDataset" uuid="986f7568-a831-4f67-b87b-f0ca3e6e1c75">
 							<datasetParameter name="CYK_TEXT_STATIC_FONT_NAME">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_STATIC_FONT_NAME}]]></datasetParameterExpression>
 							</datasetParameter>
@@ -433,12 +441,12 @@
 							<datasetParameter name="CYK_TEXT_DYNAMIC_FONT_SIZE">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_DYNAMIC_FONT_SIZE}]]></datasetParameterExpression>
 							</datasetParameter>
-							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{behaviorLabelValueCollection2}.getCollection())]]></dataSourceExpression>
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{labelValueCollectionReport}.getCollection())]]></dataSourceExpression>
 						</datasetRun>
-						<jr:column width="114" uuid="d3e09da2-233c-45c6-bac5-fe6fb76e7d20">
+						<jr:column width="123" uuid="876409da-5957-4388-af33-e9f53fd132ed">
 							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="114" height="12" uuid="44cc3762-7a40-49e6-be28-57814b07208a"/>
+									<reportElement x="0" y="0" width="123" height="12" uuid="25fa0314-b546-462c-b1b6-edfc8728e15e"/>
 									<textElement markup="styled">
 										<font fontName="Times New Roman"/>
 									</textElement>
@@ -446,10 +454,10 @@
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="13" uuid="630d9120-93e8-495c-9092-3c02d234a10d">
+						<jr:column width="23" uuid="65804120-537a-42e8-b3b0-d1d67ad044aa">
 							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="13" height="12" uuid="6fa38971-7c13-4638-8f31-ae157320724c"/>
+									<reportElement x="0" y="0" width="23" height="12" uuid="4269c1f7-7562-4565-a18a-4d18697593dd"/>
 									<textElement markup="styled">
 										<font fontName="Batang"/>
 									</textElement>
