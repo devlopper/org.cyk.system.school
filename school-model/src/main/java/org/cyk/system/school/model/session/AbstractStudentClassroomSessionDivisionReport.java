@@ -35,7 +35,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 	private Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects;
 	
 	//private List<LabelValueCollectionReport> labelValueCollections = new ArrayList<>();
-	private LabelValueCollectionReport studentLabelValueCollection,attendanceLabelValueCollection,overallResultlLabelValueCollection
+	private LabelValueCollectionReport labelValueCollectionReport,studentLabelValueCollection,attendanceLabelValueCollection,overallResultlLabelValueCollection
 		,behaviorLabelValueCollection,gradingScaleLabelValueCollection,effortLevelLabelValueCollection,informationLabelValueCollection;
 		
 	private AcademicSessionReport academicSession = new AcademicSessionReport();
@@ -100,6 +100,10 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		
 		for(int i=0;i<3;i++)
 			markTotals.add(positiveFloatNumber(20, 0, 99));
+		
+		labelValueCollectionReport = new LabelValueCollectionReport();
+		for(int i=0;i<60;i++)
+			studentLabelValueCollection.add("Label "+i, i+"");
 		
 		studentLabelValueCollection = new LabelValueCollectionReport();
 		studentLabelValueCollection.setName("PUPIL'S DETAILS");

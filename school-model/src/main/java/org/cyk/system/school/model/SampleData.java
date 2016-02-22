@@ -14,6 +14,10 @@ public class SampleData implements Serializable {
 		return RandomDataProvider.generate(StudentClassroomSessionDivisionReport.class, 1);
 	}
 	
+	public static Collection<StudentClassroomSessionDivisionReport> createStudentClassroomSessionDivisionReports2(){
+		return RandomDataProvider.generate(StudentClassroomSessionDivisionReport.class, 1);
+	}
+	
 	public static void main(String[] args) {
 		Collection<StudentClassroomSessionDivisionReport> reports = createStudentClassroomSessionDivisionReports();
 		System.out.println("SampleData.main() : "+reports.iterator().next().getClassroomSessionDivisionSubjects().size());
