@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="339"/>
+	<property name="ireport.y" value="323"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -818,7 +818,7 @@
 				</componentElement>
 			</frame>
 			<frame>
-				<reportElement x="357" y="214" width="198" height="220" backcolor="#000000" uuid="2261a94c-5493-40ea-9f3a-b21167bb1ca1"/>
+				<reportElement x="357" y="214" width="170" height="220" backcolor="#000000" uuid="2261a94c-5493-40ea-9f3a-b21167bb1ca1"/>
 				<box rightPadding="0">
 					<pen lineWidth="0.25" lineColor="#00CCCC"/>
 					<topPen lineWidth="0.0" lineColor="#00CCCC"/>
@@ -827,28 +827,28 @@
 					<rightPen lineWidth="0.25" lineColor="#00CCCC"/>
 				</box>
 				<textField>
-					<reportElement style="block header" x="0" y="0" width="198" height="13" uuid="440c6d7c-005f-4d50-a780-8931d3d68733"/>
+					<reportElement style="block header" x="0" y="0" width="170" height="13" uuid="440c6d7c-005f-4d50-a780-8931d3d68733"/>
 					<textElement markup="styled"/>
 					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{commentsBlockTitle}+"</font>"]]></textFieldExpression>
 				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="2" y="13" width="166" height="13" uuid="fe518cec-68b5-471a-aeaa-44736fb02614"/>
+					<textElement markup="styled">
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{comments}+"</font>"]]></textFieldExpression>
+				</textField>
 				<image hAlign="Center" isUsingCache="false" onErrorType="Blank">
-					<reportElement x="2" y="162" width="196" height="40" uuid="5df88f9c-cfd0-4d8c-99f8-46f7e049db74"/>
+					<reportElement x="0" y="110" width="170" height="40" uuid="5df88f9c-cfd0-4d8c-99f8-46f7e049db74"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
 					<imageExpression><![CDATA[$F{commentator}.getPerson().getSignatureSpecimen()]]></imageExpression>
 				</image>
-				<textField>
-					<reportElement x="0" y="202" width="198" height="13" uuid="a6cfe002-7b37-4421-8f2d-bc1802bb083c"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="0" y="150" width="170" height="13" uuid="a6cfe002-7b37-4421-8f2d-bc1802bb083c"/>
 					<textElement textAlignment="Center" markup="styled"/>
 					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{commentator}.getPerson().getTitle()+" "+$F{commentator}.getPerson().getNames()+"</font>"]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement x="2" y="13" width="196" height="13" uuid="fe518cec-68b5-471a-aeaa-44736fb02614"/>
-					<textElement markup="styled">
-						<paragraph leftIndent="5"/>
-					</textElement>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{comments}+"</font>"]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
