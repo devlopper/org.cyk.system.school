@@ -34,7 +34,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 	private Collection<StudentClassroomSessionDivisionSubjectReport> subjects = new ArrayList<>();
 	private Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects;
 	
-	//private List<LabelValueCollectionReport> labelValueCollections = new ArrayList<>();
+	//private List<LabelValueCollectionReport> labelValueCollectionList = new ArrayList<>();
 	private LabelValueCollectionReport labelValueCollectionReport,studentLabelValueCollection,attendanceLabelValueCollection,overallResultlLabelValueCollection
 		,behaviorLabelValueCollection,gradingScaleLabelValueCollection,effortLevelLabelValueCollection,informationLabelValueCollection;
 		
@@ -194,10 +194,14 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		subjectsTableColumnNames.add("CLASS AVERAGE");
 		subjectsTableColumnNames.add("REMARKS");
 		subjectsTableColumnNames.add("TEACHER");
+		
+		labelValueCollections.add(studentLabelValueCollection);
+		labelValueCollections.add(attendanceLabelValueCollection);
+		labelValueCollections.add(effortLevelLabelValueCollection);
 	}
-	/*
+	
 	public LabelValueCollectionReport getLabelValueCollectionByIndex(Integer index){
-		return labelValueCollections.get(index);
-	}*/
+		return labelValueCollections.get(index.intValue());
+	}
 
 }
