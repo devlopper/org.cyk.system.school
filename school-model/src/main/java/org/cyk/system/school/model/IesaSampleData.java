@@ -20,6 +20,8 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		Collection<StudentClassroomSessionDivisionReport> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReport.class, 1);
 		StudentClassroomSessionDivisionReport report = collection.iterator().next();
 		
+		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
+		
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
 		report.getLabelValueCollections().clear();
 
