@@ -218,7 +218,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setOverallResultlLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.overallresult"));
 		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.average", r.getAverage());
 		labelValue(LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID, r.getAverageScale());
-		if(Boolean.TRUE.equals(parameters.getRankable()))
+		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getStudentClassroomSessionDivisionRankable()))
 			labelValue("school.report.studentclassroomsessiondivision.block.overallresult.rank", r.getRank());
 		
 		r.setGradingScaleLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.gradingscale"));
