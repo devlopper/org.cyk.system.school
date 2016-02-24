@@ -253,7 +253,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		
 		create(studentWorkMetricCollection);
 		*/
-		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa.jrxml", "reportcard.jrxml"),null);
+		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/iesa.jrxml", "reportcard.jrxml"),null);
 		create(reportTemplate);
 		commonNodeInformations1 = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection1,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
 		commonNodeInformations1.setClassroomSessionTimeDivisionType(getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER));

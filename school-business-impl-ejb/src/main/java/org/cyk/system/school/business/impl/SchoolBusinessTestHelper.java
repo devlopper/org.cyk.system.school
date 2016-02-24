@@ -174,6 +174,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			StudentSubject studentSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(student, subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
 			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
 		}
+		//debug(subjectEvaluation);
+		//debug(subjectEvaluation.getStudentSubjectEvaluations().iterator().next());
 		subjectEvaluationBusiness.create(subjectEvaluation);
 	}
 
@@ -412,6 +414,17 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	/**/
+	
+	public void simulateStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Object[][] objects,Boolean generateReport,Boolean printReport){
+		for(Object[] object : objects){
+			createSubjectEvaluations((ClassroomSessionDivisionSubject)object[0],(String[][])object[1]);
+		}
+    	 
+    	if(Boolean.TRUE.equals(generateReport)){
+    		randomValues(Arrays.asList(classroomSessionDivision),Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
+    		createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivision),printReport);
+    	}
+    }
 	
 	public void simulate(SchoolBusinessSimulationParameters parameters){
 		System.out.println("School business simulation started");

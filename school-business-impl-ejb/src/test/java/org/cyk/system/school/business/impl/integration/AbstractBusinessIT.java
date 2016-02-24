@@ -15,6 +15,7 @@ import org.cyk.system.root.business.impl.AbstractFakedDataProducer.FakedDataProd
 import org.cyk.system.root.business.impl.BusinessIntegrationTestHelper;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.RootBusinessTestHelper;
+import org.cyk.system.root.business.impl.RootDataProducerHelper;
 import org.cyk.system.root.business.impl.validation.DefaultValidator;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
 import org.cyk.system.root.business.impl.validation.ValidatorMap;
@@ -62,6 +63,7 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
 	@Inject protected GenericBusiness genericBusiness;
 	@Inject protected ApplicationBusiness applicationBusiness;
 	@Inject protected TeacherBusiness teacherBusiness;
+	@Inject protected RootDataProducerHelper rootDataProducerHelper;
 	
 	@Inject protected ValidatorMap validatorMap;// = ValidatorMap.getInstance();
 	@Inject protected RootBusinessLayer rootBusinessLayer;
