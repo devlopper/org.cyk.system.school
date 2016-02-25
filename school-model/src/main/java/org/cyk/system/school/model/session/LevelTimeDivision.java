@@ -27,7 +27,7 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	
 	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull private TimeDivisionType timeDivisionType;
 
- 	@Column(nullable=false) @NotNull private Integer index;
+ 	@Column(name="theindex",nullable=false) @NotNull private Integer index;
 	
 	public LevelTimeDivision(Level level, TimeDivisionType timeDivisionType,Integer index) {
 		super();
