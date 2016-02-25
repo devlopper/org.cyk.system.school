@@ -24,7 +24,7 @@ public abstract class AbstractSchoolFakedDataProducer extends AbstractFakedDataP
 			public void set(Object object) {
 				super.set(object);
 				
-			}
+			} 
 		});
 	}
 	

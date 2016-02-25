@@ -28,18 +28,19 @@ public class Evaluation extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
+	public static Boolean COEFFICIENT_APPLIED = Boolean.FALSE;
+	
 	@JoinColumn(name="type") @ManyToOne @NotNull private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
 	@Temporal(TemporalType.TIMESTAMP) @Column(name="happeningDate") @NotNull private Date date;
-	@NotNull private Boolean coefficientApplied = Boolean.FALSE;
+	@NotNull private Boolean coefficientApplied = COEFFICIENT_APPLIED;
 	
 	/**/
 	
 	@Transient private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
 
-	public Evaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,Boolean coefficientApplied) {
+	public Evaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 		super();
 		this.classroomSessionDivisionSubjectEvaluationType = classroomSessionDivisionSubjectEvaluationType;
-		this.coefficientApplied = coefficientApplied;
 	}
 	
 	public Collection<StudentSubjectEvaluation> getStudentSubjectEvaluations(){

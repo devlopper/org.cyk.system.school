@@ -15,18 +15,19 @@ import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.subject.Evaluation;
 
 public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
 
 	private static final long serialVersionUID = -5752455124275831171L;
 
-    @Inject protected IesaFakedDataProducer dataProducer;
+    @Inject protected IesaFakedDataProducer dataProducer; 
     @Inject protected MarkupLanguageBusiness markupLanguageBusiness;
      
     protected void installApplication(Boolean fake){
     	super.installApplication(fake);
     	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
-    	schoolBusinessTestHelper.setCoefficientApplied(Boolean.FALSE);
+    	Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS.setAttendance(Boolean.FALSE);
     	
     	JasperReportBusinessImpl.Listener.COLLECTION.add(new JasperReportBusinessImpl.Listener.Adapter.Default(){

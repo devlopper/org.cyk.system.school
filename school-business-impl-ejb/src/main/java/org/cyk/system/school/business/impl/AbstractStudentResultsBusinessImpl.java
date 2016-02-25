@@ -76,15 +76,20 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
 			result.getDetails().clear();
-			for(DETAIL detail : details)
+			for(DETAIL detail : details){
+				//System.out.println(result.getStudent().getIdentifier()+" , "+student(detail).getIdentifier()+" : "+result.getStudent().getIdentifier().equals(student(detail).getIdentifier()));
 				if(result.getStudent().getIdentifier().equals(student(detail).getIdentifier())){
 					result.getDetails().add(detail);
 					WeightedValue weightedValue = weightedValue(detail);
+					//System.out.println(result.getStudent().getRegistration().getCode()+" , "+weightedValue.getValue());
 					if(weightedValue.getValue()==null)
 						;
-					else
+					else{
 						weightedValues.add(weightedValue);
+						//System.out.println(result.getStudent().getRegistration().getCode()+" , "+weightedValue.getValue()+" , "+weightedValue.getWeight());
+					}
 				}
+			}
 			//computation
 			//Is there any weighted values
 			if(weightedValues.isEmpty()){

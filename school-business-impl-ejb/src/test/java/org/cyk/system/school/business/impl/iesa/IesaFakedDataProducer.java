@@ -349,7 +349,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		
 		Collection<Evaluation> subjectEvaluations = new ArrayList<>();
 		for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypeBusiness.findAll()){
-			Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType, Boolean.FALSE);
+			Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType);
+			subjectEvaluation.setCoefficientApplied(Boolean.FALSE);
 			for(StudentSubject studentSubject :studentSubjectDao.readByClassroomSessionDivisionSubject(subjectEvaluationType.getClassroomSessionDivisionSubject()) ){
 				StudentSubjectEvaluation studentSubjectEvaluation = new StudentSubjectEvaluation(subjectEvaluation, studentSubject
 						, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue())));

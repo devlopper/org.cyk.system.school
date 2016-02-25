@@ -75,7 +75,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	@Inject private SchoolBusinessLayer schoolBusinessLayer;
 	
-	@Getter @Setter private Boolean coefficientApplied = Boolean.TRUE,studentSubjectCascadeBottomUpOnCreate,studentSubjectCascadeTopDownOnCreate;
+	@Getter @Setter private Boolean studentSubjectCascadeBottomUpOnCreate,studentSubjectCascadeTopDownOnCreate;
 	@Getter @Setter private RankOptions<SortableStudentResults> rankOptions;
 	
 	@Getter @Setter private List<EvaluationType> evaluationTypes = new ArrayList<>();
@@ -141,7 +141,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			if(studentSubjects.isEmpty())
 				continue;
 			for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
-				Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType, coefficientApplied);
+				Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType);
+				subjectEvaluation.setCoefficientApplied(coefficientApplied);
 				subjectEvaluations.add(subjectEvaluation);
 				for(StudentSubject studentSubject : studentSubjects ){
 					subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation, studentSubject
@@ -166,7 +167,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	public void createSubjectEvaluation(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType,String[][] details){
-		Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType,coefficientApplied);
+		Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType); 
 		for(String[] detail : details){
 			if(StringUtils.isBlank(detail[1]))
 				continue;
@@ -194,10 +195,14 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) ){
 					for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
-						assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
-						System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent());
-						writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
-						files.add(studentClassroomSessionDivision.getResults().getReport());
+						if(!SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness()
+								.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
+										, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()){
+							assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
+							System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent());
+							writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
+							files.add(studentClassroomSessionDivision.getResults().getReport());	
+						}
 					}
 				}
 			}
@@ -456,12 +461,12 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     	System.out.println(classroomSessions.size()+" classroom session(s) created");
     	
     	System.out.println("Creating subject evaluations");
-    	createSubjectEvaluations(coefficientApplied);
+    	createSubjectEvaluations(Evaluation.COEFFICIENT_APPLIED);
     	
     	System.out.println("Try to create more subject evaluations than allowed");
     	new Try("Vous ne pouvez pas créer plus de 1 evaluation"){ 
 			private static final long serialVersionUID = -8176804174113453706L;
-			@Override protected void code() {createSubjectEvaluations(coefficientApplied);}
+			@Override protected void code() {createSubjectEvaluations(Evaluation.COEFFICIENT_APPLIED);}
 		}.execute();
     	
     	System.out.println("Setting student metric , attendance , appreciation");
@@ -507,7 +512,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				schoolBusinessLayer.getStudentSubjectBusiness().create(studentSubject);
 			}
 		}
-		createSubjectEvaluations(customClassroomSessionDivisionSubjects,coefficientApplied);
+		createSubjectEvaluations(customClassroomSessionDivisionSubjects,Evaluation.COEFFICIENT_APPLIED);
 		if(Boolean.TRUE.equals(parameters.getCreateStudentClassroomSessionDivisionReport())){
 			System.out.println("Creating student classroom session reports");
 			createStudentClassroomSessionDivisionReport(customClassroomSessionDivisions,parameters.getClassroomSessionDivisionIndexes(),Boolean.TRUE);
