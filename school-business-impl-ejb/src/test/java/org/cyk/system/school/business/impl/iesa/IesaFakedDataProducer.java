@@ -272,9 +272,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		levelG2 = create(new Level(null,levelNameG2, null));
 		levelG3 = create(new Level(null,levelNameG3, null));
 		
-		levelTimeDivisionG1 = create(new LevelTimeDivision(levelG1, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
-		levelTimeDivisionG2 = create(new LevelTimeDivision(levelG2, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
-		levelTimeDivisionG3 = create(new LevelTimeDivision(levelG3, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR)));
+		levelTimeDivisionG1 = create(new LevelTimeDivision(levelG1, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR),0));
+		levelTimeDivisionG2 = create(new LevelTimeDivision(levelG2, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR),1));
+		levelTimeDivisionG3 = create(new LevelTimeDivision(levelG3, getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR),2));
 		flush("Before actors");
 		
 		rootRandomDataProvider.createActor(Teacher.class, numbreOfTeachers);

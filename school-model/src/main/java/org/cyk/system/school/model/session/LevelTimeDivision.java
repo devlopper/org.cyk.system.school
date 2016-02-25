@@ -2,6 +2,7 @@ package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -22,16 +23,17 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	
 	private static final long serialVersionUID = 374208919427476791L;
 	
-	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull
-	private Level level;
+	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull private Level level;
 	
-	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull
-	private TimeDivisionType timeDivisionType;
+	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull private TimeDivisionType timeDivisionType;
 
-	public LevelTimeDivision(Level level, TimeDivisionType timeDivisionType) {
+ 	@Column(nullable=false) @NotNull private Integer index;
+	
+	public LevelTimeDivision(Level level, TimeDivisionType timeDivisionType,Integer index) {
 		super();
 		this.level = level;
 		this.timeDivisionType = timeDivisionType;
+		this.index = index;
 	}
 	
 	@Override
