@@ -12,6 +12,7 @@ import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
@@ -59,7 +60,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     				StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport = (StudentClassroomSessionDivisionReport) object;
     				ClassroomSession classroomSession = ((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getClassroomSession();
     				
-    				((JRDesignExpression)jasperDesign.getParametersMap().get("CYK_RANKABLE").getDefaultValueExpression())
+    				((JRDesignExpression)jasperDesign.getParametersMap().get(SchoolConstant.REPORT_CYK_GLOBAL_RANKABLE).getDefaultValueExpression())
     					.setText(classroomSession.getStudentClassroomSessionDivisionRankable().toString());
     				
     				if(Boolean.TRUE.equals(classroomSession.getStudentClassroomSessionDivisionRankable())){

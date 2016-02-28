@@ -253,7 +253,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		
 		create(studentWorkMetricCollection);
 		*/
-		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/iesa.jrxml", "reportcard.jrxml"),null);
+		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/iesa.jrxml", "reportcard.jrxml"),null,null);
 		create(reportTemplate);
 		commonNodeInformations1 = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection1,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
 		commonNodeInformations1.setClassroomSessionTimeDivisionType(getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER));
@@ -469,7 +469,6 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		@Override
 		public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
 				StudentClassroomSessionDivisionReportParameters parameters) {
-			parameters.setRankable(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getStudentClassroomSessionDivisionRankable());
 			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
 			r.getAcademicSession().getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
 					+ " OF <style forecolor=\"red\">A</style>BIDJAN");

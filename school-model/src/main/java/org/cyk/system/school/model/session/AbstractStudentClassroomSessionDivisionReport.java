@@ -27,8 +27,8 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 	private List<String> markTotals = new ArrayList<>();
 	private List<BigDecimal> tempMarkTotals = new ArrayList<>();
 	private ClassroomSessionDivisionReport classroomSessionDivision = new ClassroomSessionDivisionReport();
-	private Boolean generateBackgroundImage=Boolean.TRUE;
-	private InputStream backgroundImage;
+	private Boolean generateHeaderImage=Boolean.TRUE,generateBackgroundImage=Boolean.TRUE;
+	private InputStream headerImage,backgroundImage;
 	
 	private List<String> subjectsTableColumnNames = new ArrayList<>();
 	private Collection<StudentClassroomSessionDivisionSubjectReport> subjects = new ArrayList<>();
@@ -61,6 +61,9 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 				+ "<style forecolor=\"red\">S</style>"
 				+ "CHOOL OF "
 				+ "<style forecolor=\"red\">A</style>BIDJAN");
+		
+		if(Boolean.TRUE.equals(generateHeaderImage))
+			headerImage = inputStream(provider.documentHeader().getBytes());
 		
 		if(Boolean.TRUE.equals(generateBackgroundImage))
 			backgroundImage = inputStream(provider.companyLogo().getBytes());

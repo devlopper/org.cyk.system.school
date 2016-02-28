@@ -26,12 +26,11 @@ public interface SchoolReportProducer extends CompanyReportProducer {
 	public static class StudentClassroomSessionDivisionReportParameters implements Serializable{
 		private static final long serialVersionUID = 1446488904290411180L;
 		private Set<String> evaluationTypeCodes=new LinkedHashSet<>();
-		private Boolean sumMarks = Boolean.FALSE,rankable=Boolean.TRUE;
+		private Boolean sumMarks = Boolean.FALSE;
 		
 		public StudentClassroomSessionDivisionReportParameters(StudentClassroomSessionDivisionReportParameters parameters){
 			this.evaluationTypeCodes = new LinkedHashSet<>(parameters.evaluationTypeCodes);
 			this.sumMarks=parameters.sumMarks;
-			this.rankable=parameters.rankable;
 		}
 	}
 	

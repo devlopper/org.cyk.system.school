@@ -145,11 +145,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			StudentClassroomSessionDivisionReportParameters parameters = 
 					new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
 			
-			if(arguments.getRankable()==null){
-				
-			}else
-				parameters.setRankable(arguments.getRankable());
-			
 			StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
 					,parameters);
 			

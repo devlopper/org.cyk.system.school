@@ -43,11 +43,10 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	@Getter @Setter @NoArgsConstructor
 	public static class BuildReportArguments implements Serializable{
 		private static final long serialVersionUID = 7151479991050865862L;
-		private Boolean attendance = Boolean.TRUE,rankable;
+		private Boolean attendance = Boolean.TRUE;
 		
 		public BuildReportArguments(BuildReportArguments buildReportOptions){
 			this.attendance = buildReportOptions.attendance;
-			this.rankable = buildReportOptions.rankable;
 		}
 	}
 	

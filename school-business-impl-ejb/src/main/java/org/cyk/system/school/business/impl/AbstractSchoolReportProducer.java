@@ -62,6 +62,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		//debug(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate());
 		
 		ReportTemplate reportTemplate = schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate();
+		if(reportTemplate.getHeaderImage()!=null)
+			r.setHeaderImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(reportTemplate.getHeaderImage()));
 		if(reportTemplate.getBackgroundImage()!=null)
 			r.setBackgroundImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(reportTemplate.getBackgroundImage()));
 		RootBusinessLayer.getInstance().getContactCollectionBusiness().load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());

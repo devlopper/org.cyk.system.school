@@ -41,4 +41,8 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 		return level.getUiString()+" "+timeDivisionType.getUiString();
 	}
 	
+	/**/
+	
+	public static final String FIELD_INDEX = "index";
+	
 }
