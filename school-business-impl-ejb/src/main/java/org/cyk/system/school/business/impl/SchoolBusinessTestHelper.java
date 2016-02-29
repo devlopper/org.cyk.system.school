@@ -185,7 +185,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	public void createStudentClassroomSessionDivisionReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean createFileOnDisk){
-		System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions : ");
+		System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions");
 		studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
 		if(Boolean.TRUE.equals(createFileOnDisk)){
 			Collection<File> files = new ArrayList<>();
@@ -195,9 +195,9 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) ){
 					for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
-						if(!SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness()
+						if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness()
 								.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
-										, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()){
+										, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
 							assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
 							System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent());
 							writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
@@ -421,9 +421,10 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	/**/
 	
 	public void simulateStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Object[][] objects,Boolean generateReport,Boolean printReport){
-		for(Object[] object : objects){
-			createSubjectEvaluations((ClassroomSessionDivisionSubject)object[0],(String[][])object[1]);
-		}
+		if(objects!=null)
+			for(Object[] object : objects){
+				createSubjectEvaluations((ClassroomSessionDivisionSubject)object[0],(String[][])object[1]);
+			}
     	 
     	if(Boolean.TRUE.equals(generateReport)){
     		randomValues(Arrays.asList(classroomSessionDivision),Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);

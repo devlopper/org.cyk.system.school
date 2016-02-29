@@ -38,6 +38,11 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
+	private Boolean studentEvaluationRequired=Boolean.TRUE;
+	private Boolean studentSubjectAttendanceAggregated=Boolean.TRUE;
+	private Boolean studentRankable=Boolean.TRUE;
+	private Boolean studentSubjectRankable=Boolean.TRUE;
+	
 	@Transient private Collection<ClassroomSessionDivisionSubject> subjects = new ArrayList<>();
 	
 	public ClassroomSessionDivision(ClassroomSession classroomSession,TimeDivisionType timeDivisionType, BigDecimal coefficient) {

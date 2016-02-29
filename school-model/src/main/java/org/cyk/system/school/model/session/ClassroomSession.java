@@ -31,9 +31,11 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	@ManyToOne @NotNull private LevelTimeDivision levelTimeDivision;
 	private String suffix;
 	@ManyToOne private Teacher coordinator;
+	/*
+	private Boolean studentClassroomSessionDivisionSubjectAttendancable=Boolean.TRUE;
 	private Boolean studentClassroomSessionDivisionRankable=Boolean.TRUE;
 	private Boolean studentClassroomSessionDivisionSubjectRankable=Boolean.TRUE;
-	
+	*/
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
 	@NotNull @Column(nullable=false) private Long numberOfStudents = 0l;

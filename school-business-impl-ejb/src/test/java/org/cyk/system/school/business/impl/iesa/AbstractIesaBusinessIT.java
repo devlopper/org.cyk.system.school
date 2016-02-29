@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl.iesa;
 
 import javax.inject.Inject;
 
-import net.sf.jasperreports.engine.design.JRDesignExpression;
 import net.sf.jasperreports.engine.design.JasperDesign;
 
 import org.cyk.system.root.business.api.markuplanguage.MarkupLanguageBusiness;
@@ -12,8 +11,6 @@ import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
-import org.cyk.system.school.model.SchoolConstant;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.Evaluation;
@@ -38,16 +35,15 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     			Object object = aReport.getDataSource().iterator().next();
     			if(object instanceof StudentClassroomSessionDivisionReport){
     				StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport = (StudentClassroomSessionDivisionReport) object;
-    				ClassroomSession classroomSession = ((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getClassroomSession();
-    				return !Boolean.TRUE.equals(classroomSession.getStudentClassroomSessionDivisionRankable());
+    				return !Boolean.TRUE.equals(((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getStudentRankable());
     			}
     			return super.isJrxmlProcessable(aReport);
     		}
     		
     		@Override
     		public String processJrxml(ReportBasedOnTemplateFile<?> aReport,String jrxml) {
-    			jrxml = updateTableColumn(jrxml,new Object[]{DETAIL,0,BAND,2,FRAME,0,COMPONENT_ELEMENT,0}, 0, 11, new String[]{WIDTH,"124"});
-    			jrxml = updateTableColumn(jrxml,new Object[]{DETAIL,0,BAND,2,FRAME,0,COMPONENT_ELEMENT,0}, 0, 12, new String[]{WIDTH,"150"});
+    			//jrxml = updateTableColumn(jrxml,new Object[]{DETAIL,0,BAND,2,FRAME,0,COMPONENT_ELEMENT,0}, 0, 11, new String[]{WIDTH,"124"});
+    			//jrxml = updateTableColumn(jrxml,new Object[]{DETAIL,0,BAND,2,FRAME,0,COMPONENT_ELEMENT,0}, 0, 12, new String[]{WIDTH,"150"});
     			return jrxml;
     		}
     		
@@ -58,12 +54,11 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     			Object object = aReport.getDataSource().iterator().next();
     			if(object instanceof StudentClassroomSessionDivisionReport){
     				StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport = (StudentClassroomSessionDivisionReport) object;
-    				ClassroomSession classroomSession = ((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getClassroomSession();
     				
-    				((JRDesignExpression)jasperDesign.getParametersMap().get(SchoolConstant.REPORT_CYK_GLOBAL_RANKABLE).getDefaultValueExpression())
-    					.setText(classroomSession.getStudentClassroomSessionDivisionRankable().toString());
+    				//((JRDesignExpression)jasperDesign.getParametersMap().get(SchoolConstant.REPORT_CYK_GLOBAL_RANKABLE).getDefaultValueExpression())
+    				//	.setText(((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getStudentSubjectRankable().toString());
     				
-    				if(Boolean.TRUE.equals(classroomSession.getStudentClassroomSessionDivisionRankable())){
+    				if(Boolean.TRUE.equals(((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getStudentRankable())){
     					
     				}else{
     					

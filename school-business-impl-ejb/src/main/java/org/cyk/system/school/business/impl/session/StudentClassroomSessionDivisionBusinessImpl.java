@@ -138,9 +138,36 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportArguments arguments) {
 		//logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 		//		,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
-		if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
+		if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
+				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null) || !Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) ){
+			StudentClassroomSessionDivisionReportParameters parameters = 
+					new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
+			
+			StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
+					,parameters);
+			
+			if(report==null){
+				
+			}else{
+				if(studentClassroomSessionDivision.getResults().getReport()==null)
+					studentClassroomSessionDivision.getResults().setReport(new File());
+				reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
+					,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
+					.getStudentClassroomSessionDivisionResultsReportTemplate().getTemplate(),Boolean.TRUE);				
+				//dao.update(studentClassroomSessionDivision);
+				genericDao.update(studentClassroomSessionDivision.getResults());
+				logIdentifiable("Report built",studentClassroomSessionDivision);
+			}
+		}else{
 			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 					,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
+		}
+		
+		/*if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired())){
+			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
+					,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
+			//exceptionUtils().exception(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
+			//		&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null, "exception.studentclassroomsessiondivision.evaluationrequired");
 		}else{
 			StudentClassroomSessionDivisionReportParameters parameters = 
 					new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
@@ -160,7 +187,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				genericDao.update(studentClassroomSessionDivision.getResults());
 				logIdentifiable("Report built",studentClassroomSessionDivision);
 			}
-		}
+		}*/
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -221,7 +248,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
-			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
+			if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
+					&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
 				logIdentifiable("Cannot build report", studentClassroomSessionDivision);
 				//debug(studentClassroomSessionDivision.getResults());
 				//debug(studentClassroomSessionDivision.getResults().getEvaluationSort());

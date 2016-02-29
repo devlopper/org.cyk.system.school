@@ -95,23 +95,26 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			set(as.getSchool().getOwnedCompany().getCompany().getSigner(), r.getSigner());
 		
 		r.setComments(s.getResults().getAppreciation());
-		r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
+		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired())){
+			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
+			r.setAverageScale(getGradeScaleCode(s.getResults().getEvaluationSort().getAverageInterval()));
+			r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
+			
+			r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
+			r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
+			r.setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
+		}
 		
 		//debug(s.getResults().getEvaluationSort());
 		//debug(s.getResults());
 		//debug(s.getResults().getEvaluationSort());
 		//debug(s.getResults().getEvaluationSort().getAverageInterval());
+			
 		
-		r.setAverageScale(getGradeScaleCode(s.getResults().getEvaluationSort().getAverageInterval()));
-		r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.title",new Object[]{csd.getUiString()}));
 		r.setSubjectsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.subject"));
 		r.setCommentsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.comments"));
 		r.setSchoolStampBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.schoolstamp"));
-		
-		r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
-		r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
-		r.setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
 		
 		//r.setMissedTime((s.getResults().getLectureAttendance().getMissedDuration()/DateUtils.MILLIS_PER_HOUR) +"");
 		//r.setMissedTimeJustified((s.getResults().getLectureAttendance().getMissedDurationJustified()/DateUtils.MILLIS_PER_HOUR)+"");
@@ -220,7 +223,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setOverallResultlLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.overallresult"));
 		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.average", r.getAverage());
 		labelValue(LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID, r.getAverageScale());
-		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getStudentClassroomSessionDivisionRankable()))
+		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentRankable()))
 			labelValue("school.report.studentclassroomsessiondivision.block.overallresult.rank", r.getRank());
 		
 		r.setGradingScaleLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.gradingscale"));
