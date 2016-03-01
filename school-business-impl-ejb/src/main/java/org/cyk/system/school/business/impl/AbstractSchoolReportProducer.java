@@ -171,7 +171,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		if(Boolean.TRUE.equals(parameters.getSumMarks())){
 			for(int i=0;i<parameters.getEvaluationTypeCodes().size();i++)
-				r.getMarkTotals().set(i,format(r.getTempMarkTotals().get(i)));
+				if(i < r.getMarkTotals().size())
+					r.getMarkTotals().set(i,format(r.getTempMarkTotals().get(i)));
 		}
 		
 		
@@ -236,6 +237,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 		
 		r.setEffortLevelLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.effort"));
+		/*
 		IntervalCollection intervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection().getValueIntervalCollection();
 		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(intervalCollection, Boolean.TRUE)){
@@ -243,8 +245,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}
+		*/
 		
 		r.setBehaviorLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.behaviour"));
+		/*
 		MetricCollection metricCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection();
 		for(Metric metric : rootBusinessLayer.getMetricBusiness().findByCollection(metricCollection)){
@@ -257,6 +261,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, metric.getName(), value);
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}
+		*/
 	}
 
 	protected String getGradeScaleCode(Interval interval){

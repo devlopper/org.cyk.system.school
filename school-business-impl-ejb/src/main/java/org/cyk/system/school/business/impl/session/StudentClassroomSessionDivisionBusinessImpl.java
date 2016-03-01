@@ -24,7 +24,6 @@ import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
-import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.persistence.api.mathematics.MetricDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
@@ -42,6 +41,7 @@ import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
@@ -50,6 +50,7 @@ import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.persistence.api.StudentResultsMetricValueDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionStudentsMetricCollectionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
@@ -71,6 +72,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao; 
 	@Inject private StudentResultsMetricValueDao studentResultsMetricValueDao;
 	@Inject private MetricDao metricDao;
+	@Inject private ClassroomSessionDivisionStudentsMetricCollectionDao classroomSessionDivisionStudentsMetricCollectionDao;
 	
 	
 	@Inject 
@@ -97,12 +99,13 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			schoolBusinessLayer.getStudentClassroomSessionBusiness().create(studentClassroomSession);
 		}
 		
-		MetricCollection metricCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
-				.findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getStudentWorkMetricCollection();
-		for(Metric metric : metricDao.readByCollection(metricCollection)){
-			studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
-				.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO,Constant.EMPTY_STRING.toString(),null)));
-		}
+		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
+		
+		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections)
+			for(Metric metric : metricDao.readByCollection(classroomSessionDivisionStudentsMetricCollection.getMetricCollection())){
+				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
+					.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO,Constant.EMPTY_STRING.toString(),null)));
+			}
 		
 		Collection<StudentSubject> studentSubjects = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeTopDownOnCreate())){
