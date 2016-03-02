@@ -22,36 +22,42 @@ import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
+import org.cyk.system.root.model.file.report.ReportTemplate;
+import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
+import org.cyk.system.school.business.api.session.EvaluationTypeBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupBusiness;
+import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
-import org.cyk.system.school.business.api.subject.EvaluationBusiness;
-import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
@@ -75,7 +81,10 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
+	@Inject private ClassroomSessionDivisionStudentsMetricCollectionBusiness classroomSessionDivisionStudentsMetricCollectionBusiness;
+	@Inject private LevelGroupTypeBusiness levelGroupTypeBusiness;
 	@Inject private EvaluationBusiness evaluationBusiness;
+	@Inject private EvaluationTypeBusiness evaluationTypeBusiness;
 	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
 	@Inject private LectureBusiness lectureBusiness;
 	@Inject private LevelGroupBusiness levelGroupBusiness;
@@ -167,6 +176,15 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
         beansMap.put((Class)StudentSubject.class, (TypedBusiness)studentClassroomSessionDivisionBusiness);
         beansMap.put((Class)LevelGroup.class, (TypedBusiness)levelGroupBusiness);
     }
+	
+	public CommonNodeInformations instanciateOneCommonNodeInformations(String intervalCollectionCode,String[][] intervalCollectionItems,ReportTemplate reportTemplate
+			,TimeDivisionType attendanceTimeDivisionType,TimeDivisionType classroomSessionTimeDivisionType,String currentClassroomSessionDivisionIndex){
+		CommonNodeInformations commonNodeInformations = new CommonNodeInformations(createIntervalCollection(intervalCollectionCode,intervalCollectionItems
+				,Constant.CHARACTER_SLASH.toString()),reportTemplate,attendanceTimeDivisionType);
+		commonNodeInformations.setClassroomSessionTimeDivisionType(classroomSessionTimeDivisionType);
+		commonNodeInformations.setCurrentClassroomSessionDivisionIndex(new Byte(currentClassroomSessionDivisionIndex));
+		return commonNodeInformations;
+	}
 
 	@Override
 	protected void fakeTransactions() {}

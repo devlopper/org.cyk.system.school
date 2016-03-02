@@ -33,10 +33,6 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
 	private Byte currentClassroomSessionDivisionIndex = 0;
 	
-	/*
-	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
-	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
-	*/
 	public CommonNodeInformations(IntervalCollection intervalCollection,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate,TimeDivisionType attendanceTimeDivisionType) {
 		super();
 		this.studentClassroomSessionDivisionResultsReportTemplate = studentClassroomSessionDivisionResultsReportTemplate;

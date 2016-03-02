@@ -20,6 +20,7 @@ import org.cyk.system.root.model.mathematics.MetricValueInputted;
 import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.StudentResultsMetricValue;
+import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.SelectItemBuilderListener;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -47,8 +48,18 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		metricCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
-				.findCommonNodeInformations(identifiable.getClassroomSessionDivision().getClassroomSession()).getStudentWorkMetricCollection();
+		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = SchoolBusinessLayer.getInstance()
+				.getClassroomSessionDivisionStudentsMetricCollectionBusiness().findByClassroomSessionDivision(identifiable.getClassroomSessionDivision());
+		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
+			if(metricCollection==null){
+				metricCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection();
+				break;
+			}
+		}
+		
+		
+		//metricCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+		//		.findCommonNodeInformations(identifiable.getClassroomSessionDivision().getClassroomSession()).getStudentWorkMetricCollection();
 		isNumberValueType = MetricValueType.NUMBER.equals(metricCollection.getValueType());
 		showNumberColumn = isNumberValueType;
 		showStringColumn = !isNumberValueType;

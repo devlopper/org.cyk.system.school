@@ -55,6 +55,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelName;
@@ -255,11 +256,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		*/
 		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/iesa.jrxml", "reportcard.jrxml"),null,null);
 		create(reportTemplate);
-		commonNodeInformations1 = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection1,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
+		commonNodeInformations1 = new CommonNodeInformations(intervalCollection,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
 		commonNodeInformations1.setClassroomSessionTimeDivisionType(getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER));
 		commonNodeInformations1.setCurrentClassroomSessionDivisionIndex(new Byte("1"));
 		
-		commonNodeInformations2 = new CommonNodeInformations(intervalCollection,studentWorkMetricCollection2,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
+		commonNodeInformations2 = new CommonNodeInformations(intervalCollection,reportTemplate,getEnumeration(TimeDivisionType.class, TimeDivisionType.DAY));
 		commonNodeInformations2.setClassroomSessionTimeDivisionType(getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER));
 		commonNodeInformations2.setCurrentClassroomSessionDivisionIndex(new Byte("1"));
 		
@@ -298,19 +299,26 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	Collection<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>(); 
     	Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>();
     	Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = new ArrayList<>(); 
+    	Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = new ArrayList<>(); 
     	
-    	grade1 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession, levelTimeDivisionG1,new Subject[]{
+    	grade1 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionDivisionStudentsMetricCollections
+    			,academicSession, levelTimeDivisionG1,new Subject[]{
     			subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
     			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
-    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation},true,true,listener);
+    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation}
+    			,new MetricCollection[]{studentWorkMetricCollection1},true,true,listener);
     	
-    	grade2 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession, levelTimeDivisionG2,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
+    	grade2 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionDivisionStudentsMetricCollections
+    			,academicSession, levelTimeDivisionG2,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
     			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
-    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation},false,true,listener);
+    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation}
+    			,new MetricCollection[]{studentWorkMetricCollection2},false,true,listener);
     	
-    	grade3 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession, levelTimeDivisionG3,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
+    	grade3 = grade(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionDivisionStudentsMetricCollections
+    			,academicSession, levelTimeDivisionG3,new Subject[]{subjectNameMathematics,subjectNameGrammar,subjectNameReadingComprehension
     			,subjectNameHandWriting,subjectNameSpelling,subjectNamePhonics,subjectNameCreativeWriting,subjectNameMoralEducation,subjectNameSocialStudies
-    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation},false,false,listener);
+    			,subjectNameScience,subjectNameFrench,subjectNameArtAndCraft,subjectNameMusic,subjectNameICT,subjectNamePhysicalEducation}
+    			,new MetricCollection[]{studentWorkMetricCollection1},false,false,listener);
     	
     	flush(ClassroomSession.class, classroomSessionBusiness, classroomSessions);
     	flush(ClassroomSessionDivision.class, classroomSessionDivisionBusiness, classroomSessionDivisions);
@@ -409,21 +417,26 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		return create(levelName);
 	}
 	
-	private ClassroomSessionInfos grade(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Subject[] subjects
-			,Boolean studentRankable,Boolean studentEvaluationRequired,FakedDataProducerListener listener){
+	private ClassroomSessionInfos grade(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
+			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
+			,Collection<ClassroomSessionDivisionStudentsMetricCollection> studentsMetricCollections
+			,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Subject[] subjects,MetricCollection[] metricCollections,Boolean studentRankable,Boolean studentEvaluationRequired
+			,FakedDataProducerListener listener){
 		ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision, teacherDao.readOneRandomly());
 		classroomSession.getPeriod().setFromDate(new Date());
 		classroomSession.getPeriod().setToDate(new Date());
 		classroomSessions.add(classroomSession);
 		ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(classroomSession);
-		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession(),subjects,studentRankable,studentEvaluationRequired));
-		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession(),subjects,studentRankable,studentEvaluationRequired));
-		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession(),subjects,studentRankable,studentEvaluationRequired));
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,studentsMetricCollections,classroomSessionInfos.getClassroomSession(),subjects,metricCollections,studentRankable,studentEvaluationRequired));
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,studentsMetricCollections,classroomSessionInfos.getClassroomSession(),subjects,metricCollections,studentRankable,studentEvaluationRequired));
+		classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,studentsMetricCollections,classroomSessionInfos.getClassroomSession(),subjects,metricCollections,studentRankable,studentEvaluationRequired));
 		return classroomSessionInfos;
 	}
 	
-	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes,ClassroomSession classroomSession
-			,Subject[] subjects,Boolean studentRankable,Boolean studentEvaluationRequired){
+	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects
+			,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes,Collection<ClassroomSessionDivisionStudentsMetricCollection> studentsMetricCollections
+			,ClassroomSession classroomSession,Subject[] subjects,MetricCollection[] metricCollections
+			,Boolean studentRankable,Boolean studentEvaluationRequired){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));
 		classroomSessionDivision.setStudentRankable(studentRankable);
@@ -433,7 +446,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		classroomSessionDivision.getPeriod().setFromDate(new Date());
 		classroomSessionDivision.getPeriod().setToDate(new Date());
 		ClassroomSessionDivisionInfos classroomSessionDivisionInfos = new ClassroomSessionDivisionInfos(classroomSessionDivision);
-		
+		for(MetricCollection metricCollection : metricCollections)
+			studentsMetricCollections.add(new ClassroomSessionDivisionStudentsMetricCollection(classroomSessionDivision, metricCollection));
 		for(Subject subject : subjects){
 			classroomSessionDivisionInfos.getSubjects().add(createClassroomSessionDivisionSubject(classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionDivision,subject,new Object[][]{
 				{evaluationTypeTest1,"0.15"},{evaluationTypeTest2,"0.15"},{evaluationTypeExam,"0.7"}
@@ -504,14 +518,14 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			
 			r.setBehaviorLabelValueCollection1(new LabelValueCollectionReport());
 			r.getBehaviorLabelValueCollection1().setName("school.report.studentclassroomsessiondivision.block.behaviour");
-			for(int i=0;i<=5;i++)
+			/*for(int i=0;i<=5;i++)
 				r.getBehaviorLabelValueCollection1().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
-			
+			*/
 			r.setBehaviorLabelValueCollection2(new LabelValueCollectionReport());
 			r.getBehaviorLabelValueCollection2().setName("school.report.studentclassroomsessiondivision.block.behaviour");
-			for(int i=6;i<=11;i++)
+			/*for(int i=6;i<=11;i++)
 				r.getBehaviorLabelValueCollection2().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
-			
+			*/
 			return r;
 		}
 		

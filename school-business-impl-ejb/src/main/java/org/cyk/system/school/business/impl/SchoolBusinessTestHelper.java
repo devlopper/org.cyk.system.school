@@ -39,6 +39,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -49,6 +50,7 @@ import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionStudentsMetricCollectionDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.FileExtension;
@@ -72,6 +74,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Inject private TimeDivisionTypeDao timeDivisionTypeDao;
 	@Inject private SubjectDao subjectDao;
 	@Inject private TeacherDao teacherDao;
+	@Inject private ClassroomSessionDivisionStudentsMetricCollectionDao classroomSessionDivisionStudentsMetricCollectionDao;
 	
 	@Inject private SchoolBusinessLayer schoolBusinessLayer;
 	
@@ -231,17 +234,20 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
 				}
 				
-				if(Boolean.TRUE.equals(metric)){				
-					IntervalCollection intervalCollection = schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSessionDivision.getClassroomSession())
-							.getStudentWorkMetricCollection().getValueIntervalCollection();
-					RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
-					Collection<StudentResultsMetricValue> studentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness()
-							.findByStudentResults(studentClassroomSessionDivision.getResults());
-					for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
-						studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
-						studentResultsMetricValue.getMetricValue().setStringValue(RandomStringUtils.randomAlphabetic(1));
+				if(Boolean.TRUE.equals(metric)){
+					Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = 
+							classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
+					for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
+						IntervalCollection intervalCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection().getValueIntervalCollection();
+						RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
+						Collection<StudentResultsMetricValue> studentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness()
+								.findByStudentResults(studentClassroomSessionDivision.getResults());
+						for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
+							studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+							studentResultsMetricValue.getMetricValue().setStringValue(RandomStringUtils.randomAlphabetic(1));
+						}
+						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);	
 					}
-					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);
 				}
 				
 				if(Boolean.TRUE.equals(appreciation)){
