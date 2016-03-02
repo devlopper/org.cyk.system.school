@@ -22,8 +22,6 @@ import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
-import org.cyk.system.root.model.file.report.ReportTemplate;
-import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -49,7 +47,6 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -177,18 +174,17 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
         beansMap.put((Class)LevelGroup.class, (TypedBusiness)levelGroupBusiness);
     }
 	
-	public CommonNodeInformations instanciateOneCommonNodeInformations(String intervalCollectionCode,String[][] intervalCollectionItems,ReportTemplate reportTemplate
-			,TimeDivisionType attendanceTimeDivisionType,TimeDivisionType classroomSessionTimeDivisionType,String currentClassroomSessionDivisionIndex){
-		CommonNodeInformations commonNodeInformations = new CommonNodeInformations(createIntervalCollection(intervalCollectionCode,intervalCollectionItems
-				,Constant.CHARACTER_SLASH.toString()),reportTemplate,attendanceTimeDivisionType);
-		commonNodeInformations.setClassroomSessionTimeDivisionType(classroomSessionTimeDivisionType);
-		commonNodeInformations.setCurrentClassroomSessionDivisionIndex(new Byte(currentClassroomSessionDivisionIndex));
-		return commonNodeInformations;
-	}
+	
 
 	@Override
 	protected void fakeTransactions() {}
-	    
+	
+	/**/
+	
+
+	
+	/**/
+	
     public static SchoolBusinessLayer getInstance() {
 		return INSTANCE;
 	}

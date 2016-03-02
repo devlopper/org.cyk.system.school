@@ -10,6 +10,9 @@ import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -46,9 +49,9 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
-import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionInfos;
-import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionDivisionSubjectInfos;
-import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionInfos;
+import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionInfos;
+import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionSubjectInfos;
+import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
 import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataProducer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -78,9 +81,6 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTimeConstants;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {

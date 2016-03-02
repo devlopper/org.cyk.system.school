@@ -1,7 +1,7 @@
 package org.cyk.system.school.business.impl.iesa;
 
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.ClassroomSessionInfos;
+import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
