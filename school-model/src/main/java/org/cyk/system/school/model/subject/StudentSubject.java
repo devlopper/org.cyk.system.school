@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.utility.common.Constant;
 
 @Getter @Setter @Entity @NoArgsConstructor
 public class StudentSubject extends AbstractStudentResult<ClassroomSessionDivisionSubject,StudentSubjectEvaluation> implements Serializable {
@@ -39,7 +40,7 @@ public class StudentSubject extends AbstractStudentResult<ClassroomSessionDivisi
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, student.getRegistration().getCode(),classroomSessionDivisionSubject.getIdentifier(),results.getLogMessage());
+		return String.format(LOG_FORMAT, student.getRegistration().getCode(),classroomSessionDivisionSubject.getIdentifier(),results==null?Constant.EMPTY_STRING:results.getLogMessage());
 	}
 	private static final String LOG_FORMAT = StudentSubject.class.getSimpleName()+"(STUD=%s SUBJECT=%s %s)";
 	

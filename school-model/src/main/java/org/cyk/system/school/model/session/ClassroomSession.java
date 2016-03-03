@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
 import org.cyk.system.school.model.actor.Teacher;
@@ -48,6 +49,11 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 		this.levelTimeDivision = levelTimeDivision;
 		this.coordinator = coordinator;
 	}
+	
+	@Override
+	public String toString() {
+		return levelTimeDivision.toString()+(StringUtils.isBlank(suffix) ? Constant.EMPTY_STRING : (Constant.CHARACTER_SPACE+suffix));
+	}	
 	
 	@Override
 	public String getLogMessage() {

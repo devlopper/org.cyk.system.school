@@ -13,14 +13,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.RootDataProducerHelper;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.CommonNodeInformations;
+import org.cyk.system.school.model.session.Level;
+import org.cyk.system.school.model.session.LevelGroup;
+import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
@@ -51,17 +57,24 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	}
 	
 	public Subject instanciateOneSubject(String name,ArrayList<Subject>[] collections){
-		Subject subject = RootDataProducerHelper.getInstance().createEnumeration(Subject.class,name);
-		for(Collection<Subject> collection : collections)
-			collection.add(subject);
+		Subject subject = SchoolBusinessLayer.getInstance().getSubjectBusiness().instanciateOne(name);
+		if(collections!=null)
+			for(Collection<Subject> collection : collections)
+				collection.add(subject);
 		return subject;
 	}
 	
-	public void instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
+	public Subject createOneSubject(String name,ArrayList<Subject>[] collections){
+		return (Subject) RootBusinessLayer.getInstance().getGenericBusiness().create(instanciateOneSubject(name, collections));
+	}
+	
+	public Collection<ClassroomSessionInfos> instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
-			,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Object[][] evaluationTypes,Collection<Subject> subjects,String[] suffixes,Boolean studentEvaluationRequired,Boolean studentRankable){
+			,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Object[][] evaluationTypes,Collection<Subject> subjects,Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections
+			,MetricCollection[] studentMetricCollections,String[] suffixes,Boolean studentEvaluationRequired,Boolean studentRankable){
 		if(suffixes==null)
 			suffixes = new String[]{null};
+		Collection<ClassroomSessionInfos> classroomSessionInfosCollection = new ArrayList<>();
 		for(String suffix : suffixes){
 			ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision,null);
 			classroomSession.setSuffix(StringUtils.isBlank(suffix)?null:suffix);
@@ -69,14 +82,15 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			classroomSession.getPeriod().setToDate(new Date());
 			classroomSessions.add(classroomSession);
 			ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(classroomSession);
+			classroomSessionInfosCollection.add(classroomSessionInfos);
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,classroomSessionDivisionStudentsMetricCollections,studentMetricCollections,studentEvaluationRequired,studentRankable));
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,classroomSessionDivisionStudentsMetricCollections,studentMetricCollections,studentEvaluationRequired,studentRankable));
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects
-					,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,classroomSessionDivisionStudentsMetricCollections,studentMetricCollections,studentEvaluationRequired,studentRankable));
 		}
+		return classroomSessionInfosCollection;
 	}
 	/*
 	private void grade(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
@@ -87,7 +101,8 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	
 	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
-			,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects,Boolean studentEvaluationRequired,Boolean studentRankable){
+			,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects,Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections
+			,MetricCollection[] studentMetricCollections,Boolean studentEvaluationRequired,Boolean studentRankable){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));
 		classroomSessionDivision.setStudentEvaluationRequired(studentEvaluationRequired);
@@ -102,6 +117,10 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			for(Subject subject : subjects){
 				classroomSessionDivisionInfos.getSubjects().add(createClassroomSessionDivisionSubject(classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionDivision,subject,evaluationTypes));
 			}
+		
+		if(studentMetricCollections!=null)
+			for(MetricCollection metricCollection : studentMetricCollections)
+				classroomSessionDivisionStudentsMetricCollections.add(new ClassroomSessionDivisionStudentsMetricCollection(classroomSessionDivision, metricCollection));
     	
 		return classroomSessionDivisionInfos;
 	}
@@ -121,6 +140,14 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType = new ClassroomSessionDivisionSubjectEvaluationType(subject,name,coefficient,maximalValue);
 		subjectEvaluationTypes.add(subjectEvaluationType);
 		return subjectEvaluationType;
+	}
+	
+	public LevelTimeDivision createLevelTimeDivision(String levelCode,String levelName,LevelGroup levelGroup,CommonNodeInformations commonNodeInformations,Integer index){
+		commonNodeInformations.setAggregateAttendance(Boolean.FALSE);
+		LevelName _levelName = RootDataProducerHelper.getInstance().createEnumeration(LevelName.class,levelCode,levelName);
+		_levelName.setNodeInformations(commonNodeInformations);
+		return RootDataProducerHelper.getInstance().create(new LevelTimeDivision(RootDataProducerHelper.getInstance().create(new Level(levelGroup,_levelName))
+				, RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR),index));
 	}
 	
 	/**/

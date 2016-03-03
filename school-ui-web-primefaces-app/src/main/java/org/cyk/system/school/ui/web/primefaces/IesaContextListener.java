@@ -9,7 +9,6 @@ import javax.servlet.annotation.WebListener;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.party.person.AbstractActor;
 import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
@@ -154,7 +153,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			r.getSubjectsTableColumnNames().add("CLASS AVERAGE");
 			r.getSubjectsTableColumnNames().add("REMARKS");
 			r.getSubjectsTableColumnNames().add("TEACHER");
-			
+			/*
 			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
 			if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
@@ -176,7 +175,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			r.getBehaviorLabelValueCollection2().setName("school.report.studentclassroomsessiondivision.block.behaviour");
 			for(int i=6;i<=11;i++)
 				r.getBehaviorLabelValueCollection2().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
-			
+			*/
 			return r;
 		}
 		

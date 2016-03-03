@@ -37,8 +37,13 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	}
 	
 	@Override
+	public String toString() {
+		return level+" "+timeDivisionType+" "+index;
+	}
+	
+	@Override
 	public String getUiString() {
-		return level.getUiString()+" "+timeDivisionType.getUiString();
+		return level.getUiString()+" "+timeDivisionType.getUiString()+" "+index;
 	}
 	
 	/**/

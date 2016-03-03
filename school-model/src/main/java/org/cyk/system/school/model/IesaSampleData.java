@@ -5,15 +5,114 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.cyk.system.root.model.AbstractSampleData;
+import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
+import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.utility.common.generator.RandomDataProvider;
 
 public class IesaSampleData extends AbstractSampleData implements Serializable {
 
 	private static final long serialVersionUID = -1887987316565799879L;
-
+	
 	public static Collection<StudentClassroomSessionDivisionReport> createStudentClassroomSessionDivisionReportsForOtherGrade(){
-		return generate(StudentClassroomSessionDivisionReport.class, 1);
+		Collection<StudentClassroomSessionDivisionReport> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReport.class, 1);
+		StudentClassroomSessionDivisionReport report = collection.iterator().next();
+		
+		LabelValueCollectionReport labelValueCollectionReport;
+		
+		report.getLabelValueCollections().add(labelValueCollectionReport = new LabelValueCollectionReport());
+		labelValueCollectionReport.setName("PUPIL'S DETAILS");
+		labelValueCollectionReport.add("Formname(s)", report.getStudent().getPerson().getNames());
+		labelValueCollectionReport.add("Surname", report.getStudent().getPerson().getSurname());
+		labelValueCollectionReport.add("Date of birth", report.getStudent().getPerson().getBirthDate());
+		labelValueCollectionReport.add("Place of birth", report.getStudent().getPerson().getBirthLocation());
+		labelValueCollectionReport.add("Admission No", report.getStudent().getRegistrationCode());
+		labelValueCollectionReport.add("Class", report.getClassroomSessionDivision().getClassroomSession().getName());
+		labelValueCollectionReport.add("Gender", report.getStudent().getPerson().getSex());
+		
+		report.getLabelValueCollections().add(labelValueCollectionReport = new LabelValueCollectionReport());
+		labelValueCollectionReport.setName("SCHOOL ATTENDANCE");
+		labelValueCollectionReport.add("Number of times school opened","999");
+		labelValueCollectionReport.add("Number of times present","999");
+		labelValueCollectionReport.add("Number of times absent","999");
+		
+		report.getLabelValueCollections().add(labelValueCollectionReport = new LabelValueCollectionReport());
+		labelValueCollectionReport.setName("OVERALL RESULT");
+		labelValueCollectionReport.add("AVERAGE","78.15");
+		labelValueCollectionReport.add("GRADE","A+");
+		labelValueCollectionReport.add("RANK","24");
+		
+		report.getLabelValueCollections().add(labelValueCollectionReport = new LabelValueCollectionReport());
+		labelValueCollectionReport.setName("BEHAVIOUR,STUDY AND WORK HABITS");
+		labelValueCollectionReport.add("Respects authority", "4");
+		labelValueCollectionReport.add("Works independently and neatly", "2");
+		labelValueCollectionReport.add("Completes homework and class work on time", "3");
+		labelValueCollectionReport.add("Shows social courtesies", "4");
+		labelValueCollectionReport.add("Demonstrates self-control", "3");
+		labelValueCollectionReport.add("Takes care of school and others materials", "2");
+		
+		report.getLabelValueCollections().add(labelValueCollectionReport = new LabelValueCollectionReport());
+		labelValueCollectionReport.add("Game/Sport", "4");
+		labelValueCollectionReport.add("Handwriting", "3");
+		labelValueCollectionReport.add("Drawing/Painting", "4");
+		labelValueCollectionReport.add("Punctuality/Regularity", "4");
+		labelValueCollectionReport.add("Works cooperatively in groups", "2");
+		labelValueCollectionReport.add("Listens and follows directions", "2");
+		
+		report.getLabelValueCollections().add(labelValueCollectionReport = new LabelValueCollectionReport());
+		labelValueCollectionReport.setName("GRADING SCALE");
+		LabelValueReport labelValueReport = labelValueCollectionReport.add("A+", "Excellent");
+		labelValueReport.addExtendedValues("90 - 100");
+		
+		labelValueReport = labelValueCollectionReport.add("A",  "Very Good");
+		labelValueReport.addExtendedValues("80 - 89.99");
+		
+		labelValueReport = labelValueCollectionReport.add("B+", "Good");
+		labelValueReport.addExtendedValues("70 - 79.99");
+		
+		labelValueReport = labelValueCollectionReport.add("B",  "Fair");
+		labelValueReport.addExtendedValues("60 - 69.99");
+		
+		labelValueReport = labelValueCollectionReport.add("C+", "Satisfactory");
+		labelValueReport.addExtendedValues("55 - 59.99");
+		
+		labelValueReport = labelValueCollectionReport.add("C",  "Barely satisfactory");
+		labelValueReport.addExtendedValues("50 - 54.99");
+		
+		labelValueReport = labelValueCollectionReport.add("E",  "Fail");
+		labelValueReport.addExtendedValues("00 - 49.99");
+		
+		report.getLabelValueCollections().add(labelValueCollectionReport = new LabelValueCollectionReport());
+		labelValueCollectionReport.setName("EFFORT LEVELS");
+		labelValueCollectionReport.add("1", "Has no regard for the observable traits");
+		labelValueCollectionReport.add("2", "Shows minimal regard for the observable traits");
+		labelValueCollectionReport.add("3", "Acceptable level of observable traits");
+		labelValueCollectionReport.add("4", "Maintains high level of observable traits");
+		labelValueCollectionReport.add("5", "Maintains an excellent degree of observable traits");
+		
+		report.getLabelValueCollections().add(labelValueCollectionReport = new LabelValueCollectionReport());
+		labelValueCollectionReport.setName("HOME/SCHOOL COMMUNICATIONS");
+		labelValueCollectionReport.add("ANNUAL AVERAGE","90");
+		labelValueCollectionReport.add("ANNUAL GRADE","B+");
+		labelValueCollectionReport.add("ANNUAL RANK","25");
+		labelValueCollectionReport.add("PROMOTION INFORMATION","PROMOTED");
+		labelValueCollectionReport.add("NEXT ACADEMIC YEAR","7Th SEPTEMBER 2015");
+		
+		report.getSubjectsTableColumnNames().add("No.");
+		report.getSubjectsTableColumnNames().add("SUBJECTS");
+		report.getSubjectsTableColumnNames().add("Test 1 15%");
+		report.getSubjectsTableColumnNames().add("Test 2 15%");
+		report.getSubjectsTableColumnNames().add("Exam 70%");
+		report.getSubjectsTableColumnNames().add("TOTAL");
+		report.getSubjectsTableColumnNames().add("GRADE");
+		report.getSubjectsTableColumnNames().add("RANK");
+		report.getSubjectsTableColumnNames().add("OUT OF");
+		report.getSubjectsTableColumnNames().add("MAX");
+		report.getSubjectsTableColumnNames().add("CLASS AVERAGE");
+		report.getSubjectsTableColumnNames().add("REMARKS");
+		report.getSubjectsTableColumnNames().add("TEACHER");
+		
+		return collection;
 	}
 	
 	public static Collection<StudentClassroomSessionDivisionReport> createStudentClassroomSessionDivisionReportsForKinderGarten(){
@@ -21,9 +120,19 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		StudentClassroomSessionDivisionReport report = collection.iterator().next();
 		
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
-		
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
-		report.getLabelValueCollections().clear();
+				
+		setLabelValueCollection(report,"PUPIL'S DETAILS",new String[]{
+				"Formname(s)", report.getStudent().getPerson().getNames()
+				,"Surname", report.getStudent().getPerson().getSurname()
+				,"Date of birth", report.getStudent().getPerson().getBirthDate()
+				,"Place of birth", report.getStudent().getPerson().getBirthLocation()
+				,"Admission No", report.getStudent().getRegistrationCode()
+				,"Class", report.getClassroomSessionDivision().getClassroomSession().getName()
+				,"Gender", report.getStudent().getPerson().getSex()
+				});
+		
+		setLabelValueCollection(report,"ATTENDANCE RECORD",new String[]{"Days school opened","61","Days Present","16","Days Absent","45"});
 
 		setLabelValueCollection(report,"EXPRESSIVE LANGUAGE",new String[]{"Participates actively during circle time","1"
 				,"Participates in singing rhymes","NA","Can say her name and name of classmates","1","Can respond appropriately to “how are you?”","1"
@@ -64,12 +173,11 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		setLabelValueCollection(report,"FINE MOTOR SKILLS",new String[]{"Scribbles spontaneously","2","Can scribble to and from, in circular motions and in lines","2",
 				"Can place simple pieces in a puzzle board","1","Can build a tower of at least 3-5 blocks","2","Develops good pencil grip and control","1"});
 		
-		setLabelValueCollection(report,"ATTENDANCE RECORD",new String[]{"Days school opened","61","Days Present","16","Days Absent","45"});
+		setLabelValueCollection(report,"SKILLS PERFORMANCE LEVELS",new String[]{"3","Does regularly","2","Does sometimes","1","Learning to do","NA","Not Assessed"});
 		
 		setLabelValueCollection(report,"HOME/SCHOOL COMMUNICATIONS",new String[]{"Conference requested","NO","Promotion in danger","YES",
 				"School reopens","4th January 2016","Next Term Examination","14th March 2016"});
 		
-		setLabelValueCollection(report,"SKILLS PERFORMANCE LEVELS",new String[]{"3","Does regularly","2","Does sometimes","1","Learning to do","NA","Not Assessed"});
 		return collection;
 	}
 		

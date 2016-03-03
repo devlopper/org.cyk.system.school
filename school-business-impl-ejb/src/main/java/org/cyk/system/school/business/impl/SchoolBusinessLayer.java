@@ -41,6 +41,7 @@ import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
+import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -86,6 +87,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private LectureBusiness lectureBusiness;
 	@Inject private LevelGroupBusiness levelGroupBusiness;
 	@Inject private SubjectClassroomSessionBusiness subjectClassroomSessionBusiness;
+	@Inject private SubjectBusiness subjectBusiness;
 	
 	@Setter private AverageComputationListener averageComputationListener;
 	@Setter private Script averageComputationScript;

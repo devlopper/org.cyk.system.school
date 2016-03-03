@@ -206,7 +206,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivisionReportParameters parameters){
 		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
-		
+		/*
 		r.setStudentLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.student"));
 		labelValue("school.report.studentclassroomsessiondivision.block.student.lastnames", r.getStudent().getPerson().getLastName());
 		labelValue("school.report.studentclassroomsessiondivision.block.student.firstname", r.getStudent().getPerson().getName());
@@ -235,8 +235,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
 			currentLabelValueCollection.getCollection().add(labelValueReport);
 		}
+		*/
 		
-		r.setEffortLevelLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.effort"));
+		//r.setEffortLevelLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.effort"));
 		/*
 		IntervalCollection intervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection().getValueIntervalCollection();
@@ -247,7 +248,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 		*/
 		
-		r.setBehaviorLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.behaviour"));
+		//r.setBehaviorLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.behaviour"));
 		/*
 		MetricCollection metricCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
 				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection();

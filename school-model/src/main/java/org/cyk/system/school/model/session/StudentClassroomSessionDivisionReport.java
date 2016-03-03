@@ -2,8 +2,6 @@ package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
 
-import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +10,7 @@ import lombok.Setter;
 public class StudentClassroomSessionDivisionReport extends AbstractStudentClassroomSessionDivisionReport implements Serializable {
 
 	private static final long serialVersionUID = -6025941646465245555L;
-	
+	/*
 	private LabelValueCollectionReport behaviorLabelValueCollection1,behaviorLabelValueCollection2;
 	
 	@Override
@@ -28,5 +26,6 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentClassr
 		for(int i=6;i<=11;i++)
 			behaviorLabelValueCollection2.getCollection().add(getBehaviorLabelValueCollection().getCollection().get(i));
 	}
+	*/
 	
 }

@@ -21,6 +21,7 @@ import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
@@ -59,8 +60,13 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	}
 	
 	@Override
+	public String toString() {
+		return timeDivisionType.toString()+Constant.CHARACTER_SPACE+index;
+	}
+	
+	@Override
 	public String getUiString() {
-		return timeDivisionType.getUiString();
+		return toString();
 	}
 	
 	@Override

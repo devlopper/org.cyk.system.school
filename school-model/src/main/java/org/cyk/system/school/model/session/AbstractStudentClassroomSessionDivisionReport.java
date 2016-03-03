@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
-import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
-import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.party.person.ActorReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 
@@ -33,11 +31,10 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 	private List<String> subjectsTableColumnNames = new ArrayList<>();
 	private Collection<StudentClassroomSessionDivisionSubjectReport> subjects = new ArrayList<>();
 	private Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects;
-	
-	//private List<LabelValueCollectionReport> labelValueCollectionList = new ArrayList<>();
+	/*
 	private LabelValueCollectionReport labelValueCollectionReport,studentLabelValueCollection,attendanceLabelValueCollection,overallResultlLabelValueCollection
 		,behaviorLabelValueCollection,gradingScaleLabelValueCollection,effortLevelLabelValueCollection,informationLabelValueCollection;
-		
+	*/	
 	private AcademicSessionReport academicSession = new AcademicSessionReport();
 	private ActorReport student = new ActorReport();
 	private ActorReport signer = new ActorReport();
@@ -103,7 +100,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		
 		for(int i=0;i<3;i++)
 			markTotals.add(positiveFloatNumber(20, 0, 99));
-		
+		/*
 		labelValueCollectionReport = new LabelValueCollectionReport();
 		for(int i=0;i<60;i++)
 			labelValueCollectionReport.add("Label "+i, i+"");
@@ -201,10 +198,7 @@ public abstract class AbstractStudentClassroomSessionDivisionReport extends Abst
 		labelValueCollections.add(studentLabelValueCollection);
 		labelValueCollections.add(attendanceLabelValueCollection);
 		labelValueCollections.add(effortLevelLabelValueCollection);
+		*/
 	}
 	
-	public LabelValueCollectionReport getLabelValueCollectionByIndex(Integer index){
-		return labelValueCollections.get(index.intValue());
-	}
-
 }

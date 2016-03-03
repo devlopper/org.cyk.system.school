@@ -30,7 +30,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	//trimesterEverybodyHaveNotAllEvaluations(dataProducer.getGrade1().division(0),Boolean.TRUE,Boolean.TRUE);
     	//trimesterEverybodyHaveNotAllEvaluations(dataProducer.getGrade2().division(0),Boolean.TRUE,Boolean.TRUE);
     	
-    	/*
+    	
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getGrade1().division(0).getClassroomSessionDivision(), new Object[][]{
     		new Object[]{dataProducer.getGrade1().division(0).subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     	    		{"STUD1","90","30","60"}
@@ -41,6 +41,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	    	}}
     	}, Boolean.TRUE,Boolean.TRUE);
     	
+    	/*
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getGrade2().division(0).getClassroomSessionDivision(), new Object[][]{
     		new Object[]{dataProducer.getGrade2().division(0).subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     	    		{"STUD1","90","30","60"}
@@ -51,7 +52,8 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	    	}}
     	}, Boolean.TRUE,Boolean.TRUE);
     	*/
-    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getGrade3().division(0).getClassroomSessionDivision(),null, Boolean.TRUE,Boolean.TRUE);
+    	
+    	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getGrade3().division(0).getClassroomSessionDivision(),null, Boolean.TRUE,Boolean.TRUE);
     }
         
 }

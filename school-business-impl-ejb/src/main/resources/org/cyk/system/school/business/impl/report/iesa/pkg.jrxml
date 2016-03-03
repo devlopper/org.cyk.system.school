@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="475"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -160,14 +160,6 @@
 	<field name="name" class="java.lang.String">
 		<fieldDescription><![CDATA[name]]></fieldDescription>
 	</field>
-	<field name="studentLabelValueCollection" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[studentLabelValueCollection]]></fieldDescription>
-	</field>
-	<field name="attendanceLabelValueCollection" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport"/>
-	<field name="effortLevelLabelValueCollection" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport"/>
-	<field name="informationLabelValueCollection" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[informationLabelValueCollection]]></fieldDescription>
-	</field>
 	<field name="subjectsBlockTitle" class="java.lang.String"/>
 	<field name="commentsBlockTitle" class="java.lang.String">
 		<fieldDescription><![CDATA[commentsBlockTitle]]></fieldDescription>
@@ -185,28 +177,28 @@
 		<fieldDescription><![CDATA[labelValueCollectionAtIndex2]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex3" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[labelValueCollectionAtIndex3]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex4" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[labelValueCollectionAtIndex4]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex5" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[labelValueCollectionAtIndex5]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex6" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[labelValueCollectionAtIndex6]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex7" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[labelValueCollectionAtIndex7]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex8" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[labelValueCollectionAtIndex8]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex9" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[labelValueCollectionAtIndex9]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex10" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+		<fieldDescription><![CDATA[labelValueCollectionAtIndex10]]></fieldDescription>
 	</field>
 	<field name="schoolStampBlockTitle" class="java.lang.String">
 		<fieldDescription><![CDATA[schoolStampBlockTitle]]></fieldDescription>
@@ -269,7 +261,7 @@
 				<textField>
 					<reportElement style="block header" x="0" y="0" width="194" height="13" uuid="97c5bac7-e1c0-4d7b-8629-33858d604173"/>
 					<textElement markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentLabelValueCollection}.getName()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{labelValueCollectionAtIndex0}.getName()+"</font>"]]></textFieldExpression>
 				</textField>
 				<image isUsingCache="false" onErrorType="Blank">
 					<reportElement x="2" y="19" width="64" height="70" uuid="1e10220e-5880-4b76-a166-a93abc111a9b"/>
@@ -294,7 +286,7 @@
 							<datasetParameter name="CYK_LABEL_VALUE_HEIGHT">
 								<datasetParameterExpression><![CDATA[$P{CYK_LABEL_VALUE_HEIGHT}]]></datasetParameterExpression>
 							</datasetParameter>
-							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{studentLabelValueCollection}.getCollection())]]></dataSourceExpression>
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{labelValueCollectionAtIndex0}.getCollection())]]></dataSourceExpression>
 						</datasetRun>
 						<jr:column width="55" uuid="d486f9b0-675b-4e4e-ba2b-4fb2c41a735e">
 							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">

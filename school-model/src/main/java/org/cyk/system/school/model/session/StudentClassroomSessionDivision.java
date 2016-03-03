@@ -36,6 +36,11 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 	}
 	
 	@Override
+	public String toString() {
+		return student+" "+classroomSessionDivision;
+	}
+	
+	@Override
 	public String getLogMessage() {
 		return String.format(LOG_FORMAT, student.getRegistration().getCode(),classroomSessionDivision.getIdentifier(),results.getLogMessage());
 	}
