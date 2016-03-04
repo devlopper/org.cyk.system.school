@@ -22,6 +22,7 @@ import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -88,6 +89,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private LevelGroupBusiness levelGroupBusiness;
 	@Inject private SubjectClassroomSessionBusiness subjectClassroomSessionBusiness;
 	@Inject private SubjectBusiness subjectBusiness;
+	
+	@Inject private MetricCollectionDao metricCollectionDao;
 	
 	@Setter private AverageComputationListener averageComputationListener;
 	@Setter private Script averageComputationScript;

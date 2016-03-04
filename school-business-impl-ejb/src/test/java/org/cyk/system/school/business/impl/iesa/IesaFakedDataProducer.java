@@ -29,6 +29,8 @@ import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
+import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.security.Installation;
@@ -37,6 +39,7 @@ import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
@@ -49,6 +52,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
 import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataProducer;
 import org.cyk.system.school.model.SchoolConstant;
+import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -84,6 +88,10 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 
 	private static final long serialVersionUID = -1832900422621121762L;
 
+	public static final String STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK = "BSWHPK";
+	public static final String STUDENT_BEHAVIOUR_MERIC_COLLECTION_G1_G6 = "BSWHG1G6";
+	public static final String STUDENT_BEHAVIOUR_MERIC_COLLECTION_G7_G12 = "BSWHG7G12";
+	
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private CompanyBusiness companyBusiness;
 	@Inject private CompanyBusinessLayer companyBusinessLayer;
@@ -95,6 +103,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
+	@Inject private ClassroomSessionDivisionStudentsMetricCollectionBusiness classroomSessionDivisionStudentsMetricCollectionBusiness;
 	@Inject private LectureBusiness lectureBusiness;
 	@Inject private TeacherDao teacherDao;
 	@Inject private PersonDao personDao;
@@ -225,28 +234,28 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		evaluationTypes.add(evaluationTypeTest2 = create(schoolBusinessLayer.getEvaluationTypeBusiness().instanciateOne("Test 2")));
 		evaluationTypes.add(evaluationTypeExam = create(schoolBusinessLayer.getEvaluationTypeBusiness().instanciateOne("Exam")));
 				
-		studentWorkMetricCollectionPk = rootBusinessLayer.getMetricCollectionBusiness().instanciateOne("BSWHPk","Behaviour,Study and Work Habits",MetricValueType.NUMBER
+		studentWorkMetricCollectionPk = create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK,"Behaviour,Study and Work Habits",MetricValueType.NUMBER
     			, new String[]{"Participates actively during circle time","Participates in singing rhymes","Can say her name and name of classmates"
     			,"Can respond appropriately to “how are you?”","Can say his/her age","Can say the name of her school","Names objects in the classroom and school environment"
     			,"Uses at least one of the following words “me”,“I”, “he”, “she”, “you”","Talks in two or three word phrases and longer sentences"
     			,"Can use “and” to connect words/phrases","Talks with words in correct order","Can be engaged in conversations"}
-    	, new String[][]{ {"BSWHPk_1", "Learning to do", "1", "1"},{"BSWHPk_2", "Does sometimes", "2", "2"} ,{"BSWHPk_3", "Does regularly", "3", "3"} });
+    	, new String[][]{ {"BSWHPk_1", "Learning to do", "1", "1"},{"BSWHPk_2", "Does sometimes", "2", "2"} ,{"BSWHPk_3", "Does regularly", "3", "3"} }));
     	
-    	studentWorkMetricCollectionG1G6 = rootBusinessLayer.getMetricCollectionBusiness().instanciateOne("BSWHG1G6","Behaviour,Study and Work Habits",MetricValueType.NUMBER
+    	studentWorkMetricCollectionG1G6 = create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(STUDENT_BEHAVIOUR_MERIC_COLLECTION_G1_G6,"Behaviour,Study and Work Habits",MetricValueType.NUMBER
     			, new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies","Demonstrates self-control"
     					,"Takes care of school and others materials","Game/Sport","Handwriting","Drawing/Painting","Punctionality/Regularity","Works cooperatively in groups"
     					,"Listens and follows directions"}
     	, new String[][]{ {"1", "Has no regard for the observable traits", "1", "1"},{"2", "Shows minimal regard for the observable traits", "2", "2"}
     	,{"3", "Acceptable level of observable traits", "3", "3"},{"4", "Maintains high level of observable traits", "4", "4"}
-    	,{"5", "Maintains an excellent degree of observable traits", "5", "5"} });
+    	,{"5", "Maintains an excellent degree of observable traits", "5", "5"} }));
    
-    	studentWorkMetricCollectionG7G12 = rootBusinessLayer.getMetricCollectionBusiness().instanciateOne("BSWHG7G12","Behaviour,Study and Work Habits",MetricValueType.STRING
+    	studentWorkMetricCollectionG7G12 = create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(STUDENT_BEHAVIOUR_MERIC_COLLECTION_G7_G12,"Behaviour,Study and Work Habits",MetricValueType.STRING
     			, new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies","Demonstrates self-control"
     					,"Takes care of school and others materials","Game/Sport","Handwriting","Drawing/Painting","Punctionality/Regularity","Works cooperatively in groups"
     					,"Listens and follows directions"}
     	, new String[][]{ {"E", "Excellent", "1", "1"},{"G", "Good", "2", "2"}
     	,{"S", "Satisfactory", "3", "3"},{"N", "Needs Improvement", "4", "4"}
-    	,{"H", "Has no regard", "5", "5"} });
+    	,{"H", "Has no regard", "5", "5"} }));
 		
     	File reportHeaderFile = createFile("report/iesa/document_header.png","document_header.png");
     	
@@ -325,6 +334,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	flush(ClassroomSessionDivision.class, classroomSessionDivisionBusiness, classroomSessionDivisions);
     	flush(ClassroomSessionDivisionSubject.class, classroomSessionDivisionSubjectBusiness, classroomSessionDivisionSubjects);
     	flush(ClassroomSessionDivisionSubjectEvaluationType.class, subjectEvaluationTypeBusiness, subjectEvaluationTypes);
+    	flush(ClassroomSessionDivisionStudentsMetricCollection.class, classroomSessionDivisionStudentsMetricCollectionBusiness, classroomSessionDivisionStudentsMetricCollections);
 	}
 	
 	@Override
@@ -418,48 +428,90 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		@Override
 		public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
 				StudentClassroomSessionDivisionReportParameters parameters) {
-			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
-			r.getAcademicSession().getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
+			LabelValueCollectionReport labelValueCollectionReport;
+			StudentClassroomSessionDivisionReport report = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
+			report.getAcademicSession().getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
 					+ " OF <style forecolor=\"red\">A</style>BIDJAN");
 			
-			r.getSubjectsTableColumnNames().add("No.");
-			r.getSubjectsTableColumnNames().add("SUBJECTS");
-			r.getSubjectsTableColumnNames().add("Test 1 15%");
-			r.getSubjectsTableColumnNames().add("Test 2 15%");
-			r.getSubjectsTableColumnNames().add("Exam 70%");
-			r.getSubjectsTableColumnNames().add("TOTAL 100%");
-			r.getSubjectsTableColumnNames().add("GRADE");
-			r.getSubjectsTableColumnNames().add("RANK");
-			r.getSubjectsTableColumnNames().add("OUT OF");
-			r.getSubjectsTableColumnNames().add("MAX");
-			r.getSubjectsTableColumnNames().add("CLASS AVERAGE");
-			r.getSubjectsTableColumnNames().add("REMARKS");
-			r.getSubjectsTableColumnNames().add("TEACHER");
+			report.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 15%","Test 2 15%","Exam 70%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
+			
+
+			report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
+					{"Formname(s)", report.getStudent().getPerson().getNames()}
+					,{"Surname", report.getStudent().getPerson().getSurname()}
+					,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
+					,{"Place of birth", report.getStudent().getPerson().getBirthLocation()}
+					,{"Admission No", report.getStudent().getRegistrationCode()}
+					,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
+					,{"Gender", report.getStudent().getPerson().getSex()}
+					});
+			
+			report.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
+					{"Number of times school opened",report.getClassroomSessionDivision().getOpenedTime()}
+					,{"Number of times present",report.getAttendedTime()}
+					,{"Number of times absent",report.getMissedTime()}
+					});
+			
+			report.addLabelValueCollection("OVERALL RESULT",new String[][]{
+					{"AVERAGE",report.getAverage()}
+					,{"GRADE",report.getAverageScale()}
+					,{"RANK",report.getRank()}
+					});
 			/*
-			r.setInformationLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.informations"));
-			if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
-				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
-				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
-				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
-				//labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", 
-				//		studentClassroomSessionDivision.get "To Compute");
-			}else{
-				labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", 
-						format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNextStartingDate()));
-			}
-			
-			LabelValueCollectionReport labelValueCollectionReport = r.
-			r.setBehaviorLabelValueCollection1(new LabelValueCollectionReport());
-			r.getBehaviorLabelValueCollection1().setName("school.report.studentclassroomsessiondivision.block.behaviour");
-			for(int i=0;i<=5;i++)
-				r.getBehaviorLabelValueCollection1().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
-			
-			r.setBehaviorLabelValueCollection2(new LabelValueCollectionReport());
-			r.getBehaviorLabelValueCollection2().setName("school.report.studentclassroomsessiondivision.block.behaviour");
-			for(int i=6;i<=11;i++)
-				r.getBehaviorLabelValueCollection2().getCollection().add(r.getBehaviorLabelValueCollection().getCollection().get(i));
+			MetricCollection metricCollection = SchoolBusinessLayer.getInstance().getMetricCollectionDao().read(STUDENT_BEHAVIOUR_MERIC_COLLECTION_G1_G6);
+			Collection<Metric> metrics = rootBusinessLayer.getMetricBusiness().findByCollection(metricCollection);
+			Collection<StudentResultsMetricValue> studentResultsMetricValues = SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness()
+					.findByStudentResults(((StudentClassroomSessionDivision)report.getSource()).getResults()); 
+			report.addLabelValueCollection(metricCollection.getName() ,convertStudentResultsMetricValueToArray(metrics, studentResultsMetricValues));
 			*/
-			return r;
+			addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_G1_G6);
+			labelValueCollectionReport = new LabelValueCollectionReport();
+			labelValueCollectionReport.setName(report.getCurrentLabelValueCollection().getName());
+			labelValueCollectionReport.setCollection(report.getCurrentLabelValueCollection().getCollection().subList(6, 12));
+			report.getCurrentLabelValueCollection().setCollection(report.getCurrentLabelValueCollection().getCollection().subList(0, 6));
+			
+			report.addLabelValueCollection(labelValueCollectionReport);
+			
+			IntervalCollection intervalCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(
+					((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale();
+			String[][] values =  convertToArray(rootBusinessLayer.getIntervalBusiness().findByCollection(intervalCollection),Boolean.TRUE);
+			commonUtils.swapColumns(values, 1, 2);
+			report.addLabelValueCollection(intervalCollection.getName(),values);
+			/*
+			report.addLabelValueCollection("GRADING SCALE",new String[][]{
+					{"A+", "Excellent","90 - 100"}
+					,{"A",  "Very Good","80 - 89.99"}
+					,{"B+", "Good","70 - 79.99"}
+					,{"B",  "Fair","60 - 69.99"}
+					,{"C+", "Satisfactory","55 - 59.99"}
+					,{"C",  "Barely satisfactory","50 - 54.99"}
+					,{"E",  "Fail","00 - 49.99"}
+					});
+			*/
+			
+			intervalCollection = SchoolBusinessLayer.getInstance().getMetricCollectionDao().read(STUDENT_BEHAVIOUR_MERIC_COLLECTION_G1_G6).getValueIntervalCollection();
+			values =  convertToArray(rootBusinessLayer.getIntervalBusiness().findByCollection(intervalCollection),Boolean.FALSE);
+			report.addLabelValueCollection(intervalCollection.getName(),values);
+			
+			/*
+			report.addLabelValueCollection("EFFORT LEVELS",new String[][]{
+					{"1", "Has no regard for the observable traits"}
+					,{"2", "Shows minimal regard for the observable traits"}
+					,{"3", "Acceptable level of observable traits"}
+					,{"4", "Maintains high level of observable traits"}
+					,{"5", "Maintains an excellent degree of observable traits"}
+					});
+			*/
+
+			report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
+					{"ANNUAL AVERAGE","90"}
+					,{"ANNUAL GRADE","B+"}
+					,{"ANNUAL RANK","25"}
+					,{"PROMOTION INFORMATION","PROMOTED"}
+					,{"NEXT ACADEMIC YEAR","7Th SEPTEMBER 2015"}
+					});
+			
+			return report;
 		}
 		
     }

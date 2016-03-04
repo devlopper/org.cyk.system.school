@@ -8,3 +8,5 @@
 /Workspaces
 rebel.xml
 *.jasper
+/target/
+/target/

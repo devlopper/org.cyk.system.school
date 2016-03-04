@@ -2,18 +2,21 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
-import org.cyk.system.root.model.file.report.LabelValueReport;
+import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
+import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
-import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.model.NodeResults;
+import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -264,9 +267,24 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 		*/
 	}
+	
+	protected String[][] convertStudentResultsMetricValueToArray(Collection<Metric> metrics,Collection<StudentResultsMetricValue> studentResultsMetricValues){
+		Collection<MetricValue> metricValues = new ArrayList<>();
+		for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues)
+			metricValues.add(studentResultsMetricValue.getMetricValue());
+		return convertToArray(metrics, metricValues);
+	}
 
 	protected String getGradeScaleCode(Interval interval){
 		return interval.getCode();
+	}
+	
+	protected LabelValueCollectionReport addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String metricCollectionCode){
+		MetricCollection metricCollection = SchoolBusinessLayer.getInstance().getMetricCollectionDao().read(metricCollectionCode);
+		Collection<Metric> metrics = rootBusinessLayer.getMetricBusiness().findByCollection(metricCollection);
+		Collection<StudentResultsMetricValue> studentResultsMetricValues = SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness()
+				.findByStudentResults(studentResults); 
+		return report.addLabelValueCollection(metricCollection.getName() ,convertStudentResultsMetricValueToArray(metrics, studentResultsMetricValues));
 	}
 	
 	/**/
