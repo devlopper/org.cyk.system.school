@@ -84,6 +84,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Getter @Setter private List<EvaluationType> evaluationTypes = new ArrayList<>();
 	@Getter @Setter private Object[][] customClassroomSessionDivisionSubjectEvaluationTypeInfos;
 	
+	@Getter @Setter private Integer appreciationLenght = 300;
 	/**/
 	
 	@Override
@@ -198,6 +199,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) ){
 					for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
+						System.out.println("ER : "+studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired());
 						if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness()
 								.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
 										, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
@@ -251,7 +253,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				}
 				
 				if(Boolean.TRUE.equals(appreciation)){
-					studentClassroomSessionDivision.getResults().setAppreciation(RandomStringUtils.randomAlphabetic(50));
+					studentClassroomSessionDivision.getResults().setAppreciation(RandomStringUtils.randomAlphabetic(appreciationLenght));
 					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
 				}
 			}

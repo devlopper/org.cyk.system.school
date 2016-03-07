@@ -14,6 +14,10 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	installApplication();
     	
     	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
+    	
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
+    			dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
     			dataProducer.getG1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
     	
@@ -39,7 +43,9 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	//trimesterEverybodyHaveNotAllEvaluations(dataProducer.getGrade1().division(0),Boolean.TRUE,Boolean.TRUE);
     	//trimesterEverybodyHaveNotAllEvaluations(dataProducer.getGrade2().division(0),Boolean.TRUE,Boolean.TRUE);
     	
-    	
+    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getPk().division(0).getClassroomSessionDivision(), null
+    			, Boolean.TRUE,Boolean.TRUE);
+    	/*
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getG1().division(0).getClassroomSessionDivision(), new Object[][]{
     		new Object[]{dataProducer.getG1().division(0).subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     	    		{"STUD1","90","30","60"}
@@ -80,7 +86,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	              //,{"STUD5","20","95","55"}
     	    	}}
     	}, Boolean.TRUE,Boolean.TRUE);
-    	
+    	*/
     	
     	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getGrade3().division(0).getClassroomSessionDivision(),null, Boolean.TRUE,Boolean.TRUE);
     }

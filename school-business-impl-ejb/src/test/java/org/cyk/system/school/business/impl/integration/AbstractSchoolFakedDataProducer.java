@@ -1,7 +1,5 @@
 package org.cyk.system.school.business.impl.integration;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.inject.Inject;
 
@@ -9,11 +7,8 @@ import lombok.Getter;
 
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
-import org.cyk.system.root.model.mathematics.Metric;
-import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper;
-import org.cyk.system.school.model.StudentResultsMetricValue;
 
 @Getter
 public abstract class AbstractSchoolFakedDataProducer extends AbstractFakedDataProducer implements Serializable {

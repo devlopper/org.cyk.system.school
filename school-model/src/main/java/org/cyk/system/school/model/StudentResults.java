@@ -61,6 +61,7 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 		
 	@Embedded private Attendance lectureAttendance = new Attendance();
 	
+	@Column(length= 1024 * 1)
 	private String appreciation;
 	
 	@OneToOne private File report;
