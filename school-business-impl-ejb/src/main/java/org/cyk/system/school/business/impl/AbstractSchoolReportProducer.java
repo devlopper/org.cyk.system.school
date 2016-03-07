@@ -10,7 +10,6 @@ import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
-import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValue;
@@ -100,7 +99,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.setComments(s.getResults().getAppreciation());
 		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired())){
 			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
-			r.setAverageScale(getGradeScaleCode(s.getResults().getEvaluationSort().getAverageInterval()));
+			r.setAverageScale(rootBusinessLayer.getIntervalBusiness().findRelativeCode(s.getResults().getEvaluationSort().getAverageInterval()));
 			r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 			
 			r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
@@ -164,7 +163,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			//if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
 				set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
 				if(applicable)
-					sr.getAverageScale().setCode(getGradeScaleCode(studentSubject.getResults().getEvaluationSort().getAverageInterval()));
+					sr.getAverageScale().setCode(rootBusinessLayer.getIntervalBusiness().findRelativeCode(studentSubject.getResults().getEvaluationSort().getAverageInterval()));
 			//}else
 				//sr.getAverageScale().setCode(NOT_APPLICABLE);
 			
@@ -208,64 +207,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivisionReportParameters parameters){
-		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) r.getSource();
-		/*
-		r.setStudentLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.student"));
-		labelValue("school.report.studentclassroomsessiondivision.block.student.lastnames", r.getStudent().getPerson().getLastName());
-		labelValue("school.report.studentclassroomsessiondivision.block.student.firstname", r.getStudent().getPerson().getName());
-		labelValue("school.report.studentclassroomsessiondivision.block.student.birthdate", r.getStudent().getPerson().getBirthDate());
-		labelValue("school.report.studentclassroomsessiondivision.block.student.birthlocation", r.getStudent().getPerson().getBirthLocation());
-		labelValue("school.report.studentclassroomsessiondivision.block.student.registrationcode", r.getStudent().getRegistrationCode());
-		labelValue("school.report.studentclassroomsessiondivision.block.student.classroomsessionname", r.getClassroomSessionDivision().getClassroomSession().getName());
-		labelValue("school.report.studentclassroomsessiondivision.block.student.sex", r.getStudent().getPerson().getSex());
 		
-		r.setAttendanceLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.attendance"));
-		labelValue("school.report.studentclassroomsessiondivision.block.attendance.opened", r.getClassroomSessionDivision().getOpenedTime());
-		labelValue("school.report.studentclassroomsessiondivision.block.attendance.present", r.getAttendedTime());
-		labelValue("school.report.studentclassroomsessiondivision.block.attendance.absent", r.getMissedTime());
-		
-		r.setOverallResultlLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.overallresult"));
-		labelValue("school.report.studentclassroomsessiondivision.block.overallresult.average", r.getAverage());
-		labelValue(LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID, r.getAverageScale());
-		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentRankable()))
-			labelValue("school.report.studentclassroomsessiondivision.block.overallresult.rank", r.getRank());
-		
-		r.setGradingScaleLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.gradingscale"));
-		IntervalCollection evaluationIntervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
-				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
-		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(evaluationIntervalCollection, Boolean.FALSE)){
-			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, getGradeScaleCode(interval), interval.getName());
-			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
-			currentLabelValueCollection.getCollection().add(labelValueReport);
-		}
-		*/
-		
-		//r.setEffortLevelLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.effort"));
-		/*
-		IntervalCollection intervalCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
-				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection().getValueIntervalCollection();
-		for(Interval interval : rootBusinessLayer.getIntervalBusiness().findByCollection(intervalCollection, Boolean.TRUE)){
-			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, interval.getCode(), interval.getName());
-			labelValueReport.addExtendedValues(format(interval.getLow().getValue())+" - "+format(interval.getHigh().getValue()));
-			currentLabelValueCollection.getCollection().add(labelValueReport);
-		}
-		*/
-		
-		//r.setBehaviorLabelValueCollection(labelValueCollection("school.report.studentclassroomsessiondivision.block.behaviour"));
-		/*
-		MetricCollection metricCollection = ((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()
-				.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentWorkMetricCollection();
-		for(Metric metric : rootBusinessLayer.getMetricBusiness().findByCollection(metricCollection)){
-			String value = "";
-			for(StudentResultsMetricValue studentResultsMetricValue : schoolBusinessLayer.getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults()))
-				if(studentResultsMetricValue.getMetricValue().getMetric().getIdentifier().equals(metric.getIdentifier())){
-					value = formatUsingBusiness(studentResultsMetricValue.getMetricValue());
-					break;
-				}
-			LabelValueReport labelValueReport = new LabelValueReport(currentLabelValueCollection,null, metric.getName(), value);
-			currentLabelValueCollection.getCollection().add(labelValueReport);
-		}
-		*/
 	}
 	
 	protected String[][] convertStudentResultsMetricValueToArray(Collection<Metric> metrics,Collection<StudentResultsMetricValue> studentResultsMetricValues){
@@ -274,14 +216,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			metricValues.add(studentResultsMetricValue.getMetricValue());
 		return convertToArray(metrics, metricValues);
 	}
-
-	protected String getGradeScaleCode(Interval interval){
-		return interval.getCode();
-	}
 	
 	protected LabelValueCollectionReport addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String metricCollectionCode){
-		MetricCollection metricCollection = SchoolBusinessLayer.getInstance().getMetricCollectionDao().read(metricCollectionCode);
-		Collection<Metric> metrics = rootBusinessLayer.getMetricBusiness().findByCollection(metricCollection);
+		MetricCollection metricCollection = rootBusinessLayer.getMetricCollectionDao().read(metricCollectionCode);
+		Collection<Metric> metrics = rootBusinessLayer.getMetricDao().readByCollection(metricCollection);
 		Collection<StudentResultsMetricValue> studentResultsMetricValues = SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness()
 				.findByStudentResults(studentResults); 
 		return report.addLabelValueCollection(metricCollection.getName() ,convertStudentResultsMetricValueToArray(metrics, studentResultsMetricValues));

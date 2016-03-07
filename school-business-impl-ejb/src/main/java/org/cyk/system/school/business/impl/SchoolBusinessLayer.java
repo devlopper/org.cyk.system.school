@@ -6,9 +6,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.api.ClazzBusiness;
@@ -22,7 +19,6 @@ import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
-import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -57,9 +53,13 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER) @Getter
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
@@ -79,6 +79,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
 	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
+	@Inject private ClassroomSessionDivisionDao classroomSessionDivisionDao;
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	@Inject private ClassroomSessionDivisionStudentsMetricCollectionBusiness classroomSessionDivisionStudentsMetricCollectionBusiness;
 	@Inject private LevelGroupTypeBusiness levelGroupTypeBusiness;
@@ -89,8 +90,6 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private LevelGroupBusiness levelGroupBusiness;
 	@Inject private SubjectClassroomSessionBusiness subjectClassroomSessionBusiness;
 	@Inject private SubjectBusiness subjectBusiness;
-	
-	@Inject private MetricCollectionDao metricCollectionDao;
 	
 	@Setter private AverageComputationListener averageComputationListener;
 	@Setter private Script averageComputationScript;
