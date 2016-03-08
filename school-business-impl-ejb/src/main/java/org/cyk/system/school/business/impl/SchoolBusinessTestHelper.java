@@ -199,7 +199,6 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) ){
 					for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
-						System.out.println("ER : "+studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired());
 						if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness()
 								.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
 										, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
