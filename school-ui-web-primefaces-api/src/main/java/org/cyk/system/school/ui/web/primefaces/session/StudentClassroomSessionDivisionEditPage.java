@@ -2,9 +2,10 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -15,11 +16,10 @@ import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
-import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
-import org.cyk.ui.web.api.ItemCollectionWebAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.MetricValueCollection;
+import org.cyk.ui.web.primefaces.MetricValueCollection.AbstractMetricValueItem;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
@@ -34,64 +34,28 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private MetricValueCollection<MetricValueItem,StudentResultsMetricValue> metricValueCollection;
-	/*
-	private List<SelectItem> metricValueCollectionChoices = new ArrayList<>();
-	private Boolean isNumberValueType,showNumberColumn,showStringColumn,showCombobox;*/
-	private MetricCollection metricCollection;
-	
+	private List<MetricValueCollection<StudentResultsMetricValueItem,StudentResultsMetricValue>> metricValueCollections = new ArrayList<>();
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = SchoolBusinessLayer.getInstance()
 				.getClassroomSessionDivisionStudentsMetricCollectionBusiness().findByClassroomSessionDivision(identifiable.getClassroomSessionDivision());
+	
+		MetricValueCollection<StudentResultsMetricValueItem,StudentResultsMetricValue> metricValueCollection = null;
 		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
-			if(metricCollection==null){
-				metricCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection();
-				break;
-			}
+			final MetricCollection metricCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection();			
+			metricValueCollection = (MetricValueCollection<StudentResultsMetricValueItem, StudentResultsMetricValue>) createMetricValueCollection(metricCollection,StudentResultsMetricValueItem.class, StudentResultsMetricValue.class 
+					,new MetricValueCollection.Adapter<StudentResultsMetricValueItem,StudentResultsMetricValue>(){
+				private static final long serialVersionUID = -3872058204105902514L;
+				@Override
+				public Collection<StudentResultsMetricValue> load() { 
+					return SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResultsByMetricCollection(identifiable.getResults(),metricCollection);
+				}
+			});
+			
+			metricValueCollections.add(metricValueCollection);
 		}
-		
-		
-		//metricCollection = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
-		//		.findCommonNodeInformations(identifiable.getClassroomSessionDivision().getClassroomSession()).getStudentWorkMetricCollection();
-		/*isNumberValueType = MetricValueType.NUMBER.equals(metricCollection.getValueType());
-		showNumberColumn = isNumberValueType;
-		showStringColumn = !isNumberValueType;
-		if(showCombobox = RootBusinessLayer.getInstance().getIntervalCollectionBusiness().isAllIntervalLowerEqualsToHigher(metricCollection.getValueIntervalCollection())){
-			metricValueCollectionChoices.add(new SelectItem(null, languageBusiness.findText(SelectItemBuilderListener.NULL_LABEL_ID)));
-			for(Interval interval : RootBusinessLayer.getInstance().getIntervalBusiness().findByCollection(metricCollection.getValueIntervalCollection())){
-				metricValueCollectionChoices.add(new SelectItem(MetricValueInputted.VALUE_INTERVAL_CODE.equals(metricCollection.getValueInputted()) ? interval.getCode() : interval.getLow().getValue()
-						, MetricValueInputted.VALUE_INTERVAL_CODE.equals(metricCollection.getValueInputted()) ? interval.getCode() : numberBusiness.format(interval.getLow().getValue())));
-			}
-		}
-		*/
-		metricValueCollection = (MetricValueCollection<MetricValueItem, StudentResultsMetricValue>) createItemCollection(MetricValueItem.class, StudentResultsMetricValue.class 
-				,new ItemCollectionWebAdapter<MetricValueItem,StudentResultsMetricValue>(){
-			private static final long serialVersionUID = -3872058204105902514L;
-			@Override
-			public Collection<StudentResultsMetricValue> load() { 
-				return SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults());
-			}
-			@Override
-			public void instanciated(AbstractItemCollection<MetricValueItem, StudentResultsMetricValue,SelectItem> itemCollection,MetricValueItem item) {
-				super.instanciated(itemCollection, item);
-				item.setName(item.getIdentifiable().getMetricValue().getMetric().getName());
-				item.setNumberValue(item.getIdentifiable().getMetricValue().getNumberValue());
-				item.setStringValue(item.getIdentifiable().getMetricValue().getStringValue());
-			}	
-			@Override
-			public void write(MetricValueItem item) {
-				super.write(item);
-				item.getIdentifiable().getMetricValue().setNumberValue(item.getNumberValue());
-				item.getIdentifiable().getMetricValue().setStringValue(item.getStringValue());
-			}
-		});
-		metricValueCollection.setMetricCollection(metricCollection);
-		metricValueCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
-		metricValueCollection.getAddCommandable().setRendered(Boolean.FALSE);
-		
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -100,10 +64,19 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			String identifier, Class<TYPE> aClass, Class<IDENTIFIABLE> identifiableClass) {
 		return new MetricValueCollection(identifier, aClass, identifiableClass);
 	}
+	
+	public MetricValueCollection<StudentResultsMetricValueItem,StudentResultsMetricValue> getMetricValueCollection(Integer index){
+		if(index < metricValueCollections.size())
+			return metricValueCollections.get(index);
+		return null;
+	}
 		
 	@Override
 	protected void update() {
-		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().update(identifiable, metricValueCollection.getIdentifiables());
+		List<StudentResultsMetricValue> studentResultsMetricValues = new ArrayList<>();
+		for(MetricValueCollection<StudentResultsMetricValueItem,StudentResultsMetricValue> metricValueCollection : metricValueCollections)
+			studentResultsMetricValues.addAll(metricValueCollection.getIdentifiables());
+		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().update(identifiable, studentResultsMetricValues);
 	}
 	
 	@Override
@@ -147,11 +120,9 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	}
 	
 	@Getter @Setter
-	public static class MetricValueItem extends AbstractItemCollectionItem<StudentResultsMetricValue> implements Serializable {
+	public static class StudentResultsMetricValueItem extends AbstractMetricValueItem<StudentResultsMetricValue> implements Serializable {
 		private static final long serialVersionUID = 3828481396841243726L;
-		private String name;
-		private BigDecimal numberValue;
-		private String stringValue;
+		
 	}
 
 }

@@ -1,7 +1,9 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -9,12 +11,14 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails.SubjectDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.StudentResultsMetricValue;
+import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
@@ -35,7 +39,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	
 	private FormOneData<StudentClassroomSessionDivisionDetails> details;
 	private Table<AbstractSubjectDetails> subjectTable;
-	private Table<StudentResultsMetricValueDetails> metricTable;
+	private List<Table<StudentResultsMetricValueDetails>> metricTables = new ArrayList<>();
 	private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
 	private Boolean showReport = Boolean.FALSE;
 	
@@ -88,21 +92,32 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				return "model.entity.subject";
 			}
 		});
-		
-		metricTable = (Table<StudentResultsMetricValueDetails>) createDetailsTable(StudentResultsMetricValueDetails.class, 
-				new DetailsConfigurationListener.Table.Adapter<StudentResultsMetricValue,StudentResultsMetricValueDetails>(StudentResultsMetricValue.class, StudentResultsMetricValueDetails.class){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public Collection<StudentResultsMetricValue> getIdentifiables() {
-				return SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResults(identifiable.getResults());
-			}
-			@Override
-			public String getTitleId() {
-				return "model.entity.metric";
-			}
-		});
-		
-		
+		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : SchoolBusinessLayer.getInstance()
+				.getClassroomSessionDivisionStudentsMetricCollectionBusiness().findByClassroomSessionDivision(identifiable.getClassroomSessionDivision())){
+			final MetricCollection metricCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection();
+			Table<StudentResultsMetricValueDetails> table;
+			metricTables.add(table = (Table<StudentResultsMetricValueDetails>) createDetailsTable(StudentResultsMetricValueDetails.class, 
+					new DetailsConfigurationListener.Table.Adapter<StudentResultsMetricValue,StudentResultsMetricValueDetails>(StudentResultsMetricValue.class, StudentResultsMetricValueDetails.class){
+				private static final long serialVersionUID = 1L;
+				@Override
+				public Collection<StudentResultsMetricValue> getIdentifiables() {
+					return SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResultsByMetricCollection(identifiable.getResults(),metricCollection);
+				}
+				@Override
+				public String getTitleId() {
+					return "model.entity.metric";
+				}
+				
+			}));
+			table.setTitle(metricCollection.getName());
+			
+		}
+	}
+	
+	public Table<StudentResultsMetricValueDetails> getMetricTable(Integer index){
+		if(index < metricTables.size())
+			return metricTables.get(index);
+		return null;
 	}
 	
 	@Override
