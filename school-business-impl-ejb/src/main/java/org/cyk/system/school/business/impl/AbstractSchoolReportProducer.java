@@ -225,6 +225,11 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		return report.addLabelValueCollection(metricCollection.getName() ,convertStudentResultsMetricValueToArray(metrics, studentResultsMetricValues));
 	}
 	
+	protected void addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String[] metricCollectionCodes){
+		for(String metricCollectionCode : metricCollectionCodes)
+			addStudentResultsLabelValueCollection(report, studentResults, metricCollectionCode);
+	}
+	
 	/**/
 	
 	public static final String LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID = "school.report.studentclassroomsessiondivision.block.overallresult.grade";
