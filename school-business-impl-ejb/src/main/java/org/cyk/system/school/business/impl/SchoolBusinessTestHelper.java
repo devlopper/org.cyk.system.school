@@ -203,7 +203,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 								.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
 										, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
 							assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
-							System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent());
+							System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession());
 							writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
 							files.add(studentClassroomSessionDivision.getResults().getReport());	
 						}
