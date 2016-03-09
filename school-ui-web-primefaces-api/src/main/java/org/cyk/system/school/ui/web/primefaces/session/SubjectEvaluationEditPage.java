@@ -3,6 +3,7 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -15,7 +16,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
@@ -27,6 +31,7 @@ import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.api.AbstractWebApplicableValueQuestion;
 import org.cyk.ui.web.api.ItemCollectionWebAdapter;
+import org.cyk.ui.web.api.servlet.SecurityFilter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -174,6 +179,22 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 		@Override
 		public String toString() {
 			return registrationCode+" "+names+" "+value;
+		}
+	}
+	
+	/**/
+	
+	public static class SecurityFilter extends org.cyk.ui.web.api.servlet.SecurityFilter.Listener.Adapter.Default implements Serializable{
+		private static final long serialVersionUID = -8581044465789806149L;
+		@Override
+		public Boolean isUrlAccessibleByUserAccount(URL url, UserAccount userAccount) {
+			if(Boolean.TRUE.equals(super.isUrlAccessibleByUserAccount(url, userAccount))){
+				Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
+				if(teacher==null)
+					return Boolean.FALSE;
+				//ClassroomSessionDivisionSubject classroomSessionDivisionSubject = ;
+			}
+			return Boolean.FALSE;
 		}
 	}
 
