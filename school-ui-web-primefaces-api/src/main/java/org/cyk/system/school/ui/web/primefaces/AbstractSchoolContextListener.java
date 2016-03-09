@@ -1,6 +1,7 @@
 package org.cyk.system.school.ui.web.primefaces;
 
 import java.io.Serializable;
+import java.net.URL;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
@@ -29,6 +30,7 @@ import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDi
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionQueryManyFormModel;
 import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
+import org.cyk.ui.web.api.servlet.SecurityFilter;
 
 public abstract class AbstractSchoolContextListener extends AbstractCompanyContextListener implements Serializable {
 
@@ -79,7 +81,17 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		
 		primefacesManager.getSelectManyPageListeners().add(new ClassroomSessionQueryManyFormModel.PageAdapter());
 		primefacesManager.getSelectManyPageListeners().add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
+
+		//SecurityFilter.URL_CONSTRAINTS.put("/private/__role__/__manager__/evaluation/edit.jsf",new SubjectEvaluationEditPage.SecurityConstraint());
 		
+		SecurityFilter.Listener.COLLECTION.add(new SecurityFilter.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 4605368263736933413L;
+			
+			@Override
+			public Boolean isUrlAccessible(URL url) {
+				return super.isUrlAccessible(url);
+			}
+		});
 	}
 	
 	@Override

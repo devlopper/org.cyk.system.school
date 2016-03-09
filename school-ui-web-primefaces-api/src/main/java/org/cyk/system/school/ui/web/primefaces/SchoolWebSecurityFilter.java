@@ -14,7 +14,7 @@ public class SchoolWebSecurityFilter extends SecurityFilter.Listener.Adapter.Def
 	
 	private static final long serialVersionUID = -8581044465789806149L;
 	
-	@Override
+	/*@Override
 	public Boolean isUrlAccessibleByUserAccount(URL url, UserAccount userAccount) {
 		if(Boolean.TRUE.equals(super.isUrlAccessibleByUserAccount(url, userAccount))){
 			Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
@@ -23,7 +23,7 @@ public class SchoolWebSecurityFilter extends SecurityFilter.Listener.Adapter.Def
 			ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 		}
 		return Boolean.FALSE;
-	}
+	}*/
 	
 	/**/
 }

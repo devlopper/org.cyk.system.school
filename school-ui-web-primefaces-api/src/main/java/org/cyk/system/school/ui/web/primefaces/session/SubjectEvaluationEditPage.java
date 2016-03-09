@@ -10,6 +10,8 @@ import java.util.Collection;
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -24,6 +26,8 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.ui.api.AbstractUserSession;
+import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -31,7 +35,8 @@ import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.api.AbstractWebApplicableValueQuestion;
 import org.cyk.ui.web.api.ItemCollectionWebAdapter;
-import org.cyk.ui.web.api.servlet.SecurityFilter;
+import org.cyk.ui.web.api.WebManager;
+import org.cyk.ui.web.api.servlet.SecurityFilter.UrlConstraint;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -76,7 +81,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 			subjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
 			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
-		System.out.println("SubjectEvaluationEditPage.initialisation()");
+		
 		markCollection = createItemCollection(Mark.class, StudentSubjectEvaluation.class,new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
@@ -184,17 +189,16 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 	
 	/**/
 	
-	public static class SecurityFilter extends org.cyk.ui.web.api.servlet.SecurityFilter.Listener.Adapter.Default implements Serializable{
-		private static final long serialVersionUID = -8581044465789806149L;
+	public static class SecurityConstraint implements UrlConstraint{
 		@Override
-		public Boolean isUrlAccessibleByUserAccount(URL url, UserAccount userAccount) {
-			if(Boolean.TRUE.equals(super.isUrlAccessibleByUserAccount(url, userAccount))){
-				Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
-				if(teacher==null)
-					return Boolean.FALSE;
-				//ClassroomSessionDivisionSubject classroomSessionDivisionSubject = ;
-			}
-			return Boolean.FALSE;
+		public Boolean isAccessAllowed(AbstractUserSession userSession,UserAccount userAccount, URL url, HttpServletRequest request,HttpServletResponse response) {
+			Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
+			if(teacher==null)
+				return Boolean.FALSE;
+			ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = WebManager.getInstance().getIdentifiableFromRequestParameter(request, ClassroomSessionDivisionSubjectEvaluationType.class,
+					UIManager.getInstance().businessEntityInfos(ClassroomSessionDivisionSubjectEvaluationType.class).getIdentifier());
+			return classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getTeacher()!=null 
+					&& classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getTeacher().equals(teacher);
 		}
 	}
 
