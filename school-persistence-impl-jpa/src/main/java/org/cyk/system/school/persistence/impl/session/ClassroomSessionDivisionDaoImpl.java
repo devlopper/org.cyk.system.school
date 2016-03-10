@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.utility.common.computation.ArithmeticOperator;
 
@@ -13,12 +15,20 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 
 	private static final long serialVersionUID = 6306356272165070761L;
 	
-    private String readByClassroomSession,readByClassroomSessions,countByClassroomSession,readByClassroomSessionByIndex;
+    private String readByClassroomSession,readByClassroomSessions,countByClassroomSession,readByClassroomSessionByIndex,readByClassroomSessionByIndexByTeacher
+    	,readByClassroomSessionByTeacher;
      
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation(); 
         registerNamedQuery(readByClassroomSession, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
+        registerNamedQuery(readByClassroomSessionByTeacher, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE aClassroomSessionDivision.classroomSession=:classroomSession AND EXISTS( "
+				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision AND aSubject.teacher=:teacher"
+				+ " )");
+        registerNamedQuery(readByClassroomSessionByIndexByTeacher, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
+        		+ " aClassroomSessionDivision.classroomSession=:classroomSession AND aClassroomSessionDivision.index=:pindex AND EXISTS( "
+				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision AND aSubject.teacher=:teacher"
+				+ " )");
         registerNamedQuery(readByClassroomSessionByIndex, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
         		.and(ClassroomSessionDivision.FIELD_INDEX, PARAMETER_INDEX,ArithmeticOperator.EQ));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
@@ -35,6 +45,13 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 		return namedQuery(readByClassroomSessions).parameterIdentifiers(classroomSessions)
                 .resultMany();
 	}
+	
+	@Override
+	public Collection<ClassroomSessionDivision> readByClassroomSessionByTeacher(ClassroomSession classroomSession, Teacher teacher) {
+		return namedQuery(readByClassroomSessionByTeacher).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
+				.parameter(ClassroomSessionDivisionSubject.FIELD_TEACHER, teacher)
+                .resultMany();
+	}
 
 	@Override
 	public Long countByClassroomSession(ClassroomSession classroomSession) {
@@ -46,6 +63,13 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 	public ClassroomSessionDivision readByClassroomSessionByIndex(ClassroomSession classroomSession, Byte index) {
 		return namedQuery(readByClassroomSessionByIndex).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
 				.parameter(PARAMETER_INDEX, index)
+                .resultOne();
+	}
+	
+	@Override
+	public ClassroomSessionDivision readByClassroomSessionByIndexByTeacher(ClassroomSession classroomSession, Byte index,Teacher teacher) {
+		return namedQuery(readByClassroomSessionByIndexByTeacher).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
+				.parameter(PARAMETER_INDEX, index).parameter(ClassroomSessionDivisionSubject.FIELD_TEACHER, teacher)
                 .resultOne();
 	}
 	

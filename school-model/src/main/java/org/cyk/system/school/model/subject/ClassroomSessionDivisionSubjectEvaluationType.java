@@ -28,7 +28,7 @@ public class ClassroomSessionDivisionSubjectEvaluationType extends AbstractIdent
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal coefficient;
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal maximumValue;
 	@OneToOne private Interval countInterval;
-
+	
 	public ClassroomSessionDivisionSubjectEvaluationType(ClassroomSessionDivisionSubject classroomSessionDivisionSubject, EvaluationType evaluationType,BigDecimal coefficient, BigDecimal maximumValue) {
 		super();
 		this.classroomSessionDivisionSubject = classroomSessionDivisionSubject;

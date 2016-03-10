@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
@@ -27,9 +28,14 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		super(dao);  
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSession> findByAcademicSession(AcademicSession academicSession) {
 		return dao.readByAcademicSession(academicSession);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSession> findByAcademicSessionByTeacher(AcademicSession academicSession, Teacher teacher) {
+		return dao.readByAcademicSessionByTeacher(academicSession,teacher);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -52,5 +58,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	public Long convertAttendanceTimeToMillisecond(ClassroomSession classroomSession,BigDecimal duration) {
 		return duration==null?0l:RootBusinessLayer.getInstance().getTimeDivisionTypeBusiness().convertToMillisecond(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), duration);
 	}
+
+	
 	
 }

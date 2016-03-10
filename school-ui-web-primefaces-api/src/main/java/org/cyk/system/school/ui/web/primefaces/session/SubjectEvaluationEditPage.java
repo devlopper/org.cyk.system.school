@@ -3,31 +3,23 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.root.model.party.person.Person;
-import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
-import org.cyk.ui.api.AbstractUserSession;
-import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -35,8 +27,6 @@ import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.api.AbstractWebApplicableValueQuestion;
 import org.cyk.ui.web.api.ItemCollectionWebAdapter;
-import org.cyk.ui.web.api.WebManager;
-import org.cyk.ui.web.api.servlet.SecurityFilter.UrlConstraint;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -189,17 +179,4 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 	
 	/**/
 	
-	public static class SecurityConstraint implements UrlConstraint{
-		@Override
-		public Boolean isAccessAllowed(AbstractUserSession userSession,UserAccount userAccount, URL url, HttpServletRequest request,HttpServletResponse response) {
-			Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
-			if(teacher==null)
-				return Boolean.FALSE;
-			ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = WebManager.getInstance().getIdentifiableFromRequestParameter(request, ClassroomSessionDivisionSubjectEvaluationType.class,
-					UIManager.getInstance().businessEntityInfos(ClassroomSessionDivisionSubjectEvaluationType.class).getIdentifier());
-			return classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getTeacher()!=null 
-					&& classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getTeacher().equals(teacher);
-		}
-	}
-
 }

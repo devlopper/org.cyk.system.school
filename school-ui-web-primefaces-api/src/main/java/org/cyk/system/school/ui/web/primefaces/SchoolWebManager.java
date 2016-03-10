@@ -3,7 +3,6 @@ package org.cyk.system.school.ui.web.primefaces;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -13,8 +12,8 @@ import lombok.Setter;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.model.party.person.JobTitle;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.party.person.PersonTitle;
-import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -59,7 +58,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	private String outcomeClassroomSessionSubjectDetails;
 	private String outcomeClassroomSessionStudentDetails;*/
 	
-	@Inject private AcademicSessionBusiness academicSessionBusiness;
+	public static Boolean EVALUATION_EDITABLE_BY_TEACHER_ONLY = Boolean.TRUE;
+	public static Boolean APPRECIATION_EDITABLE_BY_COODINATOR_ONLY = Boolean.TRUE;
 	
 	@Override
 	protected void initialisation() {
@@ -129,14 +129,27 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	public void initialiseSelectClassroomSession(final AbstractBusinessEntityFormOnePage<?> page,final String classroomSessionFieldName,final String classroomSessionDivisionFieldName
 			,final String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName) {
 		
-		page.setChoices(classroomSessionFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
-				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
+		Collection<ClassroomSession> classroomSessions = null;
+		AcademicSession academicSession = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null);
+		final Teacher teacher = page.getUserSession().getUserAccount().getUser() instanceof Person 
+				? SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) page.getUserSession().getUserAccount().getUser()) : null;
+		
+		if(!Boolean.TRUE.equals(page.getUserSession().getIsAdministrator()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
+			classroomSessions = teacher==null?null:SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSessionByTeacher(academicSession,teacher);
+		}else {
+			classroomSessions = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(academicSession);
+		}
+		
+		//page.setChoices(classroomSessionFieldName, classroomSessions);
+		
+		selectClassroomSession(page, teacher, (ClassroomSession) page.setChoicesAndGetAutoSelected(classroomSessionFieldName, classroomSessions), classroomSessionFieldName, classroomSessionDivisionFieldName
+			, classroomSessionDivisionSubjectFieldName, subjectEvaluationTypeFieldName);
 		
 		page.createAjaxBuilder(classroomSessionFieldName).updatedFieldNames(classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName)
 		.method(ClassroomSession.class,new ListenValueMethod<ClassroomSession>() {
 			@Override
 			public void execute(ClassroomSession value) {
-				selectClassroomSession(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
+				selectClassroomSession(page,teacher,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 			}
 		}).build();
 		
@@ -144,7 +157,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		.method(ClassroomSessionDivision.class,new ListenValueMethod<ClassroomSessionDivision>() {
 			@Override
 			public void execute(ClassroomSessionDivision value) {
-				selectClassroomSessionDivision(page,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
+				selectClassroomSessionDivision(page,teacher,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 			}
 		}).build();
 		
@@ -159,13 +172,18 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 	}
 	
-	public static void selectClassroomSession(AbstractBusinessEntityFormOnePage<?> page,ClassroomSession classroomSession,String classroomSessionFieldName,String classroomSessionDivisionFieldName
+	public static void selectClassroomSession(AbstractBusinessEntityFormOnePage<?> page,Teacher teacher,ClassroomSession classroomSession,String classroomSessionFieldName,String classroomSessionDivisionFieldName
 			,String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName){
 		ClassroomSessionDivision classroomSessionDivision = null;
 		if(classroomSession==null)
 			page.setChoices(classroomSessionDivisionFieldName,null);
 		else{
-			Collection<ClassroomSessionDivision> classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession);
+			Collection<ClassroomSessionDivision> classroomSessionDivisions;
+			if(!Boolean.TRUE.equals(page.getUserSession().getIsAdministrator()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
+				classroomSessionDivisions = teacher==null?null:SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSessionByTeacher(classroomSession,teacher);
+			}else{
+				classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession);
+			}
 			page.setChoices(classroomSessionDivisionFieldName, classroomSessionDivisions);
 			CommonNodeInformations commonNodeInformations = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(classroomSession);
 			page.getForm().findInputByFieldName(classroomSessionDivisionFieldName).setDisabled(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null);
@@ -177,19 +195,27 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 					}
 			}
 		}
-		selectClassroomSessionDivision(page,classroomSessionDivision,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
+		selectClassroomSessionDivision(page,teacher,classroomSessionDivision,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
 	}
 	
-	public static void selectClassroomSessionDivision(AbstractBusinessEntityFormOnePage<?> page,ClassroomSessionDivision classroomSessionDivision,String classroomSessionFieldName,String classroomSessionDivisionFieldName
+	public static void selectClassroomSessionDivision(AbstractBusinessEntityFormOnePage<?> page,Teacher teacher,ClassroomSessionDivision classroomSessionDivision,String classroomSessionFieldName,String classroomSessionDivisionFieldName
 			,String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName){
+		ClassroomSessionDivisionSubject classroomSessionDivisionSubject = null;
 		if(classroomSessionDivision==null){
 			page.setChoices(classroomSessionDivisionSubjectFieldName, null);
 		}else{
-			page.setChoices(classroomSessionDivisionSubjectFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()
-					.findByClassroomSessionDivision(classroomSessionDivision),classroomSessionDivision);
+			Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects;
+			if(!Boolean.TRUE.equals(page.getUserSession().getIsAdministrator()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
+				classroomSessionDivisionSubjects = teacher==null?null:SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(classroomSessionDivision,teacher);
+			}else{
+				classroomSessionDivisionSubjects = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()
+						.findByClassroomSessionDivision(classroomSessionDivision);
+			}
+			//page.setChoices(classroomSessionDivisionSubjectFieldName, classroomSessionDivisionSubjects,classroomSessionDivision);
+			classroomSessionDivisionSubject = (ClassroomSessionDivisionSubject) page.setChoicesAndGetAutoSelected(classroomSessionDivisionSubjectFieldName, classroomSessionDivisionSubjects);
 			page.setFieldValue(classroomSessionDivisionFieldName, classroomSessionDivision);
 		}
-		selectClassroomSessionDivisionSubject(page, null, classroomSessionFieldName, classroomSessionDivisionFieldName, classroomSessionDivisionSubjectFieldName, subjectEvaluationTypeFieldName);
+		selectClassroomSessionDivisionSubject(page, classroomSessionDivisionSubject, classroomSessionFieldName, classroomSessionDivisionFieldName, classroomSessionDivisionSubjectFieldName, subjectEvaluationTypeFieldName);
 	}
 	
 	public static void selectClassroomSessionDivisionSubject(AbstractBusinessEntityFormOnePage<?> page,ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String classroomSessionFieldName,String classroomSessionDivisionFieldName

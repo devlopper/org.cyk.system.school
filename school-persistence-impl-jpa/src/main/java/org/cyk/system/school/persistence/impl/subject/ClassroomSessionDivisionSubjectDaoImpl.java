@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -15,12 +16,14 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-   private String readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readByClassroomSessions;
+   private String readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readByClassroomSessions,readByClassroomSessionDivisionByTeacher;
     
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
         registerNamedQuery(readByClassroomSessionDivision, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION));
+        registerNamedQuery(readByClassroomSessionDivisionByTeacher, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION)
+        		.and(ClassroomSessionDivisionSubject.FIELD_TEACHER));
         registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
         		, StudentClassroomSession.FIELD_CLASSROOMSESSION),ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
         registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION));
@@ -47,6 +50,13 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 	@Override
 	public Collection<ClassroomSessionDivisionSubject> readByClassroomSessions(Collection<ClassroomSession> classroomSessions) {
 		return namedQuery(readByClassroomSessions).parameterIdentifiers(classroomSessions).resultMany();
+	}
+	
+	@Override
+	public Collection<ClassroomSessionDivisionSubject> readByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision,Teacher teacher) {
+		return namedQuery(readByClassroomSessionDivisionByTeacher).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION, classroomSessionDivision)
+				.parameter(ClassroomSessionDivisionSubject.FIELD_TEACHER, teacher)
+				.resultMany();
 	}
 	
 }

@@ -3,6 +3,7 @@ package org.cyk.system.school.business.api.session;
 import java.util.Collection;
 
 import org.cyk.system.root.business.api.TypedBusiness;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -14,6 +15,7 @@ public interface ClassroomSessionDivisionBusiness extends TypedBusiness<Classroo
 
 	Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession);
 	Collection<ClassroomSessionDivision> findByClassroomSessions(Collection<ClassroomSession> classroomSessions);
+	Collection<ClassroomSessionDivision> findByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
 	
 	
 }

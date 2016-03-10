@@ -1,18 +1,23 @@
 package org.cyk.system.school.ui.web.primefaces;
 
 import java.io.Serializable;
-import java.net.URL;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.cyk.system.company.ui.web.primefaces.AbstractCompanyContextListener;
+import org.cyk.system.root.model.network.UniformResourceLocator;
+import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -28,15 +33,18 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionQueryManyFormModel;
+import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
 import org.cyk.ui.web.api.servlet.SecurityFilter;
+import org.cyk.ui.web.api.servlet.SecurityFilter.UniformResourceLocatorRuntimeConstraint;
 
 public abstract class AbstractSchoolContextListener extends AbstractCompanyContextListener implements Serializable {
 
 	private static final long serialVersionUID = -9042005596731665575L;
 
 	@Inject protected SchoolBusinessLayer schoolBusinessLayer;
+	@Inject protected SchoolWebManager schoolWebManager;
 		
 	@Override
 	protected void initialisation() {
@@ -82,16 +90,38 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		primefacesManager.getSelectManyPageListeners().add(new ClassroomSessionQueryManyFormModel.PageAdapter());
 		primefacesManager.getSelectManyPageListeners().add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
 
-		//SecurityFilter.URL_CONSTRAINTS.put("/private/__role__/__manager__/evaluation/edit.jsf",new SubjectEvaluationEditPage.SecurityConstraint());
+		if(Boolean.TRUE.equals(SchoolWebManager.EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
+			SecurityFilter.addUniformResourceLocatorRuntimeConstraint(new UniformResourceLocator("/private/__role__/__manager__/evaluation/edit.jsf")
+				,new UniformResourceLocatorRuntimeConstraint(){
+					@Override
+					public Boolean isAccessibleByUserAccount(AbstractUserSession userSession,UserAccount userAccount, UniformResourceLocator uniformResourceLocator, HttpServletRequest request,HttpServletResponse response) {
+						Teacher teacher = schoolBusinessLayer.getTeacherBusiness().findByPerson((Person) userAccount.getUser());
+						if(teacher==null)
+							return Boolean.FALSE;
+						ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = webManager
+								.getIdentifiableFromRequestParameter(request, ClassroomSessionDivisionSubjectEvaluationType.class,Boolean.TRUE);
+						return classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getTeacher()!=null 
+								&& classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getTeacher().equals(teacher);
+					}
+				});
+		}
 		
-		SecurityFilter.Listener.COLLECTION.add(new SecurityFilter.Listener.Adapter.Default(){
-			private static final long serialVersionUID = 4605368263736933413L;
-			
-			@Override
-			public Boolean isUrlAccessible(URL url) {
-				return super.isUrlAccessible(url);
-			}
-		});
+		/*
+		if(Boolean.TRUE.equals(SchoolWebManager.APPRECIATION_EDITABLE_BY_COODINATOR_ONLY)){
+			SecurityFilter.addUniformResourceLocatorRuntimeConstraint(new UniformResourceLocator("/private/studentclassroomsessiondivision/edit.jsf")
+				,new UniformResourceLocatorRuntimeConstraint(){
+					@Override
+					public Boolean isAccessibleByUserAccount(AbstractUserSession userSession,UserAccount userAccount, UniformResourceLocator uniformResourceLocator, HttpServletRequest request,HttpServletResponse response) {
+						Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
+						if(teacher==null)
+							return Boolean.FALSE;
+						ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = webManager
+								.getIdentifiableFromRequestParameter(request, ClassroomSessionDivisionSubjectEvaluationType.class,Boolean.TRUE);
+						return classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getTeacher()!=null 
+								&& classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getTeacher().equals(teacher);
+					}
+				});
+		}*/
 	}
 	
 	@Override
