@@ -10,6 +10,9 @@ import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
@@ -18,7 +21,6 @@ import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
-import org.cyk.system.root.business.impl.party.ApplicationBusinessImplListener;
 import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
 import org.cyk.system.root.model.event.EventMissedReason;
@@ -78,9 +80,6 @@ import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTimeConstants;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {
@@ -153,7 +152,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		ApplicationBusinessImpl.LISTENERS.add(new ApplicationBusinessImplListener.Adapter.Default(){
+		ApplicationBusinessImpl.Listener.COLLECTION.add(new ApplicationBusinessImpl.Listener.Adapter.Default(){
 			private static final long serialVersionUID = 6894726061444433277L;
 
 			@Override
