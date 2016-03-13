@@ -65,5 +65,6 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";
 	public static final String FIELD_COORDINATOR = "coordinator";
 	public static final String FIELD_NUMBER_OF_STUDENTS = "numberOfStudents";
+	public static final String FIELD_SUFFIX = "suffix";
 	
 }

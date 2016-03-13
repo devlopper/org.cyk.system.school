@@ -8,11 +8,14 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 
 public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession> {
 
 	Collection<ClassroomSession> findByAcademicSession(AcademicSession academicSession);
 	Collection<ClassroomSession> findByAcademicSessionByTeacher(AcademicSession academicSession,Teacher teacher);
+	
+	ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,String suffix);
 	
 	CommonNodeInformations findCommonNodeInformations(ClassroomSession classroomSession);
 	

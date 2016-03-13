@@ -16,6 +16,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 
 @Stateless
@@ -59,6 +60,9 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		return duration==null?0l:RootBusinessLayer.getInstance().getTimeDivisionTypeBusiness().convertToMillisecond(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), duration);
 	}
 
-	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffix) {
+		return dao.readByAcademicSessionByLevelTimeDivisionBySuffix(academicSession,levelTimeDivision,suffix);
+	}
 	
 }

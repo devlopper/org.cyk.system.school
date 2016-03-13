@@ -15,12 +15,14 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readByAcademicSession,readByAcademicSessionByTeacher,readByLevelTimeDivision;
+	private String readByAcademicSession,readByAcademicSessionByTeacher,readByLevelTimeDivision,readByAcademicSessionByLevelTimeDivisionBySuffix;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
 		registerNamedQuery(readByAcademicSession, _select().where(ClassroomSession.FIELD_ACADEMIC_SESSION));
+		registerNamedQuery(readByAcademicSessionByLevelTimeDivisionBySuffix, _select().where(ClassroomSession.FIELD_ACADEMIC_SESSION)
+				.and(ClassroomSession.FIELD_LEVEL_TIME_DIVISION).and(ClassroomSession.FIELD_SUFFIX));
 		registerNamedQuery(readByAcademicSessionByTeacher, "SELECT aClassroomSession FROM ClassroomSession aClassroomSession WHERE aClassroomSession.academicSession=:academicSession AND EXISTS( "
 				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision.classroomSession=aClassroomSession AND aSubject.teacher=:teacher"
 				+ " )");
@@ -43,7 +45,11 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 		return namedQuery(readByLevelTimeDivision).parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision).resultMany();
 	}
 	
-    
+    @Override
+    public ClassroomSession readByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffix) {
+    	return namedQuery(readByAcademicSessionByLevelTimeDivisionBySuffix).parameter(ClassroomSession.FIELD_ACADEMIC_SESSION, academicSession)
+    			.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, academicSession).parameter(ClassroomSession.FIELD_SUFFIX, academicSession).resultOne();
+    }
 	
 }
  

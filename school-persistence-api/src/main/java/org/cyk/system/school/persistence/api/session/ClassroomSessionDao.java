@@ -13,5 +13,6 @@ public interface ClassroomSessionDao extends TypedDao<ClassroomSession> {
 	Collection<ClassroomSession> readByAcademicSession(AcademicSession academicSession);
 	Collection<ClassroomSession> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 	Collection<ClassroomSession> readByAcademicSessionByTeacher(AcademicSession academicSession, Teacher teacher);
+	ClassroomSession readByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffix);
 
 }
