@@ -5,10 +5,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
+import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
@@ -27,6 +29,7 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.utility.common.Constant;
 
 public abstract class AbstractSchoolReportProducer extends AbstractCompanyReportProducer implements SchoolReportProducer,Serializable {
 
@@ -217,19 +220,31 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		return convertToArray(metrics, metricValues);
 	}
 	
-	protected LabelValueCollectionReport addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String metricCollectionCode){
+	protected LabelValueCollectionReport addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String metricCollectionCode,String defaultValue){
 		MetricCollection metricCollection = rootBusinessLayer.getMetricCollectionDao().read(metricCollectionCode);
 		Collection<Metric> metrics = rootBusinessLayer.getMetricDao().readByCollection(metricCollection);
 		Collection<StudentResultsMetricValue> studentResultsMetricValues = SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness()
 				.findByStudentResults(studentResults); 
-		return report.addLabelValueCollection(metricCollection.getName() ,convertStudentResultsMetricValueToArray(metrics, studentResultsMetricValues));
+		LabelValueCollectionReport labelValueCollectionReport =  report.addLabelValueCollection(metricCollection.getName() ,convertStudentResultsMetricValueToArray(metrics, studentResultsMetricValues));
+		for(LabelValueReport labelValueReport : labelValueCollectionReport.getCollection())
+			if(StringUtils.isBlank(labelValueReport.getValue()))
+				labelValueReport.setValue(defaultValue);
+		return labelValueCollectionReport;
+	}
+	
+	protected LabelValueCollectionReport addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String metricCollectionCode){
+		return addStudentResultsLabelValueCollection(report, studentResults, metricCollectionCode, Constant.EMPTY_STRING);
+	}
+	
+	protected void addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String[][] metricCollections){
+		for(String[] metricCollection : metricCollections)
+			addStudentResultsLabelValueCollection(report, studentResults, metricCollection[0],metricCollection[1]);
 	}
 	
 	protected void addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String[] metricCollectionCodes){
 		for(String metricCollectionCode : metricCollectionCodes)
 			addStudentResultsLabelValueCollection(report, studentResults, metricCollectionCode);
 	}
-	
 	/**/
 	
 	public static final String LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID = "school.report.studentclassroomsessiondivision.block.overallresult.grade";

@@ -15,6 +15,7 @@ public interface ClassroomSessionDivisionBusiness extends TypedBusiness<Classroo
 
 	Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession);
 	Collection<ClassroomSessionDivision> findByClassroomSessions(Collection<ClassroomSession> classroomSessions);
+	Collection<ClassroomSessionDivision> findByClassroomSessionsByIndex(Collection<ClassroomSession> classroomSessions,Byte index);
 	Collection<ClassroomSessionDivision> findByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
 	
 	

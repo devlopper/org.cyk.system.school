@@ -18,5 +18,6 @@ public interface ClassroomSessionDivisionDao extends TypedDao<ClassroomSessionDi
 	ClassroomSessionDivision readByClassroomSessionByIndex(ClassroomSession classroomSession, Byte index);
 	ClassroomSessionDivision readByClassroomSessionByIndexByTeacher(ClassroomSession classroomSession, Byte index,Teacher teacher);
 	Collection<ClassroomSessionDivision> readByClassroomSessionByTeacher(ClassroomSession classroomSession, Teacher teacher);
+	Collection<ClassroomSessionDivision> readByClassroomSessionsByIndex(Collection<ClassroomSession> classroomSessions, Byte index);
 
 }

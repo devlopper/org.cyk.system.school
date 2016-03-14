@@ -82,6 +82,11 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSessionDivision> findByClassroomSessionsByIndex(Collection<ClassroomSession> classroomSessions,Byte index) {
+		return dao.readByClassroomSessionsByIndex(classroomSessions,index);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivision> findByClassroomSessionByTeacher(ClassroomSession classroomSession, Teacher teacher) {
 		return dao.readByClassroomSessionByTeacher(classroomSession,teacher);
 	}

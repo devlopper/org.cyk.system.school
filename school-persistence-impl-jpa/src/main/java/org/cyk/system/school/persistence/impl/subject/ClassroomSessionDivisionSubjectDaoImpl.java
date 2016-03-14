@@ -10,13 +10,15 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 
 public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<ClassroomSessionDivisionSubject> implements ClassroomSessionDivisionSubjectDao,Serializable {
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-   private String readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readByClassroomSessions,readByClassroomSessionDivisionByTeacher;
+   private String readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readByClassroomSessions,readByClassroomSessionDivisionByTeacher
+   	,readByClassroomSessionBySubject;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -26,6 +28,9 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
         		.and(ClassroomSessionDivisionSubject.FIELD_TEACHER));
         registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
         		, StudentClassroomSession.FIELD_CLASSROOMSESSION),ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
+        registerNamedQuery(readByClassroomSessionBySubject, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
+        		, StudentClassroomSession.FIELD_CLASSROOMSESSION),ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
+        		.and(ClassroomSessionDivisionSubject.FIELD_SUBJECT));
         registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
         		, StudentClassroomSession.FIELD_CLASSROOMSESSION)));
@@ -40,6 +45,13 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 	@Override
 	public Collection<ClassroomSessionDivisionSubject> readByClassroomSession(ClassroomSession classroomSession) {
 		return namedQuery(readByClassroomSession).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
+	}
+	
+	@Override
+	public Collection<ClassroomSessionDivisionSubject> readByClassroomSessionBySubject(ClassroomSession classroomSession,Subject subject) {
+		return namedQuery(readByClassroomSessionBySubject).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
+				.parameter(ClassroomSessionDivisionSubject.FIELD_SUBJECT, subject)
+				.resultMany();
 	}
     
 	@Override

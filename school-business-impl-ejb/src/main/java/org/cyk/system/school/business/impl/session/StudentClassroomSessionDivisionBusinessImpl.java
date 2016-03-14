@@ -1,7 +1,6 @@
 package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,7 +54,6 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
-import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.cdi.BeanAdapter;
 
 @Stateless
@@ -104,7 +102,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections)
 			for(Metric metric : metricDao.readByCollection(classroomSessionDivisionStudentsMetricCollection.getMetricCollection())){
 				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
-					.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, BigDecimal.ZERO,Constant.EMPTY_STRING.toString(),null)));
+					.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, null,null,null)));
 			}
 		
 		Collection<StudentSubject> studentSubjects = new ArrayList<>();

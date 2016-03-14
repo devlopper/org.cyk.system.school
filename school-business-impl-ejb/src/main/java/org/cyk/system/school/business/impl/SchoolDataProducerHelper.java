@@ -56,16 +56,22 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		return commonNodeInformations;
 	}
 	
-	public Subject instanciateOneSubject(String name,ArrayList<Subject>[] collections){
-		Subject subject = SchoolBusinessLayer.getInstance().getSubjectBusiness().instanciateOne(name);
+	public Subject instanciateOneSubject(String code,String name,ArrayList<Subject>[] collections){
+		Subject subject = SchoolBusinessLayer.getInstance().getSubjectBusiness().instanciateOne(code,name);
 		if(collections!=null)
 			for(Collection<Subject> collection : collections)
 				collection.add(subject);
 		return subject;
 	}
+	public Subject instanciateOneSubject(String name,ArrayList<Subject>[] collections){
+		return instanciateOneSubject(name, name, collections);
+	}
 	
+	public Subject createOneSubject(String code,String name,ArrayList<Subject>[] collections){
+		return (Subject) RootBusinessLayer.getInstance().getGenericBusiness().create(instanciateOneSubject(code,name, collections));
+	}
 	public Subject createOneSubject(String name,ArrayList<Subject>[] collections){
-		return (Subject) RootBusinessLayer.getInstance().getGenericBusiness().create(instanciateOneSubject(name, collections));
+		return createOneSubject(name, name, collections);
 	}
 	
 	public Collection<ClassroomSessionInfos> instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions

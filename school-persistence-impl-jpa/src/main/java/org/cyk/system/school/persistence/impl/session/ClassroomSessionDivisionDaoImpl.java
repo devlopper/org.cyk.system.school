@@ -3,6 +3,8 @@ package org.cyk.system.school.persistence.impl.session;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.persistence.NoResultException;
+
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -16,7 +18,7 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 	private static final long serialVersionUID = 6306356272165070761L;
 	
     private String readByClassroomSession,readByClassroomSessions,countByClassroomSession,readByClassroomSessionByIndex,readByClassroomSessionByIndexByTeacher
-    	,readByClassroomSessionByTeacher;
+    	,readByClassroomSessionByTeacher,readByClassroomSessionsByIndex;
      
     @Override
     protected void namedQueriesInitialisation() {
@@ -32,6 +34,8 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
         registerNamedQuery(readByClassroomSessionByIndex, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
         		.and(ClassroomSessionDivision.FIELD_INDEX, PARAMETER_INDEX,ArithmeticOperator.EQ));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
+        registerNamedQuery(readByClassroomSessionsByIndex, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
+        		.and(ClassroomSessionDivision.FIELD_INDEX, PARAMETER_INDEX,ArithmeticOperator.EQ));
     } 
     
     @Override
@@ -62,8 +66,14 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 	@Override
 	public ClassroomSessionDivision readByClassroomSessionByIndex(ClassroomSession classroomSession, Byte index) {
 		return namedQuery(readByClassroomSessionByIndex).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
-				.parameter(PARAMETER_INDEX, index)
+				.parameter(PARAMETER_INDEX, index).ignoreThrowable(NoResultException.class)
                 .resultOne();
+	}
+	
+	@Override
+	public Collection<ClassroomSessionDivision> readByClassroomSessionsByIndex(Collection<ClassroomSession> classroomSessions, Byte index) {
+		return namedQuery(readByClassroomSessionsByIndex).parameterIdentifiers(classroomSessions).parameter(PARAMETER_INDEX, index)
+                .resultMany();
 	}
 	
 	@Override
