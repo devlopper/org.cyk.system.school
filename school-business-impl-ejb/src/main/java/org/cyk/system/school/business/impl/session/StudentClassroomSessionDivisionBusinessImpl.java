@@ -272,7 +272,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			
 			if(arguments.getExecutionProgress()!=null){
 				arguments.getExecutionProgress().addWorkDoneByStep(1);
-				System.out.println(arguments.getExecutionProgress().getCurrentAmountOfWorkDone()+" / "+arguments.getExecutionProgress().getTotalAmountOfWork());
 			}
 		}
 		
