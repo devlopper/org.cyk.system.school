@@ -54,7 +54,6 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
-import org.cyk.utility.common.cdi.BeanAdapter;
 
 @Stateless
 public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
@@ -135,7 +134,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		return super.delete(studentClassroomSessionDivision);
 	}
 	
-	@Override
+	@Override 
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportArguments arguments) {
 		//logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 		//		,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
@@ -199,7 +198,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		buildReport(studentClassroomSessionDivision, StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS);
+		buildReport(studentClassroomSessionDivision, new BuildReportArguments());
 	}
 	
 	@Override
@@ -210,11 +209,11 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions) {
-		buildReport(classroomSessionDivisions, StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS);
+		buildReport(classroomSessionDivisions, new BuildReportArguments());
 	}
 	
 	@Override 
-	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportArguments options) {
+	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportArguments arguments) {
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		/*
 		 * Data loading
@@ -231,13 +230,18 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={} , Lecture={}"
 				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size(),lectures.size());
+		
+		//if(arguments.getListener()!=null)
+		//	arguments.getListener().loadedOnBuildReport(studentClassroomSessionDivisions);
+		arguments.setStudentClassroomSessionDivisions(studentClassroomSessionDivisions);
+		
 		/*
 		 * Data computing
 		 */
 		studentSubjectBusiness.average(subjects, studentSubjects, studentSubjectEvaluations, Boolean.FALSE);
 		average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, Boolean.FALSE);
 		
-		if(Boolean.TRUE.equals(options.getAttendance())){
+		if(Boolean.TRUE.equals(arguments.getAttendance())){
 			attendance(classroomSessionDivisions, studentClassroomSessionDivisions, lectures, participations, eventMisseds);
 		}
 		//rank
@@ -249,6 +253,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
+			//if(arguments.getListener()!=null)
+			//	arguments.getListener().computingOnBuildReport(studentClassroomSessionDivision);
 			if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 					&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
 				logIdentifiable("Cannot build report", studentClassroomSessionDivision);
@@ -260,6 +266,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			}else{
 				buildReport(studentClassroomSessionDivision);
 			}
+			
+			//if(arguments.getListener()!=null)
+			//	arguments.getListener().computedOnBuildReport(studentClassroomSessionDivision);
+			
+			if(arguments.getExecutionProgress()!=null)
+				arguments.getExecutionProgress().addWorkDoneByStep(1);
 		}
 		
 		classroomSessionDivisionBusiness.computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
@@ -377,25 +389,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	/**/
 	
-	public static interface Listener{
-		
-		Collection<Listener> COLLECTION = new ArrayList<>();
-		
-		
-		
-		/**/
-		
-		public static class Adapter extends BeanAdapter implements Listener,Serializable{
-			private static final long serialVersionUID = -9048282379616583423L;
-			
-			
-			/**/
-			
-			public static class Default extends Adapter implements Serializable{
-				private static final long serialVersionUID = 2884910167320359611L;
-				
-			}
-		}
-	}
+	
 	
 }

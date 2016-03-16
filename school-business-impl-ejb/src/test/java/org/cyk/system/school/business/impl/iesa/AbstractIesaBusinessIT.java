@@ -26,7 +26,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     	super.installApplication(fake);
     	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
     	Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
-    	StudentClassroomSessionDivisionBusiness.DEFAULT_BUILD_REPORT_OPTIONS.setAttendance(Boolean.FALSE);
+    	StudentClassroomSessionDivisionBusiness.BuildReportArguments.ATTENDANCE = Boolean.FALSE;
     	
     	JasperReportBusinessImpl.Listener.COLLECTION.add(new JasperReportBusinessImpl.Listener.Adapter.Default(){
     		

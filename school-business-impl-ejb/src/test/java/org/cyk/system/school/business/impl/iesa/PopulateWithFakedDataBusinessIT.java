@@ -12,7 +12,7 @@ public class PopulateWithFakedDataBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.setNumbreOfLecturesByClassroomSessionDivisionSubject(0);
     	dataProducer.setNumbreOfTeachers(12/* * 5*/);
     	dataProducer.setNumbreOfStudents(/*12 * 30 * 5*/50);
-    	dataProducer.setNumbreOfStudentsByClassroomSession(1);
+    	dataProducer.setNumbreOfStudentsByClassroomSession(3);
     	installApplication();
     	System.exit(0);
     }

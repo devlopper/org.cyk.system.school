@@ -37,7 +37,7 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractQ
 		}
 		
 		@Override
-		public void serve(Object data, String actionIdentifier) {
+		public void serve(AbstractSelectManyPage<?> selectManyPage,Object data, String actionIdentifier) {
 			WebNavigationManager.getInstance().redirectToFileConsultManyPage(SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
 					.findReportFiles(((StudentClassroomSessionDivisionQueryManyFormModel)data).getIdentifiables()), FileExtension.PDF);
 		}

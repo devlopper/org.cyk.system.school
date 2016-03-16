@@ -86,9 +86,56 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 
 	private static final long serialVersionUID = -1832900422621121762L;
 
-	public static final String STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK = "BSWHPK";
-	public static final String STUDENT_BEHAVIOUR_MERIC_COLLECTION_G1_G6 = "BSWHG1G6";
-	public static final String STUDENT_BEHAVIOUR_MERIC_COLLECTION_G7_G12 = "BSWHG7G12";
+	public static final String MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR = "BSWHG1G6";
+	public static final String MERIC_COLLECTION_G7_G12_STUDENT_BEHAVIOUR = "BSWHG7G12";
+	
+	public static final String LEVEL_NAME_CODE_PK = "PK";
+	public static final String LEVEL_NAME_CODE_K1 = "K1";
+	public static final String LEVEL_NAME_CODE_K2 = "K2";
+	public static final String LEVEL_NAME_CODE_K3 = "K3";
+	public static final String LEVEL_NAME_CODE_G1 = "G1";
+	public static final String LEVEL_NAME_CODE_G2 = "G2";
+	public static final String LEVEL_NAME_CODE_G3 = "G3";
+	public static final String LEVEL_NAME_CODE_G4 = "G4";
+	public static final String LEVEL_NAME_CODE_G5 = "G5";
+	public static final String LEVEL_NAME_CODE_G6 = "G6";
+	public static final String LEVEL_NAME_CODE_G7 = "G7";
+	public static final String LEVEL_NAME_CODE_G8 = "G8";
+	public static final String LEVEL_NAME_CODE_G9 = "G9";
+	public static final String LEVEL_NAME_CODE_G10 = "G10";
+	public static final String LEVEL_NAME_CODE_G11 = "G11";
+	public static final String LEVEL_NAME_CODE_G12 = "G12";
+	
+	public static final String REPORT_CYK_GLOBAL_RANKABLE = "CYK_GLOBAL_RANKABLE";
+	
+	public static final String MERIC_COLLECTION_PK_STUDENT_EXPRESSIVE_LANGUAGE = "MCPKSEL";
+	public static final String MERIC_COLLECTION_PK_STUDENT_RECEPTIVE_LANGUAGE = "MCPKSRL";
+	public static final String MERIC_COLLECTION_PK_STUDENT_READING_READNESS = "MCPKSRR";
+	public static final String MERIC_COLLECTION_PK_STUDENT_NUMERACY_DEVELOPMENT = "MCPKSND";
+	public static final String MERIC_COLLECTION_PK_STUDENT_ARTS_MUSIC = "MCPKSAM";
+	public static final String MERIC_COLLECTION_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT = "MCPKSSED";
+	public static final String MERIC_COLLECTION_PK_STUDENT_GROSS_MOTOR_SKILLS = "MCPKSGMS";
+	public static final String MERIC_COLLECTION_PK_STUDENT_FINE_MOTOR_SKILLS = "MCPKSFMS";
+	
+	public static final String MERIC_COLLECTION_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING = "MCK1SELAR";
+	public static final String MERIC_COLLECTION_K1_STUDENT_COMMUNICATION_SKILLS = "MCK1SCS";
+	public static final String MERIC_COLLECTION_K1_STUDENT_SCIENCE = "MCK1SS";
+	public static final String MERIC_COLLECTION_K1_STUDENT_SOCIAL_STUDIES = "MCK1SSS";
+	public static final String MERIC_COLLECTION_K1_STUDENT_MATHEMATICS = "MCK1SM";
+	public static final String MERIC_COLLECTION_K1_STUDENT_WORK_HABITS = "MCK1SWH";
+	public static final String MERIC_COLLECTION_K1_STUDENT_SOCIAL_SKILLS = "MCK1SSSK";
+	
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_READING_READINESS = "MCK2K3SRR";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_READING = "MCK2K3SR";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_WRITING = "MCK2K3SW";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_LISTENING_SPEAKING_VIEWING = "MCK2K3SLSV";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_ALPHABET_IDENTIFICATION = "MCK2K3SAI";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_MATHEMATICS = "MCK2K3SM";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_SCIENCE_SOCIAL_STUDIES_MORAL_EDUCATION = "MCK2K3SSSSME";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_ART_CRAFT = "MCK2K3SAC";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_MUSIC = "MCK2K3SMM";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_PHYSICAL_EDUCATION = "MCK2K3SPE";
+	public static final String MERIC_COLLECTION_K2_K3_STUDENT_WORK_BEHAVIOUR_HABITS = "MCK2K3SWBH";
 	
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private CompanyBusiness companyBusiness;
@@ -242,7 +289,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				,createFile("report/iesa/studentclassroomsessiondivisionreport_background.jpg","studentclassroomsessiondivisionreport_background.jpg"));
 		create(reportTemplatePk);
     	
-		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/iesa.jrxml", "reportcard.jrxml"),null,null);
+		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/g1g12.jrxml", "reportcard.jrxml"),null,null);
 		create(reportTemplate);
 		
 		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "1");
@@ -490,7 +537,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					labelValueCollectionReport.add("RANK",report.getRank());
 				report.addLabelValueCollection(labelValueCollectionReport);
 				
-				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_G1_G6);
+				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(),MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR);
 				labelValueCollectionReport = new LabelValueCollectionReport();
 				labelValueCollectionReport.setName(report.getCurrentLabelValueCollection().getName());
 				labelValueCollectionReport.setCollection(report.getCurrentLabelValueCollection().getCollection().subList(6, 12));
@@ -502,7 +549,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
 					,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 				
-				addIntervalCollectionLabelValueCollection(report,rootBusinessLayer.getMetricCollectionDao().read(STUDENT_BEHAVIOUR_MERIC_COLLECTION_G1_G6).getValueIntervalCollection()
+				addIntervalCollectionLabelValueCollection(report,rootBusinessLayer.getMetricCollectionDao().read(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR).getValueIntervalCollection()
 						,Boolean.TRUE,Boolean.FALSE,null);
 				
 				if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==3){
@@ -535,6 +582,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						});
 				*/
 			}else{
+				/*addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK);
 				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK);
 				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK);
 				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK);
@@ -546,7 +594,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK);
 				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK);
 				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK);
-				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(), STUDENT_BEHAVIOUR_MERIC_COLLECTION_PK);
+				*/
 			}
 			return report;
 		}
