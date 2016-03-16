@@ -58,8 +58,10 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 		
 		public void setStudentClassroomSessionDivisions(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions){
 			this.studentClassroomSessionDivisions = studentClassroomSessionDivisions;
-			if(this.studentClassroomSessionDivisions != null)
-				executionProgress.setTotalAmountOfWork(new Double(studentClassroomSessionDivisions.size()));
+			if(this.studentClassroomSessionDivisions != null){
+				executionProgress.setTotalAmountOfWorkUsing100AsBase(new Double(studentClassroomSessionDivisions.size()));
+				//executionProgress.setStep(new Double(executionProgress.getTotalAmountOfWork()/studentClassroomSessionDivisions.size()));
+			}
 		}
 
 	}

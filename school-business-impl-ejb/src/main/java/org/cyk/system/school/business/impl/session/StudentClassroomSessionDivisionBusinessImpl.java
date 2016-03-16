@@ -270,8 +270,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			//if(arguments.getListener()!=null)
 			//	arguments.getListener().computedOnBuildReport(studentClassroomSessionDivision);
 			
-			if(arguments.getExecutionProgress()!=null)
+			if(arguments.getExecutionProgress()!=null){
 				arguments.getExecutionProgress().addWorkDoneByStep(1);
+				System.out.println(arguments.getExecutionProgress().getCurrentAmountOfWorkDone()+" / "+arguments.getExecutionProgress().getTotalAmountOfWork());
+			}
 		}
 		
 		classroomSessionDivisionBusiness.computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
