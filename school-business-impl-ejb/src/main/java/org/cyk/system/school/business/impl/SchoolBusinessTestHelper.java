@@ -154,6 +154,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				}
 			}
 		}
+		System.out.println("Creating "+subjectEvaluations.size()+" evaluation(s)");
 		schoolBusinessLayer.getEvaluationBusiness().create(subjectEvaluations);
 	}
 	public void createSubjectEvaluations(Boolean coefficientApplied){
@@ -259,6 +260,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				}
 			}			
 		}
+		
+		System.out.println("Updating "+studentClassroomSessionDivisions.size()+" student classroom session division(s)");
 		studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivisions);
 		
 		if(Boolean.TRUE.equals(metric)){
