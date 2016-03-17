@@ -33,6 +33,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.utility.common.cdi.AbstractBean;
+import org.cyk.utility.common.cdi.BeanAdapter;
 import org.joda.time.DateTimeConstants;
 
 @Singleton
@@ -117,6 +118,10 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		classroomSessionDivisions.add(classroomSessionDivision);
 		classroomSessionDivision.getPeriod().setFromDate(new Date());
 		classroomSessionDivision.getPeriod().setToDate(new Date());
+		
+		for(Listener listener : Listener.COLLECTION)
+			listener.classroomSessionDivisionCreated(classroomSessionDivision);
+		
 		ClassroomSessionDivisionInfos classroomSessionDivisionInfos = new ClassroomSessionDivisionInfos(classroomSessionDivision);
 		
 		if(subjects!=null)
@@ -230,4 +235,28 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		
 	}
 	
+	/**/
+	
+	public static interface Listener {
+		
+		Collection<Listener> COLLECTION = new ArrayList<>();
+		
+		/**/
+		
+		void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision);
+		
+		public static class Adapter extends BeanAdapter implements Listener,Serializable{
+			private static final long serialVersionUID = -7938520926769839615L;
+			
+			/**/
+			
+			@Override
+			public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {}
+			
+			public static class Default extends Adapter implements Serializable {
+				private static final long serialVersionUID = -5680372873034239621L;
+				
+			}
+		}
+	}
 }

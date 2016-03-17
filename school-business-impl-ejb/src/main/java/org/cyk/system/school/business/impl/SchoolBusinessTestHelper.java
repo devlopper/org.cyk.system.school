@@ -224,17 +224,19 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	public void randomValues(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean metric,Boolean attendance,Boolean appreciation){
+		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
 			Long t = schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSessionDivision.getClassroomSession()).getAttendanceTimeDivisionType().getDuration();
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
+				studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
 				
 				if(Boolean.TRUE.equals(attendance)){
 					studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(randomDataProvider.randomInt(0, 1)*t);
 					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(randomDataProvider.randomInt(0, 1)*t);
 					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDurationJustified(randomDataProvider.randomInt(0, 1)*t);
-					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
+					//studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
 				}
-				
+				/*
 				if(Boolean.TRUE.equals(metric)){
 					Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = 
 							classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
@@ -250,10 +252,29 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);	
 					}
 				}
-				
+				*/
 				if(Boolean.TRUE.equals(appreciation)){
 					studentClassroomSessionDivision.getResults().setAppreciation(RandomStringUtils.randomAlphabetic(appreciationLenght));
-					studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
+					//studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
+				}
+			}			
+		}
+		studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivisions);
+		
+		if(Boolean.TRUE.equals(metric)){
+			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
+				Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = 
+						classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(studentClassroomSessionDivision.getClassroomSessionDivision());
+				for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
+					IntervalCollection intervalCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection().getValueIntervalCollection();
+					RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
+					Collection<StudentResultsMetricValue> studentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness()
+							.findByStudentResults(studentClassroomSessionDivision.getResults());
+					for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
+						studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+						studentResultsMetricValue.getMetricValue().setStringValue(RandomStringUtils.randomAlphabetic(1));
+					}
+					studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);
 				}
 			}
 		}
