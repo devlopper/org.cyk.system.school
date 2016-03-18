@@ -35,72 +35,72 @@
 		
 		<navigation-case>
 			<from-outcome>classroomSessionDivisionEditView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsessiondivision/edit.jsf</to-view-id>
+			<to-view-id>/private/classroomsessiondivision/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>classroomSessionDivisionConsultView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsessiondivision/consult.jsf</to-view-id>
+			<to-view-id>/private/classroomsessiondivision/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>classroomSessionDivisionUpdateStudentResults</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsessiondivision/updatestudentresults.jsf</to-view-id>
+			<to-view-id>/private/classroomsessiondivision/updatestudentresults.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>classroomSessionDivisionUpdateStudentReport</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsessiondivision/updatestudentreport.jsf</to-view-id>
+			<to-view-id>/private/classroomsessiondivision/updatestudentreport.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>classroomSessionDivisionSubjectEditView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsessiondivisionsubject/edit.jsf</to-view-id>
+			<to-view-id>/private/classroomsessiondivisionsubject/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>classroomSessionDivisionSubjectConsultView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/classroomsessiondivisionsubject/consult.jsf</to-view-id>
+			<to-view-id>/private/classroomsessiondivisionsubject/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>evaluationEditView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/evaluation/edit.jsf</to-view-id>
+			<to-view-id>/private/evaluation/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>evaluationConsultView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/evaluation/consult.jsf</to-view-id>
+			<to-view-id>/private/evaluation/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>lectureEditView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/lecture/edit.jsf</to-view-id>
+			<to-view-id>/private/lecture/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>lectureConsultView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/lecture/consult.jsf</to-view-id>
+			<to-view-id>/private/lecture/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
 		<!-- Results -->
 		<navigation-case>
 			<from-outcome>studentClassroomSessionEditView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/studentclassroomsession/edit.jsf</to-view-id>
+			<to-view-id>/private/studentclassroomsession/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>studentClassroomSessionCreateManyView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/studentclassroomsession/createmany.jsf</to-view-id>
+			<to-view-id>/private/studentclassroomsession/createmany.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>studentClassroomSessionConsultView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/studentclassroomsession/consult.jsf</to-view-id>
+			<to-view-id>/private/studentclassroomsession/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
@@ -123,12 +123,12 @@
 		
 		<navigation-case>
 			<from-outcome>studentSubjectCreateManyView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/studentsubject/createmany.jsf</to-view-id>
+			<to-view-id>/private/studentsubject/createmany.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>studentSubjectEditView</from-outcome>
-			<to-view-id>/private/__role__/__manager__/studentsubject/createmany.jsf</to-view-id>
+			<to-view-id>/private/studentsubject/createmany.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
