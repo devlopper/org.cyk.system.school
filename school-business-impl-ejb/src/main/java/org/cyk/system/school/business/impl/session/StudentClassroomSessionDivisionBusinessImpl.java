@@ -253,6 +253,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
+			if(arguments.getExecutionProgress()!=null){
+				arguments.getExecutionProgress().setCurrentExecutionStep(RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
+						+" - "+RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getStudent()));
+			}
 			//if(arguments.getListener()!=null)
 			//	arguments.getListener().computingOnBuildReport(studentClassroomSessionDivision);
 			if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
