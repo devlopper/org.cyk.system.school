@@ -37,10 +37,15 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		@Override
 		protected void initialiseSelect(AbstractSelectManyPage<?> selectPage) {
 			super.initialiseSelect(selectPage);
-			selectPage.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
-			selectPage.setExecutionProgress(new ExecutionProgress("Build Student Classroom Session Division Report",null));
-			selectPage.getForm().getSubmitCommandable().getCommand().setExecutionProgress(selectPage.getExecutionProgress());
-			PrimefacesManager.getInstance().configureProgressBar(selectPage.getForm().getSubmitCommandable());
+			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(selectPage.getActionIdentifier())){
+				selectPage.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
+			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(selectPage.getActionIdentifier())){
+				selectPage.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
+				selectPage.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
+				selectPage.setExecutionProgress(new ExecutionProgress("Build Student Classroom Session Division Report",null));
+				selectPage.getForm().getSubmitCommandable().getCommand().setExecutionProgress(selectPage.getExecutionProgress());
+				PrimefacesManager.getInstance().configureProgressBar(selectPage.getForm().getSubmitCommandable());
+			}
 		}
 		
 		@Override
