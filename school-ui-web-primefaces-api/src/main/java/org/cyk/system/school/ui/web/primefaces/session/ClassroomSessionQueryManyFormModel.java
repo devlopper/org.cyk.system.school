@@ -50,7 +50,12 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		
 		@Override
 		public Collection<ClassroomSession> getIdentifiables(AbstractSelectManyPage<?> selectManyPage) {
-			return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
+			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(selectManyPage.getActionIdentifier())){
+				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
+			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(selectManyPage.getActionIdentifier())){
+				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
+			}else
+				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
 		}
 		
 		@Override
