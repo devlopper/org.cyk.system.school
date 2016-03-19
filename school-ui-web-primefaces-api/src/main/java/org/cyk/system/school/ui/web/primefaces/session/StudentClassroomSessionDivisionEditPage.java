@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.validation.constraints.NotNull;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.mathematics.MetricCollection;
@@ -86,9 +87,9 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	
 	public static class Form extends AbstractFormModel<StudentClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputNumber private BigDecimal numberOfTimeAbsent;
-		@Input @InputTextarea private String appreciation;
-		@Input @InputBooleanButton private Boolean conferenceRequested;
+		@Input @InputNumber @NotNull private BigDecimal numberOfTimeAbsent;
+		@Input @InputTextarea @NotNull private String appreciation;
+		@Input @InputBooleanButton /*@InputChoice @InputOneChoice @InputOneRadio*/ @NotNull private Boolean conferenceRequested;
 		
 		@Override
 		public void read() {

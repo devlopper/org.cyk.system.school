@@ -128,7 +128,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>studentSubjectEditView</from-outcome>
-			<to-view-id>/private/studentsubject/createmany.jsf</to-view-id>
+			<to-view-id>/private/studentsubject/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

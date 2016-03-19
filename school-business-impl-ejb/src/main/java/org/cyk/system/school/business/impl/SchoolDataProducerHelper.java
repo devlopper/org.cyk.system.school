@@ -149,6 +149,8 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	
 	private ClassroomSessionDivisionSubjectEvaluationType createSubjectEvaluationType(Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes,ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient,BigDecimal maximalValue){
 		ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType = new ClassroomSessionDivisionSubjectEvaluationType(subject,name,coefficient,maximalValue);
+		for(Listener listener : Listener.COLLECTION)
+			listener.classroomSessionDivisionSubjectEvaluationTypeCreated(subjectEvaluationType);
 		subjectEvaluationTypes.add(subjectEvaluationType);
 		return subjectEvaluationType;
 	}
@@ -244,6 +246,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		/**/
 		
 		void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision);
+		void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType);
 		
 		public static class Adapter extends BeanAdapter implements Listener,Serializable{
 			private static final long serialVersionUID = -7938520926769839615L;
@@ -252,6 +255,9 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			
 			@Override
 			public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {}
+			
+			@Override
+			public void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {}
 			
 			public static class Default extends Adapter implements Serializable {
 				private static final long serialVersionUID = -5680372873034239621L;

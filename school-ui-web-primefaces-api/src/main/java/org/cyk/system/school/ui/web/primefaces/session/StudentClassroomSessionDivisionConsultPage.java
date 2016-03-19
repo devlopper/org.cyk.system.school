@@ -11,6 +11,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
@@ -86,6 +87,10 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 						}
 				}
 				return studentSubjects;
+			}
+			@Override
+			public Crud[] getCruds() {
+				return new Crud[]{Crud.CREATE,Crud.READ,Crud.DELETE};
 			}
 			@Override
 			public String getTitleId() {

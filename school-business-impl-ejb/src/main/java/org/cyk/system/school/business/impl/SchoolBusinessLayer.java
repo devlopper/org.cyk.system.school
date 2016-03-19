@@ -174,7 +174,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
         beansMap.put((Class)Lecture.class, (TypedBusiness)lectureBusiness);
         beansMap.put((Class)StudentClassroomSession.class, (TypedBusiness)studentClassroomSessionBusiness);
         beansMap.put((Class)StudentClassroomSessionDivision.class, (TypedBusiness)studentClassroomSessionDivisionBusiness);
-        beansMap.put((Class)StudentSubject.class, (TypedBusiness)studentClassroomSessionDivisionBusiness);
+        beansMap.put((Class)StudentSubject.class, (TypedBusiness)studentSubjectBusiness);
         beansMap.put((Class)LevelGroup.class, (TypedBusiness)levelGroupBusiness);
     }
 	
