@@ -6,7 +6,7 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.BuildReportArguments;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -69,7 +69,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness()
 						.findByClassroomSessionsByIndex(classroomSessions,SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
-				BuildReportArguments buildReportArguments = new BuildReportArguments();
+				ServiceCallArguments buildReportArguments = new ServiceCallArguments();
 				buildReportArguments.setExecutionProgress(selectManyPage.getExecutionProgress());
 				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(classroomSessionDivisions,buildReportArguments);
 			}

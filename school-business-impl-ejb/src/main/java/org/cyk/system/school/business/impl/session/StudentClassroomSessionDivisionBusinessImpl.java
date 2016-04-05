@@ -27,7 +27,6 @@ import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.persistence.api.mathematics.MetricDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.SchoolReportProducer.StudentClassroomSessionDivisionReportParameters;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -61,7 +60,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	private static final long serialVersionUID = -3799482462496328200L;
 	
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
-	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private StudentClassroomSessionDao studentClassroomSessionDao;
 	private ReportBusiness reportBusiness = RootBusinessLayer.getInstance().getReportBusiness();
 	
@@ -135,7 +133,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override 
-	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportArguments arguments) {
+	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,ServiceCallArguments arguments) {
 		//logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 		//		,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
@@ -198,7 +196,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		buildReport(studentClassroomSessionDivision, new BuildReportArguments());
+		buildReport(studentClassroomSessionDivision, new ServiceCallArguments());
 	}
 	
 	@Override
@@ -209,11 +207,11 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions) {
-		buildReport(classroomSessionDivisions, new BuildReportArguments());
+		buildReport(classroomSessionDivisions, new ServiceCallArguments());
 	}
 	
 	@Override 
-	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportArguments arguments) {
+	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments) {
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		/*
 		 * Data loading
@@ -233,11 +231,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		//if(arguments.getListener()!=null)
 		//	arguments.getListener().loadedOnBuildReport(studentClassroomSessionDivisions);
-		arguments.setStudentClassroomSessionDivisions(studentClassroomSessionDivisions);
+		arguments.setObjects(studentClassroomSessionDivisions);
 		
 		/*
 		 * Data computing
 		 */
+		/*
 		studentSubjectBusiness.average(subjects, studentSubjects, studentSubjectEvaluations, Boolean.FALSE);
 		average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, Boolean.FALSE);
 		
@@ -252,6 +251,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		rank(classroomSessionDivisions, studentClassroomSessionDivisions,rankOptions);
 		
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
+		*/
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 			if(arguments.getExecutionProgress()!=null){
 				arguments.getExecutionProgress().setCurrentExecutionStep(RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
@@ -279,8 +279,49 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			}
 		}
 		
-		classroomSessionDivisionBusiness.computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
+		//SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
 	}
+	
+	@Override
+	public void computeEvaluationResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments) {
+		logTrace("Computing Student ClassroomSessionDivision Evaluation results of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
+		/*
+		 * Data loading
+		 */
+		Collection<StudentSubjectEvaluation> studentSubjectEvaluations = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		
+		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={}"
+				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size());
+		
+		arguments.setObjects(studentClassroomSessionDivisions);
+		
+		/*
+		 * Data computing
+		 */
+		studentSubjectBusiness.average(subjects, studentSubjects, studentSubjectEvaluations, Boolean.FALSE);
+		average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, Boolean.FALSE);
+		
+		//rank
+		RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
+        rankOptions.setType(RankType.EXAEQUO); 
+        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
+		studentSubjectBusiness.rank(subjects, studentSubjects,rankOptions);
+		rank(classroomSessionDivisions, studentClassroomSessionDivisions,rankOptions);
+		
+		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
+		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
+	}
+	
+	@Override
+	public void computeAttendanceResults(Collection<ClassroomSessionDivision> classroomSessionDivisions) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**/
 	
 	@Override
 	protected Class<StudentSubject> getDetailsClass() {

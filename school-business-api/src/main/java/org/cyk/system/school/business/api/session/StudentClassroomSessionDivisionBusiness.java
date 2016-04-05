@@ -4,10 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
@@ -19,14 +15,20 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.utility.common.cdi.BeanAdapter;
-import org.cyk.utility.common.computation.ExecutionProgress;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public interface StudentClassroomSessionDivisionBusiness extends AbstractStudentResultsBusiness<ClassroomSessionDivision,StudentClassroomSessionDivision,StudentSubject> {
 
-	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,BuildReportArguments options);
+	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,ServiceCallArguments arguments);
 	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
-	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,BuildReportArguments options);
+	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments);
 	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions);
+	
+	void computeEvaluationResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments);
+	void computeAttendanceResults(Collection<ClassroomSessionDivision> classroomSessionDivisions);
 	
 	ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
 	ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions);
@@ -44,30 +46,14 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	// TODO some methods here can go up
 	
 	@Getter @Setter @NoArgsConstructor
-	public static class BuildReportArguments implements Serializable{
+	public static class ServiceCallArguments extends BusinessServiceCallArguments<StudentClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = 7151479991050865862L;
 		public static Boolean ATTENDANCE = Boolean.TRUE;
 		
-		private Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions;
 		private Boolean attendance = ATTENDANCE;
-		private ExecutionProgress executionProgress; //= new ExecutionProgress("Build Student Classroom Session Division Report", new Double(0));
 		
-		public BuildReportArguments(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions){
-			setStudentClassroomSessionDivisions(studentClassroomSessionDivisions);
-		}
-		
-		public void setStudentClassroomSessionDivisions(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions){
-			this.studentClassroomSessionDivisions = studentClassroomSessionDivisions;
-			if(this.studentClassroomSessionDivisions != null){
-				executionProgress.setTotalAmountOfWorkUsing100AsBase(new Double(studentClassroomSessionDivisions.size()));
-				//executionProgress.setStep(new Double(executionProgress.getTotalAmountOfWork()/studentClassroomSessionDivisions.size()));
-			}
-		}
-
 	}
 	
-	//BuildReportArguments DEFAULT_BUILD_REPORT_OPTIONS = new BuildReportArguments();
-
 	Collection<StudentClassroomSessionDivision> findByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
 	
 	Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionIndex(Byte classroomSessionDivisionIndex);

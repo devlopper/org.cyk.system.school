@@ -110,7 +110,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		SchoolBusinessLayer.getInstance().setReportProducer(new ReportProducer());
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
     	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
-    	StudentClassroomSessionDivisionBusiness.BuildReportArguments.ATTENDANCE = Boolean.FALSE;
+    	StudentClassroomSessionDivisionBusiness.ServiceCallArguments.ATTENDANCE = Boolean.FALSE;
 	}
 	
 	@Override
