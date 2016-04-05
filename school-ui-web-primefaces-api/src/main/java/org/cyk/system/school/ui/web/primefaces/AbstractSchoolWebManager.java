@@ -104,6 +104,16 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		return module;
 	}
 	
+	public UICommandable getResultsCardCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
+		UICommandable module = null;
+		if(userSession.getIsAdministrator() || userSession.hasRole(Role.MANAGER)){
+			module = uiProvider.createCommandable("school.results", null);
+			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
+			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionAttendanceResults() ,null));
+		}
+		return module;
+	}
+	
 	public UICommandable getMarksCardCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.getIsAdministrator() || userSession.hasRole(Role.MANAGER)){

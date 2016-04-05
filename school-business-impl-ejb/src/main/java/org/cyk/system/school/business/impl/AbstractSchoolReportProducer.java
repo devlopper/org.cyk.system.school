@@ -100,6 +100,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			set(as.getSchool().getOwnedCompany().getCompany().getSigner(), r.getSigner());
 		
 		r.setComments(s.getResults().getAppreciation());
+		
 		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired())){
 			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
 			r.setAverageScale(rootBusinessLayer.getIntervalBusiness().findRelativeCode(s.getResults().getEvaluationSort().getAverageInterval()));
@@ -135,8 +136,11 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
-		logTrace("Number of student subjects = {}", s.getDetails().size());
-		for(StudentSubject studentSubject : s.getDetails()){
+		//Collection<StudentSubject> studentSubjects = s.getDetails();
+		Collection<StudentSubject> studentSubjects = schoolBusinessLayer.getStudentSubjectDao().readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
+		Collection<StudentSubjectEvaluation> studentSubjectEvaluations = schoolBusinessLayer.getStudentSubjectEvaluationDao().readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
+		logTrace("Number of student subjects = {}", studentSubjects.size());
+		for(StudentSubject studentSubject : studentSubjects){
 			Boolean applicable = studentSubject.getResults().getEvaluationSort().getAverage().getValue()!=null;
 			
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport();
@@ -171,7 +175,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				//sr.getAverageScale().setCode(NOT_APPLICABLE);
 			
 			BigDecimal[] results = new BigDecimal[]{BigDecimal.ZERO};
-			studentSubjectEvaluation(sr, studentSubject, studentSubject.getDetails(), results,parameters);
+			studentSubjectEvaluation(sr, studentSubject, /*studentSubject.getDetails()*/studentSubjectEvaluations, results,parameters);
 		}
 		
 		if(Boolean.TRUE.equals(parameters.getSumMarks())){

@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
@@ -39,9 +42,10 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 			,@AttributeOverride(name="rank.exaequo",column=@Column(name="evaluationRankExaequo"))
 			
 			,@AttributeOverride(name="comments",column=@Column(name="evaluationComments"))
-			
-			//,@AttributeOverride(name="averageInterval",column=@Column(name="evaluationAverageInterval"))
 	})
+	@AssociationOverrides(value={
+			@AssociationOverride(name= "averageInterval",joinColumns = @JoinColumn(name="evaluationAverageInterval"))
+			})
 	private Sort evaluationSort = new Sort();
 	
 	@Embedded @AttributeOverrides(value={
@@ -54,9 +58,10 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 			,@AttributeOverride(name="rank.exaequo",column=@Column(name="lectureAttendanceRankExaequo"))
 			
 			,@AttributeOverride(name="comments",column=@Column(name="lectureAttendanceComments"))
-			
-			//,@AttributeOverride(name="averageInterval",column=@Column(name="lectureAttendanceAverageInterval"))
 	})
+	@AssociationOverrides(value={
+			@AssociationOverride(name= "averageInterval",joinColumns = @JoinColumn(name="lectureAttendanceAverageInterval"))
+			})
 	private Sort lectureAttendanceSort = new Sort();
 		
 	@Embedded private Attendance lectureAttendance = new Attendance();
