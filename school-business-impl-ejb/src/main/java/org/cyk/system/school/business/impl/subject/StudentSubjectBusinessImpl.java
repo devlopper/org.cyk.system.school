@@ -131,6 +131,16 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentSubjectAverageScale();
 	}
 	
+	@Override
+	protected Boolean isLectureAttendanceAggregatable(StudentSubject studentSubject) {
+		return null;
+	}
+	
+	@Override
+	protected Long getAttendableDuration(StudentSubject studentSubject) {
+		return null;
+	}
+	
 	/**/
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

@@ -79,12 +79,13 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Inject private SchoolBusinessLayer schoolBusinessLayer;
 	
 	@Getter @Setter private Boolean studentSubjectCascadeBottomUpOnCreate,studentSubjectCascadeTopDownOnCreate;
-	@Getter @Setter private RankOptions<SortableStudentResults> rankOptions;
+	@Getter @Setter private RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
 	
 	@Getter @Setter private List<EvaluationType> evaluationTypes = new ArrayList<>();
 	@Getter @Setter private Object[][] customClassroomSessionDivisionSubjectEvaluationTypeInfos;
 	
 	@Getter @Setter private Integer appreciationLenght = 300;
+	
 	/**/
 	
 	@Override
@@ -92,7 +93,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		INSTANCE = this;
 		super.initialisation();
 		rankOptions = new RankOptions<>();
-        rankOptions.setType(RankType.EXAEQUO); 
+        rankOptions.setType(RankType.SEQUENCE); 
         rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 	}
 	
@@ -192,11 +193,15 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	public void computeStudentClassroomSessionDivisionResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
 		if(Boolean.TRUE.equals(computeEvaluationResults)){
 			System.out.println("Computing evaluation results of "+classroomSessionDivisions.size()+" classroom session divisions");
-			studentClassroomSessionDivisionBusiness.computeEvaluationResults(classroomSessionDivisions, null);
+			studentClassroomSessionDivisionBusiness.average(classroomSessionDivisions, Boolean.FALSE);
+			
+			
+			studentClassroomSessionDivisionBusiness.updateRank(classroomSessionDivisions, rankOptions);
 		}
-		//if(Boolean.TRUE.equals(computeAttendanceResults))
-		//	studentClassroomSessionDivisionBusiness.computeAttendanceResults(classroomSessionDivisions, null);
-		
+		if(Boolean.TRUE.equals(computeAttendanceResults)){
+			System.out.println("Computing attendance results of "+classroomSessionDivisions.size()+" classroom session divisions");
+			studentClassroomSessionDivisionBusiness.attendance(classroomSessionDivisions);
+		}
 		if(Boolean.TRUE.equals(buildReportFile)){
 			System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions");
 			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
@@ -583,5 +588,6 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		private Boolean computeEvaluationResults,computeAttendanceResults,buildReportFile;
 		
 	}
+	
 	
 }

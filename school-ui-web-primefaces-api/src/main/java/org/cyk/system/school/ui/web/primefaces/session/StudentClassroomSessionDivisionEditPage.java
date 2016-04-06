@@ -111,11 +111,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			if(numberOfTimeAbsent==null){
 				
 			}else{
-				identifiable.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
-						.convertAttendanceTimeToMillisecond(identifiable.getClassroomSessionDivision().getClassroomSession(),numberOfTimeAbsent));
-				//TODO can be refactored but i do not know how ????
-				identifiable.getResults().getLectureAttendance().setAttendedDuration(identifiable.getClassroomSessionDivision().getDuration()-
-						identifiable.getResults().getLectureAttendance().getMissedDuration());
+				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().setNumberOfTimesAbsent(identifiable, numberOfTimeAbsent);
 			}
 			
 		}

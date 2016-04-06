@@ -48,6 +48,7 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
+import org.cyk.system.school.business.impl.SchoolDataProducerHelper;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
 import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataProducer;
 import org.cyk.system.school.model.SchoolConstant;
@@ -190,8 +191,6 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Setter private Boolean generateStudentClassroomSessionDivisionReport = Boolean.FALSE;
 	@Setter private Integer classroomSessionDivisionIndex = 1;
 	
-	
-	
 	private ArrayList<Subject> subjectsG1G3 = new ArrayList<>(),subjectsG4G6 = new ArrayList<>()
 			,subjectsG7G9 = new ArrayList<>(),subjectsG10G12 = new ArrayList<>(); 
 	private LevelGroupType levelGroupType; 
@@ -229,6 +228,13 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				, new String[]{"05996283","49925138","06173731"}, new String[]{"08 BP 1828 Abidjan 08"}, new String[]{"iesa@aviso.ci"}, new String[]{"http://www.iesaci.com"});
 			}
 
+		});
+		SchoolDataProducerHelper.Listener.COLLECTION.add(new SchoolDataProducerHelper.Listener.Adapter(){
+			private static final long serialVersionUID = -5322009577688489872L;
+			@Override
+			public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {
+				classroomSessionDivision.setStudentSubjectAttendanceAggregated(Boolean.FALSE);
+			}
 		});
 	}
 	

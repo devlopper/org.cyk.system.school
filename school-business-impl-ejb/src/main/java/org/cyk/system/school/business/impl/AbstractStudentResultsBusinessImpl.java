@@ -140,42 +140,61 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	}
 
 	@Override
+	public Collection<RESULT> updateRank(Collection<LEVEL> levels,RankOptions<SortableStudentResults> options) {
+		Collection<RESULT> results = readResults(levels);
+		rank(levels, results, options);
+		return results;
+	}
+	
+	@Override
 	public void attendance(Collection<LEVEL> levels,Collection<RESULT> results,Collection<Lecture> lectures,Collection<EventParticipation> participations,
 			Collection<EventMissed> eventMisseds) {
 		for(RESULT result : results){
 			Attendance attendance = result.getResults().getLectureAttendance();
-			attendance.setAttendedDuration(0l);
-			attendance.setMissedDuration(0l);
-			attendance.setMissedDurationJustified(0l);
-			for(LEVEL level : levels){
-				if(level(result).equals(level))
-					for(Lecture lecture : lectures)
-						if(level(lecture).equals(level))
-							for(EventParticipation participation : participations)
-								if(participation.getEvent().equals(lecture.getEvent())){
-									if(result.getStudent().getPerson().equals(participation.getParty())){
-										EventMissed lEventMissed = null;
-										for(EventMissed eventMissed : eventMisseds)
-											if(eventMissed.getParticipation().equals(participation)){
-												lEventMissed = eventMissed;
-												break;
-											} 
-										if(lEventMissed==null){
-											attendance.addAttendedDuration(participation.getEvent().getPeriod().getDuration());
-										}else{
-											attendance.addAttendedDuration(participation.getEvent().getPeriod().getDuration()-lEventMissed.getDuration());
-											attendance.addMissedDuration(lEventMissed.getDuration());
-											if(lEventMissed.getReason()!=null && Boolean.TRUE.equals(lEventMissed.getReason().getAcceptable()))
-												attendance.addMissedDurationJustified(lEventMissed.getDuration());
+			if(Boolean.TRUE.equals(isLectureAttendanceAggregatable(result))){
+				//Initialize for computation
+				attendance.setAttendedDuration(0l);
+				attendance.setMissedDuration(0l);
+				attendance.setMissedDurationJustified(0l);
+				//Aggregate
+				for(LEVEL level : levels){
+					if(level(result).equals(level))
+						for(Lecture lecture : lectures)
+							if(level(lecture).equals(level))
+								for(EventParticipation participation : participations)
+									if(participation.getEvent().equals(lecture.getEvent())){
+										if(result.getStudent().getPerson().equals(participation.getParty())){
+											EventMissed lEventMissed = null;
+											for(EventMissed eventMissed : eventMisseds)
+												if(eventMissed.getParticipation().equals(participation)){
+													lEventMissed = eventMissed;
+													break;
+												} 
+											if(lEventMissed==null){
+												attendance.addAttendedDuration(participation.getEvent().getPeriod().getDuration());
+											}else{
+												attendance.addAttendedDuration(participation.getEvent().getPeriod().getDuration()-lEventMissed.getDuration());
+												attendance.addMissedDuration(lEventMissed.getDuration());
+												if(lEventMissed.getReason()!=null && Boolean.TRUE.equals(lEventMissed.getReason().getAcceptable()))
+													attendance.addMissedDurationJustified(lEventMissed.getDuration());
+											}
 										}
-									}
-							}	
+								}	
+				}	
+			}else{
+				//Just recompute derived attributes
+				Long attendableDuration = getAttendableDuration(result);
+				if(attendableDuration==null)
+					logTrace("No attendable duration has been set for {}", result.getLogMessage());
+				else
+					attendance.setAttendedDuration(attendableDuration-attendance.getMissedDuration());
 			}
 		}
 	}
 	
 	@Override
 	public Collection<RESULT> attendance(Collection<LEVEL> levels) {
+		//TODO find a way to filter only level where DAO is needed
 		Collection<RESULT> results = readResults(levels);
 		Collection<Lecture> lectures = readLectures(levels);
 		Collection<Event> events = lectureDao.readEvents(lectures);
@@ -204,6 +223,10 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	protected abstract LEVEL level(DETAIL detail);
 
 	protected abstract LEVEL level(RESULT result);
+	
+	protected abstract Boolean isLectureAttendanceAggregatable(RESULT result);
+	
+	protected abstract Long getAttendableDuration(RESULT result);
 	
 	protected abstract LEVEL level(Lecture lecture);
 	

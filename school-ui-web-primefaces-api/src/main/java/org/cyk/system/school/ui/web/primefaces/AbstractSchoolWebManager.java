@@ -82,7 +82,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	
 	public UICommandable getRegistrationCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
-		if(userSession.getIsAdministrator() || userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("command.actor.registration", IconType.PERSON);
 			module.addChild(menuManager.crudMany(Student.class, null));
 			module.addChild(menuManager.crudMany(Teacher.class, null));
@@ -93,12 +93,12 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	
 	public UICommandable getClassCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = uiProvider.createCommandable(businessEntityInfos(ClassroomSession.class).getUserInterface().getLabelId(), null);
-		if(userSession.getIsAdministrator() || userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(Role.MANAGER)){
 			module.addChild(menuManager.crudMany(ClassroomSession.class, null));
 			module.addChild(menuManager.createMany(StudentClassroomSession.class, null));
 			module.addChild(menuManager.createMany(StudentSubject.class, null));
 		}
-		if(userSession.getIsAdministrator() || userSession.hasRole(Role.MANAGER) || SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser())!=null){
+		if(userSession.hasRole(Role.MANAGER) || SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser())!=null){
 			module.addChild(menuManager.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 			module.addChild(menuManager.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 		}
@@ -107,7 +107,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	
 	public UICommandable getResultsCardCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
-		if(userSession.getIsAdministrator() || userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("school.results", null);
 			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
 			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionAttendanceResults() ,null));
@@ -117,7 +117,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	
 	public UICommandable getMarksCardCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
-		if(userSession.getIsAdministrator() || userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("school.markscard", null);
 			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
 			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
@@ -127,7 +127,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	
 	public UICommandable getControlPanelCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
-		if(userSession.getIsAdministrator() || userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("commandable.school", null);
 			module.addChild(menuManager.crudMany(Company.class, null));
 			module.addChild(menuManager.crudMany(PersonTitle.class, null));

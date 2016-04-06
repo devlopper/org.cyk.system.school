@@ -1,6 +1,7 @@
 package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -203,8 +204,34 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		}
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void computeEvaluationResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments) {
+	@Override
+	public Collection<StudentClassroomSessionDivision> average(Collection<ClassroomSessionDivision> classroomSessionDivisions, Boolean keepDetails) {
+		/*
+		 * Data loading
+		 */
+		Collection<StudentSubjectEvaluation> studentSubjectEvaluations = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		
+		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={}"
+				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size());
+		
+		//if(arguments!=null)
+		//	arguments.setObjects(studentClassroomSessionDivisions);
+		
+		/*
+		 * Data computing
+		 */
+		
+		studentSubjectBusiness.average(subjects, studentSubjects, studentSubjectEvaluations, Boolean.FALSE);
+		average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, Boolean.FALSE);
+		return studentClassroomSessionDivisions;
+		//return super.average(classroomSessionDivisions, keepDetails);
+	}
+	
+	//@Override @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void computeEvaluationResultsTODEL(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments) {
 		logTrace("Computing Student ClassroomSessionDivision Evaluation results of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		/*
 		 * Data loading
@@ -250,24 +277,14 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		update(studentClassroomSessionDivisions);
 		
 	}
-	
-	@Override
-	public void computeAttendanceResults(Collection<ClassroomSessionDivision> classroomSessionDivisions) {
-		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
-		/*
-		Collection<Lecture> lectures = lectureDao.readByClassroomSessionDivisions(classroomSessionDivisions);
-		Collection<Event> events = lectureDao.readEvents(lectures);
-		Collection<EventParticipation> participations = eventParticipationDao.readByEvents(events);
-		Collection<EventMissed> eventMisseds = eventMissedDao.readByEventParticipations(participations);
-		*/
-		
-		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
-			if(studentClassroomSessionDivision.getClassroomSessionDivision().getDuration()==null)
-				logTrace("No duration has been set for classroom session division {}", studentClassroomSessionDivision.getClassroomSessionDivision().getLogMessage());
-			else
-				studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision().getDuration()-
-					studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration());
-		}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public void setNumberOfTimesAbsent(StudentClassroomSessionDivision studentClassroomSessionDivision,BigDecimal value) {
+		studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+				.convertAttendanceTimeToMillisecond(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),value));
+
+		studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision().getDuration()-
+				studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration());
 	}
 	
 	/**/
@@ -316,6 +333,16 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override
 	protected ClassroomSessionDivision level(StudentSubject detail) {
 		return detail.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
+	}
+	
+	@Override
+	protected Boolean isLectureAttendanceAggregatable(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		return studentClassroomSessionDivision.getClassroomSessionDivision().getStudentSubjectAttendanceAggregated();
+	}
+	
+	@Override
+	protected Long getAttendableDuration(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		return studentClassroomSessionDivision.getClassroomSessionDivision().getDuration();
 	}
 	
 	@Override

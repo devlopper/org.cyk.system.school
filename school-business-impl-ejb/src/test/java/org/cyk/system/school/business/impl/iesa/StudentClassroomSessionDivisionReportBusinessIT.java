@@ -54,7 +54,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	              //,{"STUD4","45","45","80"}
     	              //,{"STUD5","20","95","55"}
     	    	}}
-    	},Boolean.TRUE,Boolean.FALSE,Boolean.TRUE,Boolean.TRUE);
+    	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     	
     	/*
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getG4().division(0).getClassroomSessionDivision(), new Object[][]{

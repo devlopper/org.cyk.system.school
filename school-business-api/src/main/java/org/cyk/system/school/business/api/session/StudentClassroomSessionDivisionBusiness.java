@@ -1,6 +1,7 @@
 package org.cyk.system.school.business.api.session;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -27,8 +28,10 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments);
 	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions);
 	
-	void computeEvaluationResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments);
-	void computeAttendanceResults(Collection<ClassroomSessionDivision> classroomSessionDivisions);
+	//void computeEvaluationResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments);
+	//void computeAttendanceResults(Collection<ClassroomSessionDivision> classroomSessionDivisions);
+	
+	void setNumberOfTimesAbsent(StudentClassroomSessionDivision studentClassroomSessionDivision,BigDecimal value);
 	
 	ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
 	ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions);
@@ -45,19 +48,18 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	
 	// TODO some methods here can go up
 	
-	@Getter @Setter @NoArgsConstructor
-	public static class ServiceCallArguments extends BusinessServiceCallArguments<StudentClassroomSessionDivision> implements Serializable{
-		private static final long serialVersionUID = 7151479991050865862L;
-		public static Boolean ATTENDANCE = Boolean.TRUE;
-		
-		private Boolean attendance = ATTENDANCE;
-		
-	}
-	
 	Collection<StudentClassroomSessionDivision> findByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
 	
 	Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionIndex(Byte classroomSessionDivisionIndex);
 
+	/**/
+	
+	@Getter @Setter @NoArgsConstructor
+	public static class ServiceCallArguments extends BusinessServiceCallArguments<StudentClassroomSessionDivision> implements Serializable{
+		private static final long serialVersionUID = 7151479991050865862L;
+		
+	}
+	
 	//TODO to be moved in Impl
 	public static interface Listener{
 		

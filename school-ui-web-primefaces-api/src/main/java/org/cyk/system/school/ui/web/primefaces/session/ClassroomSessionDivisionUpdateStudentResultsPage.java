@@ -65,10 +65,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 				if(item.getNumberOfTimeAbsent()==null){
 					
 				}else{
-					item.getIdentifiable().getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
-							.convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),item.getNumberOfTimeAbsent()));
-					item.getIdentifiable().getResults().getLectureAttendance().setAttendedDuration(item.getIdentifiable().getClassroomSessionDivision().getDuration()-
-							item.getIdentifiable().getResults().getLectureAttendance().getMissedDuration());
+					SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().setNumberOfTimesAbsent(item.getIdentifiable(), item.getNumberOfTimeAbsent());
 				}
 			}
 		});

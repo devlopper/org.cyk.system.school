@@ -160,6 +160,11 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	public StudentClassroomSession finddByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student, classroomSession);
 	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
+		return dao.readByStudentByClassroomSession(student,classroomSession);
+	}
 
 	/**/
 	
@@ -172,10 +177,17 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	protected ClassroomSession level(Lecture lecture) {
 		return lecture.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession();
 	}
-
-	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
-		return dao.readByStudentByClassroomSession(student,classroomSession);
+	
+	@Override
+	protected Boolean isLectureAttendanceAggregatable(StudentClassroomSession studentClassroomSession) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	protected Long getAttendableDuration(StudentClassroomSession studentClassroomSession) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**/

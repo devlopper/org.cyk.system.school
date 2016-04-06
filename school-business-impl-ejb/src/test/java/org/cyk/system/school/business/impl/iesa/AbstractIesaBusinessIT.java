@@ -8,7 +8,6 @@ import org.cyk.system.root.business.api.markuplanguage.MarkupLanguageBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.file.report.jasper.JasperReportBusinessImpl;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
-import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -26,7 +25,6 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     	super.installApplication(fake);
     	SchoolBusinessLayer.getInstance().setReportProducer(new IesaFakedDataProducer.ReportProducer());
     	Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
-    	StudentClassroomSessionDivisionBusiness.ServiceCallArguments.ATTENDANCE = Boolean.FALSE;
     	
     	JasperReportBusinessImpl.Listener.COLLECTION.add(new JasperReportBusinessImpl.Listener.Adapter.Default(){
     		

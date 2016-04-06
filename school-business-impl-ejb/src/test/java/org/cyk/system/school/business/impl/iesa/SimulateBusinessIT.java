@@ -16,8 +16,6 @@ public class SimulateBusinessIT extends AbstractIesaBusinessIT {
 
     	Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     
-    	StudentClassroomSessionDivisionBusiness.ServiceCallArguments.ATTENDANCE = Boolean.FALSE;
-    	
     	SchoolBusinessSimulationParameters parameters = new SchoolBusinessSimulationParameters();
 
     	parameters.setGeneratedClassroomSessionCountByLevel(null);
