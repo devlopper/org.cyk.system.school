@@ -104,6 +104,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	private String actionCreateSubjectEvaluation = "acse";
 	private String actionUpdateStudentClassroomSessionDivisionResults = "auscsdr";
 	private String actionComputeStudentClassroomSessionDivisionEvaluationResults = "acscsder";
+	private String actionComputeStudentClassroomSessionDivisionRankResults = "acscsdrr";
 	private String actionComputeStudentClassroomSessionDivisionAttendanceResults = "acscsdar";
 	private String actionUpdateStudentClassroomSessionDivisionReportFiles = "auscsdrf";
 	private String actionConsultStudentClassroomSessionDivisionReportFiles = "acscsdrf";
