@@ -18,41 +18,31 @@ public interface AbstractStudentResultsBusiness<LEVEL extends AbstractIdentifiab
 	/**
 	 * Based on the details , compute the average by grouping by level
 	 */
-	void average(Collection<LEVEL> levels,Collection<RESULT> results,Collection<DETAIL> details,Boolean keepDetails);
+	void updateAverage(Collection<LEVEL> levels,Collection<RESULT> results,Collection<DETAIL> details,BusinessServiceCallArguments<RESULT> callArguments);
 	
 	/**
 	 * Based on the details , compute the average
 	 */
-	void average(Collection<RESULT> types,Collection<DETAIL> details,Boolean keepDetails);
+	void updateAverage(Collection<RESULT> types,Collection<DETAIL> details,BusinessServiceCallArguments<RESULT> callArguments);
 	
 	/**
 	 * Compute the average of a level
 	 */
-	Collection<RESULT> average(Collection<LEVEL> levels,Boolean keepDetails);
+	Collection<RESULT> updateAverage(Collection<LEVEL> levels,BusinessServiceCallArguments<RESULT> callArguments);
 	
 	/* Rank computation */
 	
-	void rank(Collection<LEVEL> levels,Collection<RESULT> results,RankOptions<SortableStudentResults> options);
+	void updateRank(Collection<LEVEL> levels,Collection<RESULT> results,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments);
 	
-	void rank(Collection<RESULT> results,RankOptions<SortableStudentResults> options);
+	void rank(Collection<RESULT> results,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments);
 
-	Collection<RESULT> updateRank(Collection<LEVEL> levels,RankOptions<SortableStudentResults> options);
-	
-	void attendance(Collection<LEVEL> levels,Collection<RESULT> results, Collection<Lecture> lectures,Collection<EventParticipation> participations,Collection<EventMissed> eventMisseds);
-	
-	//void attendance(Collection<LEVEL> levels,Collection<RESULT> results);
-	
-	Collection<RESULT> attendance(Collection<LEVEL> levels);
+	Collection<RESULT> updateRank(Collection<LEVEL> levels,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments);
 	
 	/* Attendance computation */
 	
-	/**
-	 * Based on the details , compute the attendance by grouping by level
-	 */
-	//void attendance(Collection<LEVEL> levels,Collection<RESULT> results,Collection<DETAIL> details,Boolean keepDetails);
+	void updateAttendance(Collection<LEVEL> levels,Collection<RESULT> results, Collection<Lecture> lectures,Collection<EventParticipation> participations,Collection<EventMissed> eventMisseds,BusinessServiceCallArguments<RESULT> callArguments);
 	
-	/**
-	 * Based on the details , compute the attendance
-	 */
-	//void attendance(Collection<RESULT> types,Collection<DETAIL> details,Boolean keepDetails);
+	Collection<RESULT> updateAttendance(Collection<LEVEL> levels,BusinessServiceCallArguments<RESULT> callArguments);
+	
+
 }

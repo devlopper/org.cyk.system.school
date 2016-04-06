@@ -93,7 +93,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		INSTANCE = this;
 		super.initialisation();
 		rankOptions = new RankOptions<>();
-        rankOptions.setType(RankType.SEQUENCE); 
+        rankOptions.setType(RankType.EXAEQUO); 
         rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 	}
 	
@@ -193,14 +193,14 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	public void computeStudentClassroomSessionDivisionResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
 		if(Boolean.TRUE.equals(computeEvaluationResults)){
 			System.out.println("Computing evaluation results of "+classroomSessionDivisions.size()+" classroom session divisions");
-			studentClassroomSessionDivisionBusiness.average(classroomSessionDivisions, Boolean.FALSE);
+			studentClassroomSessionDivisionBusiness.updateAverage(classroomSessionDivisions, null);
 			
 			
-			studentClassroomSessionDivisionBusiness.updateRank(classroomSessionDivisions, rankOptions);
+			studentClassroomSessionDivisionBusiness.updateRank(classroomSessionDivisions, rankOptions,null);
 		}
 		if(Boolean.TRUE.equals(computeAttendanceResults)){
 			System.out.println("Computing attendance results of "+classroomSessionDivisions.size()+" classroom session divisions");
-			studentClassroomSessionDivisionBusiness.attendance(classroomSessionDivisions);
+			studentClassroomSessionDivisionBusiness.updateAttendance(classroomSessionDivisions,null);
 		}
 		if(Boolean.TRUE.equals(buildReportFile)){
 			System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions");
@@ -392,7 +392,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	/**/
 	
 	public void assertClassroomSessionDivisionSubjectAverage(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details){
-		Collection<StudentSubject> studentSubjects = studentSubjectBusiness.average(Arrays.asList(classroomSessionDivisionSubject), Boolean.TRUE);
+		Collection<StudentSubject> studentSubjects = studentSubjectBusiness.updateAverage(Arrays.asList(classroomSessionDivisionSubject), null);
 		for(StudentSubject studentSubject : studentSubjects){
 			for(String[] detail : details)
 				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){
@@ -402,8 +402,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	public void assertClassroomSessionDivisionSubjectRank(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details,RankOptions<SortableStudentResults> rankOptions){
-		Collection<StudentSubject> studentSubjects = studentSubjectBusiness.average(Arrays.asList(classroomSessionDivisionSubject), Boolean.TRUE);
-		studentSubjectBusiness.rank(studentSubjects,rankOptions);
+		Collection<StudentSubject> studentSubjects = studentSubjectBusiness.updateAverage(Arrays.asList(classroomSessionDivisionSubject), null);
+		studentSubjectBusiness.rank(studentSubjects,rankOptions,null);
 		for(StudentSubject studentSubject : studentSubjects){
 			for(String[] detail : details)
 				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){

@@ -52,7 +52,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	}
 	
 	@Override
-	public void average(Collection<LEVEL> levels,Collection<RESULT> results,Collection<DETAIL> details,Boolean keepDetails) {
+	public void updateAverage(Collection<LEVEL> levels,Collection<RESULT> results,Collection<DETAIL> details,BusinessServiceCallArguments<RESULT> callArguments) {
 		for(LEVEL level : levels){
 			Collection<RESULT> lResults = new ArrayList<>();
 			for(RESULT result : results)
@@ -64,14 +64,14 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				if(level(detail).equals(level))
 					lDetails.add(detail);
 				
-			average(lResults, lDetails,keepDetails);
+			updateAverage(lResults, lDetails,callArguments);
 		}
 	}
 	
 	@Override
-	public void average(Collection<RESULT> results,Collection<DETAIL> details,Boolean keepDetails) {
-		logTrace("Computing average in module {} . {}={} {}={} KeepDetails={}",getClazz().getSimpleName(),getResultClass().getSimpleName() ,results.size()
-				,getDetailsClass().getSimpleName(),details.size(),keepDetails);
+	public void updateAverage(Collection<RESULT> results,Collection<DETAIL> details,BusinessServiceCallArguments<RESULT> callArguments) {
+		logTrace("Computing average in module {} . {}={} {}={}",getClazz().getSimpleName(),getResultClass().getSimpleName() ,results.size()
+				,getDetailsClass().getSimpleName(),details.size());
 		for(RESULT result : results){
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
@@ -104,34 +104,36 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				logIdentifiable("Average computed", result);
 				//logTrace("Average {} , Interval {}",result.getResults().getEvaluationSort().getAverage(),result.getResults().getEvaluationSort().getAverageInterval());
 			}
+			
+			addCallArgumentsWorkDoneByStep(callArguments);
 		}
 		
 	}
 	
 	@Override
-	public Collection<RESULT> average(Collection<LEVEL> levels,Boolean keepDetails) {
+	public Collection<RESULT> updateAverage(Collection<LEVEL> levels,BusinessServiceCallArguments<RESULT> callArguments) {
 		//Structure
 		Collection<RESULT> results = readResults(levels);
 		//Data
-		Collection<DETAIL> details = readDetails(levels,keepDetails);
+		Collection<DETAIL> details = readDetails(levels,Boolean.FALSE);
 		//Computation
-		average(results, details,keepDetails);
+		updateAverage(results, details,callArguments);
 		return results;
 	}
  
 	@Override
-	public void rank(Collection<LEVEL> levels, Collection<RESULT> results,RankOptions<SortableStudentResults> options) {
+	public void updateRank(Collection<LEVEL> levels, Collection<RESULT> results,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments) {
 		for(LEVEL level : levels){
 			Collection<RESULT> lResults = new ArrayList<>();
 			for(RESULT result : results)
 				if(level(result).equals(level))
 					lResults.add(result);
-			rank(lResults,options);
+			rank(lResults,options,callArguments);
 		}
 	}
 	
 	@Override
-	public void rank(Collection<RESULT> results,RankOptions<SortableStudentResults> options) {
+	public void rank(Collection<RESULT> results,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments) {
 		List<SortableStudentResults> sortables = new ArrayList<>();
 		for(RESULT result : results) 
 			sortables.add(new SortableStudentResults(result,Boolean.TRUE));  
@@ -140,15 +142,15 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	}
 
 	@Override
-	public Collection<RESULT> updateRank(Collection<LEVEL> levels,RankOptions<SortableStudentResults> options) {
+	public Collection<RESULT> updateRank(Collection<LEVEL> levels,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments) {
 		Collection<RESULT> results = readResults(levels);
-		rank(levels, results, options);
+		updateRank(levels, results, options,callArguments);
 		return results;
 	}
 	
 	@Override
-	public void attendance(Collection<LEVEL> levels,Collection<RESULT> results,Collection<Lecture> lectures,Collection<EventParticipation> participations,
-			Collection<EventMissed> eventMisseds) {
+	public void updateAttendance(Collection<LEVEL> levels,Collection<RESULT> results,Collection<Lecture> lectures,Collection<EventParticipation> participations,
+			Collection<EventMissed> eventMisseds,BusinessServiceCallArguments<RESULT> callArguments) {
 		for(RESULT result : results){
 			Attendance attendance = result.getResults().getLectureAttendance();
 			if(Boolean.TRUE.equals(isLectureAttendanceAggregatable(result))){
@@ -189,11 +191,12 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				else
 					attendance.setAttendedDuration(attendableDuration-attendance.getMissedDuration());
 			}
+			addCallArgumentsWorkDoneByStep(callArguments);
 		}
 	}
 	
 	@Override
-	public Collection<RESULT> attendance(Collection<LEVEL> levels) {
+	public Collection<RESULT> updateAttendance(Collection<LEVEL> levels,BusinessServiceCallArguments<RESULT> callArguments) {
 		//TODO find a way to filter only level where DAO is needed
 		Collection<RESULT> results = readResults(levels);
 		Collection<Lecture> lectures = readLectures(levels);
@@ -201,7 +204,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		Collection<EventParticipation> eventParticipations = eventParticipationDao.readByEvents(events);
 		Collection<EventMissed> eventMisseds = eventMissedDao.readByEventParticipations(eventParticipations);
 		
-		attendance(levels,results, lectures,eventParticipations, eventMisseds);
+		updateAttendance(levels,results, lectures,eventParticipations, eventMisseds,callArguments);
 		return results;
 	}
 	

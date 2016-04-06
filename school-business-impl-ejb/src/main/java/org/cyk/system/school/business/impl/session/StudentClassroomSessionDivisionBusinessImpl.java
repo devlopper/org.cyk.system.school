@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.file.report.ReportBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
-import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.file.File;
@@ -31,7 +30,6 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
@@ -198,14 +196,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				buildReport(studentClassroomSessionDivision);
 			}
 			
-			if(arguments!=null && arguments.getExecutionProgress()!=null){
-				arguments.getExecutionProgress().addWorkDoneByStep(1);
-			}
+			addCallArgumentsWorkDoneByStep(arguments);
 		}
 	}
 	
 	@Override
-	public Collection<StudentClassroomSessionDivision> average(Collection<ClassroomSessionDivision> classroomSessionDivisions, Boolean keepDetails) {
+	public Collection<StudentClassroomSessionDivision> updateAverage(Collection<ClassroomSessionDivision> classroomSessionDivisions, BusinessServiceCallArguments<StudentClassroomSessionDivision> callArguments) {
 		/*
 		 * Data loading
 		 */
@@ -217,67 +213,25 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={}"
 				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size());
 		
-		//if(arguments!=null)
-		//	arguments.setObjects(studentClassroomSessionDivisions);
+		setCallArgumentsObjects(callArguments, studentClassroomSessionDivisions);
 		
 		/*
 		 * Data computing
 		 */
 		
-		studentSubjectBusiness.average(subjects, studentSubjects, studentSubjectEvaluations, Boolean.FALSE);
-		average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, Boolean.FALSE);
+		studentSubjectBusiness.updateAverage(subjects, studentSubjects, studentSubjectEvaluations, null);
+		updateAverage(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, callArguments);
 		return studentClassroomSessionDivisions;
-		//return super.average(classroomSessionDivisions, keepDetails);
 	}
 	
-	//@Override @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void computeEvaluationResultsTODEL(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments) {
-		logTrace("Computing Student ClassroomSessionDivision Evaluation results of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
-		/*
-		 * Data loading
-		 */
-		Collection<StudentSubjectEvaluation> studentSubjectEvaluations = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+	@Override
+	public Collection<StudentClassroomSessionDivision> updateRank(Collection<ClassroomSessionDivision> classroomSessionDivisions,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<StudentClassroomSessionDivision> callArguments) {
 		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
-		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
-		
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
-		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={}"
-				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size());
-		
-		if(arguments!=null)
-			arguments.setObjects(studentClassroomSessionDivisions);
-		
-		/*
-		 * Data computing
-		 */
-		
-		studentSubjectBusiness.average(subjects, studentSubjects, studentSubjectEvaluations, Boolean.FALSE);
-		average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, Boolean.FALSE);
-		
-		//rank
-		
-		RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
-        rankOptions.setType(RankType.EXAEQUO); 
-        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
-		studentSubjectBusiness.rank(subjects, studentSubjects,rankOptions);
-		rank(classroomSessionDivisions, studentClassroomSessionDivisions,rankOptions);
-		
-		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
-		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
-		
-		/*
-		 * Data saving
-		 */
-		
-		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().update(subjects);
-		SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().update(studentSubjects);
-		
-		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().update(classroomSessionDivisions);
-		
-		update(studentClassroomSessionDivisions);
-		
+		studentSubjectBusiness.updateRank(subjects, studentSubjects,options,null);
+		return super.updateRank(classroomSessionDivisions, options,callArguments);
 	}
-
+	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public void setNumberOfTimesAbsent(StudentClassroomSessionDivision studentClassroomSessionDivision,BigDecimal value) {
 		studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
@@ -320,7 +274,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(levels);
 		Collection<StudentSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessionDivisions(levels);
 		
-		studentSubjectBusiness.average(subjects, studentSubjects, evaluatedStudents,keepDetails);
+		studentSubjectBusiness.updateAverage(subjects, studentSubjects, evaluatedStudents,null);
 		
 		return studentSubjects;
 	}

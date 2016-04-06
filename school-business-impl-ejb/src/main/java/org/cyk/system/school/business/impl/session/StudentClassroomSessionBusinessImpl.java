@@ -129,9 +129,9 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessions(levels);
 		Collection<StudentSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessions(levels);
 		
-		studentSubjectBusiness.average(subjects, studentSubjects, evaluatedStudents,keepDetails);
+		studentSubjectBusiness.updateAverage(subjects, studentSubjects, evaluatedStudents,null);
 		
-		studentClassroomSessionDivisionBusiness.average(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects,keepDetails);
+		studentClassroomSessionDivisionBusiness.updateAverage(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects,null);
 		
 		return studentClassroomSessionDivisions;
 	}
