@@ -1,19 +1,27 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
+import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractQueryManyFormModel;
 import org.cyk.ui.web.api.WebNavigationManager;
 import org.cyk.ui.web.primefaces.PrimefacesManager;
+import org.cyk.ui.web.primefaces.page.AbstractProcessManyPage;
 import org.cyk.ui.web.primefaces.page.AbstractSelectManyPage;
 import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.annotation.user.interfaces.FieldOverride;
@@ -33,46 +41,101 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		public PageAdapter() {
 			super(ClassroomSession.class);
 		}
-		
+				
 		@Override
-		protected void initialiseSelect(AbstractSelectManyPage<?> selectPage) {
-			super.initialiseSelect(selectPage);
-			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(selectPage.getActionIdentifier())){
-				selectPage.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
-			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(selectPage.getActionIdentifier())){
-				selectPage.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
-				selectPage.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
-				selectPage.setExecutionProgress(new ExecutionProgress("Build Student Classroom Session Division Report",null));
-				selectPage.getForm().getSubmitCommandable().getCommand().setExecutionProgress(selectPage.getExecutionProgress());
-				PrimefacesManager.getInstance().configureProgressBar(selectPage.getForm().getSubmitCommandable());
-			}
-		}
-		
-		@Override
-		public Collection<ClassroomSession> getIdentifiables(AbstractSelectManyPage<?> selectManyPage) {
-			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(selectManyPage.getActionIdentifier())){
+		public Collection<ClassroomSession> getIdentifiables(AbstractSelectManyPage<?> page) {
+			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
-			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(selectManyPage.getActionIdentifier())){
+			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
 			}else
 				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
 		}
+	}
+	
+	@Getter @Setter
+	public static class ProcessPageAdapter extends AbstractProcessManyPage.Listener.Adapter.Default<ClassroomSession,Long> implements Serializable {
+
+		private static final long serialVersionUID = -8606970206843948983L;
+
+		public ProcessPageAdapter() {
+			super(ClassroomSession.class);
+		}
 		
 		@Override
-		public void serve(AbstractSelectManyPage<?> selectManyPage,Object data, String actionIdentifier) {
-			Collection<ClassroomSession> classroomSessions = ((ClassroomSessionQueryManyFormModel)data).getIdentifiables();
-			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
-				Collection<ClassroomSessionDivision> classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSessions(classroomSessions);
-				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions);
-				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findReportFiles(studentClassroomSessionDivisions);
-				WebNavigationManager.getInstance().redirectToFileConsultManyPage(SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findReportFiles(studentClassroomSessionDivisions), FileExtension.PDF);
-			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
-				Collection<ClassroomSessionDivision> classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness()
-						.findByClassroomSessionsByIndex(classroomSessions,SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
-				ServiceCallArguments buildReportArguments = new ServiceCallArguments();
-				buildReportArguments.setExecutionProgress(selectManyPage.getExecutionProgress());
-				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(classroomSessionDivisions,buildReportArguments);
+		protected void initialiseProcess(AbstractProcessManyPage<?> page) {
+			super.initialiseProcess(page);
+			SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
+			page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
+			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
+				
+			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
+				page.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
+				page.setExecutionProgress(new ExecutionProgress("Build Student Classroom Session Division Report",null));
+				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());
+				PrimefacesManager.getInstance().configureProgressBar(page.getForm().getSubmitCommandable());
+			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults()
+					,schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionEvaluationResults(),schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionRankResults()}
+				, page.getActionIdentifier())){
+				page.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
+				page.setExecutionProgress(new ExecutionProgress("Compute Student Classroom Session Division "+page.getActionIdentifier(),null));
+				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());
+				PrimefacesManager.getInstance().configureProgressBar(page.getForm().getSubmitCommandable());
 			}
 		}
+		
+		@Override
+		public void serve(AbstractProcessManyPage<?> page,Object data, String actionIdentifier) {
+			SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
+			Collection<ClassroomSession> classroomSessions = new ArrayList<>();
+			for(Object object : page.getElements())
+				classroomSessions.add((ClassroomSession) object);
+			
+			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessions(classroomSessions);
+				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions);
+				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().findReportFiles(studentClassroomSessionDivisions);
+				WebNavigationManager.getInstance().redirectToFileConsultManyPage(schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().findReportFiles(studentClassroomSessionDivisions), FileExtension.PDF);
+			}else if(schoolBusinessLayer.getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = schoolBusinessLayer.getClassroomSessionDivisionBusiness()
+						.findByClassroomSessionsByIndex(classroomSessions,schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+				ServiceCallArguments callArguments = new ServiceCallArguments();
+				callArguments.setExecutionProgress(page.getExecutionProgress());
+				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().buildReport(classroomSessionDivisions,callArguments);
+			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults()
+					,schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionEvaluationResults(),schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionRankResults()}
+				, actionIdentifier)){
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = schoolBusinessLayer.getClassroomSessionDivisionBusiness()
+						.findByClassroomSessionsByIndex(classroomSessions,schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+				ServiceCallArguments callArguments = new ServiceCallArguments();
+				callArguments.setExecutionProgress(page.getExecutionProgress());
+				if(schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults().equals(actionIdentifier))
+					schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().updateAttendance(classroomSessionDivisions, callArguments);
+				else if(schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(actionIdentifier))
+					schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().updateAverage(classroomSessionDivisions, callArguments);
+				else if(schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionRankResults().equals(actionIdentifier)){
+					RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
+			        rankOptions.setType(RankType.EXAEQUO); 
+			        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
+					schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().updateRank(classroomSessionDivisions, rankOptions,callArguments);
+				}
+			}
+		}
+		
+		@Override
+		public Class<?> getFormDataClass(AbstractProcessManyPage<?> processManyPage,String actionIdentifier) {
+			return Form.class;
+		}
+		
+		public static class Form extends AbstractFormModel<ClassroomSession> implements Serializable{
+			private static final long serialVersionUID = -4741435164709063863L;
+			/*
+			@Input @InputText private String myinput1;
+			@Input @InputText private String myinput2;
+			@Input @InputBooleanButton private Boolean mychoice1;
+			@Input @InputBooleanCheck private Boolean mychoice2;
+			*/
+		}
+		
 	}
 }

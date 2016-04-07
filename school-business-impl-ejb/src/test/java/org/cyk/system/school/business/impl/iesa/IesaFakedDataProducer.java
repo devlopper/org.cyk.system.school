@@ -76,7 +76,10 @@ import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
@@ -143,15 +146,18 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Inject private CompanyBusinessLayer companyBusinessLayer;
 	@Inject private EvaluationBusiness subjectEvaluationBusiness;
 	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
+	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeDao subjectEvaluationTypeDao;
 	@Inject private StudentSubjectDao studentSubjectDao;
 	@Inject private StudentSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentBusiness studentBusiness;
 	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
+	@Inject private ClassroomSessionDivisionSubjectDao classroomSessionDivisionSubjectDao;
 	@Inject private ClassroomSessionDivisionStudentsMetricCollectionBusiness classroomSessionDivisionStudentsMetricCollectionBusiness;
 	@Inject private LectureBusiness lectureBusiness;
 	@Inject private TeacherDao teacherDao;
+	@Inject private StudentDao studentDao;
 	@Inject private PersonDao personDao;
 	
 	private Subject subjectNameEnglishLanguage,subjectNameLiteratureInEnglish,subjectNameHistory,subjectNameGeography
@@ -430,7 +436,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		//ExecutorService executor = Executors.newFixedThreadPool(5);
 		//Collection<StudentSubject> studentSubjects = new ArrayList<>();
 		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{g1,g2,g3,g4,g5,g6,g7,g8,g9}){
-			Collection<Student> students = studentBusiness.findManyRandomly(numbreOfStudentsByClassroomSession);
+			Collection<Student> students = studentDao.readManyRandomly(numbreOfStudentsByClassroomSession);
 			createStudentClassroomSessions(classroomSessionInfos, students);	
 			//executor.execute(new ClassroomsessionBusinessProducer(classroomSessionInfos, listener, students,studentSubjects));
 		}
@@ -440,7 +446,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		//flush(StudentSubject.class,studentSubjectBusiness,studentSubjects);
 		
 		Collection<Evaluation> subjectEvaluations = new ArrayList<>();
-		for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypeBusiness.findAll()){
+		for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypeDao.readAll()){
 			Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType);
 			subjectEvaluation.setCoefficientApplied(Boolean.FALSE);
 			for(StudentSubject studentSubject :studentSubjectDao.readByClassroomSessionDivisionSubject(subjectEvaluationType.getClassroomSessionDivisionSubject()) ){
@@ -452,9 +458,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			flush(Evaluation.class,subjectEvaluationBusiness,subjectEvaluations,10000l);
 		}
 		flush(Evaluation.class,subjectEvaluationBusiness,subjectEvaluations);
-		
+		/*
 		Collection<Lecture> lectures = new ArrayList<>();
-		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjectBusiness.findAll()){
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjectDao.readAll()){
 			for(int i=0;i<numbreOfLecturesByClassroomSessionDivisionSubject;i++){
 				Event event = new Event();
 				event.getPeriod().setFromDate(new Date());
@@ -473,7 +479,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			}
 		}
 		flush(Lecture.class,lectureBusiness,lectures);
+		*/
 	
+		/*
 		if(Boolean.TRUE.equals(generateStudentClassroomSessionDivisionReport)){
 			System.out.println("Updating metric value");
 			
@@ -490,6 +498,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			System.out.println("Generating report");
 			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(classroomSessionInfos);
 		}
+		*/
 	}
 
 	private void createStudentClassroomSessions(ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){
