@@ -73,9 +73,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		logTrace("Computing average in module {} . {}={} {}={}",getClazz().getSimpleName(),getResultClass().getSimpleName() ,results.size()
 				,getDetailsClass().getSimpleName(),details.size());
 		for(RESULT result : results){
-			if(callArguments!=null){
-				callArguments.getExecutionProgress().setCurrentExecutionStep(result.toString());
-			}
+			setCallArgumentsCurrentExecutionStep(callArguments, result);
 			
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
@@ -108,7 +106,6 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				logIdentifiable("Average computed", result);
 				//logTrace("Average {} , Interval {}",result.getResults().getEvaluationSort().getAverage(),result.getResults().getEvaluationSort().getAverageInterval());
 			}
-			
 			addCallArgumentsWorkDoneByStep(callArguments);
 		}
 		
@@ -156,6 +153,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	public void updateAttendance(Collection<LEVEL> levels,Collection<RESULT> results,Collection<Lecture> lectures,Collection<EventParticipation> participations,
 			Collection<EventMissed> eventMisseds,BusinessServiceCallArguments<RESULT> callArguments) {
 		for(RESULT result : results){
+			setCallArgumentsCurrentExecutionStep(callArguments, result);
 			Attendance attendance = result.getResults().getLectureAttendance();
 			if(Boolean.TRUE.equals(isLectureAttendanceAggregatable(result))){
 				//Initialize for computation
@@ -207,6 +205,8 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		Collection<Event> events = lectureDao.readEvents(lectures);
 		Collection<EventParticipation> eventParticipations = eventParticipationDao.readByEvents(events);
 		Collection<EventMissed> eventMisseds = eventMissedDao.readByEventParticipations(eventParticipations);
+		
+		setCallArgumentsObjects(callArguments, results);
 		
 		updateAttendance(levels,results, lectures,eventParticipations, eventMisseds,callArguments);
 		return results;
