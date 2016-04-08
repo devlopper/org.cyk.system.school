@@ -181,12 +181,13 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override 
-	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments) {
+	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments callArguments) {
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		setCallArgumentsObjects(callArguments, studentClassroomSessionDivisions);
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
-			if(arguments!=null && arguments.getExecutionProgress()!=null){
-				arguments.getExecutionProgress().setCurrentExecutionStep(RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
+			if(callArguments!=null && callArguments.getExecutionProgress()!=null){
+				callArguments.getExecutionProgress().setCurrentExecutionStep(RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
 						+" - "+RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getStudent()));
 			}
 			if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
@@ -196,7 +197,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				buildReport(studentClassroomSessionDivision);
 			}
 			
-			addCallArgumentsWorkDoneByStep(arguments);
+			addCallArgumentsWorkDoneByStep(callArguments);
 		}
 	}
 	
@@ -214,7 +215,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size());
 		
 		setCallArgumentsObjects(callArguments, studentClassroomSessionDivisions);
-		
 		/*
 		 * Data computing
 		 */

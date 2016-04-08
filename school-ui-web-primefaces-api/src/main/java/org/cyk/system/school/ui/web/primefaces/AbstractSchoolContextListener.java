@@ -96,6 +96,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.PageAdapter());
 		
 		primefacesManager.getSelectManyPageListeners().add(new ClassroomSessionQueryManyFormModel.PageAdapter());
+		primefacesManager.getProcessManyPageListeners().add(new ClassroomSessionQueryManyFormModel.ProcessPageAdapter());
 		primefacesManager.getSelectManyPageListeners().add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
 
 		if(Boolean.TRUE.equals(SchoolWebManager.EVALUATION_EDITABLE_BY_TEACHER_ONLY)){

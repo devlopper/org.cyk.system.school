@@ -73,6 +73,10 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		logTrace("Computing average in module {} . {}={} {}={}",getClazz().getSimpleName(),getResultClass().getSimpleName() ,results.size()
 				,getDetailsClass().getSimpleName(),details.size());
 		for(RESULT result : results){
+			if(callArguments!=null){
+				callArguments.getExecutionProgress().setCurrentExecutionStep(result.toString());
+			}
+			
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
 			result.getDetails().clear();
