@@ -105,6 +105,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				callArguments.setExecutionProgress(page.getExecutionProgress());
 				Form form = (Form) data;
 				RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
+		        rankOptions.setType(RankType.EXAEQUO); 
+		        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().buildReport(classroomSessionDivisions,form.getUpdateEvaluationResults(),form.getUpdateAttendanceResults()
 						,form.getUpdateRankResults(),rankOptions,callArguments);
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults()
@@ -132,12 +134,17 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			return Form.class;
 		}
 		
+		@Override
+		public Boolean getShowForm(AbstractProcessManyPage<?> processManyPage,String actionIdentifier) {
+			return SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier);
+		}
+		
 		@Getter @Setter
 		public static class Form extends AbstractFormModel<ClassroomSession> implements Serializable{
 			private static final long serialVersionUID = -4741435164709063863L;
-			@Input @InputBooleanButton private Boolean updateEvaluationResults;
-			@Input @InputBooleanButton private Boolean updateAttendanceResults;
-			@Input @InputBooleanButton private Boolean updateRankResults;
+			@Input @InputBooleanButton private Boolean updateEvaluationResults=Boolean.TRUE;
+			@Input @InputBooleanButton private Boolean updateAttendanceResults=Boolean.TRUE;
+			@Input @InputBooleanButton private Boolean updateRankResults=Boolean.TRUE;
 		}
 		
 	}

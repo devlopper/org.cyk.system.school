@@ -179,10 +179,13 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean updateEvaluationResults,Boolean updateAttendanceResults,Boolean updateRankResults,RankOptions<SortableStudentResults> rankOptions,ServiceCallArguments callArguments) {
 		if(Boolean.TRUE.equals(updateEvaluationResults))
 			updateAverage(classroomSessionDivisions, callArguments);
+		clearCallArgumentsExecution(callArguments);
 		if(Boolean.TRUE.equals(updateAttendanceResults))
 			updateAttendance(classroomSessionDivisions, callArguments);
+		clearCallArgumentsExecution(callArguments);
 		if(Boolean.TRUE.equals(updateRankResults))
 			updateRank(classroomSessionDivisions,rankOptions, callArguments);
+		clearCallArgumentsExecution(callArguments);
 		
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
