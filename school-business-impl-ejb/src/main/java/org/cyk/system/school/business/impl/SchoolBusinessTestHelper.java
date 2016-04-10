@@ -31,6 +31,7 @@ import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
@@ -191,7 +192,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	public void computeStudentClassroomSessionDivisionResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
-		if(Boolean.TRUE.equals(computeEvaluationResults)){
+		/*if(Boolean.TRUE.equals(computeEvaluationResults)){
 			System.out.println("Computing evaluation results of "+classroomSessionDivisions.size()+" classroom session divisions");
 			studentClassroomSessionDivisionBusiness.updateAverage(classroomSessionDivisions, null);
 			
@@ -202,9 +203,10 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			System.out.println("Computing attendance results of "+classroomSessionDivisions.size()+" classroom session divisions");
 			studentClassroomSessionDivisionBusiness.updateAttendance(classroomSessionDivisions,null);
 		}
+		*/
 		if(Boolean.TRUE.equals(buildReportFile)){
 			System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions");
-			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions);
+			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,rankOptions,new ServiceCallArguments());
 			
 			if(Boolean.TRUE.equals(createFileOnDisk)){
 				Collection<File> files = new ArrayList<>();

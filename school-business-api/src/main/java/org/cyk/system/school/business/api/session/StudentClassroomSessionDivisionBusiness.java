@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
+import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
@@ -25,8 +27,9 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 
 	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,ServiceCallArguments arguments);
 	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
-	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments);
-	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions);
+	
+	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean updateEvaluationResults,Boolean updateAttendanceResults,Boolean updateRankResults
+			,RankOptions<SortableStudentResults> rankOptions,ServiceCallArguments arguments);
 	
 	//void computeEvaluationResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments);
 	//void computeAttendanceResults(Collection<ClassroomSessionDivision> classroomSessionDivisions);

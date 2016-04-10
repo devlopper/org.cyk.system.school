@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
@@ -26,7 +23,12 @@ import org.cyk.ui.web.primefaces.page.AbstractSelectManyPage;
 import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.annotation.user.interfaces.FieldOverride;
 import org.cyk.utility.common.annotation.user.interfaces.FieldOverrides;
+import org.cyk.utility.common.annotation.user.interfaces.Input;
+import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
 import org.cyk.utility.common.computation.ExecutionProgress;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryManyFormModel.FIELD_IDENTIFIABLES,type=ClassroomSession.class)})
 public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSessionQueryManyFormModel<ClassroomSession> implements Serializable {
@@ -101,7 +103,10 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 						.findByClassroomSessionsByIndex(classroomSessions,schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				ServiceCallArguments callArguments = new ServiceCallArguments();
 				callArguments.setExecutionProgress(page.getExecutionProgress());
-				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().buildReport(classroomSessionDivisions,callArguments);
+				Form form = (Form) data;
+				RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
+				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().buildReport(classroomSessionDivisions,form.getUpdateEvaluationResults(),form.getUpdateAttendanceResults()
+						,form.getUpdateRankResults(),rankOptions,callArguments);
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults()
 					,schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionEvaluationResults(),schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionRankResults()}
 				, actionIdentifier)){
@@ -127,14 +132,12 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			return Form.class;
 		}
 		
+		@Getter @Setter
 		public static class Form extends AbstractFormModel<ClassroomSession> implements Serializable{
 			private static final long serialVersionUID = -4741435164709063863L;
-			/*
-			@Input @InputText private String myinput1;
-			@Input @InputText private String myinput2;
-			@Input @InputBooleanButton private Boolean mychoice1;
-			@Input @InputBooleanCheck private Boolean mychoice2;
-			*/
+			@Input @InputBooleanButton private Boolean updateEvaluationResults;
+			@Input @InputBooleanButton private Boolean updateAttendanceResults;
+			@Input @InputBooleanButton private Boolean updateRankResults;
 		}
 		
 	}

@@ -215,6 +215,15 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		return results;
 	}
 	
+	@Override
+	public Collection<RESULT> updateResults(Collection<LEVEL> levels,RankOptions<SortableStudentResults> rankOptions,BusinessServiceCallArguments<RESULT> callArguments) {
+		Collection<RESULT> results = null;
+		results = updateAverage(levels, callArguments);
+		results = updateAttendance(levels, callArguments);
+		results = updateRank(levels, rankOptions, callArguments);
+		return results;
+	}
+	
 	/**/
 	
 	protected abstract Class<DETAIL> getDetailsClass();

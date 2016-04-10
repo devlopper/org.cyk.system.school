@@ -174,14 +174,16 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		// TODO Many report as one document must be handled
 		return findReport(studentClassroomSessionDivisions.iterator().next());
 	}
-	
-	@Override
-	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions) {
-		buildReport(classroomSessionDivisions, new ServiceCallArguments());
-	}
-	
+		
 	@Override 
-	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments callArguments) {
+	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean updateEvaluationResults,Boolean updateAttendanceResults,Boolean updateRankResults,RankOptions<SortableStudentResults> rankOptions,ServiceCallArguments callArguments) {
+		if(Boolean.TRUE.equals(updateEvaluationResults))
+			updateAverage(classroomSessionDivisions, callArguments);
+		if(Boolean.TRUE.equals(updateAttendanceResults))
+			updateAttendance(classroomSessionDivisions, callArguments);
+		if(Boolean.TRUE.equals(updateRankResults))
+			updateRank(classroomSessionDivisions,rankOptions, callArguments);
+		
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		//debug(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getResults());

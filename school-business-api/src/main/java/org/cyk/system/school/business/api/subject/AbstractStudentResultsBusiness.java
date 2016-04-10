@@ -12,7 +12,7 @@ import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.subject.Lecture;
 
 public interface AbstractStudentResultsBusiness<LEVEL extends AbstractIdentifiable,RESULT extends AbstractStudentResult<LEVEL,DETAIL>,DETAIL> extends TypedBusiness<RESULT> {
-
+	
 	/* Average computation */
 	
 	/**
@@ -44,5 +44,8 @@ public interface AbstractStudentResultsBusiness<LEVEL extends AbstractIdentifiab
 	
 	Collection<RESULT> updateAttendance(Collection<LEVEL> levels,BusinessServiceCallArguments<RESULT> callArguments);
 	
+	/**/
+	
+	Collection<RESULT> updateResults(Collection<LEVEL> levels,RankOptions<SortableStudentResults> rankOptions,BusinessServiceCallArguments<RESULT> callArguments);
 
 }

@@ -47,7 +47,7 @@ public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCru
 	
 	@Override
 	protected void update() {
-		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(identifiable));
+		//SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(identifiable));
 	}
 	
 	@Override
