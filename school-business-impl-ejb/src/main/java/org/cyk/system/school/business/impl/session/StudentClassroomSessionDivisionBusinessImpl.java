@@ -184,6 +184,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments callArguments) {
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		//debug(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getResults());
 		setCallArgumentsObjects(callArguments, studentClassroomSessionDivisions);
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 			if(callArguments!=null && callArguments.getExecutionProgress()!=null){
@@ -209,7 +210,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		Collection<StudentSubjectEvaluation> studentSubjectEvaluations = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
-		
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={}"
 				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size());
@@ -221,6 +221,11 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		studentSubjectBusiness.updateAverage(subjects, studentSubjects, studentSubjectEvaluations, null);
 		updateAverage(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, callArguments);
+		
+		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
+		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
+		
+		
 		return studentClassroomSessionDivisions;
 	}
 	

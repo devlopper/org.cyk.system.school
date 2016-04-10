@@ -86,6 +86,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
 		r.getClassroomSessionDivision().setOpenedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getDuration())));
+		//debug(r.getClassroomSessionDivision());
 		r.setAttendedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getAttendedDuration())));
 		r.setMissedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()

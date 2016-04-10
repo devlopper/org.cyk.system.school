@@ -136,8 +136,9 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	@Override
 	public void rank(Collection<RESULT> results,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments) {
 		List<SortableStudentResults> sortables = new ArrayList<>();
-		for(RESULT result : results) 
+		for(RESULT result : results) {
 			sortables.add(new SortableStudentResults(result,Boolean.TRUE));  
+		}
 		
 		mathematicsBusiness.rank(sortables, options);
 	}
@@ -190,6 +191,8 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				Long attendableDuration = getAttendableDuration(result);
 				if(attendableDuration==null)
 					logTrace("No attendable duration has been set for {}", result.getLogMessage());
+				else if(attendance.getMissedDuration()==null)
+					logTrace("No missed duration has been set for {}", result.getLogMessage());
 				else
 					attendance.setAttendedDuration(attendableDuration-attendance.getMissedDuration());
 			}

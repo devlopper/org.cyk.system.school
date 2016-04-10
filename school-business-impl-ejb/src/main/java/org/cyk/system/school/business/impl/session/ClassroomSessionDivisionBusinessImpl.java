@@ -66,7 +66,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 				classroomSessionDivision.getResults().setAverage(average.getValue());
 				classroomSessionDivision.getResults().setNumberOfStudent(numberOfStudent);
 			}
-			
+			dao.update(classroomSessionDivision);
 		}
 	}
 
