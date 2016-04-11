@@ -28,8 +28,12 @@ import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.UICommandable.IconType;
 import org.cyk.ui.api.command.menu.SystemMenu;
+import org.cyk.ui.api.model.AbstractTree;
+import org.cyk.ui.api.model.HierarchyNode;
 import org.cyk.ui.web.api.AjaxListener.ListenValueMethod;
+import org.cyk.ui.web.api.WebHierarchyNode;
 import org.cyk.ui.web.primefaces.AbstractPrimefacesManager;
+import org.cyk.ui.web.primefaces.Tree;
 import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 
 @Getter
@@ -74,13 +78,13 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		addBusinessMenu(systemMenu,getMarksCardCommandable(userSession, null));
 		
 		systemMenu.getReferenceEntities().add(getControlPanelCommandable(userSession, null));
-		
+		userSession.setNavigator(getNavigator(org.primefaces.component.tree.Tree.class,WebHierarchyNode.class,userSession));
 		return systemMenu;
 	}
 	
 	/**/
 	
-	public UICommandable getRegistrationCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getRegistrationCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("command.actor.registration", IconType.PERSON);
@@ -91,7 +95,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		return module;
 	}
 	
-	public UICommandable getClassCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getClassCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = uiProvider.createCommandable(businessEntityInfos(ClassroomSession.class).getUserInterface().getLabelId(), null);
 		if(userSession.hasRole(Role.MANAGER)){
 			module.addChild(menuManager.crudMany(ClassroomSession.class, null));
@@ -105,7 +109,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		return module;
 	}
 	
-	public UICommandable getResultsCardCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getResultsCardCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("school.results", null);
@@ -116,7 +120,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		return module;
 	}
 	
-	public UICommandable getMarksCardCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getMarksCardCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("school.markscard", null);
@@ -126,7 +130,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		return module;
 	}
 	
-	public UICommandable getControlPanelCommandable(AbstractUserSession userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getControlPanelCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("commandable.school", null);
@@ -135,6 +139,23 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			module.addChild(menuManager.crudMany(JobTitle.class, null));
 		}
 		return module;
+	}
+	
+	@Override
+	protected <NODE, NODE_MODEL extends HierarchyNode> AbstractTree<NODE, NODE_MODEL> createNavigatorTree(AbstractUserSession<NODE, NODE_MODEL> userSession) {
+		AbstractTree<NODE, NODE_MODEL> tree = super.createNavigatorTree(userSession);
+		//((Tree)tree).setOutcome(uiManager.businessEntityInfos(ClassroomSession.class).getUserInterface().getConsultViewId());
+		//tree.getTreeListeners().add(new  TreeListener<NODE, NODE_MODEL>() {});
+		return tree;
+	}
+	
+	@Override
+	protected <NODE, NODE_MODEL extends HierarchyNode> Collection<?> getNavigatorTreeNodeDatas(AbstractUserSession<NODE, NODE_MODEL> userSession) {
+		if(userSession.hasRole(Role.MANAGER)){
+			return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
+		}else{
+			return null;
+		}
 	}
 	
 	/**/
