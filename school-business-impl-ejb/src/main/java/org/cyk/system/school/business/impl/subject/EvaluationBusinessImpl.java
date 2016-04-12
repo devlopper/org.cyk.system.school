@@ -11,9 +11,11 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
@@ -25,6 +27,7 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	
 	@Inject private StudentSubjectEvaluationDao studentSubjectEvaluationDao;
 	@Inject private StudentSubjectDao studentSubjectDao;
+	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeDao classroomSessionDivisionSubjectEvaluationTypeDao;
 	
 	@Inject
 	public EvaluationBusinessImpl(EvaluationDao dao) {
@@ -49,6 +52,8 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 		exceptionUtils().cannotCreateMoreThan(numberOfEvaluations,evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval(),  Evaluation.class);
 		if(evaluation.getDate()==null)
 			evaluation.setDate(universalTimeCoordinated());
+		commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, 1l);
+		classroomSessionDivisionSubjectEvaluationTypeDao.update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
 		evaluation = super.create(evaluation);
 		save(evaluation);
 		return evaluation;
@@ -81,6 +86,10 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	public Evaluation delete(Evaluation evaluation) {
 		for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluationDao.readByEvaluation(evaluation))
 			studentSubjectEvaluationDao.delete(studentSubjectEvaluation);
+		
+		commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, -1l);
+		classroomSessionDivisionSubjectEvaluationTypeDao.update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
+		
 		return super.delete(evaluation);
 	}
 	

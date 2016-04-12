@@ -20,6 +20,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 
@@ -29,6 +30,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	private static final long serialVersionUID = -3799482462496328200L;
 	
 	@Inject private SubjectClassroomSessionDao subjectClassroomSessionDao;
+	@Inject private ClassroomSessionDivisionDao classroomSessionDivisionDao;
 	
 	@Inject
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {
@@ -44,6 +46,8 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			subjectClassroomSession = new SubjectClassroomSession(classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
 			subjectClassroomSessionDao.create(subjectClassroomSession);
 		}
+		commonUtils.increment(Long.class, classroomSessionDivisionSubject.getClassroomSessionDivision(), ClassroomSessionDivision.FIELD_NUMBER_OF_SUBJECTS, 1l);
+		classroomSessionDivisionDao.update(classroomSessionDivisionSubject.getClassroomSessionDivision());
 		return classroomSessionDivisionSubject;
 	}
 	
@@ -100,4 +104,5 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	public Collection<ClassroomSessionDivisionSubject> findByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision,Teacher teacher) {
 		return dao.readByClassroomSessionDivisionByTeacher(classroomSessionDivision,teacher);
 	}
+
 }

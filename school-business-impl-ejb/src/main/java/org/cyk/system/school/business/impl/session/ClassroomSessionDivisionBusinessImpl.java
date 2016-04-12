@@ -20,6 +20,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 
 @Stateless
@@ -27,6 +28,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
+	@Inject private ClassroomSessionDao classroomSessionDao;
 	
 	@Inject
 	public ClassroomSessionDivisionBusinessImpl(ClassroomSessionDivisionDao dao) {
@@ -36,6 +38,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override
 	public ClassroomSessionDivision create(ClassroomSessionDivision classroomSessionDivision) {
 		classroomSessionDivision.setIndex(dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()).byteValue());
+		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
+		classroomSessionDao.update(classroomSessionDivision.getClassroomSession());
 		return super.create(classroomSessionDivision);
 	}
 	
@@ -84,6 +88,11 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivision> findByClassroomSessionsByIndex(Collection<ClassroomSession> classroomSessions,Byte index) {
 		return dao.readByClassroomSessionsByIndex(classroomSessions,index);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public ClassroomSessionDivision findByClassroomSessionByIndex(ClassroomSession classroomSession, Byte index) {
+		return dao.readByClassroomSessionByIndex(classroomSession,index);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

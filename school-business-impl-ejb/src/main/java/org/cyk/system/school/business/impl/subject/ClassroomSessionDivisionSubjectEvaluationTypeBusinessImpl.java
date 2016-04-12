@@ -11,15 +11,18 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.EvaluationType;
-import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 
 @Stateless
 public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubjectEvaluationType, ClassroomSessionDivisionSubjectEvaluationTypeDao> implements ClassroomSessionDivisionSubjectEvaluationTypeBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
+	
+	@Inject private ClassroomSessionDivisionSubjectDao classroomSessionDivisionSubjectDao;
 	
 	@Inject
 	public ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl(ClassroomSessionDivisionSubjectEvaluationTypeDao dao) {
@@ -30,6 +33,8 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 	public ClassroomSessionDivisionSubjectEvaluationType create(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 		if(classroomSessionDivisionSubjectEvaluationType.getCountInterval()!=null)
 			RootBusinessLayer.getInstance().getIntervalBusiness().create(classroomSessionDivisionSubjectEvaluationType.getCountInterval());
+		commonUtils.increment(Long.class, classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject(), ClassroomSessionDivisionSubject.FIELD_NUMBER_OF_EVALUATION_TYPES, 1l);
+		classroomSessionDivisionSubjectDao.update(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
 		return super.create(classroomSessionDivisionSubjectEvaluationType);
 	}
 	

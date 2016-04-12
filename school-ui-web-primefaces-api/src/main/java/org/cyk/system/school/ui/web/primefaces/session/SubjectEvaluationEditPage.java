@@ -56,7 +56,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 			else
 				classroomSessionDivisionSubject = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().find(classroomSessionDivisionSubjectIdentifier);	
 		}else{
-			subjectEvaluationType = SchoolBusinessLayer.getInstance().getSubjectEvaluationTypeBusiness().find(subjectEvaluationTypeIdentifier);
+			subjectEvaluationType = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectEvaluationTypeBusiness().find(subjectEvaluationTypeIdentifier);
 			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 			
@@ -113,7 +113,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
-		setChoices(Form.FIELD_TYPE, SchoolBusinessLayer.getInstance().getSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
+		setChoices(Form.FIELD_TYPE, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
 	
 	@Override

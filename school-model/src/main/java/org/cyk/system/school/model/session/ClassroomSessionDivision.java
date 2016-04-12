@@ -34,7 +34,8 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	@ManyToOne @NotNull private ClassroomSession classroomSession;
 	@ManyToOne @NotNull private TimeDivisionType timeDivisionType;
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal coefficient;
-	@Column(name="order_index") @NotNull private Byte index;
+	@Column(name="order_index",nullable=false) @NotNull private Byte index;
+	@Column(nullable=false) @NotNull private Long numberOfSubjects=0l;
 	@Embedded private NodeResults results = new NodeResults();
 	
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
@@ -80,5 +81,6 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	public static final String FIELD_COEFFICIENT = "coefficient";
 	public static final String FIELD_RESULTS = "results";
 	public static final String FIELD_INDEX = "index";
+	public static final String FIELD_NUMBER_OF_SUBJECTS = "numberOfSubjects";
 	
 }

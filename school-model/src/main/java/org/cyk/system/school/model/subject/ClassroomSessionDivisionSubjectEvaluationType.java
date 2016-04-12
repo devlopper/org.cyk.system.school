@@ -28,6 +28,7 @@ public class ClassroomSessionDivisionSubjectEvaluationType extends AbstractIdent
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal coefficient;
 	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal maximumValue;
 	@OneToOne private Interval countInterval;
+	@Column(nullable=false) @NotNull private Long numberOfEvaluations=0l;
 	
 	public ClassroomSessionDivisionSubjectEvaluationType(ClassroomSessionDivisionSubject classroomSessionDivisionSubject, EvaluationType evaluationType,BigDecimal coefficient, BigDecimal maximumValue) {
 		super();
@@ -55,4 +56,6 @@ public class ClassroomSessionDivisionSubjectEvaluationType extends AbstractIdent
 		return String.format(LOG_FORMAT, classroomSessionDivisionSubject.getIdentifier(),evaluationType.getIdentifier());
 	}
 	private static final String LOG_FORMAT = ClassroomSessionDivisionSubjectEvaluationType.class.getSimpleName()+"(SUBJECT=%s TYPE=%s)";
+	
+	public static final String FIELD_NUMBER_OF_EVALUATIONS = "numberOfEvaluations";
 }

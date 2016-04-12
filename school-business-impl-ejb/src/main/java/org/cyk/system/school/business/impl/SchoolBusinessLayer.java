@@ -87,7 +87,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private LevelGroupTypeBusiness levelGroupTypeBusiness;
 	@Inject private EvaluationBusiness evaluationBusiness;
 	@Inject private EvaluationTypeBusiness evaluationTypeBusiness;
-	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
+	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness classroomSessionDivisionSubjectEvaluationTypeBusiness;
 	@Inject private LectureBusiness lectureBusiness;
 	@Inject private LevelGroupBusiness levelGroupBusiness;
 	@Inject private SubjectClassroomSessionBusiness subjectClassroomSessionBusiness;
@@ -178,7 +178,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
         beansMap.put((Class)ClassroomSessionDivision.class, (TypedBusiness)classroomSessionDivisionBusiness);
         beansMap.put((Class)ClassroomSessionDivisionSubject.class, (TypedBusiness)classroomSessionDivisionSubjectBusiness);
         beansMap.put((Class)Evaluation.class, (TypedBusiness)evaluationBusiness);
-        beansMap.put((Class)ClassroomSessionDivisionSubjectEvaluationType.class, (TypedBusiness)subjectEvaluationTypeBusiness);
+        beansMap.put((Class)ClassroomSessionDivisionSubjectEvaluationType.class, (TypedBusiness)classroomSessionDivisionSubjectEvaluationTypeBusiness);
         beansMap.put((Class)Lecture.class, (TypedBusiness)lectureBusiness);
         beansMap.put((Class)StudentClassroomSession.class, (TypedBusiness)studentClassroomSessionBusiness);
         beansMap.put((Class)StudentClassroomSessionDivision.class, (TypedBusiness)studentClassroomSessionDivisionBusiness);

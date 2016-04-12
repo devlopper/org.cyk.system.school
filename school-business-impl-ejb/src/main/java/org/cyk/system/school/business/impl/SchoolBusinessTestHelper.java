@@ -142,7 +142,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	public void createSubjectEvaluations(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Boolean coefficientApplied){
 		Collection<Evaluation> subjectEvaluations = new ArrayList<>();
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
-			Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = schoolBusinessLayer.getSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+			Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 			Collection<StudentSubject> studentSubjects = schoolBusinessLayer.getStudentSubjectBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 			if(studentSubjects.isEmpty())
 				continue;
@@ -554,7 +554,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				BigDecimal coefficient = new BigDecimal((String) customClassroomSessionDivisionSubjectEvaluationTypeInfos[i][1]);
 				BigDecimal maximumValue = new BigDecimal((String) customClassroomSessionDivisionSubjectEvaluationTypeInfos[i][2]);
 				ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType = new ClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubject, evaluationType, coefficient,maximumValue);
-				schoolBusinessLayer.getSubjectEvaluationTypeBusiness().create(subjectEvaluationType);
+				schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().create(subjectEvaluationType);
 			}
 			for(Student student : customStudents){
 				StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);

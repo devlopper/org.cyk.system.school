@@ -3,9 +3,6 @@ package org.cyk.system.school.ui.web.primefaces;
 import java.io.Serializable;
 import java.util.Collection;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.model.party.person.JobTitle;
@@ -33,14 +30,19 @@ import org.cyk.ui.api.model.HierarchyNode;
 import org.cyk.ui.web.api.AjaxListener.ListenValueMethod;
 import org.cyk.ui.web.api.WebHierarchyNode;
 import org.cyk.ui.web.primefaces.AbstractPrimefacesManager;
-import org.cyk.ui.web.primefaces.Tree;
 import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
+import org.primefaces.model.TreeNode;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager implements Serializable {
 
 	private static final long serialVersionUID = 7231721191071228908L;
 
+	private SchoolBusinessLayer schoolBusinessLayer;
+	
 	protected final String outcomeConfigureLevels = "configureLevels";
 	@Setter protected String academicSessionInfos="ACA INFOS TO SET";
 	@Setter protected String classroomSessionDivisionTypeName,classroomSessionDivisionInfos="CSD INFOS TO SET";
@@ -61,6 +63,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	@Override
 	protected void initialisation() {
 		super.initialisation(); 
+		schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 		identifier = "school";
 		AcademicSession academicSession = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null);
 		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(academicSession.getPeriod());
@@ -68,6 +71,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		classroomSessionDivisionInfos = "No "+academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex();
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public SystemMenu systemMenu(AbstractUserSession userSession) {
 		SystemMenu systemMenu = new SystemMenu();
@@ -78,8 +82,62 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		addBusinessMenu(systemMenu,getMarksCardCommandable(userSession, null));
 		
 		systemMenu.getReferenceEntities().add(getControlPanelCommandable(userSession, null));
-		userSession.setNavigator(getNavigator(org.primefaces.component.tree.Tree.class,WebHierarchyNode.class,userSession));
+		userSession.setNavigatorTree(getNavigator(TreeNode.class,WebHierarchyNode.class,ClassroomSession.class,userSession));
+		
 		return systemMenu;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected <NODE, NODE_MODEL extends HierarchyNode> AbstractTree<NODE, NODE_MODEL> createNavigatorTree(AbstractUserSession<NODE, NODE_MODEL> userSession) {
+		AbstractTree<NODE, NODE_MODEL> tree = super.createNavigatorTree(userSession);
+		tree.getTreeListeners().add((org.cyk.ui.api.model.AbstractTree.Listener<NODE, NODE_MODEL>) new  AbstractTree.Listener.Adapter.Default<TreeNode,WebHierarchyNode>(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Boolean isLeaf(TreeNode node) {
+				Object object = nodeModel(node).getData();
+				//System.out.println("AbstractSchoolWebManager.createNavigatorTree(...).new Default() {...}.isLeaf()");
+				debug(object);
+				if(object instanceof ClassroomSession){
+					ClassroomSession classroomSession = (ClassroomSession) object;
+					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
+							, schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+					return classroomSessionDivision.getNumberOfSubjects() == 0;
+				}
+				return super.isLeaf(node);
+			}
+			
+			@Override
+			public Collection<?> children(Object object) { 
+				//System.out.println("AbstractSchoolWebManager.createNavigatorTree(...).new Default() {...}.children()");
+				//debug(object);
+				//if(object instanceof WebHierarchyNode)
+				//	object = ((WebHierarchyNode)object).getData();
+				if(object instanceof ClassroomSession){
+					ClassroomSession classroomSession = (ClassroomSession) object;
+					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
+							, schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+					return schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(classroomSessionDivision);
+				}
+				if(object instanceof ClassroomSessionDivisionSubject){
+					ClassroomSessionDivisionSubject classroomSessionDivisionSubject = (ClassroomSessionDivisionSubject) object;
+					return schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+				}
+				
+				return super.children(object);
+			}
+		});
+		return tree;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected <NODE, NODE_MODEL extends HierarchyNode,TYPE> Collection<TYPE> getNavigatorTreeNodeDatas(Class<TYPE> dataClass,AbstractUserSession<NODE, NODE_MODEL> userSession) {
+		if(userSession.hasRole(Role.MANAGER)){
+			return (Collection<TYPE>) SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
+		}else{
+			return null;
+		}
 	}
 	
 	/**/
@@ -139,23 +197,6 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			module.addChild(menuManager.crudMany(JobTitle.class, null));
 		}
 		return module;
-	}
-	
-	@Override
-	protected <NODE, NODE_MODEL extends HierarchyNode> AbstractTree<NODE, NODE_MODEL> createNavigatorTree(AbstractUserSession<NODE, NODE_MODEL> userSession) {
-		AbstractTree<NODE, NODE_MODEL> tree = super.createNavigatorTree(userSession);
-		//((Tree)tree).setOutcome(uiManager.businessEntityInfos(ClassroomSession.class).getUserInterface().getConsultViewId());
-		//tree.getTreeListeners().add(new  TreeListener<NODE, NODE_MODEL>() {});
-		return tree;
-	}
-	
-	@Override
-	protected <NODE, NODE_MODEL extends HierarchyNode> Collection<?> getNavigatorTreeNodeDatas(AbstractUserSession<NODE, NODE_MODEL> userSession) {
-		if(userSession.hasRole(Role.MANAGER)){
-			return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
-		}else{
-			return null;
-		}
 	}
 	
 	/**/
@@ -257,7 +298,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		if(classroomSessionDivisionSubject==null){
 			page.setChoices(subjectEvaluationTypeFieldName, null);
 		}else{
-			page.setChoices(subjectEvaluationTypeFieldName, SchoolBusinessLayer.getInstance().getSubjectEvaluationTypeBusiness()
+			page.setChoices(subjectEvaluationTypeFieldName, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectEvaluationTypeBusiness()
 					.findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 		}
 	}
