@@ -97,7 +97,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			public Boolean isLeaf(TreeNode node) {
 				Object object = nodeModel(node).getData();
 				//System.out.println("AbstractSchoolWebManager.createNavigatorTree(...).new Default() {...}.isLeaf()");
-				debug(object);
+				//debug(object);
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
 					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
