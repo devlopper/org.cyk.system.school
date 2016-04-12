@@ -2,8 +2,6 @@ package org.cyk.system.school.business.impl.iesa;
 
 import javax.inject.Inject;
 
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 import org.cyk.system.root.business.api.markuplanguage.MarkupLanguageBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.file.report.jasper.JasperReportBusinessImpl;
@@ -13,6 +11,8 @@ import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.Evaluation;
+
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
 

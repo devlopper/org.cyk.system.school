@@ -10,21 +10,13 @@ import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
-import org.cyk.system.root.model.event.Event;
-import org.cyk.system.root.model.event.EventMissed;
-import org.cyk.system.root.model.event.EventMissedReason;
-import org.cyk.system.root.model.event.EventParticipation;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
@@ -47,7 +39,6 @@ import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
 import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataProducer;
@@ -72,7 +63,6 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.EvaluationType;
-import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
@@ -83,7 +73,11 @@ import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSub
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {
@@ -235,13 +229,25 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			}
 
 		});
-		SchoolDataProducerHelper.Listener.COLLECTION.add(new SchoolDataProducerHelper.Listener.Adapter(){
-			private static final long serialVersionUID = -5322009577688489872L;
+		SchoolDataProducerHelper.Listener.COLLECTION.add(new SchoolDataProducerHelper.Listener.Adapter.Default(){
+			private static final long serialVersionUID = -5301917191935456060L;
+
 			@Override
-			public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {
-				classroomSessionDivision.setStudentSubjectAttendanceAggregated(Boolean.FALSE);
+    		public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {
+    			super.classroomSessionDivisionCreated(classroomSessionDivision);
+    			classroomSessionDivision.getPeriod().setFromDate(new DateTime(2016, 4, 4, 0, 0).toDate());
+    			classroomSessionDivision.getPeriod().setToDate(new DateTime(2016, 6, 13, 0, 0).toDate());
+    			classroomSessionDivision.setDuration(48l * DateTimeConstants.MILLIS_PER_DAY);
+    			classroomSessionDivision.setStudentSubjectAttendanceAggregated(Boolean.FALSE);
+    		}
+			
+			@Override
+			public void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+				super.classroomSessionDivisionSubjectEvaluationTypeCreated(classroomSessionDivisionSubjectEvaluationType);
+				classroomSessionDivisionSubjectEvaluationType.setCountInterval(rootBusinessLayer.getIntervalBusiness().instanciateOne(null
+						, RandomStringUtils.randomAlphanumeric(6), "1", "1"));
 			}
-		});
+    	});
 	}
 	
 	@SuppressWarnings("unchecked")

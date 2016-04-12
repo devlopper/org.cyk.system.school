@@ -1,10 +1,13 @@
 package org.cyk.system.school.ui.web.primefaces;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
+import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.party.person.JobTitle;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.party.person.PersonTitle;
@@ -19,6 +22,7 @@ import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.UIManager;
@@ -94,25 +98,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		tree.getTreeListeners().add((org.cyk.ui.api.model.AbstractTree.Listener<NODE, NODE_MODEL>) new  AbstractTree.Listener.Adapter.Default<TreeNode,WebHierarchyNode>(){
 			private static final long serialVersionUID = 1L;
 			@Override
-			public Boolean isLeaf(TreeNode node) {
-				Object object = nodeModel(node).getData();
-				//System.out.println("AbstractSchoolWebManager.createNavigatorTree(...).new Default() {...}.isLeaf()");
-				//debug(object);
-				if(object instanceof ClassroomSession){
-					ClassroomSession classroomSession = (ClassroomSession) object;
-					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
-							, schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
-					return classroomSessionDivision.getNumberOfSubjects() == 0;
-				}
-				return super.isLeaf(node);
-			}
-			
-			@Override
 			public Collection<?> children(Object object) { 
-				//System.out.println("AbstractSchoolWebManager.createNavigatorTree(...).new Default() {...}.children()");
-				//debug(object);
-				//if(object instanceof WebHierarchyNode)
-				//	object = ((WebHierarchyNode)object).getData();
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
 					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
@@ -123,9 +109,82 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 					ClassroomSessionDivisionSubject classroomSessionDivisionSubject = (ClassroomSessionDivisionSubject) object;
 					return schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 				}
-				
 				return super.children(object);
 			}
+			
+			@Override
+			public Boolean isLeaf(TreeNode node) {
+				Object object = nodeModel(node).getData();
+				if(object instanceof ClassroomSession){
+					ClassroomSession classroomSession = (ClassroomSession) object;
+					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
+							, schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+					return classroomSessionDivision.getNumberOfSubjects() == 0;
+				}
+				return super.isLeaf(node);
+			}
+			
+			@Override
+			public Object getRedirectionObject(TreeNode node) {
+				Object object = ((WebHierarchyNode)node.getData()).getData();
+				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
+					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
+					if(RootBusinessLayer.getInstance().getIntervalBusiness().isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
+							return new Evaluation();
+						else{
+							return schoolBusinessLayer.getEvaluationBusiness().findByClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType)
+									.iterator().next();
+						}
+				}
+				return super.getRedirectionObject(node);
+			}
+			
+			@Override
+			public Crud getRedirectionCrud(TreeNode node) {
+				Object object = ((WebHierarchyNode)node.getData()).getData();
+				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
+					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
+					if(RootBusinessLayer.getInstance().getIntervalBusiness().isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
+							return Crud.CREATE;
+						else
+							return Crud.READ;
+				}
+				return super.getRedirectionCrud(node);
+			}
+			
+			/*@Override
+			public String getRedirectToViewId(TreeNode node,Crud crud,Object object) {
+				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
+					debug(object);
+					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
+					if(RootBusinessLayer.getInstance().getIntervalBusiness().isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
+							return uiManager.businessEntityInfos(Evaluation.class).getUserInterface().getEditViewId();
+						else
+							return uiManager.businessEntityInfos(Evaluation.class).getUserInterface().getConsultViewId();
+				}
+				return super.getRedirectToViewId(node,crud,object);
+			}*/
+			/*
+			@Override
+			public Object[] getRedirectToParameters(TreeNode node,Crud crud,Object object) {
+				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
+					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
+					if(RootBusinessLayer.getInstance().getIntervalBusiness().isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
+							return uiManager.businessEntityInfos(Evaluation.class).getUserInterface().getEditViewId();
+						else
+							return uiManager.businessEntityInfos(Evaluation.class).getUserInterface().getConsultViewId();
+				}
+				return super.getRedirectToParameters(node,crud,object);
+			}
+			*/
 		});
 		return tree;
 	}

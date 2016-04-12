@@ -97,4 +97,9 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	public Collection<Evaluation> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		return dao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<Evaluation> findByClassroomSessionDivisionSubjectEvaluationType(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+		return dao.readByClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType);
+	}
 }
