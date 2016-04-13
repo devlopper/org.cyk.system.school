@@ -10,12 +10,13 @@
       xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
       
     <div class="ui-state-highlight">
-    	<h:outputText value="#{uiManager.text('model.entity.academicSession')}" />
+    	<h:outputText value="#{uiManager.text('model.entity.academicSession')} : #{schoolWebManager.academicSessionInfos}" />
     	<br />
-    	<h:outputText value="#{schoolWebManager.academicSessionInfos}" />
-    	<br />
-    	<h:outputText value="#{schoolWebManager.classroomSessionDivisionTypeName}" />
-    	<br />
+    	<!--h:outputText value="#{schoolWebManager.academicSessionInfos}" />
+    	<br /-->
+    	<h:outputText value="#{schoolWebManager.classroomSessionDivisionTypeName} : #{schoolWebManager.classroomSessionDivisionInfos}" />
+    	<!--br />
     	<h:outputText value="#{schoolWebManager.classroomSessionDivisionInfos}" />
+    	-->
     </div>
 </html>

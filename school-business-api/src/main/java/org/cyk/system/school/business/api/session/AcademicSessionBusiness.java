@@ -12,4 +12,6 @@ public interface AcademicSessionBusiness extends AbstractIdentifiablePeriodBusin
 
 	BigDecimal convertAttendanceTimeToDivisionDuration(Long millisecond);
 	Long convertAttendanceTimeToMillisecond(BigDecimal duration);
+	
+	AcademicSession update(AcademicSession academicSession,Boolean cascade);
 }

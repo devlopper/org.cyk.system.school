@@ -19,7 +19,7 @@ import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 
 @Named @ViewScoped @Getter @Setter
-public class SubjectEvaluationConsultPage extends AbstractConsultPage<Evaluation> implements Serializable {
+public class EvaluationConsultPage extends AbstractConsultPage<Evaluation> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	

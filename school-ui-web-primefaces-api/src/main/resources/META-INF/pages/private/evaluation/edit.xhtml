@@ -10,10 +10,10 @@
       xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
 
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
- 		<ui:param name="pageController" value="#{subjectEvaluationEditPage}" />
+ 		<ui:param name="pageController" value="#{evaluationEditPage}" />
  		<ui:define name="body">
- 			<cyk:formOneData value="#{subjectEvaluationEditPage.form}"/>
- 			<cyk:itemCollection value="#{subjectEvaluationEditPage.markCollection}" >
+ 			<cyk:formOneData value="#{evaluationEditPage.form}"/>
+ 			<cyk:itemCollection value="#{evaluationEditPage.markCollection}" >
  				<p:column headerText="#{uiManager.text('field.registration.code')}" >
  					<h:outputText value="#{item.registrationCode}" />
  				</p:column>
@@ -25,15 +25,16 @@
  					<!--cyk:inputText value="#{item.form.findInputByFieldName('type1')}"/-->
  					
  					<pe:inputNumber id="markValue" value="#{item.value}" required="#{true}" autocomplete="false" binding="#{mark}"
- 						minValue="0" maxValue="#{subjectEvaluationEditPage.maximumValue}" disabled="#{not item.applicable}"
- 						decimalPlaces="#{subjectEvaluationEditPage.decimalPlaces}"  requiredMessage="#{item.names} - #{uiManager.textInputValueRequired('school.mark')}"/>
- 					
+ 						minValue="0" maxValue="#{evaluationEditPage.maximumValue}" disabled="#{not item.applicable}"
+ 						decimalPlaces="#{evaluationEditPage.decimalPlaces}"  requiredMessage="#{item.names} - #{uiManager.textInputValueRequired('school.mark')}"
+ 						rendered="#{evaluationEditPage.form.editable}"/>
+ 					<h:outputText value="#{item.valueAsString}" rendered="#{not evaluationEditPage.form.editable}" />
  				</p:column>
  			</cyk:itemCollection>
  		</ui:define>
  		
  		<ui:define name="contentMenuBar">
- 			<cyk:command value="#{subjectEvaluationEditPage.form.submitCommandable}" executeParameter="#{subjectEvaluationEditPage.form.data}" />
+ 			<cyk:command value="#{evaluationEditPage.form.submitCommandable}" executeParameter="#{evaluationEditPage.form.data}" />
  		</ui:define>
  	</ui:decorate>
  

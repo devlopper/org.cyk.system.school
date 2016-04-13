@@ -72,7 +72,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		AcademicSession academicSession = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null);
 		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(academicSession.getPeriod());
 		classroomSessionDivisionTypeName = academicSession.getNodeInformations().getClassroomSessionTimeDivisionType().getName();
-		classroomSessionDivisionInfos = "No "+academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex();
+		classroomSessionDivisionInfos = "No "+(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex()+1);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -80,15 +80,21 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	public SystemMenu systemMenu(AbstractUserSession userSession) {
 		SystemMenu systemMenu = new SystemMenu();
 		
+		addBusinessMenu(systemMenu,getSchoolCommandable(userSession, null));
 		addBusinessMenu(systemMenu,getRegistrationCommandable(userSession, null));
 		addBusinessMenu(systemMenu,getClassCommandable(userSession, null));			
 		//addBusinessMenu(systemMenu,getResultsCardCommandable(userSession, null));
 		addBusinessMenu(systemMenu,getMarksCardCommandable(userSession, null));
 		
 		systemMenu.getReferenceEntities().add(getControlPanelCommandable(userSession, null));
-		userSession.setNavigatorTree(getNavigator(TreeNode.class,WebHierarchyNode.class,ClassroomSession.class,userSession));
 		
+		initialiseNavigatorTree(userSession);
 		return systemMenu;
+	}
+	
+	@Override
+	public void initialiseNavigatorTree(AbstractUserSession userSession) {
+		userSession.setNavigatorTree(getNavigator(TreeNode.class,WebHierarchyNode.class,ClassroomSession.class,userSession));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -201,6 +207,21 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	
 	/**/
 	
+	protected Boolean isConnectedUserInstanceOfTeacher(AbstractUserSession<?,?> userSession){
+		return isConnectedUserInstanceOfActor(userSession, SchoolBusinessLayer.getInstance().getTeacherBusiness());
+	}
+	
+	/**/
+	
+	public UICommandable getSchoolCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
+		UICommandable module = null;
+		if(userSession.hasRole(Role.MANAGER)){
+			module = uiProvider.createCommandable("school", null);
+			module.addChild(menuManager.crudMany(AcademicSession.class, null));
+		}
+		return module;
+	}
+	
 	public UICommandable getRegistrationCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
@@ -218,8 +239,9 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			module.addChild(menuManager.crudMany(ClassroomSession.class, null));
 			module.addChild(menuManager.createMany(StudentClassroomSession.class, null));
 			module.addChild(menuManager.createMany(StudentSubject.class, null));
+			//module.addChild(menuManager.createSelecMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
 		}
-		if(userSession.hasRole(Role.MANAGER) || SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser())!=null){
+		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(menuManager.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 			module.addChild(menuManager.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 		}

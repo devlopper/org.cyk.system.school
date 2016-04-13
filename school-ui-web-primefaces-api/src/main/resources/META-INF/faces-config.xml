@@ -7,8 +7,46 @@
 		<from-view-id>*</from-view-id>
 						
 		<navigation-case>
+			<from-outcome>updateAllAcademicSessionCurrentClassroomSessionDivisionIndex</from-outcome>
+			<to-view-id>/private/academicsession/updateallcurrentclassroomsessiondivisionindex.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>schoolConsultStudentClassroomSessionDivisionReportFileView</from-outcome>
 			<to-view-id>/private/school/consultstudentclassroomsessiondivisionreportfile.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>levelNameEditView</from-outcome>
+			<to-view-id>/private/levelname/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>levelNameConsultView</from-outcome>
+			<to-view-id>/private/levelname/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>levelNameListView</from-outcome>
+			<to-view-id>/private/levelname/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>academicSessionEditView</from-outcome>
+			<to-view-id>/private/academicsession/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>academicSessionConsultView</from-outcome>
+			<to-view-id>/private/academicsession/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>academicSessionListView</from-outcome>
+			<to-view-id>/private/academicsession/list.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

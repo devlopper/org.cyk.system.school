@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
@@ -15,11 +16,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.UIProvider;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -36,7 +39,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
 @Named @ViewScoped @Getter @Setter
-public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
+public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
@@ -45,6 +48,8 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 	private ItemCollection<Mark,StudentSubjectEvaluation> markCollection;
 	private BigDecimal maximumValue;
 	private Integer decimalPlaces = 0;
+	
+	@Inject private SchoolWebManager schoolWebManager;
 	
 	@Override
 	protected void initialisation() {
@@ -82,13 +87,21 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 			public Collection<StudentSubjectEvaluation> load() {
 				return identifiable.getStudentSubjectEvaluations();
 			}
-			
+			@Override
+			public Crud getCrud() {
+				return crud;
+			}
+			@Override
+			public Boolean isShowAddButton() {
+				return Boolean.FALSE;
+			}
 			@Override
 			public void instanciated(AbstractItemCollection<Mark, StudentSubjectEvaluation,SelectItem> itemCollection,Mark mark) {
 				super.instanciated(itemCollection, mark);
 				mark.setRegistrationCode(mark.getIdentifiable().getStudentSubject().getStudent().getRegistration().getCode());
 				mark.setNames(mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
 				mark.setValue(mark.getIdentifiable().getValue());
+				mark.setValueAsString(RootBusinessLayer.getInstance().getNumberBusiness().format(mark.getValue()));
 			}	
 			@Override
 			public void write(Mark item) {
@@ -99,7 +112,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 		((AbstractWebApplicableValueQuestion)markCollection.getApplicableValueQuestion()).setUpdate("markValue");
 		markCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
 		markCollection.getApplicableValueQuestion().setRendered(Boolean.TRUE);
-		markCollection.getAddCommandable().setRendered(Boolean.FALSE);
+		//markCollection.getAddCommandable().setRendered(Boolean.FALSE);
 		form.getControlSetListeners().add(new ControlSetAdapter<Object>(){
 			@Override
 			public Boolean build(Field field) {
@@ -108,6 +121,11 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 				return false;
 			}
 		});
+		
+		//TODO make it in super class
+		//markCollection.setShowFooter(markCollection.getAddCommandable().getRendered());
+		//onDocumentLoadJavaScript = markCollection.getFormatJavaScript();
+		
 	}
 	
 	@Override
@@ -120,11 +138,18 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 	protected void create() {
 		identifiable.setStudentSubjectEvaluations(markCollection.getIdentifiables());
 		super.create();
+		schoolWebManager.initialiseNavigatorTree(userSession);
 	}
 	
 	@Override
 	protected void update() {
 		SchoolBusinessLayer.getInstance().getEvaluationBusiness().save(identifiable,markCollection.getIdentifiables());
+	}
+	
+	@Override
+	protected void delete() {
+		super.delete();
+		schoolWebManager.initialiseNavigatorTree(userSession);
 	}
 	
 	@Override
@@ -170,6 +195,7 @@ public class SubjectEvaluationEditPage extends AbstractCrudOnePage<Evaluation> i
 		private String registrationCode;
 		private String names;
 		private BigDecimal value;
+		private String valueAsString;
 				
 		@Override
 		public String toString() {

@@ -16,8 +16,11 @@ import lombok.Setter;
 
 import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
+import org.cyk.utility.common.annotation.ModelBean;
+import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
+import org.cyk.utility.common.annotation.ModelBean.GenderType;
 
-@Getter @Setter @Entity @NoArgsConstructor
+@Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS,genderType=GenderType.FEMALE)
 public class AcademicSession extends AbstractIdentifiablePeriod implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;

@@ -12,6 +12,7 @@ import org.cyk.system.root.model.network.UniformResourceLocator;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
@@ -19,12 +20,14 @@ import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubje
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
 import org.cyk.system.school.business.impl.subject.StudentSubjectDetails;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionQueryOneFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
@@ -61,6 +64,10 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		//uiManager.businessEntityInfos(ClassroomSession.class).setUiConsultViewId("");
 		//IdentifiableConfiguration identifiableConfiguration = uiManager.findConfiguration(ClassroomSession.class);
 		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(AcademicSession.class, AcademicSessionEditPage.Form.class, AcademicSessionDetails.class,null,null));
+		uiManager.configBusinessIdentifiable(AcademicSession.class, null);
+		//webNavigationManager.useDynamicSelectView(AcademicSession.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class,null,ClassroomSessionQueryManyFormModel.class));
 		uiManager.configBusinessIdentifiable(ClassroomSession.class, null);

@@ -10,10 +10,13 @@
       xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
 
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
- 		<ui:param name="pageController" value="#{evaluationConsultPage}" />
+ 		<ui:param name="pageController" value="#{classroomSessionConsultPage}" />
  		<ui:define name="body">
- 			<cyk:formOneData value="#{evaluationConsultPage.details}" />	
-			<cyk:table value="#{evaluationConsultPage.markTable}" />
+ 			<cyk:formOneData value="#{classroomSessionConsultPage.details}" />	
+			<cyk:table value="#{classroomSessionConsultPage.divisionTable}" />
+			<cyk:table value="#{classroomSessionConsultPage.subjectTable}" />	
+			<cyk:table value="#{classroomSessionConsultPage.studentTable}" />
+			
  		</ui:define>
  	</ui:decorate>
  
