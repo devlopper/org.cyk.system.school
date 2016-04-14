@@ -49,5 +49,6 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	/**/
 	
 	public static final String FIELD_INDEX = "index";
+	public static final String FIELD_LEVEL = "level";
 	
 }

@@ -8,6 +8,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
+import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 
 public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession> {
@@ -21,5 +22,6 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	
 	BigDecimal convertAttendanceTimeToDivisionDuration(ClassroomSession classroomSession,Long millisecond);
 	Long convertAttendanceTimeToMillisecond(ClassroomSession classroomSession,BigDecimal duration);
+	Collection<ClassroomSession> findByAcademicSessionByLevelGroup(AcademicSession academicSession,LevelGroup levelGroup);
 
 }

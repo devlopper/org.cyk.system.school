@@ -41,4 +41,5 @@ public class Level extends AbstractIdentifiable implements Serializable {
 		return toString();
 	}
 	
+	public static final String FIELD_GROUP = "group";
 }

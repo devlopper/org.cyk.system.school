@@ -16,6 +16,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
+import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 
@@ -65,4 +66,8 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		return dao.readByAcademicSessionByLevelTimeDivisionBySuffix(academicSession,levelTimeDivision,suffix);
 	}
 	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSession> findByAcademicSessionByLevelGroup(AcademicSession academicSession, LevelGroup levelGroup) {
+		return dao.readByAcademicSessionByLevelGroup(academicSession,levelGroup);
+	}
 }
