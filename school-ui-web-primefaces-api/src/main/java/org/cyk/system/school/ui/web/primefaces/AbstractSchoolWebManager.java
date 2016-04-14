@@ -82,9 +82,8 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		
 		addBusinessMenu(systemMenu,getSchoolCommandable(userSession, null));
 		addBusinessMenu(systemMenu,getRegistrationCommandable(userSession, null));
-		addBusinessMenu(systemMenu,getClassCommandable(userSession, null));			
+		addBusinessMenu(systemMenu,getRegularActivitiesCommandable(userSession, null));		
 		addBusinessMenu(systemMenu,getResultsCardCommandable(userSession, null));
-		addBusinessMenu(systemMenu,getMarksCardCommandable(userSession, null));
 		
 		systemMenu.getReferenceEntities().add(getControlPanelCommandable(userSession, null));
 		
@@ -212,6 +211,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		if(userSession.hasRole(Role.MANAGER)){
 			module = uiProvider.createCommandable("school", null);
 			module.addChild(menuManager.crudMany(AcademicSession.class, null));
+			module.addChild(menuManager.crudMany(ClassroomSession.class, null));
 		}
 		return module;
 	}
@@ -223,18 +223,15 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			module.addChild(menuManager.crudMany(Student.class, null));
 			module.addChild(menuManager.crudMany(Teacher.class, null));
 			module.addChild(menuManager.crudMany(Employee.class, null));
+			
+			module.addChild(menuManager.createMany(StudentClassroomSession.class, null));
+			module.addChild(menuManager.createMany(StudentSubject.class, null));
 		}
 		return module;
 	}
 	
-	public UICommandable getClassCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
-		UICommandable module = uiProvider.createCommandable(businessEntityInfos(ClassroomSession.class).getUserInterface().getLabelId(), null);
-		if(userSession.hasRole(Role.MANAGER)){
-			module.addChild(menuManager.crudMany(ClassroomSession.class, null));
-			module.addChild(menuManager.createMany(StudentClassroomSession.class, null));
-			module.addChild(menuManager.createMany(StudentSubject.class, null));
-			//module.addChild(menuManager.createSelecMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
-		}
+	public UICommandable getRegularActivitiesCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
+		UICommandable module = uiProvider.createCommandable("school.activities", null);
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(menuManager.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 		}
@@ -246,6 +243,10 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(menuManager.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 		}
+		if(userSession.hasRole(Role.MANAGER)){
+			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
+			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
+		}
 		/*
 		if(userSession.hasRole(Role.MANAGER)){
 			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
@@ -253,16 +254,6 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionRankResults() ,null));
 		}
 		*/
-		return module;
-	}
-	
-	public UICommandable getMarksCardCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
-		UICommandable module = null;
-		if(userSession.hasRole(Role.MANAGER)){
-			module = uiProvider.createCommandable("school.markscard", null);
-			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
-			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
-		}
 		return module;
 	}
 	
