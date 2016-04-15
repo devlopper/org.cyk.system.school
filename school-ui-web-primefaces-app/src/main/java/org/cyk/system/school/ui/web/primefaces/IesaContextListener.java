@@ -8,9 +8,11 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.company.business.impl.TypedBusinessServiceAdapter;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
+import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.party.person.AbstractActor;
@@ -109,6 +111,15 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		SchoolBusinessLayer.getInstance().setReportProducer(new ReportProducer());
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
     	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
+    	
+    	AbstractTypedBusinessService.Listener.MAP.put(Student.class, new TypedBusinessServiceAdapter<Student>(){
+    		private static final long serialVersionUID = -3562693685285194133L;
+			@Override
+    		public void processOnCreated(Student student) {
+    			super.processOnCreated(student);
+    			createCustomer(student);
+    		}
+    	});
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
+import org.cyk.system.company.ui.web.primefaces.CompanyWebManager;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.party.person.JobTitle;
@@ -84,7 +85,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		addBusinessMenu(systemMenu,getRegistrationCommandable(userSession, null));
 		addBusinessMenu(systemMenu,getRegularActivitiesCommandable(userSession, null));		
 		addBusinessMenu(systemMenu,getResultsCardCommandable(userSession, null));
-		
+		addBusinessMenu(systemMenu,CompanyWebManager.getInstance().getCustomerCommandable(userSession, null));
 		systemMenu.getReferenceEntities().add(getControlPanelCommandable(userSession, null));
 		
 		initialiseNavigatorTree(userSession);

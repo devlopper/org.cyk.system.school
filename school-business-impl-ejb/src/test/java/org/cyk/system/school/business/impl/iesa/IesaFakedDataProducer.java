@@ -182,8 +182,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	
 	private CommonNodeInformations commonNodeInformations1,commonNodeInformations2;
 	
-	@Setter private Integer numbreOfTeachers = 10;
-	@Setter private Integer numbreOfStudents = 10;
+	@Setter private Integer numbreOfTeachers = 0;
+	@Setter private Integer numbreOfStudents = 0;
 	@Setter private Integer numbreOfLecturesByClassroomSessionDivisionSubject = 5;
 	@Setter private Integer numbreOfStudentsByClassroomSession = 25;
 	

@@ -110,7 +110,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 			SecurityFilter.addUniformResourceLocatorRuntimeConstraint(new UniformResourceLocator("/private/__role__/__manager__/evaluation/edit.jsf")
 				,new UniformResourceLocatorRuntimeConstraint(){
 					@Override
-					public Boolean isAccessibleByUserAccount(AbstractUserSession userSession,UserAccount userAccount, UniformResourceLocator uniformResourceLocator, HttpServletRequest request,HttpServletResponse response) {
+					public Boolean isAccessibleByUserAccount(AbstractUserSession<?,?> userSession,UserAccount userAccount, UniformResourceLocator uniformResourceLocator, HttpServletRequest request,HttpServletResponse response) {
 						Teacher teacher = schoolBusinessLayer.getTeacherBusiness().findByPerson((Person) userAccount.getUser());
 						if(teacher==null)
 							return Boolean.FALSE;
