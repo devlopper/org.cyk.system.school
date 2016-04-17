@@ -6,17 +6,17 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.company.model.product.IntangibleProduct;
+import org.cyk.system.company.model.sale.SalableProduct;
 import org.cyk.system.root.business.api.ClazzBusiness;
 import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFormatter;
+import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.model.AbstractIdentifiable;
@@ -43,6 +43,7 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentSubjectEvaluationBusiness;
 import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -62,6 +63,9 @@ import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER) @Getter
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
@@ -156,6 +160,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				return super.getParentOf(object);
 			}
 		});
+		
+		AbstractTypedBusinessService.Listener.MAP.put(Student.class, new StudentBusinessServiceAdapter());
 	}
 	
 	@Override
@@ -164,7 +170,10 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	}
 	
 	@Override
-	protected void persistData() {}
+	protected void persistData() {
+		create(new IntangibleProduct(SchoolConstant.INTANGIBLE_PRODUCT_TUITION, SchoolConstant.INTANGIBLE_PRODUCT_TUITION, null, null));
+    	create(new SalableProduct(getEnumeration(IntangibleProduct.class, SchoolConstant.INTANGIBLE_PRODUCT_TUITION), null));
+	}
 
 	@Override
 	protected void setConstants() {}

@@ -58,6 +58,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	protected String outcomeConsultSchoolStudentClassroomSessionDivisionReportFile  = "schoolConsultStudentClassroomSessionDivisionReportFileView";
 	
 	protected String outcomeStudentClassroomSessionDivisionMergeReport  = "studentClassroomSessionDivisionMergeReportView";
+	protected final String outcomeDefineTuition = "studentClassroomSessionTuitionEditView";
 	/*private String outcomeClassroomSessionMainDetails;
 	private String outcomeClassroomSessionDivisionDetails;
 	private String outcomeClassroomSessionSubjectDetails;

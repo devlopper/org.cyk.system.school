@@ -141,6 +141,11 @@
 			<to-view-id>/private/studentclassroomsession/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionTuitionEditView</from-outcome>
+			<to-view-id>/private/studentclassroomsession/tuitionedit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>studentClassroomSessionDivisionEditView</from-outcome>

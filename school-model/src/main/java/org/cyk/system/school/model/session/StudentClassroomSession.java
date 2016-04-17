@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.utility.common.Constant;
@@ -19,6 +20,7 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne private ClassroomSession classroomSession;
+	@ManyToOne private Sale tuitionSale;
 	
 	public StudentClassroomSession(Student student,ClassroomSession classroomSession) {
 		super();

@@ -9,6 +9,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
@@ -83,6 +84,10 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		}else{
 			//logTrace("Moving student from classroom session {} to {}", currentStudentClassroomSession.getClassroomSession(),studentClassroomSession.getClassroomSession());
 			
+		}
+	
+		if(studentClassroomSession.getTuitionSale()!=null && studentClassroomSession.getTuitionSale().getIdentifier()==null){
+			CompanyBusinessLayer.getInstance().getSaleBusiness().create(studentClassroomSession.getTuitionSale());
 		}
 		return super.update(studentClassroomSession);
 	}

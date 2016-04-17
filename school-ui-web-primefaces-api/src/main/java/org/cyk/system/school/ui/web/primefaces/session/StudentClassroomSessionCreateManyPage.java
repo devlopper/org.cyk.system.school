@@ -52,6 +52,14 @@ public class StudentClassroomSessionCreateManyPage extends AbstractCrudOnePage<S
 				item.setNames(item.getIdentifiable().getStudent().getPerson().getNames());
 				item.setClassroomSession(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSession()));
 			}	
+			@Override
+			public Boolean isShowAddButton() {
+				return Boolean.TRUE;
+			}
+			@Override
+			public Crud getCrud() {
+				return crud;
+			}
 		});
 	}
 	

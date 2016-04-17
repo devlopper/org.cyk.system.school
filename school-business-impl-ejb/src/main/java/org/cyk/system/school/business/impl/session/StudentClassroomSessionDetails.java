@@ -12,10 +12,17 @@ public class StudentClassroomSessionDetails extends AbstractOutputDetails<Studen
 	
 	@Input @InputText private String registrationCode;
 	@Input @InputText private String names;
+	@Input @InputText private String tuition;
 	
 	public StudentClassroomSessionDetails(StudentClassroomSession studentClassroomSession) {
 		super(studentClassroomSession);
 		registrationCode = studentClassroomSession.getStudent().getRegistration().getCode();
 		names = studentClassroomSession.getStudent().getPerson().getNames();
+		if(studentClassroomSession.getTuitionSale()==null){
+			tuition = "NA";
+		}else{
+			tuition = formatNumber(studentClassroomSession.getTuitionSale().getCost().getValue());
+		}
+		
 	}
 }
