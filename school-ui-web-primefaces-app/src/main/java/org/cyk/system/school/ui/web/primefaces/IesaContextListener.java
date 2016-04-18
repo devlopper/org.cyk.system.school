@@ -8,6 +8,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.company.business.impl.adapter.ActorBusinessServiceAdapter;
+import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
@@ -18,7 +20,6 @@ import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.StudentBusinessServiceAdapter;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -111,7 +112,8 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
     	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
     	
-    	StudentBusinessServiceAdapter.IS_CUSTOMER = Boolean.TRUE;
+    	ActorBusinessServiceAdapter.ARE_CUSTOMERS.add(Student.class);
+    	SaleConsultPage.SHOW_SALE_PRODUCT_TABLE = Boolean.FALSE;
 	}
 	
 	@Override

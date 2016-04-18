@@ -19,7 +19,7 @@ public class StudentClassroomSessionDetails extends AbstractOutputDetails<Studen
 		registrationCode = studentClassroomSession.getStudent().getRegistration().getCode();
 		names = studentClassroomSession.getStudent().getPerson().getNames();
 		if(studentClassroomSession.getTuitionSale()==null){
-			tuition = "NA";
+			
 		}else{
 			tuition = formatNumber(studentClassroomSession.getTuitionSale().getCost().getValue());
 		}

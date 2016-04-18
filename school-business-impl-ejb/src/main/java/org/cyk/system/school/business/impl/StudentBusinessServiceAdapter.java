@@ -9,10 +9,4 @@ public class StudentBusinessServiceAdapter extends ActorBusinessServiceAdapter<S
 
 	private static final long serialVersionUID = -8384047237353201461L;
 	
-	public static Boolean IS_CUSTOMER = Boolean.FALSE;
-	
-	@Override
-	protected Boolean isCustomer() {
-		return IS_CUSTOMER;
-	}
 }

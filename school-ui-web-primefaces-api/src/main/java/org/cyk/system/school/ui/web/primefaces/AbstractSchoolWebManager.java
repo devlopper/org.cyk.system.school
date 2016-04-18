@@ -87,6 +87,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		addBusinessMenu(systemMenu,getRegularActivitiesCommandable(userSession, null));		
 		addBusinessMenu(systemMenu,getResultsCardCommandable(userSession, null));
 		addBusinessMenu(systemMenu,CompanyWebManager.getInstance().getCustomerCommandable(userSession, null));
+		addBusinessMenu(systemMenu,CompanyWebManager.getInstance().getSaleCommandable(userSession, null,null));
 		systemMenu.getReferenceEntities().add(getControlPanelCommandable(userSession, null));
 		
 		initialiseNavigatorTree(userSession);
