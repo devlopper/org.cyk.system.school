@@ -423,7 +423,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	}
 	
 	@Override
-	public void produce(FakedDataProducerListener listener) {
+	public void produce(Listener listener) {
 		this.listener =listener;
 		rootDataProducerHelper.setBasePackage(SchoolBusinessLayer.class.getPackage());
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
@@ -438,7 +438,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	}
 	
 	@Override
-	protected void doBusiness(FakedDataProducerListener listener){
+	protected void doBusiness(Listener listener){
 		//ExecutorService executor = Executors.newFixedThreadPool(5);
 		//Collection<StudentSubject> studentSubjects = new ArrayList<>();
 		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{g1,g2,g3,g4,g5,g6,g7,g8,g9}){
@@ -629,11 +629,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 
 		private static final long serialVersionUID = 925442738199260331L;
 		private ClassroomSessionInfos classroomSessionInfos;
-		private FakedDataProducerListener listener;
+		private Listener listener;
 		private Collection<StudentSubject> studentSubjects;
 		private Collection<Student> students;
 		
-		public ClassroomsessionBusinessProducer(ClassroomSessionInfos classroomSessionInfos,FakedDataProducerListener listener,Collection<Student> students,Collection<StudentSubject> studentSubjects) {
+		public ClassroomsessionBusinessProducer(ClassroomSessionInfos classroomSessionInfos,Listener listener,Collection<Student> students,Collection<StudentSubject> studentSubjects) {
 			super();
 			this.classroomSessionInfos = classroomSessionInfos;
 			this.listener = listener;
