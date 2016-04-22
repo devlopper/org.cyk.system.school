@@ -573,14 +573,21 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				addIntervalCollectionLabelValueCollection(report,rootBusinessLayer.getMetricCollectionDao().read(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR).getValueIntervalCollection()
 						,Boolean.TRUE,Boolean.FALSE,null);
 				
-				if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==3){
-					labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
+				if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
+					/*labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
 					labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
 					labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
 					//labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", 
 					//		studentClassroomSessionDivision.get "To Compute");
 					labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", 
 							format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNextStartingDate()));
+					*/
+					report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
+							{"ANNUAL AVERAGE","TO COMPUTE"}
+							,{"ANNUAL GRADE","TO COMPUTE"}
+							,{"ANNUAL RANK","TO COMPUTE"}
+							,{"NEXT ACADEMIC SESSION","TO COMPUTE"}
+							});
 				}else{
 					ClassroomSessionDivision nextClassroomSessionDivision = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionDao()
 							.readByClassroomSessionByIndex(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()

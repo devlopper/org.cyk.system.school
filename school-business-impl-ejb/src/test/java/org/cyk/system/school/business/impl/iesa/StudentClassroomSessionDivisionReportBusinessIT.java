@@ -46,8 +46,8 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getPk().division(0).getClassroomSessionDivision(), null
     	//		, Boolean.TRUE,Boolean.TRUE);
     	
-    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getG1().division(0).getClassroomSessionDivision(), new Object[][]{
-    		new Object[]{dataProducer.getG1().division(0).subject(0).getClassroomSessionDivisionSubject(),new String[][]{
+    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getG1().division(2).getClassroomSessionDivision(), new Object[][]{
+    		new Object[]{dataProducer.getG1().division(2).subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     	    		{"STUD1","90","30","60"}
     	    		,{"STUD2","70","50","60"}
     	              ,{"STUD3","40","60","40"}
