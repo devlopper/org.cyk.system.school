@@ -30,8 +30,9 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.ui.api.AbstractUserSession;
+import org.cyk.ui.api.Icon;
 import org.cyk.ui.api.UIManager;
-import org.cyk.ui.api.command.IconType;
+import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.api.model.AbstractTree;
@@ -123,14 +124,14 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			
 			@Override
 			public TreeNode createNode(HierarchyNode model, TreeNode parent) {
-				model.setCollapsedIconType(IconType.THING_FOLDER_COLLAPSED);
-				model.setExpandedIconType(IconType.THING_FOLDER_EXPANDED);
+				model.setCollapsedIcon(Icon.THING_FOLDER_COLLAPSED);
+				model.setExpandedIcon(Icon.THING_FOLDER_EXPANDED);
 				if(model.getData() instanceof ClassroomSessionDivisionSubjectEvaluationType){
 					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) model.getData();
 					if(RootBusinessLayer.getInstance().getIntervalBusiness().isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
 							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
-						model.setCollapsedIconType(IconType.THING_TABLE);
-						model.setExpandedIconType(IconType.THING_TABLE);
+						model.setCollapsedIcon(Icon.THING_TABLE);
+						model.setExpandedIcon(Icon.THING_TABLE);
 				}
 				return super.createNode(model, parent);
 			}
@@ -212,9 +213,9 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	public UICommandable getSchoolCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
-			module = uiProvider.createCommandable("school", null);
-			module.addChild(menuManager.crudMany(AcademicSession.class, null));
-			module.addChild(menuManager.crudMany(ClassroomSession.class, null));
+			module = Builder.create("school", null);
+			module.addChild(Builder.createList(AcademicSession.class, null));
+			module.addChild(Builder.createList(ClassroomSession.class, null));
 		}
 		return module;
 	}
@@ -222,33 +223,33 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	public UICommandable getRegistrationCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
-			module = uiProvider.createCommandable("command.actor.registration", IconType.PERSON);
-			module.addChild(menuManager.crudMany(Student.class, null));
-			module.addChild(menuManager.crudMany(Teacher.class, null));
-			module.addChild(menuManager.crudMany(Employee.class, null));
+			module = Builder.create("command.actor.registration", Icon.PERSON);
+			module.addChild(Builder.createList(Student.class, null));
+			module.addChild(Builder.createList(Teacher.class, null));
+			module.addChild(Builder.createList(Employee.class, null));
 			
-			module.addChild(menuManager.createMany(StudentClassroomSession.class, null));
-			module.addChild(menuManager.createMany(StudentSubject.class, null));
+			module.addChild(Builder.createMany(StudentClassroomSession.class, null));
+			module.addChild(Builder.createMany(StudentSubject.class, null));
 		}
 		return module;
 	}
 	
 	public UICommandable getRegularActivitiesCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
-		UICommandable module = uiProvider.createCommandable("school.activities", null);
+		UICommandable module = Builder.create("school.activities", null);
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
-			module.addChild(menuManager.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
+			module.addChild(Builder.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 		}
 		return module;
 	}
 	
 	public UICommandable getResultsCardCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
-		UICommandable module = uiProvider.createCommandable("school.results", null);
+		UICommandable module = Builder.create("school.results", null);
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
-			module.addChild(menuManager.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
+			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 		}
 		if(userSession.hasRole(Role.MANAGER)){
-			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
-			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
 		}
 		/*
 		if(userSession.hasRole(Role.MANAGER)){
@@ -263,10 +264,10 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	public UICommandable getControlPanelCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
-			module = uiProvider.createCommandable("commandable.school", null);
-			module.addChild(menuManager.crudMany(Company.class, null));
-			module.addChild(menuManager.crudMany(PersonTitle.class, null));
-			module.addChild(menuManager.crudMany(JobTitle.class, null));
+			module = Builder.create("commandable.school", null);
+			module.addChild(Builder.createList(Company.class, null));
+			module.addChild(Builder.createList(PersonTitle.class, null));
+			module.addChild(Builder.createList(JobTitle.class, null));
 		}
 		return module;
 	}

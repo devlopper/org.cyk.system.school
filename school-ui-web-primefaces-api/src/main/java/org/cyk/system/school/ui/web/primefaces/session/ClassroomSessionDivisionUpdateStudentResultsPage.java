@@ -17,7 +17,7 @@ import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.ui.api.UIProvider;
+import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
@@ -99,10 +99,9 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 	
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
-		contextualMenu.setLabel(formatUsingBusiness(identifiable)); 
+		UICommandable contextualMenu = instanciateCommandableBuilder().setLabel(formatUsingBusiness(identifiable)).create();
 		
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSession(), null));
+		contextualMenu.getChildren().add(Builder.createConsult(identifiable.getClassroomSession(), null));
 		
 		return Arrays.asList(contextualMenu);
 	}

@@ -18,6 +18,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
+import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
@@ -72,10 +73,10 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	@Override
 	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
 		super.processIdentifiableContextualCommandable(commandable);
-		commandable.addChild(navigationManager.createUpdateCommandable(identifiable, "command.selectclassroomsessiondivision.auscsdr", null,
+		commandable.addChild(Builder.createCrud(Crud.UPDATE,identifiable, "command.selectclassroomsessiondivision.auscsdr", null,
 				SchoolWebManager.getInstance().getOutcomeUpdateStudentClassroomSessionDivisionResults()));
 		
-		commandable.addChild(navigationManager.createUpdateCommandable(identifiable, "school.markscard.generate", null,
+		commandable.addChild(Builder.createCrud(Crud.UPDATE,identifiable, "school.markscard.generate", null,
 				SchoolWebManager.getInstance().getOutcomeGenerateStudentClassroomSessionDivisionReport()));
 	}
 	

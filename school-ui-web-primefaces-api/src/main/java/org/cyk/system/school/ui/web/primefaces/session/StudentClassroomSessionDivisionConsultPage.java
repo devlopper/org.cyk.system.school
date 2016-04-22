@@ -24,6 +24,7 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
+import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
@@ -129,7 +130,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
 		super.processIdentifiableContextualCommandable(commandable);
 		if(identifiable.getResults().getReport()!=null)
-			commandable.addChild(navigationManager.createReportCommandable(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision()
+			commandable.addChild(Builder.createReport(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision()
 					,"school.markscard", null));
 	}
 	

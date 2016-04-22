@@ -14,7 +14,7 @@ import lombok.Setter;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.ui.api.UIProvider;
+import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -52,10 +52,9 @@ public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCru
 	
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
-		contextualMenu.setLabel(formatUsingBusiness(identifiable)); 
-		
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSession(), null));
+		UICommandable contextualMenu = instanciateCommandableBuilder().setLabel(formatUsingBusiness(identifiable)).create();
+	
+		contextualMenu.getChildren().add(Builder.createConsult(identifiable.getClassroomSession(), null));
 		
 		return Arrays.asList(contextualMenu);
 	}

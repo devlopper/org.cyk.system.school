@@ -23,7 +23,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
-import org.cyk.ui.api.UIProvider;
+import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
@@ -170,12 +170,11 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = UIProvider.getInstance().createCommandable("button", null);
-		contextualMenu.setLabel(formatUsingBusiness(subjectEvaluationType)); 
-		
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession(), null));
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision(), null));
-		contextualMenu.getChildren().add(navigationManager.createConsultCommandable(classroomSessionDivisionSubject, null));
+		UICommandable contextualMenu = instanciateCommandableBuilder().setLabel(formatUsingBusiness(subjectEvaluationType)).create();
+	
+		contextualMenu.getChildren().add(Builder.createConsult(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession(), null));
+		contextualMenu.getChildren().add(Builder.createConsult(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision(), null));
+		contextualMenu.getChildren().add(Builder.createConsult(classroomSessionDivisionSubject, null));
 		
 		return Arrays.asList(contextualMenu);
 	}
