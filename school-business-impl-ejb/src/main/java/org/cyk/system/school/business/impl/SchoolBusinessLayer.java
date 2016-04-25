@@ -6,6 +6,9 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.model.product.IntangibleProduct;
@@ -57,6 +60,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
@@ -64,9 +68,6 @@ import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER) @Getter
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
@@ -87,6 +88,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private ClassroomSessionDivisionDao classroomSessionDivisionDao;
+	@Inject private ClassroomSessionDao classroomSessionDao;
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	@Inject private ClassroomSessionDivisionStudentsMetricCollectionBusiness classroomSessionDivisionStudentsMetricCollectionBusiness;
 	@Inject private LevelGroupTypeBusiness levelGroupTypeBusiness;

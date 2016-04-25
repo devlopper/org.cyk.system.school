@@ -49,6 +49,7 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
+import org.cyk.utility.common.cdi.BeanAdapter;
 
 @Stateless
 public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
@@ -230,6 +231,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
 		
+		for(Listener listener : Listener.COLLECTION)
+			listener.processOnEvaluationAverageUpdated(classroomSessionDivisions, callArguments);
+		
 		return studentClassroomSessionDivisions;
 	}
 	
@@ -374,6 +378,28 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	/**/
 	
-	
+	public static interface Listener {
+		
+		Collection<Listener> COLLECTION = new ArrayList<>();
+		
+		void processOnEvaluationAverageUpdated(Collection<ClassroomSessionDivision> classroomSessionDivisions, BusinessServiceCallArguments<StudentClassroomSessionDivision> callArguments);
+		
+		/**/
+		
+		public static class Adapter extends BeanAdapter implements Listener,Serializable {
+			private static final long serialVersionUID = 2280338625270476061L;
+			@Override
+			public void processOnEvaluationAverageUpdated(Collection<ClassroomSessionDivision> classroomSessionDivisions,BusinessServiceCallArguments<StudentClassroomSessionDivision> callArguments) {}
+			/**/
+			
+			public static class Default extends Adapter implements Serializable {
+				private static final long serialVersionUID = 2280338625270476061L;
+				
+				/**/
+				
+				
+			}
+		}
+	}
 	
 }

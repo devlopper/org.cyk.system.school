@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,6 +17,8 @@ import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.company.model.structure.Company;
+import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
@@ -27,6 +30,7 @@ import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
+import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -40,6 +44,7 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper;
+import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
 import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataProducer;
 import org.cyk.system.school.model.SchoolConstant;
@@ -249,6 +254,30 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						, RandomStringUtils.randomAlphanumeric(6), "1", "1"));
 			}
     	});
+		
+		org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionBusinessImpl.Listener.COLLECTION.add(
+				new org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionBusinessImpl.Listener.Adapter.Default(){
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void processOnEvaluationAverageUpdated(Collection<ClassroomSessionDivision> classroomSessionDivisions,BusinessServiceCallArguments<StudentClassroomSessionDivision> callArguments) {
+						super.processOnEvaluationAverageUpdated(classroomSessionDivisions,callArguments);
+						debug(classroomSessionDivisions.iterator().next().getClassroomSession().getAcademicSession().getNodeInformations());
+						if(classroomSessionDivisions.iterator().next().getClassroomSession().getAcademicSession().getNodeInformations().getCurrentClassroomSessionDivisionIndex().intValue()==2){
+							Collection<ClassroomSession> classroomSessions = new HashSet<>();
+							for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
+								classroomSessions.add(classroomSessionDivision.getClassroomSession());
+							
+							SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateAverage(classroomSessions, new BusinessServiceCallArguments<StudentClassroomSession>());
+						
+							RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
+					    	 rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
+					    	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateRank(classroomSessions, rankOptions, new BusinessServiceCallArguments<StudentClassroomSession>());
+						}else{
+							
+						}
+					}
+				});
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -311,20 +340,20 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/g1g12.jrxml", "reportcard.jrxml"),null,null);
 		create(reportTemplate);
 		
-		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "1");
+		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");
 		
 		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(rootBusinessLayer.getIntervalCollectionBusiness()
 				.instanciateOne("G1G6Grade", "Grade", new String[][]{
 						{"A+", "Excellent", "90", "100"},{"A", "Very good", "80", "89.99"},{"B+", "Good", "70", "79.99"},{"B", "Fair", "60", "69.99"}
 						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})), reportTemplate
-						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "1");	
+						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");	
 		CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
 		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(rootBusinessLayer.getIntervalCollectionBusiness()
 				.instanciateOne("G7G12Grade", "Grade", new String[][]{
 						{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
 						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})), reportTemplate
-						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "1");	
+						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");	
 		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);

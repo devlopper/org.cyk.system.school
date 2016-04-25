@@ -88,22 +88,23 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	    	}}
     	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     	
+    	
     	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateAverage(Arrays.asList(dataProducer.getG1().getClassroomSession()), new BusinessServiceCallArguments<StudentClassroomSession>());
     	RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
     	 rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
     	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateRank(Arrays.asList(dataProducer.getG1().getClassroomSession()), rankOptions, new BusinessServiceCallArguments<StudentClassroomSession>());
     	
-    	classroomSessionDivisionInfos = dataProducer.getG1().division(2);
-    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), /*new Object[][]{
-    		new Object[]{classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{
+    	//classroomSessionDivisionInfos = dataProducer.getG1().division(2);
+    	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), /*new Object[][]{
+    	//	new Object[]{classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     	    		//{"STUD1","90","30","60"}
     	    		//,{"STUD2","70","50","60"}
     	              //,{"STUD3","40","60","40"}
     	              //,{"STUD4","45","45","80"}
     	              //,{"STUD5","20","95","55"}
-    	    	}}
-    	}*/null
-    	,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
+    	//    	}}
+    	//}*/null
+    	//,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     	
     	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), 
     	//		null,Boolean.FALSE,Boolean.FALSE,Boolean.TRUE,Boolean.TRUE);
