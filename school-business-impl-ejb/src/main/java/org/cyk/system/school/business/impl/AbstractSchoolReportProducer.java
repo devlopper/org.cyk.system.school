@@ -222,6 +222,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		Collection<MetricValue> metricValues = new ArrayList<>();
 		for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues)
 			metricValues.add(studentResultsMetricValue.getMetricValue());
+		
+		/*Collection<String> m = new ArrayList<>();
+		for(Metric metric : metrics)
+			m.add(metric.getCode());
+		//System.out.println("Convert student results metric value to array. Metrics="+StringUtils.join(m,",")+" , Values="+StringUtils.join(metricValues,",")+"");
+		//logTrace("Convert student results metric value to array. Metrics={} , Values={}", StringUtils.join(metrics,","),StringUtils.join(metricValues,","));*/
 		return convertToArray(metrics, metricValues);
 	}
 	

@@ -24,7 +24,9 @@ import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
 import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.MetricValueInputted;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
@@ -288,11 +290,15 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
 					IntervalCollection intervalCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection().getValueIntervalCollection();
 					RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
+					List<Interval> intervals = new ArrayList<>(RootBusinessLayer.getInstance().getIntervalBusiness().findByCollection(intervalCollection));
 					Collection<StudentResultsMetricValue> studentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness()
 							.findByStudentResults(studentClassroomSessionDivision.getResults());
 					for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
 						studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
-						studentResultsMetricValue.getMetricValue().setStringValue(RandomStringUtils.randomAlphabetic(1));
+						if(MetricValueInputted.VALUE_INTERVAL_CODE.equals(studentResultsMetricValue.getMetricValue().getMetric().getCollection().getValueInputted()))
+							studentResultsMetricValue.getMetricValue().setStringValue( ((Interval)RandomDataProvider.getInstance().randomFromList(intervals)).getCode() );
+						else
+							studentResultsMetricValue.getMetricValue().setStringValue(RandomStringUtils.randomAlphabetic(1));
 					}
 					studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);
 				}
