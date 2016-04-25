@@ -18,6 +18,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -58,6 +59,10 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		super.create(studentClassroomSession);
 		logInstanceCreated(studentClassroomSession);
 		//logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
+		
+		if(studentClassroomSession.getResults()==null)
+			studentClassroomSession.setResults(new StudentResults());
+		
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeTopDownOnCreate())){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
@@ -98,6 +103,34 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 				, studentClassroomSession.getClassroomSession()), Crud.DELETE);
 		return super.delete(studentClassroomSession);
 	}
+	
+	/**/
+	
+	@Override
+	public Collection<StudentClassroomSession> updateAverage(Collection<ClassroomSession> classroomSessions,BusinessServiceCallArguments<StudentClassroomSession> callArguments) {
+		/*
+		 * Data loading
+		 */
+		Collection<StudentClassroomSession> studentClassroomSessions = dao.readByClassroomSessions(classroomSessions);
+		//Collection<ClassroomSessionDivision> classroomSessionDivisions = classroomSessionDivisionDao.readByClassroomSessions(classroomSessions);
+		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = studentClassroomSessionDivisionDao.readByClassroomSessions(classroomSessions);
+		//logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={}"
+		//		,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size());
+		
+		setCallArgumentsObjects(callArguments, studentClassroomSessions);
+		/*
+		 * Data computing
+		 */
+		
+		updateAverage(classroomSessions, studentClassroomSessions,studentClassroomSessionDivisions, callArguments);
+		
+		//SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
+		//SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().computeResults(classroomSessions, studentClassroomSessions);
+		
+		return studentClassroomSessions;
+	}
+	
+	/**/
 	
 	@Override
 	protected Class<StudentClassroomSession> getResultClass() {

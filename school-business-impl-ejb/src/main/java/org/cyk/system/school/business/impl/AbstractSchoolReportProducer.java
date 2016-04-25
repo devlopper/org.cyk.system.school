@@ -105,7 +105,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired())){
 			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
 			r.setAverageScale(rootBusinessLayer.getIntervalBusiness().findRelativeCode(s.getResults().getEvaluationSort().getAverageInterval()));
-			r.setRank(RootBusinessLayer.getInstance().getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
+			r.setRank(rootBusinessLayer.getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
 			
 			r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
 			r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));

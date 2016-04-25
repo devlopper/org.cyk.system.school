@@ -58,6 +58,7 @@ import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
 import org.cyk.utility.common.Constant;
@@ -99,6 +100,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Inject private StudentSubjectDao studentSubjectDao;
 	@Inject private StudentSubjectEvaluationDao studentSubjectEvaluationDao;
+	@Inject private StudentClassroomSessionDao studentClassroomSessionDao;
 	
 	@Setter private AverageComputationListener averageComputationListener;
 	@Setter private Script averageComputationScript;

@@ -480,7 +480,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				createSubjectEvaluations((ClassroomSessionDivisionSubject)object[0],(String[][])object[1]);
 			}
     	 
-    	if(Boolean.TRUE.equals(generateReport)){
+    	if(Boolean.TRUE.equals(computeEvaluationResults)){
     		randomValues(Arrays.asList(classroomSessionDivision),Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     		//createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,generateReport,printReport);
     	}

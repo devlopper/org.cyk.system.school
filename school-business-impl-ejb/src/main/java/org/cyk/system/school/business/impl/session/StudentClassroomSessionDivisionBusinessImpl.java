@@ -230,7 +230,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
 		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
 		
-		
 		return studentClassroomSessionDivisions;
 	}
 	
