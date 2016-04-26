@@ -145,7 +145,6 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			@Input @InputBooleanButton private Boolean updateEvaluationResults=Boolean.TRUE;
 			@Input @InputBooleanButton private Boolean updateAttendanceResults=Boolean.TRUE;
 			@Input @InputBooleanButton private Boolean updateRankResults=Boolean.TRUE;
-			@Input @InputBooleanButton private Boolean updateAnnualResults=Boolean.FALSE;
 		}
 		
 	}

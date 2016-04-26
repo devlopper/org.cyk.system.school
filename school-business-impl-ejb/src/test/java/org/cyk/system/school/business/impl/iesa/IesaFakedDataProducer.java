@@ -262,7 +262,6 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					@Override
 					public void processOnEvaluationAverageUpdated(Collection<ClassroomSessionDivision> classroomSessionDivisions,BusinessServiceCallArguments<StudentClassroomSessionDivision> callArguments) {
 						super.processOnEvaluationAverageUpdated(classroomSessionDivisions,callArguments);
-						debug(classroomSessionDivisions.iterator().next().getClassroomSession().getAcademicSession().getNodeInformations());
 						if(classroomSessionDivisions.iterator().next().getClassroomSession().getAcademicSession().getNodeInformations().getCurrentClassroomSessionDivisionIndex().intValue()==2){
 							Collection<ClassroomSession> classroomSessions = new HashSet<>();
 							for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
