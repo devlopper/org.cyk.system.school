@@ -17,5 +17,22 @@ public class Student extends AbstractActor implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
+	/**/
+	
+	public static class SearchCriteria extends AbstractSearchCriteria<Student> {
+
+		private static final long serialVersionUID = -7909506438091294611L;
+
+		public SearchCriteria() {
+			this(null);
+		}
+
+		public SearchCriteria(String name) {
+			super(name);
+		}
+		
+		
+	}
+
 	
 }
