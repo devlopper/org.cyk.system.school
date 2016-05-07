@@ -73,7 +73,6 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	
 	@OneToOne private File report;
 	
-	private Boolean promoted;
 	private Boolean conferenceRequested;
 	
 	@Transient private Collection<StudentResultsMetricValue> studentResultsMetricValues;
@@ -109,8 +108,8 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	public String getLogMessage() {
 		return String.format(LOG_FORMAT, evaluationSort==null ?Constant.EMPTY_STRING:evaluationSort.getLogMessage()
 				,lectureAttendance==null ?Constant.EMPTY_STRING:lectureAttendance.getLogMessage()
-						,lectureAttendanceSort==null ?Constant.EMPTY_STRING:lectureAttendanceSort.getLogMessage(),appreciation,promoted,conferenceRequested);
+						,lectureAttendanceSort==null ?Constant.EMPTY_STRING:lectureAttendanceSort.getLogMessage(),appreciation,conferenceRequested);
 	}
-	private static final String LOG_FORMAT = StudentResults.class.getSimpleName()+"(%s %s %s APP=%s PROM=%s CR=%s)";
+	private static final String LOG_FORMAT = StudentResults.class.getSimpleName()+"(%s %s %s APP=%s CR=%s)";
 
 }
