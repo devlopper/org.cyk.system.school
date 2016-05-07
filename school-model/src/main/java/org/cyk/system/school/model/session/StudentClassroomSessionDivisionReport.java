@@ -21,7 +21,7 @@ public class StudentClassroomSessionDivisionReport extends AbstractReportTemplat
 
 	private static final long serialVersionUID = -6025941646465245555L;
 	
-	private String name,attendedTime,missedTime,missedTimeJustified,average,averageScale,rank,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,
+	private String name,attendedTime,missedTime,missedTimeJustified,average,averageScale,averagePromotionScale,rank,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,
 		comments,subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
 	private List<String> markTotals = new ArrayList<>();
 	private List<BigDecimal> tempMarkTotals = new ArrayList<>();

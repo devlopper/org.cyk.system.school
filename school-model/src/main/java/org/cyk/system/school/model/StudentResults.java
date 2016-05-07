@@ -44,7 +44,8 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 			,@AttributeOverride(name="comments",column=@Column(name="evaluationComments"))
 	})
 	@AssociationOverrides(value={
-			@AssociationOverride(name= "averageInterval",joinColumns = @JoinColumn(name="evaluationAverageInterval"))
+			@AssociationOverride(name= Sort.FIELD_AVERAGE_APPRECIATED_INTERVAL,joinColumns = @JoinColumn(name="evaluationAppreciatedAverageInterval"))
+			,@AssociationOverride(name= Sort.FIELD_AVERAGE_PROMOTED_INTERVAL,joinColumns = @JoinColumn(name="evaluationPromotedAverageInterval"))
 			})
 	private Sort evaluationSort = new Sort();
 	
@@ -60,7 +61,8 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 			,@AttributeOverride(name="comments",column=@Column(name="lectureAttendanceComments"))
 	})
 	@AssociationOverrides(value={
-			@AssociationOverride(name= "averageInterval",joinColumns = @JoinColumn(name="lectureAttendanceAverageInterval"))
+			@AssociationOverride(name= Sort.FIELD_AVERAGE_APPRECIATED_INTERVAL,joinColumns = @JoinColumn(name="lectureAppreciatedAttendanceAverageInterval"))
+			,@AssociationOverride(name= Sort.FIELD_AVERAGE_PROMOTED_INTERVAL,joinColumns = @JoinColumn(name="lecturePromotedAttendanceAverageInterval"))
 			})
 	private Sort lectureAttendanceSort = new Sort();
 		

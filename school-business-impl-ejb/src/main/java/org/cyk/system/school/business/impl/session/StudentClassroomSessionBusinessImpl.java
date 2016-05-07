@@ -185,8 +185,13 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	}
 	
 	@Override
-	protected IntervalCollection averageIntervalCollection(ClassroomSession classroomSession) {
+	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSession classroomSession) {
 		return classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAverageScale();
+	}
+	
+	@Override
+	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSession classroomSession) {
+		return classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAveragePromotionScale();
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

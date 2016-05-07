@@ -339,19 +339,19 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/g1g12.jrxml", "reportcard.jrxml"),null,null);
 		create(reportTemplate);
 		
-		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");
+		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");
 		
 		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(rootBusinessLayer.getIntervalCollectionBusiness()
 				.instanciateOne("G1G6Grade", "Grade", new String[][]{
 						{"A+", "Excellent", "90", "100"},{"A", "Very good", "80", "89.99"},{"B+", "Good", "70", "79.99"},{"B", "Fair", "60", "69.99"}
-						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})), reportTemplate
+						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})),null, reportTemplate
 						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");	
 		CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
 		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(rootBusinessLayer.getIntervalCollectionBusiness()
 				.instanciateOne("G7G12Grade", "Grade", new String[][]{
 						{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
-						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})), reportTemplate
+						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})),null, reportTemplate
 						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");	
 		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
@@ -617,7 +617,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
 							{"ANNUAL AVERAGE",format(classroomSessionResults.getEvaluationSort().getAverage().getValue())}
 							,{"ANNUAL GRADE"
-								,classroomSessionResults.getEvaluationSort().getAverageInterval()==null?NULL_VALUE:rootBusinessLayer.getIntervalBusiness().findRelativeCode(classroomSessionResults.getEvaluationSort().getAverageInterval())}
+								,classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval()==null?NULL_VALUE:rootBusinessLayer.getIntervalBusiness().findRelativeCode(classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval())}
 							,{"ANNUAL RANK",rootBusinessLayer.getMathematicsBusiness().format(classroomSessionResults.getEvaluationSort().getRank())}
 							,{"NEXT ACADEMIC SESSION","TO COMPUTE"}
 							});

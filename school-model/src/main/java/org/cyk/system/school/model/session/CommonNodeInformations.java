@@ -25,6 +25,7 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private IntervalCollection studentSubjectAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionDivisionAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionAverageScale;
+	@ManyToOne private IntervalCollection studentClassroomSessionAveragePromotionScale;
 	
 	@ManyToOne private TimeDivisionType attendanceTimeDivisionType;
 	
@@ -33,12 +34,13 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
 	private Byte currentClassroomSessionDivisionIndex = 0;
 	
-	public CommonNodeInformations(IntervalCollection intervalCollection,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate,TimeDivisionType attendanceTimeDivisionType) {
+	public CommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate,TimeDivisionType attendanceTimeDivisionType) {
 		super();
 		this.studentClassroomSessionDivisionResultsReportTemplate = studentClassroomSessionDivisionResultsReportTemplate;
 		this.studentSubjectAverageScale = intervalCollection;
 		this.studentClassroomSessionDivisionAverageScale = intervalCollection;
 		this.studentClassroomSessionAverageScale = intervalCollection;
+		this.studentClassroomSessionAveragePromotionScale = studentClassroomSessionAveragePromotionScale;
 		this.attendanceTimeDivisionType = attendanceTimeDivisionType;
 	}
 	

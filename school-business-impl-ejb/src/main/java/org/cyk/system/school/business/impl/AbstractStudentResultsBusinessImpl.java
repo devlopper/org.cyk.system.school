@@ -102,7 +102,8 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				//debug(result.getResults());
 				//setting
 				result.getResults().getEvaluationSort().setAverage(average); 
-				result.getResults().getEvaluationSort().setAverageInterval(intervalBusiness.findByCollectionByValue(averageIntervalCollection(level(result)),average.getValue(), 2));
+				result.getResults().getEvaluationSort().setAverageAppreciatedInterval(intervalBusiness.findByCollectionByValue(averageAppreciatedIntervalCollection(level(result)),average.getValue(), 2));
+				result.getResults().getEvaluationSort().setAveragePromotedInterval(intervalBusiness.findByCollectionByValue(averagePromotedIntervalCollection(level(result)),average.getValue(), 2));
 				logIdentifiable("Average computed", result);
 				//logTrace("Average {} , Interval {}",result.getResults().getEvaluationSort().getAverage(),result.getResults().getEvaluationSort().getAverageInterval());
 			}
@@ -249,5 +250,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	
 	protected abstract LEVEL level(Lecture lecture);
 	
-	protected abstract IntervalCollection averageIntervalCollection(LEVEL level);
+	protected abstract IntervalCollection averageAppreciatedIntervalCollection(LEVEL level);
+	
+	protected abstract IntervalCollection averagePromotedIntervalCollection(LEVEL level);
 }

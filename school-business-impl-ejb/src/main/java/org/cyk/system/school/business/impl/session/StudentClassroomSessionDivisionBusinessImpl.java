@@ -313,8 +313,13 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	protected IntervalCollection averageIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
+	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
 		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
+	}
+	
+	@Override
+	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
+		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAveragePromotionScale();
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

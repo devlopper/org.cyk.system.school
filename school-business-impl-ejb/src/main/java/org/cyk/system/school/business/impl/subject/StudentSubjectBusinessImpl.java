@@ -127,7 +127,12 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	}
 	
 	@Override
-	protected IntervalCollection averageIntervalCollection(ClassroomSessionDivisionSubject subject) {
+	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSessionDivisionSubject subject) {
+		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentSubjectAverageScale();
+	}
+	
+	@Override
+	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSessionDivisionSubject subject) {
 		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentSubjectAverageScale();
 	}
 	

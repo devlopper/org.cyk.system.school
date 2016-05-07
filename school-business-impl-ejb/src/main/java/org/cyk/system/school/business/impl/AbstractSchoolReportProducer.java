@@ -104,8 +104,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired())){
 			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
-			r.setAverageScale(rootBusinessLayer.getIntervalBusiness().findRelativeCode(s.getResults().getEvaluationSort().getAverageInterval()));
+			r.setAverageScale(rootBusinessLayer.getIntervalBusiness().findRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
 			r.setRank(rootBusinessLayer.getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
+			r.setAveragePromotionScale(rootBusinessLayer.getIntervalBusiness().findRelativeCode(s.getResults().getEvaluationSort().getAveragePromotedInterval()));
 			
 			r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
 			r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
@@ -169,9 +170,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			sr.setRank(applicable?rootBusinessLayer.getMathematicsBusiness().format(studentSubject.getResults().getEvaluationSort().getRank()):NOT_APPLICABLE);	
 			
 			//if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
-				set(studentSubject.getResults().getEvaluationSort().getAverageInterval(), sr.getAverageScale());
+				set(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval(), sr.getAverageScale());
 				if(applicable)
-					sr.getAverageScale().setCode(rootBusinessLayer.getIntervalBusiness().findRelativeCode(studentSubject.getResults().getEvaluationSort().getAverageInterval()));
+					sr.getAverageScale().setCode(rootBusinessLayer.getIntervalBusiness().findRelativeCode(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
 			//}else
 				//sr.getAverageScale().setCode(NOT_APPLICABLE);
 			
