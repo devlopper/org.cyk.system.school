@@ -333,10 +333,10 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	
     	File reportFilePk = createFile("report/iesa/pkg.jrxml", "studentclassroomsessiondivision_pkg.jrxml");
 		ReportTemplate reportTemplatePk = new ReportTemplate("SCSDRTPK",reportFilePk,reportHeaderFile
-				,createFile("report/iesa/studentclassroomsessiondivisionreport_background.jpg","studentclassroomsessiondivisionreport_background.jpg"));
+				,createFile("report/iesa/studentclassroomsessiondivisionreport_background.jpg","studentclassroomsessiondivisionreport_background.jpg"),null);
 		create(reportTemplatePk);
     	
-		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/g1g12.jrxml", "reportcard.jrxml"),null,null);
+		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/g1g12.jrxml", "reportcard.jrxml"),null,null,null);
 		create(reportTemplate);
 		
 		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");

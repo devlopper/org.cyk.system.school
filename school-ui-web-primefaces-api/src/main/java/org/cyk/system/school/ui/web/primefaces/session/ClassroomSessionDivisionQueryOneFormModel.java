@@ -3,6 +3,10 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -10,16 +14,12 @@ import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.command.UICommandable.Parameter;
 import org.cyk.ui.api.model.AbstractQueryOneFormModel;
-import org.cyk.ui.web.api.WebManager;
 import org.cyk.ui.web.api.WebNavigationManager;
 import org.cyk.ui.web.primefaces.page.AbstractSelectOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.FieldOverride;
 import org.cyk.utility.common.annotation.user.interfaces.FieldOverrides;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryOneFormModel.FIELD_IDENTIFIABLE,type=ClassroomSessionDivision.class)})
 public class ClassroomSessionDivisionQueryOneFormModel extends AbstractClassroomSessionDivisionQueryOneFormModel<ClassroomSessionDivision> implements Serializable {
@@ -52,7 +52,7 @@ public class ClassroomSessionDivisionQueryOneFormModel extends AbstractClassroom
 				//		,new Object[]{UIManager.getInstance().getIdentifiableParameter(),((ClassroomSessionDivisionQueryOneFormModel)data).getIdentifiable().getIdentifier()}); 
 				
 				WebNavigationManager.getInstance().redirectToDynamicConsultOne(((ClassroomSessionDivisionQueryOneFormModel)data).getIdentifiable()
-						,Arrays.asList(new Parameter(WebManager.getInstance().getRequestParameterTabId()
+						,Arrays.asList(new Parameter(UniformResourceLocatorParameter.TAB_ID
 						,UIManager.getInstance().businessEntityInfos(StudentClassroomSessionDivision.class).getUserInterface().getLabelId()))); 
 			}
 		}

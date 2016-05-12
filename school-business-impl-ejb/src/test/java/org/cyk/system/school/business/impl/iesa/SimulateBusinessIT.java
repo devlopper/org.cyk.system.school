@@ -1,6 +1,5 @@
 package org.cyk.system.school.business.impl.iesa;
 
-import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.SchoolBusinessSimulationParameters;
 import org.cyk.system.school.model.subject.Evaluation;
 
