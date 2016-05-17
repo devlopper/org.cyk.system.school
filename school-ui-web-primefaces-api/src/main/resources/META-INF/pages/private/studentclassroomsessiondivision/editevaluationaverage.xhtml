@@ -13,8 +13,11 @@
  		<ui:param name="pageController" value="#{studentClassroomSessionDivisionEditManyEvaluationAveragePage}" />
  		<ui:define name="body">
  			<cyk:itemCollection value="#{studentClassroomSessionDivisionEditManyEvaluationAveragePage.elementCollection}" >
+ 				<!--p:column headerText="#{uiManager.text('model.entity.classroomSession')}" >
+ 					<h:outputText value="#{item.classroomSession}" />
+ 				</p:column-->
  				<p:column headerText="#{uiManager.text('average')}" >
- 					<p:inputText id="average" value="#{item.value}" required="true" />
+ 					<p:inputText id="average" value="#{item.evaluationAverage}" required="true" />
  				</p:column>
  			</cyk:itemCollection>
  		</ui:define>
