@@ -121,6 +121,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	private String actionUpdateStudentClassroomSessionDivisionReportFiles = "auscsdrf";
 	private String actionConsultStudentClassroomSessionDivisionReportFiles = "acscsdrf";
 	
+	private String actionEditStudentClassroomSessionDivisionEvaluationAverage = "aescsdea";
+	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;

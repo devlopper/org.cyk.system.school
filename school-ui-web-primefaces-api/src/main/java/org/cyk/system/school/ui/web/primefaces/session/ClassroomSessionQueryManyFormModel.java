@@ -14,6 +14,7 @@ import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractQueryManyFormModel;
 import org.cyk.ui.web.api.WebNavigationManager;
@@ -46,12 +47,27 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				
 		@Override
 		public Collection<ClassroomSession> getIdentifiables(AbstractSelectManyPage<?> page) {
-			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
+			/*if(SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage().equals(page.getActionIdentifier())){
+				WebNavigationManager.getInstance().redirectToEditManyPage(SchoolWebManager.getInstance().getOutcomeEditStudentClassroomSessionDivisionEvaluationAverage(),StudentClassroomSessionDivision.class,((AbstractQueryManyFormModel)data).getIdentifiables());
+			}else */if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
 			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
 			}else
 				return SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findAll();
+		}
+		
+		@Override
+		public void serve(AbstractSelectManyPage<?> selectManyPage, Object data, String actionIdentifier) {
+			if(SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage().equals(actionIdentifier)){
+				@SuppressWarnings({ "unchecked", "rawtypes" })
+				Collection<ClassroomSession> classroomSessions = ((AbstractQueryManyFormModel)data).getIdentifiables();
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSessionsByIndex(classroomSessions,
+						SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+				WebNavigationManager.getInstance().redirectToEditManyPage(SchoolWebManager.getInstance().getOutcomeEditStudentClassroomSessionDivisionEvaluationAverage(),StudentClassroomSessionDivision.class
+						,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions));
+			}else
+				super.serve(selectManyPage, data, actionIdentifier);
 		}
 	}
 	
@@ -69,9 +85,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			super.initialiseProcess(page);
 			SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 			page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
-			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
-				
-			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
+			if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				page.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
 				page.setExecutionProgress(new ExecutionProgress("Build Student Classroom Session Division Report",null));
 				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());

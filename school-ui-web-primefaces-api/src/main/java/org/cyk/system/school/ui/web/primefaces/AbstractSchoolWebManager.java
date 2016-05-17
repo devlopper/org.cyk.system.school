@@ -57,6 +57,8 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	protected String outcomeConsultClassroomSessionStudentDivisionReportFile  = "classroomSessionConsultStudentDivisionReportFileView";
 	protected String outcomeConsultSchoolStudentClassroomSessionDivisionReportFile  = "schoolConsultStudentClassroomSessionDivisionReportFileView";
 	
+	protected String outcomeEditStudentClassroomSessionDivisionEvaluationAverage  = "studentClassroomSessionDivisionEditEvaluationAverageView";
+	
 	protected String outcomeStudentClassroomSessionDivisionMergeReport  = "studentClassroomSessionDivisionMergeReportView";
 	protected final String outcomeDefineTuition = "studentClassroomSessionTuitionEditView";
 	/*private String outcomeClassroomSessionMainDetails;
@@ -249,6 +251,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 		}
 		if(userSession.hasRole(Role.MANAGER)){
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
 		}

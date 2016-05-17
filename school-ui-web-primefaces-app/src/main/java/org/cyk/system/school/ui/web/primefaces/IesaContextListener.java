@@ -13,7 +13,6 @@ import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
-import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.party.person.AbstractActor;
 import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
@@ -35,11 +34,11 @@ import org.cyk.ui.api.model.party.AbstractActorEditFormModel;
 import org.cyk.ui.api.model.party.DefaultActorOutputDetails;
 import org.cyk.ui.api.model.party.DefaultPersonEditFormModel;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
-import org.cyk.ui.web.primefaces.page.BusinessEntityFormManyPageListener;
-import org.cyk.ui.web.primefaces.page.BusinessEntityFormOnePageListener;
 import org.cyk.ui.web.primefaces.page.crud.AbstractActorConsultPage;
 import org.cyk.ui.web.primefaces.page.crud.AbstractActorConsultPage.MainDetails;
 import org.cyk.ui.web.primefaces.page.tools.AbstractActorConsultPageAdapter;
+import org.cyk.ui.web.primefaces.page.tools.AbstractActorCrudManyPageAdapter;
+import org.cyk.ui.web.primefaces.page.tools.AbstractActorCrudOnePageAdapter;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
@@ -124,17 +123,16 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 	}
 	
 	@Override
-	protected <IDENTIFIABLE extends AbstractIdentifiable> void registerBusinessEntityFormOnePageListener(Class<IDENTIFIABLE> aClass,BusinessEntityFormOnePageListener<?> listener) {
-		super.registerBusinessEntityFormOnePageListener(aClass, listener);
-		if(aClass.equals(Teacher.class)){
+	protected <ACTOR extends AbstractActor> AbstractActorCrudOnePageAdapter<ACTOR> getActorCrudOnePageAdapter(Class<ACTOR> actorClass) {
+		AbstractActorCrudOnePageAdapter<ACTOR> listener = super.getActorCrudOnePageAdapter(actorClass);
+		if(listener.getEntityTypeClass().equals(Teacher.class)){
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(AbstractActorEditFormModel.FIELD_REGISTRATION_CODE);
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addFieldNames(DefaultPersonEditFormModel.FIELD_TITLE
 					,DefaultPersonEditFormModel.FIELD_SIGNATURE_SPECIMEN);
 			
 			listener.getFormConfigurationMap().get(Crud.UPDATE).get(DefaultPersonEditFormModel.TAB_PERSON_ID).addFieldNames(
 					AbstractActorEditFormModel.FIELD_REGISTRATION_CODE,DefaultPersonEditFormModel.FIELD_TITLE);
-			
-		}else if(aClass.equals(Student.class)){
+		}else if(listener.getEntityTypeClass().equals(Student.class)){
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(AbstractActorEditFormModel.FIELD_REGISTRATION_CODE);
 			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addFieldNames(DefaultPersonEditFormModel.FIELD_SURNAME
 					,DefaultPersonEditFormModel.FIELD_BIRTH_DATE,DefaultPersonEditFormModel.FIELD_BIRTH_LOCATION
@@ -145,16 +143,18 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 					,DefaultPersonEditFormModel.FIELD_BIRTH_DATE,DefaultPersonEditFormModel.FIELD_BIRTH_LOCATION
 					,DefaultPersonEditFormModel.FIELD_SEX,DefaultPersonEditFormModel.FIELD_IMAGE);
 		}
+		return listener;
 	}
 	
 	@Override
-	protected <IDENTIFIABLE extends AbstractIdentifiable> void registerBusinessEntityFormManyPageListener(Class<IDENTIFIABLE> aClass,BusinessEntityFormManyPageListener<?> listener) {
-		if(aClass.equals(Teacher.class)){
+	protected <ACTOR extends AbstractActor> AbstractActorCrudManyPageAdapter<ACTOR> getActorCrudManyPageAdapter(Class<ACTOR> actorClass) {
+		AbstractActorCrudManyPageAdapter<ACTOR> listener = super.getActorCrudManyPageAdapter(actorClass);
+		if(listener.getEntityTypeClass().equals(Teacher.class)){
 			listener.getFormConfigurationMap().get(Crud.READ).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorOutputDetails.FIELD_REGISTRATION_CODE);
-		}else if(aClass.equals(Student.class)){
+		}else if(listener.getEntityTypeClass().equals(Student.class)){
 			listener.getFormConfigurationMap().get(Crud.READ).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorOutputDetails.FIELD_REGISTRATION_CODE);
 		}
-		super.registerBusinessEntityFormManyPageListener(aClass, listener);
+		return listener;
 	}
 	
 	@Override

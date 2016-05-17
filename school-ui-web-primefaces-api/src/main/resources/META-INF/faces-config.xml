@@ -157,6 +157,11 @@
 			<to-view-id>/private/studentclassroomsessiondivision/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionDivisionEditEvaluationAverageView</from-outcome>
+			<to-view-id>/private/studentclassroomsessiondivision/editevaluationaverage.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>studentClassroomSessionDivisionMergeReportView</from-outcome>
