@@ -11,7 +11,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class StudentClassroomSessionDivisionDetails extends AbstractOutputDetails<StudentClassroomSessionDivision> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private String registrationCode,names,numberOfTimeAbsent,globalAppreciation,conferenceRequested;
+	@Input @InputText private String registrationCode,names,evaluationAverage,numberOfTimeAbsent,globalAppreciation,conferenceRequested;
 	
 	public StudentClassroomSessionDivisionDetails(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		super(studentClassroomSessionDivision);
@@ -19,6 +19,10 @@ public class StudentClassroomSessionDivisionDetails extends AbstractOutputDetail
 		names = studentClassroomSessionDivision.getStudent().getPerson().getNames();
 		globalAppreciation = studentClassroomSessionDivision.getResults().getAppreciation();
 		conferenceRequested = formatResponse(studentClassroomSessionDivision.getResults().getConferenceRequested());
+		
+		if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null)
+			evaluationAverage = numberBusiness.format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue());
+		
 		if(studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()!=null)
 			numberOfTimeAbsent = numberBusiness.format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(
 					studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()));

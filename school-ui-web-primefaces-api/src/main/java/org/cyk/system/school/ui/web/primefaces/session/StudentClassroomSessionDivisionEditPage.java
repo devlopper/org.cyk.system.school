@@ -92,6 +92,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	
 	public static class One extends AbstractFormModel<StudentClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
+		//@Input @InputNumber private BigDecimal evaluationAverage;
 		@Input @InputNumber @NotNull private BigDecimal numberOfTimeAbsent;
 		@Input @InputTextarea @NotNull private String appreciation;
 		@Input @InputBooleanButton /*@InputChoice @InputOneChoice @InputOneRadio*/ @NotNull private Boolean conferenceRequested;
@@ -99,6 +100,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		@Override
 		public void read() {
 			super.read();
+			//evaluationAverage = identifiable.getResults().getEvaluationSort().getAverage().getValue();
 			if(identifiable.getResults().getLectureAttendance().getAttendedDuration()!=null)
 				numberOfTimeAbsent = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
 				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSessionDivision().getClassroomSession(),identifiable.getResults()
@@ -111,6 +113,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		@Override
 		public void write() {
 			super.write();
+			//identifiable.getResults().getEvaluationSort().getAverage().setValue(evaluationAverage);
 			identifiable.getResults().setAppreciation(appreciation);
 			identifiable.getResults().setConferenceRequested(conferenceRequested);
 			if(numberOfTimeAbsent==null){

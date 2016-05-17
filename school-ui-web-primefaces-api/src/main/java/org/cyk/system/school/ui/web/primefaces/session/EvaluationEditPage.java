@@ -45,7 +45,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	
 	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	private ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType;
-	private ItemCollection<Mark,StudentSubjectEvaluation> markCollection;
+	private ItemCollection<StudentSubjectEvaluationItem,StudentSubjectEvaluation> markCollection;
 	private BigDecimal maximumValue;
 	private Integer decimalPlaces = 0;
 	
@@ -77,7 +77,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 		
-		markCollection = createItemCollection(Mark.class, StudentSubjectEvaluation.class,new ItemCollectionWebAdapter<Mark,StudentSubjectEvaluation>(){
+		markCollection = createItemCollection(StudentSubjectEvaluationItem.class, StudentSubjectEvaluation.class,new ItemCollectionWebAdapter<StudentSubjectEvaluationItem,StudentSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public Collection<StudentSubjectEvaluation> create() {
@@ -96,7 +96,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 				return Boolean.FALSE;
 			}
 			@Override
-			public void instanciated(AbstractItemCollection<Mark, StudentSubjectEvaluation,SelectItem> itemCollection,Mark mark) {
+			public void instanciated(AbstractItemCollection<StudentSubjectEvaluationItem, StudentSubjectEvaluation,SelectItem> itemCollection,StudentSubjectEvaluationItem mark) {
 				super.instanciated(itemCollection, mark);
 				mark.setRegistrationCode(mark.getIdentifiable().getStudentSubject().getStudent().getRegistration().getCode());
 				mark.setNames(mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
@@ -104,7 +104,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 				mark.setValueAsString(RootBusinessLayer.getInstance().getNumberBusiness().format(mark.getValue()));
 			}	
 			@Override
-			public void write(Mark item) {
+			public void write(StudentSubjectEvaluationItem item) {
 				super.write(item);
 				item.getIdentifiable().setValue(item.getValue());
 			}
@@ -189,7 +189,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	}
 	
 	@Getter @Setter
-	public static class Mark extends AbstractItemCollectionItem<StudentSubjectEvaluation> implements Serializable {
+	public static class StudentSubjectEvaluationItem extends AbstractItemCollectionItem<StudentSubjectEvaluation> implements Serializable {
 		private static final long serialVersionUID = 3828481396841243726L;
 		private String registrationCode;
 		private String names;

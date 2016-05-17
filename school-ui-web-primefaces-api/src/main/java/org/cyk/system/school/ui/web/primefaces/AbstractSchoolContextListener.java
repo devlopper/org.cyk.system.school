@@ -18,6 +18,7 @@ import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetai
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
+import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.StudentSubjectDetails;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -26,6 +27,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentSubject;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
@@ -97,6 +99,10 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 				,null,null,null));
 		uiManager.configBusinessIdentifiable(StudentSubject.class, null);
 		webNavigationManager.useDynamicSelectView(StudentSubject.class);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(Evaluation.class, null, EvaluationDetails.class
+				,null,null,null));
+		uiManager.configBusinessIdentifiable(Evaluation.class, null);
 		
 		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionQueryOneFormModel.PageAdapter());
 		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
