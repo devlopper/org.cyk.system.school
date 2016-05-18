@@ -163,6 +163,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 				super.write(item);
 				item.getIdentifiable().getResults().getEvaluationSort().getAverage().setValue(item.getEvaluationAverage());
 			}
+			
 		}
 	}
 }

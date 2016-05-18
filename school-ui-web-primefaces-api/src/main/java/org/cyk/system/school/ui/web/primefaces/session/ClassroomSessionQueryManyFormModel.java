@@ -62,10 +62,24 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			if(SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage().equals(actionIdentifier)){
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				Collection<ClassroomSession> classroomSessions = ((AbstractQueryManyFormModel)data).getIdentifiables();
+				
+				//System.out.println("CLASSROOMSESSION ID : "+classroomSessions.iterator().next().getIdentifier());
+				
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSessionsByIndex(classroomSessions,
 						SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+				/*
+				System.out.println("CLASSROOMSESSION DIVISION ID : "+classroomSessionDivisions.iterator().next().getIdentifier());
+				*/
+				
+				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions);
+				/*String f="(";
+				for(StudentClassroomSessionDivision s : studentClassroomSessionDivisions)
+					f = f + s.getIdentifier()+","; 
+				f=f+")";
+				System.out.println(f);
+				*/
 				WebNavigationManager.getInstance().redirectToEditManyPage(SchoolWebManager.getInstance().getOutcomeEditStudentClassroomSessionDivisionEvaluationAverage(),StudentClassroomSessionDivision.class
-						,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions));
+						,studentClassroomSessionDivisions);
 			}else
 				super.serve(selectManyPage, data, actionIdentifier);
 		}
