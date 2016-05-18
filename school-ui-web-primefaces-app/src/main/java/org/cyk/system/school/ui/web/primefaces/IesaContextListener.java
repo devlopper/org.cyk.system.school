@@ -323,13 +323,14 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			}
 			
 			if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
-				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
+				/*labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
 				//labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", 
 				//		studentClassroomSessionDivision.get "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", 
 						format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNextStartingDate()));
+				*/
 			}else{
 				ClassroomSessionDivision nextClassroomSessionDivision = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionDao()
 						.readByClassroomSessionByIndex(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
@@ -343,7 +344,35 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 					});
 			}
 		
+			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
+					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
+					,{"Number of times present",r.getAttendedTime()}
+					,{"Number of times absent",r.getMissedTime()}
+					});
 			
+			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
+					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
+					,{"Number of times present",r.getAttendedTime()}
+					,{"Number of times absent",r.getMissedTime()}
+					});
+			
+			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
+					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
+					,{"Number of times present",r.getAttendedTime()}
+					,{"Number of times absent",r.getMissedTime()}
+					});
+			
+			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
+					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
+					,{"Number of times present",r.getAttendedTime()}
+					,{"Number of times absent",r.getMissedTime()}
+					});
+			
+			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
+					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
+					,{"Number of times present",r.getAttendedTime()}
+					,{"Number of times absent",r.getMissedTime()}
+					});
 			
 			return r;
 		}

@@ -58,7 +58,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 	protected String outcomeConsultSchoolStudentClassroomSessionDivisionReportFile  = "schoolConsultStudentClassroomSessionDivisionReportFileView";
 	
 	protected String outcomeEditStudentClassroomSessionDivisionEvaluationAverage  = "studentClassroomSessionDivisionEditEvaluationAverageView";
-	
+	protected String outcomeConsultClassroomSessionDivisionBroadsheet = "classroomSessionDivisionBroadsheetConsultView";
 	protected String outcomeStudentClassroomSessionDivisionMergeReport  = "studentClassroomSessionDivisionMergeReportView";
 	protected final String outcomeDefineTuition = "studentClassroomSessionTuitionEditView";
 	/*private String outcomeClassroomSessionMainDetails;
@@ -249,6 +249,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		UICommandable module = Builder.create("school.results", null);
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
+			module.addChild(Builder.createSelectOne(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
 		}
 		if(userSession.hasRole(Role.MANAGER)){
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
@@ -297,21 +298,23 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		selectClassroomSession(page, teacher, (ClassroomSession) page.setChoicesAndGetAutoSelected(classroomSessionFieldName, classroomSessions), classroomSessionFieldName, classroomSessionDivisionFieldName
 			, classroomSessionDivisionSubjectFieldName, subjectEvaluationTypeFieldName);
 		
-		page.createAjaxBuilder(classroomSessionFieldName).updatedFieldNames(classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName)
-		.method(ClassroomSession.class,new ListenValueMethod<ClassroomSession>() {
-			@Override
-			public void execute(ClassroomSession value) {
-				selectClassroomSession(page,teacher,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
-			}
-		}).build();
-		
-		page.createAjaxBuilder(classroomSessionDivisionFieldName).updatedFieldNames(classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName)
-		.method(ClassroomSessionDivision.class,new ListenValueMethod<ClassroomSessionDivision>() {
-			@Override
-			public void execute(ClassroomSessionDivision value) {
-				selectClassroomSessionDivision(page,teacher,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
-			}
-		}).build();
+		if(classroomSessionDivisionFieldName!=null){
+			page.createAjaxBuilder(classroomSessionFieldName).updatedFieldNames(classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName)
+			.method(ClassroomSession.class,new ListenValueMethod<ClassroomSession>() {
+				@Override
+				public void execute(ClassroomSession value) {
+					selectClassroomSession(page,teacher,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
+				}
+			}).build();
+			
+			page.createAjaxBuilder(classroomSessionDivisionFieldName).updatedFieldNames(classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName)
+			.method(ClassroomSessionDivision.class,new ListenValueMethod<ClassroomSessionDivision>() {
+				@Override
+				public void execute(ClassroomSessionDivision value) {
+					selectClassroomSessionDivision(page,teacher,value,classroomSessionFieldName,classroomSessionDivisionFieldName,classroomSessionDivisionSubjectFieldName,subjectEvaluationTypeFieldName);
+				}
+			}).build();
+		}
 		
 		if(subjectEvaluationTypeFieldName!=null)
 			page.createAjaxBuilder(classroomSessionDivisionSubjectFieldName).updatedFieldNames(subjectEvaluationTypeFieldName)

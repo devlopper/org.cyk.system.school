@@ -48,13 +48,14 @@ public class ClassroomSessionDivisionQueryOneFormModel extends AbstractClassroom
 		@Override
 		public void serve(Object data, String actionIdentifier) {
 			if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults().equals(actionIdentifier)){
-				//WebNavigationManager.getInstance().redirectTo(SchoolWebManager.getInstance().getOutcomeUpdateStudentClassroomSessionDivisionResults()
-				//		,new Object[]{UIManager.getInstance().getIdentifiableParameter(),((ClassroomSessionDivisionQueryOneFormModel)data).getIdentifiable().getIdentifier()}); 
-				
 				WebNavigationManager.getInstance().redirectToDynamicConsultOne(((ClassroomSessionDivisionQueryOneFormModel)data).getIdentifiable()
 						,Arrays.asList(new Parameter(UniformResourceLocatorParameter.TAB_ID
 						,UIManager.getInstance().businessEntityInfos(StudentClassroomSessionDivision.class).getUserInterface().getLabelId()))); 
-			}
+			}/*else if(SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
+				WebNavigationManager.getInstance().redirectTo(SchoolWebManager.getInstance().getOutcomeConsultClassroomSessionDivisionBroadsheet(),new Object[]{
+					UIManager.getInstance().businessEntityInfos(StudentClassroomSessionDivision.class).getIdentifier(),((ClassroomSessionDivisionQueryOneFormModel)data).getIdentifiable()
+				}); 
+			}*/
 		}
 	}
 }

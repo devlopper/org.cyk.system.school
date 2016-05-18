@@ -91,6 +91,11 @@
 			<to-view-id>/private/classroomsessiondivision/updatestudentreport.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionBroadsheetConsultView</from-outcome>
+			<to-view-id>/private/classroomsessiondivision/broadsheet.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>classroomSessionDivisionSubjectEditView</from-outcome>
@@ -160,12 +165,6 @@
 		<navigation-case>
 			<from-outcome>studentClassroomSessionDivisionEditEvaluationAverageView</from-outcome>
 			<to-view-id>/private/studentclassroomsessiondivision/editevaluationaverage.jsf</to-view-id>
-			<redirect />
-		</navigation-case>
-		
-		<navigation-case>
-			<from-outcome>studentClassroomSessionDivisionMergeReportView</from-outcome>
-			<to-view-id>/private/studentclassroomsessiondivision/mergereport.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

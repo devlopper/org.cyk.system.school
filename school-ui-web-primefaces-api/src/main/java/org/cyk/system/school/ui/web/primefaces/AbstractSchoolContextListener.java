@@ -38,6 +38,7 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionS
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectQueryFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryManyFormModel;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryOneFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.StudentSubjectEditPage;
@@ -71,7 +72,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		uiManager.configBusinessIdentifiable(AcademicSession.class, null);
 		//webNavigationManager.useDynamicSelectView(AcademicSession.class);
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class,null,null,ClassroomSessionQueryManyFormModel.class));
+		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class,ClassroomSessionQueryOneFormModel.class,null,ClassroomSessionQueryManyFormModel.class));
 		uiManager.configBusinessIdentifiable(ClassroomSession.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSession.class);
 		
@@ -104,14 +105,16 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 				,null,null,null));
 		uiManager.configBusinessIdentifiable(Evaluation.class, null);
 		
+		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionQueryOneFormModel.PageAdapter());
 		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionQueryOneFormModel.PageAdapter());
 		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
 		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.PageAdapter());
 		
 		primefacesManager.getSelectManyPageListeners().add(new ClassroomSessionQueryManyFormModel.PageAdapter());
-		primefacesManager.getProcessManyPageListeners().add(new ClassroomSessionQueryManyFormModel.ProcessPageAdapter());
 		primefacesManager.getSelectManyPageListeners().add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
 
+		primefacesManager.getProcessManyPageListeners().add(new ClassroomSessionQueryManyFormModel.ProcessPageAdapter());
+		
 		if(Boolean.TRUE.equals(SchoolWebManager.EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
 			SecurityFilter.addUniformResourceLocatorRuntimeConstraint(new UniformResourceLocator("/private/__role__/__manager__/evaluation/edit.jsf")
 				,new UniformResourceLocatorRuntimeConstraint(){

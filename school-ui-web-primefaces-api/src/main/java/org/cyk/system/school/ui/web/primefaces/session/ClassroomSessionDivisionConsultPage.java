@@ -33,6 +33,8 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	private Table<ClassroomSessionDivisionSubjectDetails> subjectTable;
 	private Table<StudentClassroomSessionDivisionDetails> studentTable;
 	
+	private Table<String> broadsheetTable;
+	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
