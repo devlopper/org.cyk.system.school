@@ -1,7 +1,10 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -17,9 +20,12 @@ import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubje
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
-import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
-import org.cyk.ui.api.command.AbstractCommandable.Builder;
-import org.cyk.ui.api.command.UICommandable;
+import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.ui.api.model.table.Cell;
+import org.cyk.ui.api.model.table.CellAdapter;
+import org.cyk.ui.api.model.table.Column;
+import org.cyk.ui.api.model.table.ColumnAdapter;
+import org.cyk.ui.api.model.table.Row;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
@@ -32,8 +38,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	private FormOneData<ClassroomSessionDivisionDetails> details;
 	private Table<ClassroomSessionDivisionSubjectDetails> subjectTable;
 	private Table<StudentClassroomSessionDivisionDetails> studentTable;
-	
-	private Table<String> broadsheetTable;
+	private Table<StudentClassroomSessionDivisionDetails> broadsheetTable;
 	
 	@Override
 	protected void initialisation() {
@@ -69,9 +74,72 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 				return new Crud[]{Crud.READ,Crud.UPDATE};
 			}
 		});
+		studentTable.getColumnListeners().add(new ColumnAdapter(){
+			@Override
+			public Boolean isColumn(Field field) {
+				return StudentClassroomSessionDivisionDetails.FIELDS_SIMPLE.contains(field.getName());
+			}
+		});
 		
+		final List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(identifiable));
+		broadsheetTable = (Table<StudentClassroomSessionDivisionDetails>) createDetailsTable(StudentClassroomSessionDivisionDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails>(StudentClassroomSessionDivision.class, StudentClassroomSessionDivisionDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Collection<StudentClassroomSessionDivision> getIdentifiables() {
+				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivision(identifiable);
+			}			
+			@Override
+			public String getTitleId() {
+				return "school.broadsheet";
+			}
+			
+		});
+		broadsheetTable.getColumnListeners().add(new ColumnAdapter(){
+			@Override
+			public Boolean isColumn(Field field) {
+				if(StudentClassroomSessionDivisionDetails.FIELDS_BROAD_SHEET.contains(field.getName())){
+					if(StudentClassroomSessionDivisionDetails.isSubjectAverageFieldName(field.getName()))
+						return StudentClassroomSessionDivisionDetails.getSubjectAverageFieldNameIndex(field.getName()) < classroomSessionDivisionSubjects.size();
+					else
+						return Boolean.TRUE;
+				}else
+					return Boolean.FALSE;
+			}
+			
+			@Override
+			public void added(Column column) {
+				super.added(column);
+				if(column.getField().getName().startsWith("subject")){
+					column.setTitle(classroomSessionDivisionSubjects.get(
+							StudentClassroomSessionDivisionDetails.getSubjectAverageFieldNameIndex(column.getField().getName())).getSubject().getName());
+					
+				}
+			}
+		});
+		
+		final Integer numberOfColumnBeforeSubjects = 2;
+		final List<StudentSubject> studentSubjects = new ArrayList<>(SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivision(identifiable));
+		broadsheetTable.getCellListeners().add(new CellAdapter<StudentClassroomSessionDivisionDetails>(){
+			@Override
+			public void added(Row<StudentClassroomSessionDivisionDetails> row, Column column, Cell cell) {
+				super.added(row, column, cell);
+				if(column.getIndex() < classroomSessionDivisionSubjects.size()+numberOfColumnBeforeSubjects){
+					StudentSubject studentSubject = null;
+					for(StudentSubject ss : studentSubjects)
+						if(ss.getStudent().equals(row.getData().getMaster().getStudent()) ){
+							if(classroomSessionDivisionSubjects.indexOf(ss.getClassroomSessionDivisionSubject()) + numberOfColumnBeforeSubjects == column.getIndex()){
+								studentSubject = ss;
+								break;
+							}
+						}
+					if(studentSubject!=null){
+						cell.setValue(numberBusiness.format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()));
+					}
+				}
+			}
+		});
 	}
-	
+	/*
 	@Override
 	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
 		super.processIdentifiableContextualCommandable(commandable);
@@ -81,5 +149,5 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		commandable.addChild(Builder.createCrud(Crud.UPDATE,identifiable, "school.markscard.generate", null,
 				SchoolWebManager.getInstance().getOutcomeGenerateStudentClassroomSessionDivisionReport()));
 	}
-	
+	*/
 }

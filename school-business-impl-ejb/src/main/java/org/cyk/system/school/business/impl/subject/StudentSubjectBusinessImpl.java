@@ -172,6 +172,11 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	public Collection<StudentSubject> findByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student, classroomSession);
 	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentSubject> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
+		return dao.readByClassroomSessionDivision(classroomSessionDivision);
+	}
 	 
 	/**/
 	

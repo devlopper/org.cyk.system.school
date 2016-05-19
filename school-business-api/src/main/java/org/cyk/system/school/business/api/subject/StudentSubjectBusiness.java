@@ -16,5 +16,6 @@ public interface StudentSubjectBusiness extends AbstractStudentResultsBusiness<C
 	Collection<StudentSubject> findByStudent(Student student);
 	StudentSubject findByStudentByClassroomSessionDivisionSubject(Student student, ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
 	Collection<StudentSubject> findByStudentByClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision);
+	Collection<StudentSubject> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 	Collection<StudentSubject> findByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
 }

@@ -12,10 +12,29 @@
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
  		<ui:param name="pageController" value="#{classroomSessionDivisionConsultPage}" />
  		<ui:define name="body">
+ 			<style>
+ 				.ui-column-title{
+ 					color: red;
+ 				}
+ 				.ui-column-title {
+				    margin:0 -100% ;
+				    display:inline-block;
+				}
+				.ui-column-title :before{
+				    content:'';
+				    width:0;
+				    padding-top:110%;/* takes width as reference, + 10% for faking some extra padding */
+				    display:inline-block;
+				    vertical-align:middle;
+				}
+ 				
+ 				
+ 			</style>
+ 			
  			<cyk:formOneData value="#{classroomSessionDivisionConsultPage.details}" />	
 			<cyk:table value="#{classroomSessionDivisionConsultPage.subjectTable}" />	
 			<cyk:table value="#{classroomSessionDivisionConsultPage.studentTable}" />
-			
+			<cyk:table value="#{classroomSessionDivisionConsultPage.broadsheetTable}" />
  		</ui:define>
  	</ui:decorate>
  
