@@ -14,20 +14,29 @@
  		<ui:define name="body">
  			<style>
  				.ui-column-title{
- 					color: red;
+ 					
  				}
  				.ui-column-title {
 				    margin:0 -100% ;
 				    display:inline-block;
 				}
-				.ui-column-title :before{
+				/*.ui-column-title :before{
 				    content:'';
 				    width:0;
-				    padding-top:110%;/* takes width as reference, + 10% for faking some extra padding */
+				    padding-top:110%;/* takes width as reference, + 10% for faking some extra padding
 				    display:inline-block;
 				    vertical-align:middle;
+				}*/
+				
+				.ui-table-columntoggle th{
+					height: 120px;
 				}
- 				
+				
+				span.ui-column-title {
+				   -ms-transform: rotate(90deg); 
+				    -webkit-transform: rotate(90deg);
+				    transform: rotate(90deg);
+				} 				
  				
  			</style>
  			
