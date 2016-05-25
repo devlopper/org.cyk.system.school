@@ -9,9 +9,6 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
@@ -29,6 +26,9 @@ import org.cyk.ui.api.model.table.Row;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<ClassroomSessionDivision> implements Serializable {
@@ -87,13 +87,28 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			@Override
 			public Collection<StudentClassroomSessionDivision> getIdentifiables() {
 				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivision(identifiable);
-			}			
+			}	
+			@Override
+			public Collection<StudentClassroomSessionDivisionDetails> getDatas() {
+				Collection<StudentClassroomSessionDivisionDetails> datas = super.getDatas();
+				StudentClassroomSessionDivisionDetails s = new StudentClassroomSessionDivisionDetails(null);
+				s.setRegistrationCode(text("average"));
+				datas.add(s);
+				s = new StudentClassroomSessionDivisionDetails(null);
+				s.setRegistrationCode(text("school.passfraction"));
+				datas.add(s);
+				s = new StudentClassroomSessionDivisionDetails(null);
+				s.setRegistrationCode(text("school.passpercentage"));
+				datas.add(s);
+				return datas;
+			}
 			@Override
 			public String getTitleId() {
 				return "school.broadsheet";
 			}
 			
 		});
+		
 		broadsheetTable.getColumnListeners().add(new ColumnAdapter(){
 			@Override
 			public Boolean isColumn(Field field) {
@@ -117,12 +132,16 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 		});
 		
+		
+		
 		final Integer numberOfColumnBeforeSubjects = 2;
 		final List<StudentSubject> studentSubjects = new ArrayList<>(SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivision(identifiable));
 		broadsheetTable.getCellListeners().add(new CellAdapter<StudentClassroomSessionDivisionDetails>(){
 			@Override
 			public void added(Row<StudentClassroomSessionDivisionDetails> row, Column column, Cell cell) {
 				super.added(row, column, cell);
+				if(row.getData().getMaster()==null)
+					return;
 				if(column.getIndex() < classroomSessionDivisionSubjects.size()+numberOfColumnBeforeSubjects){
 					StudentSubject studentSubject = null;
 					for(StudentSubject ss : studentSubjects)
@@ -138,7 +157,14 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 				}
 			}
 		});
+		broadsheetTable.setUpdateStyleClass("broadsheetTableStyleClass");
 	}
+	
+	@Override
+	protected String getContentTitleIdentifiableText() {
+		return formatUsingBusiness(new Object[]{identifiable.getClassroomSession(),identifiable});
+	}
+	
 	/*
 	@Override
 	protected void processIdentifiableContextualCommandable(UICommandable commandable) {

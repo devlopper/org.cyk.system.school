@@ -12,7 +12,10 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
-@SuppressWarnings("unchecked")
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter @SuppressWarnings("unchecked")
 public class StudentClassroomSessionDivisionDetails extends AbstractOutputDetails<StudentClassroomSessionDivision> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
@@ -28,6 +31,8 @@ public class StudentClassroomSessionDivisionDetails extends AbstractOutputDetail
 	
 	public StudentClassroomSessionDivisionDetails(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		super(studentClassroomSessionDivision);
+		if(studentClassroomSessionDivision==null)
+			return;
 		registrationCode = studentClassroomSessionDivision.getStudent().getRegistration().getCode();
 		names = studentClassroomSessionDivision.getStudent().getPerson().getNames();
 		globalAppreciation = studentClassroomSessionDivision.getResults().getAppreciation();
