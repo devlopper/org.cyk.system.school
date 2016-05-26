@@ -50,8 +50,9 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	}
 	
 	public CommonNodeInformations instanciateOneCommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale,ReportTemplate reportTemplate
-			,String attendanceTimeDivisionTypeCode,String classroomSessionTimeDivisionTypeCode,String currentClassroomSessionDivisionIndex){
-		CommonNodeInformations commonNodeInformations = new CommonNodeInformations(intervalCollection,studentClassroomSessionAveragePromotionScale,reportTemplate,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,attendanceTimeDivisionTypeCode));
+			,String attendanceTimeDivisionTypeCode,String classroomSessionTimeDivisionTypeCode,String evaluationPassAverage,String currentClassroomSessionDivisionIndex){
+		CommonNodeInformations commonNodeInformations = new CommonNodeInformations(intervalCollection,studentClassroomSessionAveragePromotionScale,reportTemplate
+				,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,attendanceTimeDivisionTypeCode),new BigDecimal(evaluationPassAverage));
 		commonNodeInformations.setClassroomSessionTimeDivisionType(RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class, classroomSessionTimeDivisionTypeCode));
 		commonNodeInformations.setCurrentClassroomSessionDivisionIndex(new Byte(currentClassroomSessionDivisionIndex));
 		return commonNodeInformations;

@@ -1,6 +1,7 @@
 package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -30,11 +31,13 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private TimeDivisionType attendanceTimeDivisionType;
 	
 	@Column private Boolean aggregateAttendance;
+	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal evaluationPassAverage;
 	
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
 	private Byte currentClassroomSessionDivisionIndex = 0;
 	
-	public CommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate,TimeDivisionType attendanceTimeDivisionType) {
+	public CommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale
+			,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate,TimeDivisionType attendanceTimeDivisionType,BigDecimal evaluationPassAverage) {
 		super();
 		this.studentClassroomSessionDivisionResultsReportTemplate = studentClassroomSessionDivisionResultsReportTemplate;
 		this.studentSubjectAverageScale = intervalCollection;
@@ -42,6 +45,7 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 		this.studentClassroomSessionAverageScale = intervalCollection;
 		this.studentClassroomSessionAveragePromotionScale = studentClassroomSessionAveragePromotionScale;
 		this.attendanceTimeDivisionType = attendanceTimeDivisionType;
+		this.evaluationPassAverage = evaluationPassAverage;
 	}
 	
 	@Override

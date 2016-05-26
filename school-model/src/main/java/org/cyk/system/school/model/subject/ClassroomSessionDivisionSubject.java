@@ -44,6 +44,8 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	
 	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal duration;
 	
+	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal evaluationPassAverage;
+	
 	@Column(nullable=false) @NotNull private Long numberOfEvaluationTypes=0l;
 	
 	@Embedded private NodeResults results = new NodeResults();

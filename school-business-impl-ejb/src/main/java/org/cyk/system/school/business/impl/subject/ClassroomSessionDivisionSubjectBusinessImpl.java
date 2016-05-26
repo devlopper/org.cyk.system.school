@@ -69,6 +69,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			results.setAverageLowest(BigDecimal.ZERO);
 			results.setAverage(BigDecimal.ZERO);
 			results.setAverageHighest(BigDecimal.ZERO);
+			results.setNumberOfStudentPassingEvaluationAverage(0);
 			Collection<WeightedValue> weightedValues = new ArrayList<>();
 			for(StudentSubject studentSubject : studentSubjects){
 				if(studentSubject.getClassroomSessionDivisionSubject().getIdentifier().equals(classroomSessionDivisionSubject.getIdentifier())){
@@ -82,6 +83,11 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 						}
 						if(value.compareTo(results.getAverageHighest())==1){
 							results.setAverageHighest(value);
+						}
+						//TODO should be take first on subject if null on higher
+						if(value.compareTo(studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession().getAcademicSession()
+								.getNodeInformations().getEvaluationPassAverage())>=0){
+							results.setNumberOfStudentPassingEvaluationAverage(results.getNumberOfStudentPassingEvaluationAverage()+1);
 						}
 					}
 				}else{

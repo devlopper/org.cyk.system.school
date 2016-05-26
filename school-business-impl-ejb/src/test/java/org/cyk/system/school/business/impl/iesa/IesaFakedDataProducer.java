@@ -339,7 +339,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT",createFile("report/iesa/g1g12.jrxml", "reportcard.jrxml"),null,null,null);
 		create(reportTemplate);
 		
-		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");
+		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER,"50", "2");
 		
 		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(rootBusinessLayer.getIntervalCollectionBusiness()
 				.instanciateOne("G1G6Grade", "Grade", new String[][]{
@@ -347,7 +347,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})),create(rootBusinessLayer.getIntervalCollectionBusiness()
 								.instanciateOne("ICP1", "Promotion Scale", new String[][]{
 										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
-						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");	
+						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2");	
 		CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
 		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(rootBusinessLayer.getIntervalCollectionBusiness()
@@ -356,7 +356,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})),create(rootBusinessLayer.getIntervalCollectionBusiness()
 								.instanciateOne("ICP2", "Promotion Scale", new String[][]{
 										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
-						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "2");	
+						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2");	
 		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);

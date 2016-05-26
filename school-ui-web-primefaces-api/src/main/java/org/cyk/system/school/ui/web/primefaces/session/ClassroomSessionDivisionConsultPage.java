@@ -10,6 +10,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.business.api.mathematics.NumberBusiness;
+import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
@@ -26,6 +28,7 @@ import org.cyk.ui.api.model.table.Row;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
+import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -92,13 +95,16 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			public Collection<StudentClassroomSessionDivisionDetails> getDatas() {
 				Collection<StudentClassroomSessionDivisionDetails> datas = super.getDatas();
 				StudentClassroomSessionDivisionDetails s = new StudentClassroomSessionDivisionDetails(null);
-				s.setRegistrationCode(text("average"));
+				s.setIdentifier(StudentClassroomSessionDivisionDetails.IDENTIFIER_1);
+				s.setNames(text("school.report.broadsheet.average"));
 				datas.add(s);
 				s = new StudentClassroomSessionDivisionDetails(null);
-				s.setRegistrationCode(text("school.passfraction"));
+				s.setIdentifier(StudentClassroomSessionDivisionDetails.IDENTIFIER_2);
+				s.setNames(text("school.report.broadsheet.passfraction"));
 				datas.add(s);
 				s = new StudentClassroomSessionDivisionDetails(null);
-				s.setRegistrationCode(text("school.passpercentage"));
+				s.setIdentifier(StudentClassroomSessionDivisionDetails.IDENTIFIER_3);
+				s.setNames(text("school.report.broadsheet.passpercentage"));
 				datas.add(s);
 				return datas;
 			}
@@ -132,27 +138,41 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 		});
 		
-		
-		
 		final Integer numberOfColumnBeforeSubjects = 2;
 		final List<StudentSubject> studentSubjects = new ArrayList<>(SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivision(identifiable));
 		broadsheetTable.getCellListeners().add(new CellAdapter<StudentClassroomSessionDivisionDetails>(){
 			@Override
 			public void added(Row<StudentClassroomSessionDivisionDetails> row, Column column, Cell cell) {
 				super.added(row, column, cell);
-				if(row.getData().getMaster()==null)
-					return;
 				if(column.getIndex() < classroomSessionDivisionSubjects.size()+numberOfColumnBeforeSubjects){
-					StudentSubject studentSubject = null;
-					for(StudentSubject ss : studentSubjects)
-						if(ss.getStudent().equals(row.getData().getMaster().getStudent()) ){
-							if(classroomSessionDivisionSubjects.indexOf(ss.getClassroomSessionDivisionSubject()) + numberOfColumnBeforeSubjects == column.getIndex()){
-								studentSubject = ss;
-								break;
+					if(row.getData().getMaster()==null){
+						if(column.getIndex() >= numberOfColumnBeforeSubjects && column.getIndex() < classroomSessionDivisionSubjects.size()+numberOfColumnBeforeSubjects){
+							ClassroomSessionDivisionSubject classroomSessionDivisionSubject = classroomSessionDivisionSubjects.get(column.getIndex().intValue()-numberOfColumnBeforeSubjects);
+							if(row.getData().getIdentifier().equals(StudentClassroomSessionDivisionDetails.IDENTIFIER_1))
+								cell.setValue(numberBusiness.format(classroomSessionDivisionSubject.getResults().getAverage()));
+							else if(row.getData().getIdentifier().equals(StudentClassroomSessionDivisionDetails.IDENTIFIER_2))
+								if(classroomSessionDivisionSubject.getResults().getNumberOfStudentPassingEvaluationAverage()!=null)
+									cell.setValue(classroomSessionDivisionSubject.getResults().getNumberOfStudentPassingEvaluationAverage()+Constant.CHARACTER_SLASH.toString()+
+										classroomSessionDivisionSubject.getResults().getNumberOfStudent());
+							else if(row.getData().getIdentifier().equals(StudentClassroomSessionDivisionDetails.IDENTIFIER_3)){
+								NumberBusiness.FormatArguments formatArguments = new FormatArguments();
+								formatArguments.setIsPercentage(Boolean.TRUE);
+								cell.setValue(numberBusiness.format(classroomSessionDivisionSubject.getResults().getNumberOfStudentPassingEvaluationAverage()/
+										classroomSessionDivisionSubject.getResults().getNumberOfStudent(),formatArguments));
 							}
 						}
-					if(studentSubject!=null){
-						cell.setValue(numberBusiness.format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()));
+					}else{
+						StudentSubject studentSubject = null;
+						for(StudentSubject ss : studentSubjects)
+							if(ss.getStudent().equals(row.getData().getMaster().getStudent()) ){
+								if(classroomSessionDivisionSubjects.indexOf(ss.getClassroomSessionDivisionSubject()) + numberOfColumnBeforeSubjects == column.getIndex()){
+									studentSubject = ss;
+									break;
+								}
+							}
+						if(studentSubject!=null){
+							cell.setValue(numberBusiness.format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()));
+						}
 					}
 				}
 			}
