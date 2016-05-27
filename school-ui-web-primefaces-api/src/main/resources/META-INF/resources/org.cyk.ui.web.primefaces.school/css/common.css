@@ -1,0 +1,37 @@
+.broadsheetTableStyleClass *{
+	font-size: 95%;
+}
+.broadsheetTableStyleClass .ui-column-title{
+	
+}
+.broadsheetTableStyleClass .ui-column-title {
+    margin:0 -100% ;
+    display:inline-block;
+}
+/*.ui-column-title :before{
+    content:'';
+    width:0;
+    padding-top:110%;/* takes width as reference, + 10% for faking some extra padding
+    display:inline-block;
+    vertical-align:middle;
+}*/
+			
+.broadsheetTableStyleClass .ui-table-columntoggle th{
+	height: 120px;
+}
+
+.broadsheetTableStyleClass span.ui-column-title {
+   -ms-transform: rotate(90deg); 
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+} 				
+				
+.broadsheetTableStyleClass .studentclassroomsessiondivisiondetails-registrationcode{
+	width: 100px;
+}
+.broadsheetTableStyleClass .studentclassroomsessiondivisiondetails-names{
+	width: 200px;
+}
+.broadsheetTableStyleClass .studentclassroomsessiondivisiondetails-evaluationaveragevalue{
+	/*background-color: yellow;*/
+}

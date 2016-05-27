@@ -51,6 +51,9 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 	@Override
 	protected void initialisation() {
 		super.initialisation();
+		final Teacher teacher = userSession.getUser() instanceof Person ? SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser()) : null;
+		final Boolean isCoordinator = teacher != null && identifiable.getClassroomSession().getCoordinator()!= null && teacher.equals( identifiable.getClassroomSession().getCoordinator());
+		
 		details = createDetailsForm(ClassroomSessionDivisionDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<ClassroomSessionDivision,ClassroomSessionDivisionDetails>(ClassroomSessionDivision.class, ClassroomSessionDivisionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -88,13 +91,11 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 				return StudentClassroomSessionDivisionDetails.FIELDS_SIMPLE.contains(field.getName());
 			}
 		});
-		
-		Teacher teacher = null;
+				
 		final List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>();
-		if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
+		if(Boolean.TRUE.equals(userSession.getIsAdministrator()) || isCoordinator)
 			classroomSessionDivisionSubjects.addAll(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(identifiable));
 		else{
-			teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser());
 			if(teacher!=null)
 				classroomSessionDivisionSubjects.addAll(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(identifiable,teacher));
 		}
@@ -136,12 +137,16 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 					if(StudentClassroomSessionDivisionDetails.isSubjectAverageFieldName(field.getName()))
 						return StudentClassroomSessionDivisionDetails.getSubjectAverageFieldNameIndex(field.getName()) < classroomSessionDivisionSubjects.size();
 					else{
-						if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
+						if(Boolean.TRUE.equals(userSession.getIsAdministrator()) || isCoordinator)
 							return Boolean.TRUE;
-						else
-							return !ArrayUtils.contains(new String[]{StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_DIVIDEND,
-									StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_DIVISOR,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
-									,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_RANK_VALUE}, field.getName());
+						else{
+							if(teacher==null)
+								return Boolean.FALSE;
+							else
+								return !ArrayUtils.contains(new String[]{StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_DIVIDEND,
+											StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_DIVISOR,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
+											,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_RANK_VALUE}, field.getName());
+						}
 					}
 				}else
 					return Boolean.FALSE;
@@ -160,7 +165,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		
 		final Integer numberOfColumnBeforeSubjects = 2;
 		final List<StudentSubject> studentSubjects = new ArrayList<>();
-		if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
+		if(Boolean.TRUE.equals(userSession.getIsAdministrator()) || isCoordinator)
 			studentSubjects.addAll(SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivision(identifiable));
 		else{
 			if(teacher!=null)
