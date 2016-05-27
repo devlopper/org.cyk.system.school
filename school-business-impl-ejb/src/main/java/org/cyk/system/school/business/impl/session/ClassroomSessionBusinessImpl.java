@@ -70,4 +70,9 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	public Collection<ClassroomSession> findByAcademicSessionByLevelGroup(AcademicSession academicSession, LevelGroup levelGroup) {
 		return dao.readByAcademicSessionByLevelGroup(academicSession,levelGroup);
 	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSession> findByAcademicSessionByLevelGroupByTeacher(AcademicSession academicSession,LevelGroup levelGroup, Teacher teacher) {
+		return dao.readByAcademicSessionByLevelGroupByTeacher(academicSession,levelGroup,teacher);
+	}
 }

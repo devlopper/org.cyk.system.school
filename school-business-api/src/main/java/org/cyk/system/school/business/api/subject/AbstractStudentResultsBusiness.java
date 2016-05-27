@@ -46,6 +46,6 @@ public interface AbstractStudentResultsBusiness<LEVEL extends AbstractIdentifiab
 	
 	/**/
 	
-	Collection<RESULT> updateResults(Collection<LEVEL> levels,RankOptions<SortableStudentResults> rankOptions,BusinessServiceCallArguments<RESULT> callArguments);
+	Collection<RESULT> updateResults(Collection<LEVEL> levels,Boolean updateEvaluationAverage,Boolean updateRank,RankOptions<SortableStudentResults> rankOptions,Boolean updateAttendance,BusinessServiceCallArguments<RESULT> callArguments);
 
 }

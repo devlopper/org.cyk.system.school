@@ -1,6 +1,7 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,6 +20,7 @@ import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractQueryManyFormModel;
 import org.cyk.ui.web.api.WebNavigationManager;
 import org.cyk.ui.web.primefaces.PrimefacesManager;
+import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.AbstractProcessManyPage;
 import org.cyk.ui.web.primefaces.page.AbstractSelectManyPage;
 import org.cyk.utility.common.FileExtension;
@@ -101,6 +103,17 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				page.setExecutionProgress(new ExecutionProgress("Compute Student Classroom Session Division "+page.getActionIdentifier(),null));
 				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());
 				PrimefacesManager.getInstance().configureProgressBar(page.getForm().getSubmitCommandable());
+			}else if(SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(page.getActionIdentifier())){
+				page.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
+				page.setExecutionProgress(new ExecutionProgress("Compute Student Classroom Session Division "+page.getActionIdentifier(),null));
+				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());
+				PrimefacesManager.getInstance().configureProgressBar(page.getForm().getSubmitCommandable());
+				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
+					@Override
+					public Boolean build(Field field) {
+						return field.getName().equals(Form.FIELD_UPDATE_RANK_RESULTS);
+					}
+				});
 			}
 		}
 		
@@ -144,6 +157,17 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 					schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().updateRank(classroomSessionDivisions, rankOptions,callArguments);
 				}
+			}else if(schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(actionIdentifier)){
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = schoolBusinessLayer.getClassroomSessionDivisionBusiness()
+						.findByClassroomSessionsByIndex(classroomSessions,schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+				ServiceCallArguments callArguments = new ServiceCallArguments();
+				callArguments.setExecutionProgress(page.getExecutionProgress());
+				Form form = (Form) data;
+				RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
+		        rankOptions.setType(RankType.EXAEQUO); 
+		        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
+				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().updateResults(classroomSessionDivisions,Boolean.TRUE,form.getUpdateRankResults()
+						,rankOptions,Boolean.FALSE,callArguments);
 			}
 		}
 		
@@ -154,7 +178,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		
 		@Override
 		public Boolean getShowForm(AbstractProcessManyPage<?> processManyPage,String actionIdentifier) {
-			return SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier);
+			return SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)
+					|| SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(actionIdentifier);
 		}
 		
 		@Getter @Setter
@@ -163,6 +188,10 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			@Input @InputBooleanButton private Boolean updateEvaluationResults=Boolean.TRUE;
 			@Input @InputBooleanButton private Boolean updateAttendanceResults=Boolean.TRUE;
 			@Input @InputBooleanButton private Boolean updateRankResults=Boolean.TRUE;
+			
+			public static final String FIELD_UPDATE_EVALUATION_RESULTS = "updateEvaluationResults";
+			public static final String FIELD_UPDATE_ATTENDANCE_RESULTS = "updateAttendanceResults";
+			public static final String FIELD_UPDATE_RANK_RESULTS = "updateRankResults";
 		}
 		
 	}

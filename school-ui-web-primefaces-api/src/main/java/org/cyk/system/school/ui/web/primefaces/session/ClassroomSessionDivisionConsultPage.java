@@ -11,13 +11,16 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -86,7 +89,15 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 		});
 		
-		final List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(identifiable));
+		Teacher teacher = null;
+		final List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>();
+		if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
+			classroomSessionDivisionSubjects.addAll(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(identifiable));
+		else{
+			teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser());
+			if(teacher!=null)
+				classroomSessionDivisionSubjects.addAll(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(identifiable,teacher));
+		}
 		broadsheetTable = (Table<StudentClassroomSessionDivisionDetails>) createDetailsTable(StudentClassroomSessionDivisionDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails>(StudentClassroomSessionDivision.class, StudentClassroomSessionDivisionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -124,8 +135,14 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 				if(StudentClassroomSessionDivisionDetails.FIELDS_BROAD_SHEET.contains(field.getName())){
 					if(StudentClassroomSessionDivisionDetails.isSubjectAverageFieldName(field.getName()))
 						return StudentClassroomSessionDivisionDetails.getSubjectAverageFieldNameIndex(field.getName()) < classroomSessionDivisionSubjects.size();
-					else
-						return Boolean.TRUE;
+					else{
+						if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
+							return Boolean.TRUE;
+						else
+							return !ArrayUtils.contains(new String[]{StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_DIVIDEND,
+									StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_DIVISOR,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
+									,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_RANK_VALUE}, field.getName());
+					}
 				}else
 					return Boolean.FALSE;
 			}
@@ -142,7 +159,13 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		});
 		
 		final Integer numberOfColumnBeforeSubjects = 2;
-		final List<StudentSubject> studentSubjects = new ArrayList<>(SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivision(identifiable));
+		final List<StudentSubject> studentSubjects = new ArrayList<>();
+		if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
+			studentSubjects.addAll(SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivision(identifiable));
+		else{
+			if(teacher!=null)
+				studentSubjects.addAll(SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivisionByTeacher(identifiable,teacher));
+		}
 		broadsheetTable.getCellListeners().add(new CellAdapter<StudentClassroomSessionDivisionDetails>(){
 			@Override
 			public void added(Row<StudentClassroomSessionDivisionDetails> row, Column column, Cell cell) {

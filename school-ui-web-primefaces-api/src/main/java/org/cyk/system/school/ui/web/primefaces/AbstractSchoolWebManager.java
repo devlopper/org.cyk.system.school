@@ -110,12 +110,17 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		if(userSession.hasRole(Role.MANAGER)){
 			return (Collection<TYPE>) SchoolBusinessLayer.getInstance().getLevelGroupBusiness().findAll();
 		}else{
-			return null;
+			Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser());
+			if(teacher==null)
+				return null;
+			
+			return (Collection<TYPE>) SchoolBusinessLayer.getInstance().getLevelGroupBusiness().findByAcademicSessionByTeacher(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)
+					, teacher);
 		}
 	}
 	
 	@Override
-	protected AbstractTree<TreeNode, HierarchyNode> createNavigatorTree(AbstractUserSession<TreeNode, HierarchyNode> userSession) {
+	protected AbstractTree<TreeNode, HierarchyNode> createNavigatorTree(final AbstractUserSession<TreeNode, HierarchyNode> userSession) {
 		AbstractTree<TreeNode, HierarchyNode> tree = super.createNavigatorTree(userSession);
 		tree.getTreeListeners().add((org.cyk.ui.api.model.AbstractTree.Listener<TreeNode, HierarchyNode>) new  AbstractTree.Listener.Adapter.Default<TreeNode,HierarchyNode>(){
 			private static final long serialVersionUID = 1L;
@@ -143,17 +148,31 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 			public Collection<?> children(Object object) { 
 				if(object instanceof LevelGroup){
 					LevelGroup levelGroup = (LevelGroup) object;
-					return schoolBusinessLayer.getClassroomSessionBusiness().findByAcademicSessionByLevelGroup(schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null), levelGroup);
+					if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
+						return schoolBusinessLayer.getClassroomSessionBusiness().findByAcademicSessionByLevelGroup(schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null), levelGroup);
+					else{
+						Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser());
+						if(teacher!=null)
+							return schoolBusinessLayer.getClassroomSessionBusiness().findByAcademicSessionByLevelGroupByTeacher(schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null), levelGroup,teacher);
+					}
+						
 				}
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
+					
 					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
 							, schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
-					return schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(classroomSessionDivision);
-				}
+					
+					if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
+						return schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(classroomSessionDivision);
+					else{
+						Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser());
+						if(teacher!=null)
+							return schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(classroomSessionDivision, teacher);
+					}}
 				if(object instanceof ClassroomSessionDivisionSubject){
 					ClassroomSessionDivisionSubject classroomSessionDivisionSubject = (ClassroomSessionDivisionSubject) object;
-					return schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+					return schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);			
 				}
 				return super.children(object);
 			}
@@ -253,6 +272,7 @@ public abstract class AbstractSchoolWebManager extends AbstractPrimefacesManager
 		}
 		if(userSession.hasRole(Role.MANAGER)){
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
 		}

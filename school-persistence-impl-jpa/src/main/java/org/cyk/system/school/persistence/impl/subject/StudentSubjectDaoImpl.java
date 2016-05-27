@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentSubject;
@@ -20,7 +21,7 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentSubject> impl
 	private static final long serialVersionUID = 6306356272165070761L;
 	
     private String readByStudentBySubject,readBySubject,readByStudent,readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions
-    	,readBySubjects,readByClassroomSessions,readByStudentByClassroomSessionDivision,readByStudentByClassroomSession;
+    	,readBySubjects,readByClassroomSessions,readByStudentByClassroomSessionDivision,readByStudentByClassroomSession,readByClassroomSessionDivisionByTeacher;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -47,6 +48,10 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentSubject> impl
         registerNamedQuery(readBySubjects, _select().whereIdentifierIn(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(commonUtils.attributePath(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT
         		, ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION,ClassroomSessionDivision.FIELD_CLASSROOMSESSION)));
+        
+        registerNamedQuery(readByClassroomSessionDivisionByTeacher, _select().where(commonUtils.attributePath(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION)
+        		,ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION).and(commonUtils.attributePath(StudentSubject.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT, ClassroomSessionDivisionSubject.FIELD_TEACHER)
+                		,ClassroomSessionDivisionSubject.FIELD_TEACHER, ArithmeticOperator.EQ));
         
     }
     
@@ -103,6 +108,12 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentSubject> impl
 	public Collection<StudentSubject> readByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return namedQuery(readByStudentByClassroomSession).parameter(StudentSubject.FIELD_STUDENT, student)
 				.parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
+	}
+	
+	@Override
+	public Collection<StudentSubject> readByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision, Teacher teacher) {
+		return namedQuery(readByClassroomSessionDivisionByTeacher).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION, classroomSessionDivision)
+				.parameter(ClassroomSessionDivisionSubject.FIELD_TEACHER, teacher).resultMany();
 	}
 }
  

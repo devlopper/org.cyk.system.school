@@ -23,5 +23,6 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	BigDecimal convertAttendanceTimeToDivisionDuration(ClassroomSession classroomSession,Long millisecond);
 	Long convertAttendanceTimeToMillisecond(ClassroomSession classroomSession,BigDecimal duration);
 	Collection<ClassroomSession> findByAcademicSessionByLevelGroup(AcademicSession academicSession,LevelGroup levelGroup);
+	Collection<ClassroomSession> findByAcademicSessionByLevelGroupByTeacher(AcademicSession academicSession,LevelGroup levelGroup,Teacher teacher);
 
 }

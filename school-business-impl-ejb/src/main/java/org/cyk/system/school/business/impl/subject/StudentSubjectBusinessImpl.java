@@ -15,6 +15,7 @@ import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -176,6 +177,11 @@ public class StudentSubjectBusinessImpl extends AbstractStudentResultsBusinessIm
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentSubject> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByClassroomSessionDivision(classroomSessionDivision);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentSubject> findByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision,Teacher teacher) {
+		return dao.readByClassroomSessionDivisionByTeacher(classroomSessionDivision,teacher);
 	}
 	 
 	/**/

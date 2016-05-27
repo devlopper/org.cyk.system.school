@@ -217,11 +217,14 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	}
 	
 	@Override
-	public Collection<RESULT> updateResults(Collection<LEVEL> levels,RankOptions<SortableStudentResults> rankOptions,BusinessServiceCallArguments<RESULT> callArguments) {
+	public Collection<RESULT> updateResults(Collection<LEVEL> levels,Boolean updateEvaluationAverage,Boolean updateRank,RankOptions<SortableStudentResults> rankOptions,Boolean updateAttendance,BusinessServiceCallArguments<RESULT> callArguments) {
 		Collection<RESULT> results = null;
-		results = updateAverage(levels, callArguments);
-		results = updateAttendance(levels, callArguments);
-		results = updateRank(levels, rankOptions, callArguments);
+		if(Boolean.TRUE.equals(updateEvaluationAverage))
+			results = updateAverage(levels, callArguments);
+		if(Boolean.TRUE.equals(updateAttendance))
+			results = updateAttendance(levels, callArguments);
+		if(Boolean.TRUE.equals(updateRank))
+			results = updateRank(levels, rankOptions, callArguments);
 		return results;
 	}
 	
