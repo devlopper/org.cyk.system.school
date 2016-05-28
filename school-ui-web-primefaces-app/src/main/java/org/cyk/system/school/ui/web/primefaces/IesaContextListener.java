@@ -106,6 +106,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		super.contextInitialized(event);
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = SubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
+		System.out.println("IesaContextListener.contextInitialized()");
 		
 		SchoolBusinessLayer.getInstance().setReportProducer(new ReportProducer());
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));

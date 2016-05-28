@@ -52,7 +52,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 
 	private static final long serialVersionUID = -9042005596731665575L;
 
-	@Inject protected SchoolBusinessLayer schoolBusinessLayer;
+	/*@Inject*/ protected SchoolBusinessLayer schoolBusinessLayer;
 	@Inject protected SchoolWebManager schoolWebManager;
 		
 	@Override

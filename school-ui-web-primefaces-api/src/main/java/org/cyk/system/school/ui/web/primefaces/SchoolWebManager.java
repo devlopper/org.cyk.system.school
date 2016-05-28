@@ -55,8 +55,6 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 
 	private static SchoolWebManager INSTANCE;
 
-	private SchoolBusinessLayer schoolBusinessLayer;
-	
 	protected final String outcomeConfigureLevels = "configureLevels";
 	@Setter protected String academicSessionInfos="ACA INFOS TO SET";
 	@Setter protected String classroomSessionDivisionTypeName,classroomSessionDivisionInfos="CSD INFOS TO SET";
@@ -82,11 +80,16 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		INSTANCE = this;
 		identifier = "school";
 		super.initialisation(); 
-		schoolBusinessLayer = SchoolBusinessLayer.getInstance();
+		/*schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 		AcademicSession academicSession = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null);
 		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(academicSession.getPeriod());
 		classroomSessionDivisionTypeName = academicSession.getNodeInformations().getClassroomSessionTimeDivisionType().getName();
 		classroomSessionDivisionInfos = "No "+(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex()+1);
+		*/
+	}
+	
+	private SchoolBusinessLayer getSchoolBusinessLayer(){
+		return SchoolBusinessLayer.getInstance();
 	}
 	
 	@Override
@@ -157,31 +160,31 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			public Collection<?> children(Object object) { 
 				if(object instanceof LevelGroup){
 					LevelGroup levelGroup = (LevelGroup) object;
-					if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
-						return schoolBusinessLayer.getClassroomSessionBusiness().findByAcademicSessionByLevelGroup(schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null), levelGroup);
+					if(Boolean.TRUE.equals(userSession.getIsManager()))
+						return getSchoolBusinessLayer().getClassroomSessionBusiness().findByAcademicSessionByLevelGroup(getSchoolBusinessLayer().getAcademicSessionBusiness().findCurrent(null), levelGroup);
 					else{
 						Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser());
 						if(teacher!=null)
-							return schoolBusinessLayer.getClassroomSessionBusiness().findByAcademicSessionByLevelGroupByTeacher(schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null), levelGroup,teacher);
+							return getSchoolBusinessLayer().getClassroomSessionBusiness().findByAcademicSessionByLevelGroupByTeacher(getSchoolBusinessLayer().getAcademicSessionBusiness().findCurrent(null), levelGroup,teacher);
 					}
 						
 				}
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
 					
-					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
-							, schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+					ClassroomSessionDivision classroomSessionDivision = getSchoolBusinessLayer().getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
+							, getSchoolBusinessLayer().getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
 					
-					if(Boolean.TRUE.equals(userSession.getIsAdministrator()))
-						return schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(classroomSessionDivision);
+					if(Boolean.TRUE.equals(userSession.getIsManager()))
+						return getSchoolBusinessLayer().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(classroomSessionDivision);
 					else{
 						Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser());
 						if(teacher!=null)
-							return schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(classroomSessionDivision, teacher);
+							return getSchoolBusinessLayer().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(classroomSessionDivision, teacher);
 					}}
 				if(object instanceof ClassroomSessionDivisionSubject){
 					ClassroomSessionDivisionSubject classroomSessionDivisionSubject = (ClassroomSessionDivisionSubject) object;
-					return schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);			
+					return getSchoolBusinessLayer().getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);			
 				}
 				return super.children(object);
 			}
@@ -191,8 +194,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 				Object object = nodeModel(node).getData();
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
-					ClassroomSessionDivision classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
-							, schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+					ClassroomSessionDivision classroomSessionDivision = getSchoolBusinessLayer().getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(classroomSession
+							, getSchoolBusinessLayer().getClassroomSessionBusiness().findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
 					return classroomSessionDivision.getNumberOfSubjects() == 0;
 				}
 				return super.isLeaf(node);
@@ -208,7 +211,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
 							return new Evaluation();
 						else{
-							return schoolBusinessLayer.getEvaluationBusiness().findByClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType)
+							return getSchoolBusinessLayer().getEvaluationBusiness().findByClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType)
 									.iterator().next();
 						}
 				}
@@ -316,7 +319,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		final Teacher teacher = page.getUserSession().getUserAccount().getUser() instanceof Person 
 				? SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) page.getUserSession().getUserAccount().getUser()) : null;
 		
-		if(!Boolean.TRUE.equals(page.getUserSession().getIsAdministrator()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
+		if(!Boolean.TRUE.equals(page.getUserSession().getIsManager()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
 			classroomSessions = teacher==null?null:SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSessionByTeacher(academicSession,teacher);
 		}else {
 			classroomSessions = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(academicSession);
@@ -363,7 +366,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			page.setChoices(classroomSessionDivisionFieldName,null);
 		else{
 			Collection<ClassroomSessionDivision> classroomSessionDivisions;
-			if(!Boolean.TRUE.equals(page.getUserSession().getIsAdministrator()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
+			if(!Boolean.TRUE.equals(page.getUserSession().getIsManager()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
 				classroomSessionDivisions = teacher==null?null:SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSessionByTeacher(classroomSession,teacher);
 			}else{
 				classroomSessionDivisions = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession);
@@ -389,7 +392,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			page.setChoices(classroomSessionDivisionSubjectFieldName, null);
 		}else{
 			Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects;
-			if(!Boolean.TRUE.equals(page.getUserSession().getIsAdministrator()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
+			if(!Boolean.TRUE.equals(page.getUserSession().getIsManager()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
 				classroomSessionDivisionSubjects = teacher==null?null:SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(classroomSessionDivision,teacher);
 			}else{
 				classroomSessionDivisionSubjects = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness()

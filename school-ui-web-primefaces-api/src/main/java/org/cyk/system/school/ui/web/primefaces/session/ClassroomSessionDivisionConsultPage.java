@@ -93,7 +93,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		});
 				
 		final List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>();
-		if(Boolean.TRUE.equals(userSession.getIsAdministrator()) || isCoordinator)
+		if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
 			classroomSessionDivisionSubjects.addAll(SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(identifiable));
 		else{
 			if(teacher!=null)
@@ -137,7 +137,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 					if(StudentClassroomSessionDivisionDetails.isSubjectAverageFieldName(field.getName()))
 						return StudentClassroomSessionDivisionDetails.getSubjectAverageFieldNameIndex(field.getName()) < classroomSessionDivisionSubjects.size();
 					else{
-						if(Boolean.TRUE.equals(userSession.getIsAdministrator()) || isCoordinator)
+						if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
 							return Boolean.TRUE;
 						else{
 							if(teacher==null)
@@ -165,7 +165,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 		
 		final Integer numberOfColumnBeforeSubjects = 2;
 		final List<StudentSubject> studentSubjects = new ArrayList<>();
-		if(Boolean.TRUE.equals(userSession.getIsAdministrator()) || isCoordinator)
+		if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
 			studentSubjects.addAll(SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivision(identifiable));
 		else{
 			if(teacher!=null)
@@ -213,6 +213,9 @@ public class ClassroomSessionDivisionConsultPage extends AbstractConsultPage<Cla
 			}
 		});
 		broadsheetTable.setUpdateStyleClass("broadsheetTableStyleClass");
+		broadsheetTable.setShowHeader(Boolean.TRUE);
+		broadsheetTable.setShowToolBar(Boolean.TRUE);
+		broadsheetTable.getPrintCommandable().setRendered(Boolean.TRUE);
 	}
 	
 	@Override

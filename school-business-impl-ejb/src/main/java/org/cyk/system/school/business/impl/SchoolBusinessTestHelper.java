@@ -79,7 +79,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Inject private TeacherDao teacherDao;
 	@Inject private ClassroomSessionDivisionStudentsMetricCollectionDao classroomSessionDivisionStudentsMetricCollectionDao;
 	
-	@Inject private SchoolBusinessLayer schoolBusinessLayer;
+	/*@Inject*/ private SchoolBusinessLayer schoolBusinessLayer;
 	
 	@Getter @Setter private Boolean studentSubjectCascadeBottomUpOnCreate,studentSubjectCascadeTopDownOnCreate;
 	@Getter @Setter private RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
