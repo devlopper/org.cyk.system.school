@@ -17,7 +17,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
-import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -32,22 +32,22 @@ import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
 @Named @ViewScoped @Getter @Setter
-public class StudentClassroomSessionDivisionSubjectCreateManyPage extends AbstractCrudOnePage<StudentSubject> implements Serializable {
+public class StudentClassroomSessionDivisionSubjectCreateManyPage extends AbstractCrudOnePage<StudentClassroomSessionDivisionSubject> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private ItemCollection<StudentSubjectItem,StudentSubject> studentSubjectCollection;
+	private ItemCollection<StudentSubjectItem,StudentClassroomSessionDivisionSubject> studentSubjectCollection;
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
 		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
-		studentSubjectCollection = createItemCollection(StudentSubjectItem.class, StudentSubject.class 
-				,new ItemCollectionWebAdapter<StudentSubjectItem,StudentSubject>(){
+		studentSubjectCollection = createItemCollection(StudentSubjectItem.class, StudentClassroomSessionDivisionSubject.class 
+				,new ItemCollectionWebAdapter<StudentSubjectItem,StudentClassroomSessionDivisionSubject>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
-			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentSubject,SelectItem> itemCollection,StudentSubjectItem item) {
+			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentClassroomSessionDivisionSubject,SelectItem> itemCollection,StudentSubjectItem item) {
 				super.instanciated(itemCollection, item);
 				item.getIdentifiable().setCascadeBottomUpOnCreate(Boolean.TRUE);
 				item.getIdentifiable().setCascadeTopDownOnCreate(Boolean.FALSE);
@@ -83,7 +83,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	
 	@Override
 	protected void create() {
-		SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().create(studentSubjectCollection.getIdentifiables());
+		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().create(studentSubjectCollection.getIdentifiables());
 	}
 	
 	@Override
@@ -93,7 +93,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	
 	@Override
 	protected BusinessEntityInfos fetchBusinessEntityInfos() {
-		return uiManager.businessEntityInfos(StudentSubject.class);
+		return uiManager.businessEntityInfos(StudentClassroomSessionDivisionSubject.class);
 	}
 	@Override
 	protected Crud crudFromRequestParameter() {
@@ -101,7 +101,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	}
 	
 	@Getter @Setter
-	public static class Form extends AbstractFormModel<StudentSubject> implements Serializable{
+	public static class Form extends AbstractFormModel<StudentClassroomSessionDivisionSubject> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private ClassroomSession classroomSession;
 		@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private ClassroomSessionDivision classroomSessionDivision;
@@ -115,7 +115,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	}
 	
 	@Getter @Setter
-	public static class StudentSubjectItem extends AbstractItemCollectionItem<StudentSubject> implements Serializable {
+	public static class StudentSubjectItem extends AbstractItemCollectionItem<StudentClassroomSessionDivisionSubject> implements Serializable {
 		private static final long serialVersionUID = 3828481396841243726L;
 		private String registrationCode,names,classroomSession,classroomSessionDivision,classroomSessionDivisionSubject;
 	}

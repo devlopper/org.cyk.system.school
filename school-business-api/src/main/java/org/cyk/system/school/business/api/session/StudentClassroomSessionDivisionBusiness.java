@@ -12,18 +12,19 @@ import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
-import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.utility.common.cdi.BeanAdapter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-public interface StudentClassroomSessionDivisionBusiness extends AbstractStudentResultsBusiness<ClassroomSessionDivision,StudentClassroomSessionDivision,StudentSubject> {
+public interface StudentClassroomSessionDivisionBusiness extends AbstractStudentResultsBusiness<ClassroomSessionDivision,StudentClassroomSessionDivision,StudentClassroomSessionDivisionSubject> {
 
 	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,ServiceCallArguments arguments);
 	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
@@ -87,4 +88,7 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 			
 		}		
 	}
+
+	Collection<StudentClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession);
+	Collection<StudentClassroomSessionDivision> findByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
 }

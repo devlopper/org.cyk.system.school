@@ -21,8 +21,8 @@ import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisi
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
 import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
@@ -42,7 +42,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	private FormOneData<StudentClassroomSessionDivisionDetails> details;
 	private Table<AbstractSubjectDetails> subjectTable;
 	private List<Table<StudentResultsMetricValueDetails>> metricTables = new ArrayList<>();
-	private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
+	private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations;
 	private Boolean showReport = Boolean.FALSE;
 	
 	@SuppressWarnings("unchecked")
@@ -58,7 +58,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			}
 		
 		if(Boolean.TRUE.equals(LOAD_EVALUATIONS)){
-			studentSubjectEvaluations = SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness().findByStudentByClassroomSessionDivision(
+			studentSubjectEvaluations = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectEvaluationBusiness().findByStudentByClassroomSessionDivision(
 					identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 		}
 		
@@ -75,14 +75,14 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 		});
 		
 		subjectTable = (Table<AbstractSubjectDetails>) createDetailsTable(SUBJECT_DETAILS_CLASS, 
-				new DetailsConfigurationListener.Table.Adapter<StudentSubject,AbstractSubjectDetails>(StudentSubject.class, SUBJECT_DETAILS_CLASS){
+				new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubject,AbstractSubjectDetails>(StudentClassroomSessionDivisionSubject.class, SUBJECT_DETAILS_CLASS){
 			private static final long serialVersionUID = 1L;
 			@Override
-			public Collection<StudentSubject> getIdentifiables() {
-				Collection<StudentSubject> studentSubjects = SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByStudentByClassroomSessionDivision(identifiable.getStudent(),identifiable.getClassroomSessionDivision());
-				for(StudentSubject studentSubject : studentSubjects){
+			public Collection<StudentClassroomSessionDivisionSubject> getIdentifiables() {
+				Collection<StudentClassroomSessionDivisionSubject> studentSubjects = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().findByStudentByClassroomSessionDivision(identifiable.getStudent(),identifiable.getClassroomSessionDivision());
+				for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 					studentSubject.getDetails().clear();
-					for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations)
+					for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations)
 						if(studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier())){
 							studentSubject.getDetails().add(studentSubjectEvaluation);
 						}

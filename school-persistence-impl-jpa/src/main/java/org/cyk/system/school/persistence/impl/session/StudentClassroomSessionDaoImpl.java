@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 
@@ -15,12 +16,13 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-    private String readByClassroomSession,readByStudentByClassroomSession,readByClassroomSessions;
+    private String readByClassroomSession,readByStudentByClassroomSession,readByClassroomSessions,readByLevelTimeDivision;
     
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
         registerNamedQuery(readByClassroomSession, _select().where(StudentClassroomSession.FIELD_CLASSROOMSESSION));
+        registerNamedQuery(readByLevelTimeDivision, _select().where(commonUtils.attributePath(StudentClassroomSession.FIELD_CLASSROOMSESSION, ClassroomSession.FIELD_LEVEL_TIME_DIVISION), ClassroomSession.FIELD_LEVEL_TIME_DIVISION));
         registerNamedQuery(readByStudentByClassroomSession, _select().where(StudentClassroomSession.FIELD_STUDENT).and(StudentClassroomSession.FIELD_CLASSROOMSESSION));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(StudentClassroomSession.FIELD_CLASSROOMSESSION));
     }
@@ -41,6 +43,11 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
 	@Override
 	public Collection<StudentClassroomSession> readByClassroomSessions(Collection<ClassroomSession> levels) {
 		return namedQuery(readByClassroomSessions).parameterIdentifiers(levels).resultMany();
+	}
+	
+	@Override
+	public Collection<StudentClassroomSession> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision) {
+		return namedQuery(readByLevelTimeDivision).parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision).resultMany();
 	}
 
 }

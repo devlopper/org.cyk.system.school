@@ -19,7 +19,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
-import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
@@ -60,9 +60,10 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		cascade(classroomSessionDivisionSubject);
 		return super.delete(classroomSessionDivisionSubject);
 	}
-    	
+    
+	//TODO should be factored in higher class
 	@Override
-	public void computeResults(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<StudentSubject> studentSubjects) {
+	public void computeResults(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<StudentClassroomSessionDivisionSubject> studentSubjects) {
 		logTrace("Computing node results of {} Classroom Session Division Subject(s). Number of students={}", classroomSessionDivisionSubjects.size(),studentSubjects.size());
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
 			NodeResults results = classroomSessionDivisionSubject.getResults();
@@ -71,7 +72,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			results.setAverageHighest(BigDecimal.ZERO);
 			results.setNumberOfStudentPassingEvaluationAverage(0);
 			Collection<WeightedValue> weightedValues = new ArrayList<>();
-			for(StudentSubject studentSubject : studentSubjects){
+			for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 				if(studentSubject.getClassroomSessionDivisionSubject().getIdentifier().equals(classroomSessionDivisionSubject.getIdentifier())){
 					BigDecimal value = studentSubject.getResults().getEvaluationSort().getAverage().getValue();
 					if(value==null){

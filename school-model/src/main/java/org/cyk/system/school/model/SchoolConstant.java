@@ -11,5 +11,7 @@ public interface SchoolConstant {
 	String INTANGIBLE_PRODUCT_TUITION = "TUITION";
 	
 	/**/
+	
+	String UI_TAB_BROADSHEET_ID = "school.broadsheet";
 
 }

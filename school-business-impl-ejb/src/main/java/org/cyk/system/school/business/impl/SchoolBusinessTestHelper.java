@@ -36,7 +36,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
-import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -49,8 +49,8 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.EvaluationType;
-import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionStudentsMetricCollectionDao;
@@ -67,7 +67,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	private static SchoolBusinessTestHelper INSTANCE;
 	
 	@Inject private StudentBusiness studentBusiness;
-	@Inject private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject private StudentClassroomSessionDivisionSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
 	@Inject private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
 	@Inject private EvaluationBusiness subjectEvaluationBusiness;
@@ -145,15 +145,15 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		Collection<Evaluation> subjectEvaluations = new ArrayList<>();
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
 			Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
-			Collection<StudentSubject> studentSubjects = schoolBusinessLayer.getStudentSubjectBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+			Collection<StudentClassroomSessionDivisionSubject> studentSubjects = schoolBusinessLayer.getStudentClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 			if(studentSubjects.isEmpty())
 				continue;
 			for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
 				Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType);
 				subjectEvaluation.setCoefficientApplied(coefficientApplied);
 				subjectEvaluations.add(subjectEvaluation);
-				for(StudentSubject studentSubject : studentSubjects ){
-					subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation, studentSubject
+				for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects ){
+					subjectEvaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(subjectEvaluation, studentSubject
 							, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue()))));
 				}
 			}
@@ -169,7 +169,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		for(String studentRegistrationCode : studentRegistrationCodes){
 			Student student = studentBusiness.findByRegistrationCode(studentRegistrationCode);
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
-				StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
+				StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject);
 				studentSubjectBusiness.create(studentSubject);
 			}
 		}
@@ -181,8 +181,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			if(StringUtils.isBlank(detail[1]))
 				continue;
 			Student student = studentBusiness.findByRegistrationCode(detail[0]);
-			StudentSubject studentSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(student, subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
-			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
+			StudentClassroomSessionDivisionSubject studentSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(student, subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
+			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
 		}
 		//debug(subjectEvaluation);
 		//debug(subjectEvaluation.getStudentSubjectEvaluations().iterator().next());
@@ -218,7 +218,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 						|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) ){
 						for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 							studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
-							if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness()
+							if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectEvaluationBusiness()
 									.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
 											, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
 								assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
@@ -321,8 +321,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			createStudentClassroomSession(code, classroomSession, expected);
 	}
 	
-	public StudentSubject createStudentSubject(String registrationCode,ClassroomSessionDivisionSubject classroomSessionDivisionSubject,Object[][] expected){
-		StudentSubject studentSubject = new StudentSubject(studentBusiness.findByRegistrationCode(registrationCode), classroomSessionDivisionSubject);
+	public StudentClassroomSessionDivisionSubject createStudentSubject(String registrationCode,ClassroomSessionDivisionSubject classroomSessionDivisionSubject,Object[][] expected){
+		StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(studentBusiness.findByRegistrationCode(registrationCode), classroomSessionDivisionSubject);
 		studentSubject.setCascadeBottomUpOnCreate(studentSubjectCascadeBottomUpOnCreate);
 		studentSubject.setCascadeTopDownOnCreate(studentSubjectCascadeTopDownOnCreate);
 		studentSubject = studentSubjectBusiness.create(studentSubject);
@@ -345,7 +345,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	public void assertStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Object[] expected){
 		assertEquals("Student classroom session division subject count", (Integer)expected[0], 
-				schoolBusinessLayer.getStudentSubjectBusiness()
+				schoolBusinessLayer.getStudentClassroomSessionDivisionSubjectBusiness()
 				.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision()).size());
 	}
 	
@@ -369,7 +369,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			assertEquals("Student classroom session division count", 0, schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness()
 					.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
 			
-			assertEquals("Student classroom session division subject count", 0, schoolBusinessLayer.getStudentSubjectBusiness()
+			assertEquals("Student classroom session division subject count", 0, schoolBusinessLayer.getStudentClassroomSessionDivisionSubjectBusiness()
 					.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
 		}else{
 			assertStudentClassroomSession(studentClassroomSession, expected);
@@ -400,8 +400,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	/**/
 	
 	public void assertClassroomSessionDivisionSubjectAverage(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details){
-		Collection<StudentSubject> studentSubjects = studentSubjectBusiness.updateAverage(Arrays.asList(classroomSessionDivisionSubject), null);
-		for(StudentSubject studentSubject : studentSubjects){
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = studentSubjectBusiness.updateAverage(Arrays.asList(classroomSessionDivisionSubject), null);
+		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 			for(String[] detail : details)
 				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){
 					assertBigDecimalEquals("Average of "+studentSubject.getStudent(), detail[1], studentSubject.getResults().getEvaluationSort().getAverage().getValue());
@@ -410,9 +410,9 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	public void assertClassroomSessionDivisionSubjectRank(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details,RankOptions<SortableStudentResults> rankOptions){
-		Collection<StudentSubject> studentSubjects = studentSubjectBusiness.updateAverage(Arrays.asList(classroomSessionDivisionSubject), null);
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = studentSubjectBusiness.updateAverage(Arrays.asList(classroomSessionDivisionSubject), null);
 		studentSubjectBusiness.rank(studentSubjects,rankOptions,null);
-		for(StudentSubject studentSubject : studentSubjects){
+		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 			for(String[] detail : details)
 				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){
 					assertEquals("Rank Value of "+studentSubject.getStudent(), detail[1], studentSubject.getResults().getEvaluationSort().getRank().getValue().toString());
@@ -563,10 +563,10 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().create(subjectEvaluationType);
 			}
 			for(Student student : customStudents){
-				StudentSubject studentSubject = new StudentSubject(student, classroomSessionDivisionSubject);
+				StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject);
 				studentSubject.setCascadeBottomUpOnCreate(Boolean.TRUE);
 				studentSubject.setCascadeTopDownOnCreate(Boolean.FALSE);
-				schoolBusinessLayer.getStudentSubjectBusiness().create(studentSubject);
+				schoolBusinessLayer.getStudentClassroomSessionDivisionSubjectBusiness().create(studentSubject);
 			}
 		}
 		createSubjectEvaluations(customClassroomSessionDivisionSubjects,Evaluation.COEFFICIENT_APPLIED);

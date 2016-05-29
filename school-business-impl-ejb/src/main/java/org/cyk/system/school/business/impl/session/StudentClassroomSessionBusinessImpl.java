@@ -15,25 +15,26 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
-import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
-import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 
 @Stateless
 public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSession, StudentClassroomSession, StudentClassroomSessionDao, StudentClassroomSessionDivision> implements StudentClassroomSessionBusiness,Serializable {
@@ -41,9 +42,9 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	private static final long serialVersionUID = -3799482462496328200L;
 	
 	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
-	@Inject private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject private StudentClassroomSessionDivisionSubjectBusiness studentSubjectBusiness;
 	
-	@Inject private StudentSubjectDao studentSubjectDao;
+	@Inject private StudentClassroomSessionDivisionSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao;
 	@Inject private StudentClassroomSessionDivisionDao studentClassroomSessionDivisionDao;
 	@Inject private ClassroomSessionDao classroomSessionDao;
@@ -124,8 +125,12 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		
 		updateAverage(classroomSessions, studentClassroomSessions,studentClassroomSessionDivisions, callArguments);
 		
-		//SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
-		//SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().computeResults(classroomSessions, studentClassroomSessions);
+		Collection<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>();
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
+			classroomSessionDivisions.add(studentClassroomSessionDivision.getClassroomSessionDivision());
+		
+		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
+		SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().computeResults(classroomSessions, studentClassroomSessions);
 		
 		return studentClassroomSessions;
 	}
@@ -164,8 +169,8 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessions(levels);
 		//student data
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = studentClassroomSessionDivisionDao.readByClassroomSessions(levels);
-		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessions(levels);
-		Collection<StudentSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessions(levels);
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = studentSubjectDao.readByClassroomSessions(levels);
+		Collection<StudentClassroomSessionDivisionSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessions(levels);
 		
 		studentSubjectBusiness.updateAverage(subjects, studentSubjects, evaluatedStudents,null);
 		
@@ -207,6 +212,11 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student,classroomSession);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSession> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision) {
+		return dao.readByLevelTimeDivision(levelTimeDivision);
 	}
 
 	/**/

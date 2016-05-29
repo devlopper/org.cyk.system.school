@@ -27,8 +27,8 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
-import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.utility.common.Constant;
 
 public abstract class AbstractSchoolReportProducer extends AbstractCompanyReportProducer implements SchoolReportProducer,Serializable {
@@ -42,7 +42,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	@Override
-	public String getEvaluationTypeCode(StudentSubjectEvaluation studentSubjectEvaluation) {
+	public String getEvaluationTypeCode(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation) {
 		return studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode();
 	}
 	
@@ -139,10 +139,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
 		//Collection<StudentSubject> studentSubjects = s.getDetails();
-		Collection<StudentSubject> studentSubjects = schoolBusinessLayer.getStudentSubjectDao().readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
-		Collection<StudentSubjectEvaluation> studentSubjectEvaluations = schoolBusinessLayer.getStudentSubjectEvaluationDao().readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = schoolBusinessLayer.getStudentSubjectDao().readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
+		Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations = schoolBusinessLayer.getStudentSubjectEvaluationDao().readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
 		logTrace("Number of student subjects = {}", studentSubjects.size());
-		for(StudentSubject studentSubject : studentSubjects){
+		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 			Boolean applicable = studentSubject.getResults().getEvaluationSort().getAverage().getValue()!=null;
 			
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport();
@@ -189,11 +189,11 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 	}
 	
-	protected void studentSubjectEvaluation(StudentClassroomSessionDivisionSubjectReport sr,StudentSubject studentSubject,Collection<StudentSubjectEvaluation> studentSubjectEvaluations,BigDecimal[] results
+	protected void studentSubjectEvaluation(StudentClassroomSessionDivisionSubjectReport sr,StudentClassroomSessionDivisionSubject studentSubject,Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations,BigDecimal[] results
 			,StudentClassroomSessionDivisionReportParameters parameters){
 		int i = 0;
 		for(String evaluationTypeCode : parameters.getEvaluationTypeCodes()){
-			for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
+			for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
 				if(getEvaluationTypeCode(studentSubjectEvaluation).equals(evaluationTypeCode) 
 						&& studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()) 
 						){
@@ -208,7 +208,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 	}
 	
-	protected BigDecimal getMarkValue(StudentSubjectEvaluation studentSubjectEvaluation){
+	protected BigDecimal getMarkValue(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation){
 		BigDecimal value = studentSubjectEvaluation.getValue();
 		if(Boolean.FALSE.equals(studentSubjectEvaluation.getEvaluation().getCoefficientApplied()))
 			value = value.multiply(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());

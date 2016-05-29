@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.api.event.EventBusiness;
@@ -30,7 +32,7 @@ import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
-import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
 
 public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractIdentifiable,RESULT extends AbstractStudentResult<LEVEL,DETAIL>,DAO extends TypedDao<RESULT>,DETAIL> extends AbstractTypedBusinessService<RESULT,DAO> implements AbstractStudentResultsBusiness<LEVEL,RESULT,DETAIL>,Serializable {
 
@@ -42,7 +44,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	@Inject protected EventBusiness eventBusiness;
 	@Inject protected EventMissedBusiness eventMissedBusiness;
 	
-	@Inject protected StudentSubjectEvaluationDao evaluatedStudentDao;
+	@Inject protected StudentClassroomSessionDivisionSubjectEvaluationDao evaluatedStudentDao;
 	@Inject protected LectureDao lectureDao;
 	@Inject protected EventParticipationDao eventParticipationDao;
 	@Inject protected EventMissedDao eventMissedDao;
@@ -140,7 +142,15 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		for(RESULT result : results) {
 			sortables.add(new SortableStudentResults(result,Boolean.TRUE));  
 		}
-		
+		mathematicsBusiness.rank(sortables, options);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public void computeRank(Collection<RESULT> results, RankOptions<SortableStudentResults> options) {
+		List<SortableStudentResults> sortables = new ArrayList<>();
+		for(RESULT result : results) {
+			sortables.add(new SortableStudentResults(result,Boolean.TRUE));  
+		}
 		mathematicsBusiness.rank(sortables, options);
 	}
 

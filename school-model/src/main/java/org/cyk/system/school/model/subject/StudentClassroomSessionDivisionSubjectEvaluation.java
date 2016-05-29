@@ -15,15 +15,15 @@ import lombok.Setter;
 import org.cyk.system.root.model.AbstractIdentifiable;
 
 @Getter @Setter @Entity @NoArgsConstructor
-public class StudentSubjectEvaluation extends AbstractIdentifiable implements Serializable {
+public class StudentClassroomSessionDivisionSubjectEvaluation extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne @NotNull private Evaluation evaluation;
-	@ManyToOne @NotNull private StudentSubject studentSubject;
+	@ManyToOne @NotNull private StudentClassroomSessionDivisionSubject studentSubject;
 	@Column(precision=5,scale=FLOAT_SCALE) @NotNull private BigDecimal value;
 
-	public StudentSubjectEvaluation(Evaluation evaluation,StudentSubject studentSubject, BigDecimal value) {
+	public StudentClassroomSessionDivisionSubjectEvaluation(Evaluation evaluation,StudentClassroomSessionDivisionSubject studentSubject, BigDecimal value) {
 		super();
 		this.evaluation = evaluation;
 		this.studentSubject = studentSubject;

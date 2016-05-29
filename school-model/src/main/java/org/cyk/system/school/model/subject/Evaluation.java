@@ -36,14 +36,14 @@ public class Evaluation extends AbstractIdentifiable implements Serializable {
 	
 	/**/
 	
-	@Transient private Collection<StudentSubjectEvaluation> studentSubjectEvaluations;
+	@Transient private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations;
 
 	public Evaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 		super();
 		this.classroomSessionDivisionSubjectEvaluationType = classroomSessionDivisionSubjectEvaluationType;
 	}
 	
-	public Collection<StudentSubjectEvaluation> getStudentSubjectEvaluations(){
+	public Collection<StudentClassroomSessionDivisionSubjectEvaluation> getStudentSubjectEvaluations(){
 		if(studentSubjectEvaluations==null)
 			studentSubjectEvaluations = new ArrayList<>();
 		return studentSubjectEvaluations;

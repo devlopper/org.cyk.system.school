@@ -15,20 +15,22 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
-import org.cyk.system.school.business.impl.subject.StudentSubjectDetails;
+import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionQueryOneFormModel;
@@ -39,6 +41,7 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionS
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryOneFormModel;
+import org.cyk.system.school.ui.web.primefaces.session.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.StudentSubjectEditPage;
@@ -52,13 +55,20 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 
 	private static final long serialVersionUID = -9042005596731665575L;
 
-	/*@Inject*/ protected SchoolBusinessLayer schoolBusinessLayer;
+	///*@Inject*/ protected SchoolBusinessLayer schoolBusinessLayer;
 	@Inject protected SchoolWebManager schoolWebManager;
 		
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		AbstractWebPage.DEFAULT_LAYOUT.setWest("/org.cyk.ui.web.primefaces.school/include/layout/westtop.xhtml");
+		//SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
+	}
+	
+	@Override
+	public void contextInitialized(ServletContextEvent event) {
+		super.contextInitialized(event);
+		//schoolWebManager.doMoreInitialisation();
 	}
 	
 	@Override
@@ -71,6 +81,10 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		uiManager.registerConfiguration(new IdentifiableConfiguration(AcademicSession.class, AcademicSessionEditPage.Form.class, AcademicSessionDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(AcademicSession.class, null);
 		//webNavigationManager.useDynamicSelectView(AcademicSession.class);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(LevelTimeDivision.class, LevelTimeDivisionEditPage.Form.class, LevelTimeDivisionDetails.class,null,null,null));
+		uiManager.configBusinessIdentifiable(LevelTimeDivision.class, null);
+		//webNavigationManager.useDynamicSelectView(LevelTimeDivision.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class,ClassroomSessionQueryOneFormModel.class,null,ClassroomSessionQueryManyFormModel.class));
 		uiManager.configBusinessIdentifiable(ClassroomSession.class, null);
@@ -96,10 +110,10 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		uiManager.configBusinessIdentifiable(StudentClassroomSessionDivision.class, null);
 		webNavigationManager.useDynamicSelectView(StudentClassroomSessionDivision.class);
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(StudentSubject.class, StudentSubjectEditPage.Form.class, StudentSubjectDetails.class
+		uiManager.registerConfiguration(new IdentifiableConfiguration(StudentClassroomSessionDivisionSubject.class, StudentSubjectEditPage.Form.class, StudentClassroomSessionDivisionSubjectDetails.class
 				,null,null,null));
-		uiManager.configBusinessIdentifiable(StudentSubject.class, null);
-		webNavigationManager.useDynamicSelectView(StudentSubject.class);
+		uiManager.configBusinessIdentifiable(StudentClassroomSessionDivisionSubject.class, null);
+		webNavigationManager.useDynamicSelectView(StudentClassroomSessionDivisionSubject.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(Evaluation.class, null, EvaluationDetails.class
 				,null,null,null));
@@ -120,7 +134,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 				,new UniformResourceLocatorRuntimeConstraint(){
 					@Override
 					public Boolean isAccessibleByUserAccount(AbstractUserSession<?,?> userSession,UserAccount userAccount, UniformResourceLocator uniformResourceLocator, HttpServletRequest request,HttpServletResponse response) {
-						Teacher teacher = schoolBusinessLayer.getTeacherBusiness().findByPerson((Person) userAccount.getUser());
+						Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
 						if(teacher==null)
 							return Boolean.FALSE;
 						ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = webManager

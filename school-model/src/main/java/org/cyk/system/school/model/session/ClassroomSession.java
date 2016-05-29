@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
@@ -17,6 +18,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
+import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
@@ -32,13 +34,10 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	@ManyToOne @NotNull private LevelTimeDivision levelTimeDivision;
 	private String suffix;
 	@ManyToOne private Teacher coordinator;
-	/*
-	private Boolean studentClassroomSessionDivisionSubjectAttendancable=Boolean.TRUE;
-	private Boolean studentClassroomSessionDivisionRankable=Boolean.TRUE;
-	private Boolean studentClassroomSessionDivisionSubjectRankable=Boolean.TRUE;
-	*/
+	@Embedded private NodeResults results = new NodeResults();
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
+	//TODO should be moved on NodeResults
 	@NotNull @Column(nullable=false) private Long numberOfStudents = 0l;
 	@Column(nullable=false) @NotNull private Long numberOfDivisions=0l;
 	
@@ -49,6 +48,12 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 		this.academicSession = academicSession;
 		this.levelTimeDivision = levelTimeDivision;
 		this.coordinator = coordinator;
+	}
+	
+	public NodeResults getResults(){
+		if(results==null)
+			results = new NodeResults();
+		return results;
 	}
 	
 	@Override

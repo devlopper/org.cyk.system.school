@@ -112,4 +112,5 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	}
 	private static final String LOG_FORMAT = StudentResults.class.getSimpleName()+"(%s %s %s APP=%s CR=%s)";
 
+	public static final String FIELD_EVALUATION_SORT = "evaluationSort";
 }

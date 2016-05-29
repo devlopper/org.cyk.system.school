@@ -2,6 +2,7 @@ package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -9,8 +10,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
+import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -18,6 +21,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 
 @Stateless
@@ -28,6 +32,37 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Inject
 	public ClassroomSessionBusinessImpl(ClassroomSessionDao dao) {
 		super(dao);  
+	}
+	
+	@Override
+	public void computeResults(Collection<ClassroomSession> classroomSessions,Collection<StudentClassroomSession> studentClassroomSessions) {
+		for(ClassroomSession classroomSession : classroomSessions){
+			Collection<WeightedValue> weightedValues = new ArrayList<>();
+			Integer numberOfStudent = 0;
+			for(StudentClassroomSession s : studentClassroomSessions){
+				if(!s.getClassroomSession().equals(classroomSession) || s.getResults().getEvaluationSort().getAverage().getValue()==null)
+					continue;
+				
+				s.setClassroomSession(classroomSession);
+				
+				weightedValues.add(new WeightedValue(s.getResults().getEvaluationSort().getAverage().getValue(),BigDecimal.ONE,Boolean.TRUE));
+				if(s.getResults().getEvaluationSort().getAverage().getValue()==null)
+					continue; 
+				numberOfStudent++;
+				if(classroomSession.getResults().getAverageHighest()==null || s.getResults().getEvaluationSort().getAverage().getValue().compareTo(classroomSession.getResults().getAverageHighest())>0)
+					classroomSession.getResults().setAverageHighest(s.getResults().getEvaluationSort().getAverage().getValue());
+				if(classroomSession.getResults().getAverageLowest()==null || s.getResults().getEvaluationSort().getAverage().getValue().compareTo(classroomSession.getResults().getAverageLowest())<0)
+					classroomSession.getResults().setAverageLowest(s.getResults().getEvaluationSort().getAverage().getValue());	
+			}
+			if(weightedValues.isEmpty()){
+				
+			}else{
+				Average average = RootBusinessLayer.getInstance().getMathematicsBusiness().average(weightedValues, null, null);
+				classroomSession.getResults().setAverage(average.getValue());
+				classroomSession.getResults().setNumberOfStudent(numberOfStudent);
+			}
+			dao.update(classroomSession);
+		}
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

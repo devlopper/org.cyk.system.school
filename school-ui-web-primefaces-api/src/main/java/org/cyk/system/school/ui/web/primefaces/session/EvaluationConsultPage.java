@@ -13,7 +13,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.StudentSubjectEvaluationDetails;
 import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
@@ -41,11 +41,11 @@ public class EvaluationConsultPage extends AbstractConsultPage<Evaluation> imple
 			}
 		});
 		
-		markTable = (Table<StudentSubjectEvaluationDetails>) createDetailsTable(StudentSubjectEvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentSubjectEvaluation,StudentSubjectEvaluationDetails>(StudentSubjectEvaluation.class, StudentSubjectEvaluationDetails.class){
+		markTable = (Table<StudentSubjectEvaluationDetails>) createDetailsTable(StudentSubjectEvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubjectEvaluation,StudentSubjectEvaluationDetails>(StudentClassroomSessionDivisionSubjectEvaluation.class, StudentSubjectEvaluationDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
-			public Collection<StudentSubjectEvaluation> getIdentifiables() {
-				return SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness().findBySubjectEvaluation(identifiable, Boolean.FALSE);
+			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> getIdentifiables() {
+				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectEvaluationBusiness().findByEvaluation(identifiable, Boolean.FALSE);
 			}
 			@Override
 			public Boolean getEnabledInDefaultTab() {

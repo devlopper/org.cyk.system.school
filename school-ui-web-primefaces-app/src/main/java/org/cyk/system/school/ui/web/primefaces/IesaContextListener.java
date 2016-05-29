@@ -26,8 +26,8 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
-import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.ui.api.data.collector.form.FormConfiguration;
 import org.cyk.ui.api.model.party.AbstractActorEditFormModel;
@@ -106,8 +106,6 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		super.contextInitialized(event);
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = SubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
-		System.out.println("IesaContextListener.contextInitialized()");
-		
 		SchoolBusinessLayer.getInstance().setReportProducer(new ReportProducer());
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
     	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
@@ -172,9 +170,9 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FILED_SUBJECT) private String test1;
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_TEST1) private String test2;
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_TEST2) private String exam;
-		public SubjectDetails(StudentSubject studentSubject) {
+		public SubjectDetails(StudentClassroomSessionDivisionSubject studentSubject) {
 			super(studentSubject);
-			for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
+			for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
 				if(studentSubjectEvaluation.getStudentSubject().equals(studentSubject)){
 					if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Test1"))
 						test1 = numberBusiness.format(studentSubjectEvaluation.getValue());

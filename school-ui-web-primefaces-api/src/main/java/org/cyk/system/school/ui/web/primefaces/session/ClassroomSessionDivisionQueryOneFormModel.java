@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
@@ -53,7 +54,7 @@ public class ClassroomSessionDivisionQueryOneFormModel extends AbstractClassroom
 						,UIManager.getInstance().businessEntityInfos(StudentClassroomSessionDivision.class).getUserInterface().getLabelId()))); 
 			}else if(SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
 				WebNavigationManager.getInstance().redirectToDynamicConsultOne(((ClassroomSessionDivisionQueryOneFormModel)data).getIdentifiable()
-						,Arrays.asList(new Parameter(UniformResourceLocatorParameter.TAB_ID,ClassroomSessionDivisionConsultPage.TAB_BROADSHEET_ID))); 
+						,Arrays.asList(new Parameter(UniformResourceLocatorParameter.TAB_ID,SchoolConstant.UI_TAB_BROADSHEET_ID))); 
 			}
 		}
 	}

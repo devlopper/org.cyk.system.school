@@ -16,6 +16,7 @@ import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -47,7 +48,12 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	public void computeResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
 			Collection<WeightedValue> weightedValues = new ArrayList<>();
-			Integer numberOfStudent = 0;
+			NodeResults results = classroomSessionDivision.getResults();
+			results.setAverageLowest(BigDecimal.ZERO);
+			results.setAverage(BigDecimal.ZERO);
+			results.setAverageHighest(BigDecimal.ZERO);
+			results.setNumberOfStudent(0);
+			results.setNumberOfStudentPassingEvaluationAverage(0);
 			for(StudentClassroomSessionDivision s : studentClassroomSessionDivisions){
 				if(!s.getClassroomSessionDivision().equals(classroomSessionDivision) || s.getResults().getEvaluationSort().getAverage().getValue()==null)
 					continue;
@@ -57,18 +63,23 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 				weightedValues.add(new WeightedValue(s.getResults().getEvaluationSort().getAverage().getValue(),BigDecimal.ONE,Boolean.TRUE));
 				if(s.getResults().getEvaluationSort().getAverage().getValue()==null)
 					continue;
-				numberOfStudent++;
+				results.setNumberOfStudent(results.getNumberOfStudent()+1);
 				if(classroomSessionDivision.getResults().getAverageHighest()==null || s.getResults().getEvaluationSort().getAverage().getValue().compareTo(classroomSessionDivision.getResults().getAverageHighest())>0)
 					classroomSessionDivision.getResults().setAverageHighest(s.getResults().getEvaluationSort().getAverage().getValue());
 				if(classroomSessionDivision.getResults().getAverageLowest()==null || s.getResults().getEvaluationSort().getAverage().getValue().compareTo(classroomSessionDivision.getResults().getAverageLowest())<0)
 					classroomSessionDivision.getResults().setAverageLowest(s.getResults().getEvaluationSort().getAverage().getValue());	
+				
+				//TODO should be take first on subject if null on higher
+				if(s.getResults().getEvaluationSort().getAverage().getValue().compareTo(s.getClassroomSessionDivision().getClassroomSession().getAcademicSession()
+						.getNodeInformations().getEvaluationPassAverage())>=0){
+					results.setNumberOfStudentPassingEvaluationAverage(results.getNumberOfStudentPassingEvaluationAverage()+1);
+				}
 			}
 			if(weightedValues.isEmpty()){
 				
 			}else{
 				Average average = RootBusinessLayer.getInstance().getMathematicsBusiness().average(weightedValues, null, null);
 				classroomSessionDivision.getResults().setAverage(average.getValue());
-				classroomSessionDivision.getResults().setNumberOfStudent(numberOfStudent);
 			}
 			dao.update(classroomSessionDivision);
 		}

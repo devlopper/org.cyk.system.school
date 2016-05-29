@@ -15,13 +15,13 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.utility.common.Constant;
 
 @Getter @Setter @Entity @NoArgsConstructor
-public class StudentSubject extends AbstractStudentResult<ClassroomSessionDivisionSubject,StudentSubjectEvaluation> implements Serializable {
+public class StudentClassroomSessionDivisionSubject extends AbstractStudentResult<ClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectEvaluation> implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 	
 	@ManyToOne @NotNull private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	
-	public StudentSubject(Student student, ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+	public StudentClassroomSessionDivisionSubject(Student student, ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		super();
 		this.student = student;
 		this.classroomSessionDivisionSubject = classroomSessionDivisionSubject;
@@ -42,7 +42,7 @@ public class StudentSubject extends AbstractStudentResult<ClassroomSessionDivisi
 	public String getLogMessage() {
 		return String.format(LOG_FORMAT, student.getRegistration().getCode(),classroomSessionDivisionSubject.getIdentifier(),results==null?Constant.EMPTY_STRING:results.getLogMessage());
 	}
-	private static final String LOG_FORMAT = StudentSubject.class.getSimpleName()+"(STUD=%s SUBJECT=%s %s)";
+	private static final String LOG_FORMAT = StudentClassroomSessionDivisionSubject.class.getSimpleName()+"(STUD=%s SUBJECT=%s %s)";
 	
 	public static final String FIELD_CLASSROOMSESSIONDIVISIONSUBJECT = "classroomSessionDivisionSubject";
 }

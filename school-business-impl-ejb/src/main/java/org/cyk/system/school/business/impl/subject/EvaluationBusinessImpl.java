@@ -13,20 +13,20 @@ import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationDao;
-import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
-import org.cyk.system.school.persistence.api.subject.StudentSubjectEvaluationDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
 
 @Stateless
 public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluation, EvaluationDao> implements EvaluationBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	@Inject private StudentSubjectEvaluationDao studentSubjectEvaluationDao;
-	@Inject private StudentSubjectDao studentSubjectDao;
+	@Inject private StudentClassroomSessionDivisionSubjectEvaluationDao studentSubjectEvaluationDao;
+	@Inject private StudentClassroomSessionDivisionSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeDao classroomSessionDivisionSubjectEvaluationTypeDao;
 	
 	@Inject
@@ -38,8 +38,8 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	public Evaluation newInstance(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		Evaluation evaluation = new Evaluation();
 		evaluation.setDate(universalTimeCoordinated());
-		for(StudentSubject studentSubject : studentSubjectDao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject)){
-			evaluation.getStudentSubjectEvaluations().add(new StudentSubjectEvaluation(evaluation, studentSubject, null));
+		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjectDao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject)){
+			evaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation, studentSubject, null));
 		}
 		return evaluation;
 	}
@@ -60,20 +60,20 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	}
 	
 	@Override
-	public Evaluation save(Evaluation evaluation,Collection<StudentSubjectEvaluation> studentSubjectEvaluations) {
+	public Evaluation save(Evaluation evaluation,Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations) {
 		evaluation = dao.update(evaluation);
 		evaluation.setStudentSubjectEvaluations(studentSubjectEvaluations);
 		
-		Collection<StudentSubjectEvaluation> database = studentSubjectEvaluationDao.readByEvaluation(evaluation);
+		Collection<StudentClassroomSessionDivisionSubjectEvaluation> database = studentSubjectEvaluationDao.readByEvaluation(evaluation);
 		
-		delete(StudentSubjectEvaluation.class,studentSubjectEvaluationDao,database, evaluation.getStudentSubjectEvaluations());
+		delete(StudentClassroomSessionDivisionSubjectEvaluation.class,studentSubjectEvaluationDao,database, evaluation.getStudentSubjectEvaluations());
 		
 		save(evaluation);
 		return evaluation;
 	}
 	
 	private void save(Evaluation evaluation){
-		for(StudentSubjectEvaluation studentSubjectEvaluation : evaluation.getStudentSubjectEvaluations()){
+		for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : evaluation.getStudentSubjectEvaluations()){
 			studentSubjectEvaluation.setEvaluation(evaluation);
 			if(studentSubjectEvaluation.getIdentifier()==null)
 				studentSubjectEvaluationDao.create(studentSubjectEvaluation);
@@ -84,7 +84,7 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	
 	@Override
 	public Evaluation delete(Evaluation evaluation) {
-		for(StudentSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluationDao.readByEvaluation(evaluation))
+		for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluationDao.readByEvaluation(evaluation))
 			studentSubjectEvaluationDao.delete(studentSubjectEvaluation);
 		
 		commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, -1l);

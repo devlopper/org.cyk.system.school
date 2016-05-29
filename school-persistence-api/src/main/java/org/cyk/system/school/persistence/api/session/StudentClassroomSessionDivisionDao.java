@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -23,5 +24,7 @@ public interface StudentClassroomSessionDivisionDao extends TypedDao<StudentClas
 	Collection<StudentClassroomSessionDivision> readByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
 
 	Collection<StudentClassroomSessionDivision> readByClassroomSessionDivisionIndex(Byte classroomSessionDivisionIndex);
+
+	Collection<StudentClassroomSessionDivision> readByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
 
 }

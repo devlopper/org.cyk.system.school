@@ -34,6 +34,8 @@ public interface AbstractStudentResultsBusiness<LEVEL extends AbstractIdentifiab
 	
 	void updateRank(Collection<LEVEL> levels,Collection<RESULT> results,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments);
 	
+	void computeRank(Collection<RESULT> results,RankOptions<SortableStudentResults> options);
+	
 	void rank(Collection<RESULT> results,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments);
 
 	Collection<RESULT> updateRank(Collection<LEVEL> levels,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<RESULT> callArguments);

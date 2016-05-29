@@ -51,6 +51,22 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>levelTimeDivisionEditView</from-outcome>
+			<to-view-id>/private/leveltimedivision/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>levelTimeDivisionConsultView</from-outcome>
+			<to-view-id>/private/leveltimedivision/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>levelTimeDivisionListView</from-outcome>
+			<to-view-id>/private/leveltimedivision/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>classroomSessionEditView</from-outcome>
 			<to-view-id>/private/classroomsession/edit.jsf</to-view-id>
 			<redirect />
@@ -169,13 +185,13 @@
 		</navigation-case>
 		
 		<navigation-case>
-			<from-outcome>studentSubjectCreateManyView</from-outcome>
-			<to-view-id>/private/studentsubject/createmany.jsf</to-view-id>
+			<from-outcome>studentClassroomSessionDivisionSubjectCreateManyView</from-outcome>
+			<to-view-id>/private/studentclassroomsessiondivisionsubject/createmany.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>studentSubjectEditView</from-outcome>
-			<to-view-id>/private/studentsubject/edit.jsf</to-view-id>
+			<from-outcome>studentClassroomSessionDivisionSubjectEditView</from-outcome>
+			<to-view-id>/private/studentclassroomsessiondivisionsubject/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

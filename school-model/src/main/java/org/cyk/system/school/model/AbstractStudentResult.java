@@ -47,5 +47,6 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	
 	
 	public static final String FIELD_STUDENT = "student";
+	public static final String FIELD_RESULTS = "results";
 
 }

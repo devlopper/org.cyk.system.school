@@ -1,28 +1,44 @@
 package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.cyk.system.root.business.impl.AbstractOutputDetails;
+import org.cyk.system.school.business.impl.AbstractStudentResultsOutputDetails;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
-public class StudentClassroomSessionDetails extends AbstractOutputDetails<StudentClassroomSession> implements Serializable{
+@SuppressWarnings("unchecked")
+public class StudentClassroomSessionDetails extends AbstractStudentResultsOutputDetails<ClassroomSession,StudentClassroomSession,StudentClassroomSessionDivision> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private String registrationCode;
-	@Input @InputText private String names;
 	@Input @InputText private String tuition;
+	
+	public StudentClassroomSessionDetails() {
+		this(null);
+	}
 	
 	public StudentClassroomSessionDetails(StudentClassroomSession studentClassroomSession) {
 		super(studentClassroomSession);
-		registrationCode = studentClassroomSession.getStudent().getRegistration().getCode();
-		names = studentClassroomSession.getStudent().getPerson().getNames();
-		if(studentClassroomSession.getTuitionSale()==null){
+		/*if(studentClassroomSession.getTuitionSale()==null){
 			
 		}else{
 			tuition = formatNumber(studentClassroomSession.getTuitionSale().getCost().getValue());
-		}
+		}*/
 		
+	}
+	
+	/**/
+	
+	public static final Set<String> FIELDS_SIMPLE = new HashSet<>();
+	public static final Set<String> FIELDS_BROAD_SHEET = new HashSet<>();
+	
+	static{
+		add(new Set[]{FIELDS_SIMPLE}, FIELD_REGISTRATION_CODE,FIELD_NAMES,FIELD_EVALUATION_AVERAGE_VALUE,FIELD_EVALUATION_RANK_VALUE);
+		add(new Set[]{FIELDS_BROAD_SHEET}, FIELD_REGISTRATION_CODE,FIELD_NAMES,FIELD_EVALUATION_AVERAGE_DIVIDEND,FIELD_EVALUATION_AVERAGE_DIVISOR,FIELD_EVALUATION_AVERAGE_VALUE,FIELD_EVALUATION_RANK_VALUE);
+		configureBroadsheetFieldNames(FIELDS_BROAD_SHEET);
 	}
 }

@@ -10,6 +10,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 
 public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession> {
 
@@ -25,4 +26,5 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	Collection<ClassroomSession> findByAcademicSessionByLevelGroup(AcademicSession academicSession,LevelGroup levelGroup);
 	Collection<ClassroomSession> findByAcademicSessionByLevelGroupByTeacher(AcademicSession academicSession,LevelGroup levelGroup,Teacher teacher);
 
+	void computeResults(Collection<ClassroomSession> classroomSessions,Collection<StudentClassroomSession> studentClassroomSessions);
 }

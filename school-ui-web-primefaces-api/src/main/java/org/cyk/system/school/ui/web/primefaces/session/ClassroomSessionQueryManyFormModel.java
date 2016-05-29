@@ -9,6 +9,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.school.business.api.SortableStudentResults;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
@@ -112,6 +113,20 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 						return super.build(field);
 					}
 				});
+			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionEvaluationResults()}, page.getActionIdentifier())){
+				page.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
+				page.setExecutionProgress(new ExecutionProgress("Compute Student Classroom Session "+page.getActionIdentifier(),null));
+				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());
+				PrimefacesManager.getInstance().configureProgressBar(page.getForm().getSubmitCommandable());
+				
+				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
+					@Override
+					public Boolean build(Field field) {
+						if(SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(page.getActionIdentifier()))
+							return field.getName().equals(Form.FIELD_UPDATE_RANK_RESULTS);
+						return super.build(field);
+					}
+				});
 			}
 		}
 		
@@ -159,6 +174,17 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			        rankOptions.setType(RankType.EXAEQUO); 
 			        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 					schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().updateRank(classroomSessionDivisions, rankOptions,callArguments);
+				}
+			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionEvaluationResults()}, actionIdentifier)){
+				StudentClassroomSessionBusiness.ServiceCallArguments callArguments = new StudentClassroomSessionBusiness.ServiceCallArguments();
+				callArguments.setExecutionProgress(page.getExecutionProgress());
+				if(schoolBusinessLayer.getActionComputeStudentClassroomSessionEvaluationResults().equals(actionIdentifier)){
+					Form form = (Form) data;
+					RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
+			        rankOptions.setType(RankType.EXAEQUO); 
+			        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
+					schoolBusinessLayer.getStudentClassroomSessionBusiness().updateResults(classroomSessions,Boolean.TRUE,form.getUpdateRankResults()
+							,rankOptions,Boolean.FALSE,callArguments);
 				}
 			}
 		}

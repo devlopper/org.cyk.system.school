@@ -17,7 +17,7 @@ import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.LectureDetails;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
@@ -43,11 +43,11 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			}
 		});
 		
-		studentTable = (Table<StudentClassroomSessionDivisionSubjectDetails>) createDetailsTable(StudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentSubject,StudentClassroomSessionDivisionSubjectDetails>(StudentSubject.class, StudentClassroomSessionDivisionSubjectDetails.class){
+		studentTable = (Table<StudentClassroomSessionDivisionSubjectDetails>) createDetailsTable(StudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDetails>(StudentClassroomSessionDivisionSubject.class, StudentClassroomSessionDivisionSubjectDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override 
-			public Collection<StudentSubject> getIdentifiables() {
-				return SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().findByClassroomSessionDivisionSubject(identifiable);
+			public Collection<StudentClassroomSessionDivisionSubject> getIdentifiables() {
+				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionSubject(identifiable);
 			}
 			@Override
 			public Crud[] getCruds() {

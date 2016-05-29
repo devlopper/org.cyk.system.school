@@ -26,11 +26,12 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.Icon;
 import org.cyk.ui.api.UIManager;
@@ -80,12 +81,13 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		INSTANCE = this;
 		identifier = "school";
 		super.initialisation(); 
-		/*schoolBusinessLayer = SchoolBusinessLayer.getInstance();
+	}
+	
+	public void doMoreInitialisation(){
 		AcademicSession academicSession = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null);
 		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(academicSession.getPeriod());
 		classroomSessionDivisionTypeName = academicSession.getNodeInformations().getClassroomSessionTimeDivisionType().getName();
 		classroomSessionDivisionInfos = "No "+(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex()+1);
-		*/
 	}
 	
 	private SchoolBusinessLayer getSchoolBusinessLayer(){
@@ -249,6 +251,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		if(userSession.hasRole(Role.MANAGER)){
 			module = Builder.create("school", null);
 			module.addChild(Builder.createList(AcademicSession.class, null));
+			module.addChild(Builder.createList(LevelTimeDivision.class, null));
 			module.addChild(Builder.createList(ClassroomSession.class, null));
 		}
 		return module;
@@ -263,7 +266,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			module.addChild(Builder.createList(Employee.class, null));
 			
 			module.addChild(Builder.createMany(StudentClassroomSession.class, null));
-			module.addChild(Builder.createMany(StudentSubject.class, null));
+			module.addChild(Builder.createMany(StudentClassroomSessionDivisionSubject.class, null));
 		}
 		return module;
 	}
@@ -285,6 +288,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		if(userSession.hasRole(Role.MANAGER)){
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
 		}

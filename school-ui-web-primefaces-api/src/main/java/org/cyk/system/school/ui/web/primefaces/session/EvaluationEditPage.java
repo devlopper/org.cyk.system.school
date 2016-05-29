@@ -21,7 +21,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
@@ -45,7 +45,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	
 	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	private ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType;
-	private ItemCollection<StudentSubjectEvaluationItem,StudentSubjectEvaluation> markCollection;
+	private ItemCollection<StudentSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation> markCollection;
 	private BigDecimal maximumValue;
 	private Integer decimalPlaces = 0;
 	
@@ -72,19 +72,19 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		if(Crud.CREATE.equals(crud)){
 			
 		}else{
-			identifiable.setStudentSubjectEvaluations(SchoolBusinessLayer.getInstance().getStudentSubjectEvaluationBusiness().findBySubjectEvaluation(identifiable,Crud.UPDATE.equals(crud)));
+			identifiable.setStudentSubjectEvaluations(SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectEvaluationBusiness().findByEvaluation(identifiable,Crud.UPDATE.equals(crud)));
 			subjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
 			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 		
-		markCollection = createItemCollection(StudentSubjectEvaluationItem.class, StudentSubjectEvaluation.class,new ItemCollectionWebAdapter<StudentSubjectEvaluationItem,StudentSubjectEvaluation>(){
+		markCollection = createItemCollection(StudentSubjectEvaluationItem.class, StudentClassroomSessionDivisionSubjectEvaluation.class,new ItemCollectionWebAdapter<StudentSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
-			public Collection<StudentSubjectEvaluation> create() {
+			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> create() {
 				return identifiable.getStudentSubjectEvaluations();
 			}
 			@Override
-			public Collection<StudentSubjectEvaluation> load() {
+			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> load() {
 				return identifiable.getStudentSubjectEvaluations();
 			}
 			@Override
@@ -96,7 +96,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 				return Boolean.FALSE;
 			}
 			@Override
-			public void instanciated(AbstractItemCollection<StudentSubjectEvaluationItem, StudentSubjectEvaluation,SelectItem> itemCollection,StudentSubjectEvaluationItem mark) {
+			public void instanciated(AbstractItemCollection<StudentSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,SelectItem> itemCollection,StudentSubjectEvaluationItem mark) {
 				super.instanciated(itemCollection, mark);
 				mark.setRegistrationCode(mark.getIdentifiable().getStudentSubject().getStudent().getRegistration().getCode());
 				mark.setNames(mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
@@ -189,7 +189,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	}
 	
 	@Getter @Setter
-	public static class StudentSubjectEvaluationItem extends AbstractItemCollectionItem<StudentSubjectEvaluation> implements Serializable {
+	public static class StudentSubjectEvaluationItem extends AbstractItemCollectionItem<StudentClassroomSessionDivisionSubjectEvaluation> implements Serializable {
 		private static final long serialVersionUID = 3828481396841243726L;
 		private String registrationCode;
 		private String names;

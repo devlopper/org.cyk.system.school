@@ -27,12 +27,13 @@ import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.SchoolReportProducer.StudentClassroomSessionDivisionReportParameters;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
@@ -41,26 +42,26 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
-import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.persistence.api.StudentResultsMetricValueDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionStudentsMetricCollectionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
-import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.utility.common.cdi.BeanAdapter;
 
 @Stateless
-public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
+public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentClassroomSessionDivisionSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	@Inject private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject private StudentClassroomSessionDivisionSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentClassroomSessionDao studentClassroomSessionDao;
 	private ReportBusiness reportBusiness = RootBusinessLayer.getInstance().getReportBusiness();
 	
-	@Inject private StudentSubjectDao studentSubjectDao;
+	@Inject private StudentClassroomSessionDivisionSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao; 
 	@Inject private StudentResultsMetricValueDao studentResultsMetricValueDao;
 	@Inject private MetricDao metricDao;
@@ -99,10 +100,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, null,null,null)));
 			}
 		
-		Collection<StudentSubject> studentSubjects = new ArrayList<>();
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeTopDownOnCreate())){
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
-				studentSubjects.add(new StudentSubject(student, classroomSessionDivisionSubject));
+				studentSubjects.add(new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject));
 			}
 		}
 		cascade(studentClassroomSessionDivision, studentClassroomSessionDivision.getResults().getStudentResultsMetricValues(), studentSubjects, Crud.CREATE);
@@ -111,14 +112,14 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	private void cascade(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues
-			,Collection<StudentSubject> studentSubjects,Crud crud){
+			,Collection<StudentClassroomSessionDivisionSubject> studentSubjects,Crud crud){
 
 		new CascadeOperationListener.Adapter.Default<StudentResultsMetricValue,StudentResultsMetricValueDao,StudentResultsMetricValueBusiness>(studentResultsMetricValueDao,null)
 			.operate(studentResultsMetricValues, crud);
 	
 		logTrace("Student classroomsession division. {} , {} : {}", studentClassroomSessionDivision.getStudent().getRegistration().getCode(),studentClassroomSessionDivision.getClassroomSessionDivision().getIdentifier(),crud);
 		
-		new CascadeOperationListener.Adapter.Default<StudentSubject,StudentSubjectDao,StudentSubjectBusiness>(null,SchoolBusinessLayer.getInstance().getStudentSubjectBusiness())
+		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDao,StudentClassroomSessionDivisionSubjectBusiness>(null,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness())
 			.operate(studentSubjects, crud);
 	}
 	
@@ -213,8 +214,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		/*
 		 * Data loading
 		 */
-		Collection<StudentSubjectEvaluation> studentSubjectEvaluations = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
-		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations = evaluatedStudentDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={}"
@@ -239,7 +240,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	public Collection<StudentClassroomSessionDivision> updateRank(Collection<ClassroomSessionDivision> classroomSessionDivisions,RankOptions<SortableStudentResults> options,BusinessServiceCallArguments<StudentClassroomSessionDivision> callArguments) {
-		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		studentSubjectBusiness.updateRank(subjects, studentSubjects,options,null);
 		return super.updateRank(classroomSessionDivisions, options,callArguments);
@@ -257,8 +258,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	/**/
 	
 	@Override
-	protected Class<StudentSubject> getDetailsClass() {
-		return StudentSubject.class;
+	protected Class<StudentClassroomSessionDivisionSubject> getDetailsClass() {
+		return StudentClassroomSessionDivisionSubject.class;
 	}
 	
 	@Override
@@ -267,12 +268,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 				
 	@Override
-	protected WeightedValue weightedValue(StudentSubject detail) {
+	protected WeightedValue weightedValue(StudentClassroomSessionDivisionSubject detail) {
 		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getClassroomSessionDivisionSubject().getCoefficient(),Boolean.FALSE);
 	}
 
 	@Override
-	protected Student student(StudentSubject detail) {
+	protected Student student(StudentClassroomSessionDivisionSubject detail) {
 		return detail.getStudent();
 	}
 
@@ -282,10 +283,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 
 	@Override
-	protected Collection<StudentSubject> readDetails(Collection<ClassroomSessionDivision> levels,Boolean keepDetails) {
+	protected Collection<StudentClassroomSessionDivisionSubject> readDetails(Collection<ClassroomSessionDivision> levels,Boolean keepDetails) {
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(levels);
-		Collection<StudentSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(levels);
-		Collection<StudentSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessionDivisions(levels);
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = studentSubjectDao.readByClassroomSessionDivisions(levels);
+		Collection<StudentClassroomSessionDivisionSubjectEvaluation> evaluatedStudents = evaluatedStudentDao.readByClassroomSessionDivisions(levels);
 		
 		studentSubjectBusiness.updateAverage(subjects, studentSubjects, evaluatedStudents,null);
 		
@@ -298,7 +299,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	protected ClassroomSessionDivision level(StudentSubject detail) {
+	protected ClassroomSessionDivision level(StudentClassroomSessionDivisionSubject detail) {
 		return detail.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
 	}
 	
@@ -405,6 +406,16 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				
 			}
 		}
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession) {
+		return dao.readByClassroomSession(classroomSession);
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSessionDivision> findByClassroomSessionByTeacher(ClassroomSession classroomSession, Teacher teacher) {
+		return dao.readByClassroomSessionByTeacher(classroomSession,teacher);
 	}
 	
 }

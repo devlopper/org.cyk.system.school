@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.cyk.system.root.business.impl.RootBusinessLayer;
@@ -28,8 +27,6 @@ public class SchoolReportRepository extends AbstractReportRepository implements 
 
 	@Getter private final String reportStudentClassroomSessionDivision = "scsd";
 	
-	//@Inject private RootBusinessLayer rootBusinessLayer;
-	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
@@ -38,7 +35,6 @@ public class SchoolReportRepository extends AbstractReportRepository implements 
 	
 	@Override
 	public void build() {        	
-		System.out.println("SchoolReportRepository.build()");
 		registerConfiguration(new ReportBasedOnTemplateFileConfiguration<StudentClassroomSessionDivision, ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport>>(reportStudentClassroomSessionDivision) {
 			@SuppressWarnings("unchecked")
 			@Override

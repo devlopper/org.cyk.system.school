@@ -21,7 +21,7 @@ public class StructureBusinessIT extends AbstractIesaBusinessIT {
     	
     	assertEquals("Student classroom session count", 1l, SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().countAll());
     	assertEquals("Student classroom session division count", 3l, SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().countAll());
-    	assertEquals("Student classroom session division subject count", 45l, SchoolBusinessLayer.getInstance().getStudentSubjectBusiness().countAll());
+    	assertEquals("Student classroom session division subject count", 45l, SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().countAll());
     	
     	schoolBusinessTestHelper.setStudentSubjectCascadeBottomUpOnCreate(Boolean.TRUE);
     	schoolBusinessTestHelper.createStudentSubject("STUD1", dataProducer.getG2().subject(0, 0), new Object[][]{ {1} });

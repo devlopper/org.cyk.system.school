@@ -40,7 +40,7 @@ import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjec
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
-import org.cyk.system.school.business.api.subject.StudentSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper;
@@ -69,14 +69,14 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.EvaluationType;
-import org.cyk.system.school.model.subject.StudentSubject;
-import org.cyk.system.school.model.subject.StudentSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
-import org.cyk.system.school.persistence.api.subject.StudentSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTime;
@@ -147,8 +147,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Inject private EvaluationBusiness subjectEvaluationBusiness;
 	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness subjectEvaluationTypeBusiness;
 	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeDao subjectEvaluationTypeDao;
-	@Inject private StudentSubjectDao studentSubjectDao;
-	@Inject private StudentSubjectBusiness studentSubjectBusiness;
+	@Inject private StudentClassroomSessionDivisionSubjectDao studentSubjectDao;
+	@Inject private StudentClassroomSessionDivisionSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentBusiness studentBusiness;
 	@Inject private ClassroomSessionBusiness classroomSessionBusiness;
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
@@ -488,8 +488,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypeDao.readAll()){
 			Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType);
 			subjectEvaluation.setCoefficientApplied(Boolean.FALSE);
-			for(StudentSubject studentSubject :studentSubjectDao.readByClassroomSessionDivisionSubject(subjectEvaluationType.getClassroomSessionDivisionSubject()) ){
-				StudentSubjectEvaluation studentSubjectEvaluation = new StudentSubjectEvaluation(subjectEvaluation, studentSubject
+			for(StudentClassroomSessionDivisionSubject studentSubject :studentSubjectDao.readByClassroomSessionDivisionSubject(subjectEvaluationType.getClassroomSessionDivisionSubject()) ){
+				StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation = new StudentClassroomSessionDivisionSubjectEvaluation(subjectEvaluation, studentSubject
 						, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue())));
 				subjectEvaluation.getStudentSubjectEvaluations().add(studentSubjectEvaluation);
 			}
@@ -674,10 +674,10 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		private static final long serialVersionUID = 925442738199260331L;
 		private ClassroomSessionInfos classroomSessionInfos;
 		private Listener listener;
-		private Collection<StudentSubject> studentSubjects;
+		private Collection<StudentClassroomSessionDivisionSubject> studentSubjects;
 		private Collection<Student> students;
 		
-		public ClassroomsessionBusinessProducer(ClassroomSessionInfos classroomSessionInfos,Listener listener,Collection<Student> students,Collection<StudentSubject> studentSubjects) {
+		public ClassroomsessionBusinessProducer(ClassroomSessionInfos classroomSessionInfos,Listener listener,Collection<Student> students,Collection<StudentClassroomSessionDivisionSubject> studentSubjects) {
 			super();
 			this.classroomSessionInfos = classroomSessionInfos;
 			this.listener = listener;

@@ -11,10 +11,10 @@ import lombok.Setter;
 
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.subject.StudentSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 
 @Getter @Setter @Entity @NoArgsConstructor
-public class StudentClassroomSessionDivision extends AbstractStudentResult<ClassroomSessionDivision,StudentSubject> implements Serializable {
+public class StudentClassroomSessionDivision extends AbstractStudentResult<ClassroomSessionDivision,StudentClassroomSessionDivisionSubject> implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
