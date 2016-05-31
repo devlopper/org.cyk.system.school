@@ -203,7 +203,10 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	public Collection<StudentClassroomSession> findByClassroomSession(ClassroomSession classroomSession) {
 		return dao.readByClassroomSession(classroomSession);
 	}
-	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSession> findByClassroomSessions(Collection<ClassroomSession> classroomSessions) {
+		return dao.readByClassroomSessions(classroomSessions);
+	}
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public StudentClassroomSession finddByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student, classroomSession);

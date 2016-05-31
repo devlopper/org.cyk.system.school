@@ -20,22 +20,6 @@ public class StudentClassroomSessionDivisionEditManyEvaluationAveragePage extend
 	@Override
 	public ItemCollectionWebAdapter<StudentClassroomSessionDivisionEditPage.Many, StudentClassroomSessionDivision> getItemCollectionAdapter() {
 		return new StudentClassroomSessionDivisionEditPage.Many.ItemCollectionAdapter();
-		/*return new ItemCollectionAdapter<StudentClassroomSessionDivisionEditPage.Many,StudentClassroomSessionDivision>(businessEntityInfos){
-			private static final long serialVersionUID = -5381415970572336750L;
-			
-			@Override
-			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionEditPage.Many, StudentClassroomSessionDivision, SelectItem> itemCollection
-					,StudentClassroomSessionDivisionEditPage.Many item) {
-				super.instanciated(itemCollection, item);
-				item.setEvaluationAverage(item.getIdentifiable().getResults().getEvaluationSort().getAverage().getValue());
-			}
-			
-			@Override
-			public void write(StudentClassroomSessionDivisionEditPage.Many item) {
-				super.write(item);
-				item.getIdentifiable().getResults().getEvaluationSort().getAverage().setValue(item.getEvaluationAverage());
-			}
-		};*/
 	}
 	
 }

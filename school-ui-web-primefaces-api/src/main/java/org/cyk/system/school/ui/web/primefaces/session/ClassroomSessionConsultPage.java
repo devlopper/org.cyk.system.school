@@ -2,6 +2,7 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.faces.view.ViewScoped;
@@ -110,27 +111,6 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 	}
 	
 	@Override
-	protected Collection<StudentClassroomSessionDivision> getDetailCollection() {
-		if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
-			return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSession(identifiable);
-		else
-			if(teacher==null)
-				return null;
-			else
-				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionByTeacher(identifiable,teacher);
-	}
-
-	@Override
-	protected NodeResults getNodeResults(ClassroomSessionDivision classroomSessionDivision) {
-		return classroomSessionDivision.getResults();
-	}
-
-	@Override
-	protected ClassroomSessionDivision getSubLevel(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return studentClassroomSessionDivision.getClassroomSessionDivision();
-	}
-
-	@Override
 	protected Set<String> getResultTableSimpleFieldNameSet() {
 		return StudentClassroomSessionDetails.FIELDS_SIMPLE;
 	}
@@ -140,6 +120,32 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 		return StudentClassroomSessionDetails.FIELDS_BROAD_SHEET;
 	}
 
-	
+	@Override
+	protected CellAdapter<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDetails> getBroadsheetTableCellAdapter(List<ClassroomSessionDivision> classroomSessionDivisions) {
+		return new CellAdapter<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDetails>(2,classroomSessionDivisions) {
+			private static final long serialVersionUID = 2113891697444367237L;
+
+			@Override
+			protected ClassroomSessionDivision getSubLevel(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+				return studentClassroomSessionDivision.getClassroomSessionDivision();
+			}
+			
+			@Override
+			protected NodeResults getNodeResults(ClassroomSessionDivision classroomSessionDivision) {
+				return classroomSessionDivision.getResults();
+			}
+			
+			@Override
+			protected Collection<StudentClassroomSessionDivision> getDetailCollection() {
+				if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
+					return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSession(identifiable);
+				else
+					if(teacher==null)
+						return null;
+					else
+						return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionByTeacher(identifiable,teacher);
+			}
+		};
+	}
 
 }

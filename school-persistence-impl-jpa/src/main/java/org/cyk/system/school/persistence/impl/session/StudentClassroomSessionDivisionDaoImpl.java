@@ -10,6 +10,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -22,7 +23,7 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 
     private String readByStudentClassroomSessionDivision,readByStudentByClassroomSessionDivision,readByClassroomSession
     	,readByClassroomSessionDivisions,readByClassroomSessions,readByStudentByClassroomSession,readByClassroomSessionDivisionIndex
-    	,readByClassroomSessionByTeacher;
+    	,readByClassroomSessionByTeacher,readByLevelTimeDivision;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -47,6 +48,9 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
         
         registerNamedQuery(readByClassroomSessionByTeacher, "SELECT r FROM StudentClassroomSessionDivision r WHERE r.classroomSessionDivision.classroomSession = :classroomSession AND "
         		+ "EXISTS( SELECT rr FROM ClassroomSessionDivisionSubject rr WHERE rr.teacher = :teacher AND rr.classroomSessionDivision = r.classroomSessionDivision)");
+    
+        registerNamedQuery(readByLevelTimeDivision, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
+        		, ClassroomSessionDivision.FIELD_CLASSROOMSESSION,ClassroomSession.FIELD_LEVEL_TIME_DIVISION),ClassroomSession.FIELD_LEVEL_TIME_DIVISION));
     }
     
 	@Override
@@ -92,6 +96,11 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 	public Collection<StudentClassroomSessionDivision> readByClassroomSessionByTeacher(ClassroomSession classroomSession, Teacher teacher) {
 		return namedQuery(readByClassroomSessionByTeacher).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
 				.parameter(ClassroomSessionDivisionSubject.FIELD_TEACHER, teacher).resultMany();
+	}
+	
+	@Override
+	public Collection<StudentClassroomSessionDivision> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision) {
+		return namedQuery(readByLevelTimeDivision).parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION,levelTimeDivision).resultMany();
 	}
 
 }

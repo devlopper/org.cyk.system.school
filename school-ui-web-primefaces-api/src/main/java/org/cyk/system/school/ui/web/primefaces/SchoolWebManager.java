@@ -68,6 +68,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	protected String outcomeConsultClassroomSessionDivisionBroadsheet = "classroomSessionDivisionBroadsheetConsultView";
 	protected String outcomeStudentClassroomSessionDivisionMergeReport  = "studentClassroomSessionDivisionMergeReportView";
 	protected final String outcomeDefineTuition = "studentClassroomSessionTuitionEditView";
+	protected final String outcomeStudentClassroomSessionConsultManyRank = "studentClassroomSessionConsultManyRankView";
 	/*private String outcomeClassroomSessionMainDetails;
 	private String outcomeClassroomSessionDivisionDetails;
 	private String outcomeClassroomSessionSubjectDetails;
@@ -291,6 +292,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks() ,null));
 		}
 		/*
 		if(userSession.hasRole(Role.MANAGER)){

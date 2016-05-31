@@ -7,6 +7,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 
 public interface StudentClassroomSessionDivisionDao extends TypedDao<StudentClassroomSessionDivision> {
@@ -26,5 +27,7 @@ public interface StudentClassroomSessionDivisionDao extends TypedDao<StudentClas
 	Collection<StudentClassroomSessionDivision> readByClassroomSessionDivisionIndex(Byte classroomSessionDivisionIndex);
 
 	Collection<StudentClassroomSessionDivision> readByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
+
+	Collection<StudentClassroomSessionDivision> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 
 }

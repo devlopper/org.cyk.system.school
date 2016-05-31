@@ -15,6 +15,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -127,6 +128,13 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 						return super.build(field);
 					}
 				});
+			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionConsultStudentClassroomSessionRanks()}, page.getActionIdentifier())){
+				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
+					@Override
+					public Boolean build(Field field) {
+						return ArrayUtils.contains(new String[]{}, field.getName());
+					}
+				});
 			}
 		}
 		
@@ -186,6 +194,10 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					schoolBusinessLayer.getStudentClassroomSessionBusiness().updateResults(classroomSessions,Boolean.TRUE,form.getUpdateRankResults()
 							,rankOptions,Boolean.FALSE,callArguments);
 				}
+			}else if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks().equals(actionIdentifier)){
+				Collection<StudentClassroomSession> studentClassroomSessions = schoolBusinessLayer.getStudentClassroomSessionBusiness().findByClassroomSessions(classroomSessions);
+				WebNavigationManager.getInstance().redirectToDynamicProcessManyPage(SchoolWebManager.getInstance().getOutcomeStudentClassroomSessionConsultManyRank(),StudentClassroomSession.class
+						,studentClassroomSessions,actionIdentifier);
 			}
 		}
 		
@@ -211,6 +223,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			public static final String FIELD_UPDATE_ATTENDANCE_RESULTS = "updateAttendanceResults";
 			public static final String FIELD_UPDATE_RANK_RESULTS = "updateRankResults";
 		}
+		
+		
 		
 	}
 }

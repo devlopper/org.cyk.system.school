@@ -167,6 +167,11 @@
 			<to-view-id>/private/studentclassroomsession/tuitionedit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionConsultManyRankView</from-outcome>
+			<to-view-id>/private/studentclassroomsession/consultmanyrank.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>studentClassroomSessionDivisionEditView</from-outcome>

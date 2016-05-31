@@ -25,9 +25,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.model.table.Cell;
-import org.cyk.ui.api.model.table.CellAdapter;
 import org.cyk.ui.api.model.table.Column;
-import org.cyk.ui.api.model.table.ColumnAdapter;
 import org.cyk.ui.api.model.table.Row;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
@@ -107,54 +105,9 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 			
 		});
 		
-		broadsheetTable.getColumnListeners().add(new BroadsheetColumnAdapter<>(userSession, teacher, isCoordinator, getSubLevelClass(), subLevels, 2, getResultTableBroadsheetFieldNameSet()));
-		
-		final List<DETAIL> details = new ArrayList<>(getDetailCollection());
-		
-		broadsheetTable.getCellListeners().add(new CellAdapter<RESULT_OUTPUT>(){
-			@Override
-			public void added(Row<RESULT_OUTPUT> row, Column column, Cell cell) {
-				super.added(row, column, cell);
-				if(column.getIndex() < subLevels.size()+numberOfColumnBeforeLevels){
-					if(row.getData().getMaster()==null){
-						if(column.getIndex() >= numberOfColumnBeforeLevels && column.getIndex() < subLevels.size()+numberOfColumnBeforeLevels){
-							SUB_LEVEL subLevel = subLevels.get(column.getIndex().intValue()-numberOfColumnBeforeLevels);
-							NodeResults results = getNodeResults(subLevel);
-							if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_1)){
-								if(results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0)
-									cell.setValue(numberBusiness.format(results.getAverage()));
-							}else if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_2)){
-								if(results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0)
-									cell.setValue(results.getNumberOfStudentPassingEvaluationAverage()+Constant.CHARACTER_SLASH.toString()+
-										results.getNumberOfStudent());
-							}else if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_3)){
-								if(results.getNumberOfStudentPassingEvaluationAverage()!=null && results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0){
-									NumberBusiness.FormatArguments formatArguments = new NumberBusiness.FormatArguments();
-									formatArguments.setIsPercentage(Boolean.TRUE);
-									formatArguments.setPercentageSymbol(null);
-									BigDecimal percentage = new BigDecimal(results.getNumberOfStudentPassingEvaluationAverage()).
-											divide(new BigDecimal(results.getNumberOfStudent()),4,RoundingMode.HALF_DOWN);
-									cell.setValue(numberBusiness.format(percentage,formatArguments));
-								}
-							}
-						}
-					}else{
-						DETAIL detail = null;
-						for(DETAIL index : details){
-							if(index.getStudent().equals(row.getData().getMaster().getStudent()) ){
-								if(subLevels.indexOf(getSubLevel(index)) + numberOfColumnBeforeLevels == column.getIndex()){
-									detail = index;
-									break;
-								}
-							}
-						}
-						if(detail!=null){
-							cell.setValue(numberBusiness.format(detail.getResults().getEvaluationSort().getAverage().getValue()));
-						}
-					}
-				}
-			}
-		});
+		broadsheetTable.getColumnListeners().add(new ColumnAdapter<>(userSession, teacher, isCoordinator, getSubLevelClass(), subLevels, 2, getResultTableBroadsheetFieldNameSet()));		
+		broadsheetTable.getCellListeners().add(getBroadsheetTableCellAdapter(subLevels));
+
 		if(Boolean.TRUE.equals(isBroadsheetColumnTitleRotated()))
 			broadsheetTable.setUpdateStyleClass("broadsheetTableStyleClass");
 
@@ -181,14 +134,12 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 	protected abstract ClassroomSession getClassroomSession();
 	
 	protected abstract Collection<SUB_LEVEL> getSubLevels();
-	protected abstract Collection<DETAIL> getDetailCollection();
 	protected abstract Collection<RESULT> getResults();
-	
-	protected abstract NodeResults getNodeResults(SUB_LEVEL level);
-	protected abstract SUB_LEVEL getSubLevel(DETAIL detail);
 	
 	protected abstract Set<String> getResultTableSimpleFieldNameSet();
 	protected abstract Set<String> getResultTableBroadsheetFieldNameSet();
+	
+	protected abstract CellAdapter<SUB_LEVEL, DETAIL, RESULT_OUTPUT> getBroadsheetTableCellAdapter(List<SUB_LEVEL> subLevels);
 	
 	protected DetailsConfigurationListener.Table.Adapter<RESULT,RESULT_OUTPUT> getResultTableCreationListener(){
 		return new DetailsConfigurationListener.Table.Adapter<RESULT,RESULT_OUTPUT>(getResultClass(), getResultOutputClass()){
@@ -199,13 +150,13 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 			}
 			@Override
 			public Crud[] getCruds() {
-				return new Crud[]{Crud.READ,Crud.UPDATE};
+				return new Crud[]{Crud.READ,Crud.UPDATE,Crud.DELETE};
 			}
 		};
 	}
 	
-	protected ColumnAdapter getResultTableColumnAdapter(){
-		return new ColumnAdapter(){
+	protected org.cyk.ui.api.model.table.ColumnAdapter getResultTableColumnAdapter(){
+		return new org.cyk.ui.api.model.table.ColumnAdapter(){
 			@Override
 			public Boolean isColumn(Field field) {
 				return getResultTableSimpleFieldNameSet().contains(field.getName());
@@ -228,7 +179,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 	}
 	
 	@Getter @Setter @AllArgsConstructor
-	public static class BroadsheetColumnAdapter<SUB_LEVEL> extends ColumnAdapter implements Serializable {
+	public static class ColumnAdapter<SUB_LEVEL> extends org.cyk.ui.api.model.table.ColumnAdapter implements Serializable {
 		private static final long serialVersionUID = 5857490517889645397L;
 		
 		private AbstractUserSession<?,?> userSession;
@@ -272,6 +223,63 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		
 		protected String getDetailAverageColumnName(Column column){
 			return RootBusinessLayer.getInstance().getFormatterBusiness().format(subLevels.get(column.getIndex().intValue()-numberOfColumnBeforeLevels));
+		}
+		
+	}
+	
+	@Getter @Setter @AllArgsConstructor
+	public static abstract class CellAdapter<SUB_LEVEL,DETAIL extends AbstractStudentResult<?, ?>,RESULT_OUTPUT extends AbstractStudentResultsOutputDetails<?,?,?>> extends org.cyk.ui.api.model.table.CellAdapter<RESULT_OUTPUT> implements Serializable{
+		private static final long serialVersionUID = -1462758931814509111L;
+		
+		protected Integer numberOfColumnBeforeLevels;
+		protected List<SUB_LEVEL> subLevels;
+		
+		protected abstract NodeResults getNodeResults(SUB_LEVEL level);
+		protected abstract SUB_LEVEL getSubLevel(DETAIL detail);
+		protected abstract Collection<DETAIL> getDetailCollection();
+		
+		@Override
+		public void added(Row<RESULT_OUTPUT> row, Column column, Cell cell) {
+			super.added(row, column, cell);
+			if(column.getIndex() < subLevels.size()+numberOfColumnBeforeLevels){
+				if(row.getData().getMaster()==null){
+					if(column.getIndex() >= numberOfColumnBeforeLevels && column.getIndex() < subLevels.size()+numberOfColumnBeforeLevels){
+						SUB_LEVEL subLevel = subLevels.get(column.getIndex().intValue()-numberOfColumnBeforeLevels);
+						NodeResults results = getNodeResults(subLevel);
+						if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_1)){
+							if(results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0)
+								cell.setValue(RootBusinessLayer.getInstance().getNumberBusiness().format(results.getAverage()));
+						}else if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_2)){
+							if(results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0)
+								cell.setValue(results.getNumberOfStudentPassingEvaluationAverage()+Constant.CHARACTER_SLASH.toString()+
+									results.getNumberOfStudent());
+						}else if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_3)){
+							if(results.getNumberOfStudentPassingEvaluationAverage()!=null && results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0){
+								NumberBusiness.FormatArguments formatArguments = new NumberBusiness.FormatArguments();
+								formatArguments.setIsPercentage(Boolean.TRUE);
+								formatArguments.setPercentageSymbol(null);
+								BigDecimal percentage = new BigDecimal(results.getNumberOfStudentPassingEvaluationAverage()).
+										divide(new BigDecimal(results.getNumberOfStudent()),4,RoundingMode.HALF_DOWN);
+								cell.setValue(RootBusinessLayer.getInstance().getNumberBusiness().format(percentage,formatArguments));
+							}
+						}
+					}
+				}else{
+					DETAIL detail = null;
+					final List<DETAIL> details = new ArrayList<>(getDetailCollection());
+					for(DETAIL index : details){
+						if(index.getStudent().equals(row.getData().getMaster().getStudent()) ){
+							if(subLevels.indexOf(getSubLevel(index)) + numberOfColumnBeforeLevels == column.getIndex()){
+								detail = index;
+								break;
+							}
+						}
+					}
+					if(detail!=null){
+						cell.setValue(RootBusinessLayer.getInstance().getNumberBusiness().format(detail.getResults().getEvaluationSort().getAverage().getValue()));
+					}
+				}
+			}
 		}
 		
 	}

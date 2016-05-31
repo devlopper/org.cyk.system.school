@@ -6,6 +6,7 @@ import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 
 public interface ClassroomSessionDivisionBusiness extends TypedBusiness<ClassroomSessionDivision> {
@@ -19,6 +20,8 @@ public interface ClassroomSessionDivisionBusiness extends TypedBusiness<Classroo
 	Collection<ClassroomSessionDivision> findByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
 
 	ClassroomSessionDivision findByClassroomSessionByIndex(ClassroomSession classroomSession,Byte index);
+
+	Collection<ClassroomSessionDivision> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 	
 	
 }

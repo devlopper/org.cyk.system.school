@@ -17,6 +17,7 @@ import lombok.Setter;
 public interface StudentClassroomSessionBusiness extends AbstractStudentResultsBusiness<ClassroomSession,StudentClassroomSession,StudentClassroomSessionDivision> {
 
 	Collection<StudentClassroomSession> findByClassroomSession(ClassroomSession classroomSession);
+	Collection<StudentClassroomSession> findByClassroomSessions(Collection<ClassroomSession> classroomSessions);
 	Collection<StudentClassroomSession> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 
 	StudentClassroomSession finddByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
@@ -30,4 +31,6 @@ public interface StudentClassroomSessionBusiness extends AbstractStudentResultsB
 		private static final long serialVersionUID = 7151479991050865862L;
 		
 	}
+
+	
 }
