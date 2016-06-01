@@ -18,7 +18,6 @@ import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
-import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
@@ -30,7 +29,6 @@ import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
-import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -44,7 +42,6 @@ import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper;
-import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
 import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataProducer;
 import org.cyk.system.school.model.SchoolConstant;
@@ -269,9 +266,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 							
 							SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateAverage(classroomSessions, new BusinessServiceCallArguments<StudentClassroomSession>());
 						
-							RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
-					    	 rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
-					    	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateRank(classroomSessions, rankOptions, new BusinessServiceCallArguments<StudentClassroomSession>());
+							SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateRank(classroomSessions, schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
 						}else{
 							
 						}

@@ -1,12 +1,10 @@
 package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
-import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
-import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionInfos;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -64,7 +62,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	              //,{"STUD4","45","45","80"}
     	              //,{"STUD5","20","95","55"}
     	    	}}
-    	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
+    	},Boolean.TRUE,Boolean.TRUE,Boolean.FALSE,Boolean.TRUE);
     	
     	classroomSessionDivisionInfos = dataProducer.getG1().division(1);
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), new Object[][]{
@@ -75,7 +73,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	              //,{"STUD4","45","45","80"}
     	              //,{"STUD5","20","95","55"}
     	    	}}
-    	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
+    	},Boolean.TRUE,Boolean.TRUE,Boolean.FALSE,Boolean.TRUE);
     	
     	classroomSessionDivisionInfos = dataProducer.getG1().division(2);
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), new Object[][]{
@@ -86,13 +84,19 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	              //,{"STUD4","45","45","80"}
     	              //,{"STUD5","20","95","55"}
     	    	}}
-    	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
+    	},Boolean.TRUE,Boolean.TRUE,Boolean.FALSE,Boolean.TRUE);
     	
     	
     	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateAverage(Arrays.asList(dataProducer.getG1().getClassroomSession()), new BusinessServiceCallArguments<StudentClassroomSession>());
-    	RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
-    	 rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
-    	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateRank(Arrays.asList(dataProducer.getG1().getClassroomSession()), rankOptions, new BusinessServiceCallArguments<StudentClassroomSession>());
+    	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateRank(Arrays.asList(dataProducer.getG1().getClassroomSession()), 
+    			schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
+    	
+    	StudentClassroomSession.SearchCriteria searchCriteria = new StudentClassroomSession.SearchCriteria();
+    	searchCriteria.getDivisionCount().setLowest(2);
+    	searchCriteria.getDivisionCount().setHighest(3);
+		searchCriteria.getDivisionIndexesRequired().add(2);
+		Collection<StudentClassroomSession> studentClassroomSessions = schoolBusinessLayer.getStudentClassroomSessionBusiness().findByCriteria(searchCriteria);
+    	System.out.println("SEARCH : "+studentClassroomSessions.size()+" / " +studentClassroomSessions);
     	
     	//classroomSessionDivisionInfos = dataProducer.getG1().division(2);
     	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), /*new Object[][]{

@@ -16,6 +16,8 @@ import org.cyk.system.company.model.sale.SalableProduct;
 import org.cyk.system.root.business.api.ClazzBusiness;
 import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFormatter;
@@ -28,6 +30,7 @@ import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
+import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -129,6 +132,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	private String actionEditStudentClassroomSessionDivisionEvaluationAverage = "aescsdea";
 	private String actionConsultClassroomSessionDivisionBroadsheet = "accsdbs";
 	
+	private RankOptions<SortableStudentResults> studentEvaluationResultsRankOptions = new RankOptions<>();
+	
 	@Override
 	protected void initialisation() {
 		INSTANCE = this;
@@ -196,6 +201,9 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				return new Teacher.SearchCriteria(dataReadConfiguration.getGlobalFilter());
 			}
         });
+		
+		studentEvaluationResultsRankOptions.setType(RankType.EXAEQUO);
+		studentEvaluationResultsRankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 	}
 	
 	@Override

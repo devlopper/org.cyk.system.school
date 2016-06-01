@@ -7,6 +7,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSession.SearchCriteria;
 
 public interface StudentClassroomSessionDao extends TypedDao<StudentClassroomSession> {
 
@@ -18,4 +19,6 @@ public interface StudentClassroomSessionDao extends TypedDao<StudentClassroomSes
 
 	Collection<StudentClassroomSession> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 
+	Collection<StudentClassroomSession> readByCriteria(SearchCriteria criteria);
+	Long countByCriteria(SearchCriteria criteria);
 }

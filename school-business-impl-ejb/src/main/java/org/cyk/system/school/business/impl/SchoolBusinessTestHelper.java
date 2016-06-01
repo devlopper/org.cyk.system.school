@@ -13,13 +13,9 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
-import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
@@ -60,6 +56,9 @@ import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper implements Serializable {
 
@@ -79,10 +78,9 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Inject private TeacherDao teacherDao;
 	@Inject private ClassroomSessionDivisionStudentsMetricCollectionDao classroomSessionDivisionStudentsMetricCollectionDao;
 	
-	/*@Inject*/ private SchoolBusinessLayer schoolBusinessLayer;
+	@Inject private SchoolBusinessLayer schoolBusinessLayer;
 	
 	@Getter @Setter private Boolean studentSubjectCascadeBottomUpOnCreate,studentSubjectCascadeTopDownOnCreate;
-	@Getter @Setter private RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
 	
 	@Getter @Setter private List<EvaluationType> evaluationTypes = new ArrayList<>();
 	@Getter @Setter private Object[][] customClassroomSessionDivisionSubjectEvaluationTypeInfos;
@@ -95,9 +93,6 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
-		rankOptions = new RankOptions<>();
-        rankOptions.setType(RankType.EXAEQUO); 
-        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 	}
 	
 	public void randomSetActor(Boolean classCoordinator,Boolean teacher){
@@ -208,7 +203,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		*/
 		if(Boolean.TRUE.equals(buildReportFile)){
 			System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions");
-			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,rankOptions,new ServiceCallArguments());
+			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),new ServiceCallArguments());
 			
 			if(Boolean.TRUE.equals(createFileOnDisk)){
 				Collection<File> files = new ArrayList<>();
@@ -451,7 +446,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			if(Boolean.TRUE.equals(assertAverage))
 				assertClassroomSessionDivisionSubjectAverage(classroomSessionDivisionSubject, extract(details, index++));    	
 			if(Boolean.TRUE.equals(assertRank))
-				assertClassroomSessionDivisionSubjectRank(classroomSessionDivisionSubject,extract(details, index),rankOptions);
+				assertClassroomSessionDivisionSubjectRank(classroomSessionDivisionSubject,extract(details, index),schoolBusinessLayer.getStudentEvaluationResultsRankOptions());
 		}
 	}
 	

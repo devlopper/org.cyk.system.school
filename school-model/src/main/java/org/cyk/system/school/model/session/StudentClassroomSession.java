@@ -1,6 +1,8 @@
 package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -10,7 +12,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.company.model.sale.Sale;
+import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
+import org.cyk.system.root.model.search.IntegerSearchCriteria;
 import org.cyk.system.school.model.AbstractStudentResult;
+import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.utility.common.Constant;
 
@@ -45,4 +50,17 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 	private static final String LOG_FORMAT = StudentClassroomSession.class.getSimpleName()+"(STUD=%s CLASS=%s %s)";
 	
 	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
+	
+	/**/
+	
+	@Getter @Setter
+	public static class SearchCriteria extends AbstractFieldValueSearchCriteriaSet implements Serializable {
+
+		private static final long serialVersionUID = 6796076474234170332L;
+
+		private StudentResults.SearchCriteria results = new StudentResults.SearchCriteria();
+		private IntegerSearchCriteria divisionCount = new IntegerSearchCriteria();
+		private Set<Integer> divisionIndexesRequired = new LinkedHashSet<>();
+		
+	}
 }

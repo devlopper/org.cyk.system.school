@@ -34,6 +34,8 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal evaluationPassAverage;
 	
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
+	
+	private Byte classroomSessionDivisionCount = 3;
 	private Byte currentClassroomSessionDivisionIndex = 0;
 	
 	public CommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale

@@ -9,6 +9,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession.SearchCriteria;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,9 @@ public interface StudentClassroomSessionBusiness extends AbstractStudentResultsB
 	StudentClassroomSession finddByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
 
 	StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
+	
+	Collection<StudentClassroomSession> findByCriteria(SearchCriteria criteria);
+	Long countByCriteria(SearchCriteria criteria);
 	
 	/**/
 	

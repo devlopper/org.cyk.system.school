@@ -24,6 +24,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSession.SearchCriteria;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
@@ -242,6 +243,18 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	
 	@Override
 	protected Long getAttendableDuration(StudentClassroomSession studentClassroomSession) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSession> findByCriteria(SearchCriteria criteria) {
+		prepareFindByCriteria(criteria);
+		return dao.readByCriteria(criteria);
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Long countByCriteria(SearchCriteria criteria) {
 		// TODO Auto-generated method stub
 		return null;
 	}

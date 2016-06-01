@@ -3,20 +3,17 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
-import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.SortByRankArguments;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.mathematics.Rank;
-import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.SortableStudentResultsComparator;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -65,11 +62,17 @@ public class StudentClassroomSessionConsultManyRankPage extends AbstractConsultP
 		});
 		
 		
-		Collection<ClassroomSession> classroomSessions = new ArrayList<>();
-		for(StudentClassroomSession studentClassroomSession : studentClassroomSessions)
+		Collection<ClassroomSession> classroomSessions = new HashSet<>();
+		for(StudentClassroomSession studentClassroomSession : studentClassroomSessions){
 			classroomSessions.add(studentClassroomSession.getClassroomSession());
+		}
 		
-		final List<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>(filterClassroomSessionDivisions(SchoolBusinessLayer.getInstance()
+		List<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>(SchoolBusinessLayer.getInstance()
+				.getClassroomSessionDivisionBusiness().findByClassroomSessions(classroomSessions));
+		
+		final Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions);
+		
+		classroomSessionDivisions = new ArrayList<>(filterClassroomSessionDivisions(SchoolBusinessLayer.getInstance()
 				.getClassroomSessionDivisionBusiness().findByClassroomSessions(classroomSessions)));
 		
 		studentTable.getColumnListeners().add(new ColumnAdapter(userSession, classroomSessionDivisions));
@@ -78,7 +81,7 @@ public class StudentClassroomSessionConsultManyRankPage extends AbstractConsultP
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected Collection<StudentClassroomSessionDivision> getDetailCollection() {
-				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions);
+				return studentClassroomSessionDivisions;
 			}
 		});
 
@@ -125,10 +128,7 @@ public class StudentClassroomSessionConsultManyRankPage extends AbstractConsultP
 			final List<StudentClassroomSession> studentClassroomSessions = new ArrayList<>();
 			if(collection!=null)
 				studentClassroomSessions.addAll(collection);
-			RankOptions<SortableStudentResults> rankOptions = new RankOptions<>();
-	        rankOptions.setType(RankType.EXAEQUO); 
-	        rankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
-			SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().computeRank(studentClassroomSessions, rankOptions);
+			SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().computeRank(studentClassroomSessions, SchoolBusinessLayer.getInstance().getStudentEvaluationResultsRankOptions());
 			RootBusinessLayer.getInstance().getMathematicsBusiness().sortByRank(new SortByRankArguments<StudentClassroomSession>() {
 				@Override
 				public Rank getRank(StudentClassroomSession studentClassroomSession) {
