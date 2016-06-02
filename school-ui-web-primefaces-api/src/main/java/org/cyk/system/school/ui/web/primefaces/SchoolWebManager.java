@@ -7,9 +7,6 @@ import java.util.Collection;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.business.api.Crud;
@@ -47,6 +44,9 @@ import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 import org.primefaces.model.TreeNode;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {
@@ -99,10 +99,10 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	public SystemMenu systemMenu(AbstractUserSession<TreeNode, HierarchyNode> userSession) {
 		SystemMenu systemMenu = new SystemMenu();
 		
-		addBusinessMenu(systemMenu,getSchoolCommandable(userSession, null));
-		addBusinessMenu(systemMenu,getRegistrationCommandable(userSession, null));
-		addBusinessMenu(systemMenu,getRegularActivitiesCommandable(userSession, null));		
-		addBusinessMenu(systemMenu,getResultsCardCommandable(userSession, null));
+		addBusinessMenu(userSession,systemMenu,getSchoolCommandable(userSession, null));
+		addBusinessMenu(userSession,systemMenu,getRegistrationCommandable(userSession, null));
+		addBusinessMenu(userSession,systemMenu,getRegularActivitiesCommandable(userSession, null));		
+		addBusinessMenu(userSession,systemMenu,getResultsCardCommandable(userSession, null));
 		
 		//addBusinessMenu(systemMenu,CompanyWebManager.getInstance().getCustomerCommandable(userSession, null));
 		//addBusinessMenu(systemMenu,CompanyWebManager.getInstance().getSaleCommandable(userSession, null,null));
@@ -281,18 +281,21 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	}
 	
 	public UICommandable getResultsCardCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
-		UICommandable module = Builder.create("school.results", null);
+		UICommandable module = Builder.create("school.results", null).setIdentifier(COMMANDABLE_IDENTIFIER_RESULTS);
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
 		}
 		if(userSession.hasRole(Role.MANAGER)){
-			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
-			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
-			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
-			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
-			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
-			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks() ,null));
+			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
+			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
+			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
+			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
+			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
+			
+			addChild(userSession,module, Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks(),null)
+					.setIdentifier(COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS));
+			
 		}
 		/*
 		if(userSession.hasRole(Role.MANAGER)){
@@ -425,4 +428,21 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		return INSTANCE;
 	}
 	
+	/**/
+	
+	public static final String COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS = "COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS";
+	public static final String COMMANDABLE_IDENTIFIER_RESULTS = "COMMANDABLE_IDENTIFIER_RESULTS";
+	
+	/**/
+	
+	public static interface Listener extends AbstractPrimefacesManagerListener {
+		
+		/**/
+		
+		public static class Adapter extends AbstractPrimefacesManagerListener.Adapter implements Listener{
+			private static final long serialVersionUID = 3034803382486669232L;
+			
+			
+		}
+	}
 }

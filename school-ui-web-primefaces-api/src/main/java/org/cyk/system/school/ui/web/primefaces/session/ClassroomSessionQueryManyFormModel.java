@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.root.business.impl.validation.ExceptionUtils;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
@@ -243,6 +244,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				searchCriteria.getDivisionIndexesRequired().addAll(((Form)data).getClassroomSessionDivisionIndexesRequired());
 				
 				Collection<StudentClassroomSession> studentClassroomSessions = schoolBusinessLayer.getStudentClassroomSessionBusiness().findByCriteria(searchCriteria);
+				if(studentClassroomSessions.isEmpty())
+					ExceptionUtils.getInstance().exception("noresultsfound");
 				WebNavigationManager.getInstance().redirectToDynamicProcessManyPage(SchoolWebManager.getInstance().getOutcomeStudentClassroomSessionConsultManyRank(),StudentClassroomSession.class
 						,studentClassroomSessions,actionIdentifier);
 			}
