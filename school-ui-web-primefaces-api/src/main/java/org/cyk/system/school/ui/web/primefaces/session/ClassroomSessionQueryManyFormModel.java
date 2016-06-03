@@ -181,15 +181,16 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			
 			@SuppressWarnings("unchecked")
 			org.cyk.ui.api.data.collector.control.InputChoice<?,?,?,?,?,SelectItem> input = page.getForm().findInputByClassByFieldName(org.cyk.ui.api.data.collector.control.InputChoice.class, Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED);
-			for(ClassroomSession classroomSession : classroomSessions){
-				CommonNodeInformations nodeInformations = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(classroomSession);
-				if(nodeInformations.getClassroomSessionDivisionCount()!=null)
-					for(byte i = 0; i < nodeInformations.getClassroomSessionDivisionCount(); i++){
-						if(indexes.add(i) /*|| timeDivisionTypesProcessed.add(nodeInformations.getClassroomSessionTimeDivisionType())*/)
-							input.getList().add(new SelectItem(i, (timeDivisionTypes.size()==1?Constant.EMPTY_STRING
-								:nodeInformations.getAttendanceTimeDivisionType().getName()+Constant.CHARACTER_SPACE)+String.valueOf(i+1)));
-					}
-			}
+			if(input!=null)
+				for(ClassroomSession classroomSession : classroomSessions){
+					CommonNodeInformations nodeInformations = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(classroomSession);
+					if(nodeInformations.getClassroomSessionDivisionCount()!=null)
+						for(byte i = 0; i < nodeInformations.getClassroomSessionDivisionCount(); i++){
+							if(indexes.add(i) /*|| timeDivisionTypesProcessed.add(nodeInformations.getClassroomSessionTimeDivisionType())*/)
+								input.getList().add(new SelectItem(i, (timeDivisionTypes.size()==1?Constant.EMPTY_STRING
+									:nodeInformations.getAttendanceTimeDivisionType().getName()+Constant.CHARACTER_SPACE)+String.valueOf(i+1)));
+						}
+				}
 			
 			//page.setChoices(Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED, indexes);
 		}

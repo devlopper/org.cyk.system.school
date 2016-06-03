@@ -304,6 +304,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			module.addChild(menuManager.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionRankResults() ,null));
 		}
 		*/
+		
+		onBusinessMenuPopulateEnded(userSession, module);
 		return module;
 	}
 	
