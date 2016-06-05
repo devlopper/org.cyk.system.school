@@ -29,7 +29,7 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
         registerNamedQuery(readByStudentByClassroomSession, _select().where(StudentClassroomSession.FIELD_STUDENT).and(StudentClassroomSession.FIELD_CLASSROOMSESSION));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(StudentClassroomSession.FIELD_CLASSROOMSESSION));
     
-        registerNamedQuery(readByCriteria, "SELECT r FROM StudentClassroomSession r WHERE "
+        registerNamedQuery(readByCriteria, "SELECT r FROM StudentClassroomSession r WHERE r.classroomSession.identifier IN :classroomSessions AND "
         		+ "EXISTS(SELECT r1 FROM StudentClassroomSessionDivision r1 WHERE r1.classroomSessionDivision.classroomSession = r.classroomSession AND "
         		+ "r1.student = r.student AND r1.classroomSessionDivision.index IN :classroomSessionDivisionIndexes AND "
         		+ "(SELECT COUNT(r2) FROM StudentClassroomSessionDivision r2 WHERE r2.classroomSessionDivision.classroomSession = r.classroomSession "
@@ -67,6 +67,7 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
 		queryWrapper.parameter("classroomSessionDivisionIndexes",((StudentClassroomSession.SearchCriteria)searchCriteria).getDivisionIndexesRequired());
 		queryWrapper.parameter("classroomSessionDivisionMinCount",((StudentClassroomSession.SearchCriteria)searchCriteria).getDivisionCount().getLowest());
 		queryWrapper.parameter("classroomSessionDivisionMaxCount",((StudentClassroomSession.SearchCriteria)searchCriteria).getDivisionCount().getHighest());
+		queryWrapper.parameterIdentifiers("classroomSessions",((StudentClassroomSession.SearchCriteria)searchCriteria).getClassroomSessions());
 	}
 	
 	@SuppressWarnings("unchecked")

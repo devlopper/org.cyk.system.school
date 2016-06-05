@@ -61,6 +61,15 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 						.getClassroomSessionDivision()));
 				item.setClassroomSessionDivisionSubject(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivisionSubject()));
 			}	
+			
+			@Override
+			public Crud getCrud() {
+				return crud;
+			}
+			@Override
+			public Boolean isShowAddButton() {
+				return Boolean.TRUE;
+			}
 		});
 	}
 	

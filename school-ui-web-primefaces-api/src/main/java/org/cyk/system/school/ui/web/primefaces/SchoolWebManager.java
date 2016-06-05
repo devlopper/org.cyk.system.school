@@ -40,13 +40,13 @@ import org.cyk.ui.web.api.AjaxListener.ListenValueMethod;
 import org.cyk.ui.web.api.WebHierarchyNode;
 import org.cyk.ui.web.primefaces.AbstractPrimefacesManager;
 import org.cyk.ui.web.primefaces.HierarchyNode;
+import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 import org.primefaces.model.TreeNode;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Named @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {
@@ -57,8 +57,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	private static SchoolWebManager INSTANCE;
 
 	protected final String outcomeConfigureLevels = "configureLevels";
-	@Setter protected String academicSessionInfos="ACA INFOS TO SET";
-	@Setter protected String classroomSessionDivisionTypeName,classroomSessionDivisionInfos="CSD INFOS TO SET";
+	//@Setter protected String academicSessionInfos="ACA INFOS TO SET";
+	//@Setter protected String classroomSessionDivisionTypeName,classroomSessionDivisionInfos="CSD INFOS TO SET";
 	protected String outcomeGenerateStudentClassroomSessionDivisionReport = "classroomSessionDivisionUpdateStudentReport";
 	protected String outcomeUpdateStudentClassroomSessionDivisionResults  = "classroomSessionDivisionUpdateStudentResults";
 	protected String outcomeConsultClassroomSessionStudentDivisionReportFile  = "classroomSessionConsultStudentDivisionReportFileView";
@@ -83,12 +83,24 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		identifier = "school";
 		super.initialisation(); 
 	}
-	
+	/*
 	public void doMoreInitialisation(){
 		AcademicSession academicSession = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null);
 		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(academicSession.getPeriod());
 		classroomSessionDivisionTypeName = academicSession.getNodeInformations().getClassroomSessionTimeDivisionType().getName();
 		classroomSessionDivisionInfos = "No "+(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex()+1);
+	}*/
+	
+	public String getAcademicSessionInfos(){
+		return UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getPeriod());
+	}
+	
+	public String getClassroomSessionDivisionTypeName(){
+		return SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getClassroomSessionTimeDivisionType().getName();
+	}
+	
+	public String getClassroomSessionDivisionInfos(){
+		return "No "+(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex()+1);
 	}
 	
 	private SchoolBusinessLayer getSchoolBusinessLayer(){
@@ -111,6 +123,10 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 		initialiseNavigatorTree(userSession);
 		return systemMenu;
+	}
+	
+	public void configureBroadSheetTable(Table<?> table){
+		
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -155,6 +171,11 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
 						model.setCollapsedIcon(Icon.THING_TABLE);
 						model.setExpandedIcon(Icon.THING_TABLE);
+						Collection<Evaluation> evaluations = SchoolBusinessLayer.getInstance().getEvaluationBusiness().findByClassroomSessionDivisionSubjectEvaluationType((ClassroomSessionDivisionSubjectEvaluationType) model.getData());
+						if(evaluations.isEmpty())
+							;
+						else
+							model.getCss().addClass("treenodeevaluationexistclass");
 				}
 				return super.createNode(model, parent);
 			}

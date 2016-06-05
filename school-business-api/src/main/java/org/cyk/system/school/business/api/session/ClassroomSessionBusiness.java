@@ -17,6 +17,8 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	Collection<ClassroomSession> findByAcademicSession(AcademicSession academicSession);
 	Collection<ClassroomSession> findByAcademicSessionByTeacher(AcademicSession academicSession,Teacher teacher);
 	
+	Collection<ClassroomSession> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
+	
 	ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,String suffix);
 	
 	CommonNodeInformations findCommonNodeInformations(ClassroomSession classroomSession);

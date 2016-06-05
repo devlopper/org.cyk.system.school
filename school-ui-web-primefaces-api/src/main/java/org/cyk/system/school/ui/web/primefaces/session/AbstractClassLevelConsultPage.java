@@ -108,8 +108,8 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		broadsheetTable.getColumnListeners().add(new ColumnAdapter<>(userSession, teacher, isCoordinator, getSubLevelClass(), subLevels, 2, getResultTableBroadsheetFieldNameSet()));		
 		broadsheetTable.getCellListeners().add(getBroadsheetTableCellAdapter(subLevels));
 
-		if(Boolean.TRUE.equals(isBroadsheetColumnTitleRotated()))
-			broadsheetTable.setUpdateStyleClass("broadsheetTableStyleClass");
+		//if(Boolean.TRUE.equals(isBroadsheetColumnTitleRotated()))
+		//	broadsheetTable.setUpdateStyleClass("broadsheetTableStyleClass");
 
 		
 	}
@@ -119,10 +119,10 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		super.afterInitialisation();
 		broadsheetTable.postConstruct();
 	}
-	
+	/*
 	protected Boolean isBroadsheetColumnTitleRotated(){
 		return subLevels!=null && subLevels.size()>6;
-	}
+	}*/
 	protected abstract Class<LEVEL> getLevelClass();
 	protected abstract Class<LEVEL_OUTPUT> getLevelOutputClass();
 	protected abstract Class<SUB_LEVEL> getSubLevelClass();

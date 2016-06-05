@@ -35,3 +35,8 @@
 .broadsheetTableStyleClass .studentclassroomsessiondivisiondetails-evaluationaveragevalue{
 	/*background-color: yellow;*/
 }
+
+span.treenodeevaluationexistclass{
+	font-style: italic;
+	font-weight: bold;
+}

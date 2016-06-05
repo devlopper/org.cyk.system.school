@@ -75,6 +75,11 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		return dao.readByAcademicSessionByTeacher(academicSession,teacher);
 	}
 	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSession> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision) {
+		return dao.readByLevelTimeDivision(levelTimeDivision);
+	}
+	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public CommonNodeInformations findCommonNodeInformations(ClassroomSession classroomSession) {
 		CommonNodeInformations commonNodeInformations = classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations();
