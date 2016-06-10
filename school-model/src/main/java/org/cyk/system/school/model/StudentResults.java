@@ -34,9 +34,9 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	private static final long serialVersionUID = 2742833783679362737L;
 	
 	@Embedded @AttributeOverrides(value={
-			@AttributeOverride(name="average.dividend",column=@Column(name="evaluationAverageDividend"))
-			,@AttributeOverride(name="average.divisor",column=@Column(name="evaluationAverageDivisor"))
-			,@AttributeOverride(name="average.value",column=@Column(name="evaluationAverageValue"))
+			@AttributeOverride(name="average.dividend",column=@Column(name="evaluationAverageDividend",precision=20,scale=FLOAT_SCALE))
+			,@AttributeOverride(name="average.divisor",column=@Column(name="evaluationAverageDivisor",precision=20,scale=FLOAT_SCALE))
+			,@AttributeOverride(name="average.value",column=@Column(name="evaluationAverageValue",precision=20,scale=FLOAT_SCALE))
 			
 			,@AttributeOverride(name="rank.sequenceOrder",column=@Column(name="evaluationRankSequenceOrder"))
 			,@AttributeOverride(name="rank.value",column=@Column(name="evaluationRankValue"))
@@ -51,9 +51,9 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	private Sort evaluationSort = new Sort();
 	
 	@Embedded @AttributeOverrides(value={
-			@AttributeOverride(name="average.dividend",column=@Column(name="lectureAttendanceAverageDividend"))
-			,@AttributeOverride(name="average.divisor",column=@Column(name="lectureAttendanceAverageDivisor"))
-			,@AttributeOverride(name="average.value",column=@Column(name="lectureAttendanceAverageValue"))
+			@AttributeOverride(name="average.dividend",column=@Column(name="lectureAttendanceAverageDividend",precision=20,scale=FLOAT_SCALE))
+			,@AttributeOverride(name="average.divisor",column=@Column(name="lectureAttendanceAverageDivisor",precision=20,scale=FLOAT_SCALE))
+			,@AttributeOverride(name="average.value",column=@Column(name="lectureAttendanceAverageValue",precision=20,scale=FLOAT_SCALE))
 			
 			,@AttributeOverride(name="rank.sequenceOrder",column=@Column(name="lectureAttendanceRankSequenceOrder"))
 			,@AttributeOverride(name="rank.value",column=@Column(name="lectureAttendanceRankValue"))

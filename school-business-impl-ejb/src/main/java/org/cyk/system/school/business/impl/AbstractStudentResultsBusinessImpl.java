@@ -109,6 +109,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				logIdentifiable("Average computed", result);
 				//logTrace("Average {} , Interval {}",result.getResults().getEvaluationSort().getAverage(),result.getResults().getEvaluationSort().getAverageInterval());
 			}
+			dao.update(result);
 			addCallArgumentsWorkDoneByStep(callArguments);
 		}
 		
@@ -134,6 +135,8 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 					lResults.add(result);
 			rank(lResults,options,callArguments);
 		}
+		for(RESULT result : results)
+			dao.update(result);
 	}
 	
 	@Override
@@ -207,6 +210,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				else
 					attendance.setAttendedDuration(attendableDuration-attendance.getMissedDuration());
 			}
+			dao.update(result);
 			addCallArgumentsWorkDoneByStep(callArguments);
 		}
 	}
@@ -226,7 +230,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		return results;
 	}
 	
-	@Override
+	@Override @TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Collection<RESULT> updateResults(Collection<LEVEL> levels,Boolean updateEvaluationAverage,Boolean updateRank,RankOptions<SortableStudentResults> rankOptions,Boolean updateAttendance,BusinessServiceCallArguments<RESULT> callArguments) {
 		Collection<RESULT> results = null;
 		if(Boolean.TRUE.equals(updateEvaluationAverage))
@@ -235,6 +239,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 			results = updateAttendance(levels, callArguments);
 		if(Boolean.TRUE.equals(updateRank))
 			results = updateRank(levels, rankOptions, callArguments);
+			
 		return results;
 	}
 	
