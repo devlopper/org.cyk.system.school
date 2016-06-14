@@ -287,8 +287,8 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			module.addChild(Builder.createList(Teacher.class, null));
 			module.addChild(Builder.createList(Employee.class, null));
 			
-			module.addChild(Builder.createMany(StudentClassroomSession.class, null));
-			module.addChild(Builder.createMany(StudentClassroomSessionDivisionSubject.class, null));
+			module.addChild(Builder.createCreateMany(StudentClassroomSession.class, null));
+			module.addChild(Builder.createCreateMany(StudentClassroomSessionDivisionSubject.class, null));
 		}
 		return module;
 	}
