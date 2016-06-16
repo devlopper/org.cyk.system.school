@@ -41,6 +41,7 @@ import org.cyk.ui.web.api.WebHierarchyNode;
 import org.cyk.ui.web.primefaces.AbstractPrimefacesManager;
 import org.cyk.ui.web.primefaces.HierarchyNode;
 import org.cyk.ui.web.primefaces.Table;
+import org.cyk.ui.web.primefaces.UserSession;
 import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
@@ -108,7 +109,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	}
 	
 	@Override
-	public SystemMenu systemMenu(AbstractUserSession<TreeNode, HierarchyNode> userSession) {
+	public SystemMenu systemMenu(UserSession userSession) {
 		SystemMenu systemMenu = new SystemMenu();
 		
 		addBusinessMenu(userSession,systemMenu,getSchoolCommandable(userSession, null));
@@ -129,15 +130,14 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void initialiseNavigatorTree(AbstractUserSession userSession) {
+	public void initialiseNavigatorTree(UserSession userSession) {
 		userSession.setNavigatorTree(getNavigator(TreeNode.class,HierarchyNode.class,LevelGroup.class,userSession));
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected <TYPE> Collection<TYPE> getNavigatorTreeNodeDatas(Class<TYPE> dataClass,AbstractUserSession<TreeNode, HierarchyNode> userSession) {
+	protected <TYPE> Collection<TYPE> getNavigatorTreeNodeDatas(Class<TYPE> dataClass,UserSession userSession) {
 		if(userSession.hasRole(Role.MANAGER)){
 			return (Collection<TYPE>) SchoolBusinessLayer.getInstance().getLevelGroupBusiness().findAll();
 		}else{
@@ -151,7 +151,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	}
 	
 	@Override
-	protected AbstractTree<TreeNode, HierarchyNode> createNavigatorTree(final AbstractUserSession<TreeNode, HierarchyNode> userSession) {
+	protected AbstractTree<TreeNode, HierarchyNode> createNavigatorTree(final UserSession userSession) {
 		AbstractTree<TreeNode, HierarchyNode> tree = super.createNavigatorTree(userSession);
 		tree.getTreeListeners().add((org.cyk.ui.api.model.AbstractTree.Listener<TreeNode, HierarchyNode>) new  AbstractTree.Listener.Adapter.Default<TreeNode,HierarchyNode>(){
 			private static final long serialVersionUID = 1L;
@@ -262,13 +262,13 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	/**/
 	
-	protected Boolean isConnectedUserInstanceOfTeacher(AbstractUserSession<TreeNode, HierarchyNode> userSession){
+	protected Boolean isConnectedUserInstanceOfTeacher(UserSession userSession){
 		return isConnectedUserInstanceOfActor(userSession, SchoolBusinessLayer.getInstance().getTeacherBusiness());
 	}
 	
 	/**/
 	
-	public UICommandable getSchoolCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getSchoolCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
 			module = Builder.create("school", null);
@@ -279,7 +279,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		return module;
 	}
 	
-	public UICommandable getRegistrationCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getRegistrationCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
 		if(userSession.hasRole(Role.MANAGER)){
 			module = Builder.create("command.actor.registration", Icon.PERSON);
@@ -293,7 +293,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		return module;
 	}
 	
-	public UICommandable getRegularActivitiesCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getRegularActivitiesCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = Builder.create("school.activities", null);
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
@@ -301,7 +301,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		return module;
 	}
 	
-	public UICommandable getResultsCardCommandable(AbstractUserSession<TreeNode, HierarchyNode> userSession,Collection<UICommandable> mobileCommandables){
+	public UICommandable getResultsCardCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = Builder.create("school.results", null).setIdentifier(COMMANDABLE_IDENTIFIER_RESULTS);
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
