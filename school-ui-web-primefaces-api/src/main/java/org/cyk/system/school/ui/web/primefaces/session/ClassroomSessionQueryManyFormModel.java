@@ -202,7 +202,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			
 			
 			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
-				Collection<ClassroomSessionDivision> classroomSessionDivisions = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessions(classroomSessions);
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSessionsByIndex(classroomSessions,
+						schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions);
 				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().findReportFiles(studentClassroomSessionDivisions);
 				WebNavigationManager.getInstance().redirectToFileConsultManyPage(schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().findReportFiles(studentClassroomSessionDivisions), FileExtension.PDF);
