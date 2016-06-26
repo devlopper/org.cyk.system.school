@@ -50,6 +50,9 @@ import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
 import org.cyk.ui.web.api.servlet.SecurityFilter;
 import org.cyk.ui.web.api.servlet.SecurityFilter.UniformResourceLocatorRuntimeConstraint;
+import org.cyk.ui.web.primefaces.page.AbstractProcessManyPage;
+import org.cyk.ui.web.primefaces.page.AbstractSelectManyPage;
+import org.cyk.ui.web.primefaces.page.AbstractSelectOnePage;
 
 public abstract class AbstractSchoolContextListener extends AbstractCompanyContextListener implements Serializable {
 
@@ -119,15 +122,15 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 				,null,null,null));
 		uiManager.configBusinessIdentifiable(Evaluation.class, null);
 		
-		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionQueryOneFormModel.PageAdapter());
-		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionQueryOneFormModel.PageAdapter());
-		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
-		primefacesManager.getSelectOnePageListeners().add(new ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.PageAdapter());
+		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionQueryOneFormModel.PageAdapter());
+		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionQueryOneFormModel.PageAdapter());
+		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
+		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.PageAdapter());
 		
-		primefacesManager.getSelectManyPageListeners().add(new ClassroomSessionQueryManyFormModel.PageAdapter());
-		primefacesManager.getSelectManyPageListeners().add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
+		AbstractSelectManyPage.Listener.COLLECTION.add(new ClassroomSessionQueryManyFormModel.PageAdapter());
+		AbstractSelectManyPage.Listener.COLLECTION.add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
 
-		primefacesManager.getProcessManyPageListeners().add(new ClassroomSessionQueryManyFormModel.ProcessPageAdapter());
+		AbstractProcessManyPage.Listener.COLLECTION.add(new ClassroomSessionQueryManyFormModel.ProcessPageAdapter());
 		
 		if(Boolean.TRUE.equals(SchoolWebManager.EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
 			SecurityFilter.addUniformResourceLocatorRuntimeConstraint(new UniformResourceLocator("/private/__role__/__manager__/evaluation/edit.jsf")
