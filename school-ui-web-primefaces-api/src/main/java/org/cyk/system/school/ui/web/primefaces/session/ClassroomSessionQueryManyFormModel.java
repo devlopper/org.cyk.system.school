@@ -98,23 +98,31 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 
 		private static final long serialVersionUID = -8606970206843948983L;
 
-		private Collection<ClassroomSession> classroomSessions = new ArrayList<>();
-		private Set<TimeDivisionType> timeDivisionTypes = new LinkedHashSet<>();
-		
 		public ProcessPageAdapter() {
 			super(ClassroomSession.class);
+		}
+		
+		private Collection<ClassroomSession> getClassroomSessions(AbstractProcessManyPage<?> page){
+			Collection<ClassroomSession> classroomSessions = new ArrayList<>();
+			for(Object object : page.getElements()){
+				classroomSessions.add((ClassroomSession) object);
+			}
+			return classroomSessions;
+		}
+		
+		private Set<TimeDivisionType> getTimeDivisionTypes(AbstractProcessManyPage<?> page){
+			Set<TimeDivisionType> timeDivisionTypes = new LinkedHashSet<>();
+			for(Object object : page.getElements()){
+				CommonNodeInformations nodeInformations = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations((ClassroomSession) object);
+				timeDivisionTypes.add(nodeInformations.getClassroomSessionTimeDivisionType());
+			}
+			return timeDivisionTypes;
 		}
 		
 		@Override
 		protected void initialiseProcessOnInitialisationEnded(final AbstractProcessManyPage<?> page) {
 			super.initialiseProcessOnInitialisationEnded(page);
-			
-			for(Object object : page.getElements()){
-				classroomSessions.add((ClassroomSession) object);
-				CommonNodeInformations nodeInformations = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations((ClassroomSession) object);
-				timeDivisionTypes.add(nodeInformations.getClassroomSessionTimeDivisionType());
-			}
-			
+
 			SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 			page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
 			if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
@@ -153,6 +161,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					}
 				});
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionConsultStudentClassroomSessionRanks()}, page.getActionIdentifier())){
+				final Set<TimeDivisionType> timeDivisionTypes = getTimeDivisionTypes(page);
 				page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.FALSE);
 				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
 					@Override
@@ -176,9 +185,10 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		@Override
 		protected void initialiseProcessOnAfterInitialisationEnded(final AbstractProcessManyPage<?> page) {
 			super.initialiseProcessOnAfterInitialisationEnded(page);
+			Set<TimeDivisionType> timeDivisionTypes = getTimeDivisionTypes(page);
 			Set<Byte> indexes = new LinkedHashSet<>();
 			//Set<TimeDivisionType> timeDivisionTypesProcessed = new LinkedHashSet<>();
-			
+			Collection<ClassroomSession> classroomSessions = getClassroomSessions(page);
 			@SuppressWarnings("unchecked")
 			org.cyk.ui.api.data.collector.control.InputChoice<?,?,?,?,?,SelectItem> input = page.getForm().findInputByClassByFieldName(org.cyk.ui.api.data.collector.control.InputChoice.class, Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED);
 			if(input!=null)
@@ -198,7 +208,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		@Override
 		public void serve(AbstractProcessManyPage<?> page,Object data, String actionIdentifier) {
 			SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
-			//Collection<ClassroomSession> classroomSessions = new ArrayList<>();
+			Collection<ClassroomSession> classroomSessions = getClassroomSessions(page);
 			
 			
 			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
