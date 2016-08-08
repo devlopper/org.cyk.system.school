@@ -48,7 +48,7 @@ public class StudentClassroomSessionCreateManyPage extends AbstractCrudOnePage<S
 				super.instanciated(itemCollection, item);
 				item.getIdentifiable().setStudent(((Form)form.getData()).getStudent());
 				item.getIdentifiable().setClassroomSession(((Form)form.getData()).getClassroomSession());
-				item.setRegistrationCode(item.getIdentifiable().getStudent().getRegistration().getCode());
+				item.setRegistrationCode(item.getIdentifiable().getStudent().getCode());
 				item.setNames(item.getIdentifiable().getStudent().getPerson().getNames());
 				item.setClassroomSession(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSession()));
 			}	

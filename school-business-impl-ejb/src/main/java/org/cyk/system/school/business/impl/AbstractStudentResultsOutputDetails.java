@@ -30,7 +30,7 @@ import lombok.Setter;
 		super(studentLevel);
 		if(studentLevel==null)
 			return;
-		registrationCode = studentLevel.getStudent().getRegistration().getCode();
+		registrationCode = studentLevel.getStudent().getCode();
 		names = studentLevel.getStudent().getPerson().getNames();
 		
 		if(studentLevel.getResults().getEvaluationSort().getAverage().getDividend()!=null)

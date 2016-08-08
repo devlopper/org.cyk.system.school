@@ -17,13 +17,13 @@ public class Level extends AbstractIdentifiable implements Serializable {
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne private LevelGroup group;
-	@ManyToOne private LevelName name;
+	@ManyToOne private LevelName levelName;
 	@ManyToOne private LevelSpeciality speciality;
 	
-	public Level(LevelGroup group,LevelName name, LevelSpeciality speciality) {
+	public Level(LevelGroup group,LevelName levelName, LevelSpeciality speciality) {
 		super();
 		this.group = group;
-		this.name = name;
+		this.levelName = levelName;
 		this.speciality = speciality;
 	}
 	
@@ -33,7 +33,7 @@ public class Level extends AbstractIdentifiable implements Serializable {
 	
 	@Override
 	public String toString() {
-		return name+(speciality==null?"":(" "+speciality));
+		return levelName+(speciality==null?"":(" "+speciality));
 	}
 	
 	@Override
@@ -42,4 +42,6 @@ public class Level extends AbstractIdentifiable implements Serializable {
 	}
 	
 	public static final String FIELD_GROUP = "group";
+	public static final String FIELD_LEVEL_NAME = "name";
+	public static final String FIELD_LEVEL_SPECIALITY = "speciality";
 }

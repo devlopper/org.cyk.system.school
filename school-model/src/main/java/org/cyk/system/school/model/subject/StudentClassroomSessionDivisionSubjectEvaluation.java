@@ -32,7 +32,7 @@ public class StudentClassroomSessionDivisionSubjectEvaluation extends AbstractId
 	/*
 	@Override
 	public String toString() {
-		return subjectEvaluation.getType().getSubject().getIdentifier()+":"+studentSubject.getStudent().getRegistration().getCode()+":"+value;
+		return subjectEvaluation.getType().getSubject().getIdentifier()+":"+studentSubject.getStudent().getCode()+":"+value;
 	}*/
 	
 	public static final String FIELD_EVALUATION = "evaluation";

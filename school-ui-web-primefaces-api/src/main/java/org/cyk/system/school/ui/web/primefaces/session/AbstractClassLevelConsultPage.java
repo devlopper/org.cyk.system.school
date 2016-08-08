@@ -28,7 +28,6 @@ import org.cyk.ui.api.model.table.Cell;
 import org.cyk.ui.api.model.table.Column;
 import org.cyk.ui.api.model.table.Row;
 import org.cyk.ui.web.primefaces.Table;
-import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 import org.cyk.utility.common.Constant;
 
@@ -46,7 +45,6 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 	protected List<SUB_LEVEL> subLevels;
 	protected Integer numberOfColumnBeforeLevels = 2;
 	
-	protected FormOneData<LEVEL_OUTPUT> details;
 	protected Table<SUB_LEVEL_OUTPUT> subLevelTable;
 	protected Table<RESULT_OUTPUT> studentTable;
 	protected Table<RESULT_OUTPUT> broadsheetTable;
@@ -57,13 +55,13 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		teacher = userSession.getUser() instanceof Person ? SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser()) : null;
 		isCoordinator = teacher != null && getClassroomSession().getCoordinator()!= null && teacher.equals( getClassroomSession().getCoordinator());
 		
-		details = createDetailsForm(getLevelOutputClass(), identifiable, new DetailsConfigurationListener.Form.Adapter<LEVEL,LEVEL_OUTPUT>(getLevelClass(), getLevelOutputClass()){
+		/*details = createDetailsForm(getLevelOutputClass(), identifiable, new DetailsConfigurationListener.Form.Adapter<LEVEL,LEVEL_OUTPUT>(getLevelClass(), getLevelOutputClass()){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean getEnabledInDefaultTab() {
 				return Boolean.TRUE;
 			}
-		});
+		});*/
 		
 		subLevelTable = (Table<SUB_LEVEL_OUTPUT>) createDetailsTable(getSubLevelOutputClass(), getSubLevelTableCreationListener());
 		

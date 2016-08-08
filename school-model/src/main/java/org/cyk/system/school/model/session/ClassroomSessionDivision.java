@@ -12,12 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
+import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -25,6 +21,10 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
 public class ClassroomSessionDivision extends AbstractIdentifiablePeriod implements Serializable {
@@ -72,7 +72,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, classroomSession.getIdentifier(),timeDivisionType.getCode(),coefficient,index,duration,results.getLogMessage());
+		return String.format(LOG_FORMAT, classroomSession.getIdentifier(),timeDivisionType.getCode(),coefficient,index,numberOfMillisecond,results.getLogMessage());
 	}
 	private static final String LOG_FORMAT = ClassroomSessionDivision.class.getSimpleName()+"(CLASS=%s TIMDIV=%s COEF=%s INDEX=%s DUR=%s %s)";
 	

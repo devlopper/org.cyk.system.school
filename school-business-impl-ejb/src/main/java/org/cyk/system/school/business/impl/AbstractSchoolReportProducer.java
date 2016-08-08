@@ -59,7 +59,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		AcademicSession as = s.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
 		NodeResults results = csd.getResults();
 		
-		r.getAcademicSession().setFromDateToDate(timeBusiness.formatPeriodFromTo(as.getPeriod()));
+		r.getAcademicSession().setFromDateToDate(timeBusiness.formatPeriodFromTo(as.getExistencePeriod()));
 		r.getAcademicSession().getCompany().setImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
 		r.getAcademicSession().getCompany().setName(as.getSchool().getOwnedCompany().getCompany().getName());
 		
@@ -85,7 +85,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
 		r.getClassroomSessionDivision().setOpenedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
-				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getDuration())));
+				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getNumberOfMillisecond())));
 		//debug(r.getClassroomSessionDivision());
 		r.setAttendedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getAttendedDuration())));

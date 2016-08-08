@@ -6,7 +6,7 @@ import org.cyk.system.root.business.api.TypedBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.event.EventMissed;
-import org.cyk.system.root.model.event.EventParticipation;
+import org.cyk.system.root.model.event.EventParty;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.subject.Lecture;
@@ -42,7 +42,7 @@ public interface AbstractStudentResultsBusiness<LEVEL extends AbstractIdentifiab
 	
 	/* Attendance computation */
 	
-	void updateAttendance(Collection<LEVEL> levels,Collection<RESULT> results, Collection<Lecture> lectures,Collection<EventParticipation> participations,Collection<EventMissed> eventMisseds,BusinessServiceCallArguments<RESULT> callArguments);
+	void updateAttendance(Collection<LEVEL> levels,Collection<RESULT> results, Collection<Lecture> lectures,Collection<EventParty> eventParties,Collection<EventMissed> eventMisseds,BusinessServiceCallArguments<RESULT> callArguments);
 	
 	Collection<RESULT> updateAttendance(Collection<LEVEL> levels,BusinessServiceCallArguments<RESULT> callArguments);
 	

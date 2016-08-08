@@ -98,7 +98,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			@Override
 			public void instanciated(AbstractItemCollection<StudentSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,SelectItem> itemCollection,StudentSubjectEvaluationItem mark) {
 				super.instanciated(itemCollection, mark);
-				mark.setRegistrationCode(mark.getIdentifiable().getStudentSubject().getStudent().getRegistration().getCode());
+				mark.setRegistrationCode(mark.getIdentifiable().getStudentSubject().getStudent().getCode());
 				mark.setNames(mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
 				mark.setValue(mark.getIdentifiable().getValue());
 				mark.setValueAsString(RootBusinessLayer.getInstance().getNumberBusiness().format(mark.getValue()));

@@ -23,24 +23,12 @@ public class EvaluationConsultPage extends AbstractConsultPage<Evaluation> imple
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private FormOneData<EvaluationDetails> details;
 	private Table<StudentSubjectEvaluationDetails> markTable;
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		details = createDetailsForm(EvaluationDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<Evaluation,EvaluationDetails>(Evaluation.class, EvaluationDetails.class){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public Boolean getEnabledInDefaultTab() {
-				return Boolean.TRUE;
-			}
-			@Override
-			public String getTabId() {
-				return "1";
-			}
-		});
-		
+	
 		markTable = (Table<StudentSubjectEvaluationDetails>) createDetailsTable(StudentSubjectEvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubjectEvaluation,StudentSubjectEvaluationDetails>(StudentClassroomSessionDivisionSubjectEvaluation.class, StudentSubjectEvaluationDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override

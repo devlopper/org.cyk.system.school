@@ -199,7 +199,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			StudentClassroomSessionDivisionReport r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
 			
 			AcademicSession as = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
-			r.getAcademicSession().setFromDateToDate(timeBusiness.findYear(as.getPeriod().getFromDate())+"/"+timeBusiness.findYear(as.getPeriod().getToDate())+" ACADEMIC SESSION");
+			r.getAcademicSession().setFromDateToDate(timeBusiness.findYear(as.getExistencePeriod().getFromDate())+"/"+timeBusiness.findYear(as.getExistencePeriod().getToDate())+" ACADEMIC SESSION");
 		
 			r.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 					{"Formname(s)", r.getStudent().getPerson().getLastName()}
@@ -338,8 +338,8 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 				r.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
 					{"CONFERENCE REQUESTED",studentClassroomSessionDivision.getResults().getConferenceRequested()==null?"NO"
 							:studentClassroomSessionDivision.getResults().getConferenceRequested()?"YES":"NO"}
-					,{"NEXT OPENING",format(nextClassroomSessionDivision.getPeriod().getFromDate())}
-					,{"NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getPeriod().getToDate())}
+					,{"NEXT OPENING",format(nextClassroomSessionDivision.getExistencePeriod().getFromDate())}
+					,{"NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getExistencePeriod().getToDate())}
 					});
 			}
 		

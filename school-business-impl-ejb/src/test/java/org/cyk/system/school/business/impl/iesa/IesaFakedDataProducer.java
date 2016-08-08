@@ -238,9 +238,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			@Override
     		public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {
     			super.classroomSessionDivisionCreated(classroomSessionDivision);
-    			classroomSessionDivision.getPeriod().setFromDate(new DateTime(2016, 4, 4, 0, 0).toDate());
-    			classroomSessionDivision.getPeriod().setToDate(new DateTime(2016, 6, 13, 0, 0).toDate());
-    			classroomSessionDivision.setDuration(48l * DateTimeConstants.MILLIS_PER_DAY);
+    			classroomSessionDivision.getExistencePeriod().setFromDate(new DateTime(2016, 4, 4, 0, 0).toDate());
+    			classroomSessionDivision.getExistencePeriod().setToDate(new DateTime(2016, 6, 13, 0, 0).toDate());
+    			classroomSessionDivision.setNumberOfMillisecond(48l * DateTimeConstants.MILLIS_PER_DAY);
     			classroomSessionDivision.setStudentSubjectAttendanceAggregated(Boolean.FALSE);
     		}
 			
@@ -358,8 +358,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	create(school);
     	
     	AcademicSession academicSession = new AcademicSession(school,commonNodeInformationsG1G3,new Date());
-    	academicSession.getPeriod().setFromDate(new Date());
-    	academicSession.getPeriod().setToDate(new Date(academicSession.getPeriod().getFromDate().getTime()+DateTimeConstants.MILLIS_PER_DAY*355));
+    	academicSession.getExistencePeriod().setFromDate(new Date());
+    	academicSession.getExistencePeriod().setToDate(new Date(academicSession.getExistencePeriod().getFromDate().getTime()+DateTimeConstants.MILLIS_PER_DAY*355));
     	academicSession = create(academicSession);
 		
 		rootRandomDataProvider.createActor(Teacher.class, numbreOfTeachers);
@@ -497,8 +497,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjectDao.readAll()){
 			for(int i=0;i<numbreOfLecturesByClassroomSessionDivisionSubject;i++){
 				Event event = new Event();
-				event.getPeriod().setFromDate(new Date());
-				event.getPeriod().setToDate(new Date());
+				event.getExistencePeriod().setFromDate(new Date());
+				event.getExistencePeriod().setToDate(new Date());
 				Lecture lecture = new Lecture(classroomSessionDivisionSubject, event);
 				lectures.add(lecture);
 				for(StudentSubject studentSubject : studentSubjectBusiness.findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject)){
@@ -628,8 +628,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
 						{"CONFERENCE REQUESTED",studentClassroomSessionDivision.getResults().getConferenceRequested()==null?"NO"
 								:studentClassroomSessionDivision.getResults().getConferenceRequested()?"YES":"NO"}
-						,{"NEXT OPENING",format(nextClassroomSessionDivision.getPeriod().getFromDate())}
-						,{"NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getPeriod().getToDate())}
+						,{"NEXT OPENING",format(nextClassroomSessionDivision.getExistencePeriod().getFromDate())}
+						,{"NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getExistencePeriod().getToDate())}
 						});
 				}
 				/*

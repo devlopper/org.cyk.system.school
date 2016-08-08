@@ -10,15 +10,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import org.cyk.system.root.model.event.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
+import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS,genderType=GenderType.FEMALE)
 public class AcademicSession extends AbstractIdentifiablePeriod implements Serializable {
@@ -40,8 +40,4 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 		this.nextStartingDate = nextStartingDate;
 	} 
 	
-	@Override
-	public String getUiString() {
-		return period.getUiString();
-	}
 }

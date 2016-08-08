@@ -8,16 +8,12 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails.SubjectDetails;
-import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -27,8 +23,10 @@ import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
 import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
-import org.cyk.ui.web.primefaces.data.collector.form.FormOneData;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultPage<StudentClassroomSessionDivision> implements Serializable {
@@ -39,7 +37,6 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	public static Class<AbstractSubjectDetails> SUBJECT_DETAILS_CLASS;
 	public static Boolean LOAD_EVALUATIONS = Boolean.FALSE;
 	
-	private FormOneData<StudentClassroomSessionDivisionDetails> details;
 	private Table<AbstractSubjectDetails> subjectTable;
 	private List<Table<StudentResultsMetricValueDetails>> metricTables = new ArrayList<>();
 	private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations;
@@ -61,18 +58,6 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			studentSubjectEvaluations = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectEvaluationBusiness().findByStudentByClassroomSessionDivision(
 					identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 		}
-		
-		details = createDetailsForm(StudentClassroomSessionDivisionDetails.class, identifiable, new DetailsConfigurationListener.Form.Adapter<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails>(StudentClassroomSessionDivision.class, StudentClassroomSessionDivisionDetails.class){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public Boolean getEnabledInDefaultTab() {
-				return Boolean.TRUE;
-			}
-			@Override
-			public String getTitleId() {
-				return "model.entity.student";
-			}
-		});
 		
 		subjectTable = (Table<AbstractSubjectDetails>) createDetailsTable(SUBJECT_DETAILS_CLASS, 
 				new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubject,AbstractSubjectDetails>(StudentClassroomSessionDivisionSubject.class, SUBJECT_DETAILS_CLASS){

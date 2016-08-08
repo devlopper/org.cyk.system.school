@@ -86,8 +86,8 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		for(String suffix : suffixes){
 			ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision,null);
 			classroomSession.setSuffix(StringUtils.isBlank(suffix)?null:suffix);
-			classroomSession.getPeriod().setFromDate(new Date());
-			classroomSession.getPeriod().setToDate(new Date());
+			classroomSession.getExistencePeriod().setFromDate(new Date());
+			classroomSession.getExistencePeriod().setToDate(new Date());
 			classroomSessions.add(classroomSession);
 			ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(classroomSession);
 			classroomSessionInfosCollection.add(classroomSessionInfos);
@@ -115,10 +115,10 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
     			,new BigDecimal("1"));
 		classroomSessionDivision.setStudentEvaluationRequired(studentEvaluationRequired);
 		classroomSessionDivision.setStudentRankable(studentRankable);
-		classroomSessionDivision.setDuration(DateTimeConstants.MILLIS_PER_DAY * 45l);
+		classroomSessionDivision.setNumberOfMillisecond(DateTimeConstants.MILLIS_PER_DAY * 45l);
 		classroomSessionDivisions.add(classroomSessionDivision);
-		classroomSessionDivision.getPeriod().setFromDate(new Date());
-		classroomSessionDivision.getPeriod().setToDate(new Date());
+		classroomSessionDivision.getExistencePeriod().setFromDate(new Date());
+		classroomSessionDivision.getExistencePeriod().setToDate(new Date());
 		
 		for(Listener listener : Listener.COLLECTION)
 			listener.classroomSessionDivisionCreated(classroomSessionDivision);

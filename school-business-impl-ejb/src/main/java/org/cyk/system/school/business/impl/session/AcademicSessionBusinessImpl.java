@@ -10,7 +10,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
-import org.cyk.system.root.business.impl.event.AbstractIdentifiablePeriodBusinessImpl;
+import org.cyk.system.root.business.impl.time.AbstractIdentifiablePeriodBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.model.session.AcademicSession;

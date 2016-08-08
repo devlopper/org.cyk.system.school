@@ -142,14 +142,14 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
 			public String format(AcademicSession academicSession, ContentType contentType) {
-				return RootBusinessLayer.getInstance().getTimeBusiness().formatDate(academicSession.getPeriod().getFromDate(), academicSession.getPeriod().getToDate(), TimeBusiness.DATE_SHORT_PATTERN) ;
+				return RootBusinessLayer.getInstance().getTimeBusiness().formatDate(academicSession.getExistencePeriod().getFromDate(), academicSession.getExistencePeriod().getToDate(), TimeBusiness.DATE_SHORT_PATTERN) ;
 			}
 		});
 		registerFormatter(ClassroomSession.class, new AbstractFormatter<ClassroomSession>() {
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
 			public String format(ClassroomSession classroomSession, ContentType contentType) {
-				return classroomSession.getLevelTimeDivision().getLevel().getName().getName()
+				return classroomSession.getLevelTimeDivision().getLevel().getLevelName().getName()
 						+(StringUtils.isBlank(classroomSession.getSuffix())?Constant.EMPTY_STRING:Constant.CHARACTER_SPACE+classroomSession.getSuffix());
 			}
 		});

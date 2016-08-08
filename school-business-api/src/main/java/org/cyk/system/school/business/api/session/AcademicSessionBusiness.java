@@ -2,7 +2,7 @@ package org.cyk.system.school.business.api.session;
 
 import java.math.BigDecimal;
 
-import org.cyk.system.root.business.api.event.AbstractIdentifiablePeriodBusiness;
+import org.cyk.system.root.business.api.time.AbstractIdentifiablePeriodBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.School;
 

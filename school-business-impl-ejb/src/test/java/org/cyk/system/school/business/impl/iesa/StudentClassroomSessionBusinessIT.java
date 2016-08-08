@@ -25,7 +25,7 @@ public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     			,new Object[][]{ {15},{15},{15} });
     	
     	StudentClassroomSessionDivision studentClassroomSessionDivision = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
-    			.findByStudentByClassroomSessionDivision(SchoolBusinessLayer.getInstance().getStudentBusiness().findByRegistrationCode("STUD1"), grade.division(0).getClassroomSessionDivision());
+    			.findByStudentByClassroomSessionDivision(SchoolBusinessLayer.getInstance().getStudentBusiness().find("STUD1"), grade.division(0).getClassroomSessionDivision());
     	/*
     	schoolBusinessTestHelper.createStudentClassroomSessionDivisionReport(studentClassroomSessionDivision.getClassroomSessionDivision(), Boolean.FALSE);
     	studentClassroomSessionDivision = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().find(studentClassroomSessionDivision.getIdentifier());

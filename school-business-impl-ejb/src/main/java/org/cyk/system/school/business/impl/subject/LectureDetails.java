@@ -14,6 +14,6 @@ public class LectureDetails extends AbstractOutputDetails<Lecture> implements Se
 	
 	public LectureDetails(Lecture lecture) {
 		super(lecture);
-		date = timeBusiness.formatDate(lecture.getEvent().getPeriod().getFromDate());
+		date = timeBusiness.formatDate(lecture.getEvent().getExistencePeriod().getFromDate());
 	}
 }

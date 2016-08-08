@@ -19,13 +19,13 @@ import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
-import org.cyk.system.root.model.event.EventParticipation;
+import org.cyk.system.root.model.event.EventParty;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.time.Attendance;
 import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.root.persistence.api.event.EventMissedDao;
-import org.cyk.system.root.persistence.api.event.EventParticipationDao;
+import org.cyk.system.root.persistence.api.event.EventPartyDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.AbstractStudentResult;
@@ -46,7 +46,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	
 	@Inject protected StudentClassroomSessionDivisionSubjectEvaluationDao evaluatedStudentDao;
 	@Inject protected LectureDao lectureDao;
-	@Inject protected EventParticipationDao eventParticipationDao;
+	@Inject protected EventPartyDao eventPartyDao;
 	@Inject protected EventMissedDao eventMissedDao;
 	
 	public AbstractStudentResultsBusinessImpl(DAO dao) {
@@ -85,12 +85,12 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 				if(result.getStudent().getIdentifier().equals(student(detail).getIdentifier())){
 					result.getDetails().add(detail);
 					WeightedValue weightedValue = weightedValue(detail);
-					//System.out.println(result.getStudent().getRegistration().getCode()+" , "+weightedValue.getValue());
+					//System.out.println(result.getStudent().getCode()+" , "+weightedValue.getValue());
 					if(weightedValue.getValue()==null)
 						;
 					else{
 						weightedValues.add(weightedValue);
-						//System.out.println(result.getStudent().getRegistration().getCode()+" , "+weightedValue.getValue()+" , "+weightedValue.getWeight());
+						//System.out.println(result.getStudent().getCode()+" , "+weightedValue.getValue()+" , "+weightedValue.getWeight());
 					}
 				}
 			}
@@ -165,7 +165,7 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	}
 	
 	@Override
-	public void updateAttendance(Collection<LEVEL> levels,Collection<RESULT> results,Collection<Lecture> lectures,Collection<EventParticipation> participations,
+	public void updateAttendance(Collection<LEVEL> levels,Collection<RESULT> results,Collection<Lecture> lectures,Collection<EventParty> participations,
 			Collection<EventMissed> eventMisseds,BusinessServiceCallArguments<RESULT> callArguments) {
 		for(RESULT result : results){
 			setCallArgumentsCurrentExecutionStep(callArguments, result);
@@ -180,22 +180,22 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 					if(level(result).equals(level))
 						for(Lecture lecture : lectures)
 							if(level(lecture).equals(level))
-								for(EventParticipation participation : participations)
+								for(EventParty participation : participations)
 									if(participation.getEvent().equals(lecture.getEvent())){
 										if(result.getStudent().getPerson().equals(participation.getParty())){
 											EventMissed lEventMissed = null;
 											for(EventMissed eventMissed : eventMisseds)
-												if(eventMissed.getParticipation().equals(participation)){
+												if(eventMissed.getEventParty().equals(participation)){
 													lEventMissed = eventMissed;
 													break;
 												} 
 											if(lEventMissed==null){
-												attendance.addAttendedDuration(participation.getEvent().getPeriod().getDuration());
+												attendance.addAttendedDuration(participation.getEvent().getExistencePeriod().getNumberOfMillisecond());
 											}else{
-												attendance.addAttendedDuration(participation.getEvent().getPeriod().getDuration()-lEventMissed.getDuration());
-												attendance.addMissedDuration(lEventMissed.getDuration());
+												attendance.addAttendedDuration(participation.getEvent().getExistencePeriod().getNumberOfMillisecond()-lEventMissed.getNumberOfMillisecond());
+												attendance.addMissedDuration(lEventMissed.getNumberOfMillisecond());
 												if(lEventMissed.getReason()!=null && Boolean.TRUE.equals(lEventMissed.getReason().getAcceptable()))
-													attendance.addMissedDurationJustified(lEventMissed.getDuration());
+													attendance.addMissedDurationJustified(lEventMissed.getNumberOfMillisecond());
 											}
 										}
 								}	
@@ -221,12 +221,12 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		Collection<RESULT> results = readResults(levels);
 		Collection<Lecture> lectures = readLectures(levels);
 		Collection<Event> events = lectureDao.readEvents(lectures);
-		Collection<EventParticipation> eventParticipations = eventParticipationDao.readByEvents(events);
-		Collection<EventMissed> eventMisseds = eventMissedDao.readByEventParticipations(eventParticipations);
+		Collection<EventParty> eventParties = eventPartyDao.readByEvents(events);
+		Collection<EventMissed> eventMisseds = eventMissedDao.readByEventParties(eventParties);
 		
 		setCallArgumentsObjects(callArguments, results);
 		
-		updateAttendance(levels,results, lectures,eventParticipations, eventMisseds,callArguments);
+		updateAttendance(levels,results, lectures,eventParties, eventMisseds,callArguments);
 		return results;
 	}
 	

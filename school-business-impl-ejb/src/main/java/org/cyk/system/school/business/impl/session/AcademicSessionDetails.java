@@ -14,8 +14,8 @@ public class AcademicSessionDetails extends AbstractOutputDetails<AcademicSessio
 		
 	public AcademicSessionDetails(AcademicSession academicSession) {
 		super(academicSession);
-		fromDate = formatDate(academicSession.getPeriod().getFromDate());
-		toDate = formatDate(academicSession.getPeriod().getToDate());
+		fromDate = formatDate(academicSession.getExistencePeriod().getFromDate());
+		toDate = formatDate(academicSession.getExistencePeriod().getToDate());
 		nextStartingDate = formatDate(academicSession.getNextStartingDate());
 		attendanceTimeDivisionType = formatUsingBusiness(academicSession.getNodeInformations().getAttendanceTimeDivisionType());
 		aggregateAttendance = formatUsingBusiness(academicSession.getNodeInformations().getAggregateAttendance());

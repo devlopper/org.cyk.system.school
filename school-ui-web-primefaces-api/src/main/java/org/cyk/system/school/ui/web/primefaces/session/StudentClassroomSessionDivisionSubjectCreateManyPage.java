@@ -53,7 +53,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 				item.getIdentifiable().setCascadeTopDownOnCreate(Boolean.FALSE);
 				item.getIdentifiable().setStudent(((Form)form.getData()).getStudent());
 				item.getIdentifiable().setClassroomSessionDivisionSubject(((Form)form.getData()).getClassroomSessionDivisionSubject());
-				item.setRegistrationCode(item.getIdentifiable().getStudent().getRegistration().getCode());
+				item.setRegistrationCode(item.getIdentifiable().getStudent().getCode());
 				item.setNames(item.getIdentifiable().getStudent().getPerson().getNames());
 				item.setClassroomSession(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivisionSubject()
 						.getClassroomSessionDivision().getClassroomSession()));

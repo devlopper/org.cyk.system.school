@@ -47,7 +47,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 			@Override
 			public void instanciated(AbstractItemCollection<Result, StudentClassroomSessionDivision,SelectItem> itemCollection,Result result) {
 				super.instanciated(itemCollection, result);
-				result.setRegistrationCode(result.getIdentifiable().getStudent().getRegistration().getCode());
+				result.setRegistrationCode(result.getIdentifiable().getStudent().getCode());
 				result.setNames(result.getIdentifiable().getStudent().getPerson().getNames());
 				result.setAppreciation(result.getIdentifiable().getResults().getAppreciation());
 				result.setConferenceRequested(result.getIdentifiable().getResults().getConferenceRequested());
@@ -74,7 +74,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 		resultCollection.getAddCommandable().setRendered(Boolean.FALSE);
 		
 		maximumMissedDuration = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
-				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getDuration());
+				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getNumberOfMillisecond());
 	}
 	
 	@Override

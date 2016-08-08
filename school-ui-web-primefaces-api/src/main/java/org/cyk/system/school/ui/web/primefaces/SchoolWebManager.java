@@ -87,13 +87,13 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	/*
 	public void doMoreInitialisation(){
 		AcademicSession academicSession = SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null);
-		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(academicSession.getPeriod());
+		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatExistencePeriodFromTo(academicSession.getExistencePeriod());
 		classroomSessionDivisionTypeName = academicSession.getNodeInformations().getClassroomSessionTimeDivisionType().getName();
 		classroomSessionDivisionInfos = "No "+(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex()+1);
 	}*/
 	
 	public String getAcademicSessionInfos(){
-		return UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getPeriod());
+		return UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getExistencePeriod());
 	}
 	
 	public String getClassroomSessionDivisionTypeName(){

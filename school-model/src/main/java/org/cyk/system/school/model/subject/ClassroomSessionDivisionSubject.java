@@ -86,7 +86,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, classroomSessionDivision.getIdentifier(),subject.getCode(),coefficient,teacher==null?Constant.EMPTY_STRING:teacher.getRegistration().getCode(),duration,results.getLogMessage());
+		return String.format(LOG_FORMAT, classroomSessionDivision.getIdentifier(),subject.getCode(),coefficient,teacher==null?Constant.EMPTY_STRING:teacher.getCode(),duration,results.getLogMessage());
 	}
 	private static final String LOG_FORMAT = ClassroomSessionDivisionSubject.class.getSimpleName()+"(DIV=%s SUB=%s COEF=%s TEACH=%s DUR=%s %s)";
 	

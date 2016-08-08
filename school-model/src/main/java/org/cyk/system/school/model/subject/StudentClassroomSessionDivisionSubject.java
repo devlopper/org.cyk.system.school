@@ -40,7 +40,7 @@ public class StudentClassroomSessionDivisionSubject extends AbstractStudentResul
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, student.getRegistration().getCode(),classroomSessionDivisionSubject.getIdentifier(),results==null?Constant.EMPTY_STRING:results.getLogMessage());
+		return String.format(LOG_FORMAT, student.getCode(),classroomSessionDivisionSubject.getIdentifier(),results==null?Constant.EMPTY_STRING:results.getLogMessage());
 	}
 	private static final String LOG_FORMAT = StudentClassroomSessionDivisionSubject.class.getSimpleName()+"(STUD=%s SUBJECT=%s %s)";
 	

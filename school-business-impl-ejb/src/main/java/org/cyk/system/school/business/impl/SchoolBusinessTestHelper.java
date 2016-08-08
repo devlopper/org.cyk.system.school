@@ -162,7 +162,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 
 	public void createStudentClassroomSessionDivisionSubjects(String[] studentRegistrationCodes,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects){
 		for(String studentRegistrationCode : studentRegistrationCodes){
-			Student student = studentBusiness.findByRegistrationCode(studentRegistrationCode);
+			Student student = studentBusiness.find(studentRegistrationCode);
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
 				StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject);
 				studentSubjectBusiness.create(studentSubject);
@@ -175,7 +175,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		for(String[] detail : details){
 			if(StringUtils.isBlank(detail[1]))
 				continue;
-			Student student = studentBusiness.findByRegistrationCode(detail[0]);
+			Student student = studentBusiness.find(detail[0]);
 			StudentClassroomSessionDivisionSubject studentSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(student, subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
 			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
 		}
@@ -305,7 +305,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	public StudentClassroomSession createStudentClassroomSession(String registrationCode,ClassroomSession classroomSession,Object[][] expected){
-		StudentClassroomSession studentClassroomSession = new StudentClassroomSession(studentBusiness.findByRegistrationCode(registrationCode), classroomSession);
+		StudentClassroomSession studentClassroomSession = new StudentClassroomSession(studentBusiness.find(registrationCode), classroomSession);
 		studentClassroomSession = studentClassroomSessionBusiness.create(studentClassroomSession);
 		//assertStudentClassroomSession(studentClassroomSession, expected);
 		return studentClassroomSession;
@@ -317,7 +317,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 	
 	public StudentClassroomSessionDivisionSubject createStudentSubject(String registrationCode,ClassroomSessionDivisionSubject classroomSessionDivisionSubject,Object[][] expected){
-		StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(studentBusiness.findByRegistrationCode(registrationCode), classroomSessionDivisionSubject);
+		StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(studentBusiness.find(registrationCode), classroomSessionDivisionSubject);
 		studentSubject.setCascadeBottomUpOnCreate(studentSubjectCascadeBottomUpOnCreate);
 		studentSubject.setCascadeTopDownOnCreate(studentSubjectCascadeTopDownOnCreate);
 		studentSubject = studentSubjectBusiness.create(studentSubject);
@@ -398,7 +398,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = studentSubjectBusiness.updateAverage(Arrays.asList(classroomSessionDivisionSubject), null);
 		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 			for(String[] detail : details)
-				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){
+				if(detail[0].equals(studentSubject.getStudent().getCode())){
 					assertBigDecimalEquals("Average of "+studentSubject.getStudent(), detail[1], studentSubject.getResults().getEvaluationSort().getAverage().getValue());
 				}
 		}
@@ -409,7 +409,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		studentSubjectBusiness.rank(studentSubjects,rankOptions,null);
 		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 			for(String[] detail : details)
-				if(detail[0].equals(studentSubject.getStudent().getRegistration().getCode())){
+				if(detail[0].equals(studentSubject.getStudent().getCode())){
 					assertEquals("Rank Value of "+studentSubject.getStudent(), detail[1], studentSubject.getResults().getEvaluationSort().getRank().getValue().toString());
 					assertEquals("Rank Exaequo of "+studentSubject.getStudent(), detail.length>2?detail[2]:"false", 
 							studentSubject.getResults().getEvaluationSort().getRank().getExaequo()==null?"false":studentSubject.getResults().getEvaluationSort().getRank().getExaequo());
@@ -503,7 +503,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     		classroomSessions = new ArrayList<>();
     		Set<String> levelNames = new HashSet<>();
     		for(ClassroomSession classroomSession : schoolBusinessLayer.getClassroomSessionBusiness().findAll()){
-    			if(levelNames.add(classroomSession.getLevelTimeDivision().getLevel().getName().getCode())){
+    			if(levelNames.add(classroomSession.getLevelTimeDivision().getLevel().getLevelName().getCode())){
     				classroomSessions.add(classroomSession);
     			}
     		}
@@ -533,14 +533,14 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		System.out.println("Creating custom classroom session");
 		ClassroomSession customClassroomSession = new ClassroomSession(schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null)
 				, levelTimeDivisionDao.readOneRandomly(), null);
-		customClassroomSession.getPeriod().setFromDate(new Date());
-		customClassroomSession.getPeriod().setToDate(new Date());
+		customClassroomSession.getExistencePeriod().setFromDate(new Date());
+		customClassroomSession.getExistencePeriod().setToDate(new Date());
 		schoolBusinessLayer.getClassroomSessionBusiness().create(customClassroomSession);
 		Collection<ClassroomSessionDivision> customClassroomSessionDivisions = new ArrayList<>();
 		ClassroomSessionDivision customClassroomSessionDivision = new ClassroomSessionDivision(customClassroomSession
 				, timeDivisionTypeDao.read(TimeDivisionType.TRIMESTER), BigDecimal.ONE);
-		customClassroomSessionDivision.getPeriod().setFromDate(new Date());
-		customClassroomSessionDivision.getPeriod().setToDate(new Date());
+		customClassroomSessionDivision.getExistencePeriod().setFromDate(new Date());
+		customClassroomSessionDivision.getExistencePeriod().setToDate(new Date());
 		schoolBusinessLayer.getClassroomSessionDivisionBusiness().create(customClassroomSessionDivision);
 		customClassroomSessionDivisions.add(customClassroomSessionDivision);
 		Collection<Student> customStudents = schoolBusinessLayer.getStudentBusiness().findManyRandomly(parameters.generatedStudentInClassroomSessionCount);

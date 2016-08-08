@@ -59,25 +59,25 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 		@Override
 		public void read() {
 			super.read();
-			if(identifiable.getDuration()==null)
+			if(identifiable.getNumberOfMillisecond()==null)
 				;
 			else
-				duration = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getDuration());
+				duration = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getNumberOfMillisecond());
 			
-			fromDate = identifiable.getPeriod().getFromDate();
-			toDate = identifiable.getPeriod().getToDate();
+			fromDate = identifiable.getExistencePeriod().getFromDate();
+			toDate = identifiable.getExistencePeriod().getToDate();
 		}
 		
 		@Override
 		public void write() {
 			super.write();
 			if(duration==null)
-				identifiable.setDuration(null);
+				identifiable.setNumberOfMillisecond(null);
 			else
-				identifiable.setDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),duration));
+				identifiable.setNumberOfMillisecond(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),duration));
 			
-			identifiable.getPeriod().setFromDate(fromDate);
-			identifiable.getPeriod().setToDate(toDate);
+			identifiable.getExistencePeriod().setFromDate(fromDate);
+			identifiable.getExistencePeriod().setToDate(toDate);
 		}
 		
 		public static final String FIELD_DURATION = "duration";

@@ -2,9 +2,6 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
@@ -12,10 +9,13 @@ import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.model.AbstractQueryOneFormModel;
 import org.cyk.ui.web.api.WebNavigationManager;
 import org.cyk.ui.web.primefaces.page.AbstractSelectOnePage;
-import org.cyk.utility.common.annotation.user.interfaces.FieldOverride;
-import org.cyk.utility.common.annotation.user.interfaces.FieldOverrides;
+import org.cyk.utility.common.annotation.FieldOverride;
+import org.cyk.utility.common.annotation.FieldOverrides;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryOneFormModel.FIELD_IDENTIFIABLE,type=ClassroomSessionDivisionSubjectEvaluationType.class)})
 public class ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel extends AbstractClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel<ClassroomSessionDivisionSubjectEvaluationType> implements Serializable {

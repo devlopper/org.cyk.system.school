@@ -82,7 +82,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public CommonNodeInformations findCommonNodeInformations(ClassroomSession classroomSession) {
-		CommonNodeInformations commonNodeInformations = classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations();
+		CommonNodeInformations commonNodeInformations = classroomSession.getLevelTimeDivision().getLevel().getLevelName().getNodeInformations();
 		if(commonNodeInformations==null)
 			commonNodeInformations = classroomSession.getAcademicSession().getNodeInformations();
 		if(commonNodeInformations==null)

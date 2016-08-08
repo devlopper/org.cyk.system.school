@@ -28,7 +28,7 @@ public class StudentClassroomSessionTuitionEditPage extends AbstractCrudOnePage<
 	protected void initialisation() {
 		super.initialisation();
 		if(identifiable.getTuitionSale()==null){
-			identifiable.setTuitionSale(CompanyBusinessLayer.getInstance().getSaleBusiness().instanciateOne(null, null,identifiable.getStudent().getRegistration().getCode()
+			identifiable.setTuitionSale(CompanyBusinessLayer.getInstance().getSaleBusiness().instanciateOne(null, null,identifiable.getStudent().getCode()
 					, null, "false", new String[][]{ {SchoolConstant.INTANGIBLE_PRODUCT_TUITION,"1"} }));
 		}
 	}

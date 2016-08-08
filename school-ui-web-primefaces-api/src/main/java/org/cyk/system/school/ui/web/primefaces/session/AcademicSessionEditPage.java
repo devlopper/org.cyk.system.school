@@ -51,8 +51,8 @@ public class AcademicSessionEditPage extends AbstractCrudOnePage<AcademicSession
 		@Override
 		public void read() {
 			super.read();
-			fromDate = identifiable.getPeriod().getFromDate();
-			toDate = identifiable.getPeriod().getToDate();
+			fromDate = identifiable.getExistencePeriod().getFromDate();
+			toDate = identifiable.getExistencePeriod().getToDate();
 			
 			attendanceTimeDivisionType = identifiable.getNodeInformations().getAttendanceTimeDivisionType();
 			aggregateAttendance = identifiable.getNodeInformations().getAggregateAttendance();
@@ -64,8 +64,8 @@ public class AcademicSessionEditPage extends AbstractCrudOnePage<AcademicSession
 		@Override
 		public void write() {
 			super.write();
-			identifiable.getPeriod().setFromDate(fromDate);
-			identifiable.getPeriod().setToDate(toDate);
+			identifiable.getExistencePeriod().setFromDate(fromDate);
+			identifiable.getExistencePeriod().setToDate(toDate);
 			
 			identifiable.getNodeInformations().setAttendanceTimeDivisionType(attendanceTimeDivisionType);
 			identifiable.getNodeInformations().setAggregateAttendance(aggregateAttendance);

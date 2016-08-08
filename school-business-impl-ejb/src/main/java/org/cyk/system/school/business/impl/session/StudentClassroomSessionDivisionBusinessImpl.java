@@ -118,7 +118,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		new CascadeOperationListener.Adapter.Default<StudentResultsMetricValue,StudentResultsMetricValueDao,StudentResultsMetricValueBusiness>(studentResultsMetricValueDao,null)
 			.operate(studentResultsMetricValues, crud);
 	
-		logTrace("Student classroomsession division. {} , {} : {}", studentClassroomSessionDivision.getStudent().getRegistration().getCode(),studentClassroomSessionDivision.getClassroomSessionDivision().getIdentifier(),crud);
+		logTrace("Student classroomsession division. {} , {} : {}", studentClassroomSessionDivision.getStudent().getCode(),studentClassroomSessionDivision.getClassroomSessionDivision().getIdentifier(),crud);
 		
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDao,StudentClassroomSessionDivisionSubjectBusiness>(null,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness())
 			.operate(studentSubjects, crud);
@@ -149,7 +149,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				if(studentClassroomSessionDivision.getResults().getReport()==null)
 					studentClassroomSessionDivision.getResults().setReport(new File());
 				reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
-					,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations()
+					,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations()
 					.getStudentClassroomSessionDivisionResultsReportTemplate().getTemplate(),Boolean.TRUE);				
 				//dao.update(studentClassroomSessionDivision);
 				genericDao.update(studentClassroomSessionDivision.getResults());
@@ -164,7 +164,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		return reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), 
-				studentClassroomSessionDivision.getStudent().getRegistration().getCode());
+				studentClassroomSessionDivision.getStudent().getCode());
 	}
 	
 	@Override
@@ -252,7 +252,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
 				.convertAttendanceTimeToMillisecond(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),value));
 
-		studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision().getDuration()-
+		studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision().getNumberOfMillisecond()-
 				studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration());
 	}
 	
@@ -311,17 +311,17 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	protected Long getAttendableDuration(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return studentClassroomSessionDivision.getClassroomSessionDivision().getDuration();
+		return studentClassroomSessionDivision.getClassroomSessionDivision().getNumberOfMillisecond();
 	}
 	
 	@Override
 	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
-		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
+		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
 	}
 	
 	@Override
 	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
-		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAveragePromotionScale();
+		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentClassroomSessionAveragePromotionScale();
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

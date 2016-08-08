@@ -15,7 +15,7 @@ public class StudentSubjectEvaluationDetails extends AbstractOutputDetails<Stude
 	
 	public StudentSubjectEvaluationDetails(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation) {
 		super(studentSubjectEvaluation);
-		registrationCode = studentSubjectEvaluation.getStudentSubject().getStudent().getRegistration().getCode();
+		registrationCode = studentSubjectEvaluation.getStudentSubject().getStudent().getCode();
 		names = studentSubjectEvaluation.getStudentSubject().getStudent().getPerson().getNames();
 		mark = numberBusiness.format(studentSubjectEvaluation.getValue());
 	}

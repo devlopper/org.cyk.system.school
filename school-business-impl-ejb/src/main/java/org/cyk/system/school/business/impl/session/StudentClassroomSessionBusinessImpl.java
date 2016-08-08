@@ -192,12 +192,12 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	
 	@Override
 	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSession classroomSession) {
-		return classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAverageScale();
+		return classroomSession.getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentClassroomSessionAverageScale();
 	}
 	
 	@Override
 	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSession classroomSession) {
-		return classroomSession.getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentClassroomSessionAveragePromotionScale();
+		return classroomSession.getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentClassroomSessionAveragePromotionScale();
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

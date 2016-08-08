@@ -46,7 +46,7 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, student.getRegistration().getCode(),classroomSession.getIdentifier(),results==null?Constant.EMPTY_STRING:results.getLogMessage());
+		return String.format(LOG_FORMAT, student.getCode(),classroomSession.getIdentifier(),results==null?Constant.EMPTY_STRING:results.getLogMessage());
 	}
 	private static final String LOG_FORMAT = StudentClassroomSession.class.getSimpleName()+"(STUD=%s CLASS=%s %s)";
 	

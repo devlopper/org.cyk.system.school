@@ -2,9 +2,6 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -13,8 +10,11 @@ import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.ui.api.model.AbstractQueryOneFormModel;
 import org.cyk.ui.web.api.WebNavigationManager;
 import org.cyk.ui.web.primefaces.page.AbstractSelectOnePage;
-import org.cyk.utility.common.annotation.user.interfaces.FieldOverride;
-import org.cyk.utility.common.annotation.user.interfaces.FieldOverrides;
+import org.cyk.utility.common.annotation.FieldOverride;
+import org.cyk.utility.common.annotation.FieldOverrides;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryOneFormModel.FIELD_IDENTIFIABLE,type=ClassroomSession.class)})
 public class ClassroomSessionQueryOneFormModel extends AbstractClassroomSessionQueryOneFormModel<ClassroomSession> implements Serializable {

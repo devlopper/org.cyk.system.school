@@ -129,12 +129,12 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 	
 	@Override
 	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSessionDivisionSubject subject) {
-		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentSubjectAverageScale();
+		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentSubjectAverageScale();
 	}
 	
 	@Override
 	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSessionDivisionSubject subject) {
-		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getNodeInformations().getStudentSubjectAverageScale();
+		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentSubjectAverageScale();
 	}
 	
 	@Override
