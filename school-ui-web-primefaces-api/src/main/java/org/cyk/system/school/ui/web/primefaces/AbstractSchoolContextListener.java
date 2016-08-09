@@ -165,11 +165,5 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 				});
 		}*/
 	}
-	
-	@Override
-	protected void businessAdapters(ServletContextEvent event) {
-		super.businessAdapters(event);
 		
-	}
-	
 }

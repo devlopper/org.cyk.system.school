@@ -1,7 +1,6 @@
 package org.cyk.system.school.ui.web.primefaces;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import javax.servlet.ServletContextEvent;
@@ -10,18 +9,15 @@ import javax.servlet.annotation.WebListener;
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.company.business.impl.adapter.ActorBusinessServiceAdapter;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
-import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
-import org.cyk.system.root.model.party.person.AbstractActor;
 import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -29,21 +25,10 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionConsultPage;
-import org.cyk.ui.api.data.collector.form.FormConfiguration;
-import org.cyk.ui.api.model.party.AbstractActorEditFormModel;
-import org.cyk.ui.api.model.party.DefaultActorOutputDetails;
-import org.cyk.ui.api.model.party.DefaultPersonEditFormModel;
-import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
-import org.cyk.ui.web.primefaces.page.crud.AbstractActorConsultPage;
-import org.cyk.ui.web.primefaces.page.crud.AbstractActorConsultPage.MainDetails;
-import org.cyk.ui.web.primefaces.page.tools.AbstractActorConsultPageAdapter;
-import org.cyk.ui.web.primefaces.page.tools.AbstractActorCrudManyPageAdapter;
-import org.cyk.ui.web.primefaces.page.tools.AbstractActorCrudOnePageAdapter;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
-import org.cyk.utility.common.cdi.AbstractBean;
 
 @WebListener
 public class IesaContextListener extends AbstractSchoolContextListener implements Serializable {
@@ -121,7 +106,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		uiManager.registerApplicationUImanager(SchoolWebManager.getInstance());
 	}
 	
-	@Override
+	/*@Override
 	protected <ACTOR extends AbstractActor> AbstractActorCrudOnePageAdapter<ACTOR> getActorCrudOnePageAdapter(Class<ACTOR> actorClass) {
 		AbstractActorCrudOnePageAdapter<ACTOR> listener = super.getActorCrudOnePageAdapter(actorClass);
 		if(listener.getEntityTypeClass().equals(Teacher.class)){
@@ -143,9 +128,9 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 					,DefaultPersonEditFormModel.FIELD_SEX,DefaultPersonEditFormModel.FIELD_IMAGE);
 		}
 		return listener;
-	}
+	}*/
 	
-	@Override
+	/*@Override
 	protected <ACTOR extends AbstractActor> AbstractActorCrudManyPageAdapter<ACTOR> getActorCrudManyPageAdapter(Class<ACTOR> actorClass) {
 		AbstractActorCrudManyPageAdapter<ACTOR> listener = super.getActorCrudManyPageAdapter(actorClass);
 		if(listener.getEntityTypeClass().equals(Teacher.class)){
@@ -154,7 +139,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			listener.getFormConfigurationMap().get(Crud.READ).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorOutputDetails.FIELD_REGISTRATION_CODE);
 		}
 		return listener;
-	}
+	}*/
 	
 	@Override
 	protected void identifiableConfiguration(ServletContextEvent event) {
@@ -224,7 +209,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			r.setName(name+" TERM , "+studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup().getName().toUpperCase()
 					+" REPORT");
 			
-			String levelNameCode = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getName().getCode();
+			String levelNameCode = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getCode();
 			if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_PK,LEVEL_NAME_CODE_K1,LEVEL_NAME_CODE_K2,LEVEL_NAME_CODE_K3},levelNameCode)){
 				r.setName(r.getName()+" SHEET");
 				String performanceCodeMetricCollectionCode = null;
@@ -379,7 +364,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
     }
 	
 	/**/
-	
+	/*
 	@SuppressWarnings("unchecked")
 	@Override
 	protected <ACTOR extends AbstractActor> AbstractActorConsultPageAdapter<ACTOR> getActorConsultPageAdapter(Class<ACTOR> actorClass) {
@@ -389,7 +374,8 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 			return (AbstractActorConsultPageAdapter<ACTOR>) new TeacherConsultPageAdapter();
 		return super.getActorConsultPageAdapter(actorClass);
 	}
-	
+	*/
+	/*
 	private static class TeacherConsultPageAdapter extends AbstractActorConsultPage.Adapter<Teacher>{
 
 		private static final long serialVersionUID = -5657492205127185872L;
@@ -456,5 +442,5 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 		}
 		
 	}
-	
+	*/
 }

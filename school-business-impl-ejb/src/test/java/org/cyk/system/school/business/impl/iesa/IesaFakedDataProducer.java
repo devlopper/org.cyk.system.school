@@ -358,7 +358,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	create(school);
     	
     	AcademicSession academicSession = new AcademicSession(school,commonNodeInformationsG1G3,new Date());
-    	academicSession.getExistencePeriod().setFromDate(new Date());
+    	academicSession.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(new Date());
     	academicSession.getExistencePeriod().setToDate(new Date(academicSession.getExistencePeriod().getFromDate().getTime()+DateTimeConstants.MILLIS_PER_DAY*355));
     	academicSession = create(academicSession);
 		
