@@ -10,7 +10,10 @@ import javax.inject.Named;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails.SubjectDetails;
@@ -55,7 +58,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			}
 		
 		if(Boolean.TRUE.equals(LOAD_EVALUATIONS)){
-			studentSubjectEvaluations = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectEvaluationBusiness().findByStudentByClassroomSessionDivision(
+			studentSubjectEvaluations = inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class).findByStudentByClassroomSessionDivision(
 					identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 		}
 		
@@ -64,7 +67,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubject> getIdentifiables() {
-				Collection<StudentClassroomSessionDivisionSubject> studentSubjects = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().findByStudentByClassroomSessionDivision(identifiable.getStudent(),identifiable.getClassroomSessionDivision());
+				Collection<StudentClassroomSessionDivisionSubject> studentSubjects = inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByStudentByClassroomSessionDivision(identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 				for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 					studentSubject.getDetails().clear();
 					for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations)
@@ -83,8 +86,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				return "model.entity.subject";
 			}
 		});
-		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : SchoolBusinessLayer.getInstance()
-				.getClassroomSessionDivisionStudentsMetricCollectionBusiness().findByClassroomSessionDivision(identifiable.getClassroomSessionDivision())){
+		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : inject(ClassroomSessionDivisionStudentsMetricCollectionBusiness.class).findByClassroomSessionDivision(identifiable.getClassroomSessionDivision())){
 			final MetricCollection metricCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection();
 			Table<StudentResultsMetricValueDetails> table;
 			metricTables.add(table = (Table<StudentResultsMetricValueDetails>) createDetailsTable(StudentResultsMetricValueDetails.class, 
@@ -92,7 +94,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				private static final long serialVersionUID = 1L;
 				@Override
 				public Collection<StudentResultsMetricValue> getIdentifiables() {
-					return SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResultsByMetricCollection(identifiable.getResults(),metricCollection);
+					return inject(StudentResultsMetricValueBusiness.class).findByStudentResultsByMetricCollection(identifiable.getResults(),metricCollection);
 				}
 				@Override
 				public String getTitleId() {

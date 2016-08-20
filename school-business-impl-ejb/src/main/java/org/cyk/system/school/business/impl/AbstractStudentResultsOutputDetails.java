@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
@@ -43,7 +43,7 @@ import lombok.Setter;
 			evaluationAverageValue = numberBusiness.format(studentLevel.getResults().getEvaluationSort().getAverage().getValue());
 		
 		if(studentLevel.getResults().getEvaluationSort().getRank().getValue()!=null)
-			evaluationRankValue = RootBusinessLayer.getInstance().getMathematicsBusiness().format(studentLevel.getResults().getEvaluationSort().getRank());
+			evaluationRankValue = inject(MathematicsBusiness.class).format(studentLevel.getResults().getEvaluationSort().getRank());
 		
 	}
 	

@@ -7,7 +7,10 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
+import org.cyk.system.root.business.api.file.FileBusiness;
+import org.cyk.system.root.business.api.geography.ContactCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.LabelValueReport;
@@ -15,6 +18,10 @@ import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValue;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricDao;
+import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.StudentResults;
@@ -29,18 +36,14 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
 import org.cyk.utility.common.Constant;
 
 public abstract class AbstractSchoolReportProducer extends AbstractCompanyReportProducer implements SchoolReportProducer,Serializable {
 
 	private static final long serialVersionUID = 4631829200070130087L;
 
-	private SchoolBusinessLayer schoolBusinessLayer;
-	
-	public AbstractSchoolReportProducer() {
-		schoolBusinessLayer = SchoolBusinessLayer.getInstance();
-	}
-	
 	@Override
 	public String getEvaluationTypeCode(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation) {
 		return studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode();
@@ -60,18 +63,18 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		NodeResults results = csd.getResults();
 		
 		r.getAcademicSession().setFromDateToDate(timeBusiness.formatPeriodFromTo(as.getExistencePeriod()));
-		r.getAcademicSession().getCompany().setImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
+		r.getAcademicSession().getCompany().setImage(inject(FileBusiness.class).findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
 		r.getAcademicSession().getCompany().setName(as.getSchool().getOwnedCompany().getCompany().getName());
 		
-		//debug(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs));
-		//debug(schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate());
+		//debug(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(cs));
+		//debug(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate());
 		
-		ReportTemplate reportTemplate = schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate();
+		ReportTemplate reportTemplate = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate();
 		if(reportTemplate.getHeaderImage()!=null)
-			r.setHeaderImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(reportTemplate.getHeaderImage()));
+			r.setHeaderImage(inject(FileBusiness.class).findInputStream(reportTemplate.getHeaderImage()));
 		if(reportTemplate.getBackgroundImage()!=null)
-			r.setBackgroundImage(RootBusinessLayer.getInstance().getFileBusiness().findInputStream(reportTemplate.getBackgroundImage()));
-		RootBusinessLayer.getInstance().getContactCollectionBusiness().load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
+			r.setBackgroundImage(inject(FileBusiness.class).findInputStream(reportTemplate.getBackgroundImage()));
+		inject(ContactCollectionBusiness.class).load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
 		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContact());
 		if(cs.getCoordinator()!=null)
 			r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
@@ -84,12 +87,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
 		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
-		r.getClassroomSessionDivision().setOpenedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
+		r.getClassroomSessionDivision().setOpenedTime(format(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getNumberOfMillisecond())));
 		//debug(r.getClassroomSessionDivision());
-		r.setAttendedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
+		r.setAttendedTime(format(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getAttendedDuration())));
-		r.setMissedTime(format(schoolBusinessLayer.getClassroomSessionBusiness()
+		r.setMissedTime(format(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getMissedDuration())));
 		
 		set(student, r.getStudent());
@@ -104,9 +107,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired())){
 			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
-			r.setAverageScale(rootBusinessLayer.getIntervalBusiness().findRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
-			r.setRank(rootBusinessLayer.getMathematicsBusiness().format(s.getResults().getEvaluationSort().getRank()));
-			r.setAveragePromotionScale(rootBusinessLayer.getIntervalBusiness().findRelativeCode(s.getResults().getEvaluationSort().getAveragePromotedInterval()));
+			r.setAverageScale(inject(IntervalBusiness.class).findRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
+			r.setRank(inject(MathematicsBusiness.class).format(s.getResults().getEvaluationSort().getRank()));
+			r.setAveragePromotionScale(inject(IntervalBusiness.class).findRelativeCode(s.getResults().getEvaluationSort().getAveragePromotedInterval()));
 			
 			r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
 			r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
@@ -139,8 +142,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
 		//Collection<StudentSubject> studentSubjects = s.getDetails();
-		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = schoolBusinessLayer.getStudentSubjectDao().readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
-		Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations = schoolBusinessLayer.getStudentSubjectEvaluationDao().readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
+		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = inject(StudentClassroomSessionDivisionSubjectDao.class).readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
+		Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations = inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
 		logTrace("Number of student subjects = {}", studentSubjects.size());
 		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 			Boolean applicable = studentSubject.getResults().getEvaluationSort().getAverage().getValue()!=null;
@@ -167,12 +170,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			sr.setAverage(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()):NOT_APPLICABLE);
 			sr.setAverageCoefficiented(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()
 					.multiply(studentSubject.getClassroomSessionDivisionSubject().getCoefficient())):NOT_APPLICABLE);
-			sr.setRank(applicable?rootBusinessLayer.getMathematicsBusiness().format(studentSubject.getResults().getEvaluationSort().getRank()):NOT_APPLICABLE);	
+			sr.setRank(applicable?inject(MathematicsBusiness.class).format(studentSubject.getResults().getEvaluationSort().getRank()):NOT_APPLICABLE);	
 			
 			//if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
 				set(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval(), sr.getAverageScale());
 				if(applicable)
-					sr.getAverageScale().setCode(rootBusinessLayer.getIntervalBusiness().findRelativeCode(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
+					sr.getAverageScale().setCode(inject(IntervalBusiness.class).findRelativeCode(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
 			//}else
 				//sr.getAverageScale().setCode(NOT_APPLICABLE);
 			
@@ -233,9 +236,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	protected LabelValueCollectionReport addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String metricCollectionCode,String defaultValue){
-		MetricCollection metricCollection = rootBusinessLayer.getMetricCollectionDao().read(metricCollectionCode);
-		Collection<Metric> metrics = rootBusinessLayer.getMetricDao().readByCollection(metricCollection);
-		Collection<StudentResultsMetricValue> studentResultsMetricValues = SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness()
+		MetricCollection metricCollection = inject(MetricCollectionDao.class).read(metricCollectionCode);
+		Collection<Metric> metrics = inject(MetricDao.class).readByCollection(metricCollection);
+		Collection<StudentResultsMetricValue> studentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class)
 				.findByStudentResults(studentResults); 
 		LabelValueCollectionReport labelValueCollectionReport =  report.addLabelValueCollection(metricCollection.getName() ,convertStudentResultsMetricValueToArray(metrics, studentResultsMetricValues));
 		for(LabelValueReport labelValueReport : labelValueCollectionReport.getCollection())

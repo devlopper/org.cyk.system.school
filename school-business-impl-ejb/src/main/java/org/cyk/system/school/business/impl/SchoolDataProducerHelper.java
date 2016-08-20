@@ -9,16 +9,14 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.impl.RootDataProducerHelper;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -35,6 +33,9 @@ import org.cyk.system.school.model.subject.Subject;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.joda.time.DateTimeConstants;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton
 public class SchoolDataProducerHelper extends AbstractBean implements Serializable {
@@ -59,7 +60,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	}
 	
 	public Subject instanciateOneSubject(String code,String name,ArrayList<Subject>[] collections){
-		Subject subject = SchoolBusinessLayer.getInstance().getSubjectBusiness().instanciateOne(code,name);
+		Subject subject = inject(SubjectBusiness.class).instanciateOne(code,name);
 		if(collections!=null)
 			for(Collection<Subject> collection : collections)
 				collection.add(subject);
@@ -70,7 +71,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	}
 	
 	public Subject createOneSubject(String code,String name,ArrayList<Subject>[] collections){
-		return (Subject) RootBusinessLayer.getInstance().getGenericBusiness().create(instanciateOneSubject(code,name, collections));
+		return (Subject) inject(GenericBusiness.class).create(instanciateOneSubject(code,name, collections));
 	}
 	public Subject createOneSubject(String name,ArrayList<Subject>[] collections){
 		return createOneSubject(name, name, collections);

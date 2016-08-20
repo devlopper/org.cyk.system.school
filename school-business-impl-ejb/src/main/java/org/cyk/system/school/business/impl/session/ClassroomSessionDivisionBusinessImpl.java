@@ -11,9 +11,9 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.NodeResults;
@@ -79,7 +79,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 			if(weightedValues.isEmpty()){
 				
 			}else{
-				Average average = RootBusinessLayer.getInstance().getMathematicsBusiness().average(weightedValues, null, null);
+				Average average = inject(MathematicsBusiness.class).average(weightedValues, null, null);
 				classroomSessionDivision.getResults().setAverage(average.getValue());
 			}
 			dao.update(classroomSessionDivision);

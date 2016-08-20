@@ -11,7 +11,7 @@ import org.cyk.system.company.ui.web.primefaces.AbstractCompanyContextListener;
 import org.cyk.system.root.model.network.UniformResourceLocator;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.security.UserAccount;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
@@ -137,7 +137,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 				,new UniformResourceLocatorRuntimeConstraint(){
 					@Override
 					public Boolean isAccessibleByUserAccount(AbstractUserSession<?,?> userSession,UserAccount userAccount, UniformResourceLocator uniformResourceLocator, HttpServletRequest request,HttpServletResponse response) {
-						Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
+						Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userAccount.getUser());
 						if(teacher==null)
 							return Boolean.FALSE;
 						ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = webManager
@@ -154,7 +154,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 				,new UniformResourceLocatorRuntimeConstraint(){
 					@Override
 					public Boolean isAccessibleByUserAccount(AbstractUserSession userSession,UserAccount userAccount, UniformResourceLocator uniformResourceLocator, HttpServletRequest request,HttpServletResponse response) {
-						Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
+						Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userAccount.getUser());
 						if(teacher==null)
 							return Boolean.FALSE;
 						ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = webManager

@@ -6,11 +6,8 @@ import java.util.Date;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.model.time.TimeDivisionType;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -21,6 +18,9 @@ import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class AcademicSessionEditPage extends AbstractCrudOnePage<AcademicSession> implements Serializable {
@@ -34,7 +34,7 @@ public class AcademicSessionEditPage extends AbstractCrudOnePage<AcademicSession
 	
 	@Override
 	protected void update() {
-		SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().update(identifiable, Boolean.TRUE);
+		inject(AcademicSessionBusiness.class).update(identifiable, Boolean.TRUE);
 	}
 	
 	public static class Form extends AbstractFormModel<AcademicSession> implements Serializable{

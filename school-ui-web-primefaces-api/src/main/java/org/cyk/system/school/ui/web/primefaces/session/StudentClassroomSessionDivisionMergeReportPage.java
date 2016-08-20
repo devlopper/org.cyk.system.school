@@ -6,12 +6,10 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -20,6 +18,9 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyPickList;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionMergeReportPage extends AbstractCrudOnePage<StudentClassroomSessionDivision> implements Serializable {
@@ -35,8 +36,8 @@ public class StudentClassroomSessionDivisionMergeReportPage extends AbstractCrud
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
-		setChoices(Form.FIELD_STUDENTS, SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisionIndex(
-				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex()));
+		setChoices(Form.FIELD_STUDENTS, inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisionIndex(
+				inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex()));
 	}
 	
 	@Override
@@ -56,7 +57,7 @@ public class StudentClassroomSessionDivisionMergeReportPage extends AbstractCrud
 	
 	@Override
 	protected void create() {
-		navigationManager.redirectToFileConsultManyPage(SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness()
+		navigationManager.redirectToFileConsultManyPage(inject(StudentClassroomSessionDivisionBusiness.class)
 				.findReportFiles(((Form)form.getData()).getStudents()), FileExtension.PDF);
 	}
 	

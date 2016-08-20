@@ -7,7 +7,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.subject.EvaluationBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.LectureDetails;
@@ -37,7 +38,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			private static final long serialVersionUID = 1L;
 			@Override 
 			public Collection<StudentClassroomSessionDivisionSubject> getIdentifiables() {
-				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionSubject(identifiable);
+				return inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionSubject(identifiable);
 			}
 			@Override
 			public Crud[] getCruds() {
@@ -49,7 +50,7 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<Evaluation> getIdentifiables() {
-				return SchoolBusinessLayer.getInstance().getEvaluationBusiness().findByClassroomSessionDivisionSubject(identifiable);
+				return inject(EvaluationBusiness.class).findByClassroomSessionDivisionSubject(identifiable);
 			}
 			@Override
 			public Crud[] getCruds() {

@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsOutputDetails;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
@@ -32,7 +32,7 @@ public class StudentClassroomSessionDivisionDetails extends AbstractStudentResul
 		globalAppreciation = studentClassroomSessionDivision.getResults().getAppreciation();
 		conferenceRequested = formatResponse(studentClassroomSessionDivision.getResults().getConferenceRequested());
 		if(studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()!=null)
-			numberOfTimeAbsent = numberBusiness.format(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(
+			numberOfTimeAbsent = numberBusiness.format(inject(ClassroomSessionBusiness.class).convertAttendanceTimeToDivisionDuration(
 					studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()));
 	}
 	

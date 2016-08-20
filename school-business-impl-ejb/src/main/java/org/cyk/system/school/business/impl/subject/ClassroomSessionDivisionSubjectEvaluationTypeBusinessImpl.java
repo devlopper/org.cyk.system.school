@@ -8,8 +8,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
@@ -32,7 +32,7 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 	@Override
 	public ClassroomSessionDivisionSubjectEvaluationType create(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 		if(classroomSessionDivisionSubjectEvaluationType.getCountInterval()!=null)
-			RootBusinessLayer.getInstance().getIntervalBusiness().create(classroomSessionDivisionSubjectEvaluationType.getCountInterval());
+			inject(IntervalBusiness.class).create(classroomSessionDivisionSubjectEvaluationType.getCountInterval());
 		commonUtils.increment(Long.class, classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject(), ClassroomSessionDivisionSubject.FIELD_NUMBER_OF_EVALUATION_TYPES, 1l);
 		classroomSessionDivisionSubjectDao.update(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
 		return super.create(classroomSessionDivisionSubjectEvaluationType);

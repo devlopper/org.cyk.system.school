@@ -3,6 +3,8 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -38,8 +40,8 @@ public class ClassroomSessionQueryOneFormModel extends AbstractClassroomSessionQ
 		@Override
 		public void serve(Object data, String actionIdentifier) {
 			if(SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
-				ClassroomSessionDivision classroomSessionDivision = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSessionByIndex(
-						((ClassroomSessionQueryOneFormModel)data).getIdentifiable(), SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+				ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByIndex(
+						((ClassroomSessionQueryOneFormModel)data).getIdentifiable(), inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				WebNavigationManager.getInstance().redirectTo(SchoolWebManager.getInstance().getOutcomeConsultClassroomSessionDivisionBroadsheet(),new Object[]{
 					UniformResourceLocatorParameter.IDENTIFIABLE,classroomSessionDivision
 				}); 

@@ -10,9 +10,9 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
@@ -96,7 +96,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 				}
 			}
 			results.setNumberOfStudent(weightedValues.size());
-			results.setAverage(RootBusinessLayer.getInstance().getMathematicsBusiness().average(weightedValues, null, null).getValue());
+			results.setAverage(inject(MathematicsBusiness.class).average(weightedValues, null, null).getValue());
 			logIdentifiable("Average computed", classroomSessionDivisionSubject);
 			dao.update(classroomSessionDivisionSubject);
 		}

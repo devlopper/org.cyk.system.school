@@ -6,13 +6,10 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.root.business.api.FormatterBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -31,6 +28,9 @@ import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionSubjectCreateManyPage extends AbstractCrudOnePage<StudentClassroomSessionDivisionSubject> implements Serializable {
 
@@ -42,7 +42,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	protected void initialisation() {
 		super.initialisation();
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
-		//		+" - "+SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().format(identifiable);
+		//		+" - "+inject(ClassroomSessionBusiness.class).format(identifiable);
 		studentSubjectCollection = createItemCollection(StudentSubjectItem.class, StudentClassroomSessionDivisionSubject.class 
 				,new ItemCollectionWebAdapter<StudentSubjectItem,StudentClassroomSessionDivisionSubject>(){
 			private static final long serialVersionUID = -3872058204105902514L;
@@ -55,11 +55,11 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 				item.getIdentifiable().setClassroomSessionDivisionSubject(((Form)form.getData()).getClassroomSessionDivisionSubject());
 				item.setRegistrationCode(item.getIdentifiable().getStudent().getCode());
 				item.setNames(item.getIdentifiable().getStudent().getPerson().getNames());
-				item.setClassroomSession(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivisionSubject()
+				item.setClassroomSession(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivisionSubject()
 						.getClassroomSessionDivision().getClassroomSession()));
-				item.setClassroomSessionDivision(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivisionSubject()
+				item.setClassroomSessionDivision(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivisionSubject()
 						.getClassroomSessionDivision()));
-				item.setClassroomSessionDivisionSubject(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivisionSubject()));
+				item.setClassroomSessionDivisionSubject(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivisionSubject()));
 			}	
 			
 			@Override
@@ -92,7 +92,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 	
 	@Override
 	protected void create() {
-		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().create(studentSubjectCollection.getIdentifiables());
+		inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentSubjectCollection.getIdentifiables());
 	}
 	
 	@Override

@@ -11,13 +11,13 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import org.cyk.system.root.business.impl.RootBusinessLayer;
+import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -35,6 +35,9 @@ import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputTextarea;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage<StudentClassroomSessionDivision> implements Serializable {
 
@@ -45,8 +48,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = SchoolBusinessLayer.getInstance()
-				.getClassroomSessionDivisionStudentsMetricCollectionBusiness().findByClassroomSessionDivision(identifiable.getClassroomSessionDivision());
+		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = inject(ClassroomSessionDivisionStudentsMetricCollectionBusiness.class).findByClassroomSessionDivision(identifiable.getClassroomSessionDivision());
 	
 		MetricValueCollection<StudentResultsMetricValueItem,StudentResultsMetricValue> metricValueCollection = null;
 		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
@@ -56,7 +58,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 				private static final long serialVersionUID = -3872058204105902514L;
 				@Override
 				public Collection<StudentResultsMetricValue> load() { 
-					return SchoolBusinessLayer.getInstance().getStudentResultsMetricValueBusiness().findByStudentResultsByMetricCollection(identifiable.getResults(),metricCollection);
+					return inject(StudentResultsMetricValueBusiness.class).findByStudentResultsByMetricCollection(identifiable.getResults(),metricCollection);
 				}
 			});
 			
@@ -82,7 +84,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		List<StudentResultsMetricValue> studentResultsMetricValues = new ArrayList<>();
 		for(MetricValueCollection<StudentResultsMetricValueItem,StudentResultsMetricValue> metricValueCollection : metricValueCollections)
 			studentResultsMetricValues.addAll(metricValueCollection.getIdentifiables());
-		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().update(identifiable, studentResultsMetricValues);
+		inject(StudentClassroomSessionDivisionBusiness.class).update(identifiable, studentResultsMetricValues);
 	}
 	/*
 	@Override
@@ -102,7 +104,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			super.read();
 			//evaluationAverage = identifiable.getResults().getEvaluationSort().getAverage().getValue();
 			if(identifiable.getResults().getLectureAttendance().getAttendedDuration()!=null)
-				numberOfTimeAbsent = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+				numberOfTimeAbsent = inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSessionDivision().getClassroomSession(),identifiable.getResults()
 						.getLectureAttendance().getMissedDuration());
 			
@@ -119,7 +121,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			if(numberOfTimeAbsent==null){
 				
 			}else{
-				SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().setNumberOfTimesAbsent(identifiable, numberOfTimeAbsent);
+				inject(StudentClassroomSessionDivisionBusiness.class).setNumberOfTimesAbsent(identifiable, numberOfTimeAbsent);
 			}
 			
 		}
@@ -152,9 +154,9 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionEditPage.Many, StudentClassroomSessionDivision, SelectItem> itemCollection
 					,StudentClassroomSessionDivisionEditPage.Many item) {
 				super.instanciated(itemCollection, item);
-				item.setLabel(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivision().getClassroomSession())
+				item.setLabel(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivision().getClassroomSession())
 						+Constant.CHARACTER_SLASH+item.getLabel());
-				item.setClassroomSession(RootBusinessLayer.getInstance().getFormatterBusiness().format(item.getIdentifiable().getClassroomSessionDivision().getClassroomSession()));
+				item.setClassroomSession(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivision().getClassroomSession()));
 				item.setEvaluationAverage(item.getIdentifiable().getResults().getEvaluationSort().getAverage().getValue());
 			}
 			

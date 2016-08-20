@@ -12,6 +12,7 @@ import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.report.ReportBasedOnDynamicBuilderIdentifiableConfiguration;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFileConfiguration;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
@@ -39,7 +40,7 @@ public class SchoolReportRepository extends AbstractReportRepository implements 
 			@SuppressWarnings("unchecked")
 			@Override
 			public <MODEL> ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> build(Class<MODEL> arg0, Collection<MODEL> models, String arg2,Boolean arg3, Map<String, String[]> arg4) {
-				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findReport((Collection<StudentClassroomSessionDivision>) models);
+				return inject(StudentClassroomSessionDivisionBusiness.class).findReport((Collection<StudentClassroomSessionDivision>) models);
 			}
 		});
 		

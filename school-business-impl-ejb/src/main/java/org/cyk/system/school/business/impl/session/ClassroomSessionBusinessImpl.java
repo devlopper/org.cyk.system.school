@@ -10,9 +10,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
+import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Teacher;
@@ -57,7 +58,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 			if(weightedValues.isEmpty()){
 				
 			}else{
-				Average average = RootBusinessLayer.getInstance().getMathematicsBusiness().average(weightedValues, null, null);
+				Average average = inject(MathematicsBusiness.class).average(weightedValues, null, null);
 				classroomSession.getResults().setAverage(average.getValue());
 				classroomSession.getResults().setNumberOfStudent(numberOfStudent);
 			}
@@ -93,12 +94,12 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public BigDecimal convertAttendanceTimeToDivisionDuration(ClassroomSession classroomSession,Long millisecond) {
 		return millisecond==null?BigDecimal.ZERO
-				:RootBusinessLayer.getInstance().getTimeDivisionTypeBusiness().convertToDivisionDuration(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), millisecond);
+				:inject(TimeDivisionTypeBusiness.class).convertToDivisionDuration(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), millisecond);
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Long convertAttendanceTimeToMillisecond(ClassroomSession classroomSession,BigDecimal duration) {
-		return duration==null?0l:RootBusinessLayer.getInstance().getTimeDivisionTypeBusiness().convertToMillisecond(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), duration);
+		return duration==null?0l:inject(TimeDivisionTypeBusiness.class).convertToMillisecond(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), duration);
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

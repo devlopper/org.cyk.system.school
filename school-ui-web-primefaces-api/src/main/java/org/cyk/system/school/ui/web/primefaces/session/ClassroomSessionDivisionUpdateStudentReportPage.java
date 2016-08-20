@@ -8,10 +8,7 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.command.AbstractCommandable.Builder;
@@ -22,6 +19,9 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyCheck;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyChoice;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCrudOnePage<ClassroomSessionDivision> implements Serializable {
@@ -42,12 +42,12 @@ public class ClassroomSessionDivisionUpdateStudentReportPage extends AbstractCru
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		setChoices(Form.FIELD_STUDENT_CLASSROOM_SESSION_DIVISIONS
-				, SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivision(identifiable));
+				, inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivision(identifiable));
 	}
 	
 	@Override
 	protected void update() {
-		//SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(Arrays.asList(identifiable));
+		//inject(StudentClassroomSessionDivisionBusiness.class).buildReport(Arrays.asList(identifiable));
 	}
 	
 	@Override

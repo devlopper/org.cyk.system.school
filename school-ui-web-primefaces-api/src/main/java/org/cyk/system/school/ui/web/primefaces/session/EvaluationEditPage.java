@@ -12,12 +12,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.root.business.api.mathematics.NumberBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.EvaluationBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
@@ -37,6 +37,9 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
@@ -59,9 +62,9 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			if(classroomSessionDivisionSubjectIdentifier==null)
 				;
 			else
-				classroomSessionDivisionSubject = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().find(classroomSessionDivisionSubjectIdentifier);	
+				classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).find(classroomSessionDivisionSubjectIdentifier);	
 		}else{
-			subjectEvaluationType = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectEvaluationTypeBusiness().find(subjectEvaluationTypeIdentifier);
+			subjectEvaluationType = inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).find(subjectEvaluationTypeIdentifier);
 			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 			
@@ -72,7 +75,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		if(Crud.CREATE.equals(crud)){
 			
 		}else{
-			identifiable.setStudentSubjectEvaluations(SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectEvaluationBusiness().findByEvaluation(identifiable,Crud.UPDATE.equals(crud)));
+			identifiable.setStudentSubjectEvaluations(inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class).findByEvaluation(identifiable,Crud.UPDATE.equals(crud)));
 			subjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
 			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
@@ -101,7 +104,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 				mark.setRegistrationCode(mark.getIdentifiable().getStudentSubject().getStudent().getCode());
 				mark.setNames(mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
 				mark.setValue(mark.getIdentifiable().getValue());
-				mark.setValueAsString(RootBusinessLayer.getInstance().getNumberBusiness().format(mark.getValue()));
+				mark.setValueAsString(inject(NumberBusiness.class).format(mark.getValue()));
 			}	
 			@Override
 			public void write(StudentSubjectEvaluationItem item) {
@@ -114,6 +117,8 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		markCollection.getApplicableValueQuestion().setRendered(Boolean.TRUE);
 		//markCollection.getAddCommandable().setRendered(Boolean.FALSE);
 		form.getControlSetListeners().add(new ControlSetAdapter<Object>(){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Boolean build(Field field) {
 				if(field.getName().equals(Form.FIELD_TYPE))
@@ -131,7 +136,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
-		setChoices(Form.FIELD_TYPE, SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
+		setChoices(Form.FIELD_TYPE, inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
 	
 	@Override
@@ -143,7 +148,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	
 	@Override
 	protected void update() {
-		SchoolBusinessLayer.getInstance().getEvaluationBusiness().save(identifiable,markCollection.getIdentifiables());
+		inject(EvaluationBusiness.class).save(identifiable,markCollection.getIdentifiables());
 	}
 	
 	@Override
@@ -158,7 +163,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	}
 	
 	protected Evaluation instanciateIdentifiable() {
-		Evaluation subjectEvaluation = SchoolBusinessLayer.getInstance().getEvaluationBusiness().newInstance(classroomSessionDivisionSubject);
+		Evaluation subjectEvaluation = inject(EvaluationBusiness.class).newInstance(classroomSessionDivisionSubject);
 		subjectEvaluation.setClassroomSessionDivisionSubjectEvaluationType(subjectEvaluationType);
 		return subjectEvaluation;
 	}

@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.system.root.business.api.event.EventPartyBusiness;
 import org.cyk.system.root.business.impl.event.EventPartyDetails;
 import org.cyk.system.root.model.event.EventParty;
 import org.cyk.system.school.model.subject.Lecture;
@@ -30,7 +31,7 @@ public class LectureConsultPage extends AbstractConsultPage<Lecture> implements 
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<EventParty> getIdentifiables() {
-				return rootBusinessLayer.getEventPartyBusiness().findByEvent(identifiable.getEvent());
+				return inject(EventPartyBusiness.class).findByEvent(identifiable.getEvent());
 			}	
 			public Boolean getEnabledInDefaultTab() {
 				return Boolean.TRUE;

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.model.StudentResults;
@@ -54,7 +55,7 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 				studentClassroomSessionDivision = new StudentClassroomSessionDivision(student, classroomSessionDivision);
 				studentClassroomSessionDivision.setCascadeTopDownOnCreate(studentSubject.getCascadeTopDownOnCreate());
 				studentClassroomSessionDivision.setCascadeBottomUpOnCreate(studentSubject.getCascadeBottomUpOnCreate());
-				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().create(studentClassroomSessionDivision);
+				inject(StudentClassroomSessionDivisionBusiness.class).create(studentClassroomSessionDivision);
 			}
 		}
 		cascade(studentSubject,Crud.CREATE);

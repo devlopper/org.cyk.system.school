@@ -5,7 +5,8 @@ import java.io.Serializable;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -32,7 +33,7 @@ public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<Student
 			if(classroomSessionIdentifier==null)
 				;
 			else{
-				studentClassroomSession.setClassroomSession(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().find(classroomSessionIdentifier));
+				studentClassroomSession.setClassroomSession(inject(ClassroomSessionBusiness.class).find(classroomSessionIdentifier));
 				
 			}
 		}
@@ -42,8 +43,8 @@ public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<Student
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
-		setChoices(Form.CLASSROOM_SESSION, SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findByAcademicSession(
-				SchoolBusinessLayer.getInstance().getAcademicSessionBusiness().findCurrent(null)));
+		setChoices(Form.CLASSROOM_SESSION, inject(ClassroomSessionBusiness.class).findByAcademicSession(
+				inject(AcademicSessionBusiness.class).findCurrent(null)));
 	}
 	
 	@Override

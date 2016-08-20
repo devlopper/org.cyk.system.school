@@ -8,7 +8,9 @@ import java.util.Set;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
@@ -81,17 +83,17 @@ public class ClassroomSessionDivisionConsultPage extends AbstractClassLevelConsu
 	@Override
 	protected Collection<ClassroomSessionDivisionSubject> getSubLevels() {
 		if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
-			return SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(identifiable);
+			return inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivision(identifiable);
 		else
 			if(teacher==null)
 				return null;
 			else
-				return SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(identifiable,teacher);
+				return inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionByTeacher(identifiable,teacher);
 	}
 
 	@Override
 	protected Collection<StudentClassroomSessionDivision> getResults() {
-		return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivision(identifiable);
+		return inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivision(identifiable);
 	}
 
 	@Override
@@ -121,12 +123,12 @@ public class ClassroomSessionDivisionConsultPage extends AbstractClassLevelConsu
 			@Override
 			protected Collection<StudentClassroomSessionDivisionSubject> getDetailCollection() {
 				if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
-					return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivision(identifiable);
+					return inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivision(identifiable);
 				else
 					if(teacher==null)
 						return null;
 					else
-						return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionByTeacher(identifiable,teacher);
+						return inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionByTeacher(identifiable,teacher);
 			}
 		};
 	}

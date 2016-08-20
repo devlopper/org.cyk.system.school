@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionInfos;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -87,15 +87,15 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	},Boolean.TRUE,Boolean.TRUE,Boolean.FALSE,Boolean.TRUE);
     	
     	
-    	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateAverage(Arrays.asList(dataProducer.getG1().getClassroomSession()), new BusinessServiceCallArguments<StudentClassroomSession>());
-    	SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateRank(Arrays.asList(dataProducer.getG1().getClassroomSession()), 
+    	inject(StudentClassroomSessionBusiness.class).updateAverage(Arrays.asList(dataProducer.getG1().getClassroomSession()), new BusinessServiceCallArguments<StudentClassroomSession>());
+    	inject(StudentClassroomSessionBusiness.class).updateRank(Arrays.asList(dataProducer.getG1().getClassroomSession()), 
     			schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
     	
     	StudentClassroomSession.SearchCriteria searchCriteria = new StudentClassroomSession.SearchCriteria();
     	searchCriteria.getDivisionCount().setLowest(2);
     	searchCriteria.getDivisionCount().setHighest(3);
 		searchCriteria.getDivisionIndexesRequired().add(2);
-		Collection<StudentClassroomSession> studentClassroomSessions = schoolBusinessLayer.getStudentClassroomSessionBusiness().findByCriteria(searchCriteria);
+		Collection<StudentClassroomSession> studentClassroomSessions = inject(StudentClassroomSessionBusiness.class).findByCriteria(searchCriteria);
     	System.out.println("SEARCH : "+studentClassroomSessions.size()+" / " +studentClassroomSessions);
     	
     	//classroomSessionDivisionInfos = dataProducer.getG1().division(2);

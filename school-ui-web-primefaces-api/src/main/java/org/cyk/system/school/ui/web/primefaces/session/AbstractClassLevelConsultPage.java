@@ -11,13 +11,14 @@ import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.business.api.FormatterBusiness;
+import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsOutputDetails;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.SchoolConstant;
@@ -52,7 +53,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		teacher = userSession.getUser() instanceof Person ? SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userSession.getUser()) : null;
+		teacher = userSession.getUser() instanceof Person ? inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser()) : null;
 		isCoordinator = teacher != null && getClassroomSession().getCoordinator()!= null && teacher.equals( getClassroomSession().getCoordinator());
 		
 		/*details = createDetailsForm(getLevelOutputClass(), identifiable, new DetailsConfigurationListener.Form.Adapter<LEVEL,LEVEL_OUTPUT>(getLevelClass(), getLevelOutputClass()){
@@ -155,6 +156,8 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 	
 	protected org.cyk.ui.api.model.table.ColumnAdapter getResultTableColumnAdapter(){
 		return new org.cyk.ui.api.model.table.ColumnAdapter(){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public Boolean isColumn(Field field) {
 				return getResultTableSimpleFieldNameSet().contains(field.getName());
@@ -215,12 +218,12 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 			if(AbstractStudentResultsOutputDetails.isDetailAverageFieldName(column.getField().getName())){
 				column.setTitle(getDetailAverageColumnName(column));
 			}else if(AbstractStudentResultsOutputDetails.FIELD_EVALUATION_AVERAGE_DIVISOR.equals(column.getField().getName())){
-				column.setTitle(RootBusinessLayer.getInstance().getLanguageBusiness().findText("count.of",new Object[]{ RootBusinessLayer.getInstance().getLanguageBusiness().findClassLabelText(subLevelClass) }));
+				column.setTitle(inject(LanguageBusiness.class).findText("count.of",new Object[]{ inject(LanguageBusiness.class).findClassLabelText(subLevelClass) }));
 			}
 		}
 		
 		protected String getDetailAverageColumnName(Column column){
-			return RootBusinessLayer.getInstance().getFormatterBusiness().format(subLevels.get(column.getIndex().intValue()-numberOfColumnBeforeLevels));
+			return inject(FormatterBusiness.class).format(subLevels.get(column.getIndex().intValue()-numberOfColumnBeforeLevels));
 		}
 		
 	}
@@ -246,7 +249,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 						NodeResults results = getNodeResults(subLevel);
 						if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_1)){
 							if(results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0)
-								cell.setValue(RootBusinessLayer.getInstance().getNumberBusiness().format(results.getAverage()));
+								cell.setValue(inject(NumberBusiness.class).format(results.getAverage()));
 						}else if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_2)){
 							if(results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0)
 								cell.setValue(results.getNumberOfStudentPassingEvaluationAverage()+Constant.CHARACTER_SLASH.toString()+
@@ -258,7 +261,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 								formatArguments.setPercentageSymbol(null);
 								BigDecimal percentage = new BigDecimal(results.getNumberOfStudentPassingEvaluationAverage()).
 										divide(new BigDecimal(results.getNumberOfStudent()),4,RoundingMode.HALF_DOWN);
-								cell.setValue(RootBusinessLayer.getInstance().getNumberBusiness().format(percentage,formatArguments));
+								cell.setValue(inject(NumberBusiness.class).format(percentage,formatArguments));
 							}
 						}
 					}
@@ -274,7 +277,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 						}
 					}
 					if(detail!=null){
-						cell.setValue(RootBusinessLayer.getInstance().getNumberBusiness().format(detail.getResults().getEvaluationSort().getAverage().getValue()));
+						cell.setValue(inject(NumberBusiness.class).format(detail.getResults().getEvaluationSort().getAverage().getValue()));
 					}
 				}
 			}

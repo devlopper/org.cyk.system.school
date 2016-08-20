@@ -12,10 +12,10 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.file.report.ReportBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
@@ -24,9 +24,13 @@ import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.persistence.api.mathematics.MetricDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.SchoolReportProducer.StudentClassroomSessionDivisionReportParameters;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
@@ -60,7 +64,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Inject private StudentClassroomSessionDivisionSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentClassroomSessionDao studentClassroomSessionDao;
-	private ReportBusiness reportBusiness = RootBusinessLayer.getInstance().getReportBusiness();
+	private ReportBusiness reportBusiness = inject(ReportBusiness.class);
 	
 	@Inject private StudentClassroomSessionDivisionSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao; 
@@ -90,7 +94,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			studentClassroomSession = new StudentClassroomSession(student, classroomSession);
 			studentClassroomSession.setCascadeTopDownOnCreate(studentClassroomSessionDivision.getCascadeTopDownOnCreate());
 			studentClassroomSession.setCascadeBottomUpOnCreate(studentClassroomSessionDivision.getCascadeBottomUpOnCreate());
-			schoolBusinessLayer.getStudentClassroomSessionBusiness().create(studentClassroomSession);
+			inject(StudentClassroomSessionBusiness.class).create(studentClassroomSession);
 		}
 		
 		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
@@ -120,7 +124,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 		logTrace("Student classroomsession division. {} , {} : {}", studentClassroomSessionDivision.getStudent().getCode(),studentClassroomSessionDivision.getClassroomSessionDivision().getIdentifier(),crud);
 		
-		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDao,StudentClassroomSessionDivisionSubjectBusiness>(null,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectBusiness())
+		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDao,StudentClassroomSessionDivisionSubjectBusiness>(null,inject(StudentClassroomSessionDivisionSubjectBusiness.class))
 			.operate(studentSubjects, crud);
 	}
 	
@@ -134,7 +138,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override 
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,ServiceCallArguments arguments) {
 		//logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
-		//		,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
+		//		,inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null) || !Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) ){
 			StudentClassroomSessionDivisionReportParameters parameters = 
@@ -157,7 +161,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			}
 		}else{
 			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
-					,RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision()));
+					,inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		}
 	}
 	
@@ -196,8 +200,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		setCallArgumentsObjects(callArguments, studentClassroomSessionDivisions);
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 			if(callArguments!=null && callArguments.getExecutionProgress()!=null){
-				callArguments.getExecutionProgress().setCurrentExecutionStep(RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
-						+" - "+RootBusinessLayer.getInstance().getFormatterBusiness().format(studentClassroomSessionDivision.getStudent()));
+				callArguments.getExecutionProgress().setCurrentExecutionStep(inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
+						+" - "+inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getStudent()));
 			}
 			if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 					&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
@@ -230,8 +234,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		studentSubjectBusiness.updateAverage(subjects, studentSubjects, studentSubjectEvaluations, null);
 		updateAverage(classroomSessionDivisions, studentClassroomSessionDivisions, studentSubjects, callArguments);
 		
-		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionSubjectBusiness().computeResults(subjects, studentSubjects);
-		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
+		inject(ClassroomSessionDivisionSubjectBusiness.class).computeResults(subjects, studentSubjects);
+		inject(ClassroomSessionDivisionBusiness.class).computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
 		
 		for(Listener listener : Listener.COLLECTION)
 			listener.processOnEvaluationAverageUpdated(classroomSessionDivisions, callArguments);
@@ -249,7 +253,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public void setNumberOfTimesAbsent(StudentClassroomSessionDivision studentClassroomSessionDivision,BigDecimal value) {
-		studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+		studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToMillisecond(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),value));
 
 		studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision().getNumberOfMillisecond()-

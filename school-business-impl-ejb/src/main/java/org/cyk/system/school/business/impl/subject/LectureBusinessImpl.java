@@ -5,8 +5,8 @@ import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.cyk.system.root.business.api.event.EventBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
@@ -24,7 +24,7 @@ public class LectureBusinessImpl extends AbstractTypedBusinessService<Lecture, L
 	@Override
 	public Lecture create(Lecture lecture) {
 		if(lecture.getEvent().getIdentifier()==null)
-			RootBusinessLayer.getInstance().getEventBusiness().create(lecture.getEvent());
+			inject(EventBusiness.class).create(lecture.getEvent());
 		return super.create(lecture);
 	}
 	

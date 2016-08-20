@@ -9,7 +9,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.subject.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
@@ -40,7 +43,7 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<SubjectClassroomSession> getIdentifiables() {
-				return SchoolBusinessLayer.getInstance().getSubjectClassroomSessionBusiness().findByClassroomSession(identifiable);
+				return inject(SubjectClassroomSessionBusiness.class).findByClassroomSession(identifiable);
 			}
 			@Override
 			public Crud[] getCruds() {
@@ -96,18 +99,18 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 
 	@Override
 	protected Collection<StudentClassroomSession> getResults() {
-		return SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().findByClassroomSession(identifiable);
+		return inject(StudentClassroomSessionBusiness.class).findByClassroomSession(identifiable);
 	}
 	
 	@Override
 	protected Collection<ClassroomSessionDivision> getSubLevels() {
 		if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
-			return SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSession(identifiable);
+			return inject(ClassroomSessionDivisionBusiness.class).findByClassroomSession(identifiable);
 		else
 			if(teacher==null)
 				return null;
 			else
-				return SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().findByClassroomSessionByTeacher(identifiable,teacher);
+				return inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByTeacher(identifiable,teacher);
 	}
 	
 	@Override
@@ -138,12 +141,12 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			@Override
 			protected Collection<StudentClassroomSessionDivision> getDetailCollection() {
 				if(Boolean.TRUE.equals(userSession.getIsManager()) || isCoordinator)
-					return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSession(identifiable);
+					return inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSession(identifiable);
 				else
 					if(teacher==null)
 						return null;
 					else
-						return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionByTeacher(identifiable,teacher);
+						return inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionByTeacher(identifiable,teacher);
 			}
 		};
 	}

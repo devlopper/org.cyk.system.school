@@ -15,9 +15,11 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.api.file.FileBusiness;
+import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.RootRandomDataProvider;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.mathematics.Interval;
@@ -26,13 +28,19 @@ import org.cyk.system.root.model.mathematics.MetricValueInputted;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
+import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -97,28 +105,28 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	public void randomSetActor(Boolean classCoordinator,Boolean teacher){
 		if(Boolean.TRUE.equals(classCoordinator)){
-			Collection<ClassroomSession> classroomSessions = schoolBusinessLayer.getClassroomSessionBusiness().findAll();
+			Collection<ClassroomSession> classroomSessions = inject(ClassroomSessionBusiness.class).findAll();
 			for(ClassroomSession classroomSession : classroomSessions)
 				classroomSession.setCoordinator(RootRandomDataProvider.getInstance().oneFromDatabase(Teacher.class));
-			schoolBusinessLayer.getClassroomSessionBusiness().update(classroomSessions);
+			inject(ClassroomSessionBusiness.class).update(classroomSessions);
 		}
 		if(Boolean.TRUE.equals(teacher)){
-			Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findAll();
+			Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = inject(ClassroomSessionDivisionSubjectBusiness.class).findAll();
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects)
 				classroomSessionDivisionSubject.setTeacher(RootRandomDataProvider.getInstance().oneFromDatabase(Teacher.class));
-			schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().update(classroomSessionDivisionSubjects);
+			inject(ClassroomSessionDivisionSubjectBusiness.class).update(classroomSessionDivisionSubjects);
 		}
 	}
 	
 	public Collection<ClassroomSession> createStudentClassroomSessions(Integer generateStudentInClassroomSessionCount,Integer studentByClassroomSessionCount){
 		Collection<ClassroomSession> classroomSessions = generateStudentInClassroomSessionCount==null?
-				schoolBusinessLayer.getClassroomSessionBusiness().findAll():
-					schoolBusinessLayer.getClassroomSessionBusiness().findManyRandomly(generateStudentInClassroomSessionCount);
-		return createStudentClassroomSessions(schoolBusinessLayer.getStudentBusiness().findManyRandomly(studentByClassroomSessionCount),classroomSessions);
+				inject(ClassroomSessionBusiness.class).findAll():
+					inject(ClassroomSessionBusiness.class).findManyRandomly(generateStudentInClassroomSessionCount);
+		return createStudentClassroomSessions(inject(StudentBusiness.class).findManyRandomly(studentByClassroomSessionCount),classroomSessions);
 	}
 	
 	public Collection<ClassroomSession> createStudentClassroomSessions(Integer studentByClassroomSessionCount,Collection<ClassroomSession> classroomSessions){
-		return createStudentClassroomSessions(schoolBusinessLayer.getStudentBusiness().findManyRandomly(studentByClassroomSessionCount),classroomSessions);
+		return createStudentClassroomSessions(inject(StudentBusiness.class).findManyRandomly(studentByClassroomSessionCount),classroomSessions);
 	}
 	
 	public Collection<ClassroomSession> createStudentClassroomSessions(Collection<Student> students,Collection<ClassroomSession> classroomSessions){
@@ -128,19 +136,19 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			for(Student student : students)
 				studentClassroomSessions.add(new StudentClassroomSession(student, classroomSession));
 				
-		schoolBusinessLayer.getStudentClassroomSessionBusiness().create(studentClassroomSessions);
+		inject(StudentClassroomSessionBusiness.class).create(studentClassroomSessions);
 		return classroomSessions;
 	}
 	
 	public void deleteStudentClassroomSessions(String[] studentRegistrationCode,ClassroomSessionDivision classroomSessionDivision){
-		//schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().del
+		//inject(StudentClassroomSessionDivisionBusiness.class).del
 	}
 	
 	public void createSubjectEvaluations(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Boolean coefficientApplied){
 		Collection<Evaluation> subjectEvaluations = new ArrayList<>();
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
-			Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
-			Collection<StudentClassroomSessionDivisionSubject> studentSubjects = schoolBusinessLayer.getStudentClassroomSessionDivisionSubjectBusiness().findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+			Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+			Collection<StudentClassroomSessionDivisionSubject> studentSubjects = inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 			if(studentSubjects.isEmpty())
 				continue;
 			for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
@@ -154,10 +162,10 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			}
 		}
 		System.out.println("Creating "+subjectEvaluations.size()+" evaluation(s)");
-		schoolBusinessLayer.getEvaluationBusiness().create(subjectEvaluations);
+		inject(EvaluationBusiness.class).create(subjectEvaluations);
 	}
 	public void createSubjectEvaluations(Boolean coefficientApplied){
-		createSubjectEvaluations(schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().findAll(), coefficientApplied);
+		createSubjectEvaluations(inject(ClassroomSessionDivisionSubjectBusiness.class).findAll(), coefficientApplied);
 	}
 
 	public void createStudentClassroomSessionDivisionSubjects(String[] studentRegistrationCodes,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects){
@@ -208,12 +216,12 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			if(Boolean.TRUE.equals(createFileOnDisk)){
 				Collection<File> files = new ArrayList<>();
 				for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
-					classroomSessionDivision = schoolBusinessLayer.getClassroomSessionDivisionBusiness().find(classroomSessionDivision.getIdentifier());
+					classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).find(classroomSessionDivision.getIdentifier());
 					if(classroomSessionDivisionIndexes==null || classroomSessionDivisionIndexes.isEmpty()
 						|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) ){
 						for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 							studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
-							if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionSubjectEvaluationBusiness()
+							if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class)
 									.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
 											, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
 								assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
@@ -224,7 +232,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 						}
 					}
 				}
-				writeStream(RootBusinessLayer.getInstance().getFileBusiness().merge(files, FileExtension.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
+				writeStream(inject(FileBusiness.class).merge(files, FileExtension.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
 	    	}
 		}
 	}
@@ -232,7 +240,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		computeStudentClassroomSessionDivisionResults(classroomSessionDivisions, null,computeEvaluationResults,computeAttendanceResults,buildReportFile, createFileOnDisk);
 	}
 	public void computeStudentClassroomSessionDivisionResults(Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
-		computeStudentClassroomSessionDivisionResults(schoolBusinessLayer.getClassroomSessionDivisionBusiness().findAll(),computeEvaluationResults,computeAttendanceResults,buildReportFile,createFileOnDisk);
+		computeStudentClassroomSessionDivisionResults(inject(ClassroomSessionDivisionBusiness.class).findAll(),computeEvaluationResults,computeAttendanceResults,buildReportFile,createFileOnDisk);
 	}
 	public void createStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
 		computeStudentClassroomSessionDivisionResults(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,buildReportFile, createFileOnDisk);
@@ -241,7 +249,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	public void randomValues(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean metric,Boolean attendance,Boolean appreciation){
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
-			Long t = schoolBusinessLayer.getClassroomSessionBusiness().findCommonNodeInformations(classroomSessionDivision.getClassroomSession()).getAttendanceTimeDivisionType().getDuration();
+			Long t = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSessionDivision.getClassroomSession()).getAttendanceTimeDivisionType().getDuration();
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 				studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
 				
@@ -257,8 +265,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 							classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
 					for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
 						IntervalCollection intervalCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection().getValueIntervalCollection();
-						RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
-						Collection<StudentResultsMetricValue> studentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness()
+						inject(IntervalCollectionBusiness.class).load(intervalCollection);
+						Collection<StudentResultsMetricValue> studentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class)
 								.findByStudentResults(studentClassroomSessionDivision.getResults());
 						for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
 							studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
@@ -284,9 +292,9 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 						classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(studentClassroomSessionDivision.getClassroomSessionDivision());
 				for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
 					IntervalCollection intervalCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection().getValueIntervalCollection();
-					RootBusinessLayer.getInstance().getIntervalCollectionBusiness().load(intervalCollection);
-					List<Interval> intervals = new ArrayList<>(RootBusinessLayer.getInstance().getIntervalBusiness().findByCollection(intervalCollection));
-					Collection<StudentResultsMetricValue> studentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness()
+					inject(IntervalCollectionBusiness.class).load(intervalCollection);
+					List<Interval> intervals = new ArrayList<>(inject(IntervalBusiness.class).findByCollection(intervalCollection));
+					Collection<StudentResultsMetricValue> studentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class)
 							.findByStudentResults(studentClassroomSessionDivision.getResults());
 					for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
 						studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
@@ -301,7 +309,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		}
 	}
 	public void randomValues(Boolean metric,Boolean attendance,Boolean appreciation){
-		randomValues(schoolBusinessLayer.getClassroomSessionDivisionBusiness().findAll(), metric, attendance, appreciation);
+		randomValues(inject(ClassroomSessionDivisionBusiness.class).findAll(), metric, attendance, appreciation);
 	}
 	
 	public StudentClassroomSession createStudentClassroomSession(String registrationCode,ClassroomSession classroomSession,Object[][] expected){
@@ -328,11 +336,11 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	public void assertStudentClassroomSession(StudentClassroomSession studentClassroomSession,Object[][] expected){
 		assertEquals("Student classroom session division count", expected.length, 
-				schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness()
+				inject(StudentClassroomSessionDivisionBusiness.class)
 				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
 		
 		int i=0;
-		for(StudentClassroomSessionDivision studentClassroomSessionDivision : schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness()
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : inject(StudentClassroomSessionDivisionBusiness.class)
 				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()))
 			assertStudentClassroomSessionDivision(studentClassroomSessionDivision, expected[i++]);
 		
@@ -340,19 +348,19 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	public void assertStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Object[] expected){
 		assertEquals("Student classroom session division subject count", (Integer)expected[0], 
-				schoolBusinessLayer.getStudentClassroomSessionDivisionSubjectBusiness()
+				inject(StudentClassroomSessionDivisionSubjectBusiness.class)
 				.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision()).size());
 	}
 	
 	public void updateStudentClassroomSession(StudentClassroomSession studentClassroomSession,ClassroomSession classroomSession){
-		Integer oldStudentClassroomSessionDivisionCount = schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness()
+		Integer oldStudentClassroomSessionDivisionCount = inject(StudentClassroomSessionDivisionBusiness.class)
 				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size();
 		
 		studentClassroomSession.setClassroomSession(classroomSession);
 		
 		studentClassroomSessionBusiness.update(studentClassroomSession);
 		
-		Integer newStudentClassroomSessionDivisionCount = schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness()
+		Integer newStudentClassroomSessionDivisionCount = inject(StudentClassroomSessionDivisionBusiness.class)
 				.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size();
 		
 		assertEquals("Student classroom session division count", oldStudentClassroomSessionDivisionCount, newStudentClassroomSessionDivisionCount);
@@ -361,10 +369,10 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	public void deleteStudentClassroomSession(StudentClassroomSession studentClassroomSession,Object[][] expected){
 		studentClassroomSessionBusiness.delete(studentClassroomSession);
 		if(expected==null){
-			assertEquals("Student classroom session division count", 0, schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness()
+			assertEquals("Student classroom session division count", 0, inject(StudentClassroomSessionDivisionBusiness.class)
 					.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
 			
-			assertEquals("Student classroom session division subject count", 0, schoolBusinessLayer.getStudentClassroomSessionDivisionSubjectBusiness()
+			assertEquals("Student classroom session division subject count", 0, inject(StudentClassroomSessionDivisionSubjectBusiness.class)
 					.findByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()).size());
 		}else{
 			assertStudentClassroomSession(studentClassroomSession, expected);
@@ -380,8 +388,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		int i = 0;
 		for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues)
 			studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(values[i++]));
-		schoolBusinessLayer.getStudentClassroomSessionDivisionBusiness().update(studentClassroomSessionDivision, new ArrayList<>(studentResultsMetricValues));
-		Collection<StudentResultsMetricValue> updateStudentResultsMetricValues = schoolBusinessLayer.getStudentResultsMetricValueBusiness().findByStudentResults(studentClassroomSessionDivision.getResults());
+		inject(StudentClassroomSessionDivisionBusiness.class).update(studentClassroomSessionDivision, new ArrayList<>(studentResultsMetricValues));
+		Collection<StudentResultsMetricValue> updateStudentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class).findByStudentResults(studentClassroomSessionDivision.getResults());
 		assertEquals("Student classroom session division metrics count", studentResultsMetricValues.size(), updateStudentResultsMetricValues.size());
 		
 		for(StudentResultsMetricValue u : studentResultsMetricValues)
@@ -502,7 +510,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     	else{
     		classroomSessions = new ArrayList<>();
     		Set<String> levelNames = new HashSet<>();
-    		for(ClassroomSession classroomSession : schoolBusinessLayer.getClassroomSessionBusiness().findAll()){
+    		for(ClassroomSession classroomSession : inject(ClassroomSessionBusiness.class).findAll()){
     			if(levelNames.add(classroomSession.getLevelTimeDivision().getLevel().getLevelName().getCode())){
     				classroomSessions.add(classroomSession);
     			}
@@ -526,42 +534,42 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     	
     	Collection<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>();
     	for(ClassroomSession classroomSession : classroomSessions)
-    		classroomSessionDivisions.addAll(schoolBusinessLayer.getClassroomSessionDivisionBusiness().findByClassroomSession(classroomSession));
+    		classroomSessionDivisions.addAll(inject(ClassroomSessionDivisionBusiness.class).findByClassroomSession(classroomSession));
     	System.out.println("Creating student classroom session reports");
 		computeStudentClassroomSessionDivisionResults(classroomSessionDivisions,parameters.getClassroomSessionDivisionIndexes(),parameters.getComputeEvaluationResults(),parameters.getComputeAttendanceResults(),parameters.getBuildReportFile(),Boolean.TRUE);
 		
 		System.out.println("Creating custom classroom session");
-		ClassroomSession customClassroomSession = new ClassroomSession(schoolBusinessLayer.getAcademicSessionBusiness().findCurrent(null)
+		ClassroomSession customClassroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
 				, levelTimeDivisionDao.readOneRandomly(), null);
 		customClassroomSession.getExistencePeriod().setFromDate(new Date());
 		customClassroomSession.getExistencePeriod().setToDate(new Date());
-		schoolBusinessLayer.getClassroomSessionBusiness().create(customClassroomSession);
+		inject(ClassroomSessionBusiness.class).create(customClassroomSession);
 		Collection<ClassroomSessionDivision> customClassroomSessionDivisions = new ArrayList<>();
 		ClassroomSessionDivision customClassroomSessionDivision = new ClassroomSessionDivision(customClassroomSession
 				, timeDivisionTypeDao.read(TimeDivisionType.TRIMESTER), BigDecimal.ONE);
 		customClassroomSessionDivision.getExistencePeriod().setFromDate(new Date());
 		customClassroomSessionDivision.getExistencePeriod().setToDate(new Date());
-		schoolBusinessLayer.getClassroomSessionDivisionBusiness().create(customClassroomSessionDivision);
+		inject(ClassroomSessionDivisionBusiness.class).create(customClassroomSessionDivision);
 		customClassroomSessionDivisions.add(customClassroomSessionDivision);
-		Collection<Student> customStudents = schoolBusinessLayer.getStudentBusiness().findManyRandomly(parameters.generatedStudentInClassroomSessionCount);
+		Collection<Student> customStudents = inject(StudentBusiness.class).findManyRandomly(parameters.generatedStudentInClassroomSessionCount);
 		Collection<ClassroomSessionDivisionSubject> customClassroomSessionDivisionSubjects = new ArrayList<>();
 		for(Subject subject : subjectDao.readManyRandomly(5)){
 			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = new ClassroomSessionDivisionSubject(customClassroomSessionDivision, subject
 					,BigDecimal.ONE , teacherDao.readOneRandomly());
 			customClassroomSessionDivisionSubjects.add(classroomSessionDivisionSubject);
-			schoolBusinessLayer.getClassroomSessionDivisionSubjectBusiness().create(classroomSessionDivisionSubject);
+			inject(ClassroomSessionDivisionSubjectBusiness.class).create(classroomSessionDivisionSubject);
 			for(int i = 0;i<customClassroomSessionDivisionSubjectEvaluationTypeInfos.length;i++){
 				EvaluationType evaluationType = (EvaluationType) customClassroomSessionDivisionSubjectEvaluationTypeInfos[i][0];
 				BigDecimal coefficient = new BigDecimal((String) customClassroomSessionDivisionSubjectEvaluationTypeInfos[i][1]);
 				BigDecimal maximumValue = new BigDecimal((String) customClassroomSessionDivisionSubjectEvaluationTypeInfos[i][2]);
 				ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType = new ClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubject, evaluationType, coefficient,maximumValue);
-				schoolBusinessLayer.getClassroomSessionDivisionSubjectEvaluationTypeBusiness().create(subjectEvaluationType);
+				inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).create(subjectEvaluationType);
 			}
 			for(Student student : customStudents){
 				StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject);
 				studentSubject.setCascadeBottomUpOnCreate(Boolean.TRUE);
 				studentSubject.setCascadeTopDownOnCreate(Boolean.FALSE);
-				schoolBusinessLayer.getStudentClassroomSessionDivisionSubjectBusiness().create(studentSubject);
+				inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentSubject);
 			}
 		}
 		createSubjectEvaluations(customClassroomSessionDivisionSubjects,Evaluation.COEFFICIENT_APPLIED);

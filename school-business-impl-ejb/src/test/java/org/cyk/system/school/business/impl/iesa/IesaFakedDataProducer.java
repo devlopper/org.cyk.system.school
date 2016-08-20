@@ -18,6 +18,10 @@ import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
+import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
@@ -28,12 +32,17 @@ import org.cyk.system.root.model.mathematics.MetricValueInputted;
 import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
+import org.cyk.system.school.business.api.session.EvaluationTypeBusiness;
+import org.cyk.system.school.business.api.session.LevelGroupBusiness;
+import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
@@ -71,6 +80,8 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
@@ -247,7 +258,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			@Override
 			public void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 				super.classroomSessionDivisionSubjectEvaluationTypeCreated(classroomSessionDivisionSubjectEvaluationType);
-				classroomSessionDivisionSubjectEvaluationType.setCountInterval(rootBusinessLayer.getIntervalBusiness().instanciateOne(null
+				classroomSessionDivisionSubjectEvaluationType.setCountInterval(inject(IntervalBusiness.class).instanciateOne(null
 						, RandomStringUtils.randomAlphanumeric(6), "1", "1"));
 			}
     	});
@@ -264,9 +275,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 							for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
 								classroomSessions.add(classroomSessionDivision.getClassroomSession());
 							
-							SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateAverage(classroomSessions, new BusinessServiceCallArguments<StudentClassroomSession>());
+							inject(StudentClassroomSessionBusiness.class).updateAverage(classroomSessions, new BusinessServiceCallArguments<StudentClassroomSession>());
 						
-							SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().updateRank(classroomSessions, schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
+							inject(StudentClassroomSessionBusiness.class).updateRank(classroomSessions, schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
 						}else{
 							
 						}
@@ -277,11 +288,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void structure(){
-		levelGroupType = create(schoolBusinessLayer.getLevelGroupTypeBusiness().instanciateOne("LevelGroupTypeDummy"));
-		LevelGroup levelGroupPrimary = (LevelGroup) create(schoolBusinessLayer.getLevelGroupBusiness().instanciateOne(SchoolConstant.LEVEL_GROUP_PRIMARY)
+		levelGroupType = create(inject(LevelGroupTypeBusiness.class).instanciateOne("LevelGroupTypeDummy"));
+		LevelGroup levelGroupPrimary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.LEVEL_GROUP_PRIMARY)
 				.setType(levelGroupType));
-		LevelGroup levelGroupSecondary = (LevelGroup) create(schoolBusinessLayer.getLevelGroupBusiness().instanciateOne(SchoolConstant.LEVEL_GROUP_SECONDARY)
-				.setType(levelGroupType));
+		/*LevelGroup levelGroupSecondary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.LEVEL_GROUP_SECONDARY)
+				.setType(levelGroupType));*/
 		
 		// Subjects
 		schoolDataProducerHelper.createOneSubject("Mathematics",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
@@ -318,9 +329,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	schoolDataProducerHelper.createOneSubject("Advanced mathematics",new ArrayList[]{subjectsG10G12});
 		
 		//Evaluation Type
-		evaluationTypes.add(evaluationTypeTest1 = create(schoolBusinessLayer.getEvaluationTypeBusiness().instanciateOne("Test 1")));
-		evaluationTypes.add(evaluationTypeTest2 = create(schoolBusinessLayer.getEvaluationTypeBusiness().instanciateOne("Test 2")));
-		evaluationTypes.add(evaluationTypeExam = create(schoolBusinessLayer.getEvaluationTypeBusiness().instanciateOne("Exam")));
+		evaluationTypes.add(evaluationTypeTest1 = create(inject(EvaluationTypeBusiness.class).instanciateOne("Test 1")));
+		evaluationTypes.add(evaluationTypeTest2 = create(inject(EvaluationTypeBusiness.class).instanciateOne("Test 2")));
+		evaluationTypes.add(evaluationTypeExam = create(inject(EvaluationTypeBusiness.class).instanciateOne("Exam")));
 				
 		createMetricCollections();
 		
@@ -336,23 +347,23 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		
 		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER,"50", "2");
 		
-		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(rootBusinessLayer.getIntervalCollectionBusiness()
+		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(inject(IntervalCollectionBusiness.class)
 				.instanciateOne("G1G6Grade", "Grade", new String[][]{
 						{"A+", "Excellent", "90", "100"},{"A", "Very good", "80", "89.99"},{"B+", "Good", "70", "79.99"},{"B", "Fair", "60", "69.99"}
-						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})),create(rootBusinessLayer.getIntervalCollectionBusiness()
+						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
 								.instanciateOne("ICP1", "Promotion Scale", new String[][]{
 										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
 						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2");	
-		CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
+		//CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
-		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(rootBusinessLayer.getIntervalCollectionBusiness()
+		/*CommonNodeInformations commonNodeInformationsG7G9 =*/ schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(inject(IntervalCollectionBusiness.class)
 				.instanciateOne("G7G12Grade", "Grade", new String[][]{
 						{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
-						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})),create(rootBusinessLayer.getIntervalCollectionBusiness()
+						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
 								.instanciateOne("ICP2", "Promotion Scale", new String[][]{
 										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
 						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2");	
-		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
+		//CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);
     	create(school);
@@ -530,7 +541,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			SchoolBusinessTestHelper.getInstance().randomValues(classroomSessionInfos, Boolean.TRUE, Boolean.TRUE,Boolean.TRUE);
 			
 			System.out.println("Generating report");
-			SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().buildReport(classroomSessionInfos);
+			inject(StudentClassroomSessionDivisionBusiness.class).buildReport(classroomSessionInfos);
 		}
 		*/
 	}
@@ -538,7 +549,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	private void createStudentClassroomSessions(ClassroomSessionInfos classroomSessionInfos,Collection<Student> students){
 		System.out.println("Creating data of classroom session "+classroomSessionInfos.getClassroomSession().getIdentifier()+" with "+students.size()+" students");
 		for(Student student : students){
-			SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().create(new StudentClassroomSession(student, classroomSessionInfos.getClassroomSession()));	
+			inject(StudentClassroomSessionBusiness.class).create(new StudentClassroomSession(student, classroomSessionInfos.getClassroomSession()));	
 		}
 	}
 	
@@ -594,11 +605,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				
 				report.addLabelValueCollection(labelValueCollectionReport);
 				
-				addIntervalCollectionLabelValueCollection(report,SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(
+				addIntervalCollectionLabelValueCollection(report,inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
 					((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
 					,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 				
-				addIntervalCollectionLabelValueCollection(report,rootBusinessLayer.getMetricCollectionDao().read(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR).getValueIntervalCollection()
+				addIntervalCollectionLabelValueCollection(report,inject(MetricCollectionDao.class).read(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR).getValueIntervalCollection()
 						,Boolean.TRUE,Boolean.FALSE,null);
 				
 				if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
@@ -610,18 +621,18 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", 
 							format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNextStartingDate()));
 					*/
-					StudentResults classroomSessionResults = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDao()
+					StudentResults classroomSessionResults = inject(StudentClassroomSessionDao.class)
 							.readByStudentByClassroomSession(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getResults();
 					
 					report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
 							{"ANNUAL AVERAGE",format(classroomSessionResults.getEvaluationSort().getAverage().getValue())}
 							,{"ANNUAL GRADE"
-								,classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval()==null?NULL_VALUE:rootBusinessLayer.getIntervalBusiness().findRelativeCode(classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval())}
-							,{"ANNUAL RANK",rootBusinessLayer.getMathematicsBusiness().format(classroomSessionResults.getEvaluationSort().getRank())}
+								,classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval()==null?NULL_VALUE:inject(IntervalBusiness.class).findRelativeCode(classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval())}
+							,{"ANNUAL RANK",inject(MathematicsBusiness.class).format(classroomSessionResults.getEvaluationSort().getRank())}
 							,{"NEXT ACADEMIC SESSION","TO COMPUTE"}
 							});
 				}else{
-					ClassroomSessionDivision nextClassroomSessionDivision = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionDao()
+					ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
 							.readByClassroomSessionByIndex(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 									,new Byte((byte) (studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()+1)));
 				
@@ -693,13 +704,13 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	
 	private void createMetricCollections(){
 		String[][] valueIntervals = new String[][]{ {"1", "Learning to do", "1", "1"},{"2", "Does sometimes", "2", "2"} ,{"3", "Does regularly", "3", "3"} };
-		pkMetricCollections = new MetricCollection[]{ create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Expressive language",MetricValueType.NUMBER
+		pkMetricCollections = new MetricCollection[]{ create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Expressive language",MetricValueType.NUMBER
     			, new String[]{"Participates actively during circle time","Participates in singing rhymes","Can say her name and name of classmates"
     			,"Can respond appropriately to “how are you?”","Can say his/her age","Can say the name of her school","Names objects in the classroom and school environment"
     			,"Uses at least one of the following words “me”,“I”, “he”, “she”, “you”","Talks in two or three word phrases and longer sentences"
     			,"Can use “and” to connect words/phrases","Talks with words in correct order","Can be engaged in conversations"}
     	,"Skills Performance levels", valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Receptive language",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Receptive language",MetricValueType.NUMBER
     			, new String[]{"Responds to her name when called",
     			"Retrieves named objects",
     			"Follows simple instructions (across the classroom) – stand, sit, bring your cup",
@@ -709,7 +720,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			"Understands the concept “Give and Take”",
     			"Talks about feelings"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Reading readness",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Reading readness",MetricValueType.NUMBER
     			, new String[]{"Shows interest in books/stories",
     			"Names familiar objects in pictures/books – vegetables, fruits, animals",
     			"Tells what action is going on in pictures",
@@ -719,7 +730,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			"Identifying pictures that begin with a particular sound",
     			"Recognizes the written letters of the alphabet"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Numeracy development",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Numeracy development",MetricValueType.NUMBER
     			, new String[]{"Sorts objects by shape",
     			"Sorts objects by size",
     			"Participates in reciting different counting rhymes, songs, stories and games",
@@ -730,14 +741,14 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			"Identifies the 3 basic geometric shapes ( circle, triangle and square)",
     			"Identifies more shapes ( Star, diamond, heart, cross ,crescent)"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Arts and music",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Arts and music",MetricValueType.NUMBER
     			, new String[]{"Moves expressively to sounds and music – nodding, clapping, movement of body",
     			"Participates in musical activities",
     			"Hums or sing words of songs",
     			"Participates in role play",
     			"Shows satisfaction with completed work"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Social and emotional development",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Social and emotional development",MetricValueType.NUMBER
     			, new String[]{"Initiates interaction with adults",
     			"Initiates interaction with classmates",
     			"Participates in group activities",
@@ -749,7 +760,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			"Can express dissatisfaction and other emotions – body language or words",
     			"Responds to correction – stops the misbehaviour"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Gross motor skills",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Gross motor skills",MetricValueType.NUMBER
     			, new String[]{"Can run well without falling",
     			"Can kick a ball",
     			"Climbs up ladder and slides down slide without help",
@@ -757,7 +768,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			"Can stand on one foot for a few seconds without support",
     			"Throws a ball into a basket from a short distance"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Fine motor skills",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Fine motor skills",MetricValueType.NUMBER
     			, new String[]{"Scribbles spontaneously",
     			"Can scribble to and from, in circular motions and in lines",
     			"Can place simple pieces in a puzzle board",
@@ -769,28 +780,28 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		valueIntervals = new String[][]{ {"1", "Emerging", "1", "1"}
     	,{"2", "Developing", "2", "2"} 
     	,{"3", "Proficient", "3", "3"},{"4", "Exemplary", "4", "4"} };
-		k1MetricCollections = new MetricCollection[]{ create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"English/language/Arts/Reading",MetricValueType.NUMBER
+		k1MetricCollections = new MetricCollection[]{ create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"English/language/Arts/Reading",MetricValueType.NUMBER
     			, new String[]{"Reads independently with understanding","Comprehends a variety of texts","Applies a variety of strategies to comprehend printed text"
     					,"Reads to access and utilize information from written and electronic sources","Demonstrates understanding of letter-sound associations"}
     	,"Skills Performance levels", valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Communication skills",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Communication skills",MetricValueType.NUMBER
     			, new String[]{"Contributes ideas to discussions","Communicates ideas effectively","Write for a variety of purposes","Writes well-organized compositions"
     					,"Uses appropriate writing skills","Write legibly","Revises, edits and proofreads work"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Science",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Science",MetricValueType.NUMBER
     			, new String[]{"Understands and applies scientific process","Understands and applies knowledge of key concepts"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Social Studies",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Social Studies",MetricValueType.NUMBER
     			, new String[]{"Gathers and organizes information","Understands and applies knowledge of key concepts"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Mathematics",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Mathematics",MetricValueType.NUMBER
     			, new String[]{"Demonstrates understanding of number sense","Reads and interprets data","Applies problem-solving strategies","Communicates mathematically"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Work habits",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Work habits",MetricValueType.NUMBER
     			, new String[]{"Follows directions","Uses time and materials constructively ","Works independently","Completes class assignments","Completes homework assignments",
     			"Listens attentively"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Social Skills",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Social Skills",MetricValueType.NUMBER
     			, new String[]{"Cooperates with others","Shows respect for others","Participates in classroom activities","Follows classroom/school rules"}
     	, valueIntervals))
     	};
@@ -799,46 +810,46 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	,{"2", "Does not meets and applies expectations/standards; but shows growth with support", "2", "2"} 
     	,{"3", "Meets and applies expectations/standards with support", "3", "3"},{"4", "Meets and applies expectations/standards with support", "4", "4"} };
     	
-		k2k3MetricCollections = new MetricCollection[]{ create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Reading Readiness",MetricValueType.NUMBER
+		k2k3MetricCollections = new MetricCollection[]{ create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Reading Readiness",MetricValueType.NUMBER
     			, new String[]{"Demonstrates concepts of print","Identifies and produces rhyming words","Segments and blends sounds"}
     	,"Performance Codes", valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Reading",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Reading",MetricValueType.NUMBER
     			, new String[]{"Answers questions about essential narrative elements","Reads high frequency words","Blends sounds to read words","Reads simple text"
     					,"Developmental Reading assessment"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Writing",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Writing",MetricValueType.NUMBER
     			, new String[]{"Writes first and last name","Expresses ideas through independent writing"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Listening,Speaking and Viewing",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Listening,Speaking and Viewing",MetricValueType.NUMBER
     			, new String[]{"Uses oral language to communicate effectively","Recites short poems and songs","Follows two-step oral directions"
     					,"Makes predictions and retells","Comprehends information through listening","Demonstrates comprehension of information through speaking"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Alphabet identification",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Alphabet identification",MetricValueType.NUMBER
     			, new String[]{"Identifies Upper-Case","Identifies Lower-Case","Produces Letter Sounds","Prints Letters Correctly"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Mathematics",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Mathematics",MetricValueType.NUMBER
     			, new String[]{"Number and Operations","Geometry","Measurement","Algebraic Thinking"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Science, Social Studies and Moral Education",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Science, Social Studies and Moral Education",MetricValueType.NUMBER
     			, new String[]{"Science","Social Studies","Moral Education"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Art and Craft",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Art and Craft",MetricValueType.NUMBER
     			, new String[]{"Performance","Initiative"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Music",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Music",MetricValueType.NUMBER
     			, new String[]{"Performance","Initiative"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Physical Education",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Physical Education",MetricValueType.NUMBER
     			, new String[]{"Performance","Initiative"}
     	, valueIntervals))
-    	,create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Work and Behaviour Habits",MetricValueType.NUMBER
+    	,create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Work and Behaviour Habits",MetricValueType.NUMBER
     			, new String[]{"Follows directions","Uses time and materials constructively","Works independently","Completes class assignments"
     					,"Completes homework assignments","Listens attentively","Cooperates with others","Shows respect for others","Participates in classroom activities"
     					,"Follows classroom/school rules"}
     	, valueIntervals))
     	};
 		
-		g1g6MetricCollections = new MetricCollection[]{ create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR,"Behaviour,Study and Work Habits",MetricValueType.NUMBER
+		g1g6MetricCollections = new MetricCollection[]{ create(inject(MetricCollectionBusiness.class).instanciateOne(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR,"Behaviour,Study and Work Habits",MetricValueType.NUMBER
     			, new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies","Demonstrates self-control"
     					,"Takes care of school and others materials","Game/Sport","Handwriting","Drawing/Painting","Punctionality/Regularity","Works cooperatively in groups"
     					,"Listens and follows directions"}
@@ -846,7 +857,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	,{"3", "Acceptable level of observable traits", "3", "3"},{"4", "Maintains high level of observable traits", "4", "4"}
     	,{"5", "Maintains an excellent degree of observable traits", "5", "5"} }))};
    
-		g7g12MetricCollections = new MetricCollection[]{ create(rootBusinessLayer.getMetricCollectionBusiness().instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Behaviour,Study and Work Habits",MetricValueType.STRING
+		g7g12MetricCollections = new MetricCollection[]{ create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Behaviour,Study and Work Habits",MetricValueType.STRING
     			, new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies","Demonstrates self-control"
     					,"Takes care of school and others materials","Game/Sport","Handwriting","Drawing/Painting","Punctionality/Regularity","Works cooperatively in groups"
     					,"Listens and follows directions"}

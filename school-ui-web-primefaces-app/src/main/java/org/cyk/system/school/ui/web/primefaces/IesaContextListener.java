@@ -12,7 +12,9 @@ import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
@@ -24,6 +26,7 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
@@ -250,7 +253,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 						});
 				}
 				
-				labelValueCollectionReport = addIntervalCollectionLabelValueCollection(r,rootBusinessLayer.getMetricCollectionDao().read(performanceCodeMetricCollectionCode).getValueIntervalCollection()
+				labelValueCollectionReport = addIntervalCollectionLabelValueCollection(r,inject(MetricCollectionDao.class).read(performanceCodeMetricCollectionCode).getValueIntervalCollection()
 						,Boolean.TRUE,Boolean.FALSE,null);
 				labelValueCollectionReport.add("NA", "Not Assessed");
 			}else{
@@ -297,11 +300,11 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 				
 				r.addLabelValueCollection(labelValueCollectionReport);
 				
-				addIntervalCollectionLabelValueCollection(r,SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(
+				addIntervalCollectionLabelValueCollection(r,inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
 					((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
 					,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 				
-				addIntervalCollectionLabelValueCollection(r,rootBusinessLayer.getMetricCollectionDao().read(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR).getValueIntervalCollection()
+				addIntervalCollectionLabelValueCollection(r,inject(MetricCollectionDao.class).read(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR).getValueIntervalCollection()
 						,Boolean.TRUE,Boolean.FALSE,null);
 				
 			}
@@ -316,7 +319,7 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
 						format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNextStartingDate()));
 				*/
 			}else{
-				ClassroomSessionDivision nextClassroomSessionDivision = SchoolBusinessLayer.getInstance().getClassroomSessionDivisionDao()
+				ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
 						.readByClassroomSessionByIndex(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 								,new Byte((byte) (studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()+1)));
 			

@@ -9,11 +9,8 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import org.cyk.system.root.business.impl.RootBusinessLayer;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.root.business.api.language.LanguageBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.data.collector.form.ControlSet;
@@ -27,6 +24,9 @@ import org.primefaces.extensions.model.dynaform.DynaFormLabel;
 import org.primefaces.extensions.model.dynaform.DynaFormModel;
 import org.primefaces.extensions.model.dynaform.DynaFormRow;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<ClassroomSessionDivision> implements Serializable {
 
@@ -36,11 +36,13 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 	protected void initialisation() {
 		super.initialisation();
 		form.getControlSetListeners().add(new ControlSetAdapter<Object>(){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Field field) {
 				if(field.getName().equals(Form.FIELD_DURATION))
-					return RootBusinessLayer.getInstance().getLanguageBusiness().findText("field.number.of",new Object[]{
-							SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().findCommonNodeInformations(identifiable.getClassroomSession())
+					return inject(LanguageBusiness.class).findText("field.number.of",new Object[]{
+							inject(ClassroomSessionBusiness.class).findCommonNodeInformations(identifiable.getClassroomSession())
 							.getAttendanceTimeDivisionType().getName()
 					});
 				
@@ -62,7 +64,7 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 			if(identifiable.getNumberOfMillisecond()==null)
 				;
 			else
-				duration = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getNumberOfMillisecond());
+				duration = inject(ClassroomSessionBusiness.class).convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getNumberOfMillisecond());
 			
 			fromDate = identifiable.getExistencePeriod().getFromDate();
 			toDate = identifiable.getExistencePeriod().getToDate();
@@ -74,7 +76,7 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 			if(duration==null)
 				identifiable.setNumberOfMillisecond(null);
 			else
-				identifiable.setNumberOfMillisecond(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),duration));
+				identifiable.setNumberOfMillisecond(inject(ClassroomSessionBusiness.class).convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),duration));
 			
 			identifiable.getExistencePeriod().setFromDate(fromDate);
 			identifiable.getExistencePeriod().setToDate(toDate);

@@ -7,7 +7,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
-import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.company.business.api.sale.SaleBusiness;
 import org.cyk.system.company.model.sale.SaleProduct;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -28,7 +28,7 @@ public class StudentClassroomSessionTuitionEditPage extends AbstractCrudOnePage<
 	protected void initialisation() {
 		super.initialisation();
 		if(identifiable.getTuitionSale()==null){
-			identifiable.setTuitionSale(CompanyBusinessLayer.getInstance().getSaleBusiness().instanciateOne(null, null,identifiable.getStudent().getCode()
+			identifiable.setTuitionSale(inject(SaleBusiness.class).instanciateOne(null, null,identifiable.getStudent().getCode()
 					, null, "false", new String[][]{ {SchoolConstant.INTANGIBLE_PRODUCT_TUITION,"1"} }));
 		}
 	}
@@ -54,7 +54,7 @@ public class StudentClassroomSessionTuitionEditPage extends AbstractCrudOnePage<
 			super.write();
 			SaleProduct saleProduct = identifiable.getTuitionSale().getSaleProducts().iterator().next();
 			saleProduct.getCost().setValue(amount);
-			CompanyBusinessLayer.getInstance().getSaleBusiness().applyChange(identifiable.getTuitionSale(), saleProduct);
+			inject(SaleBusiness.class).applyChange(identifiable.getTuitionSale(), saleProduct);
 		}
 	}
 	

@@ -6,14 +6,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.BusinessEntityInfos;
+import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.SortByRankArguments;
-import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.mathematics.Rank;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.model.NodeResults;
@@ -25,6 +25,9 @@ import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter
 public abstract class AbstractStudentClassroomSessionConsultManyRankPage extends AbstractConsultPage<StudentClassroomSession> implements Serializable {
@@ -58,13 +61,11 @@ public abstract class AbstractStudentClassroomSessionConsultManyRankPage extends
 			classroomSessions.add(studentClassroomSession.getClassroomSession());
 		}
 		
-		List<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>(SchoolBusinessLayer.getInstance()
-				.getClassroomSessionDivisionBusiness().findByClassroomSessions(classroomSessions));
+		List<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>(inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessions(classroomSessions));
 		
-		final Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivisions(classroomSessionDivisions);
+		final Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisions(classroomSessionDivisions);
 		
-		classroomSessionDivisions = new ArrayList<>(filterClassroomSessionDivisions(SchoolBusinessLayer.getInstance()
-				.getClassroomSessionDivisionBusiness().findByClassroomSessions(classroomSessions)));
+		classroomSessionDivisions = new ArrayList<>(filterClassroomSessionDivisions(inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessions(classroomSessions)));
 		
 		studentTable.getColumnListeners().add(new ColumnAdapter(userSession, classroomSessionDivisions));
 		
@@ -126,8 +127,8 @@ public abstract class AbstractStudentClassroomSessionConsultManyRankPage extends
 			final List<StudentClassroomSession> studentClassroomSessions = new ArrayList<>();
 			if(collection!=null)
 				studentClassroomSessions.addAll(collection);
-			SchoolBusinessLayer.getInstance().getStudentClassroomSessionBusiness().computeRank(studentClassroomSessions, SchoolBusinessLayer.getInstance().getStudentEvaluationResultsRankOptions());
-			RootBusinessLayer.getInstance().getMathematicsBusiness().sortByRank(new SortByRankArguments<StudentClassroomSession>() {
+			inject(StudentClassroomSessionBusiness.class).computeRank(studentClassroomSessions, SchoolBusinessLayer.getInstance().getStudentEvaluationResultsRankOptions());
+			inject(MathematicsBusiness.class).sortByRank(new SortByRankArguments<StudentClassroomSession>() {
 				@Override
 				public Rank getRank(StudentClassroomSession studentClassroomSession) {
 					return studentClassroomSession.getResults().getEvaluationSort().getRank();

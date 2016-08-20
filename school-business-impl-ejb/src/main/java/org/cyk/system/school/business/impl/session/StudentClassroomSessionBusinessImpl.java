@@ -9,15 +9,16 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.company.business.api.sale.SaleBusiness;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -76,7 +77,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	
 	private void cascade(StudentClassroomSession studentClassroomSession,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Crud crud){
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null
-				,SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness())
+				,inject(StudentClassroomSessionDivisionBusiness.class))
 			.operate(studentClassroomSessionDivisions, crud);
 		commonUtils.increment(Long.class, studentClassroomSession.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_STUDENTS
 				, Crud.CREATE.equals(crud)?1l:Crud.DELETE.equals(crud)?-1l:0l);
@@ -94,7 +95,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		}
 	
 		if(studentClassroomSession.getTuitionSale()!=null && studentClassroomSession.getTuitionSale().getIdentifier()==null){
-			CompanyBusinessLayer.getInstance().getSaleBusiness().create(studentClassroomSession.getTuitionSale());
+			inject(SaleBusiness.class).create(studentClassroomSession.getTuitionSale());
 		}
 		return super.update(studentClassroomSession);
 	}
@@ -130,8 +131,8 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
 			classroomSessionDivisions.add(studentClassroomSessionDivision.getClassroomSessionDivision());
 		
-		SchoolBusinessLayer.getInstance().getClassroomSessionDivisionBusiness().computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
-		SchoolBusinessLayer.getInstance().getClassroomSessionBusiness().computeResults(classroomSessions, studentClassroomSessions);
+		inject(ClassroomSessionDivisionBusiness.class).computeResults(classroomSessionDivisions, studentClassroomSessionDivisions);
+		inject(ClassroomSessionBusiness.class).computeResults(classroomSessions, studentClassroomSessions);
 		
 		return studentClassroomSessions;
 	}

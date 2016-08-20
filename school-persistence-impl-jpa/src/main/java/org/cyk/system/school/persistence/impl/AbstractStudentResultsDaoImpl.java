@@ -8,10 +8,7 @@ import org.cyk.system.root.model.mathematics.Rank;
 import org.cyk.system.root.model.mathematics.Sort;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.AbstractStudentResult;
-import org.cyk.system.school.model.StudentResults;
-import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.AbstractStudentResultsDao;
-import org.cyk.utility.common.computation.ArithmeticOperator;
 
 public abstract class AbstractStudentResultsDaoImpl<LEVEL extends AbstractIdentifiable,RESULT extends AbstractStudentResult<LEVEL,DETAIL>,DETAIL> extends AbstractTypedDao<RESULT> implements AbstractStudentResultsDao<LEVEL,RESULT,DETAIL>,Serializable {
 

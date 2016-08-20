@@ -9,12 +9,10 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.command.AbstractCommandable.Builder;
@@ -25,6 +23,9 @@ import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.api.ItemCollectionWebAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCrudOnePage<ClassroomSessionDivision> implements Serializable {
@@ -42,7 +43,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public Collection<StudentClassroomSessionDivision> load() {
-				return SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().findByClassroomSessionDivision(identifiable);
+				return inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivision(identifiable);
 			}
 			@Override
 			public void instanciated(AbstractItemCollection<Result, StudentClassroomSessionDivision,SelectItem> itemCollection,Result result) {
@@ -52,7 +53,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 				result.setAppreciation(result.getIdentifiable().getResults().getAppreciation());
 				result.setConferenceRequested(result.getIdentifiable().getResults().getConferenceRequested());
 				if(result.getIdentifiable().getResults().getLectureAttendance().getAttendedDuration()!=null)
-					result.setNumberOfTimeAbsent(SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+					result.setNumberOfTimeAbsent(inject(ClassroomSessionBusiness.class)
 					.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),result.getIdentifiable().getResults()
 							.getLectureAttendance().getMissedDuration()));
 			}	
@@ -65,7 +66,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 				if(item.getNumberOfTimeAbsent()==null){
 					
 				}else{
-					SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().setNumberOfTimesAbsent(item.getIdentifiable(), item.getNumberOfTimeAbsent());
+					inject(StudentClassroomSessionDivisionBusiness.class).setNumberOfTimesAbsent(item.getIdentifiable(), item.getNumberOfTimeAbsent());
 				}
 			}
 		});
@@ -73,7 +74,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 		resultCollection.getApplicableValueQuestion().setRendered(Boolean.FALSE);
 		resultCollection.getAddCommandable().setRendered(Boolean.FALSE);
 		
-		maximumMissedDuration = SchoolBusinessLayer.getInstance().getClassroomSessionBusiness()
+		maximumMissedDuration = inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getNumberOfMillisecond());
 	}
 	
@@ -89,7 +90,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 	
 	@Override
 	protected void update() {
-		SchoolBusinessLayer.getInstance().getStudentClassroomSessionDivisionBusiness().update(resultCollection.getIdentifiables());
+		inject(StudentClassroomSessionDivisionBusiness.class).update(resultCollection.getIdentifiables());
 	}
 	
 	@Override

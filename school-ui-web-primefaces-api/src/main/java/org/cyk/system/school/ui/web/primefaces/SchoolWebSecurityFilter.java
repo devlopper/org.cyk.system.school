@@ -11,7 +11,7 @@ public class SchoolWebSecurityFilter extends SecurityFilter.Listener.Adapter.Def
 	/*@Override
 	public Boolean isUrlAccessibleByUserAccount(URL url, UserAccount userAccount) {
 		if(Boolean.TRUE.equals(super.isUrlAccessibleByUserAccount(url, userAccount))){
-			Teacher teacher = SchoolBusinessLayer.getInstance().getTeacherBusiness().findByPerson((Person) userAccount.getUser());
+			Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userAccount.getUser());
 			if(teacher==null)
 				return Boolean.FALSE;
 			ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
