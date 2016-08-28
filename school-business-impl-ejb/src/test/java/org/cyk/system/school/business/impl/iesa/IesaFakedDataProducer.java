@@ -38,7 +38,6 @@ import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
-import org.cyk.system.school.business.api.session.EvaluationTypeBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
@@ -46,6 +45,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
+import org.cyk.system.school.business.api.subject.EvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;

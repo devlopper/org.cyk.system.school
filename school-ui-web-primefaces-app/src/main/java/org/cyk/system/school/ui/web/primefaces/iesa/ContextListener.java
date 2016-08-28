@@ -1,4 +1,4 @@
-package org.cyk.system.school.ui.web.primefaces;
+package org.cyk.system.school.ui.web.primefaces.iesa;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -13,7 +13,6 @@ import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArgumen
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
-import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
@@ -27,6 +26,8 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.ui.web.primefaces.AbstractSchoolContextListener;
+import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
@@ -34,7 +35,7 @@ import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 
 @WebListener
-public class IesaContextListener extends AbstractSchoolContextListener implements Serializable {
+public class ContextListener extends AbstractSchoolContextListener implements Serializable {
 
 	private static final long serialVersionUID = -9042005596731665575L;
 	
@@ -100,57 +101,10 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
     	
     	ActorBusinessServiceAdapter.ARE_CUSTOMERS.add(Student.class);
     	SaleConsultPage.SHOW_SALE_PRODUCT_TABLE = Boolean.FALSE;
+    	
+    	SchoolWebManager.getInstance().getListeners().add(new PrimefacesManager());
 	}
-	
-	@Override
-	protected void applicationUImanagers(ServletContextEvent event) {
-		super.applicationUImanagers(event);
-		uiManager.registerApplicationUImanager(RootWebManager.getInstance());
-		uiManager.registerApplicationUImanager(SchoolWebManager.getInstance());
-	}
-	
-	/*@Override
-	protected <ACTOR extends AbstractActor> AbstractActorCrudOnePageAdapter<ACTOR> getActorCrudOnePageAdapter(Class<ACTOR> actorClass) {
-		AbstractActorCrudOnePageAdapter<ACTOR> listener = super.getActorCrudOnePageAdapter(actorClass);
-		if(listener.getEntityTypeClass().equals(Teacher.class)){
-			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(AbstractActorEditFormModel.FIELD_REGISTRATION_CODE);
-			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addFieldNames(DefaultPersonEditFormModel.FIELD_TITLE
-					,DefaultPersonEditFormModel.FIELD_SIGNATURE_SPECIMEN);
-			
-			listener.getFormConfigurationMap().get(Crud.UPDATE).get(DefaultPersonEditFormModel.TAB_PERSON_ID).addFieldNames(
-					AbstractActorEditFormModel.FIELD_REGISTRATION_CODE,DefaultPersonEditFormModel.FIELD_TITLE);
-		}else if(listener.getEntityTypeClass().equals(Student.class)){
-			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(AbstractActorEditFormModel.FIELD_REGISTRATION_CODE);
-			listener.getFormConfigurationMap().get(Crud.CREATE).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addFieldNames(DefaultPersonEditFormModel.FIELD_SURNAME
-					,DefaultPersonEditFormModel.FIELD_BIRTH_DATE,DefaultPersonEditFormModel.FIELD_BIRTH_LOCATION
-					,DefaultPersonEditFormModel.FIELD_SEX,DefaultPersonEditFormModel.FIELD_IMAGE);
-			
-			listener.getFormConfigurationMap().get(Crud.UPDATE).get(DefaultPersonEditFormModel.TAB_PERSON_ID).addFieldNames(
-					AbstractActorEditFormModel.FIELD_REGISTRATION_CODE,DefaultPersonEditFormModel.FIELD_SURNAME
-					,DefaultPersonEditFormModel.FIELD_BIRTH_DATE,DefaultPersonEditFormModel.FIELD_BIRTH_LOCATION
-					,DefaultPersonEditFormModel.FIELD_SEX,DefaultPersonEditFormModel.FIELD_IMAGE);
-		}
-		return listener;
-	}*/
-	
-	/*@Override
-	protected <ACTOR extends AbstractActor> AbstractActorCrudManyPageAdapter<ACTOR> getActorCrudManyPageAdapter(Class<ACTOR> actorClass) {
-		AbstractActorCrudManyPageAdapter<ACTOR> listener = super.getActorCrudManyPageAdapter(actorClass);
-		if(listener.getEntityTypeClass().equals(Teacher.class)){
-			listener.getFormConfigurationMap().get(Crud.READ).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorOutputDetails.FIELD_REGISTRATION_CODE);
-		}else if(listener.getEntityTypeClass().equals(Student.class)){
-			listener.getFormConfigurationMap().get(Crud.READ).get(FormConfiguration.TYPE_INPUT_SET_SMALLEST).addRequiredFieldNames(DefaultActorOutputDetails.FIELD_REGISTRATION_CODE);
-		}
-		return listener;
-	}*/
-	
-	@Override
-	protected void identifiableConfiguration(ServletContextEvent event) {
-		super.identifiableConfiguration(event);
-		//IdentifiableConfiguration identifiableConfiguration = new IdentifiableConfiguration(StudentClassroomSessionDivision.class, editOneFormModelClass, readOneFormModelClass);
-		//uiManager.registerConfiguration(configuration);
-	}
-	
+		
 	/**/
 	
 	public static class SubjectDetails extends AbstractSubjectDetails implements Serializable{
@@ -367,83 +321,5 @@ public class IesaContextListener extends AbstractSchoolContextListener implement
     }
 	
 	/**/
-	/*
-	@SuppressWarnings("unchecked")
-	@Override
-	protected <ACTOR extends AbstractActor> AbstractActorConsultPageAdapter<ACTOR> getActorConsultPageAdapter(Class<ACTOR> actorClass) {
-		if(actorClass.equals(Student.class))
-			return (AbstractActorConsultPageAdapter<ACTOR>) new StudentConsultPageAdapter();
-		else if(actorClass.equals(Teacher.class))
-			return (AbstractActorConsultPageAdapter<ACTOR>) new TeacherConsultPageAdapter();
-		return super.getActorConsultPageAdapter(actorClass);
-	}
-	*/
-	/*
-	private static class TeacherConsultPageAdapter extends AbstractActorConsultPage.Adapter<Teacher>{
 
-		private static final long serialVersionUID = -5657492205127185872L;
-
-		public TeacherConsultPageAdapter() {
-			super(Teacher.class);
-		}
-		
-		@Override
-		public void initialisationEnded(AbstractBean bean) {
-			super.initialisationEnded(bean);
-			((AbstractActorConsultPage<?>)bean).removeDetailsMenuCommandable(DefaultPersonEditFormModel.TAB_CONTACT_ID);
-			((AbstractActorConsultPage<?>)bean).removeDetailsMenuCommandable(DefaultPersonEditFormModel.TAB_SIGNATURE_ID);
-		}
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		public <DETAILS> ControlSetAdapter<DETAILS> getControlSetAdapter(Class<DETAILS> detailsClass) {
-			if(MainDetails.class.equals(detailsClass)){
-				return (ControlSetAdapter<DETAILS>) new ControlSetAdapter<MainDetails>(){
-					@Override
-					public Boolean build(Field field) {
-						return field.getName().equals(MainDetails.FIELD_TITLE) || field.getName().equals(MainDetails.FIELD_FIRSTNAME) 
-								|| field.getName().equals(MainDetails.FIELD_LASTNAMES) || field.getName().equals(MainDetails.FIELD_REGISTRATION_CODE)
-								|| field.getName().equals(MainDetails.FIELD_REGISTRATION_DATE);
-					}
-				};
-			}
-			return super.getControlSetAdapter(detailsClass);
-		}
-		
-	}
-	
-	private static class StudentConsultPageAdapter extends AbstractActorConsultPage.Adapter<Student>{
-
-		private static final long serialVersionUID = -5657492205127185872L;
-
-		public StudentConsultPageAdapter() {
-			super(Student.class);
-		}
-				
-		@Override
-		public void initialisationEnded(AbstractBean bean) {
-			super.initialisationEnded(bean);
-			((AbstractActorConsultPage<?>)bean).removeDetailsMenuCommandable(DefaultPersonEditFormModel.TAB_CONTACT_ID);
-			((AbstractActorConsultPage<?>)bean).removeDetailsMenuCommandable(DefaultPersonEditFormModel.TAB_SIGNATURE_ID);
-		}
-		
-		@SuppressWarnings("unchecked")
-		@Override
-		public <DETAILS> ControlSetAdapter<DETAILS> getControlSetAdapter(Class<DETAILS> detailsClass) {
-			if(MainDetails.class.equals(detailsClass)){
-				return (ControlSetAdapter<DETAILS>) new ControlSetAdapter<MainDetails>(){
-					@Override
-					public Boolean build(Field field) {
-						return field.getName().equals(MainDetails.FIELD_BIRTHDATE) || field.getName().equals(MainDetails.FIELD_FIRSTNAME) 
-								|| field.getName().equals(MainDetails.FIELD_LASTNAMES) || field.getName().equals(MainDetails.FIELD_REGISTRATION_CODE)
-								|| field.getName().equals(MainDetails.FIELD_REGISTRATION_DATE) || field.getName().equals(MainDetails.FIELD_BIRTHLOCATION)
-								|| field.getName().equals(MainDetails.FIELD_SEX) || field.getName().equals(MainDetails.FIELD_SURNAME);
-					}
-				};
-			}
-			return super.getControlSetAdapter(detailsClass);
-		}
-		
-	}
-	*/
 }

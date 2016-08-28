@@ -12,6 +12,7 @@ import org.cyk.system.root.model.network.UniformResourceLocator;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
+import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
@@ -21,6 +22,7 @@ import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubje
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -31,6 +33,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionQueryOneFormModel;
@@ -58,14 +61,13 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 
 	private static final long serialVersionUID = -9042005596731665575L;
 
-	///*@Inject*/ protected SchoolBusinessLayer schoolBusinessLayer;
 	@Inject protected SchoolWebManager schoolWebManager;
 		
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		AbstractWebPage.DEFAULT_LAYOUT.setWest("/org.cyk.ui.web.primefaces.school/include/layout/westtop.xhtml");
-		//SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
+		uiManager.registerApplicationUImanager(SchoolWebManager.getInstance());	
 	}
 	
 	@Override
@@ -80,6 +82,10 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		//uiManager.businessEntityInfos(ClassroomSession.class).setUiConsultViewId("");
 		//IdentifiableConfiguration identifiableConfiguration = uiManager.findConfiguration(ClassroomSession.class);
 		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(Student.class, StudentEditPage.Form.class, StudentDetails.class,null,null,null));
+		uiManager.configBusinessIdentifiable(Student.class, null);
+		//webNavigationManager.useDynamicSelectView(Student.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(AcademicSession.class, AcademicSessionEditPage.Form.class, AcademicSessionDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(AcademicSession.class, null);

@@ -1,4 +1,4 @@
-package org.cyk.system.school.persistence.impl.session;
+package org.cyk.system.school.persistence.impl.subject;
 
 import java.io.Serializable;
 

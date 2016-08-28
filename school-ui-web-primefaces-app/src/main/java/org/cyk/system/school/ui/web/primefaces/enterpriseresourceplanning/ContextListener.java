@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.servlet.ServletContextEvent;
 
-import org.cyk.system.root.ui.web.primefaces.api.RootWebManager;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.AbstractContextListener;
 import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.PrimefacesManager;
@@ -17,8 +16,7 @@ public class ContextListener extends AbstractContextListener implements Serializ
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
-		uiManager.registerApplicationUImanager(RootWebManager.getInstance());
 		SchoolWebManager.getInstance().getListeners().add(new PrimefacesManager());
 	}
-	
+		
 }

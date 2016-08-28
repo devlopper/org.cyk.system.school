@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +53,6 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Setter private AverageComputationListener averageComputationListener;
 	@Setter private Script averageComputationScript;
 	@Setter private SchoolReportProducer reportProducer;
-	@Inject private SchoolReportRepository schoolReportRepository;
 	
 	private String actionCreateSubjectEvaluation = "acse";
 	private String actionUpdateStudentClassroomSessionDivisionResults = "auscsdr";
@@ -145,7 +143,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Override
 	protected AbstractReportRepository getReportRepository() {
-		return schoolReportRepository;
+		return inject(SchoolReportRepository.class);
 	}
 	
 	@Override

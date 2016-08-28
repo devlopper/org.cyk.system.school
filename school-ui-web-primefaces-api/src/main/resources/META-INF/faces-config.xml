@@ -5,6 +5,22 @@
 
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
+		
+		<navigation-case>
+			<from-outcome>studentEditView</from-outcome>
+			<to-view-id>/private/student/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentConsultView</from-outcome>
+			<to-view-id>/private/student/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentListView</from-outcome>
+			<to-view-id>/private/student/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 						
 		<navigation-case>
 			<from-outcome>updateAllAcademicSessionCurrentClassroomSessionDivisionIndex</from-outcome>

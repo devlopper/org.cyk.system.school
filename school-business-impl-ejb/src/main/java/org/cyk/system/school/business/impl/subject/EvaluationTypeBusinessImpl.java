@@ -1,11 +1,11 @@
-package org.cyk.system.school.business.impl.session;
+package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
 
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractEnumerationBusinessImpl;
-import org.cyk.system.school.business.api.session.EvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.EvaluationTypeBusiness;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 
