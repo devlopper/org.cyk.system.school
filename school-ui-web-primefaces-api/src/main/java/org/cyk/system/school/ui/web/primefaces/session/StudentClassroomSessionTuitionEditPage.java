@@ -7,17 +7,16 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.company.business.api.sale.SaleBusiness;
-import org.cyk.system.company.model.sale.SaleProduct;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionTuitionEditPage extends AbstractCrudOnePage<StudentClassroomSession> implements Serializable {
@@ -52,9 +51,9 @@ public class StudentClassroomSessionTuitionEditPage extends AbstractCrudOnePage<
 		@Override
 		public void write() {
 			super.write();
-			SaleProduct saleProduct = identifiable.getTuitionSale().getSaleProducts().iterator().next();
+			/*SaleProduct saleProduct = identifiable.getTuitionSale().getSaleProducts().iterator().next();
 			saleProduct.getCost().setValue(amount);
-			inject(SaleBusiness.class).applyChange(identifiable.getTuitionSale(), saleProduct);
+			inject(SaleBusiness.class).applyChange(identifiable.getTuitionSale(), saleProduct);*/
 		}
 	}
 	

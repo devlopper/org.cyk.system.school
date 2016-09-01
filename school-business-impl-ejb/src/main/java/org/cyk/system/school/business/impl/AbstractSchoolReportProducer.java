@@ -63,8 +63,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		NodeResults results = csd.getResults();
 		
 		r.getAcademicSession().setFromDateToDate(timeBusiness.formatPeriodFromTo(as.getExistencePeriod()));
-		r.getAcademicSession().getCompany().setImage(inject(FileBusiness.class).findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
-		r.getAcademicSession().getCompany().setName(as.getSchool().getOwnedCompany().getCompany().getName());
+		//r.getAcademicSession().getCompany().setImage(inject(FileBusiness.class).findInputStream(as.getSchool().getOwnedCompany().getCompany().getImage()));
+		//r.getAcademicSession().getCompany().setName(as.getSchool().getOwnedCompany().getCompany().getName());
 		
 		//debug(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(cs));
 		//debug(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate());
@@ -75,7 +75,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		if(reportTemplate.getBackgroundImage()!=null)
 			r.setBackgroundImage(inject(FileBusiness.class).findInputStream(reportTemplate.getBackgroundImage()));
 		inject(ContactCollectionBusiness.class).load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
-		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContact());
+		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContactCollection());
 		if(cs.getCoordinator()!=null)
 			r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
 		
@@ -175,7 +175,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			//if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
 				set(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval(), sr.getAverageScale());
 				if(applicable)
-					sr.getAverageScale().setCode(inject(IntervalBusiness.class).findRelativeCode(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
+					sr.getAverageScale().getGlobalIdentifier().setCode(inject(IntervalBusiness.class).findRelativeCode(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
 			//}else
 				//sr.getAverageScale().setCode(NOT_APPLICABLE);
 			

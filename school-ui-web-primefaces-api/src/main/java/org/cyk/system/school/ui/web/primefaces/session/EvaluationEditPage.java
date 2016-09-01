@@ -120,7 +120,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Boolean build(Field field) {
+			public Boolean build(Object data,Field field) {
 				if(field.getName().equals(Form.FIELD_TYPE))
 					return subjectEvaluationType == null;
 				return false;

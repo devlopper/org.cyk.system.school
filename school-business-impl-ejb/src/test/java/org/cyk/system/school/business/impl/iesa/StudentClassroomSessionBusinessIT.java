@@ -1,7 +1,6 @@
 package org.cyk.system.school.business.impl.iesa;
 
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
-import org.cyk.system.school.model.actor.Student;
 
 public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
 
@@ -15,7 +14,7 @@ public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	
     	schoolBusinessTestHelper.getEvaluationTypes().addAll(dataProducer.getEvaluationTypes());
     	
-    	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
+    	//schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
     	ClassroomSessionInfos grade = dataProducer.getG1();
     	/*StudentClassroomSession studentClassroomSession = */schoolBusinessTestHelper.createStudentClassroomSession("STUD1", grade.getClassroomSession()
     			,new Object[][]{ {15},{15},{15} });

@@ -13,6 +13,9 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.file.FileBusiness;
@@ -20,7 +23,6 @@ import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
-import org.cyk.system.root.business.impl.RootRandomDataProvider;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
@@ -30,6 +32,7 @@ import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -43,7 +46,6 @@ import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
@@ -63,9 +65,6 @@ import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper implements Serializable {
@@ -107,13 +106,13 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		if(Boolean.TRUE.equals(classCoordinator)){
 			Collection<ClassroomSession> classroomSessions = inject(ClassroomSessionBusiness.class).findAll();
 			for(ClassroomSession classroomSession : classroomSessions)
-				classroomSession.setCoordinator(RootRandomDataProvider.getInstance().oneFromDatabase(Teacher.class));
+				classroomSession.setCoordinator(inject(TeacherDao.class).readOneRandomly());
 			inject(ClassroomSessionBusiness.class).update(classroomSessions);
 		}
 		if(Boolean.TRUE.equals(teacher)){
 			Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = inject(ClassroomSessionDivisionSubjectBusiness.class).findAll();
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects)
-				classroomSessionDivisionSubject.setTeacher(RootRandomDataProvider.getInstance().oneFromDatabase(Teacher.class));
+				classroomSessionDivisionSubject.setTeacher(inject(TeacherDao.class).readOneRandomly());
 			inject(ClassroomSessionDivisionSubjectBusiness.class).update(classroomSessionDivisionSubjects);
 		}
 	}
@@ -495,9 +494,9 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		System.out.println("School business simulation started");
 		
     	System.out.println("Creating teachers");
-		RootRandomDataProvider.getInstance().createActor(Teacher.class, parameters.getTeacherCount());
+    	inject(TeacherBusiness.class).create(inject(TeacherBusiness.class).instanciateManyRandomly(parameters.getTeacherCount()));
 		System.out.println("Creating students");
-		RootRandomDataProvider.getInstance().createActor(Student.class, parameters.getStudentCount());
+		inject(StudentBusiness.class).create(inject(StudentBusiness.class).instanciateManyRandomly(parameters.getStudentCount()));
     	
 		System.out.println("Setting class coordinators , subject teachers");
     	randomSetActor(Boolean.TRUE, Boolean.TRUE);

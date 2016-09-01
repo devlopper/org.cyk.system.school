@@ -3,7 +3,6 @@ package org.cyk.system.school.business.impl.iesa;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
-import org.cyk.system.school.model.actor.Student;
 
 public class StructureBusinessIT extends AbstractIesaBusinessIT {
 
@@ -15,7 +14,7 @@ public class StructureBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
+    	//schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
   
     	assertEquals("No student classroom session division", 0l, inject(StudentClassroomSessionBusiness.class).countAll());
     	

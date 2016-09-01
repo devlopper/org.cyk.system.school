@@ -39,14 +39,14 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Field field) {
+			public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Object data,Field field) {
 				if(field.getName().equals(Form.FIELD_DURATION))
 					return inject(LanguageBusiness.class).findText("field.number.of",new Object[]{
 							inject(ClassroomSessionBusiness.class).findCommonNodeInformations(identifiable.getClassroomSession())
 							.getAttendanceTimeDivisionType().getName()
 					});
 				
-				return super.fiedLabel(controlSet, field);
+				return super.fiedLabel(controlSet,data, field);
 			}
 		});
 	}

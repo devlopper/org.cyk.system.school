@@ -19,9 +19,9 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 				{"Formname(s)", report.getStudent().getPerson().getNames()}
 				,{"Surname", report.getStudent().getPerson().getSurname()}
-				,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
+				/*,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
 				,{"Place of birth", report.getStudent().getPerson().getBirthLocation()}
-				,{"Admission No", report.getStudent().getRegistrationCode()}
+				,{"Admission No", report.getStudent().getRegistrationCode()}*/
 				,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
 				,{"Gender", report.getStudent().getPerson().getSex()}
 				});
@@ -99,9 +99,9 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 				{"Formname(s)", report.getStudent().getPerson().getNames()}
 				,{"Surname", report.getStudent().getPerson().getSurname()}
-				,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
+				/*,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
 				,{"Place of birth", report.getStudent().getPerson().getBirthLocation()}
-				,{"Admission No", report.getStudent().getRegistrationCode()}
+				,{"Admission No", report.getStudent().getRegistrationCode()}*/
 				,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
 				,{"Gender", report.getStudent().getPerson().getSex()}
 				});
@@ -165,9 +165,9 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 				{"Formname(s)", report.getStudent().getPerson().getNames()}
 				,{"Surname", report.getStudent().getPerson().getSurname()}
-				,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
+				/*,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
 				,{"Place of birth", report.getStudent().getPerson().getBirthLocation()}
-				,{"Admission No", report.getStudent().getRegistrationCode()}
+				,{"Admission No", report.getStudent().getRegistrationCode()}*/
 				,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
 				,{"Gender", report.getStudent().getPerson().getSex()}
 				});
@@ -228,9 +228,9 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 				{"Formname(s)", report.getStudent().getPerson().getNames()}
 				,{"Surname", report.getStudent().getPerson().getSurname()}
-				,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
+				/*,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
 				,{"Place of birth", report.getStudent().getPerson().getBirthLocation()}
-				,{"Admission No", report.getStudent().getRegistrationCode()}
+				,{"Admission No", report.getStudent().getRegistrationCode()}*/
 				,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
 				,{"Gender", report.getStudent().getPerson().getSex()}
 				});

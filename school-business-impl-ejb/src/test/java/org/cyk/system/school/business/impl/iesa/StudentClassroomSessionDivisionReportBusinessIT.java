@@ -6,7 +6,6 @@ import java.util.Collection;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionInfos;
-import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.EvaluationType;
 
@@ -20,7 +19,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
+    	//schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
     	
     	//schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
     	//		dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 

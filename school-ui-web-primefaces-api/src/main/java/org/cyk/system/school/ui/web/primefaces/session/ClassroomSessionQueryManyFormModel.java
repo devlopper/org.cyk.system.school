@@ -147,10 +147,10 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean build(Field field) {
+					public Boolean build(Object data,Field field) {
 						if(SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(page.getActionIdentifier()))
 							return field.getName().equals(Form.FIELD_UPDATE_RANK_RESULTS);
-						return super.build(field);
+						return super.build(data,field);
 					}
 				});
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionEvaluationResults()}, page.getActionIdentifier())){
@@ -164,10 +164,10 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean build(Field field) {
+					public Boolean build(Object data,Field field) {
 						if(SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(page.getActionIdentifier()))
 							return field.getName().equals(Form.FIELD_UPDATE_RANK_RESULTS);
-						return super.build(field);
+						return super.build(data,field);
 					}
 				});
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionConsultStudentClassroomSessionRanks()}, page.getActionIdentifier())){
@@ -178,16 +178,16 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public Boolean build(Field field) {
+					public Boolean build(Object data,Field field) {
 						return ArrayUtils.contains(new String[]{Form.FIELD_CLASSROOMSESSIONDIVISION_MIN_COUNT,Form.FIELD_CLASSROOMSESSIONDIVISION_MAX_COUNT
 								,Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED}, field.getName());
 					}
 					
 					@Override
-					public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Field field) {
+					public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Object data,Field field) {
 						if(field.getName().equals(Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED) && timeDivisionTypes.size()==1)
 							return timeDivisionTypes.iterator().next().getName();
-						return super.fiedLabel(controlSet, field);
+						return super.fiedLabel(controlSet,data, field);
 					}
 					
 					

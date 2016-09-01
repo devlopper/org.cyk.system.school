@@ -45,25 +45,16 @@ public class StudentClassroomSessionDivisionReport extends AbstractReportTemplat
 		commentsBlockTitle = "CLASS TEACHER COMMENTS AND SIGNATURE";
 		schoolStampBlockTitle = "SCHOOL STAMP AND SIGNATURE";
 	
-		academicSession.getCompany().setGenerateImage(Boolean.TRUE);
+		academicSession.getCompany().getGlobalIdentifier().setGenerateImage(Boolean.TRUE);
 		academicSession.generate();
-		//TODO to be moved
-		academicSession.getCompany().setName(
-				"<style forecolor=\"red\">I</style>"
-				+ "NTERNATIONAL "
-				+ "<style  forecolor=\"red\">E</style>"
-				+ "NGLISH "
-				+ "<style forecolor=\"red\">S</style>"
-				+ "CHOOL OF "
-				+ "<style forecolor=\"red\">A</style>BIDJAN");
 		
 		if(Boolean.TRUE.equals(generateHeaderImage))
 			headerImage = inputStream(provider.documentHeader().getBytes());
 		
-		if(Boolean.TRUE.equals(generateBackgroundImage))
+		if(Boolean.TRUE.equals(generateBackgroundImage)) 
 			backgroundImage = inputStream(provider.companyLogo().getBytes());
 		
-		student.getPerson().setGenerateImage(Boolean.TRUE);
+		student.getPerson().getGlobalIdentifier().setGenerateImage(Boolean.TRUE);
 		student.generate();
 		signer.getPerson().setGenerateSignatureSpecimen(Boolean.TRUE);
 		signer.generate();

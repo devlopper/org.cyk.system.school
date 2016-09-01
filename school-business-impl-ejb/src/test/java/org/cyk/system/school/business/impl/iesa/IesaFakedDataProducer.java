@@ -11,6 +11,9 @@ import java.util.HashSet;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
@@ -35,6 +38,7 @@ import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
@@ -56,7 +60,6 @@ import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataPr
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -89,9 +92,6 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {
@@ -277,7 +277,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 							
 							inject(StudentClassroomSessionBusiness.class).updateAverage(classroomSessions, new BusinessServiceCallArguments<StudentClassroomSession>());
 						
-							inject(StudentClassroomSessionBusiness.class).updateRank(classroomSessions, schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
+							inject(StudentClassroomSessionBusiness.class).updateRank(classroomSessions, inject(SchoolBusinessLayer.class).getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
 						}else{
 							
 						}
@@ -373,9 +373,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	academicSession.getExistencePeriod().setToDate(new Date(academicSession.getExistencePeriod().getFromDate().getTime()+DateTimeConstants.MILLIS_PER_DAY*355));
     	academicSession = create(academicSession);
 		
-		rootRandomDataProvider.createActor(Teacher.class, numbreOfTeachers);
+    	inject(TeacherBusiness.class).create(inject(TeacherBusiness.class).instanciateManyRandomly(numbreOfTeachers));
 		flush("Teachers");
-		rootRandomDataProvider.createActor(Student.class, numbreOfStudents);
+		inject(StudentBusiness.class).create(inject(StudentBusiness.class).instanciateManyRandomly(numbreOfStudents));
 		flush("Students");
 		
     	school.getOwnedCompany().getCompany().setManager(personDao.readOneRandomly());
@@ -565,8 +565,6 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				StudentClassroomSessionDivisionReportParameters parameters) {
 			LabelValueCollectionReport labelValueCollectionReport;
 			StudentClassroomSessionDivisionReport report = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
-			report.getAcademicSession().getCompany().setName("<style forecolor=\"red\">I</style>NTERNATIONAL <style forecolor=\"red\">E</style>NGLISH <style forecolor=\"red\">S</style>CHOOL"
-					+ " OF <style forecolor=\"red\">A</style>BIDJAN");
 			
 			if(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getIndex()>3){
 			
@@ -575,9 +573,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 						{"Formname(s)", report.getStudent().getPerson().getNames()}
 						,{"Surname", report.getStudent().getPerson().getSurname()}
-						,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
+						/*,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
 						,{"Place of birth", report.getStudent().getPerson().getBirthLocation()}
-						,{"Admission No", report.getStudent().getRegistrationCode()}
+						,{"Admission No", report.getStudent().getRegistrationCode()}*/
 						,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
 						,{"Gender", report.getStudent().getPerson().getSex()}
 						});

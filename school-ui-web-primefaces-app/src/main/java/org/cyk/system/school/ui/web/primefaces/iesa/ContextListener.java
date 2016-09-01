@@ -145,10 +145,10 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		
 			r.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 					{"Formname(s)", r.getStudent().getPerson().getLastName()}
-					,{"Surname", r.getStudent().getPerson().getName()}
+					/*,{"Surname", r.getStudent().getPerson().getName()}
 					,{"Date of birth", r.getStudent().getPerson().getBirthDate()}
 					,{"Place of birth", r.getStudent().getPerson().getBirthLocation()}
-					,{"Admission No", r.getStudent().getRegistrationCode()}
+					,{"Admission No", r.getStudent().getRegistrationCode()}*/
 					,{"Class", r.getClassroomSessionDivision().getClassroomSession().getName()}
 					,{"Gender", r.getStudent().getPerson().getSex()}
 					});
