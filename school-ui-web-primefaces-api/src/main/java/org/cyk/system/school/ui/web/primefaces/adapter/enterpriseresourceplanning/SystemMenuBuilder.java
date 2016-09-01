@@ -32,13 +32,6 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 		return module;
 	}
 	
-	public Commandable getEmployeeCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
-		Commandable module = createModuleCommandable(Level.class, null);
-		module.addChild(createListCommandable(LevelName.class, null));
-		module.addChild(createListCommandable(LevelSpeciality.class, null));
-		return module;
-	}
-	
 	public Commandable getLevelCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable(Level.class, null);
 		module.addChild(createListCommandable(LevelName.class, null));
