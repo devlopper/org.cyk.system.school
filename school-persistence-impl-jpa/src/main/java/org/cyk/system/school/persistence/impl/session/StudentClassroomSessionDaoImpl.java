@@ -9,6 +9,7 @@ import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.root.persistence.impl.QueryWrapper;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -19,13 +20,15 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-    private String readByClassroomSession,readByStudentByClassroomSession,readByClassroomSessions,readByLevelTimeDivision,readByCriteria,countByCriteria;
+    private String readByClassroomSession,readByStudentByClassroomSession,readByAcademicSession,readByClassroomSessions,readByLevelTimeDivision
+    	,readByCriteria,countByCriteria;
     
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
         registerNamedQuery(readByClassroomSession, _select().where(StudentClassroomSession.FIELD_CLASSROOMSESSION));
         registerNamedQuery(readByLevelTimeDivision, _select().where(commonUtils.attributePath(StudentClassroomSession.FIELD_CLASSROOMSESSION, ClassroomSession.FIELD_LEVEL_TIME_DIVISION), ClassroomSession.FIELD_LEVEL_TIME_DIVISION));
+        registerNamedQuery(readByAcademicSession, _select().where(commonUtils.attributePath(StudentClassroomSession.FIELD_CLASSROOMSESSION, ClassroomSession.FIELD_ACADEMIC_SESSION), ClassroomSession.FIELD_ACADEMIC_SESSION));
         registerNamedQuery(readByStudentByClassroomSession, _select().where(StudentClassroomSession.FIELD_STUDENT).and(StudentClassroomSession.FIELD_CLASSROOMSESSION));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(StudentClassroomSession.FIELD_CLASSROOMSESSION));
     
@@ -84,6 +87,11 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
 		QueryWrapper<?> queryWrapper = countNamedQuery(countByCriteria);
 		applySearchCriteriaParameters(queryWrapper, searchCriteria);
 		return (Long) queryWrapper.resultOne();
+	}
+
+	@Override
+	public Collection<StudentClassroomSession> readByAcademicSession(AcademicSession academicSession) {
+		return namedQuery(readByAcademicSession).parameter(ClassroomSession.FIELD_ACADEMIC_SESSION, academicSession).resultMany();
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -20,9 +21,6 @@ public interface StudentClassroomSessionBusiness extends AbstractStudentResultsB
 	Collection<StudentClassroomSession> findByClassroomSession(ClassroomSession classroomSession);
 	Collection<StudentClassroomSession> findByClassroomSessions(Collection<ClassroomSession> classroomSessions);
 	Collection<StudentClassroomSession> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
-
-	StudentClassroomSession finddByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
-
 	StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
 	
 	Collection<StudentClassroomSession> findByCriteria(SearchCriteria criteria);
@@ -35,6 +33,8 @@ public interface StudentClassroomSessionBusiness extends AbstractStudentResultsB
 		private static final long serialVersionUID = 7151479991050865862L;
 		
 	}
+
+	Collection<StudentClassroomSession> findByAcademicSession(AcademicSession academicSession);
 
 	
 }

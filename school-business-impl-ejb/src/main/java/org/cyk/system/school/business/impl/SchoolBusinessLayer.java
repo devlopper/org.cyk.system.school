@@ -54,6 +54,9 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Setter private Script averageComputationScript;
 	@Setter private SchoolReportProducer reportProducer;
 	
+	private String actionPrintStudentClassroomSessionTuitionCertificate = "print.tuition.certificate";
+	private String actionPrintStudentClassroomSessionRegistrationCertificate = "print.registration.certificate";
+	
 	private String actionCreateSubjectEvaluation = "acse";
 	private String actionUpdateStudentClassroomSessionDivisionResults = "auscsdr";
 	private String actionComputeStudentClassroomSessionDivisionEvaluationResults = "acscsder";

@@ -47,6 +47,7 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryOneF
 import org.cyk.system.school.ui.web.primefaces.session.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.StudentClassroomSessionDivisionQueryManyFormModel;
+import org.cyk.system.school.ui.web.primefaces.session.StudentQueryOneFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.StudentSubjectEditPage;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.config.IdentifiableConfiguration;
@@ -83,9 +84,10 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		//IdentifiableConfiguration identifiableConfiguration = uiManager.findConfiguration(ClassroomSession.class);
 		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(Student.class, StudentEditPage.Form.class, StudentDetails.class,null,null,null));
+		uiManager.registerConfiguration(new IdentifiableConfiguration(Student.class, StudentEditPage.Form.class, StudentDetails.class,StudentQueryOneFormModel.class,null,null));
 		uiManager.configBusinessIdentifiable(Student.class, null);
-		//webNavigationManager.useDynamicSelectView(Student.class);
+		AbstractSelectOnePage.Listener.COLLECTION.add(new StudentQueryOneFormModel.PageAdapter());
+		webNavigationManager.useDynamicSelectView(Student.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(AcademicSession.class, AcademicSessionEditPage.Form.class, AcademicSessionDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(AcademicSession.class, null);
@@ -98,26 +100,33 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSession.class, ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class,ClassroomSessionQueryOneFormModel.class,null,ClassroomSessionQueryManyFormModel.class));
 		uiManager.configBusinessIdentifiable(ClassroomSession.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSession.class);
+		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionQueryOneFormModel.PageAdapter());
+		AbstractSelectManyPage.Listener.COLLECTION.add(new ClassroomSessionQueryManyFormModel.PageAdapter());
+		AbstractProcessManyPage.Listener.COLLECTION.add(new ClassroomSessionQueryManyFormModel.ProcessPageAdapter());
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivision.class, ClassroomSessionDivisionEditPage.Form.class, ClassroomSessionDivisionDetails.class
 				,ClassroomSessionDivisionQueryOneFormModel.class,null,null));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivision.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSessionDivision.class);
+		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionQueryOneFormModel.PageAdapter());
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectEditPage.Form.class, ClassroomSessionDivisionSubjectDetails.class
 				,ClassroomSessionDivisionSubjectQueryFormModel.class,null,null));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionSubject.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSessionDivisionSubject.class);
+		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionSubjectEvaluationType.class, ClassroomSessionDivisionSubjectEvaluationTypeEditPage.Form.class, ClassroomSessionDivisionSubjectEvaluationTypeDetails.class
 				,ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.class,null,null));
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionSubjectEvaluationType.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSessionDivisionSubjectEvaluationType.class);
+		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.PageAdapter());
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(StudentClassroomSessionDivision.class, StudentClassroomSessionDivisionEditPage.One.class, StudentClassroomSessionDivisionDetails.class
 				,null,StudentClassroomSessionDivisionEditPage.Many.class,StudentClassroomSessionDivisionQueryManyFormModel.class));
 		uiManager.configBusinessIdentifiable(StudentClassroomSessionDivision.class, null);
 		webNavigationManager.useDynamicSelectView(StudentClassroomSessionDivision.class);
+		AbstractSelectManyPage.Listener.COLLECTION.add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(StudentClassroomSessionDivisionSubject.class, StudentSubjectEditPage.Form.class, StudentClassroomSessionDivisionSubjectDetails.class
 				,null,null,null));
@@ -127,16 +136,6 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		uiManager.registerConfiguration(new IdentifiableConfiguration(Evaluation.class, null, EvaluationDetails.class
 				,null,null,null));
 		uiManager.configBusinessIdentifiable(Evaluation.class, null);
-		
-		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionQueryOneFormModel.PageAdapter());
-		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionQueryOneFormModel.PageAdapter());
-		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionSubjectQueryFormModel.PageAdapter());
-		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel.PageAdapter());
-		
-		AbstractSelectManyPage.Listener.COLLECTION.add(new ClassroomSessionQueryManyFormModel.PageAdapter());
-		AbstractSelectManyPage.Listener.COLLECTION.add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
-
-		AbstractProcessManyPage.Listener.COLLECTION.add(new ClassroomSessionQueryManyFormModel.ProcessPageAdapter());
 		
 		if(Boolean.TRUE.equals(SchoolWebManager.EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
 			SecurityFilter.addUniformResourceLocatorRuntimeConstraint(new UniformResourceLocator("/private/__role__/__manager__/evaluation/edit.jsf")
