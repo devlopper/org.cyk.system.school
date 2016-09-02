@@ -10,6 +10,9 @@ import org.cyk.system.company.model.structure.Vehicle;
 import org.cyk.system.root.model.message.SmtpProperties;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.AcademicSession;
+import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.ui.api.command.UICommandable;
@@ -63,8 +66,10 @@ public class SystemMenuBuilder extends AbstractSystemMenuBuilder implements Seri
 	
 	public Commandable getAcademicCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable("commandable.academic.management", null);
+		module.addChild(createListCommandable(ClassroomSession.class, null));
+		module.addChild(createListCommandable(LevelTimeDivision.class, null));
+		module.addChild(createListCommandable(AcademicSession.class, null));
 		module.addChild(createListCommandable(Subject.class, null));
-		
 		return module;
 	}
 	
