@@ -12,14 +12,17 @@ import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
+import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
+import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
@@ -102,6 +105,17 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	SaleConsultPage.SHOW_SALE_PRODUCT_TABLE = Boolean.FALSE;
     	
     	SchoolWebManager.getInstance().getListeners().add(new PrimefacesManager());
+    	
+    	StudentBusinessImpl.Listener.Adapter listener = new StudentBusinessImpl.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 1L;
+    		@Override
+    		public void afterInstanciateOne(UserAccount userAccount, Student student) {
+    			super.afterInstanciateOne(userAccount, student);
+    			student.setStudentClassroomSession(new StudentClassroomSession(student, null));
+    		}
+    	};
+    	listener.addCascadeToClass(StudentClassroomSession.class);
+    	StudentBusinessImpl.Listener.COLLECTION.add(listener);
 	}
 		
 	/**/
