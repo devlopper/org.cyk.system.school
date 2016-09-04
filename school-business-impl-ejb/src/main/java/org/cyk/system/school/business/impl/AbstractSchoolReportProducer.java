@@ -260,6 +260,14 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		for(String metricCollectionCode : metricCollectionCodes)
 			addStudentResultsLabelValueCollection(report, studentResults, metricCollectionCode);
 	}
+	
+	/**/
+	
+	public static class Default extends AbstractSchoolReportProducer implements Serializable{
+		private static final long serialVersionUID = 1L;
+		
+	}
+	
 	/**/
 	
 	public static final String LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID = "school.report.studentclassroomsessiondivision.block.overallresult.grade";

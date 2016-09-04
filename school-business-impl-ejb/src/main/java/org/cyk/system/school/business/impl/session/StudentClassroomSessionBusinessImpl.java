@@ -19,7 +19,6 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
-import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -64,15 +63,13 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		logInstanceCreated(studentClassroomSession);
 		//logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
 		
-		if(studentClassroomSession.getResults()==null)
-			studentClassroomSession.setResults(new StudentResults());
-		
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeTopDownOnCreate())){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
 				studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
 		}
 		cascade(studentClassroomSession, studentClassroomSessionDivisions, Crud.CREATE);
+		
 		return studentClassroomSession;
 	}
 	

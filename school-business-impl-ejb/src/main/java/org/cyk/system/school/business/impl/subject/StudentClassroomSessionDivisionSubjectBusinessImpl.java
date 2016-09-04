@@ -14,7 +14,6 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
-import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -46,8 +45,6 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 		studentSubject = super.create(studentSubject);
 		Student student = studentSubject.getStudent();
 		ClassroomSessionDivision classroomSessionDivision = studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
-		if(studentSubject.getResults()==null)
-			studentSubject.setResults(new StudentResults());
 		
 		if(Boolean.TRUE.equals(studentSubject.getCascadeBottomUpOnCreate())){
 			StudentClassroomSessionDivision studentClassroomSessionDivision = studentClassroomSessionDivisionDao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);

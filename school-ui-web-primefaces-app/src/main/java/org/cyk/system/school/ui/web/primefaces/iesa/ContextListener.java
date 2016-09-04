@@ -16,7 +16,6 @@ import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -95,7 +94,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		super.contextInitialized(event);
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = SubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
-		SchoolBusinessLayer.getInstance().setReportProducer(new ReportProducer());
+		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
     	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
     	

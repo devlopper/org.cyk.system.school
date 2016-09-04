@@ -33,8 +33,6 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -81,9 +79,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override
 	public StudentClassroomSessionDivision create(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		super.create(studentClassroomSessionDivision);
-		
-		if(studentClassroomSessionDivision.getResults()==null)
-			studentClassroomSessionDivision.setResults(new StudentResults());
 		
 		Student student = studentClassroomSessionDivision.getStudent();
 		ClassroomSessionDivision classroomSessionDivision = studentClassroomSessionDivision.getClassroomSessionDivision();
@@ -144,8 +139,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			StudentClassroomSessionDivisionReportParameters parameters = 
 					new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
 			
-			StudentClassroomSessionDivisionReport report = SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
-					,parameters);
+			StudentClassroomSessionDivisionReport report = null;//SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
+					//,parameters);
 			
 			if(report==null){
 				

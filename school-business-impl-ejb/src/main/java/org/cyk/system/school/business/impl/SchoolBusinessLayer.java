@@ -19,13 +19,15 @@ import org.cyk.system.root.business.impl.AbstractFormatter;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.BusinessServiceProvider;
 import org.cyk.system.root.business.impl.BusinessServiceProvider.Service;
+import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
+import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.school.business.api.SortableStudentResults;
-import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
+import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -52,7 +54,6 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Setter private AverageComputationListener averageComputationListener;
 	@Setter private Script averageComputationScript;
-	@Setter private SchoolReportProducer reportProducer;
 	
 	private String actionPrintStudentClassroomSessionTuitionCertificate = "print.tuition.certificate";
 	private String actionPrintStudentClassroomSessionRegistrationCertificate = "print.registration.certificate";
@@ -76,6 +77,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+		AbstractRootReportProducer.DEFAULT = new AbstractSchoolReportProducer.Default();
+		RootBusinessLayer.GLOBAL_IDENTIFIER_UNBUILDABLE_CLASSES.add(StudentResults.class);
 		registerFormatter(AcademicSession.class, new AbstractFormatter<AcademicSession>() {
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
@@ -148,6 +151,11 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected AbstractReportRepository getReportRepository() {
 		return inject(SchoolReportRepository.class);
 	}
+	
+	/*@Override
+	protected RootReportProducer getReportProducer() {
+		return inject(SchoolReportProducer.class);
+	}*/
 	
 	@Override
 	protected void persistData() {

@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.ui.api.model.party.AbstractActorEditFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
@@ -26,6 +27,13 @@ public class StudentEditPage extends AbstractCrudOnePage<Student> implements Ser
 		private static final long serialVersionUID = -4741435164709063863L;
 		
 		@Input @InputChoice @InputOneChoice @InputOneCombo private ClassroomSession classroomSession;
+		
+		@Override
+		public void write() {
+			super.write();
+			if(classroomSession!=null)
+				identifiable.setStudentClassroomSession(new StudentClassroomSession(identifiable, classroomSession));
+		}
 		
 		public static final String FIELD_CLASSROOMSESSION = "classroomSession";
 	}

@@ -29,6 +29,7 @@ import org.cyk.system.root.persistence.api.event.EventPartyDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.AbstractStudentResult;
+import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
@@ -52,7 +53,18 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	public AbstractStudentResultsBusinessImpl(DAO dao) {
 		super(dao); 
 	}
+
+	@Override
+	public RESULT create(RESULT identifiable) {
+		if(identifiable.getResults()==null){
+			identifiable.setResults(new StudentResults());
+		}
+		return super.create(identifiable);
+	}
 	
+
+
+
 	@Override
 	public void updateAverage(Collection<LEVEL> levels,Collection<RESULT> results,Collection<DETAIL> details,BusinessServiceCallArguments<RESULT> callArguments) {
 		for(LEVEL level : levels){
