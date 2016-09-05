@@ -164,6 +164,11 @@
 		
 		<!-- Results -->
 		<navigation-case>
+			<from-outcome>studentClassroomSessionListView</from-outcome>
+			<to-view-id>/private/studentclassroomsession/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>studentClassroomSessionEditView</from-outcome>
 			<to-view-id>/private/studentclassroomsession/edit.jsf</to-view-id>
 			<redirect />

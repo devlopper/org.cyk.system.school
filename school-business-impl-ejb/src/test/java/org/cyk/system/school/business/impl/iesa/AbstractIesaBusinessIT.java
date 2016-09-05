@@ -2,6 +2,8 @@ package org.cyk.system.school.business.impl.iesa;
 
 import javax.inject.Inject;
 
+import net.sf.jasperreports.engine.design.JasperDesign;
+
 import org.cyk.system.root.business.api.markuplanguage.MarkupLanguageBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
@@ -16,8 +18,6 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.subject.Evaluation;
 
-import net.sf.jasperreports.engine.design.JasperDesign;
-
 public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
 
 	private static final long serialVersionUID = -5752455124275831171L;
@@ -26,6 +26,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     @Inject protected MarkupLanguageBusiness markupLanguageBusiness;
      
     protected void installApplication(Boolean fake){
+    	
     	super.installApplication(fake);
     	AbstractRootReportProducer.DEFAULT = new IesaFakedDataProducer.ReportProducer();
     	Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
@@ -40,6 +41,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     	};
     	listener.addCascadeToClass(StudentClassroomSession.class);
     	StudentBusinessImpl.Listener.COLLECTION.add(listener);
+    	
     	JasperReportBusinessImpl.Listener.COLLECTION.add(new JasperReportBusinessImpl.Listener.Adapter.Default(){
     		
     		@Override

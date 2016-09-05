@@ -18,4 +18,8 @@ public class LevelTimeDivisionDetails extends AbstractOutputDetails<LevelTimeDiv
 		timeDivisionType = formatUsingBusiness(levelTimeDivision.getTimeDivisionType());
 		index = levelTimeDivision.getIndex()+"";
 	}
+	
+	public static final String FIELD_LEVEL = "level";
+	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
+	public static final String FIELD_INDEX = "index";
 }

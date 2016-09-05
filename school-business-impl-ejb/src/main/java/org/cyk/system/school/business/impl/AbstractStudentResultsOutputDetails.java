@@ -6,7 +6,10 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
+import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.model.AbstractStudentResult;
+import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.annotation.user.interfaces.IncludeInputs;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
@@ -16,7 +19,8 @@ import lombok.Setter;
 @Getter @Setter public abstract class AbstractStudentResultsOutputDetails<LEVEL,STUDENT_LEVEL extends AbstractStudentResult<LEVEL, DETAIL>,DETAIL> extends AbstractOutputDetails<STUDENT_LEVEL> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private String registrationCode,names;
+	@IncludeInputs private StudentDetails studentDetails;
+	@Input @InputText private String registrationCode,names,student;
 	
 	@Input @InputText private String detail0Average,detail1Average,detail2Average,detail3Average,detail4Average,detail5Average,detail6Average,detail7Average
 		,detail8Average;
@@ -30,6 +34,8 @@ import lombok.Setter;
 		super(studentLevel);
 		if(studentLevel==null)
 			return;
+		studentDetails = new StudentDetails(studentLevel.getStudent());
+		student = studentLevel.getStudent().getCode()+Constant.CHARACTER_SLASH+studentLevel.getStudent().getPerson().getNames();
 		registrationCode = studentLevel.getStudent().getCode();
 		names = studentLevel.getStudent().getPerson().getNames();
 		
@@ -49,6 +55,7 @@ import lombok.Setter;
 	
 	/**/
 	
+	public static final String FIELD_STUDENT = "student";
 	public static final String FIELD_REGISTRATION_CODE = "registrationCode";
 	public static final String FIELD_NAMES = "names";
 	public static final String FIELD_EVALUATION_AVERAGE_DIVIDEND = "evaluationAverageDividend";

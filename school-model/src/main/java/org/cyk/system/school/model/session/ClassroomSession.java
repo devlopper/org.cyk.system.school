@@ -35,6 +35,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	private String suffix;
 	@ManyToOne private Teacher coordinator;
 	@Embedded private NodeResults results = new NodeResults();
+	//TODO to be removed
 	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
 	//TODO should be moved on NodeResults

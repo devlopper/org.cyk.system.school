@@ -73,7 +73,13 @@ public class AcademicSessionEditPage extends AbstractCrudOnePage<AcademicSession
 			identifiable.getNodeInformations().setCurrentClassroomSessionDivisionIndex(currentClassroomSessionDivisionIndex);
 		}
 		
-		
+		public static final String FIELD_FROM_DATE = "fromDate";
+		public static final String FIELD_TO_DATE = "toDate";
+		public static final String FIELD_NEXT_STARTING_DATE = "nextStartingDate";
+		public static final String FIELD_ATTENDANCE_TIME_DIVISION_TYPE = "attendanceTimeDivisionType";
+		public static final String FIELD_AGGREGATE_ATTENDANCE = "aggregateAttendance";
+		public static final String FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE = "classroomSessionTimeDivisionType";
+		public static final String FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX = "currentClassroomSessionDivisionIndex";
 			
 	}
 

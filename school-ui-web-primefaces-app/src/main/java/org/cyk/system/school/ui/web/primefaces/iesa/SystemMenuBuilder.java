@@ -66,9 +66,9 @@ public class SystemMenuBuilder extends AbstractSystemMenuBuilder implements Seri
 	
 	public Commandable getAcademicCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable("commandable.academic.management", null);
-		module.addChild(createListCommandable(ClassroomSession.class, null));
-		module.addChild(createListCommandable(LevelTimeDivision.class, null));
 		module.addChild(createListCommandable(AcademicSession.class, null));
+		module.addChild(createListCommandable(LevelTimeDivision.class, null));
+		module.addChild(createListCommandable(ClassroomSession.class, null));
 		module.addChild(createListCommandable(Subject.class, null));
 		return module;
 	}

@@ -18,6 +18,7 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOpti
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricValue;
@@ -74,6 +75,14 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Inject 
 	public StudentClassroomSessionDivisionBusinessImpl(StudentClassroomSessionDivisionDao dao) {
 		super(dao); 
+	}
+	
+	@Override
+	protected void setProperty(StudentClassroomSessionDivision studentClassroomSessionDivision,String name) {
+		if(GlobalIdentifier.FIELD_CODE.equals(name))
+			studentClassroomSessionDivision.setCode(generateCode(studentClassroomSessionDivision.getStudent().getCode()
+					,studentClassroomSessionDivision.getClassroomSessionDivision().getCode()));
+		super.setProperty(studentClassroomSessionDivision, name);
 	}
 	
 	@Override

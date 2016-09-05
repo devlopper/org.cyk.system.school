@@ -14,6 +14,7 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Teacher;
@@ -33,6 +34,13 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Inject
 	public ClassroomSessionBusinessImpl(ClassroomSessionDao dao) {
 		super(dao);  
+	}
+
+	@Override
+	protected void setProperty(ClassroomSession classroomSession, String name) {
+		if(GlobalIdentifier.FIELD_CODE.equals(name))
+			classroomSession.setCode(generateCode(classroomSession.getLevelTimeDivision().getCode(),classroomSession.getSuffix()));
+		super.setProperty(classroomSession, name);
 	}
 	
 	@Override

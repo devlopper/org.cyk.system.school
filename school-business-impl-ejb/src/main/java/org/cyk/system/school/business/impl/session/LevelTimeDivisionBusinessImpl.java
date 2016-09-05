@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.session.LevelTimeDivisionBusiness;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
@@ -20,5 +21,10 @@ public class LevelTimeDivisionBusinessImpl extends AbstractTypedBusinessService<
 		super(dao);  
 	}
 	
-	
+	@Override
+	protected void setProperty(LevelTimeDivision levelTimeDivision, String name) {
+		if(GlobalIdentifier.FIELD_CODE.equals(name))
+			levelTimeDivision.setCode(generateCode(levelTimeDivision.getLevel().getCode(),levelTimeDivision.getTimeDivisionType().getCode()));
+		super.setProperty(levelTimeDivision, name);
+	}
 }

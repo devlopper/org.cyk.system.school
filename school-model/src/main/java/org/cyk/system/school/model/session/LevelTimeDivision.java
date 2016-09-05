@@ -13,19 +13,16 @@ import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.time.TimeDivisionType;
-import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
-import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
-import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+import org.cyk.utility.common.Constant;
 
 @Entity @Getter @Setter @NoArgsConstructor
 public class LevelTimeDivision extends AbstractIdentifiable implements Serializable{
 	
 	private static final long serialVersionUID = 374208919427476791L;
 	
-	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull private Level level;
+	@ManyToOne @NotNull private Level level;
 	
-	@ManyToOne @Input @InputChoice @InputOneChoice @InputOneCombo @NotNull private TimeDivisionType timeDivisionType;
+	@ManyToOne @NotNull private TimeDivisionType timeDivisionType;
 
  	@Column(name="theindex",nullable=false) @NotNull private Integer index;
 	
@@ -38,7 +35,7 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	
 	@Override
 	public String toString() {
-		return level+" "+timeDivisionType+" "+index;
+		return level+Constant.CHARACTER_SPACE.toString()+timeDivisionType+Constant.CHARACTER_SPACE.toString()+index;
 	}
 	
 	@Override
