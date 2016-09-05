@@ -57,9 +57,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					public Boolean build(Object data,Field field) {
 						if(data instanceof AcademicSessionDetails)
 							return isFieldNameIn(field,AcademicSessionDetails.FIELD_FROM_DATE,AcademicSessionDetails.FIELD_TO_DATE
-									,AcademicSessionDetails.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX);
-						
-						return super.build(data, field);
+									,AcademicSessionDetails.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX);						
+						return Boolean.FALSE;
 					}
 				};
 			}
@@ -82,8 +81,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 						if(data instanceof ClassroomSessionDetails)
 							return isFieldNameIn(field,ClassroomSessionDetails.FIELD_LEVEL_TIME_DIVISION,ClassroomSessionDetails.FIELD_SUFFIX
 									,ClassroomSessionDetails.FIELD_COORDINATOR,ClassroomSessionDetails.FIELD_NUMBER_OF_STUDENTS);
-						
-						return super.build(data, field);
+						return Boolean.FALSE;
 					}
 				};
 			}
@@ -104,8 +102,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 						if(data instanceof LevelTimeDivisionDetails)
 							return isFieldNameIn(field,LevelTimeDivisionDetails.FIELD_LEVEL,LevelTimeDivisionDetails.FIELD_TIME_DIVISION_TYPE
 									,LevelTimeDivisionDetails.FIELD_INDEX);
-						
-						return super.build(data, field);
+						return Boolean.FALSE;
 					}
 				};
 			}
