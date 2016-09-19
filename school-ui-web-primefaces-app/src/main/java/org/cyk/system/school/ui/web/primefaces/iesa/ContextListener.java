@@ -163,7 +163,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 			r.getAcademicSession().setFromDateToDate(timeBusiness.findYear(as.getExistencePeriod().getFromDate())+"/"+timeBusiness.findYear(as.getExistencePeriod().getToDate())+" ACADEMIC SESSION");
 		
 			r.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
-					{"Formname(s)", r.getStudent().getPerson().getLastName()}
+					{"Formname(s)", r.getStudent().getPerson().getLastnames()}
 					/*,{"Surname", r.getStudent().getPerson().getName()}
 					,{"Date of birth", r.getStudent().getPerson().getBirthDate()}
 					,{"Place of birth", r.getStudent().getPerson().getBirthLocation()}
