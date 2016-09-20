@@ -54,10 +54,10 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Setter private AverageComputationListener averageComputationListener;
 	@Setter private Script averageComputationScript;
-	
+	/*
 	private String actionPrintStudentClassroomSessionTuitionCertificate = "print.tuition.certificate";
 	private String actionPrintStudentClassroomSessionRegistrationCertificate = "print.registration.certificate";
-	
+	*/
 	private String actionCreateSubjectEvaluation = "acse";
 	private String actionUpdateStudentClassroomSessionDivisionResults = "auscsdr";
 	private String actionComputeStudentClassroomSessionDivisionEvaluationResults = "acscsder";
@@ -161,6 +161,9 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void persistData() {
 		create(inject(IntangibleProductBusiness.class).instanciateOne(SchoolConstant.INTANGIBLE_PRODUCT_TUITION));
     	create(new SalableProduct(getEnumeration(IntangibleProduct.class, SchoolConstant.INTANGIBLE_PRODUCT_TUITION), null));
+    	
+    	createReportTemplate(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml", null, null, null);
+    	createReportTemplate(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE,"certificat de scolarité",Boolean.TRUE, "report/student/tuition_certificate.jrxml", null, null, null);
 	}
 
 	@Override

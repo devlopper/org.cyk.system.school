@@ -11,6 +11,7 @@ import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.geography.ContactCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.LabelValueReport;
@@ -24,9 +25,11 @@ import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.model.NodeResults;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.StudentReportTemplateFile;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -44,6 +47,35 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 
 	private static final long serialVersionUID = 4631829200070130087L;
 
+	@Override
+	public Class<?> getReportTemplateFileClass(AbstractIdentifiable identifiable, String reportTemplateCode) {
+		if(identifiable instanceof Student){
+			if(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE.equals(reportTemplateCode))
+				return StudentReportTemplateFile.class;
+			if(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE.equals(reportTemplateCode))
+				return StudentReportTemplateFile.class;
+		}
+		
+		return super.getReportTemplateFileClass(identifiable, reportTemplateCode);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <REPORT extends AbstractReportTemplateFile<REPORT>> REPORT produce(Class<REPORT> reportClass, AbstractIdentifiable identifiable) {
+		if(StudentReportTemplateFile.class.equals(reportClass)){
+			if(identifiable instanceof Student)
+				return (REPORT) produceStudentReport((Student)identifiable);
+		}
+		
+		return super.produce(reportClass, identifiable);
+	}
+	
+	private StudentReportTemplateFile produceStudentReport(Student student) {
+		StudentReportTemplateFile report = new StudentReportTemplateFile();
+		set(student, report.getActor());
+		return report;
+	}
+	
 	@Override
 	public String getEvaluationTypeCode(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation) {
 		return studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode();

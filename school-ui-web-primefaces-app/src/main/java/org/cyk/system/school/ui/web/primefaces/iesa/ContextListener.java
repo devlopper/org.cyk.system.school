@@ -8,6 +8,9 @@ import javax.servlet.annotation.WebListener;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.company.business.impl.adapter.ActorBusinessServiceAdapter;
+import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
+import org.cyk.system.company.model.CompanyConstant;
+import org.cyk.system.company.model.structure.EmploymentAgreement;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
@@ -21,6 +24,7 @@ import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -109,7 +113,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	
     	SchoolWebManager.getInstance().getListeners().add(new PrimefacesManager());
     	
-    	StudentBusinessImpl.Listener.Adapter listener = new StudentBusinessImpl.Listener.Adapter.Default(){
+    	StudentBusinessImpl.Listener.Adapter studentListener = new StudentBusinessImpl.Listener.Adapter.Default(){
 			private static final long serialVersionUID = 1L;
     		@Override
     		public void afterInstanciateOne(UserAccount userAccount, Student student) {
@@ -117,8 +121,18 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     			student.setStudentClassroomSession(new StudentClassroomSession(student, null));
     		}
     	};
-    	listener.addCascadeToClass(StudentClassroomSession.class);
-    	StudentBusinessImpl.Listener.COLLECTION.add(listener);
+    	studentListener.addCascadeToClass(StudentClassroomSession.class)
+    		.addCascadeToReportTemplateCodes(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,
+    				SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE);
+    	StudentBusinessImpl.Listener.COLLECTION.add(studentListener);
+    	
+    	EmployeeBusinessImpl.Listener employeeListener = new EmployeeBusinessImpl.Listener.Adapter.Default();
+		employeeListener.addCascadeToClass(EmploymentAgreement.class)
+		.addCascadeToReportTemplateCodes(CompanyConstant.REPORT_EMPLOYEE_EMPLOYMENT_CONTRACT,
+				CompanyConstant.REPORT_EMPLOYEE_EMPLOYMENT_CERTIFICATE,CompanyConstant.REPORT_EMPLOYEE_WORK_CERTIFICATE);
+		EmployeeBusinessImpl.Listener.COLLECTION.add(employeeListener);
+    	
+    	
     	
     	AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, ClassroomSession.class);
     	AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, StudentClassroomSession.class);

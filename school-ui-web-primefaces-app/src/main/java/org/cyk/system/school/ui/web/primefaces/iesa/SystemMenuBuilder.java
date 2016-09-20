@@ -3,12 +3,12 @@ package org.cyk.system.school.ui.web.primefaces.iesa;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.company.model.structure.Vehicle;
 import org.cyk.system.root.model.message.SmtpProperties;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -43,17 +43,18 @@ public class SystemMenuBuilder extends AbstractSystemMenuBuilder implements Seri
 		Commandable module = createModuleCommandable("commandable.student.management", null);
 		module.addChild(createListCommandable(Student.class, null));
 		module.addChild(createListCommandable(StudentClassroomSession.class, null));
+		addReportCommandables(Student.class,module, StudentBusinessImpl.Listener.COLLECTION);
+		/*
 		module.addChild(createSelectOneCommandable(StudentClassroomSession.class, inject(SchoolBusinessLayer.class).getActionPrintStudentClassroomSessionTuitionCertificate(), null));
 		module.addChild(createSelectOneCommandable(StudentClassroomSession.class, inject(SchoolBusinessLayer.class).getActionPrintStudentClassroomSessionRegistrationCertificate(), null));
+		*/
 		return module;
 	}
 	
 	public Commandable getEmployeeCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable("commandable.personel.management", null);
 		module.addChild(createListCommandable(Employee.class, null));
-		module.addChild(createSelectOneCommandable(Employee.class, inject(CompanyBusinessLayer.class).getActionPrintEmployeeEmploymentContract(), null));
-		module.addChild(createSelectOneCommandable(Employee.class, inject(CompanyBusinessLayer.class).getActionPrintEmployeeWorkCertificate(), null));
-		module.addChild(createSelectOneCommandable(Employee.class, inject(CompanyBusinessLayer.class).getActionPrintEmployeeEmploymentCertificate(), null));
+		addReportCommandables(Employee.class,module, EmployeeBusinessImpl.Listener.COLLECTION);
 		return module;
 	}
 	
