@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.session.LevelTimeDivisionBusiness;
@@ -22,9 +23,11 @@ public class LevelTimeDivisionBusinessImpl extends AbstractTypedBusinessService<
 	}
 	
 	@Override
-	protected void setProperty(LevelTimeDivision levelTimeDivision, String name) {
-		if(GlobalIdentifier.FIELD_CODE.equals(name))
-			levelTimeDivision.setCode(generateCode(levelTimeDivision.getLevel().getCode(),levelTimeDivision.getTimeDivisionType().getCode()));
-		super.setProperty(levelTimeDivision, name);
+	protected Object[] getPropertyValueTokens(LevelTimeDivision levelTimeDivision, String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+			return new Object[]{levelTimeDivision.getLevel(),levelTimeDivision.getTimeDivisionType()};
+		return super.getPropertyValueTokens(levelTimeDivision, name);
 	}
+	
+	
 }

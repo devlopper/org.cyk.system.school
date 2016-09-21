@@ -1,6 +1,6 @@
 package org.cyk.system.school.ui.web.primefaces.integration;
 
-import org.cyk.system.school.ui.web.primefaces.session.StudentWebITRunner;
+import org.cyk.system.school.ui.web.primefaces.session.student.StudentWebITRunner;
 
 public class StudentWebIT extends AbstractWebIT {
 

@@ -54,10 +54,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Setter private AverageComputationListener averageComputationListener;
 	@Setter private Script averageComputationScript;
-	/*
-	private String actionPrintStudentClassroomSessionTuitionCertificate = "print.tuition.certificate";
-	private String actionPrintStudentClassroomSessionRegistrationCertificate = "print.registration.certificate";
-	*/
+	
 	private String actionCreateSubjectEvaluation = "acse";
 	private String actionUpdateStudentClassroomSessionDivisionResults = "auscsdr";
 	private String actionComputeStudentClassroomSessionDivisionEvaluationResults = "acscsder";
@@ -98,7 +95,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
 			public String format(ClassroomSessionDivision classroomSessionDivision, ContentType contentType) {
-				return classroomSessionDivision.getTimeDivisionType().getUiString()+" "+(classroomSessionDivision.getIndex()+1);
+				return classroomSessionDivision.getTimeDivisionType().getName()+Constant.CHARACTER_SPACE+(classroomSessionDivision.getIndex());
 			}
 		});
 		

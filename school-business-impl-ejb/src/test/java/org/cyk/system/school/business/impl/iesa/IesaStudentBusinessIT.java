@@ -19,7 +19,7 @@ public class IesaStudentBusinessIT extends AbstractIesaBusinessIT {
     protected void businesses() {
     	installApplication();
     	Student student = inject(StudentBusiness.class).instanciateOne();
-    	student.setCode("IESA/45/10");
+    	student.setCode("IESA_45_10");
     	student.setName("Zeze");
     	student.getPerson().setLastnames("Marius");
     	create(student);

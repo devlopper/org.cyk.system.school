@@ -12,7 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.NodeResults;
@@ -21,10 +24,6 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
 public class ClassroomSessionDivision extends AbstractIdentifiablePeriod implements Serializable {
@@ -37,8 +36,6 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	@Column(name="order_index",nullable=false) @NotNull private Byte index;
 	@Column(nullable=false) @NotNull private Long numberOfSubjects=0l;
 	@Embedded private NodeResults results = new NodeResults();
-	
-	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
 	private Boolean studentEvaluationRequired=Boolean.TRUE;
 	private Boolean studentSubjectAttendanceAggregated=Boolean.TRUE;

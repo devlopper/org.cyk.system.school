@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.session.LevelBusiness;
@@ -22,8 +23,10 @@ public class LevelBusinessImpl extends AbstractTypedBusinessService<Level, Level
 	}
 	
 	@Override
-	protected void setProperty(Level level, String name) {
-		if(GlobalIdentifier.FIELD_CODE.equals(name))
-			level.setCode(generateCode(level.getGroup().getCode(),level.getLevelName().getCode()));
+	protected Object[] getPropertyValueTokens(Level level, String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+			return new Object[]{level.getGroup(),level.getLevelName(),level.getSpeciality()};
+		return super.getPropertyValueTokens(level, name);
 	}
+
 }

@@ -10,9 +10,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
@@ -35,6 +37,13 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	@Inject
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {
 		super(dao); 
+	}
+	
+	@Override
+	protected Object[] getPropertyValueTokens(ClassroomSessionDivisionSubject classroomSessionDivisionSubject, String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+			return new Object[]{classroomSessionDivisionSubject.getClassroomSessionDivision(),classroomSessionDivisionSubject.getSubject()};
+		return super.getPropertyValueTokens(classroomSessionDivisionSubject, name);
 	}
 	
 	@Override

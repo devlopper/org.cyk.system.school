@@ -3,10 +3,20 @@ package org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanni
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.AcademicSession;
+import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelSpeciality;
+import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Evaluation;
+import org.cyk.system.school.model.subject.Subject;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.web.primefaces.Commandable;
@@ -25,10 +35,26 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 		return systemMenu;
 	}
 	
-	public Commandable getStudentCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
-		Commandable module = createModuleCommandable(Student.class, null);
-		module.addChild(createListCommandable(Student.class, null));
+	public Commandable getAcademicCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
+		Commandable module = createModuleCommandable("command.academic.management", null);
+		module.addChild(createListCommandable(AcademicSession.class, null));
+		module.addChild(createListCommandable(LevelTimeDivision.class, null));
+		module.addChild(createListCommandable(ClassroomSession.class, null));
+		module.addChild(createListCommandable(ClassroomSessionDivision.class, null));
+		module.addChild(createListCommandable(ClassroomSessionDivisionSubject.class, null));
 		
+		module.addChild(createListCommandable(Evaluation.class, null));
+		module.addChild(createListCommandable(StudentClassroomSessionDivision.class, null));
+		
+		module.addChild(createListCommandable(Subject.class, null));
+		return module;
+	}
+	
+	public Commandable getStudentCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
+		Commandable module = createModuleCommandable("command.student.management", null);
+		module.addChild(createListCommandable(Student.class, null));
+		module.addChild(createListCommandable(StudentClassroomSession.class, null));
+		addReportCommandables(Student.class,module, StudentBusinessImpl.Listener.COLLECTION);
 		return module;
 	}
 	

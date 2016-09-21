@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
@@ -35,14 +36,14 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	public ClassroomSessionBusinessImpl(ClassroomSessionDao dao) {
 		super(dao);  
 	}
-
-	@Override
-	protected void setProperty(ClassroomSession classroomSession, String name) {
-		if(GlobalIdentifier.FIELD_CODE.equals(name))
-			classroomSession.setCode(generateCode(classroomSession.getLevelTimeDivision().getCode(),classroomSession.getSuffix()));
-		super.setProperty(classroomSession, name);
-	}
 	
+	@Override
+	protected Object[] getPropertyValueTokens(ClassroomSession classroomSession, String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+			return new Object[]{classroomSession.getLevelTimeDivision(),classroomSession.getSuffix()};
+		return super.getPropertyValueTokens(classroomSession, name);
+	}
+
 	@Override
 	public void computeResults(Collection<ClassroomSession> classroomSessions,Collection<StudentClassroomSession> studentClassroomSessions) {
 		for(ClassroomSession classroomSession : classroomSessions){

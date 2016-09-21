@@ -1,4 +1,4 @@
-package org.cyk.system.school.ui.web.primefaces.session;
+package org.cyk.system.school.ui.web.primefaces.session.student;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +10,7 @@ import javax.inject.Named;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.ui.web.primefaces.session.AbstractStudentClassroomSessionConsultManyRankPage;
 import org.cyk.ui.web.api.WebManager;
 
 import lombok.Getter;

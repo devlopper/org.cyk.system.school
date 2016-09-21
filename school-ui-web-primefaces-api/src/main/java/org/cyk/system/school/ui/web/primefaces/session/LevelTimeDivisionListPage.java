@@ -15,20 +15,5 @@ import lombok.Setter;
 public class LevelTimeDivisionListPage extends AbstractCrudManyPage<LevelTimeDivision> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
-	
-	@Override
-	protected void initialisation() {
-		super.initialisation();
-		rowAdapter.setOpenable(Boolean.TRUE);
-		rowAdapter.setUpdatable(Boolean.FALSE);
-		table.setShowHeader(Boolean.FALSE);
-		table.setShowToolBar(Boolean.FALSE);
-	}
-	
-	@Override
-	protected void afterInitialisation() {
-		super.afterInitialisation();
-		table.setShowOpenCommand(Boolean.TRUE);
-	}
-	
+		
 }

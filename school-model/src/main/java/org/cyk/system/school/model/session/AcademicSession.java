@@ -10,15 +10,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS,genderType=GenderType.FEMALE)
 public class AcademicSession extends AbstractIdentifiablePeriod implements Serializable {
@@ -30,8 +29,6 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 	@Embedded private CommonNodeInformations nodeInformations;
 	
 	@Temporal(value=TemporalType.DATE) private Date nextStartingDate;
-	
-	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
 	public AcademicSession(School school,CommonNodeInformations nodeInformations,Date nextStartingDate) {
 		super();

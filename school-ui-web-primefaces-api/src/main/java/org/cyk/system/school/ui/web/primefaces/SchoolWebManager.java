@@ -97,7 +97,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		AcademicSession academicSession = inject(AcademicSessionBusiness.class).findCurrent(null);
 		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatExistencePeriodFromTo(academicSession.getExistencePeriod());
 		classroomSessionDivisionTypeName = academicSession.getNodeInformations().getClassroomSessionTimeDivisionType().getName();
-		classroomSessionDivisionInfos = "No "+(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex()+1);
+		classroomSessionDivisionInfos = "No "+(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 	}*/
 	
 	public String getAcademicSessionInfos(){
@@ -109,7 +109,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	}
 	
 	public String getClassroomSessionDivisionInfos(){
-		return "No "+(inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex()+1);
+		return "No "+(inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 	}
 	
 	@Override

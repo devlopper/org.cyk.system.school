@@ -114,6 +114,11 @@
 			<redirect />
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>classroomSessionDivisionListView</from-outcome>
+			<to-view-id>/private/classroomsessiondivision/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>classroomSessionDivisionUpdateStudentResults</from-outcome>
 			<to-view-id>/private/classroomsessiondivision/updatestudentresults.jsf</to-view-id>
 			<redirect />
@@ -139,6 +144,11 @@
 			<to-view-id>/private/classroomsessiondivisionsubject/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionSubjectListView</from-outcome>
+			<to-view-id>/private/classroomsessiondivisionsubject/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>evaluationEditView</from-outcome>
@@ -148,6 +158,11 @@
 		<navigation-case>
 			<from-outcome>evaluationConsultView</from-outcome>
 			<to-view-id>/private/evaluation/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>evaluationListView</from-outcome>
+			<to-view-id>/private/evaluation/list.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		
@@ -202,6 +217,11 @@
 		<navigation-case>
 			<from-outcome>studentClassroomSessionDivisionConsultView</from-outcome>
 			<to-view-id>/private/studentclassroomsessiondivision/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionDivisionListView</from-outcome>
+			<to-view-id>/private/studentclassroomsessiondivision/list.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>

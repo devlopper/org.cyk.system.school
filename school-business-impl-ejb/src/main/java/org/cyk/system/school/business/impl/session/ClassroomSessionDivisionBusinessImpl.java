@@ -11,9 +11,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.NodeResults;
@@ -38,8 +40,16 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 	
 	@Override
+	protected Object[] getPropertyValueTokens(ClassroomSessionDivision classroomSessionDivision, String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+			return new Object[]{classroomSessionDivision.getClassroomSession(),classroomSessionDivision.getTimeDivisionType(),classroomSessionDivision.getIndex()};
+		return super.getPropertyValueTokens(classroomSessionDivision, name);
+	}
+	
+	@Override
 	public ClassroomSessionDivision create(ClassroomSessionDivision classroomSessionDivision) {
-		classroomSessionDivision.setIndex(dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()).byteValue());
+		classroomSessionDivision.setIndex(new Long(classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations().getClassroomSessionDivisionIndexStart().byteValue()
+				+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession())).byteValue());
 		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
 		classroomSessionDao.update(classroomSessionDivision.getClassroomSession());
 		return super.create(classroomSessionDivision);

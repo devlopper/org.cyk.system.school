@@ -9,9 +9,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
 import org.cyk.system.root.business.impl.time.AbstractIdentifiablePeriodBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.LevelName;
@@ -28,6 +30,14 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	@Inject
 	public AcademicSessionBusinessImpl(AcademicSessionDao dao) {
 		super(dao);  
+	}
+	
+	@Override
+	protected Object[] getPropertyValueTokens(AcademicSession academicSession,String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+			return new Object[]{timeBusiness.formatDate(academicSession.getExistencePeriod().getFromDate())
+					,timeBusiness.formatDate(academicSession.getExistencePeriod().getToDate())};
+		return super.getPropertyValueTokens(academicSession, name);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -50,7 +60,7 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	}
 	
 	@Override
-	public AcademicSession update(AcademicSession academicSession,Boolean cascade) {
+	public AcademicSession update(AcademicSession academicSession,Boolean cascade) {//TODO better create cascade to children boolean property
 		academicSession = update(academicSession);
 		for(AbstractIdentifiable identifiable : genericDao.use(LevelName.class).select().all()){
 			LevelName levelName = (LevelName) identifiable;

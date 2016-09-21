@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
 import org.cyk.system.root.model.time.ScheduleCollection;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
@@ -49,8 +48,6 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	@Column(nullable=false) @NotNull private Long numberOfEvaluationTypes=0l;
 	
 	@Embedded private NodeResults results = new NodeResults();
-	
-	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
 	/**
 	 * The time table

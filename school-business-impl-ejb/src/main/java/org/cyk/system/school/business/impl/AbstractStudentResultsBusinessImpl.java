@@ -9,6 +9,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.event.EventBusiness;
 import org.cyk.system.root.business.api.event.EventMissedBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
@@ -20,6 +21,7 @@ import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.event.Event;
 import org.cyk.system.root.model.event.EventMissed;
 import org.cyk.system.root.model.event.EventParty;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.time.Attendance;
@@ -55,6 +57,13 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 	}
 
 	@Override
+	protected Object[] getPropertyValueTokens(RESULT result, String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+			return new Object[]{result.getStudent()};
+		return super.getPropertyValueTokens(result, name);
+	}
+	
+	@Override
 	public RESULT create(RESULT identifiable) {
 		if(identifiable.getResults()==null){
 			identifiable.setResults(new StudentResults());
@@ -62,9 +71,6 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 		return super.create(identifiable);
 	}
 	
-
-
-
 	@Override
 	public void updateAverage(Collection<LEVEL> levels,Collection<RESULT> results,Collection<DETAIL> details,BusinessServiceCallArguments<RESULT> callArguments) {
 		for(LEVEL level : levels){

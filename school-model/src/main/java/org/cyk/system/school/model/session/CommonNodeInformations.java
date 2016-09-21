@@ -14,6 +14,7 @@ import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractModelElement;
 import org.cyk.system.root.model.file.report.ReportTemplate;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
 
@@ -35,8 +36,11 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
 	
-	private Byte classroomSessionDivisionCount = 3;
-	private Byte currentClassroomSessionDivisionIndex = 0;
+	@ManyToOne private Interval classroomSessionDivisionIndexInterval;
+	
+	private Byte classroomSessionDivisionCount = 3;//TODO to be changed in place of interval concept
+	private Byte classroomSessionDivisionIndexStart = 1;
+	private Byte currentClassroomSessionDivisionIndex = classroomSessionDivisionIndexStart;
 	
 	public CommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale
 			,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate,TimeDivisionType attendanceTimeDivisionType,BigDecimal evaluationPassAverage) {

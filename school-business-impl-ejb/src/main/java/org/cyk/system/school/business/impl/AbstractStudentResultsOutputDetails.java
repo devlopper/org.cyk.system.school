@@ -20,7 +20,7 @@ import lombok.Setter;
 	private static final long serialVersionUID = -4741435164709063863L;
 	
 	@IncludeInputs private StudentDetails studentDetails;
-	@Input @InputText private String registrationCode,names,student;
+	@Input @InputText private String student;
 	
 	@Input @InputText private String detail0Average,detail1Average,detail2Average,detail3Average,detail4Average,detail5Average,detail6Average,detail7Average
 		,detail8Average;
@@ -36,8 +36,6 @@ import lombok.Setter;
 			return;
 		studentDetails = new StudentDetails(studentLevel.getStudent());
 		student = studentLevel.getStudent().getCode()+Constant.CHARACTER_SLASH+studentLevel.getStudent().getPerson().getNames();
-		registrationCode = studentLevel.getStudent().getCode();
-		names = studentLevel.getStudent().getPerson().getNames();
 		
 		if(studentLevel.getResults().getEvaluationSort().getAverage().getDividend()!=null)
 			evaluationAverageDividend = numberBusiness.format(studentLevel.getResults().getEvaluationSort().getAverage().getDividend());
