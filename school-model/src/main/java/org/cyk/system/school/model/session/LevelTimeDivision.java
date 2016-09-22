@@ -2,7 +2,6 @@ package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -24,28 +23,26 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	
 	@ManyToOne @NotNull private TimeDivisionType timeDivisionType;
 
- 	@Column(name="theindex",nullable=false) @NotNull private Integer index;
-	
-	public LevelTimeDivision(Level level, TimeDivisionType timeDivisionType,Integer index) {
+	public LevelTimeDivision(Level level, TimeDivisionType timeDivisionType,Long orderNumber) {
 		super();
 		this.level = level;
 		this.timeDivisionType = timeDivisionType;
-		this.index = index;
+		this.getGlobalIdentifierCreateIfNull().setOrderNumber(orderNumber);
 	}
 	
 	@Override
 	public String toString() {
-		return level+Constant.CHARACTER_SPACE.toString()+timeDivisionType+Constant.CHARACTER_SPACE.toString()+index;
+		return level+Constant.CHARACTER_SPACE.toString()+timeDivisionType+Constant.CHARACTER_SPACE.toString()+globalIdentifier.getOrderNumber();
 	}
 	
 	@Override
 	public String getUiString() {
-		return level.getUiString()+" "+timeDivisionType.getUiString()+" "+index;
+		return level.getUiString()+Constant.CHARACTER_SPACE+timeDivisionType.getUiString()+Constant.CHARACTER_SPACE+globalIdentifier.getOrderNumber();
 	}
 	
 	/**/
 	
-	public static final String FIELD_INDEX = "index";
 	public static final String FIELD_LEVEL = "level";
+	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
 	
 }

@@ -36,7 +36,7 @@ public class StudentClassroomSessionDivisionMergeReportPage extends AbstractCrud
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
-		setChoices(Form.FIELD_STUDENTS, inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisionIndex(
+		setChoices(Form.FIELD_STUDENTS, inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisionOrderNumber(
 				inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex()));
 	}
 	

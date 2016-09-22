@@ -280,7 +280,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			super.classroomSessionDivisionCreated(classroomSessionDivision);
     			classroomSessionDivision.getExistencePeriod().setFromDate(new DateTime(2016, 4, 4, 0, 0).toDate());
     			classroomSessionDivision.getExistencePeriod().setToDate(new DateTime(2016, 6, 13, 0, 0).toDate());
-    			classroomSessionDivision.setNumberOfMillisecond(48l * DateTimeConstants.MILLIS_PER_DAY);
+    			classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().setUser(new BigDecimal(48l * DateTimeConstants.MILLIS_PER_DAY));
     			classroomSessionDivision.setStudentSubjectAttendanceAggregated(Boolean.FALSE);
     		}
 			
@@ -374,7 +374,12 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT","G Marks card",Boolean.TRUE,createFile("report/iesa/g1g12.jrxml", "reportcard.jrxml"),null,null,null);
 		create(reportTemplate);
 		
-		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER,"50", "2");
+		Interval interval = inject(IntervalBusiness.class).instanciateOne(null, "A", "1", "2");
+		create(interval);
+		//commonNodeInformations.setClassroomSessionDivisionOrderNumberInterval();
+		
+		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY
+				, TimeDivisionType.TRIMESTER,"50", "2",interval);
 		
 		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(inject(IntervalCollectionBusiness.class)
 				.instanciateOne("G1G6Grade", "Grade", new String[][]{
@@ -382,7 +387,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
 								.instanciateOne("ICP1", "Promotion Scale", new String[][]{
 										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
-						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2");	
+						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2",interval);	
 		//CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
 		/*CommonNodeInformations commonNodeInformationsG7G9 =*/ schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(inject(IntervalCollectionBusiness.class)
@@ -391,7 +396,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
 								.instanciateOne("ICP2", "Promotion Scale", new String[][]{
 										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
-						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2");	
+						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2",interval);	
 		//CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);
@@ -416,7 +421,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = new ArrayList<>(); 
     	Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = new ArrayList<>(); 
     	
-    	Integer gradeIndex = 0;
+    	Long gradeIndex = 0l;
     	
     	pk = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("PK","Pre-Kindergarten",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
@@ -595,7 +600,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			LabelValueCollectionReport labelValueCollectionReport;
 			StudentClassroomSessionDivisionReport report = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
 			
-			if(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getIndex()>3){
+			if(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getOrderNumber()>4){
 			
 				report.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 15%","Test 2 15%","Exam 70%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
 				
@@ -639,7 +644,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				addIntervalCollectionLabelValueCollection(report,inject(MetricCollectionDao.class).read(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR).getValueIntervalCollection()
 						,Boolean.TRUE,Boolean.FALSE,null);
 				
-				if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
+				if(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==3){
 					/*labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
 					labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
 					labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
@@ -660,8 +665,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 							});
 				}else{
 					ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
-							.readByClassroomSessionByIndex(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
-									,new Byte((byte) (studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()+1)));
+							.readByClassroomSessionByOrderNumber(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
+									,(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()));
 				
 					report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
 						{"CONFERENCE REQUESTED",studentClassroomSessionDivision.getResults().getConferenceRequested()==null?"NO"

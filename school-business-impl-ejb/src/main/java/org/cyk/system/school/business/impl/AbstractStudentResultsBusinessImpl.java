@@ -208,9 +208,9 @@ public abstract class AbstractStudentResultsBusinessImpl<LEVEL extends AbstractI
 													break;
 												} 
 											if(lEventMissed==null){
-												attendance.addAttendedDuration(participation.getEvent().getExistencePeriod().getNumberOfMillisecond());
+												attendance.addAttendedDuration(participation.getEvent().getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class));
 											}else{
-												attendance.addAttendedDuration(participation.getEvent().getExistencePeriod().getNumberOfMillisecond()-lEventMissed.getNumberOfMillisecond());
+												attendance.addAttendedDuration(participation.getEvent().getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class)-lEventMissed.getNumberOfMillisecond());
 												attendance.addMissedDuration(lEventMissed.getNumberOfMillisecond());
 												if(lEventMissed.getReason()!=null && Boolean.TRUE.equals(lEventMissed.getReason().getAcceptable()))
 													attendance.addMissedDurationJustified(lEventMissed.getNumberOfMillisecond());

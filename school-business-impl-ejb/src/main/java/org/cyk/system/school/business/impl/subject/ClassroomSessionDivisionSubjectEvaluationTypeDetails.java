@@ -16,7 +16,7 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeDetails extends Abstra
 		super(classroomSessionDivisionSubjectEvaluationType);
 		subject = formatUsingBusiness(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
 		type = formatUsingBusiness(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
-		coefficient = formatNumber(classroomSessionDivisionSubjectEvaluationType.getCoefficient());
-		maximum = formatNumber(classroomSessionDivisionSubjectEvaluationType.getCoefficient());
+		coefficient = formatNumber(classroomSessionDivisionSubjectEvaluationType.getWeight());
+		maximum = formatNumber(classroomSessionDivisionSubjectEvaluationType.getWeight());
 	}
 }

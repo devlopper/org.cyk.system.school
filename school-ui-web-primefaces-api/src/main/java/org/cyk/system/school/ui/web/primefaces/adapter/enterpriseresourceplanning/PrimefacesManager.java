@@ -127,8 +127,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	}
 	
 	protected void configureClassroomSessionDivisionClass() {
-		getFormConfiguration(ClassroomSessionDivision.class, Crud.READ).addFieldNames(ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionDetails.FIELD_INDEX
-				,ClassroomSessionDivisionDetails.FIELD_COEFFICIENT);
+		getFormConfiguration(ClassroomSessionDivision.class, Crud.READ).addFieldNames(ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER
+				,ClassroomSessionDivisionDetails.FIELD_WEIGHT);
 		
 		registerDetailsConfiguration(ClassroomSessionDivisionDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
@@ -140,8 +140,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(data instanceof ClassroomSessionDivisionDetails)
-							return isFieldNameIn(field,ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionDetails.FIELD_INDEX
-									,ClassroomSessionDivisionDetails.FIELD_COEFFICIENT);
+							return isFieldNameIn(field,ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER
+									,ClassroomSessionDivisionDetails.FIELD_WEIGHT);
 						return Boolean.FALSE;
 					}
 				};

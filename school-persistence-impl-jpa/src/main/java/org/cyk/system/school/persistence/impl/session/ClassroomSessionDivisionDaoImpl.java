@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.NoResultException;
 
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -18,8 +19,8 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 
 	private static final long serialVersionUID = 6306356272165070761L;
 	
-    private String readByClassroomSession,readByClassroomSessions,countByClassroomSession,readByClassroomSessionByIndex,readByClassroomSessionByIndexByTeacher
-    	,readByClassroomSessionByTeacher,readByClassroomSessionsByIndex,readByLevelTimeDivision;
+    private String readByClassroomSession,readByClassroomSessions,countByClassroomSession,readByClassroomSessionByOrderNumber,readByClassroomSessionByIndexByTeacher
+    	,readByClassroomSessionByTeacher,readByClassroomSessionsByOrderNumber,readByLevelTimeDivision;
      
     @Override
     protected void namedQueriesInitialisation() {
@@ -29,16 +30,16 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision AND aSubject.teacher=:teacher"
 				+ " )");
         registerNamedQuery(readByClassroomSessionByIndexByTeacher, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
-        		+ " aClassroomSessionDivision.classroomSession=:classroomSession AND aClassroomSessionDivision.index=:pindex AND EXISTS( "
+        		+ " aClassroomSessionDivision.classroomSession=:classroomSession AND aClassroomSessionDivision.globalIdentifier.orderNumber=:pindex AND EXISTS( "
 				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision AND aSubject.teacher=:teacher"
 				+ " )");
         registerNamedQuery(readByLevelTimeDivision, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
         		+ " aClassroomSessionDivision.classroomSession.levelTimeDivision=:levelTimeDivision ");
-        registerNamedQuery(readByClassroomSessionByIndex, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
-        		.and(ClassroomSessionDivision.FIELD_INDEX, PARAMETER_INDEX,ArithmeticOperator.EQ));
+        registerNamedQuery(readByClassroomSessionByOrderNumber, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
+        		.and(getGlobalIdentifierFieldPath(GlobalIdentifier.FIELD_ORDER_NUMBER), PARAMETER_INDEX,ArithmeticOperator.EQ));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
-        registerNamedQuery(readByClassroomSessionsByIndex, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
-        		.and(ClassroomSessionDivision.FIELD_INDEX, PARAMETER_INDEX,ArithmeticOperator.EQ));
+        registerNamedQuery(readByClassroomSessionsByOrderNumber, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
+        		.and(getGlobalIdentifierFieldPath(GlobalIdentifier.FIELD_ORDER_NUMBER), PARAMETER_INDEX,ArithmeticOperator.EQ));
     } 
     
     @Override
@@ -67,15 +68,15 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 	}
 	
 	@Override
-	public ClassroomSessionDivision readByClassroomSessionByIndex(ClassroomSession classroomSession, Byte index) {
-		return namedQuery(readByClassroomSessionByIndex).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
-				.parameter(PARAMETER_INDEX, index).ignoreThrowable(NoResultException.class)
+	public ClassroomSessionDivision readByClassroomSessionByOrderNumber(ClassroomSession classroomSession, Long orderNumber) {
+		return namedQuery(readByClassroomSessionByOrderNumber).parameter(ClassroomSessionDivision.FIELD_CLASSROOMSESSION, classroomSession)
+				.parameter(PARAMETER_INDEX, orderNumber).ignoreThrowable(NoResultException.class)
                 .resultOne();
 	}
 	
 	@Override
-	public Collection<ClassroomSessionDivision> readByClassroomSessionsByIndex(Collection<ClassroomSession> classroomSessions, Byte index) {
-		return namedQuery(readByClassroomSessionsByIndex).parameterIdentifiers(classroomSessions).parameter(PARAMETER_INDEX, index)
+	public Collection<ClassroomSessionDivision> readByClassroomSessionsByOrderNumber(Collection<ClassroomSession> classroomSessions, Long orderNumber) {
+		return namedQuery(readByClassroomSessionsByOrderNumber).parameterIdentifiers(classroomSessions).parameter(PARAMETER_INDEX, orderNumber)
                 .resultMany();
 	}
 	

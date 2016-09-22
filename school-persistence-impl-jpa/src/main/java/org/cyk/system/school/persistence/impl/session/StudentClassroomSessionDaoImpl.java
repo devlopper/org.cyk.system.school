@@ -34,7 +34,7 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
     
         registerNamedQuery(readByCriteria, "SELECT r FROM StudentClassroomSession r WHERE r.classroomSession.identifier IN :classroomSessions AND "
         		+ "EXISTS(SELECT r1 FROM StudentClassroomSessionDivision r1 WHERE r1.classroomSessionDivision.classroomSession = r.classroomSession AND "
-        		+ "r1.student = r.student AND r1.classroomSessionDivision.index IN :classroomSessionDivisionIndexes AND "
+        		+ "r1.student = r.student AND r1.classroomSessionDivision.globalIdentifier.orderNumber IN :classroomSessionDivisionIndexes AND "
         		+ "(SELECT COUNT(r2) FROM StudentClassroomSessionDivision r2 WHERE r2.classroomSessionDivision.classroomSession = r.classroomSession "
         		+ " AND r2.student = r.student ) >= :classroomSessionDivisionMinCount AND (SELECT COUNT(r3) FROM StudentClassroomSessionDivision r3 WHERE"
         		+ " r3.classroomSessionDivision.classroomSession = r.classroomSession AND r3.student = r.student ) <= :classroomSessionDivisionMaxCount)"

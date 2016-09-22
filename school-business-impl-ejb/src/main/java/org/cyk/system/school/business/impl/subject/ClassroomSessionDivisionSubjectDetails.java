@@ -21,7 +21,7 @@ public class ClassroomSessionDivisionSubjectDetails extends AbstractOutputDetail
 		classroomSessionDivisionDetails = new ClassroomSessionDivisionDetails(classroomSessionDivisionSubject.getClassroomSessionDivision());
 		classroomSessionDivision = formatUsingBusiness(classroomSessionDivisionSubject.getClassroomSessionDivision());
 		classroomSession = formatUsingBusiness(classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
-		coefficient = formatNumber(classroomSessionDivisionSubject.getCoefficient());
+		coefficient = formatNumber(classroomSessionDivisionSubject.getWeight());
 		if(classroomSessionDivisionSubject.getTeacher()!=null)
 			teacher = formatUsingBusiness(classroomSessionDivisionSubject.getTeacher());
 	}

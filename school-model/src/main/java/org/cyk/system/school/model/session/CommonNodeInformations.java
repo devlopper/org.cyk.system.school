@@ -36,11 +36,11 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
 	
-	@ManyToOne private Interval classroomSessionDivisionIndexInterval;
+	@ManyToOne private Interval classroomSessionDivisionOrderNumberInterval;
 	
-	private Byte classroomSessionDivisionCount = 3;//TODO to be changed in place of interval concept
-	private Byte classroomSessionDivisionIndexStart = 1;
-	private Byte currentClassroomSessionDivisionIndex = classroomSessionDivisionIndexStart;
+	//private Long classroomSessionDivisionCount = 3l;//TODO to be changed in place of interval concept
+	//private Long classroomSessionDivisionIndexStart = 1l;
+	private Long currentClassroomSessionDivisionIndex;
 	
 	public CommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale
 			,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate,TimeDivisionType attendanceTimeDivisionType,BigDecimal evaluationPassAverage) {

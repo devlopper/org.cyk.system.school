@@ -260,7 +260,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToMillisecond(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),value));
 
-		studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision().getNumberOfMillisecond()-
+		studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision()
+				.getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class)-
 				studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration());
 	}
 	
@@ -278,7 +279,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				
 	@Override
 	protected WeightedValue weightedValue(StudentClassroomSessionDivisionSubject detail) {
-		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getClassroomSessionDivisionSubject().getCoefficient(),Boolean.FALSE);
+		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getClassroomSessionDivisionSubject().getWeight(),Boolean.FALSE);
 	}
 
 	@Override
@@ -319,7 +320,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	protected Long getAttendableDuration(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return studentClassroomSessionDivision.getClassroomSessionDivision().getNumberOfMillisecond();
+		return studentClassroomSessionDivision.getClassroomSessionDivision().getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class);
 	}
 	
 	@Override
@@ -357,8 +358,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionIndex(Byte classroomSessionDivisionIndex) {
-		return dao.readByClassroomSessionDivisionIndex(classroomSessionDivisionIndex);
+	public Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionOrderNumber(Long classroomSessionDivisionOrderNumber) {
+		return dao.readByClassroomSessionDivisionIndex(classroomSessionDivisionOrderNumber);
 	}
 
 	/**/

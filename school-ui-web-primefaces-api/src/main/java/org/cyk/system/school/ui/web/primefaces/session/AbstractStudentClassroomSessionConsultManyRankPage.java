@@ -101,7 +101,7 @@ public abstract class AbstractStudentClassroomSessionConsultManyRankPage extends
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
 			Boolean found = Boolean.FALSE;
 			for(ClassroomSessionDivision index : result)
-				if(index.getTimeDivisionType().equals(classroomSessionDivision.getTimeDivisionType()) && index.getIndex()==classroomSessionDivision.getIndex()){
+				if(index.getTimeDivisionType().equals(classroomSessionDivision.getTimeDivisionType()) && index.getOrderNumber()==classroomSessionDivision.getOrderNumber()){
 					found = Boolean.TRUE;
 					break;
 				}
@@ -164,7 +164,7 @@ public abstract class AbstractStudentClassroomSessionConsultManyRankPage extends
 		protected ClassroomSessionDivision getSubLevel(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 			for(ClassroomSessionDivision classroomSessionDivision : subLevels)
 				if(studentClassroomSessionDivision.getClassroomSessionDivision().getTimeDivisionType().equals(classroomSessionDivision.getTimeDivisionType()) 
-						&& studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==classroomSessionDivision.getIndex())
+						&& studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==classroomSessionDivision.getOrderNumber())
 					return classroomSessionDivision;
 			return null;
 		}

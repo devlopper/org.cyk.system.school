@@ -33,7 +33,7 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractQ
 		
 		@Override
 		public Collection<StudentClassroomSessionDivision> getIdentifiables(AbstractSelectManyPage<?> selectManyPage) {
-			return inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisionIndex(
+			return inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisionOrderNumber(
 					inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 		}
 		

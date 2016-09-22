@@ -32,8 +32,6 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 
 	@ManyToOne @NotNull private ClassroomSession classroomSession;
 	@ManyToOne @NotNull private TimeDivisionType timeDivisionType;
-	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal coefficient;
-	@Column(name="order_index",nullable=false) @NotNull private Byte index;
 	@Column(nullable=false) @NotNull private Long numberOfSubjects=0l;
 	@Embedded private NodeResults results = new NodeResults();
 	
@@ -44,11 +42,11 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	
 	@Transient private Collection<ClassroomSessionDivisionSubject> subjects = new ArrayList<>();
 	
-	public ClassroomSessionDivision(ClassroomSession classroomSession,TimeDivisionType timeDivisionType, BigDecimal coefficient) {
+	public ClassroomSessionDivision(ClassroomSession classroomSession,TimeDivisionType timeDivisionType, BigDecimal weight) {
 		super();
 		this.timeDivisionType = timeDivisionType;
 		this.classroomSession = classroomSession;
-		this.coefficient = coefficient;
+		this.getGlobalIdentifierCreateIfNull().setWeight(weight);
 	}
 	
 	public NodeResults getResults(){
@@ -59,7 +57,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	
 	@Override
 	public String toString() {
-		return timeDivisionType.toString()+Constant.CHARACTER_SPACE+index;
+		return timeDivisionType.toString()+Constant.CHARACTER_SPACE+getGlobalIdentifier().getOrderNumber();
 	}
 	
 	@Override
@@ -69,15 +67,13 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, classroomSession.getIdentifier(),timeDivisionType.getCode(),coefficient,index,numberOfMillisecond,results.getLogMessage());
+		return String.format(LOG_FORMAT, classroomSession.getIdentifier(),timeDivisionType.getCode(),globalIdentifier.getWeight(),globalIdentifier.getOrderNumber(),results.getLogMessage());
 	}
-	private static final String LOG_FORMAT = ClassroomSessionDivision.class.getSimpleName()+"(CLASS=%s TIMDIV=%s COEF=%s INDEX=%s DUR=%s %s)";
+	private static final String LOG_FORMAT = ClassroomSessionDivision.class.getSimpleName()+"(CLASS=%s TIMDIV=%s COEF=%s INDEX=%s %s)";
 	
 	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
 	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
-	public static final String FIELD_COEFFICIENT = "coefficient";
 	public static final String FIELD_RESULTS = "results";
-	public static final String FIELD_INDEX = "index";
 	public static final String FIELD_NUMBER_OF_SUBJECTS = "numberOfSubjects";
 	
 }

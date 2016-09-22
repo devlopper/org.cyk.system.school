@@ -64,9 +64,9 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, academicSession.getIdentifier(),levelTimeDivision.getUiString(),suffix,coordinator==null?Constant.EMPTY_STRING:coordinator.getCode(),numberOfMillisecond);
+		return String.format(LOG_FORMAT, academicSession.getIdentifier(),levelTimeDivision.getUiString(),suffix,coordinator==null?Constant.EMPTY_STRING:coordinator.getCode());
 	}
-	private static final String LOG_FORMAT = ClassroomSession.class.getSimpleName()+"(AS=%s LEVEL=%s SUFFIX=%s COORDINATOR=%s DUR=%s)";
+	private static final String LOG_FORMAT = ClassroomSession.class.getSimpleName()+"(AS=%s LEVEL=%s SUFFIX=%s COORDINATOR=%s)";
 	
 	public static final String FIELD_ACADEMIC_SESSION = "academicSession";
 	public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";

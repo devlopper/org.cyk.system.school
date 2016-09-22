@@ -13,6 +13,21 @@
  		<ui:param name="pageController" value="#{classroomSessionDivisionEditPage}" />
  		<ui:define name="body">
  			<cyk:formOneData value="#{classroomSessionDivisionEditPage.form}"/>
+ 			<!--cyk:itemCollection value="#{classroomSessionDivisionEditPage.classroomSessionDivisionSubjectCollection}" >
+ 				<p:column headerText="#{uiManager.text('model.entity.subject')}" >
+ 					<p:selectOneMenu value="#{item.subject}" required="#{true}"
+ 						requiredMessage="#{item.names} - #{uiManager.textInputValueRequired('school.conferencerequested')}" 
+ 						>
+ 						<f:selectItems value="#{webManager.booleanSelectItems}" />
+ 				    </p:selectOneMenu>
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('model.entity.teacher')}" >
+ 					<h:outputText value="#{item.teacher.names}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('coefficient')}" >
+ 					
+ 				</p:column>
+ 			</cyk:itemCollection-->
  		</ui:define>
  		
  		<ui:define name="contentMenuBar">

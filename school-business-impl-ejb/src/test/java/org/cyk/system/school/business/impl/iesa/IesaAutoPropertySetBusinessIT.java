@@ -38,6 +38,7 @@ public class IesaAutoPropertySetBusinessIT extends AbstractBusinessIT {
     		System.out.println("ClassroomSessionDivision : "+classroomSessionDivision.getCode()+" , "+classroomSessionDivision.getName());
     	for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : inject(ClassroomSessionDivisionSubjectBusiness.class).findAll())
     		System.out.println("ClassroomSessionDivisionSubject : "+classroomSessionDivisionSubject.getCode()+" , "+classroomSessionDivisionSubject.getName());
+    		
     	System.exit(0);
     }
     

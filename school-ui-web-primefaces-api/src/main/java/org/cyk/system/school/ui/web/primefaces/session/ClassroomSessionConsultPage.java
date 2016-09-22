@@ -37,8 +37,8 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 	private Table<SubjectClassroomSessionDetails> subjectTable;
 	
 	@Override
-	protected void initialisation() {
-		super.initialisation();
+	protected void consultInitialisation() {
+		super.consultInitialisation();
 		subjectTable = (Table<SubjectClassroomSessionDetails>) createDetailsTable(SubjectClassroomSessionDetails.class, new DetailsConfigurationListener.Table.Adapter<SubjectClassroomSession,SubjectClassroomSessionDetails>(SubjectClassroomSession.class, SubjectClassroomSessionDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -51,7 +51,7 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			}
 		});
 	}
-
+	
 	@Override
 	protected Class<ClassroomSession> getLevelClass() {
 		return ClassroomSession.class;

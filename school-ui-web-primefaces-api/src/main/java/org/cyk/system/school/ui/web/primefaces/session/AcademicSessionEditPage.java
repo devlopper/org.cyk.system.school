@@ -6,8 +6,10 @@ import java.util.Date;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.model.time.TimeDivisionType;
-import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -19,9 +21,6 @@ import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Named @ViewScoped @Getter @Setter
 public class AcademicSessionEditPage extends AbstractCrudOnePage<AcademicSession> implements Serializable {
 
@@ -31,12 +30,7 @@ public class AcademicSessionEditPage extends AbstractCrudOnePage<AcademicSession
 	protected void initialisation() {
 		super.initialisation();
 	}
-	
-	@Override
-	protected void update() {
-		inject(AcademicSessionBusiness.class).update(identifiable, Boolean.TRUE);
-	}
-	
+		
 	public static class Form extends AbstractFormModel<AcademicSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		
@@ -46,7 +40,7 @@ public class AcademicSessionEditPage extends AbstractCrudOnePage<AcademicSession
 		@Input @InputChoice @InputOneChoice @InputOneCombo private TimeDivisionType attendanceTimeDivisionType;
 		@Input @InputBooleanButton private Boolean aggregateAttendance;
 		@Input @InputChoice @InputOneChoice @InputOneCombo private TimeDivisionType classroomSessionTimeDivisionType;
-		@Input @InputNumber private Byte currentClassroomSessionDivisionIndex;
+		@Input @InputNumber private Long currentClassroomSessionDivisionIndex;
 		
 		@Override
 		public void read() {

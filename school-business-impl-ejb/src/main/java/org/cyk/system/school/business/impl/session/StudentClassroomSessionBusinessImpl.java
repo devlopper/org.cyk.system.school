@@ -149,7 +149,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	
 	@Override
 	protected WeightedValue weightedValue(StudentClassroomSessionDivision detail) {
-		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getClassroomSessionDivision().getCoefficient(),Boolean.FALSE);
+		return new WeightedValue(detail.getResults().getEvaluationSort().getAverage().getValue(),detail.getClassroomSessionDivision().getWeight(),Boolean.FALSE);
 	}
 
 	@Override

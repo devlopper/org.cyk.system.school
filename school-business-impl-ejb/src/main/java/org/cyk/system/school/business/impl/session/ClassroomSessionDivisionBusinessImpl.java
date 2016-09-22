@@ -12,6 +12,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
@@ -32,8 +33,6 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	@Inject private ClassroomSessionDao classroomSessionDao;
-	
 	@Inject
 	public ClassroomSessionDivisionBusinessImpl(ClassroomSessionDivisionDao dao) {
 		super(dao);  
@@ -42,16 +41,18 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override
 	protected Object[] getPropertyValueTokens(ClassroomSessionDivision classroomSessionDivision, String name) {
 		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
-			return new Object[]{classroomSessionDivision.getClassroomSession(),classroomSessionDivision.getTimeDivisionType(),classroomSessionDivision.getIndex()};
+			return new Object[]{classroomSessionDivision.getClassroomSession(),classroomSessionDivision.getTimeDivisionType(),classroomSessionDivision.getOrderNumber()};
 		return super.getPropertyValueTokens(classroomSessionDivision, name);
 	}
 	
 	@Override
 	public ClassroomSessionDivision create(ClassroomSessionDivision classroomSessionDivision) {
-		classroomSessionDivision.setIndex(new Long(classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations().getClassroomSessionDivisionIndexStart().byteValue()
-				+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession())).byteValue());
+		Long start = classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations().getClassroomSessionDivisionOrderNumberInterval()==null ?
+				0 : inject(IntervalBusiness.class).findGreatestLowestValue(classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations()
+						.getClassroomSessionDivisionOrderNumberInterval()).longValue();
+		classroomSessionDivision.setOrderNumber(start+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()));
 		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
-		classroomSessionDao.update(classroomSessionDivision.getClassroomSession());
+		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
 		return super.create(classroomSessionDivision);
 	}
 	
@@ -108,13 +109,13 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public Collection<ClassroomSessionDivision> findByClassroomSessionsByIndex(Collection<ClassroomSession> classroomSessions,Byte index) {
-		return dao.readByClassroomSessionsByIndex(classroomSessions,index);
+	public Collection<ClassroomSessionDivision> findByClassroomSessionsByOrderNumber(Collection<ClassroomSession> classroomSessions,Long orderNumber) {
+		return dao.readByClassroomSessionsByOrderNumber(classroomSessions,orderNumber);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public ClassroomSessionDivision findByClassroomSessionByIndex(ClassroomSession classroomSession, Byte index) {
-		return dao.readByClassroomSessionByIndex(classroomSession,index);
+	public ClassroomSessionDivision findByClassroomSessionByOrderNumber(ClassroomSession classroomSession, Long orderNumber) {
+		return dao.readByClassroomSessionByOrderNumber(classroomSession,orderNumber);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

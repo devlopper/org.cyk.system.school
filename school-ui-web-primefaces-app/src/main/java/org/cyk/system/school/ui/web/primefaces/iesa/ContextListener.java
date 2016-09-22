@@ -219,7 +219,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 			FormatArguments formatArguments = new FormatArguments();
 			formatArguments.setIsRank(Boolean.TRUE);
 			formatArguments.setType(CharacterSet.LETTER);
-			String name = numberBusiness.format(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()+1, formatArguments).toUpperCase();
+			String name = numberBusiness.format(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber(), formatArguments).toUpperCase();
 			r.setName(name+" TERM , "+studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup().getName().toUpperCase()
 					+" REPORT");
 			
@@ -320,7 +320,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				
 			}
 			
-			if(studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()==2){
+			if(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==3){
 				/*labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
 				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
@@ -331,8 +331,8 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				*/
 			}else{
 				ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
-						.readByClassroomSessionByIndex(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
-								,new Byte((byte) (studentClassroomSessionDivision.getClassroomSessionDivision().getIndex()+1)));
+						.readByClassroomSessionByOrderNumber(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
+								,(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()));
 			
 				r.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
 					{"CONFERENCE REQUESTED",studentClassroomSessionDivision.getResults().getConferenceRequested()==null?"NO"

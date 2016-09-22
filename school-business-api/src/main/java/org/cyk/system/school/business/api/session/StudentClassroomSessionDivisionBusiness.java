@@ -55,7 +55,7 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	
 	Collection<StudentClassroomSessionDivision> findByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
 	
-	Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionIndex(Byte classroomSessionDivisionIndex);
+	Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionOrderNumber(Long classroomSessionDivisionOrderNumber);
 
 	/**/
 	

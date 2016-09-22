@@ -95,7 +95,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
 			public String format(ClassroomSessionDivision classroomSessionDivision, ContentType contentType) {
-				return classroomSessionDivision.getTimeDivisionType().getName()+Constant.CHARACTER_SPACE+(classroomSessionDivision.getIndex());
+				return classroomSessionDivision.getTimeDivisionType().getName()+Constant.CHARACTER_SPACE+(classroomSessionDivision.getOrderNumber());
 			}
 		});
 		

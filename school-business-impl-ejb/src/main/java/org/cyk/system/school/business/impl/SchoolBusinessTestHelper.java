@@ -217,7 +217,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
 					classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).find(classroomSessionDivision.getIdentifier());
 					if(classroomSessionDivisionIndexes==null || classroomSessionDivisionIndexes.isEmpty()
-						|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getIndex().intValue())) ){
+						|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getOrderNumber().intValue())) ){
 						for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
 							studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
 							if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class)

@@ -51,8 +51,8 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 	protected Table<RESULT_OUTPUT> broadsheetTable;
 	
 	@Override
-	protected void initialisation() {
-		super.initialisation();
+	protected void consultInitialisation() {
+		super.consultInitialisation();
 		teacher = userSession.getUser() instanceof Person ? inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser()) : null;
 		isCoordinator = teacher != null && getClassroomSession().getCoordinator()!= null && teacher.equals( getClassroomSession().getCoordinator());
 		
@@ -172,9 +172,11 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 			public Collection<SUB_LEVEL> getIdentifiables() {
 				return getSubLevels();
 			}
+			
 			@Override
-			public Crud[] getCruds() {
-				return new Crud[]{Crud.READ,Crud.UPDATE};
+			public Boolean getEnabledInDefaultTab() {
+				// TODO Auto-generated method stub
+				return Boolean.TRUE;
 			}
 		};
 	}

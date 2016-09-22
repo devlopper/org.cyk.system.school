@@ -7,6 +7,8 @@ import java.util.Collection;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.business.api.Crud;
@@ -54,8 +56,6 @@ import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 import org.primefaces.model.TreeNode;
-
-import lombok.Getter;
 
 @Named @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {
@@ -200,7 +200,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
 					
-					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByIndex(classroomSession
+					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(classroomSession
 							, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
 					
 					if(Boolean.TRUE.equals(userSession.getIsManager()))
@@ -222,7 +222,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 				Object object = nodeModel(node).getData();
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
-					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByIndex(classroomSession
+					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(classroomSession
 							, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
 					return classroomSessionDivision.getNumberOfSubjects() == 0;
 				}
@@ -269,6 +269,15 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	protected Boolean isConnectedUserInstanceOfTeacher(UserSession userSession){
 		return isConnectedUserInstanceOfActor(userSession, inject(TeacherBusiness.class));
 	}
+	
+	/**/
+	/*
+	public List<SelectItem> getSubjectSelectItems(){
+		return webManager.getSelectItems(Subject.class);
+	}
+	public List<SelectItem> getTeacherSelectItems(){
+		return webManager.getSelectItems(Teacher.class);
+	}*/
 	
 	/**/
 	
@@ -412,7 +421,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			page.getForm().findInputByFieldName(classroomSessionDivisionFieldName).setDisabled(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null);
 			if(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null){
 				for(ClassroomSessionDivision c : classroomSessionDivisions)
-					if(c.getIndex().equals(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()) ){
+					if(c.getOrderNumber().equals(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()) ){
 						classroomSessionDivision = c;
 						break;
 					}

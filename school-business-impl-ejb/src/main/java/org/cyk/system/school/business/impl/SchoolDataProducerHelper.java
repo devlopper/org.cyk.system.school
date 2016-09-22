@@ -9,10 +9,14 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.impl.RootDataProducerHelper;
 import org.cyk.system.root.model.file.report.ReportTemplate;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
@@ -34,9 +38,6 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.joda.time.DateTimeConstants;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Singleton
 public class SchoolDataProducerHelper extends AbstractBean implements Serializable {
 
@@ -50,12 +51,14 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		super.initialisation();
 	}
 	
-	public CommonNodeInformations instanciateOneCommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale,ReportTemplate reportTemplate
-			,String attendanceTimeDivisionTypeCode,String classroomSessionTimeDivisionTypeCode,String evaluationPassAverage,String currentClassroomSessionDivisionIndex){
+	public CommonNodeInformations instanciateOneCommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale
+			,ReportTemplate reportTemplate,String attendanceTimeDivisionTypeCode,String classroomSessionTimeDivisionTypeCode,String evaluationPassAverage
+			,String currentClassroomSessionDivisionIndex,Interval interval){
 		CommonNodeInformations commonNodeInformations = new CommonNodeInformations(intervalCollection,studentClassroomSessionAveragePromotionScale,reportTemplate
 				,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,attendanceTimeDivisionTypeCode),new BigDecimal(evaluationPassAverage));
 		commonNodeInformations.setClassroomSessionTimeDivisionType(RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class, classroomSessionTimeDivisionTypeCode));
-		commonNodeInformations.setCurrentClassroomSessionDivisionIndex(new Byte(currentClassroomSessionDivisionIndex));
+		commonNodeInformations.setCurrentClassroomSessionDivisionIndex(new Long(currentClassroomSessionDivisionIndex));
+		commonNodeInformations.setClassroomSessionDivisionOrderNumberInterval(interval);
 		return commonNodeInformations;
 	}
 	
@@ -116,7 +119,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
     			,new BigDecimal("1"));
 		classroomSessionDivision.setStudentEvaluationRequired(studentEvaluationRequired);
 		classroomSessionDivision.setStudentRankable(studentRankable);
-		classroomSessionDivision.setNumberOfMillisecond(DateTimeConstants.MILLIS_PER_DAY * 45l);
+		classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().setUser(new BigDecimal(DateTimeConstants.MILLIS_PER_DAY * 45l));
 		classroomSessionDivisions.add(classroomSessionDivision);
 		classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(new Date());
 		classroomSessionDivision.getExistencePeriod().setToDate(new Date());
@@ -157,7 +160,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		return subjectEvaluationType;
 	}
 	
-	public LevelTimeDivision createLevelTimeDivision(String levelCode,String levelName,LevelGroup levelGroup,CommonNodeInformations commonNodeInformations,Integer index){
+	public LevelTimeDivision createLevelTimeDivision(String levelCode,String levelName,LevelGroup levelGroup,CommonNodeInformations commonNodeInformations,Long index){
 		commonNodeInformations.setAggregateAttendance(Boolean.FALSE);
 		LevelName _levelName = RootDataProducerHelper.getInstance().createEnumeration(LevelName.class,levelCode,levelName);
 		_levelName.setNodeInformations(commonNodeInformations);

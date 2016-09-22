@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
@@ -85,7 +86,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				@SuppressWarnings({ "unchecked", "rawtypes" })
 				Collection<ClassroomSession> classroomSessions = ((AbstractQueryManyFormModel)data).getIdentifiables();
 				
-				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionsByIndex(classroomSessions,
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionsByOrderNumber(classroomSessions,
 						inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				
 				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisions(classroomSessionDivisions);
@@ -207,12 +208,15 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			if(input!=null)
 				for(ClassroomSession classroomSession : classroomSessions){
 					CommonNodeInformations nodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession);
-					if(nodeInformations.getClassroomSessionDivisionCount()!=null)
-						for(byte i = 0; i < nodeInformations.getClassroomSessionDivisionCount(); i++){
-							if(indexes.add(i) /*|| timeDivisionTypesProcessed.add(nodeInformations.getClassroomSessionTimeDivisionType())*/)
-								input.getList().add(new SelectItem(i, (timeDivisionTypes.size()==1?Constant.EMPTY_STRING
-									:nodeInformations.getAttendanceTimeDivisionType().getName()+Constant.CHARACTER_SPACE)+String.valueOf(i+1)));
-						}
+					if(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()!=null){
+						Long max = inject(IntervalBusiness.class).findLowestGreatestValue(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()).longValue();
+						if(max!=null)
+							for(byte i = 0; i < max; i++){
+								if(indexes.add(i) /*|| timeDivisionTypesProcessed.add(nodeInformations.getClassroomSessionTimeDivisionType())*/)
+									input.getList().add(new SelectItem(i, (timeDivisionTypes.size()==1?Constant.EMPTY_STRING
+										:nodeInformations.getAttendanceTimeDivisionType().getName()+Constant.CHARACTER_SPACE)+String.valueOf(i+1)));
+							}
+					}
 				}
 			
 			//page.setChoices(Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED, indexes);
@@ -225,14 +229,14 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			
 			
 			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
-				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionsByIndex(classroomSessions,
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionsByOrderNumber(classroomSessions,
 						inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisions(classroomSessionDivisions);
 				inject(StudentClassroomSessionDivisionBusiness.class).findReportFiles(studentClassroomSessionDivisions);
 				WebNavigationManager.getInstance().redirectToFileConsultManyPage(inject(StudentClassroomSessionDivisionBusiness.class).findReportFiles(studentClassroomSessionDivisions), FileExtension.PDF);
 			}else if(schoolBusinessLayer.getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
-						.findByClassroomSessionsByIndex(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				ServiceCallArguments callArguments = new ServiceCallArguments();
 				callArguments.setExecutionProgress(page.getExecutionProgress());
 				Form form = (Form) data;
@@ -242,7 +246,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					,schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionEvaluationResults(),schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionRankResults()}
 				, actionIdentifier)){
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
-						.findByClassroomSessionsByIndex(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				ServiceCallArguments callArguments = new ServiceCallArguments();
 				callArguments.setExecutionProgress(page.getExecutionProgress());
 				if(schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults().equals(actionIdentifier))

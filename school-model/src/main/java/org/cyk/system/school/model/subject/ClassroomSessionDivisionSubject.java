@@ -34,14 +34,10 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	@ManyToOne @NotNull private ClassroomSessionDivision classroomSessionDivision;
 	
 	@ManyToOne @NotNull private Subject subject;
-	
-	@Column(precision=COEFFICIENT_PRECISION,scale=FLOAT_SCALE,nullable=false) @NotNull private BigDecimal coefficient;
-	
+		
 	@ManyToOne private ClassroomSessionDivisionSubjectGroup group;
 	
 	@ManyToOne private Teacher teacher;
-	
-	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal duration;
 	
 	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal evaluationPassAverage;
 	
@@ -61,7 +57,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 		super();
 		this.classroomSessionDivision = classroomSessionDivision;
 		this.subject = subject;
-		this.coefficient = coefficient;
+		getGlobalIdentifierCreateIfNull().setWeight(coefficient);
 		this.teacher = teacher;
 	}
 	
@@ -83,9 +79,9 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, classroomSessionDivision.getIdentifier(),subject.getCode(),coefficient,teacher==null?Constant.EMPTY_STRING:teacher.getCode(),duration,results.getLogMessage());
+		return String.format(LOG_FORMAT, classroomSessionDivision.getIdentifier(),subject.getCode(),teacher==null?Constant.EMPTY_STRING:teacher.getCode(),results.getLogMessage());
 	}
-	private static final String LOG_FORMAT = ClassroomSessionDivisionSubject.class.getSimpleName()+"(DIV=%s SUB=%s COEF=%s TEACH=%s DUR=%s %s)";
+	private static final String LOG_FORMAT = ClassroomSessionDivisionSubject.class.getSimpleName()+"(DIV=%s SUB=%s TEACH=%s DUR=%s %s)";
 	
 	/**/
 
@@ -93,7 +89,6 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	public static final String FIELD_SUBJECT = "subject";
 	public static final String FIELD_GROUP = "group";
 	public static final String FIELD_TEACHER = "teacher";
-	public static final String FIELD_DURATION = "duration";
 	public static final String FIELD_NUMBER_OF_EVALUATION_TYPES = "numberOfEvaluationTypes";
 	
 }

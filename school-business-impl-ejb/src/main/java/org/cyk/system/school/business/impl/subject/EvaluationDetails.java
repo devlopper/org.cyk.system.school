@@ -15,6 +15,6 @@ public class EvaluationDetails extends AbstractOutputDetails<Evaluation> impleme
 	public EvaluationDetails(Evaluation subjectEvaluation) {
 		super(subjectEvaluation);
 		name = subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getName();
-		coefficient = numberBusiness.format(subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getCoefficient());
+		coefficient = numberBusiness.format(subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getWeight());
 	}
 }

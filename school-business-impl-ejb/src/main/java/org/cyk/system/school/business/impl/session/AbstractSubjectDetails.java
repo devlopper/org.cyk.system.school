@@ -13,7 +13,7 @@ public abstract class AbstractSubjectDetails extends AbstractOutputDetails<Stude
 	public AbstractSubjectDetails(StudentClassroomSessionDivisionSubject studentSubject) {
 		super(studentSubject);
 		subject = studentSubject.getClassroomSessionDivisionSubject().getSubject().getName();
-		//coefficient = numberBusiness.format(studentSubject.getClassroomSessionDivisionSubject().getCoefficient());
+		//coefficient = numberBusiness.format(studentSubject.getClassroomSessionDivisionSubject().getWeight());
 		//teacher = studentSubject.getClassroomSessionDivisionSubject().getTeacher().getPerson().getNames();
 		
 	}

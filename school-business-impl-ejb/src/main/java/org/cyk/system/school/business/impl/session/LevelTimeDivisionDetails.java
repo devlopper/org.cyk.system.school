@@ -16,7 +16,7 @@ public class LevelTimeDivisionDetails extends AbstractOutputDetails<LevelTimeDiv
 		super(levelTimeDivision);
 		level = formatUsingBusiness(levelTimeDivision.getLevel());
 		timeDivisionType = formatUsingBusiness(levelTimeDivision.getTimeDivisionType());
-		index = levelTimeDivision.getIndex()+"";
+		index = levelTimeDivision.getOrderNumber()+"";
 	}
 	
 	public static final String FIELD_LEVEL = "level";

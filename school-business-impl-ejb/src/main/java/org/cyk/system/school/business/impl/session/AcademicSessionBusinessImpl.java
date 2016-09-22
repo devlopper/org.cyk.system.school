@@ -60,7 +60,7 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	}
 	
 	@Override
-	public AcademicSession update(AcademicSession academicSession,Boolean cascade) {//TODO better create cascade to children boolean property
+	public AcademicSession update(AcademicSession academicSession) {
 		academicSession = update(academicSession);
 		for(AbstractIdentifiable identifiable : genericDao.use(LevelName.class).select().all()){
 			LevelName levelName = (LevelName) identifiable;
@@ -71,5 +71,5 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 		}
 		return academicSession;
 	}
-
+	
 }
