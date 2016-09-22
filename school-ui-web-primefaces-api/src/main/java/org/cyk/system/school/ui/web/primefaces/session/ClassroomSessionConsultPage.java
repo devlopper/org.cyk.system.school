@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -45,11 +44,9 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			public Collection<SubjectClassroomSession> getIdentifiables() {
 				return inject(SubjectClassroomSessionBusiness.class).findByClassroomSession(identifiable);
 			}
-			@Override
-			public Crud[] getCruds() {
-				return new Crud[]{Crud.READ,Crud.UPDATE};
-			}
+			
 		});
+		
 	}
 	
 	@Override

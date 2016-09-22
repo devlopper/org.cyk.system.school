@@ -11,7 +11,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class ClassroomSessionDivisionDetails extends AbstractOutputDetails<ClassroomSessionDivision> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @IncludeInputs private ClassroomSessionDetails classroomSessionDetails;
+	@IncludeInputs private ClassroomSessionDetails classroomSessionDetails;
 	@Input @InputText private String classroomSession;
 	
 	public ClassroomSessionDivisionDetails(ClassroomSessionDivision classroomSessionDivision) {

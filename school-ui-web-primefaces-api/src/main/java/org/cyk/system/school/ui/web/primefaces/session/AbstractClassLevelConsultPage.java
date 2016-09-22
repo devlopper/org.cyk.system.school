@@ -173,11 +173,6 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 				return getSubLevels();
 			}
 			
-			@Override
-			public Boolean getEnabledInDefaultTab() {
-				// TODO Auto-generated method stub
-				return Boolean.TRUE;
-			}
 		};
 	}
 	
