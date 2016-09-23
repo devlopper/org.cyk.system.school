@@ -34,6 +34,7 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.utility.common.Constant;
@@ -106,6 +107,9 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				
 				if(object instanceof ClassroomSession)
 					return null;//((ClassroomSession)object).getAcademicSession();
+				if(object instanceof SubjectClassroomSession)
+					return ((SubjectClassroomSession)object).getClassroomSession();
+				
 				if(object instanceof ClassroomSessionDivision)
 					return ((ClassroomSessionDivision)object).getClassroomSession();
 				if(object instanceof ClassroomSessionDivisionSubject)

@@ -29,8 +29,13 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	
 	@Transient protected Collection<DETAIL> details = new ArrayList<>();
 	
-	@Transient protected Boolean cascadeTopDownOnCreate = Boolean.TRUE;
-	@Transient protected Boolean cascadeBottomUpOnCreate = Boolean.FALSE;
+	//@Transient protected Boolean cascadeTopDownOnCreate = Boolean.TRUE;
+	//@Transient protected Boolean cascadeBottomUpOnCreate = Boolean.FALSE;
+	
+	{
+		cascadeOperationToChildren = Boolean.TRUE;
+		cascadeOperationToMaster = Boolean.FALSE;
+	}
 	
 	public abstract LEVEL getLevel();
 	

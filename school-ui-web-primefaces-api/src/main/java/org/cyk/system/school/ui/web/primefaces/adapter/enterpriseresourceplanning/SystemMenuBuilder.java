@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
+import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -62,6 +64,14 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 		Commandable module = createModuleCommandable(Level.class, null);
 		module.addChild(createListCommandable(LevelName.class, null));
 		module.addChild(createListCommandable(LevelSpeciality.class, null));
+		return module;
+	}
+	
+	@Override
+	public Commandable getEmployeeCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables) {
+		Commandable module = super.getEmployeeCommandable(userSession, mobileCommandables);
+		module.addChild(createListCommandable(Teacher.class, null));
+		addReportCommandables(Teacher.class,module, TeacherBusinessImpl.Listener.COLLECTION);
 		return module;
 	}
 	

@@ -9,6 +9,7 @@ import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusine
 import org.cyk.system.school.business.api.session.LevelBusiness;
 import org.cyk.system.school.business.api.session.LevelTimeDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -16,6 +17,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Subject;
 
 public class IesaAutoPropertySetBusinessIT extends AbstractBusinessIT {
 
@@ -26,6 +28,8 @@ public class IesaAutoPropertySetBusinessIT extends AbstractBusinessIT {
     @Override
     protected void businesses() {
     	installApplication();
+    	for(Subject subject : inject(SubjectBusiness.class).findAll())
+    		System.out.println("Subjects : "+subject.getCode()+" , "+subject.getName());
     	for(AcademicSession academicSession : inject(AcademicSessionBusiness.class).findAll())
     		System.out.println("Academic Session : "+academicSession.getCode()+" , "+academicSession.getName());
     	for(Level level : inject(LevelBusiness.class).findAll())

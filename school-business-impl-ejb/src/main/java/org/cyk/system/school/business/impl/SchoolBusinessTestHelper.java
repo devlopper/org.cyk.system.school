@@ -87,7 +87,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	@Inject private SchoolBusinessLayer schoolBusinessLayer;
 	
-	@Getter @Setter private Boolean studentSubjectCascadeBottomUpOnCreate,studentSubjectCascadeTopDownOnCreate;
+	@Getter @Setter private Boolean studentSubjectCascadeOperationToMaster,studentSubjectCascadeOperationToChildren;
 	
 	@Getter @Setter private List<EvaluationType> evaluationTypes = new ArrayList<>();
 	@Getter @Setter private Object[][] customClassroomSessionDivisionSubjectEvaluationTypeInfos;
@@ -325,8 +325,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	public StudentClassroomSessionDivisionSubject createStudentSubject(String registrationCode,ClassroomSessionDivisionSubject classroomSessionDivisionSubject,Object[][] expected){
 		StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(studentBusiness.find(registrationCode), classroomSessionDivisionSubject);
-		studentSubject.setCascadeBottomUpOnCreate(studentSubjectCascadeBottomUpOnCreate);
-		studentSubject.setCascadeTopDownOnCreate(studentSubjectCascadeTopDownOnCreate);
+		studentSubject.setCascadeOperationToMaster(studentSubjectCascadeOperationToMaster);
+		studentSubject.setCascadeOperationToChildren(studentSubjectCascadeOperationToChildren);
 		studentSubject = studentSubjectBusiness.create(studentSubject);
 		assertStudentClassroomSession(studentClassroomSessionBusiness.findByStudentByClassroomSession(studentSubject.getStudent()
 				, studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()), expected);
@@ -566,8 +566,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			}
 			for(Student student : customStudents){
 				StudentClassroomSessionDivisionSubject studentSubject = new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject);
-				studentSubject.setCascadeBottomUpOnCreate(Boolean.TRUE);
-				studentSubject.setCascadeTopDownOnCreate(Boolean.FALSE);
+				studentSubject.setCascadeOperationToMaster(Boolean.TRUE);
+				studentSubject.setCascadeOperationToChildren(Boolean.FALSE);
 				inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentSubject);
 			}
 		}

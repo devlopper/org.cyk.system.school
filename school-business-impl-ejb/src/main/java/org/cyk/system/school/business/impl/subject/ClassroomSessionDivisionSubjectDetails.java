@@ -12,7 +12,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class ClassroomSessionDivisionSubjectDetails extends AbstractOutputDetails<ClassroomSessionDivisionSubject> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @IncludeInputs private ClassroomSessionDivisionDetails classroomSessionDivisionDetails;
+	@IncludeInputs private ClassroomSessionDivisionDetails classroomSessionDivisionDetails;
 	@Input @InputText private String classroomSession,classroomSessionDivision,subject,coefficient,teacher;
 	
 	public ClassroomSessionDivisionSubjectDetails(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {

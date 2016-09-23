@@ -13,6 +13,7 @@ import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetai
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.SubjectClassroomSessionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
@@ -24,6 +25,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
@@ -40,6 +42,7 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryOneFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.LevelTimeDivisionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
@@ -96,6 +99,10 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionQueryOneFormModel.PageAdapter());
 		AbstractSelectManyPage.Listener.COLLECTION.add(new ClassroomSessionQueryManyFormModel.PageAdapter());
 		AbstractProcessManyPage.Listener.COLLECTION.add(new ClassroomSessionQueryManyFormModel.ProcessPageAdapter());
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(SubjectClassroomSession.class, SubjectClassroomSessionEditPage.Form.class, SubjectClassroomSessionDetails.class,null,null,null));
+		uiManager.configBusinessIdentifiable(SubjectClassroomSession.class, null);
+		webNavigationManager.useDynamicSelectView(SubjectClassroomSession.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivision.class, ClassroomSessionDivisionEditPage.Form.class, ClassroomSessionDivisionDetails.class
 				,ClassroomSessionDivisionQueryOneFormModel.class,null,null));

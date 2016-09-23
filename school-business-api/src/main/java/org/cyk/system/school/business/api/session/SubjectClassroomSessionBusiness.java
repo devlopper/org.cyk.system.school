@@ -1,4 +1,4 @@
-package org.cyk.system.school.business.api.subject;
+package org.cyk.system.school.business.api.session;
 
 import java.util.Collection;
 

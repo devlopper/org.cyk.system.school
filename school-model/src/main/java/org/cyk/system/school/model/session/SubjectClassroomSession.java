@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.school.model.AbstractNodeAggregatedResult;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.subject.Subject;
 
 @Getter @Setter @Entity @NoArgsConstructor
@@ -20,10 +21,17 @@ public class SubjectClassroomSession extends AbstractNodeAggregatedResult implem
 	@ManyToOne private Subject subject;
 	@ManyToOne private ClassroomSession classroomSession;
 	
+	private Teacher teacher;
+	
 	public SubjectClassroomSession(Subject subject,ClassroomSession classroomSession) {
 		super();
 		this.subject = subject;
 		this.classroomSession = classroomSession;
+	}
+	
+	@Override
+	public String getUiString() {
+		return subject.getUiString();
 	}
 
 	public static final String FIELD_SUBJECT = "subject";

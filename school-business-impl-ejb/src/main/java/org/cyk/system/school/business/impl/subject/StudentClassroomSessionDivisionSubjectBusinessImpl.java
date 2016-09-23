@@ -46,12 +46,12 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 		Student student = studentSubject.getStudent();
 		ClassroomSessionDivision classroomSessionDivision = studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
 		
-		if(Boolean.TRUE.equals(studentSubject.getCascadeBottomUpOnCreate())){
+		if(Boolean.TRUE.equals(studentSubject.getCascadeOperationToMaster())){
 			StudentClassroomSessionDivision studentClassroomSessionDivision = studentClassroomSessionDivisionDao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 			if(studentClassroomSessionDivision==null){
 				studentClassroomSessionDivision = new StudentClassroomSessionDivision(student, classroomSessionDivision);
-				studentClassroomSessionDivision.setCascadeTopDownOnCreate(studentSubject.getCascadeTopDownOnCreate());
-				studentClassroomSessionDivision.setCascadeBottomUpOnCreate(studentSubject.getCascadeBottomUpOnCreate());
+				studentClassroomSessionDivision.setCascadeOperationToChildren(studentSubject.getCascadeOperationToChildren());
+				studentClassroomSessionDivision.setCascadeOperationToMaster(studentSubject.getCascadeOperationToMaster());
 				inject(StudentClassroomSessionDivisionBusiness.class).create(studentClassroomSessionDivision);
 			}
 		}

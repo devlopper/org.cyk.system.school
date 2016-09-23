@@ -64,7 +64,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		//logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
 		
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
-		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeTopDownOnCreate())){
+		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeOperationToChildren())){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
 				studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
 		}

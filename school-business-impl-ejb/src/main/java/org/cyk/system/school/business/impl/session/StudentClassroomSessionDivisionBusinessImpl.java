@@ -96,8 +96,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		StudentClassroomSession studentClassroomSession = studentClassroomSessionDao.readByStudentByClassroomSession(student, classroomSession);
 		if(studentClassroomSession==null){
 			studentClassroomSession = new StudentClassroomSession(student, classroomSession);
-			studentClassroomSession.setCascadeTopDownOnCreate(studentClassroomSessionDivision.getCascadeTopDownOnCreate());
-			studentClassroomSession.setCascadeBottomUpOnCreate(studentClassroomSessionDivision.getCascadeBottomUpOnCreate());
+			studentClassroomSession.setCascadeOperationToChildren(studentClassroomSessionDivision.getCascadeOperationToChildren());
+			studentClassroomSession.setCascadeOperationToMaster(studentClassroomSessionDivision.getCascadeOperationToMaster());
 			inject(StudentClassroomSessionBusiness.class).create(studentClassroomSession);
 		}
 		
@@ -110,7 +110,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			}
 		
 		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = new ArrayList<>();
-		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeTopDownOnCreate())){
+		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeOperationToChildren())){
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
 				studentSubjects.add(new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject));
 			}

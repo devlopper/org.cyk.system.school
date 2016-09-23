@@ -6,28 +6,35 @@ import java.lang.reflect.Field;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.impl.time.PeriodDetails;
 import org.cyk.system.school.business.impl.actor.StudentDetails;
+import org.cyk.system.school.business.impl.actor.TeacherDetails;
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.SubjectClassroomSessionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
+import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.web.primefaces.UserSession;
+import org.cyk.ui.web.primefaces.Table.ColumnAdapter;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.DetailsConfiguration;
 
@@ -38,13 +45,18 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	public PrimefacesManager() {
 		configureAcademicSessionClass();
 		configureLevelTimeDivisionClass();
+		
 		configureClassroomSessionClass();
+		configureSubjectClassroomSessionClass();
+		
 		configureClassroomSessionDivisionClass();
 		configureClassroomSessionDivisionSubjectClass();
 		
 		configureStudentClass();
 		configureStudentClassroomSessionClass();
 		configureStudentClassroomSessionDivisionClass();
+		
+		configureTeacherClass();
 	}
 	
 	@Override
@@ -125,6 +137,39 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 			}
 		});
 	}
+	protected void configureSubjectClassroomSessionClass() {
+		getFormConfiguration(SubjectClassroomSession.class, Crud.CREATE).addRequiredFieldNames(SubjectClassroomSessionEditPage.Form.FIELD_CLASSROOM_SESSION,
+				SubjectClassroomSessionEditPage.Form.FIELD_SUBJECT,SubjectClassroomSessionEditPage.Form.FIELD_TEACHER)
+					.addFieldNames(SubjectClassroomSessionEditPage.Form.FIELD_TEACHER);
+		
+		registerDetailsConfiguration(SubjectClassroomSessionDetails.class, new DetailsConfiguration(){
+			private static final long serialVersionUID = 1L;
+			@SuppressWarnings("rawtypes")
+			@Override
+			public ControlSetAdapter getFormControlSetAdapter(Class clazz) {
+				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						if(data instanceof SubjectClassroomSessionDetails)
+							return isFieldNameIn(field,SubjectClassroomSessionDetails.FIELD_CLASSROOM_SESSION,SubjectClassroomSessionDetails.FIELD_SUBJECT
+									,SubjectClassroomSessionDetails.FIELD_TEACHER);
+						return Boolean.FALSE;
+					}
+				};
+			}
+			@Override
+			public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz) {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field, SubjectClassroomSessionDetails.FIELD_SUBJECT, SubjectClassroomSessionDetails.FIELD_TEACHER);
+					}
+				};
+			}
+		});
+	}
 	
 	protected void configureClassroomSessionDivisionClass() {
 		getFormConfiguration(ClassroomSessionDivision.class, Crud.READ).addFieldNames(ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER
@@ -167,6 +212,17 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 							return isFieldNameIn(field,ClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION
 									,ClassroomSessionDivisionSubjectDetails.FIELD_SUBJECT,ClassroomSessionDivisionSubjectDetails.FIELD_TEACHER);
 						return Boolean.FALSE;
+					}
+				};
+			}
+			
+			@Override
+			public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz) {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field, ClassroomSessionDivisionSubjectDetails.FIELD_SUBJECT,ClassroomSessionDivisionSubjectDetails.FIELD_TEACHER);
 					}
 				};
 			}
@@ -242,6 +298,40 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 						//if(data instanceof StudentClassroomSessionDetails)
 							return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT,StudentClassroomSessionDetails.FIELD_CLASSROOM_SESSION);
 						
+					}
+				};
+			}
+		});
+	}
+	
+	/**/
+	
+	protected void configureTeacherClass() {
+		getFormConfiguration(Teacher.class, Crud.CREATE).addRequiredFieldNames(TeacherEditPage.Form.FIELD_CODE)
+		.addFieldNames(TeacherEditPage.Form.FIELD_IMAGE,TeacherEditPage.Form.FIELD_NAME,TeacherEditPage.Form.FIELD_LAST_NAMES
+				,TeacherEditPage.Form.FIELD_BIRTH_DATE,TeacherEditPage.Form.FIELD_BIRTH_LOCATION,TeacherEditPage.Form.FIELD_NATIONALITY,TeacherEditPage.Form.FIELD_SEX
+				,TeacherEditPage.Form.FIELD_BLOOD_GROUP,TeacherEditPage.Form.FIELD_LANGUAGE_COLLECTION,TeacherEditPage.Form.FIELD_REGISTRATION_DATE);
+		
+		getFormConfiguration(Teacher.class, Crud.UPDATE).addRequiredFieldNames(TeacherEditPage.Form.FIELD_CODE)
+		.addFieldNames(TeacherEditPage.Form.FIELD_IMAGE,TeacherEditPage.Form.FIELD_NAME,TeacherEditPage.Form.FIELD_LAST_NAMES
+				,TeacherEditPage.Form.FIELD_BIRTH_DATE,TeacherEditPage.Form.FIELD_BIRTH_LOCATION,TeacherEditPage.Form.FIELD_NATIONALITY,TeacherEditPage.Form.FIELD_SEX
+				,TeacherEditPage.Form.FIELD_BLOOD_GROUP,TeacherEditPage.Form.FIELD_LANGUAGE_COLLECTION,TeacherEditPage.Form.FIELD_REGISTRATION_DATE);
+		
+		getFormConfiguration(Teacher.class, Crud.DELETE).addFieldNames(TeacherEditPage.Form.FIELD_CODE,TeacherEditPage.Form.FIELD_IMAGE,TeacherEditPage.Form.FIELD_NAME
+				,TeacherEditPage.Form.FIELD_LAST_NAMES);
+		
+		registerDetailsConfiguration(TeacherDetails.class, new DetailsConfiguration(){
+			private static final long serialVersionUID = 1L;
+			@SuppressWarnings("rawtypes")
+			@Override
+			public ControlSetAdapter getFormControlSetAdapter(Class clazz) {
+				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						return isFieldNameIn(field,TeacherDetails.FIELD_CODE,TeacherDetails.FIELD_NAME,TeacherDetails.FIELD_LASTNAMES
+								,TeacherDetails.FIELD_BIRTH_DATE,TeacherDetails.FIELD_BIRTH_LOCATION,TeacherDetails.FIELD_REGISTRATION_DATE
+								,TeacherDetails.FIELD_SEX,TeacherDetails.FIELD_BLOOD_GROUP,TeacherDetails.FIELD_LANGUAGE_COLLECTION);
 					}
 				};
 			}

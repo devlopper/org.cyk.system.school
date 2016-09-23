@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
@@ -13,6 +15,7 @@ import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Student.SearchCriteria;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.utility.common.ListenerUtils;
@@ -30,7 +33,7 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 		super(dao);  
 	}
 	
-	@Override
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Student instanciateOne(final UserAccount userAccount) {
 		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
 			@Override
@@ -94,6 +97,11 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 		return student;
 	}
 
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<Student> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
+		return dao.readByClassroomSessionDivision(classroomSessionDivision);
+	}	
+	
 	/**/
 
 	public static interface Listener extends org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl.Listener<Student>{
@@ -126,5 +134,8 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 			
 		}
 		
-	}	
+	}
+
+
+	
 }
