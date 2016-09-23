@@ -26,19 +26,12 @@ import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<StudentClassroomSession> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
-		
+	
 	@Override
 	protected StudentClassroomSession instanciateIdentifiable() {
 		StudentClassroomSession studentClassroomSession = super.instanciateIdentifiable();
-		if(studentClassroomSession.getClassroomSession()==null){
-			Long classroomSessionIdentifier = requestParameterLong(ClassroomSession.class);
-			if(classroomSessionIdentifier==null)
-				;
-			else{
-				studentClassroomSession.setClassroomSession(inject(ClassroomSessionBusiness.class).find(classroomSessionIdentifier));
-				
-			}
-		}
+		if(studentClassroomSession.getClassroomSession()==null)
+			studentClassroomSession.setClassroomSession(webManager.getIdentifiableFromRequestParameter(ClassroomSession.class, Boolean.TRUE));
 		return studentClassroomSession;
 	}
 	
@@ -46,14 +39,9 @@ public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<Student
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		setChoices(Form.FIELD_CLASSROOM_SESSION, inject(ClassroomSessionBusiness.class).findByAcademicSession(
-				inject(AcademicSessionBusiness.class).findCurrent(null)));
+				inject(AcademicSessionBusiness.class).findCurrent(null)),identifiable.getClassroomSession());
 	}
-	
-	@Override
-	protected Class<?> __formModelClass__() {
-		return Form.class;
-	}
-	
+		
 	public static class Form extends AbstractFormModel<StudentClassroomSession> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		

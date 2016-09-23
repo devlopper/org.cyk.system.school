@@ -104,6 +104,11 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
+		//System.out.println("#########################          ContextListener.contextInitialized()           ###################################");
+		/*AbstractTypedDao.Configuration.disallowAll(new Package[]{Event.class.getPackage()
+				,Tag.class.getPackage(),UserInterface.class.getPackage(),AccountingPeriod.class.getPackage(),Cashier.class.getPackage()
+				,IntangibleProduct.class.getPackage(),Production.class.getPackage(),Sale.class.getPackage(),StockTangibleProductMovement.class.getPackage()});
+		*/
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = SubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
 		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();

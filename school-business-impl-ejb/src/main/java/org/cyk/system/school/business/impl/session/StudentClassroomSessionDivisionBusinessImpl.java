@@ -57,7 +57,7 @@ import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivi
 import org.cyk.utility.common.cdi.BeanAdapter;
 
 @Stateless
-public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSessionDivision, StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao, StudentClassroomSessionDivisionSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
+public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudentResultsBusinessImpl<StudentClassroomSessionDivision, StudentClassroomSessionDivisionDao,ClassroomSessionDivision, StudentClassroomSessionDivisionSubject> implements StudentClassroomSessionDivisionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	

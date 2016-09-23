@@ -13,7 +13,7 @@ public class ClassroomSessionDivisionSubjectDetails extends AbstractOutputDetail
 	private static final long serialVersionUID = -4741435164709063863L;
 	
 	@IncludeInputs private ClassroomSessionDivisionDetails classroomSessionDivisionDetails;
-	@Input @InputText private String classroomSession,classroomSessionDivision,subject,coefficient,teacher;
+	@Input @InputText private String classroomSession,classroomSessionDivision,subject,teacher;
 	
 	public ClassroomSessionDivisionSubjectDetails(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		super(classroomSessionDivisionSubject);
@@ -21,7 +21,6 @@ public class ClassroomSessionDivisionSubjectDetails extends AbstractOutputDetail
 		classroomSessionDivisionDetails = new ClassroomSessionDivisionDetails(classroomSessionDivisionSubject.getClassroomSessionDivision());
 		classroomSessionDivision = formatUsingBusiness(classroomSessionDivisionSubject.getClassroomSessionDivision());
 		classroomSession = formatUsingBusiness(classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
-		coefficient = formatNumber(classroomSessionDivisionSubject.getWeight());
 		if(classroomSessionDivisionSubject.getTeacher()!=null)
 			teacher = formatUsingBusiness(classroomSessionDivisionSubject.getTeacher());
 	}
@@ -29,7 +28,6 @@ public class ClassroomSessionDivisionSubjectDetails extends AbstractOutputDetail
 	public static final String FIELD_CLASSROOM_SESSION = "classroomSession";
 	public static final String FIELD_CLASSROOM_SESSION_DIVISION_DETAILS = "classroomSessionDivisionDetails";
 	public static final String FIELD_CLASSROOM_SESSION_DIVISION = "classroomSessionDivision";
-	public static final String FIELD_COEFFICIENT = "coefficient";
 	public static final String FIELD_TEACHER = "teacher";
 	public static final String FIELD_SUBJECT = "subject";
 }

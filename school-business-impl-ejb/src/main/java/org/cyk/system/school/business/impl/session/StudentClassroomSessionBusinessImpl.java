@@ -39,7 +39,7 @@ import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSub
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 
 @Stateless
-public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsBusinessImpl<ClassroomSession, StudentClassroomSession, StudentClassroomSessionDao, StudentClassroomSessionDivision> implements StudentClassroomSessionBusiness,Serializable {
+public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsBusinessImpl<StudentClassroomSession,StudentClassroomSessionDao,ClassroomSession, StudentClassroomSessionDivision> implements StudentClassroomSessionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
@@ -259,6 +259,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		return null;
 	}
 
+	
 	/**/
 	
 	

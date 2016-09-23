@@ -137,6 +137,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 			}
 		});
 	}
+	
 	protected void configureSubjectClassroomSessionClass() {
 		getFormConfiguration(SubjectClassroomSession.class, Crud.CREATE).addRequiredFieldNames(SubjectClassroomSessionEditPage.Form.FIELD_CLASSROOM_SESSION,
 				SubjectClassroomSessionEditPage.Form.FIELD_SUBJECT,SubjectClassroomSessionEditPage.Form.FIELD_TEACHER)
@@ -279,6 +280,17 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					}
 				};
 			}
+			
+			@Override
+			public ColumnAdapter getTableColumnAdapter() {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT);
+					}
+				};
+			}
 		});
 	}
 	
@@ -298,6 +310,17 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 						//if(data instanceof StudentClassroomSessionDetails)
 							return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT,StudentClassroomSessionDetails.FIELD_CLASSROOM_SESSION);
 						
+					}
+				};
+			}
+			
+			@Override
+			public ColumnAdapter getTableColumnAdapter() {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED);
 					}
 				};
 			}

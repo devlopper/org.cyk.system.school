@@ -68,6 +68,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		
 		studentTable = (Table<RESULT_OUTPUT>) createDetailsTable(getResultOutputClass(), getResultTableCreationListener());
 		studentTable.getColumnListeners().add(getResultTableColumnAdapter());
+		studentTable.getAddRowCommandable().addParameter(identifiable);
 		
 		if(SchoolConstant.UI_TAB_BROADSHEET_ID.equals(selectedTabId)){
 			subLevels = new ArrayList<>(getSubLevels());
