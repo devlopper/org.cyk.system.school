@@ -22,7 +22,7 @@ import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
-import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
+import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -169,9 +169,9 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		
 	/**/
 	
-	public static class SubjectDetails extends AbstractSubjectDetails implements Serializable{
+	public static class SubjectDetails extends AbstractStudentClassroomSessionDivisionSubjectDetails implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputText @Sequence(direction=Direction.AFTER,field=FILED_SUBJECT) private String test1;
+		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT) private String test1;
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_TEST1) private String test2;
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_TEST2) private String exam;
 		public SubjectDetails(StudentClassroomSessionDivisionSubject studentSubject) {

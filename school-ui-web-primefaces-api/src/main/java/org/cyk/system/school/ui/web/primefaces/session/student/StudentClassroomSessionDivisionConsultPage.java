@@ -15,8 +15,8 @@ import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStuden
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
-import org.cyk.system.school.business.impl.session.AbstractSubjectDetails;
-import org.cyk.system.school.business.impl.session.AbstractSubjectDetails.SubjectDetails;
+import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails.SubjectDetails;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -37,22 +37,22 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	public static String SUBJECT_DETAILS_CLASS_NAME = SubjectDetails.class.getName();
-	public static Class<AbstractSubjectDetails> SUBJECT_DETAILS_CLASS;
+	public static Class<AbstractStudentClassroomSessionDivisionSubjectDetails> SUBJECT_DETAILS_CLASS;
 	public static Boolean LOAD_EVALUATIONS = Boolean.FALSE;
 	
-	private Table<AbstractSubjectDetails> subjectTable;
+	private Table<AbstractStudentClassroomSessionDivisionSubjectDetails> subjectTable;
 	private List<Table<StudentResultsMetricValueDetails>> metricTables = new ArrayList<>();
 	private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations;
 	private Boolean showReport = Boolean.FALSE;
-	
+		
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void initialisation() {
-		super.initialisation();
+	protected void consultInitialisation() {
+		super.consultInitialisation();
 		
 		if(SUBJECT_DETAILS_CLASS==null)
 			try {//TODO make it as util method
-				SUBJECT_DETAILS_CLASS = (Class<AbstractSubjectDetails>) Class.forName(SUBJECT_DETAILS_CLASS_NAME);
+				SUBJECT_DETAILS_CLASS = (Class<AbstractStudentClassroomSessionDivisionSubjectDetails>) Class.forName(SUBJECT_DETAILS_CLASS_NAME);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -62,8 +62,8 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 					identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 		}
 		
-		subjectTable = (Table<AbstractSubjectDetails>) createDetailsTable(SUBJECT_DETAILS_CLASS, 
-				new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubject,AbstractSubjectDetails>(StudentClassroomSessionDivisionSubject.class, SUBJECT_DETAILS_CLASS){
+		subjectTable = (Table<AbstractStudentClassroomSessionDivisionSubjectDetails>) createDetailsTable(SUBJECT_DETAILS_CLASS, 
+				new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubject,AbstractStudentClassroomSessionDivisionSubjectDetails>(StudentClassroomSessionDivisionSubject.class, SUBJECT_DETAILS_CLASS){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubject> getIdentifiables() {

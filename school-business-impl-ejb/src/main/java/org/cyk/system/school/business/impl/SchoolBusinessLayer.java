@@ -33,10 +33,12 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
@@ -117,8 +119,12 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType)
 					return ((ClassroomSessionDivisionSubjectEvaluationType)object).getClassroomSessionDivisionSubject();
 				
+				if(object instanceof StudentClassroomSession)
+					return ((StudentClassroomSession)object).getClassroomSession();
 				if(object instanceof StudentClassroomSessionDivision)
 					return ((StudentClassroomSessionDivision)object).getClassroomSessionDivision();
+				if(object instanceof StudentClassroomSessionDivisionSubject)
+					return ((StudentClassroomSessionDivisionSubject)object).getClassroomSessionDivisionSubject();
 				
 				return super.getParentOf(object);
 			}
@@ -152,11 +158,6 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected AbstractReportRepository getReportRepository() {
 		return inject(SchoolReportRepository.class);
 	}
-	
-	/*@Override
-	protected RootReportProducer getReportProducer() {
-		return inject(SchoolReportProducer.class);
-	}*/
 	
 	@Override
 	protected void persistData() {

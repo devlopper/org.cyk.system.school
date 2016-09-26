@@ -15,6 +15,7 @@ import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetail
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.SubjectClassroomSessionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -25,6 +26,7 @@ import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
@@ -55,6 +57,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		configureStudentClass();
 		configureStudentClassroomSessionClass();
 		configureStudentClassroomSessionDivisionClass();
+		configureStudentClassroomSessionDivisionSubjectClass();
 		
 		configureTeacherClass();
 	}
@@ -140,7 +143,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	
 	protected void configureSubjectClassroomSessionClass() {
 		getFormConfiguration(SubjectClassroomSession.class, Crud.CREATE).addRequiredFieldNames(SubjectClassroomSessionEditPage.Form.FIELD_CLASSROOM_SESSION,
-				SubjectClassroomSessionEditPage.Form.FIELD_SUBJECT,SubjectClassroomSessionEditPage.Form.FIELD_TEACHER)
+				SubjectClassroomSessionEditPage.Form.FIELD_SUBJECT)
 					.addFieldNames(SubjectClassroomSessionEditPage.Form.FIELD_TEACHER);
 		
 		registerDetailsConfiguration(SubjectClassroomSessionDetails.class, new DetailsConfiguration(){
@@ -321,6 +324,39 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					@Override
 					public Boolean isColumn(Field field) {
 						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED);
+					}
+				};
+			}
+		});
+	}
+	
+	protected void configureStudentClassroomSessionDivisionSubjectClass() {
+		getFormConfiguration(StudentClassroomSessionDivisionSubject.class, Crud.READ).addFieldNames(StudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT
+				,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
+		registerDetailsConfiguration(StudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfiguration(){
+			private static final long serialVersionUID = 1L;
+			@SuppressWarnings("rawtypes")
+			@Override
+			public ControlSetAdapter getFormControlSetAdapter(Class clazz) {
+				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						//if(data instanceof StudentClassroomSessionDetails)
+							return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT
+									,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
+						
+					}
+				};
+			}
+			
+			@Override
+			public ColumnAdapter getTableColumnAdapter() {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
 					}
 				};
 			}
