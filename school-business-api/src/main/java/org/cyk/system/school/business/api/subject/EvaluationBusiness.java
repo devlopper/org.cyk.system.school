@@ -10,7 +10,9 @@ import org.cyk.system.school.model.subject.Evaluation;
 
 public interface EvaluationBusiness extends TypedBusiness<Evaluation> {
 
-	Evaluation newInstance(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
+	Evaluation instanciateOne(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
+	
+	Evaluation instanciateOne(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType);
 	
 	Evaluation save(Evaluation evaluation,Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations);
 	

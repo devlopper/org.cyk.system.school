@@ -19,6 +19,7 @@ import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsOutputDetails;
+import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.SchoolConstant;
@@ -28,6 +29,7 @@ import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.model.table.Cell;
 import org.cyk.ui.api.model.table.Column;
 import org.cyk.ui.api.model.table.Row;
+import org.cyk.ui.web.primefaces.PrimefacesManager;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 import org.cyk.utility.common.Constant;
@@ -56,18 +58,9 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		teacher = userSession.getUser() instanceof Person ? inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser()) : null;
 		isCoordinator = teacher != null && getClassroomSession().getCoordinator()!= null && teacher.equals( getClassroomSession().getCoordinator());
 		
-		/*details = createDetailsForm(getLevelOutputClass(), identifiable, new DetailsConfigurationListener.Form.Adapter<LEVEL,LEVEL_OUTPUT>(getLevelClass(), getLevelOutputClass()){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public Boolean getEnabledInDefaultTab() {
-				return Boolean.TRUE;
-			}
-		});*/
-		
 		subLevelTable();
 		
 		studentTable = (Table<RESULT_OUTPUT>) createDetailsTable(getResultOutputClass(), getResultTableCreationListener());
-		studentTable.getColumnListeners().add(getResultTableColumnAdapter());
 		studentTable.getAddRowCommandable().addParameter(identifiable);
 		
 		if(SchoolConstant.UI_TAB_BROADSHEET_ID.equals(selectedTabId)){
@@ -159,7 +152,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		};
 	}
 	
-	protected org.cyk.ui.api.model.table.ColumnAdapter getResultTableColumnAdapter(){
+	/*protected org.cyk.ui.api.model.table.ColumnAdapter getResultTableColumnAdapter(){
 		return new org.cyk.ui.api.model.table.ColumnAdapter(){
 			private static final long serialVersionUID = 1L;
 
@@ -168,7 +161,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 				return getResultTableSimpleFieldNameSet().contains(field.getName());
 			}
 		};
-	}
+	}*/
 	
 	protected DetailsConfigurationListener.Table.Adapter<SUB_LEVEL,SUB_LEVEL_OUTPUT> getSubLevelTableCreationListener(){
 		return new DetailsConfigurationListener.Table.Adapter<SUB_LEVEL,SUB_LEVEL_OUTPUT>(getSubLevelClass(), getSubLevelOutputClass()){

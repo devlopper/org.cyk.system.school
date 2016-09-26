@@ -109,7 +109,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				,Tag.class.getPackage(),UserInterface.class.getPackage(),AccountingPeriod.class.getPackage(),Cashier.class.getPackage()
 				,IntangibleProduct.class.getPackage(),Production.class.getPackage(),Sale.class.getPackage(),StockTangibleProductMovement.class.getPackage()});
 		*/
-		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = SubjectDetails.class.getName();
+		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
 		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
@@ -169,12 +169,12 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		
 	/**/
 	
-	public static class SubjectDetails extends AbstractStudentClassroomSessionDivisionSubjectDetails implements Serializable{
+	public static class StudentClassroomSessionDivisionSubjectDetails extends AbstractStudentClassroomSessionDivisionSubjectDetails implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT) private String test1;
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_TEST1) private String test2;
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_TEST2) private String exam;
-		public SubjectDetails(StudentClassroomSessionDivisionSubject studentSubject) {
+		public StudentClassroomSessionDivisionSubjectDetails(StudentClassroomSessionDivisionSubject studentSubject) {
 			super(studentSubject);
 			for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
 				if(studentSubjectEvaluation.getStudentSubject().equals(studentSubject)){

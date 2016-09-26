@@ -14,11 +14,8 @@
  		<ui:define name="body">
  			<cyk:formOneData value="#{evaluationEditPage.form}"/>
  			<cyk:itemCollection value="#{evaluationEditPage.markCollection}" >
- 				<p:column headerText="#{uiManager.text('field.registration.code')}" >
- 					<h:outputText value="#{item.registrationCode}" />
- 				</p:column>
- 				<p:column headerText="#{uiManager.text('field.names')}" >
- 					<h:outputText value="#{item.names}" />
+ 				<p:column headerText="#{uiManager.text('model.entity.student')}" >
+ 					<h:outputText value="#{item.student}" />
  				</p:column>
  				<p:column headerText="#{uiManager.text('school.mark')}" >
  					<!--cyk:inputNumber value="#{item.form.findInputByFieldName('value')}"/-->

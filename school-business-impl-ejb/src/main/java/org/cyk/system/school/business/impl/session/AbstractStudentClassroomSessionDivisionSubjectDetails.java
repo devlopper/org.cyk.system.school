@@ -26,9 +26,9 @@ public abstract class AbstractStudentClassroomSessionDivisionSubjectDetails exte
 	
 	/**/
 	
-	public static class SubjectDetails extends AbstractStudentClassroomSessionDivisionSubjectDetails implements Serializable{
+	public static class StudentClassroomSessionDivisionSubjectDetails extends AbstractStudentClassroomSessionDivisionSubjectDetails implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		public SubjectDetails(StudentClassroomSessionDivisionSubject studentSubject) {
+		public StudentClassroomSessionDivisionSubjectDetails(StudentClassroomSessionDivisionSubject studentSubject) {
 			super(studentSubject);
 		}
 	}

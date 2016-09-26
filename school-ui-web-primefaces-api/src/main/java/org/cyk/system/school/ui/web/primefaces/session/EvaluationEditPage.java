@@ -5,12 +5,16 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
@@ -33,13 +37,12 @@ import org.cyk.ui.web.api.ItemCollectionWebAdapter;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
+import org.cyk.utility.common.annotation.user.interfaces.InputCalendar;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
@@ -47,8 +50,8 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
-	private ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType;
-	private ItemCollection<StudentSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation> markCollection;
+	private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
+	private ItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation> markCollection;
 	private BigDecimal maximumValue;
 	private Integer decimalPlaces = 0;
 	
@@ -56,6 +59,12 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	
 	@Override
 	protected void initialisation() {
+		classroomSessionDivisionSubjectEvaluationType = webManager.getIdentifiableFromRequestParameter(ClassroomSessionDivisionSubjectEvaluationType.class, Boolean.TRUE);
+		if(classroomSessionDivisionSubjectEvaluationType==null)
+			classroomSessionDivisionSubject = webManager.getIdentifiableFromRequestParameter(ClassroomSessionDivisionSubject.class, Boolean.TRUE);
+		else
+			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
+		/*
 		Long subjectEvaluationTypeIdentifier = requestParameterLong(ClassroomSessionDivisionSubjectEvaluationType.class);
 		if(subjectEvaluationTypeIdentifier==null){
 			Long classroomSessionDivisionSubjectIdentifier = requestParameterLong(ClassroomSessionDivisionSubject.class);
@@ -64,23 +73,23 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			else
 				classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).find(classroomSessionDivisionSubjectIdentifier);	
 		}else{
-			subjectEvaluationType = inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).find(subjectEvaluationTypeIdentifier);
-			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
+			classroomSessionDivisionSubjectEvaluationType = inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).find(subjectEvaluationTypeIdentifier);
+			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
-			
+		*/	
 		super.initialisation();
-		if(subjectEvaluationType!=null){
+		if(classroomSessionDivisionSubjectEvaluationType!=null){
 			maximumValue = identifiable.getClassroomSessionDivisionSubjectEvaluationType().getMaximumValue();
 		}
 		if(Crud.CREATE.equals(crud)){
 			
 		}else{
 			identifiable.setStudentSubjectEvaluations(inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class).findByEvaluation(identifiable,Crud.UPDATE.equals(crud)));
-			subjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
-			classroomSessionDivisionSubject = subjectEvaluationType.getClassroomSessionDivisionSubject();
+			classroomSessionDivisionSubjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
+			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 		
-		markCollection = createItemCollection(StudentSubjectEvaluationItem.class, StudentClassroomSessionDivisionSubjectEvaluation.class,new ItemCollectionWebAdapter<StudentSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation>(){
+		markCollection = createItemCollection(StudentClassroomSessionDivisionSubjectEvaluationItem.class, StudentClassroomSessionDivisionSubjectEvaluation.class,new ItemCollectionWebAdapter<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation>(){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> create() {
@@ -99,15 +108,15 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 				return Boolean.FALSE;
 			}
 			@Override
-			public void instanciated(AbstractItemCollection<StudentSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,SelectItem> itemCollection,StudentSubjectEvaluationItem mark) {
+			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,SelectItem> itemCollection,StudentClassroomSessionDivisionSubjectEvaluationItem mark) {
 				super.instanciated(itemCollection, mark);
-				mark.setRegistrationCode(mark.getIdentifiable().getStudentSubject().getStudent().getCode());
-				mark.setNames(mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
+				mark.setStudent(mark.getIdentifiable().getStudentSubject().getStudent().getCode()+Constant.CHARACTER_UNDESCORE
+						+mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
 				mark.setValue(mark.getIdentifiable().getValue());
 				mark.setValueAsString(inject(NumberBusiness.class).format(mark.getValue()));
 			}	
 			@Override
-			public void write(StudentSubjectEvaluationItem item) {
+			public void write(StudentClassroomSessionDivisionSubjectEvaluationItem item) {
 				super.write(item);
 				item.getIdentifiable().setValue(item.getValue());
 			}
@@ -122,7 +131,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			@Override
 			public Boolean build(Object data,Field field) {
 				if(field.getName().equals(Form.FIELD_TYPE))
-					return subjectEvaluationType == null;
+					return classroomSessionDivisionSubjectEvaluationType == null;
 				return false;
 			}
 		});
@@ -163,48 +172,45 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	}
 	
 	protected Evaluation instanciateIdentifiable() {
-		Evaluation subjectEvaluation = inject(EvaluationBusiness.class).newInstance(classroomSessionDivisionSubject);
-		subjectEvaluation.setClassroomSessionDivisionSubjectEvaluationType(subjectEvaluationType);
+		Evaluation subjectEvaluation = inject(EvaluationBusiness.class).instanciateOne(classroomSessionDivisionSubject);
+		subjectEvaluation.setClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType);
 		return subjectEvaluation;
 	}
 		
-	@Override
-	protected Class<?> __formModelClass__() {
-		return Form.class;
-	}
-	
+	/*
 	@Override
 	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = instanciateCommandableBuilder().setLabel(formatUsingBusiness(subjectEvaluationType)).create();
+		UICommandable contextualMenu = instanciateCommandableBuilder().setLabel(formatUsingBusiness(classroomSessionDivisionSubjectEvaluationType)).create();
 	
 		contextualMenu.getChildren().add(Builder.createConsult(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession(), null));
 		contextualMenu.getChildren().add(Builder.createConsult(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision(), null));
 		contextualMenu.getChildren().add(Builder.createConsult(classroomSessionDivisionSubject, null));
 		
 		return Arrays.asList(contextualMenu);
-	}
+	}*/
 		
 	@Getter @Setter
 	public static class Form extends AbstractFormModel<Evaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
-		@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private ClassroomSessionDivisionSubjectEvaluationType type;
-		//@Input @InputCalendar @NotNull private Date date;
+		
+		@Input(readOnly=true,disabled=true) @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private ClassroomSessionDivisionSubjectEvaluationType type;
+		@Input @InputCalendar @NotNull private Date date;
 		@NotNull private Boolean coefficientApplied = Boolean.TRUE;
+		
 		public static final String FIELD_TYPE = "type";
+		public static final String FIELD_DATE = "date";
+		public static final String FIELD_COEFFICIENT_APPLIED = "coefficientApplied";
+	
 	}
 	
 	@Getter @Setter
-	public static class StudentSubjectEvaluationItem extends AbstractItemCollectionItem<StudentClassroomSessionDivisionSubjectEvaluation> implements Serializable {
+	public static class StudentClassroomSessionDivisionSubjectEvaluationItem extends AbstractItemCollectionItem<StudentClassroomSessionDivisionSubjectEvaluation> implements Serializable {
 		private static final long serialVersionUID = 3828481396841243726L;
-		private String registrationCode;
-		private String names;
+	
+		private String student;
 		private BigDecimal value;
 		private String valueAsString;
 				
-		@Override
-		public String toString() {
-			return registrationCode+" "+names+" "+value;
-		}
 	}
 	
 	/**/

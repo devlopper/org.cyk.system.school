@@ -8,7 +8,9 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.root.business.api.Crud;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
@@ -16,7 +18,7 @@ import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl.SchoolReportRepository;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
-import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails.SubjectDetails;
+import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -28,15 +30,12 @@ import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultPage<StudentClassroomSessionDivision> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	public static String SUBJECT_DETAILS_CLASS_NAME = SubjectDetails.class.getName();
+	public static String SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 	public static Class<AbstractStudentClassroomSessionDivisionSubjectDetails> SUBJECT_DETAILS_CLASS;
 	public static Boolean LOAD_EVALUATIONS = Boolean.FALSE;
 	
@@ -77,10 +76,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				}
 				return studentSubjects;
 			}
-			@Override
-			public Crud[] getCruds() {
-				return new Crud[]{Crud.CREATE,Crud.READ,Crud.DELETE};
-			}
+			
 			@Override
 			public String getTitleId() {
 				return "model.entity.subject";

@@ -11,6 +11,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.file.report.ReportBusiness;
@@ -78,11 +79,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	protected void setProperty(StudentClassroomSessionDivision studentClassroomSessionDivision,String name) {
-		if(GlobalIdentifier.FIELD_CODE.equals(name))
-			studentClassroomSessionDivision.setCode(generateCode(studentClassroomSessionDivision.getStudent().getCode()
-					,studentClassroomSessionDivision.getClassroomSessionDivision().getCode()));
-		super.setProperty(studentClassroomSessionDivision, name);
+	protected Object[] getPropertyValueTokens(StudentClassroomSessionDivision studentClassroomSessionDivision, String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+			return new Object[]{studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision()};
+		return super.getPropertyValueTokens(studentClassroomSessionDivision, name);
 	}
 	
 	@Override

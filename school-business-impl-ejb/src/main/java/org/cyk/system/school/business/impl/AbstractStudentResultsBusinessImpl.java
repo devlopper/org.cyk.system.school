@@ -67,6 +67,7 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 	public RESULT create(RESULT identifiable) {
 		if(identifiable.getResults()==null){
 			identifiable.setResults(new StudentResults());
+			identifiable.getResults().setCode(identifiable.getStudent().getCode());
 		}
 		return super.create(identifiable);
 	}

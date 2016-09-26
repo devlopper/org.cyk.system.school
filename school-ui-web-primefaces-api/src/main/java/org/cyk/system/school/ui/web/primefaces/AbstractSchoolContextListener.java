@@ -41,6 +41,7 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionS
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryOneFormModel;
+import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionEditPage;
@@ -138,7 +139,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		uiManager.configBusinessIdentifiable(StudentClassroomSessionDivisionSubject.class, null);
 		webNavigationManager.useDynamicSelectView(StudentClassroomSessionDivisionSubject.class);
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(Evaluation.class, null, EvaluationDetails.class
+		uiManager.registerConfiguration(new IdentifiableConfiguration(Evaluation.class, EvaluationEditPage.Form.class, EvaluationDetails.class
 				,null,null,null));
 		uiManager.configBusinessIdentifiable(Evaluation.class, null);
 		

@@ -54,8 +54,8 @@ import lombok.Setter;
 	/**/
 	
 	public static final String FIELD_STUDENT = "student";
-	public static final String FIELD_REGISTRATION_CODE = "registrationCode";
-	public static final String FIELD_NAMES = "names";
+	//public static final String FIELD_REGISTRATION_CODE = "registrationCode";
+	//public static final String FIELD_NAMES = "names";
 	public static final String FIELD_EVALUATION_AVERAGE_DIVIDEND = "evaluationAverageDividend";
 	public static final String FIELD_EVALUATION_AVERAGE_DIVISOR = "evaluationAverageDivisor";
 	public static final String FIELD_EVALUATION_AVERAGE_VALUE = "evaluationAverageValue";

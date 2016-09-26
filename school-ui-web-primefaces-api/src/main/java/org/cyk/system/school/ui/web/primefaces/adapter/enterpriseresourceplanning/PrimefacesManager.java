@@ -15,6 +15,7 @@ import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetail
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.SubjectClassroomSessionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -26,12 +27,15 @@ import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
 import org.cyk.ui.api.command.menu.SystemMenu;
@@ -58,8 +62,11 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		configureStudentClassroomSessionClass();
 		configureStudentClassroomSessionDivisionClass();
 		configureStudentClassroomSessionDivisionSubjectClass();
+		configureStudentResultsMetricValueDetailsClass();
 		
 		configureTeacherClass();
+		
+		configureEvaluationClass();
 	}
 	
 	@Override
@@ -323,7 +330,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED);
+						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION
+								,StudentClassroomSessionDivisionDetails.FIELD_NUMBER_OF_TIME_ABSENT,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
+								,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED);
 					}
 				};
 			}
@@ -363,6 +372,22 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		});
 	}
 	
+	protected void configureStudentResultsMetricValueDetailsClass() {
+		registerDetailsConfiguration(StudentResultsMetricValueDetails.class, new DetailsConfiguration(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public ColumnAdapter getTableColumnAdapter() {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field,StudentResultsMetricValueDetails.FIELD_NAME,StudentResultsMetricValueDetails.FIELD_VALUE);
+					}
+				};
+			}
+		});
+	}
+	
 	/**/
 	
 	protected void configureTeacherClass() {
@@ -391,6 +416,31 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 						return isFieldNameIn(field,TeacherDetails.FIELD_CODE,TeacherDetails.FIELD_NAME,TeacherDetails.FIELD_LASTNAMES
 								,TeacherDetails.FIELD_BIRTH_DATE,TeacherDetails.FIELD_BIRTH_LOCATION,TeacherDetails.FIELD_REGISTRATION_DATE
 								,TeacherDetails.FIELD_SEX,TeacherDetails.FIELD_BLOOD_GROUP,TeacherDetails.FIELD_LANGUAGE_COLLECTION);
+					}
+				};
+			}
+		});
+	}
+	
+	/**/
+	
+	protected void configureEvaluationClass() {
+		getFormConfiguration(Evaluation.class, Crud.CREATE).addRequiredFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
+		
+		getFormConfiguration(Evaluation.class, Crud.UPDATE).addRequiredFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
+		
+		getFormConfiguration(Evaluation.class, Crud.DELETE).addFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
+		
+		registerDetailsConfiguration(EvaluationDetails.class, new DetailsConfiguration(){
+			private static final long serialVersionUID = 1L;
+			@SuppressWarnings("rawtypes")
+			@Override
+			public ControlSetAdapter getFormControlSetAdapter(Class clazz) {
+				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						return isFieldNameIn(field,EvaluationDetails.FIELD_NAME);
 					}
 				};
 			}

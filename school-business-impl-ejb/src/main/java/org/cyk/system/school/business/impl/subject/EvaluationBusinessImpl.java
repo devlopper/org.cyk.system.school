@@ -25,22 +25,27 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	@Inject private StudentClassroomSessionDivisionSubjectEvaluationDao studentSubjectEvaluationDao;
-	@Inject private StudentClassroomSessionDivisionSubjectDao studentSubjectDao;
-	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeDao classroomSessionDivisionSubjectEvaluationTypeDao;
-	
 	@Inject
 	public EvaluationBusinessImpl(EvaluationDao dao) {
 		super(dao); 
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public Evaluation newInstance(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+	public Evaluation instanciateOne(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		Evaluation evaluation = new Evaluation();
-		evaluation.setDate(universalTimeCoordinated());
-		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjectDao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject)){
-			evaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation, studentSubject, null));
+		
+		for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject)){
+			evaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation, studentClassroomSessionDivisionSubject, null));
 		}
+		return evaluation;
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Evaluation instanciateOne(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+		exceptionUtils().cannotCreateMoreThan(dao.countByClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType)
+				,classroomSessionDivisionSubjectEvaluationType.getCountInterval(),  Evaluation.class);
+		Evaluation evaluation = super.instanciateOne();
+		evaluation.setName(classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getName());
 		return evaluation;
 	}
 
@@ -50,10 +55,8 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 		Long numberOfEvaluations = dao.countByClassroomSessionDivisionSubjectEvaluationType(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
 		logTrace("Number of evaluations found : {}", numberOfEvaluations);
 		exceptionUtils().cannotCreateMoreThan(numberOfEvaluations,evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval(),  Evaluation.class);
-		if(evaluation.getDate()==null)
-			evaluation.setDate(universalTimeCoordinated());
 		commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, 1l);
-		classroomSessionDivisionSubjectEvaluationTypeDao.update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
+		inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
 		evaluation = super.create(evaluation);
 		save(evaluation);
 		return evaluation;
@@ -64,9 +67,10 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 		evaluation = dao.update(evaluation);
 		evaluation.setStudentSubjectEvaluations(studentSubjectEvaluations);
 		
-		Collection<StudentClassroomSessionDivisionSubjectEvaluation> database = studentSubjectEvaluationDao.readByEvaluation(evaluation);
+		Collection<StudentClassroomSessionDivisionSubjectEvaluation> database = inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class)
+				.readByEvaluation(evaluation);
 		
-		delete(StudentClassroomSessionDivisionSubjectEvaluation.class,studentSubjectEvaluationDao,database, evaluation.getStudentSubjectEvaluations());
+		delete(StudentClassroomSessionDivisionSubjectEvaluation.class,inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class),database, evaluation.getStudentSubjectEvaluations());
 		
 		save(evaluation);
 		return evaluation;
@@ -76,19 +80,19 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 		for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : evaluation.getStudentSubjectEvaluations()){
 			studentSubjectEvaluation.setEvaluation(evaluation);
 			if(studentSubjectEvaluation.getIdentifier()==null)
-				studentSubjectEvaluationDao.create(studentSubjectEvaluation);
+				inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).create(studentSubjectEvaluation);
 			else
-				studentSubjectEvaluationDao.update(studentSubjectEvaluation);		
+				inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).update(studentSubjectEvaluation);		
 		}
 	}
 	
 	@Override
 	public Evaluation delete(Evaluation evaluation) {
-		for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluationDao.readByEvaluation(evaluation))
-			studentSubjectEvaluationDao.delete(studentSubjectEvaluation);
+		for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).readByEvaluation(evaluation))
+			inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).delete(studentSubjectEvaluation);
 		
 		commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, -1l);
-		classroomSessionDivisionSubjectEvaluationTypeDao.update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
+		inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
 		
 		return super.delete(evaluation);
 	}

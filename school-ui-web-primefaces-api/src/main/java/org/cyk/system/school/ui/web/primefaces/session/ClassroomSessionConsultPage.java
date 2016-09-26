@@ -8,6 +8,9 @@ import java.util.Set;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -25,16 +28,13 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.ui.web.primefaces.Table;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<ClassroomSession,ClassroomSessionDetails,ClassroomSessionDivision,ClassroomSessionDivisionDetails,StudentClassroomSession,StudentClassroomSessionDetails,StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	private Table<SubjectClassroomSessionDetails> subjectTable;
-	
+		
 	@Override
 	protected void subLevelTable() {
 		super.subLevelTable();

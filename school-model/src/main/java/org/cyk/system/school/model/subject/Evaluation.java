@@ -3,14 +3,10 @@ package org.cyk.system.school.model.subject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -31,10 +27,7 @@ public class Evaluation extends AbstractIdentifiable implements Serializable {
 	public static Boolean COEFFICIENT_APPLIED = Boolean.FALSE;
 	
 	@JoinColumn(name="type") @ManyToOne @NotNull private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
-	@Temporal(TemporalType.TIMESTAMP) @Column(name="happeningDate") @NotNull private Date date;
 	@NotNull private Boolean coefficientApplied = COEFFICIENT_APPLIED;
-	
-	/**/
 	
 	@Transient private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations;
 
@@ -56,7 +49,7 @@ public class Evaluation extends AbstractIdentifiable implements Serializable {
 	
 	@Override
 	public String getLogMessage() {
-		return String.format(LOG_FORMAT, classroomSessionDivisionSubjectEvaluationType.getIdentifier(),date,coefficientApplied);
+		return String.format(LOG_FORMAT, classroomSessionDivisionSubjectEvaluationType.getIdentifier(),getBirthDate(),coefficientApplied);
 	}
 	private static final String LOG_FORMAT = Evaluation.class.getSimpleName()+"(TYPE=%s date=%s COEF_APPLIED=%s)";
 	
