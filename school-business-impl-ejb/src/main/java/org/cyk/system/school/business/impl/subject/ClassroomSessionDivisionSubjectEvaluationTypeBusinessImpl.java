@@ -33,8 +33,9 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 	
 	@Override
 	protected Object[] getPropertyValueTokens(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType, String name) {
-		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name)){
 			return new Object[]{classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject(),classroomSessionDivisionSubjectEvaluationType.getEvaluationType()};
+		}
 		return super.getPropertyValueTokens(classroomSessionDivisionSubjectEvaluationType, name);
 	}
 	

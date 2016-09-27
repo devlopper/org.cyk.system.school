@@ -9,6 +9,8 @@ import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusine
 import org.cyk.system.school.business.api.session.LevelBusiness;
 import org.cyk.system.school.business.api.session.LevelTimeDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.EvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -17,6 +19,8 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
 
 public class IesaAutoPropertySetBusinessIT extends AbstractBusinessIT {
@@ -42,6 +46,10 @@ public class IesaAutoPropertySetBusinessIT extends AbstractBusinessIT {
     		System.out.println("ClassroomSessionDivision : "+classroomSessionDivision.getCode()+" , "+classroomSessionDivision.getName());
     	for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : inject(ClassroomSessionDivisionSubjectBusiness.class).findAll())
     		System.out.println("ClassroomSessionDivisionSubject : "+classroomSessionDivisionSubject.getCode()+" , "+classroomSessionDivisionSubject.getName());
+    	for(EvaluationType evaluationType : inject(EvaluationTypeBusiness.class).findAll())
+    		System.out.println("EvaluationType : "+evaluationType.getCode()+" , "+evaluationType.getName());
+    	for(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType : inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findAll())
+    		System.out.println("ClassroomSessionDivisionSubjectEvaluationType : "+classroomSessionDivisionSubjectEvaluationType.getCode()+" , "+classroomSessionDivisionSubjectEvaluationType.getName());
     		
     	System.exit(0);
     }
