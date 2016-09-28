@@ -42,7 +42,6 @@ import org.cyk.ui.api.model.AbstractTree;
 import org.cyk.ui.web.api.WebHierarchyNode;
 import org.cyk.ui.web.primefaces.Commandable;
 import org.cyk.ui.web.primefaces.HierarchyNode;
-import org.cyk.ui.web.primefaces.Tree;
 import org.cyk.ui.web.primefaces.UserSession;
 import org.primefaces.model.TreeNode;
 
@@ -121,7 +120,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	
 	@Override
 	protected AbstractTree<TreeNode, HierarchyNode> createNavigatorTree(final UserSession userSession) {
-		AbstractTree<TreeNode, HierarchyNode> tree = new Tree();//super.createNavigatorTree(userSession);
+		AbstractTree<TreeNode, HierarchyNode> tree = /*new Tree();*/super.createNavigatorTree(userSession);
 		tree.getTreeListeners().add((org.cyk.ui.api.model.AbstractTree.Listener<TreeNode, HierarchyNode>) new  AbstractTree.Listener.Adapter.Default<TreeNode,HierarchyNode>(){
 			private static final long serialVersionUID = 1L;
 			

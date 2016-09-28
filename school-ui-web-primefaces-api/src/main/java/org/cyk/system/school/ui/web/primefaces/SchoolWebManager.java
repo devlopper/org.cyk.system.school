@@ -136,7 +136,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	@Override
 	public void initialiseNavigatorTree(UserSession userSession) {
-		userSession.setNavigatorTree(getNavigator(TreeNode.class,HierarchyNode.class,LevelGroup.class,userSession));
+		//userSession.setNavigatorTree(getNavigator(TreeNode.class,HierarchyNode.class,LevelGroup.class,userSession));
 	}
 	
 	@SuppressWarnings("unchecked")
