@@ -17,6 +17,7 @@ import org.cyk.system.school.business.impl.session.SubjectClassroomSessionDetail
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectEvaluationDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -62,11 +63,13 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		configureStudentClassroomSessionClass();
 		configureStudentClassroomSessionDivisionClass();
 		configureStudentClassroomSessionDivisionSubjectClass();
+		configureStudentClassroomSessionDivisionSubjectEvaluationClass();
 		configureStudentResultsMetricValueDetailsClass();
 		
 		configureTeacherClass();
 		
 		configureEvaluationClass();
+		
 	}
 	
 	@Override
@@ -427,6 +430,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	protected void configureEvaluationClass() {
 		getFormConfiguration(Evaluation.class, Crud.CREATE).addRequiredFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
 		
+		getFormConfiguration(Evaluation.class, Crud.READ).addFieldNames(EvaluationDetails.FIELD_CLASSROOM_SESSION,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION
+				,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_TYPE,EvaluationDetails.FIELD_NAME);
+		
 		getFormConfiguration(Evaluation.class, Crud.UPDATE).addRequiredFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
 		
 		getFormConfiguration(Evaluation.class, Crud.DELETE).addFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
@@ -440,7 +446,42 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean build(Object data,Field field) {
-						return isFieldNameIn(field,EvaluationDetails.FIELD_NAME);
+						return isFieldNameIn(field,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_TYPE
+								,EvaluationDetails.FIELD_NAME);
+					}
+				};
+			}
+		});
+	}
+	
+	protected void configureStudentClassroomSessionDivisionSubjectEvaluationClass() {
+		
+		getFormConfiguration(Evaluation.class, Crud.READ).addFieldNames(StudentClassroomSessionDivisionSubjectEvaluationDetails.FIELD_NAMES
+				,StudentClassroomSessionDivisionSubjectEvaluationDetails.FIELD_MARK);
+		
+		registerDetailsConfiguration(StudentClassroomSessionDivisionSubjectEvaluationDetails.class, new DetailsConfiguration(){
+			private static final long serialVersionUID = 1L;
+			@SuppressWarnings("rawtypes")
+			@Override
+			public ControlSetAdapter getFormControlSetAdapter(Class clazz) {
+				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectEvaluationDetails.FIELD_NAMES
+								,StudentClassroomSessionDivisionSubjectEvaluationDetails.FIELD_MARK);
+					}
+				};
+			}
+			
+			@Override
+			public ColumnAdapter getTableColumnAdapter() {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectEvaluationDetails.FIELD_NAMES
+								,StudentClassroomSessionDivisionSubjectEvaluationDetails.FIELD_MARK);
 					}
 				};
 			}

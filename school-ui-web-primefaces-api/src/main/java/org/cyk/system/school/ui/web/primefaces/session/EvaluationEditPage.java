@@ -18,6 +18,7 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
@@ -110,7 +111,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			@Override
 			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,SelectItem> itemCollection,StudentClassroomSessionDivisionSubjectEvaluationItem mark) {
 				super.instanciated(itemCollection, mark);
-				mark.setStudent(mark.getIdentifiable().getStudentSubject().getStudent().getCode()+Constant.CHARACTER_UNDESCORE
+				mark.setStudent(mark.getIdentifiable().getStudentSubject().getStudent().getCode()+Constant.CHARACTER_SPACE
 						+mark.getIdentifiable().getStudentSubject().getStudent().getPerson().getNames());
 				mark.setValue(mark.getIdentifiable().getValue());
 				mark.setValueAsString(inject(NumberBusiness.class).format(mark.getValue()));
@@ -147,6 +148,11 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		super.afterInitialisation();
 		setChoices(Form.FIELD_TYPE, inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
+	
+	/*@Override
+	protected String getContentTitleIdentifiableText() {
+		return formatPathUsingBusiness(AbstractIdentifiable.class, Crud.CREATE.equals(crud) ? identifiable.getClassroomSessionDivisionSubjectEvaluationType() : identifiable);
+	}*/
 	
 	@Override
 	protected void create() {

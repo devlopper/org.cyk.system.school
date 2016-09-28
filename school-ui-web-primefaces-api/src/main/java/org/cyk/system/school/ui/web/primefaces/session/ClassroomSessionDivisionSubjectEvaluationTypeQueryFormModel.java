@@ -17,13 +17,13 @@ import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryOneFormModel.FIELD_IDENTIFIABLE,type=ClassroomSessionDivisionSubjectEvaluationType.class)})
+@Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryOneFormModel.FIELD_IDENTIFIABLE_FROM_COMBO,type=ClassroomSessionDivisionSubjectEvaluationType.class)})
 public class ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel extends AbstractClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel<ClassroomSessionDivisionSubjectEvaluationType> implements Serializable {
 	private static final long serialVersionUID = -3756660150800681378L;
 	
 	@Override @Sequence(direction=Direction.AFTER,field=FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT)
-	public ClassroomSessionDivisionSubjectEvaluationType getIdentifiable() {
-		return super.getIdentifiable();
+	public ClassroomSessionDivisionSubjectEvaluationType getIdentifiableFromCombo() {
+		return super.getIdentifiableFromCombo();
 	}
 	
 	/**/
@@ -35,21 +35,20 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel extends
 		
 		public PageAdapter() {
 			super(ClassroomSessionDivisionSubjectEvaluationType.class);
+			type = Type.IDENTIFIABLE_FROM_COMBO;
 		}
 		
 		@Override
 		protected void initialiseSelect(AbstractSelectOnePage<?> selectPage) {
 			super.initialiseSelect(selectPage);
 			SchoolWebManager.getInstance().initialiseSelectClassroomSession(selectPage, FIELD_CLASSROOM_SESSION, FIELD_CLASSROOM_SESSION_DIVISION
-					,FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, AbstractQueryOneFormModel.FIELD_IDENTIFIABLE);
+					,FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, AbstractQueryOneFormModel.FIELD_IDENTIFIABLE_FROM_COMBO);
 		}
-		
-		
 		
 		@Override
 		public void serve(Object data, String actionIdentifier) {
 			if(SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation().equals(actionIdentifier)){
-				WebNavigationManager.getInstance().redirectToDynamicCreate(((ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel)data).getIdentifiable()
+				WebNavigationManager.getInstance().redirectToDynamicCreate(((ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel)data).getIdentifiableFromCombo()
 						, Evaluation.class,null); 
 			}
 		}

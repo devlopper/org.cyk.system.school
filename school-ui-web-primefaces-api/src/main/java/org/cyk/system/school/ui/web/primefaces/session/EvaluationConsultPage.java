@@ -7,7 +7,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
-import org.cyk.system.school.business.impl.subject.StudentSubjectEvaluationDetails;
+import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectEvaluationDetails;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.ui.web.primefaces.Table;
@@ -21,13 +21,13 @@ public class EvaluationConsultPage extends AbstractConsultPage<Evaluation> imple
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private Table<StudentSubjectEvaluationDetails> markTable;
+	private Table<StudentClassroomSessionDivisionSubjectEvaluationDetails> markTable;
 	
 	@Override
-	protected void initialisation() {
-		super.initialisation();
+	protected void consultInitialisation() {
+		super.consultInitialisation();
 	
-		markTable = (Table<StudentSubjectEvaluationDetails>) createDetailsTable(StudentSubjectEvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubjectEvaluation,StudentSubjectEvaluationDetails>(StudentClassroomSessionDivisionSubjectEvaluation.class, StudentSubjectEvaluationDetails.class){
+		markTable = (Table<StudentClassroomSessionDivisionSubjectEvaluationDetails>) createDetailsTable(StudentClassroomSessionDivisionSubjectEvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubjectEvaluation,StudentClassroomSessionDivisionSubjectEvaluationDetails>(StudentClassroomSessionDivisionSubjectEvaluation.class, StudentClassroomSessionDivisionSubjectEvaluationDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> getIdentifiables() {
@@ -39,7 +39,7 @@ public class EvaluationConsultPage extends AbstractConsultPage<Evaluation> imple
 			}
 			@Override
 			public String getTabId() {
-				return "1";
+				return uiManager.businessEntityInfos(Evaluation.class).getIdentifier();
 			}
 		});
 	}

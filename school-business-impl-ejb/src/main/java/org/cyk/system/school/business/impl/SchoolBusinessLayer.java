@@ -23,6 +23,7 @@ import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.school.business.api.SortableStudentResults;
@@ -38,6 +39,7 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
@@ -106,26 +108,30 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			private static final long serialVersionUID = -6563167908087619179L;
 			@Override
 			public Object getParentOf(Object object) {
-				
-				if(object instanceof ClassroomSession)
-					return null;//((ClassroomSession)object).getAcademicSession();
-				if(object instanceof SubjectClassroomSession)
-					return ((SubjectClassroomSession)object).getClassroomSession();
-				
-				if(object instanceof ClassroomSessionDivision)
-					return ((ClassroomSessionDivision)object).getClassroomSession();
-				if(object instanceof ClassroomSessionDivisionSubject)
-					return ((ClassroomSessionDivisionSubject)object).getClassroomSessionDivision();
-				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType)
-					return ((ClassroomSessionDivisionSubjectEvaluationType)object).getClassroomSessionDivisionSubject();
-				
-				if(object instanceof StudentClassroomSession)
-					return ((StudentClassroomSession)object).getClassroomSession();
-				if(object instanceof StudentClassroomSessionDivision)
-					return ((StudentClassroomSessionDivision)object).getClassroomSessionDivision();
-				if(object instanceof StudentClassroomSessionDivisionSubject)
-					return ((StudentClassroomSessionDivisionSubject)object).getClassroomSessionDivisionSubject();
-				
+				if(object instanceof AbstractIdentifiable){
+					AbstractIdentifiable identifiable = (AbstractIdentifiable) object;
+					if(identifiable instanceof ClassroomSession)
+						return null;//((ClassroomSession)object).getAcademicSession();
+					if(identifiable instanceof SubjectClassroomSession)
+						return ((SubjectClassroomSession)identifiable).getClassroomSession();
+					
+					if(identifiable instanceof ClassroomSessionDivision)
+						return ((ClassroomSessionDivision)identifiable).getClassroomSession();
+					if(identifiable instanceof ClassroomSessionDivisionSubject)
+						return ((ClassroomSessionDivisionSubject)identifiable).getClassroomSessionDivision();
+					if(identifiable instanceof ClassroomSessionDivisionSubjectEvaluationType)
+						return ((ClassroomSessionDivisionSubjectEvaluationType)identifiable).getClassroomSessionDivisionSubject();
+					
+					if(identifiable instanceof Evaluation)
+						return ((Evaluation)identifiable).getClassroomSessionDivisionSubjectEvaluationType();
+					
+					if(identifiable instanceof StudentClassroomSession)
+						return ((StudentClassroomSession)identifiable).getClassroomSession();
+					if(identifiable instanceof StudentClassroomSessionDivision)
+						return ((StudentClassroomSessionDivision)identifiable).getClassroomSessionDivision();
+					if(identifiable instanceof StudentClassroomSessionDivisionSubject)
+						return ((StudentClassroomSessionDivisionSubject)identifiable).getClassroomSessionDivisionSubject();
+				}
 				return super.getParentOf(object);
 			}
 		});

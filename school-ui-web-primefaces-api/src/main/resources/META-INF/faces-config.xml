@@ -151,6 +151,22 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>classroomSessionDivisionSubjectEvaluationTypeEditView</from-outcome>
+			<to-view-id>/private/classroomsessiondivisionsubjectevaluationtype/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionSubjectEvaluationTypeConsultView</from-outcome>
+			<to-view-id>/private/classroomsessiondivisionsubjectevaluationtype/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionSubjectEvaluationTypeListView</from-outcome>
+			<to-view-id>/private/classroomsessiondivisionsubjectevaluationtype/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>evaluationEditView</from-outcome>
 			<to-view-id>/private/evaluation/edit.jsf</to-view-id>
 			<redirect />
