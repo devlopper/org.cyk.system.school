@@ -1,8 +1,22 @@
 package org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 
+import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.business.api.language.LanguageBusiness;
+import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.root.model.security.Role;
+import org.cyk.system.school.business.api.actor.TeacherBusiness;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.LevelGroupBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
 import org.cyk.system.school.model.actor.Student;
@@ -11,18 +25,26 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.Level;
+import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelSpeciality;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.ui.api.Icon;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.menu.SystemMenu;
+import org.cyk.ui.api.model.AbstractTree;
+import org.cyk.ui.web.api.WebHierarchyNode;
 import org.cyk.ui.web.primefaces.Commandable;
+import org.cyk.ui.web.primefaces.HierarchyNode;
+import org.cyk.ui.web.primefaces.Tree;
 import org.cyk.ui.web.primefaces.UserSession;
+import org.primefaces.model.TreeNode;
 
 public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.adapter.enterpriseresourceplanning.SystemMenuBuilder implements Serializable {
 
@@ -34,6 +56,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	public SystemMenu build(UserSession userSession) {
 		SystemMenu systemMenu = super.build(userSession);
 		addBusinessMenu(userSession,systemMenu,getStudentCommandable(userSession, null));
+		initialiseNavigatorTree(userSession);
 		return systemMenu;
 	}
 	
@@ -73,6 +96,137 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 		module.addChild(createListCommandable(Teacher.class, null));
 		addReportCommandables(Teacher.class,module, TeacherBusinessImpl.Listener.COLLECTION);
 		return module;
+	}
+	
+	@Override
+	protected void initialiseNavigatorTree(UserSession userSession) {
+		super.initialiseNavigatorTree(userSession);
+		userSession.setNavigatorTree(getNavigator(TreeNode.class,HierarchyNode.class,LevelGroup.class,userSession));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	protected <TYPE> Collection<TYPE> getNavigatorTreeNodeDatas(Class<TYPE> dataClass,UserSession userSession) {
+		if(userSession.hasRole(Role.MANAGER)){
+			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findAll();
+		}else{
+			Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());
+			if(teacher==null)
+				return null;
+			
+			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findByAcademicSessionByTeacher(inject(AcademicSessionBusiness.class).findCurrent(null)
+					, teacher);
+		}
+	}
+	
+	@Override
+	protected AbstractTree<TreeNode, HierarchyNode> createNavigatorTree(final UserSession userSession) {
+		AbstractTree<TreeNode, HierarchyNode> tree = new Tree();//super.createNavigatorTree(userSession);
+		tree.getTreeListeners().add((org.cyk.ui.api.model.AbstractTree.Listener<TreeNode, HierarchyNode>) new  AbstractTree.Listener.Adapter.Default<TreeNode,HierarchyNode>(){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public String getRootNodeLabel(Class<?> dataClass) {
+				return inject(LanguageBusiness.class).findClassLabelText(ClassroomSession.class);
+			}
+			
+			@Override
+			public TreeNode createNode(HierarchyNode model, TreeNode parent) {
+				model.setCollapsedIcon(Icon.THING_FOLDER_COLLAPSED);
+				model.setExpandedIcon(Icon.THING_FOLDER_EXPANDED);
+				if(model.getData() instanceof ClassroomSessionDivisionSubjectEvaluationType){
+					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) model.getData();
+					if(inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+						model.setCollapsedIcon(Icon.THING_TABLE);
+						model.setExpandedIcon(Icon.THING_TABLE);
+						Collection<Evaluation> evaluations = inject(EvaluationBusiness.class).findByClassroomSessionDivisionSubjectEvaluationType((ClassroomSessionDivisionSubjectEvaluationType) model.getData());
+						if(evaluations.isEmpty())
+							;
+						else
+							model.getCss().addClass("treenodeevaluationexistclass");
+				}
+				return super.createNode(model, parent);
+			}
+			
+			@Override
+			public Collection<?> children(Object object) { 
+				if(object instanceof LevelGroup){
+					LevelGroup levelGroup = (LevelGroup) object;
+					if(Boolean.TRUE.equals(userSession.getIsManager()))
+						return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroup(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup);
+					else{
+						Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());
+						if(teacher!=null)
+							return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroupByTeacher(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup,teacher);
+					}
+						
+				}
+				if(object instanceof ClassroomSession){
+					ClassroomSession classroomSession = (ClassroomSession) object;
+					
+					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(classroomSession
+							, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+					
+					if(Boolean.TRUE.equals(userSession.getIsManager()))
+						return inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivision(classroomSessionDivision);
+					else{
+						Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());
+						if(teacher!=null)
+							return inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionByTeacher(classroomSessionDivision, teacher);
+					}}
+				if(object instanceof ClassroomSessionDivisionSubject){
+					ClassroomSessionDivisionSubject classroomSessionDivisionSubject = (ClassroomSessionDivisionSubject) object;
+					return inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);			
+				}
+				return super.children(object);
+			}
+			
+			@Override
+			public Boolean isLeaf(TreeNode node) {
+				Object object = nodeModel(node).getData();
+				if(object instanceof ClassroomSession){
+					ClassroomSession classroomSession = (ClassroomSession) object;
+					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(classroomSession
+							, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+					return classroomSessionDivision.getNumberOfSubjects() == 0;
+				}
+				return super.isLeaf(node);
+			}
+			
+			@Override
+			public Object getRedirectionObject(TreeNode node) {
+				Object object = ((WebHierarchyNode)node.getData()).getData();
+				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
+					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
+					if(inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
+							return new Evaluation();
+						else{
+							return inject(EvaluationBusiness.class).findByClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType)
+									.iterator().next();
+						}
+				}
+				return super.getRedirectionObject(node);
+			}
+			
+			@Override
+			public Crud getRedirectionCrud(TreeNode node) {
+				Object object = ((WebHierarchyNode)node.getData()).getData();
+				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
+					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
+					if(inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
+							return Crud.CREATE;
+						else
+							return Crud.READ;
+				}
+				return super.getRedirectionCrud(node);
+			}
+		});
+		return tree;
 	}
 	
 	public static SystemMenuBuilder getInstance(){

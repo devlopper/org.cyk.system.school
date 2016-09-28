@@ -39,7 +39,7 @@ public class EvaluationConsultPage extends AbstractConsultPage<Evaluation> imple
 			}
 			@Override
 			public String getTabId() {
-				return uiManager.businessEntityInfos(Evaluation.class).getIdentifier();
+				return "model.entity.evaluation";
 			}
 		});
 	}

@@ -3,7 +3,6 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
@@ -18,8 +17,6 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
-import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
@@ -28,8 +25,6 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
-import org.cyk.ui.api.command.AbstractCommandable.Builder;
-import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
@@ -65,19 +60,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			classroomSessionDivisionSubject = webManager.getIdentifiableFromRequestParameter(ClassroomSessionDivisionSubject.class, Boolean.TRUE);
 		else
 			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
-		/*
-		Long subjectEvaluationTypeIdentifier = requestParameterLong(ClassroomSessionDivisionSubjectEvaluationType.class);
-		if(subjectEvaluationTypeIdentifier==null){
-			Long classroomSessionDivisionSubjectIdentifier = requestParameterLong(ClassroomSessionDivisionSubject.class);
-			if(classroomSessionDivisionSubjectIdentifier==null)
-				;
-			else
-				classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).find(classroomSessionDivisionSubjectIdentifier);	
-		}else{
-			classroomSessionDivisionSubjectEvaluationType = inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).find(subjectEvaluationTypeIdentifier);
-			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
-		}
-		*/	
+		
 		super.initialisation();
 		if(classroomSessionDivisionSubjectEvaluationType!=null){
 			maximumValue = identifiable.getClassroomSessionDivisionSubjectEvaluationType().getMaximumValue();
@@ -148,11 +131,6 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		super.afterInitialisation();
 		setChoices(Form.FIELD_TYPE, inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
-	
-	/*@Override
-	protected String getContentTitleIdentifiableText() {
-		return formatPathUsingBusiness(AbstractIdentifiable.class, Crud.CREATE.equals(crud) ? identifiable.getClassroomSessionDivisionSubjectEvaluationType() : identifiable);
-	}*/
 	
 	@Override
 	protected void create() {
