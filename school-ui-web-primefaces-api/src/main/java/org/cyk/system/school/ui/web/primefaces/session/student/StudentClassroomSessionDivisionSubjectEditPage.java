@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
-public class StudentSubjectEditPage extends AbstractCrudOnePage<StudentClassroomSessionDivisionSubject> implements Serializable {
+public class StudentClassroomSessionDivisionSubjectEditPage extends AbstractCrudOnePage<StudentClassroomSessionDivisionSubject> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 		

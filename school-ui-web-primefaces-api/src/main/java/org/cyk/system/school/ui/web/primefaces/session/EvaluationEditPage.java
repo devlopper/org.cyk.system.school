@@ -156,9 +156,9 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	}
 	
 	protected Evaluation instanciateIdentifiable() {
-		Evaluation subjectEvaluation = inject(EvaluationBusiness.class).instanciateOne(classroomSessionDivisionSubject);
-		subjectEvaluation.setClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType);
-		return subjectEvaluation;
+		Evaluation evaluation = inject(EvaluationBusiness.class).instanciateOne(classroomSessionDivisionSubject);
+		evaluation.setClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType);
+		return evaluation;
 	}
 		
 	/*

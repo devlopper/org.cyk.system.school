@@ -20,7 +20,7 @@ public class SystemMenuBuilder extends org.cyk.system.school.ui.web.primefaces.a
 		addBusinessMenu(userSession,systemMenu,getAcademicCommandable(userSession, null));
 		addBusinessMenu(userSession,systemMenu,getServiceCommandable(userSession, null));
 		//addBusinessMenu(userSession,systemMenu,getMessageCommandable(userSession, null));
-		initialiseNavigatorTree(userSession);
+		initialiseNavigatorTree(userSession);//TODO make it as a call after .build
 		return systemMenu;
 	}
 	

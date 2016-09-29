@@ -10,13 +10,9 @@
       xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
 
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
- 		<ui:param name="pageController" value="#{studentClassroomSessionDivisionSubjectEditPage}" />
+ 		<ui:param name="pageController" value="#{studentClassroomSessionDivisionSubjectListPage}" />
  		<ui:define name="body">
- 			<cyk:formOneData value="#{studentClassroomSessionDivisionSubjectEditPage.form}"/>
- 		</ui:define>
- 		
- 		<ui:define name="contentMenuBar">
- 			<cyk:command value="#{studentClassroomSessionDivisionSubjectEditPage.form.submitCommandable}" executeParameter="#{studentClassroomSessionDivisionSubjectEditPage.form.data}" />
+ 			<cyk:table value="#{studentClassroomSessionDivisionSubjectListPage.table}" />
  		</ui:define>
  	</ui:decorate>
  

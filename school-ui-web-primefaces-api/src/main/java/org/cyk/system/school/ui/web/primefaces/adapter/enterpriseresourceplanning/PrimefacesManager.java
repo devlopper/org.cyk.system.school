@@ -7,6 +7,7 @@ import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.impl.time.PeriodDetails;
 import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.business.impl.actor.TeacherDetails;
+import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
@@ -345,7 +346,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	protected void configureStudentClassroomSessionDivisionSubjectClass() {
 		getFormConfiguration(StudentClassroomSessionDivisionSubject.class, Crud.READ).addFieldNames(StudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT
 				,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
-		registerDetailsConfiguration(StudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfiguration(){
+		
+		registerDetailsConfiguration(AbstractStudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -363,12 +365,12 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 			}
 			
 			@Override
-			public ColumnAdapter getTableColumnAdapter() {
+			public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz) {
 				return new DetailsConfiguration.DefaultColumnAdapter(){
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
+						return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT);
 					}
 				};
 			}
@@ -448,6 +450,17 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					public Boolean build(Object data,Field field) {
 						return isFieldNameIn(field,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_TYPE
 								,EvaluationDetails.FIELD_NAME);
+					}
+				};
+			}
+			
+			@Override
+			public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz) {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_TYPE,EvaluationDetails.FIELD_NAME);
 					}
 				};
 			}

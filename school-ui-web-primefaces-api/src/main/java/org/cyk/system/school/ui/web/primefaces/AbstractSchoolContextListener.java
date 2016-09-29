@@ -48,7 +48,7 @@ import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomS
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentQueryOneFormModel;
-import org.cyk.system.school.ui.web.primefaces.session.student.StudentSubjectEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionSubjectEditPage;
 import org.cyk.ui.api.config.IdentifiableConfiguration;
 import org.cyk.ui.web.api.AbstractWebPage;
 import org.cyk.ui.web.primefaces.page.AbstractProcessManyPage;
@@ -134,7 +134,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		webNavigationManager.useDynamicSelectView(StudentClassroomSessionDivision.class);
 		AbstractSelectManyPage.Listener.COLLECTION.add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
 		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(StudentClassroomSessionDivisionSubject.class, StudentSubjectEditPage.Form.class, StudentClassroomSessionDivisionSubjectDetails.class
+		uiManager.registerConfiguration(new IdentifiableConfiguration(StudentClassroomSessionDivisionSubject.class, StudentClassroomSessionDivisionSubjectEditPage.Form.class, StudentClassroomSessionDivisionSubjectDetails.class
 				,null,null,null));
 		uiManager.configBusinessIdentifiable(StudentClassroomSessionDivisionSubject.class, null);
 		webNavigationManager.useDynamicSelectView(StudentClassroomSessionDivisionSubject.class);

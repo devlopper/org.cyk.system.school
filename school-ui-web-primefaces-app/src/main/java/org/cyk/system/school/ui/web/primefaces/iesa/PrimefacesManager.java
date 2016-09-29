@@ -3,6 +3,7 @@ package org.cyk.system.school.ui.web.primefaces.iesa;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.ui.web.primefaces.iesa.ContextListener.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.web.primefaces.UserSession;
@@ -22,7 +23,7 @@ public class PrimefacesManager extends org.cyk.system.school.ui.web.primefaces.a
 	@Override
 	protected void configureStudentClassroomSessionDivisionSubjectClass() {
 		super.configureStudentClassroomSessionDivisionSubjectClass();
-		registerDetailsConfiguration(StudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfiguration(){
+		registerDetailsConfiguration(/*org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails.class*/AbstractStudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -40,7 +41,7 @@ public class PrimefacesManager extends org.cyk.system.school.ui.web.primefaces.a
 			}
 			
 			@Override
-			public ColumnAdapter getTableColumnAdapter() {
+			public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz) {
 				return new DetailsConfiguration.DefaultColumnAdapter(){
 					private static final long serialVersionUID = 1L;
 					@Override

@@ -247,13 +247,23 @@
 		</navigation-case>
 		
 		<navigation-case>
-			<from-outcome>studentClassroomSessionDivisionSubjectCreateManyView</from-outcome>
-			<to-view-id>/private/studentclassroomsessiondivisionsubject/createmany.jsf</to-view-id>
+			<from-outcome>studentClassroomSessionDivisionSubjectEditView</from-outcome>
+			<to-view-id>/private/studentclassroomsessiondivisionsubject/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>studentClassroomSessionDivisionSubjectEditView</from-outcome>
-			<to-view-id>/private/studentclassroomsessiondivisionsubject/edit.jsf</to-view-id>
+			<from-outcome>studentClassroomSessionDivisionSubjectConsultView</from-outcome>
+			<to-view-id>/private/studentclassroomsessiondivisionsubject/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionDivisionSubjectListView</from-outcome>
+			<to-view-id>/private/studentclassroomsessiondivisionsubject/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionDivisionSubjectCreateManyView</from-outcome>
+			<to-view-id>/private/studentclassroomsessiondivisionsubject/createmany.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

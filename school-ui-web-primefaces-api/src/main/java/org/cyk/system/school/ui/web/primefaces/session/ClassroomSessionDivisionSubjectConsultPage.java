@@ -6,20 +6,19 @@ import java.util.Collection;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.root.business.api.Crud;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
-import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.LectureDetails;
+import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultPage<ClassroomSessionDivisionSubject> implements Serializable {
@@ -31,18 +30,14 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 	private Table<LectureDetails> lectureTable;
 	
 	@Override
-	protected void initialisation() {
-		super.initialisation();
+	protected void consultInitialisation() {
+		super.consultInitialisation();
 		
 		studentTable = (Table<StudentClassroomSessionDivisionSubjectDetails>) createDetailsTable(StudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDetails>(StudentClassroomSessionDivisionSubject.class, StudentClassroomSessionDivisionSubjectDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override 
 			public Collection<StudentClassroomSessionDivisionSubject> getIdentifiables() {
 				return inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionSubject(identifiable);
-			}
-			@Override
-			public Crud[] getCruds() {
-				return new Crud[]{/*Crud.CREATE*/};
 			}
 		});
 		
@@ -51,10 +46,6 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 			@Override
 			public Collection<Evaluation> getIdentifiables() {
 				return inject(EvaluationBusiness.class).findByClassroomSessionDivisionSubject(identifiable);
-			}
-			@Override
-			public Crud[] getCruds() {
-				return new Crud[]{Crud.CREATE,Crud.READ,Crud.UPDATE,Crud.DELETE};
 			}
 		});
 		/*
