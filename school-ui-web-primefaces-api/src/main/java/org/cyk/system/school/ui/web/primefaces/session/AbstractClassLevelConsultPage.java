@@ -19,12 +19,14 @@ import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsOutputDetails;
+import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.model.table.Cell;
 import org.cyk.ui.api.model.table.Column;
@@ -113,6 +115,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 	}
 	
 	protected void subLevelTable(){
+		PrimefacesManager.getDetailsConfiguration(ClassroomSessionDivisionDetails.class).getTableColumnAdapter(null, null);
 		subLevelTable = (Table<SUB_LEVEL_OUTPUT>) createDetailsTable(getSubLevelOutputClass(), getSubLevelTableCreationListener());
 	}
 	

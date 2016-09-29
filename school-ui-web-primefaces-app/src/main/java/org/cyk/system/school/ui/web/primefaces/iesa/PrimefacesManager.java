@@ -5,10 +5,11 @@ import java.lang.reflect.Field;
 
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.ui.web.primefaces.iesa.ContextListener.StudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.ui.api.command.menu.SystemMenu;
-import org.cyk.ui.web.primefaces.UserSession;
 import org.cyk.ui.web.primefaces.Table.ColumnAdapter;
-import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
+import org.cyk.ui.web.primefaces.UserSession;
+import org.cyk.ui.web.primefaces.page.AbstractPrimefacesPage;
 import org.cyk.ui.web.primefaces.page.DetailsConfiguration;
 
 public class PrimefacesManager extends org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.PrimefacesManager implements Serializable {
@@ -23,32 +24,20 @@ public class PrimefacesManager extends org.cyk.system.school.ui.web.primefaces.a
 	@Override
 	protected void configureStudentClassroomSessionDivisionSubjectClass() {
 		super.configureStudentClassroomSessionDivisionSubjectClass();
-		registerDetailsConfiguration(/*org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails.class*/AbstractStudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfiguration(){
+		registerDetailsConfiguration(AbstractStudentClassroomSessionDivisionSubjectDetails.class, new StudentClassroomSessionDivisionSubjectDetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
-			@SuppressWarnings("rawtypes")
-			@Override
-			public ControlSetAdapter getFormControlSetAdapter(Class clazz) {
-				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
-					private static final long serialVersionUID = 1L;
-					@Override
-					public Boolean build(Object data,Field field) {
-						//if(data instanceof StudentClassroomSessionDetails)
-							return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT
-									,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
-						
-					}
-				};
-			}
 			
 			@Override
-			public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz) {
+			public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz,final AbstractPrimefacesPage page) {
 				return new DetailsConfiguration.DefaultColumnAdapter(){
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
+						if(page instanceof StudentClassroomSessionDivisionConsultPage)
+							return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
 								,StudentClassroomSessionDivisionSubjectDetails.FIELD_TEST1,StudentClassroomSessionDivisionSubjectDetails.FIELD_TEST2
 								,StudentClassroomSessionDivisionSubjectDetails.FIELD_EXAM);
+						return isFieldNameIn(field, StudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT);
 					}
 				};
 			}

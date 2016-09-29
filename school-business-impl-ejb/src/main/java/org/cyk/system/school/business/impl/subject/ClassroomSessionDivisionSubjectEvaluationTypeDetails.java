@@ -10,13 +10,17 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class ClassroomSessionDivisionSubjectEvaluationTypeDetails extends AbstractOutputDetails<ClassroomSessionDivisionSubjectEvaluationType> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private String subject,type,coefficient,maximum;
+	@Input @InputText private String classroomSessionDivisionSubject,coefficient,maximum;
 	
 	public ClassroomSessionDivisionSubjectEvaluationTypeDetails(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 		super(classroomSessionDivisionSubjectEvaluationType);
-		subject = formatUsingBusiness(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
-		type = formatUsingBusiness(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
+		classroomSessionDivisionSubject = formatUsingBusiness(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
 		coefficient = formatNumber(classroomSessionDivisionSubjectEvaluationType.getWeight());
 		maximum = formatNumber(classroomSessionDivisionSubjectEvaluationType.getWeight());
 	}
+	
+	public static final String FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT = "classroomSessionDivisionSubject";
+	public static final String FIELD_COEFFICIENT = "coefficient";
+	public static final String FIELD_MAXIMUM = "maximum";
+	
 }

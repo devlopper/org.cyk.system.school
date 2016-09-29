@@ -17,7 +17,7 @@ public class ClassroomSessionDivisionDetails extends AbstractOutputDetails<Class
 	public ClassroomSessionDivisionDetails(ClassroomSessionDivision classroomSessionDivision) {
 		super(classroomSessionDivision);
 		classroomSessionDetails = new ClassroomSessionDetails(classroomSessionDivision.getClassroomSession());
-		classroomSession = formatUsingBusiness(classroomSessionDivision);
+		classroomSession = formatUsingBusiness(classroomSessionDivision.getClassroomSession());
 	}
 	
 	public static final String FIELD_CLASSROOM_SESSION_DETAILS = "classroomSessionDetails";
