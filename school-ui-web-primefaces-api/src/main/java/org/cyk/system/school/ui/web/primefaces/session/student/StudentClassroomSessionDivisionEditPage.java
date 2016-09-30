@@ -11,6 +11,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.mathematics.MetricCollection;
@@ -31,12 +34,12 @@ import org.cyk.ui.web.primefaces.MetricValueCollection.AbstractMetricValueItem;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
+import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
+import org.cyk.utility.common.annotation.user.interfaces.InputChoice.ChoiceSet;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
+import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
+import org.cyk.utility.common.annotation.user.interfaces.InputOneRadio;
 import org.cyk.utility.common.annotation.user.interfaces.InputTextarea;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage<StudentClassroomSessionDivision> implements Serializable {
@@ -61,7 +64,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 					return inject(StudentResultsMetricValueBusiness.class).findByStudentResultsByMetricCollection(identifiable.getResults(),metricCollection);
 				}
 			});
-			
+			//metricValueCollection.addNullChoice();
 			metricValueCollections.add(metricValueCollection);
 		}
 	}
@@ -97,7 +100,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		//@Input @InputNumber private BigDecimal evaluationAverage;
 		@Input @InputNumber @NotNull private BigDecimal numberOfTimeAbsent;
 		@Input @InputTextarea @NotNull private String appreciation;
-		@Input @InputBooleanButton /*@InputChoice @InputOneChoice @InputOneRadio*/ @NotNull private Boolean conferenceRequested;
+		@Input /*@InputBooleanButton*/ @InputChoice(set=ChoiceSet.YES_NO) @InputOneChoice @InputOneRadio @NotNull private Boolean conferenceRequested;
 		
 		@Override
 		public void read() {

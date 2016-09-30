@@ -323,8 +323,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		levelGroupType = create(inject(LevelGroupTypeBusiness.class).instanciateOne("LevelGroupTypeDummy"));
 		LevelGroup levelGroupPrimary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.LEVEL_GROUP_PRIMARY)
 				.setType(levelGroupType));
-		/*LevelGroup levelGroupSecondary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.LEVEL_GROUP_SECONDARY)
-				.setType(levelGroupType));*/
+		LevelGroup levelGroupSecondary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.LEVEL_GROUP_SECONDARY)
+				.setType(levelGroupType));
 		
 		// Subjects
 		schoolDataProducerHelper.createOneSubject("Mathematics",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
@@ -393,14 +393,14 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2",interval);	
 		//CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
-		/*CommonNodeInformations commonNodeInformationsG7G9 =*/ schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(inject(IntervalCollectionBusiness.class)
+		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(inject(IntervalCollectionBusiness.class)
 				.instanciateOne("G7G12Grade", "Grade", new String[][]{
 						{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
 						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
 								.instanciateOne("ICP2", "Promotion Scale", new String[][]{
 										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
 						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2",interval);	
-		//CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
+		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);
     	create(school);
@@ -486,11 +486,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			, schoolDataProducerHelper.createLevelTimeDivision("G11","Grade 12",levelGroupSecondary,commonNodeInformationsG10G12,gradeIndex++) 
     			,new Object[][]{{evaluationTypeTest1,"0.2","100"},{evaluationTypeTest2,"0.2","100"},{evaluationTypeExam,"0.6","100"}}, subjectsG7G9,classroomSessionDivisionStudentsMetricCollections
     			,g7g12MetricCollections,null,Boolean.TRUE,Boolean.FALSE).iterator().next();
-    	g12 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
+    	*/g12 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("G12","Grade 12",levelGroupSecondary,commonNodeInformationsG10G12,gradeIndex++) 
     			,new Object[][]{{evaluationTypeTest1,"0.2","100"},{evaluationTypeTest2,"0.2","100"},{evaluationTypeExam,"0.6","100"}},subjectsG7G9,classroomSessionDivisionStudentsMetricCollections
     			,g7g12MetricCollections,new String[]{"A","B"},Boolean.TRUE,Boolean.FALSE).iterator().next();
-    	*/
+    	
     	flush(ClassroomSession.class, classroomSessionBusiness, classroomSessions);
     	flush(ClassroomSessionDivision.class, classroomSessionDivisionBusiness, classroomSessionDivisions);
     	flush(ClassroomSessionDivisionSubject.class, classroomSessionDivisionSubjectBusiness, classroomSessionDivisionSubjects);
