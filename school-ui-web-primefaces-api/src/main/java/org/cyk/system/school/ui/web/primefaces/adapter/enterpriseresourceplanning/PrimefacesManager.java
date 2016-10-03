@@ -256,7 +256,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 			}
 		});
 	}
-	
+	 
 	protected void configureClassroomSessionDivisionSubjectEvaluationTypeClass() {
 		registerDetailsConfiguration(ClassroomSessionDivisionSubjectEvaluationTypeDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
