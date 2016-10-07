@@ -146,7 +146,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					public Boolean build(Object data,Field field) {
 						if(data instanceof ClassroomSessionDetails)
 							return isFieldNameIn(field,ClassroomSessionDetails.FIELD_LEVEL_TIME_DIVISION,ClassroomSessionDetails.FIELD_SUFFIX
-									,ClassroomSessionDetails.FIELD_COORDINATOR,ClassroomSessionDetails.FIELD_NUMBER_OF_STUDENTS);
+									,ClassroomSessionDetails.FIELD_COORDINATOR,ClassroomSessionDetails.FIELD_NUMBER_OF_STUDENT);
 						return Boolean.FALSE;
 					}
 				};

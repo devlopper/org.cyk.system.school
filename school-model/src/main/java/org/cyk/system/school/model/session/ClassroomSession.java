@@ -11,8 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.system.root.model.mathematics.machine.FiniteStateMachineState;
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
@@ -20,10 +23,6 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
 public class ClassroomSession extends AbstractIdentifiablePeriod implements Serializable {
@@ -35,11 +34,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	private String suffix;
 	@ManyToOne private Teacher coordinator;
 	@Embedded private NodeResults results = new NodeResults();
-	//TODO to be removed
-	@ManyToOne private FiniteStateMachineState finiteStateMachineState;
 	
-	//TODO should be moved on NodeResults
-	@NotNull @Column(nullable=false) private Long numberOfStudents = 0l;
 	@Column(nullable=false) @NotNull private Long numberOfDivisions=0l;
 	
 	@Transient private Collection<ClassroomSessionDivision> divisions = new ArrayList<>();
@@ -71,7 +66,6 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	public static final String FIELD_ACADEMIC_SESSION = "academicSession";
 	public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";
 	public static final String FIELD_COORDINATOR = "coordinator";
-	public static final String FIELD_NUMBER_OF_STUDENTS = "numberOfStudents";
 	public static final String FIELD_NUMBER_OF_DIVISIONS = "numberOfDivisions";
 	public static final String FIELD_SUFFIX = "suffix";
 	

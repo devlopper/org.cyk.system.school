@@ -38,4 +38,5 @@ public class NodeResults extends AbstractModelElement implements Serializable {
 	}
 	private static final String LOG_FORMAT = NodeResults.class.getSimpleName()+"(A=%s H=%s L=%s STUD=%s,PA=%s)";
 
+	public static final String FIELD_NUMBER_OF_STUDENT = "numberOfStudent";
 }

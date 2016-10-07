@@ -19,6 +19,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
+import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -77,7 +78,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null
 				,inject(StudentClassroomSessionDivisionBusiness.class))
 			.operate(studentClassroomSessionDivisions, crud);
-		commonUtils.increment(Long.class, studentClassroomSession.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_STUDENTS
+		commonUtils.increment(Long.class, studentClassroomSession.getClassroomSession().getResults(), NodeResults.FIELD_NUMBER_OF_STUDENT
 				, Crud.CREATE.equals(crud)?1l:Crud.DELETE.equals(crud)?-1l:0l);
 		classroomSessionDao.update(studentClassroomSession.getClassroomSession());
 	}

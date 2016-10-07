@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.ui.api.model.party.AbstractActorEditFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
@@ -25,6 +26,7 @@ public class StudentEditPage extends AbstractCrudOnePage<Student> implements Ser
 	public static class Form extends AbstractActorEditFormModel.AbstractDefault.Default<Student> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		
+		@Input @InputChoice @InputOneChoice @InputOneCombo private LevelTimeDivision levelTimeDivision;
 		@Input @InputChoice @InputOneChoice @InputOneCombo private ClassroomSession classroomSession;
 		
 		@Override
@@ -41,6 +43,7 @@ public class StudentEditPage extends AbstractCrudOnePage<Student> implements Ser
 				identifiable.getStudentClassroomSession().setClassroomSession(classroomSession);
 		}
 		
+		public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";
 		public static final String FIELD_CLASSROOMSESSION = "classroomSession";
 	}
 

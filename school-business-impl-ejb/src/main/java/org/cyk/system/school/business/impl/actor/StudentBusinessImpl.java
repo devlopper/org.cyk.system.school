@@ -9,8 +9,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
-import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Student;
@@ -18,10 +20,6 @@ import org.cyk.system.school.model.actor.Student.SearchCriteria;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
-import org.cyk.utility.common.ListenerUtils;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Stateless
 public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, StudentDao,SearchCriteria> implements StudentBusiness,Serializable {
@@ -33,70 +31,11 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 		super(dao);  
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public Student instanciateOne(final UserAccount userAccount) {
-		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
-			@Override
-			public void execute(Listener listener) {
-				listener.beforeInstanciateOne(userAccount);
-			}});
-		final Student student = super.instanciateOne(userAccount);
-		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
-			@Override
-			public void execute(Listener listener) {
-				listener.afterInstanciateOne(userAccount,student);
-			}});
-		return student;
+	@Override
+	protected Collection<? extends org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl.Listener<?>> getListeners() {
+		return Listener.COLLECTION;
 	}
 	
-	@Override
-	public Student create(final Student student) {
-		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
-			@Override
-			public void execute(Listener listener) {
-				listener.beforeCreate(student);
-			}});
-		super.create(student);
-		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
-			@Override
-			public void execute(Listener listener) {
-				listener.afterCreate(student);
-			}});
-		return student;
-	}
-	
-	@Override
-	public Student update(final Student student) {
-		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
-			@Override
-			public void execute(Listener listener) {
-				listener.beforeUpdate(student);
-			}});
-		super.update(student);
-		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
-			@Override
-			public void execute(Listener listener) {
-				listener.afterUpdate(student);
-			}});
-		return student;
-	}
-	
-	@Override
-	public Student delete(final Student student) {
-		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
-			@Override
-			public void execute(Listener listener) {
-				listener.beforeDelete(student);
-			}});
-		super.delete(student);
-		listenerUtils.execute(Listener.COLLECTION, new ListenerUtils.VoidMethod<Listener>(){
-			@Override
-			public void execute(Listener listener) {
-				listener.afterDelete(student);
-			}});
-		return student;
-	}
-
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<Student> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByClassroomSessionDivision(classroomSessionDivision);
