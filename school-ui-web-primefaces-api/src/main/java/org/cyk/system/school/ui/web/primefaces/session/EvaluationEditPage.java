@@ -114,7 +114,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 
 			@Override
 			public Boolean build(Object data,Field field) {
-				if(field.getName().equals(Form.FIELD_TYPE))
+				if(field.getName().equals(EvaluationEditPage.Form.FIELD_TYPE))
 					return classroomSessionDivisionSubjectEvaluationType == null;
 				return false;
 			}

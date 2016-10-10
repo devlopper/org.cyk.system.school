@@ -82,7 +82,7 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 
 			@Override
 			public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Object data,Field field) {
-				if(field.getName().equals(Form.FIELD_DURATION))
+				if(field.getName().equals(ClassroomSessionDivisionEditPage.Form.FIELD_DURATION))
 					return inject(LanguageBusiness.class).findText("field.number.of",new Object[]{
 							inject(ClassroomSessionBusiness.class).findCommonNodeInformations(identifiable.getClassroomSession())
 							.getAttendanceTimeDivisionType().getName()

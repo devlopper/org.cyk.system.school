@@ -13,12 +13,14 @@ public class StudentDetails extends AbstractActorDetails.AbstractDefault<Student
 
 	private static final long serialVersionUID = 1L;
 
-	private String classroomSession;
+	private String admissionLevelTimeDivision,classroomSession;
 	
 	public StudentDetails(Student student) {
 		super(student);
+		admissionLevelTimeDivision = formatUsingBusiness(student.getAdmissionLevelTimeDivision());
 	}
 
+	public static final String FIELD_ADMISSION_LEVEL_TIME_DIVISION = "admissionLevelTimeDivision";
 	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
 	
 }

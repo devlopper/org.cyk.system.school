@@ -150,7 +150,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(page.getActionIdentifier()))
-							return field.getName().equals(Form.FIELD_UPDATE_RANK_RESULTS);
+							return field.getName().equals(ProcessPageAdapter.Form.FIELD_UPDATE_RANK_RESULTS);
 						return super.build(data,field);
 					}
 				});
@@ -167,7 +167,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(page.getActionIdentifier()))
-							return field.getName().equals(Form.FIELD_UPDATE_RANK_RESULTS);
+							return field.getName().equals(ProcessPageAdapter.Form.FIELD_UPDATE_RANK_RESULTS);
 						return super.build(data,field);
 					}
 				});
@@ -180,13 +180,14 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 
 					@Override
 					public Boolean build(Object data,Field field) {
-						return ArrayUtils.contains(new String[]{Form.FIELD_CLASSROOMSESSIONDIVISION_MIN_COUNT,Form.FIELD_CLASSROOMSESSIONDIVISION_MAX_COUNT
-								,Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED}, field.getName());
+						return ArrayUtils.contains(new String[]{ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_MIN_COUNT
+								,ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_MAX_COUNT
+								,ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED}, field.getName());
 					}
 					
 					@Override
 					public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Object data,Field field) {
-						if(field.getName().equals(Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED) && timeDivisionTypes.size()==1)
+						if(field.getName().equals(ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED) && timeDivisionTypes.size()==1)
 							return timeDivisionTypes.iterator().next().getName();
 						return super.fiedLabel(controlSet,data, field);
 					}
