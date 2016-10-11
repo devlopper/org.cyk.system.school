@@ -78,8 +78,8 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null
 				,inject(StudentClassroomSessionDivisionBusiness.class))
 			.operate(studentClassroomSessionDivisions, crud);
-		commonUtils.increment(Long.class, studentClassroomSession.getClassroomSession().getResults(), NodeResults.FIELD_NUMBER_OF_STUDENT
-				, Crud.CREATE.equals(crud)?1l:Crud.DELETE.equals(crud)?-1l:0l);
+		commonUtils.increment(Integer.class, studentClassroomSession.getClassroomSession().getResults(), NodeResults.FIELD_NUMBER_OF_STUDENT
+				, Crud.CREATE.equals(crud)?1:Crud.DELETE.equals(crud)?-1:0);
 		classroomSessionDao.update(studentClassroomSession.getClassroomSession());
 	}
 	

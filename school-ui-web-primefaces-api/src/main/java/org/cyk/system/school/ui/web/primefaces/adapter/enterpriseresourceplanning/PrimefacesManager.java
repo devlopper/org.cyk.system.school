@@ -292,8 +292,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		getFormConfiguration(Student.class, Crud.CREATE).addRequiredFieldNames(StudentEditPage.Form.FIELD_CODE)
 		.addFieldNames(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION,StudentEditPage.Form.FIELD_CLASSROOMSESSION,StudentEditPage.Form.FIELD_IMAGE
 				,StudentEditPage.Form.FIELD_NAME,StudentEditPage.Form.FIELD_LAST_NAMES,StudentEditPage.Form.FIELD_BIRTH_DATE,StudentEditPage.Form.FIELD_BIRTH_LOCATION
-				,StudentEditPage.Form.FIELD_NATIONALITY,StudentEditPage.Form.FIELD_SEX,StudentEditPage.Form.FIELD_BLOOD_GROUP,StudentEditPage.Form.FIELD_LANGUAGE_COLLECTION
-				,StudentEditPage.Form.FIELD_REGISTRATION_DATE);
+				,StudentEditPage.Form.FIELD_NATIONALITY,StudentEditPage.Form.FIELD_SEX,StudentEditPage.Form.FIELD_LANGUAGE_COLLECTION
+				,StudentEditPage.Form.FIELD_REGISTRATION_DATE)
+				.addControlSetListener(new StudentDetailsConfiguration.FormControlSetAdapter());
 		
 		getFormConfiguration(Student.class, Crud.UPDATE).addRequiredFieldNames(StudentEditPage.Form.FIELD_CODE)
 		.addFieldNames(StudentEditPage.Form.FIELD_IMAGE,StudentEditPage.Form.FIELD_NAME,StudentEditPage.Form.FIELD_LAST_NAMES
@@ -303,22 +304,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		getFormConfiguration(Student.class, Crud.DELETE).addFieldNames(StudentEditPage.Form.FIELD_CODE,StudentEditPage.Form.FIELD_IMAGE,StudentEditPage.Form.FIELD_NAME
 				,StudentEditPage.Form.FIELD_LAST_NAMES);
 		
-		registerDetailsConfiguration(StudentDetails.class, new DetailsConfiguration(){
-			private static final long serialVersionUID = 1L;
-			@SuppressWarnings("rawtypes")
-			@Override
-			public ControlSetAdapter.Details getFormControlSetAdapter(Class clazz) {
-				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
-					private static final long serialVersionUID = 1L;
-					@Override
-					public Boolean build(Object data,Field field) {
-						return isFieldNameIn(field,StudentDetails.FIELD_CODE,StudentDetails.FIELD_NAME,StudentDetails.FIELD_LASTNAMES,StudentDetails.FIELD_BIRTH_DATE
-								,StudentDetails.FIELD_BIRTH_LOCATION,StudentDetails.FIELD_REGISTRATION_DATE,StudentDetails.FIELD_SEX,StudentDetails.FIELD_BLOOD_GROUP
-								,StudentDetails.FIELD_LANGUAGE_COLLECTION,StudentDetails.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
-					}
-				};
-			}
-		});
+		registerDetailsConfiguration(StudentDetails.class, new StudentDetailsConfiguration());
 	}
 	
 	protected void configureStudentClassroomSessionClass() {
@@ -447,32 +433,18 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		getFormConfiguration(Teacher.class, Crud.CREATE).addRequiredFieldNames(TeacherEditPage.Form.FIELD_CODE)
 		.addFieldNames(TeacherEditPage.Form.FIELD_IMAGE,TeacherEditPage.Form.FIELD_NAME,TeacherEditPage.Form.FIELD_LAST_NAMES
 				,TeacherEditPage.Form.FIELD_BIRTH_DATE,TeacherEditPage.Form.FIELD_BIRTH_LOCATION,TeacherEditPage.Form.FIELD_NATIONALITY,TeacherEditPage.Form.FIELD_SEX
-				,TeacherEditPage.Form.FIELD_BLOOD_GROUP,TeacherEditPage.Form.FIELD_LANGUAGE_COLLECTION,TeacherEditPage.Form.FIELD_REGISTRATION_DATE);
+				,TeacherEditPage.Form.FIELD_LANGUAGE_COLLECTION,TeacherEditPage.Form.FIELD_REGISTRATION_DATE)
+				.addControlSetListener(new TeacherDetailsConfiguration.FormControlSetAdapter());
 		
 		getFormConfiguration(Teacher.class, Crud.UPDATE).addRequiredFieldNames(TeacherEditPage.Form.FIELD_CODE)
 		.addFieldNames(TeacherEditPage.Form.FIELD_IMAGE,TeacherEditPage.Form.FIELD_NAME,TeacherEditPage.Form.FIELD_LAST_NAMES
 				,TeacherEditPage.Form.FIELD_BIRTH_DATE,TeacherEditPage.Form.FIELD_BIRTH_LOCATION,TeacherEditPage.Form.FIELD_NATIONALITY,TeacherEditPage.Form.FIELD_SEX
-				,TeacherEditPage.Form.FIELD_BLOOD_GROUP,TeacherEditPage.Form.FIELD_LANGUAGE_COLLECTION,TeacherEditPage.Form.FIELD_REGISTRATION_DATE);
+				,TeacherEditPage.Form.FIELD_LANGUAGE_COLLECTION,TeacherEditPage.Form.FIELD_REGISTRATION_DATE);
 		
 		getFormConfiguration(Teacher.class, Crud.DELETE).addFieldNames(TeacherEditPage.Form.FIELD_CODE,TeacherEditPage.Form.FIELD_IMAGE,TeacherEditPage.Form.FIELD_NAME
 				,TeacherEditPage.Form.FIELD_LAST_NAMES);
 		
-		registerDetailsConfiguration(TeacherDetails.class, new DetailsConfiguration(){
-			private static final long serialVersionUID = 1L;
-			@SuppressWarnings("rawtypes")
-			@Override
-			public ControlSetAdapter.Details getFormControlSetAdapter(Class clazz) {
-				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
-					private static final long serialVersionUID = 1L;
-					@Override
-					public Boolean build(Object data,Field field) {
-						return isFieldNameIn(field,TeacherDetails.FIELD_CODE,TeacherDetails.FIELD_NAME,TeacherDetails.FIELD_LASTNAMES
-								,TeacherDetails.FIELD_BIRTH_DATE,TeacherDetails.FIELD_BIRTH_LOCATION,TeacherDetails.FIELD_REGISTRATION_DATE
-								,TeacherDetails.FIELD_SEX,TeacherDetails.FIELD_BLOOD_GROUP,TeacherDetails.FIELD_LANGUAGE_COLLECTION);
-					}
-				};
-			}
-		});
+		registerDetailsConfiguration(TeacherDetails.class, new TeacherDetailsConfiguration());
 	}
 	
 	/**/

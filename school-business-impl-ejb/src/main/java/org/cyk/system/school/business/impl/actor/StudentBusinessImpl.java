@@ -57,24 +57,17 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = -1625238619828187690L;
 				
-				/**/
-				
 				@Override
 				public void afterCreate(Student student) {
 					super.afterCreate(student);
-					if(containsCascadeToClass(StudentClassroomSession.class) && student.getStudentClassroomSession()!=null && student.getStudentClassroomSession().getIdentifier()==null){
+					if(containsCascadeToClass(StudentClassroomSession.class) && student.getStudentClassroomSession()!=null && student.getStudentClassroomSession().getClassroomSession()!=null 
+							&& student.getStudentClassroomSession().getIdentifier()==null){
 						student.getStudentClassroomSession().setStudent(student);
 						inject(StudentClassroomSessionBusiness.class).create(student.getStudentClassroomSession());
 					}		
 				}
-				
-				
 			}
-			
 		}
-		
 	}
-
-
 	
 }

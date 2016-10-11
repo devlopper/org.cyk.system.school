@@ -7,6 +7,22 @@
 		<from-view-id>*</from-view-id>
 		
 		<navigation-case>
+			<from-outcome>teacherEditView</from-outcome>
+			<to-view-id>/private/teacher/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>teacherConsultView</from-outcome>
+			<to-view-id>/private/teacher/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>teacherListView</from-outcome>
+			<to-view-id>/private/teacher/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>studentEditView</from-outcome>
 			<to-view-id>/private/student/edit.jsf</to-view-id>
 			<redirect />

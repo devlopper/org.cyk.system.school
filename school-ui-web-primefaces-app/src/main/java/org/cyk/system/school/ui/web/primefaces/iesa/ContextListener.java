@@ -6,16 +6,19 @@ import java.util.Arrays;
 import javax.servlet.ServletContextEvent;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.cyk.system.company.business.impl.adapter.ActorBusinessServiceAdapter;
+import org.cyk.system.company.business.api.sale.CustomerBusiness;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.model.CompanyConstant;
+import org.cyk.system.company.model.sale.Customer;
 import org.cyk.system.company.model.structure.EmploymentAgreement;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
+import org.cyk.system.root.business.api.language.LanguageCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.root.model.party.person.MedicalInformations;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -110,13 +113,13 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				,Tag.class.getPackage(),UserInterface.class.getPackage(),AccountingPeriod.class.getPackage(),Cashier.class.getPackage()
 				,IntangibleProduct.class.getPackage(),Production.class.getPackage(),Sale.class.getPackage(),StockTangibleProductMovement.class.getPackage()});
 		*/
+		
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
 		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();
 		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
     	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
     	
-    	ActorBusinessServiceAdapter.ARE_CUSTOMERS.add(Student.class);
     	SaleConsultPage.SHOW_SALE_PRODUCT_TABLE = Boolean.FALSE;
     	
     	SchoolWebManager.getInstance().getListeners().add(new PrimefacesManager());
@@ -127,6 +130,18 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     		public void afterInstanciateOne(UserAccount userAccount, Student student) {
     			super.afterInstanciateOne(userAccount, student);
     			student.setStudentClassroomSession(new StudentClassroomSession(student, null));
+    			student.getPerson().getExtendedInformations().setLanguageCollection(inject(LanguageCollectionBusiness.class).instanciateOne(userAccount));
+				student.getPerson().setMedicalInformations(new MedicalInformations(student.getPerson()));
+    		}
+    		
+    		@Override
+    		public void afterCreate(Student student) {
+    			super.afterCreate(student);
+    			Customer customer = new Customer();
+    			customer.setPerson(student.getPerson());
+    			customer.setCode(student.getCode());
+    			customer.setName(student.getName());
+    			inject(CustomerBusiness.class).create(customer);
     		}
     	};
     	studentListener.addCascadeToClass(StudentClassroomSession.class)

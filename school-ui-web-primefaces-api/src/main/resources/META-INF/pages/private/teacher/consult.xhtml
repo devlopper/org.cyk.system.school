@@ -10,10 +10,10 @@
       xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
 
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
- 		<ui:param name="pageController" value="#{studentConsultPage}" />
+ 		<ui:param name="pageController" value="#{teacherConsultPage}" />
  		<ui:define name="body">
  			<ui:include src="/org.cyk.ui.web.primefaces/include/person/consulttabs.xhtml">
- 				<ui:param name="personConsultPage" value="#{studentConsultPage}"/>
+ 				<ui:param name="personConsultPage" value="#{teacherConsultPage}"/>
  			</ui:include>
  		</ui:define>
  	</ui:decorate>
