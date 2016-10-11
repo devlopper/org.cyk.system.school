@@ -6,10 +6,8 @@ import java.util.Arrays;
 import javax.servlet.ServletContextEvent;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.cyk.system.company.business.api.sale.CustomerBusiness;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.model.CompanyConstant;
-import org.cyk.system.company.model.sale.Customer;
 import org.cyk.system.company.model.structure.EmploymentAgreement;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
 import org.cyk.system.root.business.api.language.LanguageCollectionBusiness;
@@ -137,11 +135,12 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     		@Override
     		public void afterCreate(Student student) {
     			super.afterCreate(student);
-    			Customer customer = new Customer();
+    			/*Customer customer = new Customer();
     			customer.setPerson(student.getPerson());
     			customer.setCode(student.getCode());
     			customer.setName(student.getName());
     			inject(CustomerBusiness.class).create(customer);
+    			*/
     		}
     	};
     	studentListener.addCascadeToClass(StudentClassroomSession.class)
