@@ -7,25 +7,29 @@ import javax.servlet.ServletContextEvent;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
-import org.cyk.system.company.model.CompanyConstant;
-import org.cyk.system.company.model.structure.EmploymentAgreement;
+import org.cyk.system.company.business.impl.structure.EmployeeDetails;
+import org.cyk.system.company.model.structure.Employee;
+import org.cyk.system.company.ui.web.primefaces.adapter.enterpriseresourceplanning.EmployeeBusinessAdapter;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
-import org.cyk.system.root.business.api.language.LanguageCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
+import org.cyk.system.root.business.impl.party.person.PersonDetails;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
-import org.cyk.system.root.model.party.person.MedicalInformations;
-import org.cyk.system.root.model.security.UserAccount;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
+import org.cyk.system.school.business.impl.actor.StudentDetails;
+import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
+import org.cyk.system.school.business.impl.actor.TeacherDetails;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
-import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -41,7 +45,11 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.ui.web.primefaces.AbstractSchoolContextListener;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
+import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.StudentBusinessAdapter;
+import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.TeacherBusinessAdapter;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
+import org.cyk.ui.api.AbstractWindow;
+import org.cyk.ui.api.AbstractWindow.WindowInstanceManager;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
@@ -106,12 +114,6 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
-		//System.out.println("#########################          ContextListener.contextInitialized()           ###################################");
-		/*AbstractTypedDao.Configuration.disallowAll(new Package[]{Event.class.getPackage()
-				,Tag.class.getPackage(),UserInterface.class.getPackage(),AccountingPeriod.class.getPackage(),Cashier.class.getPackage()
-				,IntangibleProduct.class.getPackage(),Production.class.getPackage(),Sale.class.getPackage(),StockTangibleProductMovement.class.getPackage()});
-		*/
-		
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
 		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();
@@ -122,37 +124,9 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	
     	SchoolWebManager.getInstance().getListeners().add(new PrimefacesManager());
     	
-    	StudentBusinessImpl.Listener.Adapter studentListener = new StudentBusinessImpl.Listener.Adapter.Default(){
-			private static final long serialVersionUID = 1L;
-    		@Override
-    		public void afterInstanciateOne(UserAccount userAccount, Student student) {
-    			super.afterInstanciateOne(userAccount, student);
-    			student.setStudentClassroomSession(new StudentClassroomSession(student, null));
-    			student.getPerson().getExtendedInformations().setLanguageCollection(inject(LanguageCollectionBusiness.class).instanciateOne(userAccount));
-				student.getPerson().setMedicalInformations(new MedicalInformations(student.getPerson()));
-    		}
-    		
-    		@Override
-    		public void afterCreate(Student student) {
-    			super.afterCreate(student);
-    			/*Customer customer = new Customer();
-    			customer.setPerson(student.getPerson());
-    			customer.setCode(student.getCode());
-    			customer.setName(student.getName());
-    			inject(CustomerBusiness.class).create(customer);
-    			*/
-    		}
-    	};
-    	studentListener.addCascadeToClass(StudentClassroomSession.class)
-    		.addCascadeToReportTemplateCodes(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,
-    				SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE);
-    	StudentBusinessImpl.Listener.COLLECTION.add(studentListener);
-    	
-    	EmployeeBusinessImpl.Listener employeeListener = new EmployeeBusinessImpl.Listener.Adapter.Default();
-		employeeListener.addCascadeToClass(EmploymentAgreement.class)
-		.addCascadeToReportTemplateCodes(CompanyConstant.REPORT_EMPLOYEE_EMPLOYMENT_CONTRACT,
-				CompanyConstant.REPORT_EMPLOYEE_EMPLOYMENT_CERTIFICATE,CompanyConstant.REPORT_EMPLOYEE_WORK_CERTIFICATE);
-		EmployeeBusinessImpl.Listener.COLLECTION.add(employeeListener);
+    	StudentBusinessImpl.Listener.COLLECTION.add(new StudentBusinessAdapter());
+    	TeacherBusinessImpl.Listener.COLLECTION.add(new TeacherBusinessAdapter());
+    	EmployeeBusinessImpl.Listener.COLLECTION.add(new EmployeeBusinessAdapter());
     	
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, AcademicSession.class);
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, AcademicSession.class);
@@ -183,6 +157,37 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, StudentClassroomSessionDivisionSubject.class);
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, StudentClassroomSessionDivisionSubject.class);
+		
+		AbstractWindow.WindowInstanceManager.INSTANCE = new WindowInstanceManager(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Boolean isShowDetails(Class<?> detailsClass,AbstractIdentifiable identifiable,AbstractWindow<?, ?, ?, ?, ?, ?> window) {
+				if(identifiable instanceof Person){
+					return ArrayUtils.contains(new Class<?>[]{PersonDetails.class}, detailsClass);
+				}
+				if(identifiable instanceof Employee){
+					return ArrayUtils.contains(new Class<?>[]{EmployeeDetails.class}, detailsClass);
+				}
+				if(identifiable instanceof Student){
+					return ArrayUtils.contains(new Class<?>[]{StudentDetails.class}, detailsClass);
+				}
+				if(identifiable instanceof Teacher){
+					return ArrayUtils.contains(new Class<?>[]{TeacherDetails.class}, detailsClass);
+				}
+				/*
+				if(MedicalDetails.class.equals(detailsClass) || MedicalInformationsAllergyDetails.class.equals(detailsClass) 
+						|| MedicalInformationsMedicationDetails.class.equals(detailsClass))
+					return Boolean.FALSE;
+				if(PersonRelationshipDetails.class.equals(detailsClass))
+					return Boolean.FALSE;
+				if(SignatureDetails.class.equals(detailsClass) && identifiable instanceof Person)
+					return Boolean.FALSE;
+				if(JobDetails.class.equals(detailsClass) && identifiable instanceof Actor)
+					return Boolean.FALSE;
+					*/
+				return super.isShowDetails(detailsClass, identifiable,window);
+			}
+		};
 	}
 		
 	/**/

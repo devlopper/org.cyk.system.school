@@ -49,7 +49,7 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 		
 		/**/
 
-		public static class Adapter extends org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl.Listener.Adapter<Student> implements Listener, Serializable {
+		public static class Adapter extends org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl.Listener.Adapter.Default<Student> implements Listener, Serializable {
 			private static final long serialVersionUID = -1625238619828187690L;
 			
 			/**/

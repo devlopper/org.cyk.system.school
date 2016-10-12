@@ -25,6 +25,11 @@ public class TeacherBusinessImpl extends AbstractActorBusinessImpl<Teacher, Teac
 	public TeacherBusinessImpl(TeacherDao dao) {
 		super(dao);  
 	}
+	
+	@Override
+	protected Collection<? extends org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl.Listener<?>> getListeners() {
+		return Listener.COLLECTION;
+	}
 
 	/**/
 
@@ -34,7 +39,7 @@ public class TeacherBusinessImpl extends AbstractActorBusinessImpl<Teacher, Teac
 		
 		/**/
 
-		public static class Adapter extends org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl.Listener.Adapter<Teacher> implements Listener, Serializable {
+		public static class Adapter extends org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl.Listener.Adapter.Default<Teacher> implements Listener, Serializable {
 			private static final long serialVersionUID = -1625238619828187690L;
 			
 			/**/
