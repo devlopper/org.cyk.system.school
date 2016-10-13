@@ -3,8 +3,11 @@ package org.cyk.system.school.ui.web.primefaces.iesa;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.ui.web.primefaces.iesa.ContextListener.StudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.web.primefaces.Table.ColumnAdapter;
@@ -15,6 +18,10 @@ import org.cyk.ui.web.primefaces.page.DetailsConfiguration;
 public class PrimefacesManager extends org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.PrimefacesManager implements Serializable {
 
 	private static final long serialVersionUID = -8716834916609095637L;
+	
+	public PrimefacesManager() {
+		getFormConfiguration(Student.class, Crud.CREATE).deleteRequiredFieldNames(StudentEditPage.Form.FIELD_CODE);
+	}
 	
 	@Override
 	public SystemMenu getSystemMenu(UserSession userSession) {

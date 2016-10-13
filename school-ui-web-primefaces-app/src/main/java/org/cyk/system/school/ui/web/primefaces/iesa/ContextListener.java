@@ -6,6 +6,7 @@ import java.util.Arrays;
 import javax.servlet.ServletContextEvent;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeDetails;
 import org.cyk.system.company.model.structure.Employee;
@@ -14,12 +15,20 @@ import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
+import org.cyk.system.root.business.impl.geography.ContactCollectionDetails;
+import org.cyk.system.root.business.impl.party.person.JobDetails;
+import org.cyk.system.root.business.impl.party.person.MedicalDetails;
+import org.cyk.system.root.business.impl.party.person.MedicalInformationsAllergyDetails;
+import org.cyk.system.root.business.impl.party.person.MedicalInformationsMedicationDetails;
 import org.cyk.system.root.business.impl.party.person.PersonDetails;
+import org.cyk.system.root.business.impl.party.person.PersonRelationshipDetails;
+import org.cyk.system.root.business.impl.party.person.SignatureDetails;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
@@ -49,7 +58,8 @@ import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplannin
 import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.TeacherBusinessAdapter;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.ui.api.AbstractWindow;
-import org.cyk.ui.api.AbstractWindow.WindowInstanceManager;
+import org.cyk.ui.web.primefaces.page.AbstractPrimefacesPage.PageInstanceManager;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
@@ -124,7 +134,17 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	
     	SchoolWebManager.getInstance().getListeners().add(new PrimefacesManager());
     	
-    	StudentBusinessImpl.Listener.COLLECTION.add(new StudentBusinessAdapter());
+    	StudentBusinessImpl.Listener.COLLECTION.add(new StudentBusinessAdapter(){
+    		private static final long serialVersionUID = 1L;
+
+			@Override
+			public void beforeCreate(Student student) {
+				super.beforeCreate(student);
+				if(StringUtils.isBlank(student.getCode()))
+					student.setCode("IESA/"+inject(AcademicSessionBusiness.class).findCurrent(null).getBirthDate().getYear()+"/"+StringUtils.substring(student.getName(),0,3).toUpperCase()+Constant.CHARACTER_UNDESCORE
+							+StringUtils.substring(student.getPerson().getLastnames(),0,2).toUpperCase());
+			}
+    	});
     	TeacherBusinessImpl.Listener.COLLECTION.add(new TeacherBusinessAdapter());
     	EmployeeBusinessImpl.Listener.COLLECTION.add(new EmployeeBusinessAdapter());
     	
@@ -158,33 +178,23 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, StudentClassroomSessionDivisionSubject.class);
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, StudentClassroomSessionDivisionSubject.class);
 		
-		AbstractWindow.WindowInstanceManager.INSTANCE = new WindowInstanceManager(){
+		AbstractWindow.WindowInstanceManager.INSTANCE = new PageInstanceManager(){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Boolean isShowDetails(Class<?> detailsClass,AbstractIdentifiable identifiable,AbstractWindow<?, ?, ?, ?, ?, ?> window) {
 				if(identifiable instanceof Person){
-					return ArrayUtils.contains(new Class<?>[]{PersonDetails.class}, detailsClass);
+					return isClassIn(detailsClass,PersonDetails.class,ContactCollectionDetails.class,JobDetails.class);
 				}
 				if(identifiable instanceof Employee){
-					return ArrayUtils.contains(new Class<?>[]{EmployeeDetails.class}, detailsClass);
+					return isClassIn(detailsClass,EmployeeDetails.class,ContactCollectionDetails.class,SignatureDetails.class);
 				}
 				if(identifiable instanceof Student){
-					return ArrayUtils.contains(new Class<?>[]{StudentDetails.class}, detailsClass);
+					return isClassIn(detailsClass,StudentDetails.class,ContactCollectionDetails.class,MedicalDetails.class,MedicalInformationsMedicationDetails.class
+							,MedicalInformationsAllergyDetails.class,PersonRelationshipDetails.class);
 				}
 				if(identifiable instanceof Teacher){
-					return ArrayUtils.contains(new Class<?>[]{TeacherDetails.class}, detailsClass);
+					return isClassIn(detailsClass,TeacherDetails.class,ContactCollectionDetails.class,SignatureDetails.class);
 				}
-				/*
-				if(MedicalDetails.class.equals(detailsClass) || MedicalInformationsAllergyDetails.class.equals(detailsClass) 
-						|| MedicalInformationsMedicationDetails.class.equals(detailsClass))
-					return Boolean.FALSE;
-				if(PersonRelationshipDetails.class.equals(detailsClass))
-					return Boolean.FALSE;
-				if(SignatureDetails.class.equals(detailsClass) && identifiable instanceof Person)
-					return Boolean.FALSE;
-				if(JobDetails.class.equals(detailsClass) && identifiable instanceof Actor)
-					return Boolean.FALSE;
-					*/
 				return super.isShowDetails(detailsClass, identifiable,window);
 			}
 		};
