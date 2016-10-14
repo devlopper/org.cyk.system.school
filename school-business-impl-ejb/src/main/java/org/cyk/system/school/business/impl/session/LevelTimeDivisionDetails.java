@@ -10,16 +10,14 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class LevelTimeDivisionDetails extends AbstractOutputDetails<LevelTimeDivision> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private String level,timeDivisionType,index;
+	@Input @InputText private String level,timeDivisionType;
 		
 	public LevelTimeDivisionDetails(LevelTimeDivision levelTimeDivision) {
 		super(levelTimeDivision);
 		level = formatUsingBusiness(levelTimeDivision.getLevel());
 		timeDivisionType = formatUsingBusiness(levelTimeDivision.getTimeDivisionType());
-		index = levelTimeDivision.getOrderNumber()+"";
 	}
 	
 	public static final String FIELD_LEVEL = "level";
 	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
-	public static final String FIELD_INDEX = "index";
 }

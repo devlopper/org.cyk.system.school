@@ -12,8 +12,11 @@ import org.cyk.system.company.business.impl.structure.EmployeeDetails;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.company.ui.web.primefaces.adapter.enterpriseresourceplanning.EmployeeBusinessAdapter;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
+import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
+import org.cyk.system.root.business.api.party.person.PersonBusiness;
+import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.geography.ContactCollectionDetails;
 import org.cyk.system.root.business.impl.party.person.JobDetails;
@@ -51,6 +54,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
+import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.ui.web.primefaces.AbstractSchoolContextListener;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
@@ -140,9 +144,14 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 			@Override
 			public void beforeCreate(Student student) {
 				super.beforeCreate(student);
-				if(StringUtils.isBlank(student.getCode()))
-					student.setCode("IESA/"+inject(AcademicSessionBusiness.class).findCurrent(null).getBirthDate().getYear()+"/"+StringUtils.substring(student.getName(),0,3).toUpperCase()+Constant.CHARACTER_UNDESCORE
-							+StringUtils.substring(student.getPerson().getLastnames(),0,2).toUpperCase());
+				if(StringUtils.isBlank(student.getCode())){
+					NumberBusiness.FormatArguments orderNumberFormatArguments = new FormatArguments();
+					orderNumberFormatArguments.setWidth(4);
+					student.setCode("IESA"+Constant.CHARACTER_SLASH+inject(TimeBusiness.class).findYear(inject(AcademicSessionBusiness.class).findCurrent(null).getBirthDate())
+							+inject(PersonBusiness.class).findInitials(student.getPerson())+inject(NumberBusiness.class).format(inject(StudentDao.class).countAll()+1,orderNumberFormatArguments)
+							+Constant.CHARACTER_HYPHEN+student.getAdmissionLevelTimeDivision().getLevel().getGroup().getCode()
+							);
+				}
 			}
     	});
     	TeacherBusinessImpl.Listener.COLLECTION.add(new TeacherBusinessAdapter());

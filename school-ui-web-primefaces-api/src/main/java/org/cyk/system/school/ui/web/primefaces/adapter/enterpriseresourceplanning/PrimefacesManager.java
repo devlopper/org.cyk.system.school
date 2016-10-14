@@ -38,6 +38,7 @@ import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
 import org.cyk.ui.api.command.menu.SystemMenu;
@@ -109,8 +110,11 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	}
 	
 	protected void configureLevelTimeDivisionClass() {
-		getFormConfiguration(LevelTimeDivision.class, Crud.READ).addFieldNames(LevelTimeDivisionDetails.FIELD_LEVEL,LevelTimeDivisionDetails.FIELD_TIME_DIVISION_TYPE
-				,LevelTimeDivisionDetails.FIELD_INDEX);
+		getFormConfiguration(LevelTimeDivision.class, Crud.UPDATE).addFieldNames(LevelTimeDivisionEditPage.Form.FIELD_CODE,LevelTimeDivisionEditPage.Form.FIELD_LEVEL
+				,LevelTimeDivisionEditPage.Form.FIELD_TIME_DIVISION_TYPE,LevelTimeDivisionEditPage.Form.FIELD_ORDER_NUMBER);
+		
+		getFormConfiguration(LevelTimeDivision.class, Crud.READ).addFieldNames(LevelTimeDivisionDetails.FIELD_CODE,LevelTimeDivisionDetails.FIELD_LEVEL
+				,LevelTimeDivisionDetails.FIELD_TIME_DIVISION_TYPE,LevelTimeDivisionDetails.FIELD_ORDER_NUMBER);
 		
 		registerDetailsConfiguration(LevelTimeDivisionDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
@@ -122,8 +126,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(data instanceof LevelTimeDivisionDetails)
-							return isFieldNameIn(field,LevelTimeDivisionDetails.FIELD_LEVEL,LevelTimeDivisionDetails.FIELD_TIME_DIVISION_TYPE
-									,LevelTimeDivisionDetails.FIELD_INDEX);
+							return isFieldNameIn(field,LevelTimeDivisionDetails.FIELD_CODE,LevelTimeDivisionDetails.FIELD_LEVEL
+									,LevelTimeDivisionDetails.FIELD_TIME_DIVISION_TYPE,LevelTimeDivisionDetails.FIELD_ORDER_NUMBER);
 						return Boolean.FALSE;
 					}
 				};
