@@ -226,8 +226,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 						test2 = numberBusiness.format(studentSubjectEvaluation.getValue());
 					else if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Exam"))
 						exam = numberBusiness.format(studentSubjectEvaluation.getValue());
-				}
-					
+				}					
 			}
 		}
 		public static final String FIELD_TEST1 = "test1";
