@@ -3,17 +3,11 @@ package org.cyk.system.school.business.impl.iesa;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
-import org.cyk.system.company.model.CompanyConstant;
-import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
-import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
-import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionInfos;
-import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.StudentClassroomSession;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.EvaluationType;
 
 public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
