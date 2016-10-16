@@ -273,7 +273,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					public Boolean build(Object data,Field field) {
 						if(data instanceof ClassroomSessionDivisionSubjectEvaluationTypeDetails)
 							return isFieldNameIn(field,ClassroomSessionDivisionSubjectEvaluationTypeDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
-									,ClassroomSessionDivisionSubjectEvaluationTypeDetails.FIELD_COEFFICIENT);
+									,ClassroomSessionDivisionSubjectEvaluationTypeDetails.FIELD_WEIGHT);
 						return Boolean.FALSE;
 					}
 				};
@@ -285,7 +285,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field, ClassroomSessionDivisionSubjectEvaluationTypeDetails.FIELD_COEFFICIENT);
+						return isFieldNameIn(field, ClassroomSessionDivisionSubjectEvaluationTypeDetails.FIELD_WEIGHT);
 					}
 				};
 			}

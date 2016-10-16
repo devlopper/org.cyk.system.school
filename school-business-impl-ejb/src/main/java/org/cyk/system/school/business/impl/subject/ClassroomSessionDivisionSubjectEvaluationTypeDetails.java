@@ -15,12 +15,10 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeDetails extends Abstra
 	public ClassroomSessionDivisionSubjectEvaluationTypeDetails(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 		super(classroomSessionDivisionSubjectEvaluationType);
 		classroomSessionDivisionSubject = formatUsingBusiness(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
-		coefficient = formatNumber(classroomSessionDivisionSubjectEvaluationType.getWeight());
 		maximum = formatNumber(classroomSessionDivisionSubjectEvaluationType.getWeight());
 	}
 	
 	public static final String FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT = "classroomSessionDivisionSubject";
-	public static final String FIELD_COEFFICIENT = "coefficient";
 	public static final String FIELD_MAXIMUM = "maximum";
 	
 }

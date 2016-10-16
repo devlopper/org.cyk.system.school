@@ -10,12 +10,12 @@ import lombok.Setter;
 
 import org.cyk.system.company.business.api.CompanyReportProducer;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 
 public interface SchoolReportProducer extends CompanyReportProducer {
 
-	StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
+	StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
 			StudentClassroomSessionDivisionReportParameters parameters);
 	
 	String getEvaluationTypeCode(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation);

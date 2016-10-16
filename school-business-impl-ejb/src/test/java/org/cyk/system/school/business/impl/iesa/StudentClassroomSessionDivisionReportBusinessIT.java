@@ -1,12 +1,19 @@
 package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.LinkedHashSet;
 
+import org.cyk.system.company.model.CompanyConstant;
+import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
+import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
+import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionInfos;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.EvaluationType;
 
 public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
@@ -19,7 +26,8 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	//schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1","STUD2","STUD3","STUD4","STUD5"});
+    	inject(StudentBusiness.class).create(
+    			inject(StudentBusiness.class).instanciateManyRandomly(new LinkedHashSet<String>(Arrays.asList("STUD1","STUD2","STUD3","STUD4","STUD5"))));
     	
     	//schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
     	//		dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
@@ -61,8 +69,15 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	              //,{"STUD4","45","45","80"}
     	              //,{"STUD5","20","95","55"}
     	    	}}
-    	},Boolean.TRUE,Boolean.TRUE,Boolean.FALSE,Boolean.TRUE);
+    	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     	
+    	/*StudentClassroomSessionDivision studentClassroomSessionDivision = inject(StudentClassroomSessionDivisionBusiness.class).findByStudentByClassroomSessionDivision(
+    			inject(StudentBusiness.class).find("STUD1"), classroomSessionDivisionInfos.getClassroomSessionDivision());
+    	CreateReportFileArguments<StudentClassroomSessionDivision> arguments = 
+    			new CreateReportFileArguments<StudentClassroomSessionDivision>(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET, studentClassroomSessionDivision);
+    	inject(StudentClassroomSessionDivisionBusiness.class).createReportFile(studentClassroomSessionDivision, arguments);
+    	*/
+    	/*
     	classroomSessionDivisionInfos = dataProducer.getG1().division(1);
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), new Object[][]{
     		new Object[]{classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{
@@ -84,19 +99,19 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	              //,{"STUD5","20","95","55"}
     	    	}}
     	},Boolean.TRUE,Boolean.TRUE,Boolean.FALSE,Boolean.TRUE);
-    	
+    	*/
     	
     	inject(StudentClassroomSessionBusiness.class).updateAverage(Arrays.asList(dataProducer.getG1().getClassroomSession()), new BusinessServiceCallArguments<StudentClassroomSession>());
     	inject(StudentClassroomSessionBusiness.class).updateRank(Arrays.asList(dataProducer.getG1().getClassroomSession()), 
     			schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
-    	
+    	/*
     	StudentClassroomSession.SearchCriteria searchCriteria = new StudentClassroomSession.SearchCriteria();
     	searchCriteria.getDivisionCount().setLowest(2);
     	searchCriteria.getDivisionCount().setHighest(3);
 		searchCriteria.getDivisionIndexesRequired().add(2);
 		Collection<StudentClassroomSession> studentClassroomSessions = inject(StudentClassroomSessionBusiness.class).findByCriteria(searchCriteria);
     	System.out.println("SEARCH : "+studentClassroomSessions.size()+" / " +studentClassroomSessions);
-    	
+    	*/
     	//classroomSessionDivisionInfos = dataProducer.getG1().division(2);
     	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), /*new Object[][]{
     	//	new Object[]{classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{

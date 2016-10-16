@@ -15,7 +15,7 @@ import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFileConfigurat
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 
@@ -36,10 +36,10 @@ public class SchoolReportRepository extends AbstractReportRepository implements 
 	
 	@Override
 	public void build() {        	
-		registerConfiguration(new ReportBasedOnTemplateFileConfiguration<StudentClassroomSessionDivision, ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport>>(reportStudentClassroomSessionDivision) {
+		registerConfiguration(new ReportBasedOnTemplateFileConfiguration<StudentClassroomSessionDivision, ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReportTemplateFile>>(reportStudentClassroomSessionDivision) {
 			@SuppressWarnings("unchecked")
 			@Override
-			public <MODEL> ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> build(Class<MODEL> arg0, Collection<MODEL> models, String arg2,Boolean arg3, Map<String, String[]> arg4) {
+			public <MODEL> ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReportTemplateFile> build(Class<MODEL> arg0, Collection<MODEL> models, String arg2,Boolean arg3, Map<String, String[]> arg4) {
 				return inject(StudentClassroomSessionDivisionBusiness.class).findReport((Collection<StudentClassroomSessionDivision>) models);
 			}
 		});

@@ -18,7 +18,7 @@ public class StudentClassroomSessionDivisionSubjectReport extends AbstractGenera
 
 	private static final long serialVersionUID = 7672451415743549818L;
 
-	private StudentClassroomSessionDivisionReport studentClassroomSessionDivision;
+	private StudentClassroomSessionDivisionReportTemplateFile studentClassroomSessionDivision;
 	private ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject;
 	
 	private String average,averageCoefficiented,rank;
@@ -26,7 +26,7 @@ public class StudentClassroomSessionDivisionSubjectReport extends AbstractGenera
 	private List<String> marks = new ArrayList<>();
 	private ActorReport teacher = new ActorReport();
 	
-	public StudentClassroomSessionDivisionSubjectReport(StudentClassroomSessionDivisionReport studentClassroomSessionDivision,ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject) {
+	public StudentClassroomSessionDivisionSubjectReport(StudentClassroomSessionDivisionReportTemplateFile studentClassroomSessionDivision,ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject) {
 		super();
 		this.studentClassroomSessionDivision = studentClassroomSessionDivision;
 		this.classroomSessionDivisionSubject = classroomSessionDivisionSubject;

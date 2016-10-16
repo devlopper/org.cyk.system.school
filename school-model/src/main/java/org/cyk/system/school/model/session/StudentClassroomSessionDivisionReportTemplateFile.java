@@ -17,11 +17,11 @@ import org.cyk.system.root.model.party.person.ActorReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 
 @Getter @Setter @NoArgsConstructor
-public class StudentClassroomSessionDivisionReport extends AbstractReportTemplateFile<StudentClassroomSessionDivisionReport> implements Serializable {
+public class StudentClassroomSessionDivisionReportTemplateFile extends AbstractReportTemplateFile<StudentClassroomSessionDivisionReportTemplateFile> implements Serializable {
 
 	private static final long serialVersionUID = -6025941646465245555L;
 	
-	private String name,attendedTime,missedTime,missedTimeJustified,average,averageScale,averagePromotionScale,rank,totalAverage,totalCoefficient,totalAverageCoefficiented,footer,
+	private String name,attendedTime,missedTime,missedTimeJustified,average,averageScale,averagePromotionScale,rank,totalAverage,totalCoefficient,totalAverageCoefficiented,
 		comments,subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
 	private List<String> markTotals = new ArrayList<>();
 	private List<BigDecimal> tempMarkTotals = new ArrayList<>();
@@ -92,7 +92,7 @@ public class StudentClassroomSessionDivisionReport extends AbstractReportTemplat
 		
 	}
 	
-	public StudentClassroomSessionDivisionReport addSubjectsTableColumnNames(String...names){
+	public StudentClassroomSessionDivisionReportTemplateFile addSubjectsTableColumnNames(String...names){
 		subjectsTableColumnNames.addAll(Arrays.asList(names));
 		return this;
 	}

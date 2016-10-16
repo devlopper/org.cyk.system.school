@@ -2,21 +2,29 @@ package org.cyk.system.school.business.impl.iesa;
 
 import javax.inject.Inject;
 
-import net.sf.jasperreports.engine.design.JasperDesign;
-
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.markuplanguage.MarkupLanguageBusiness;
+import org.cyk.system.root.business.api.mathematics.NumberBusiness;
+import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
+import org.cyk.system.root.business.api.party.person.PersonBusiness;
+import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.business.impl.file.report.jasper.JasperReportBusinessImpl;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.security.UserAccount;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.subject.Evaluation;
+import org.cyk.system.school.persistence.api.actor.StudentDao;
+import org.cyk.utility.common.Constant;
+
+import net.sf.jasperreports.engine.design.JasperDesign;
 
 public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
 
@@ -38,6 +46,19 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     			super.afterInstanciateOne(userAccount, student);
     			student.setStudentClassroomSession(new StudentClassroomSession(student, null));
     		}
+    		
+    		@Override
+			public void beforeCreate(Student student) {
+				super.beforeCreate(student);
+				if(StringUtils.isBlank(student.getCode())){
+					NumberBusiness.FormatArguments orderNumberFormatArguments = new FormatArguments();
+					orderNumberFormatArguments.setWidth(4);
+					student.setCode("IESA"+Constant.CHARACTER_SLASH+inject(TimeBusiness.class).findYear(inject(AcademicSessionBusiness.class).findCurrent(null).getBirthDate())
+							+inject(PersonBusiness.class).findInitials(student.getPerson())+inject(NumberBusiness.class).format(inject(StudentDao.class).countAll()+1,orderNumberFormatArguments)
+							+Constant.CHARACTER_HYPHEN+student.getAdmissionLevelTimeDivision().getLevel().getGroup().getCode()
+							);
+				}
+			}
     	};
     	listener.addCascadeToClass(StudentClassroomSession.class);
     	StudentBusinessImpl.Listener.COLLECTION.add(listener);
@@ -47,8 +68,8 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     		@Override
     		public Boolean isJrxmlProcessable(ReportBasedOnTemplateFile<?> aReport) {
     			Object object = aReport.getDataSource().iterator().next();
-    			if(object instanceof StudentClassroomSessionDivisionReport){
-    				StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport = (StudentClassroomSessionDivisionReport) object;
+    			if(object instanceof StudentClassroomSessionDivisionReportTemplateFile){
+    				StudentClassroomSessionDivisionReportTemplateFile studentClassroomSessionDivisionReport = (StudentClassroomSessionDivisionReportTemplateFile) object;
     				return !Boolean.TRUE.equals(((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getStudentRankable());
     			}
     			return super.isJrxmlProcessable(aReport);
@@ -66,8 +87,8 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     		public void processDesign(ReportBasedOnTemplateFile<?> aReport,JasperDesign jasperDesign) {
     			super.processDesign(aReport,jasperDesign);
     			Object object = aReport.getDataSource().iterator().next();
-    			if(object instanceof StudentClassroomSessionDivisionReport){
-    				StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport = (StudentClassroomSessionDivisionReport) object;
+    			if(object instanceof StudentClassroomSessionDivisionReportTemplateFile){
+    				StudentClassroomSessionDivisionReportTemplateFile studentClassroomSessionDivisionReport = (StudentClassroomSessionDivisionReportTemplateFile) object;
     				
     				//((JRDesignExpression)jasperDesign.getParametersMap().get(SchoolConstant.REPORT_CYK_GLOBAL_RANKABLE).getDefaultValueExpression())
     				//	.setText(((StudentClassroomSessionDivision)studentClassroomSessionDivisionReport.getSource()).getClassroomSessionDivision().getStudentSubjectRankable().toString());

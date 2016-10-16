@@ -34,7 +34,7 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
@@ -56,6 +56,11 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				return StudentReportTemplateFile.class;
 		}
 		
+		if(identifiable instanceof StudentClassroomSessionDivision){
+			if(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET.equals(reportTemplateCode))
+				return StudentClassroomSessionDivisionReportTemplateFile.class;
+		}
+		
 		return super.getReportTemplateFileClass(identifiable, reportTemplateCode);
 	}
 	
@@ -65,6 +70,14 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		if(StudentReportTemplateFile.class.equals(reportClass)){
 			if(identifiable instanceof Student)
 				return (REPORT) produceStudentReport((Student)identifiable);
+		}
+		
+		if(StudentClassroomSessionDivisionReportTemplateFile.class.equals(reportClass)){
+			if(identifiable instanceof StudentClassroomSessionDivision){
+				StudentClassroomSessionDivisionReportParameters parameters = 
+						new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
+				return (REPORT) produceStudentClassroomSessionDivisionReport((StudentClassroomSessionDivision)identifiable,parameters);
+			}
 		}
 		
 		return super.produce(reportClass, identifiable);
@@ -82,9 +95,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	@Override
-	public StudentClassroomSessionDivisionReport produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
+	public StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
 			StudentClassroomSessionDivisionReportParameters parameters) {
-		StudentClassroomSessionDivisionReport r = new StudentClassroomSessionDivisionReport();
+		StudentClassroomSessionDivisionReportTemplateFile r = new StudentClassroomSessionDivisionReportTemplateFile();
 		r.setSource(studentClassroomSessionDivision);
 		
 		Student student = studentClassroomSessionDivision.getStudent();
@@ -139,6 +152,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired())){
 			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
+			debug(s.getResults().getEvaluationSort());
 			r.setAverageScale(inject(IntervalBusiness.class).findRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
 			r.setRank(inject(MathematicsBusiness.class).format(s.getResults().getEvaluationSort().getRank()));
 			r.setAveragePromotionScale(inject(IntervalBusiness.class).findRelativeCode(s.getResults().getEvaluationSort().getAveragePromotedInterval()));
@@ -172,7 +186,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		return r;
 	}
 	
-	protected void processStudentSubjects(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
+	protected void processStudentSubjects(StudentClassroomSessionDivisionReportTemplateFile r,StudentClassroomSessionDivision s,StudentClassroomSessionDivisionReportParameters parameters){
 		//Collection<StudentSubject> studentSubjects = s.getDetails();
 		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = inject(StudentClassroomSessionDivisionSubjectDao.class).readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
 		Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations = inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).readByStudentByClassroomSessionDivision(s.getStudent(), s.getClassroomSessionDivision());
@@ -250,7 +264,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		return value;
 	}
 	
-	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReport r,StudentClassroomSessionDivisionReportParameters parameters){
+	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReportTemplateFile r,StudentClassroomSessionDivisionReportParameters parameters){
 		
 	}
 	

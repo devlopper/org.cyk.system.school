@@ -5,16 +5,16 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.cyk.system.root.model.AbstractSampleData;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.utility.common.generator.RandomDataProvider;
 
 public class IesaSampleData extends AbstractSampleData implements Serializable {
 
 	private static final long serialVersionUID = -1887987316565799879L;
 	
-	public static Collection<StudentClassroomSessionDivisionReport> createStudentClassroomSessionDivisionReportsForOtherGrade(){
-		Collection<StudentClassroomSessionDivisionReport> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReport.class, 1);
-		StudentClassroomSessionDivisionReport report = collection.iterator().next();
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForOtherGrade(){
+		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
+		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		
 		report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 				{"Formname(s)", report.getStudent().getPerson().getNames()}
@@ -89,9 +89,9 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		return collection;
 	}
 	
-	public static Collection<StudentClassroomSessionDivisionReport> createStudentClassroomSessionDivisionReportsForPreKinderGarten(){
-		Collection<StudentClassroomSessionDivisionReport> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReport.class, 1);
-		StudentClassroomSessionDivisionReport report = collection.iterator().next();
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForPreKinderGarten(){
+		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
+		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
@@ -155,9 +155,9 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		return collection;
 	}
 	
-	public static Collection<StudentClassroomSessionDivisionReport> createStudentClassroomSessionDivisionReportsForKG1(){
-		Collection<StudentClassroomSessionDivisionReport> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReport.class, 1);
-		StudentClassroomSessionDivisionReport report = collection.iterator().next();
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForKG1(){
+		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
+		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
@@ -218,9 +218,9 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		return collection;
 	}
 	
-	public static Collection<StudentClassroomSessionDivisionReport> createStudentClassroomSessionDivisionReportsForKG2KG3(){
-		Collection<StudentClassroomSessionDivisionReport> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReport.class, 1);
-		StudentClassroomSessionDivisionReport report = collection.iterator().next();
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForKG2KG3(){
+		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
+		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
@@ -278,7 +278,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 		
 	public static void main(String[] args) {
-		Collection<StudentClassroomSessionDivisionReport> reports = createStudentClassroomSessionDivisionReportsForOtherGrade();
+		Collection<StudentClassroomSessionDivisionReportTemplateFile> reports = createStudentClassroomSessionDivisionReportsForOtherGrade();
 		System.out.println("IesaSampleData.main() : "+reports.iterator().next().getClassroomSessionDivisionSubjects().size());
 	}
 	

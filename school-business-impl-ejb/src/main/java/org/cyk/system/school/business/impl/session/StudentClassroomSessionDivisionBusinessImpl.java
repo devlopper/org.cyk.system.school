@@ -35,6 +35,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -44,7 +45,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetri
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
@@ -148,21 +149,17 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			StudentClassroomSessionDivisionReportParameters parameters = 
 					new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
 			
-			StudentClassroomSessionDivisionReport report = null;//SchoolBusinessLayer.getInstance().getReportProducer().produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision
-					//,parameters);
+			CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = 
+	    			new CreateReportFileArguments<StudentClassroomSessionDivision>(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET, studentClassroomSessionDivision);
+			File file = createReportFile(studentClassroomSessionDivision, reportArguments);
 			
-			if(report==null){
+			if(file==null){
 				
 			}else{
-				if(studentClassroomSessionDivision.getResults().getReport()==null)
-					studentClassroomSessionDivision.getResults().setReport(new File());
-				reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults(),report
-					,studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations()
-					.getStudentClassroomSessionDivisionResultsReportTemplate().getTemplate(),Boolean.TRUE);				
-				//dao.update(studentClassroomSessionDivision);
 				genericDao.update(studentClassroomSessionDivision.getResults());
 				logIdentifiable("Report built",studentClassroomSessionDivision);
 			}
+			
 		}else{
 			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 					,inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision()));
@@ -170,7 +167,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReportTemplateFile> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		return reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), 
 				studentClassroomSessionDivision.getStudent().getCode());
 	}
@@ -181,7 +178,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReport> findReport(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
+	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReportTemplateFile> findReport(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		// TODO Many report as one document must be handled
 		return findReport(studentClassroomSessionDivisions.iterator().next());
 	}

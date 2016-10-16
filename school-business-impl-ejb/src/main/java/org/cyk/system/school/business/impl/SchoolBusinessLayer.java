@@ -16,7 +16,6 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOpti
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFormatter;
-import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.business.impl.BusinessServiceProvider;
 import org.cyk.system.root.business.impl.BusinessServiceProvider.Service;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
@@ -136,8 +135,6 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			}
 		});
 		
-		AbstractTypedBusinessService.Listener.MAP.put(Student.class, new StudentBusinessServiceAdapter());
-		
 		BusinessServiceProvider.Identifiable.COLLECTION.add(new AbstractActorBusinessImpl.BusinessServiceProviderIdentifiable<Student,Student.SearchCriteria>(Student.class){
 			private static final long serialVersionUID = 1322416788278558869L;
 			
@@ -172,6 +169,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     	
     	createReportTemplate(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml", null, null, null);
     	createReportTemplate(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE,"certificat de scolarité",Boolean.TRUE, "report/student/tuition_certificate.jrxml", null, null, null);
+    	createReportTemplate(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET,"bulletin trimestriel",Boolean.TRUE, "report/student/classroom_session_division_sheet.jrxml", null, null, null);
 	}
 
 	@Override
