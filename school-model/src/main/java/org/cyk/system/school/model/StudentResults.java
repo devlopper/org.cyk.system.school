@@ -12,21 +12,19 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.file.File;
-import org.cyk.system.root.model.mathematics.Sort;
-import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
-import org.cyk.system.root.model.time.Attendance;
-import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.mathematics.Sort;
+import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
+import org.cyk.system.root.model.time.Attendance;
+import org.cyk.utility.common.Constant;
 
 @Getter @Setter @Entity @NoArgsConstructor
 public class StudentResults extends AbstractIdentifiable implements Serializable {
@@ -71,8 +69,6 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	
 	@Column(length= 1024 * 1)
 	private String appreciation;
-	
-	@OneToOne private File report;
 	
 	private Boolean conferenceRequested;
 	

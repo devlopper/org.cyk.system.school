@@ -14,15 +14,17 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.FormatterBusiness;
-import org.cyk.system.root.business.api.file.report.ReportBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.file.FileIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricValue;
+import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
+import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
@@ -65,7 +67,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Inject private StudentClassroomSessionDivisionSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentClassroomSessionDao studentClassroomSessionDao;
-	private ReportBusiness reportBusiness = inject(ReportBusiness.class);
 	
 	@Inject private StudentClassroomSessionDivisionSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao; 
@@ -168,8 +169,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public ReportBasedOnTemplateFile<StudentClassroomSessionDivisionReportTemplateFile> findReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), 
-				studentClassroomSessionDivision.getStudent().getCode());
+		return null;// reportBusiness.buildBinaryContent(studentClassroomSessionDivision.getResults().getReport(), 
+				//studentClassroomSessionDivision.getStudent().getCode());
 	}
 	
 	@Override
@@ -347,10 +348,14 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<File> findReportFiles(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
+		FileIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new FileIdentifiableGlobalIdentifier.SearchCriteria();
+    	searchCriteria.addIdentifiablesGlobalIdentifiers(studentClassroomSessionDivisions);
+    	searchCriteria.addRepresentationType(inject(FileRepresentationTypeDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET));
+    	Collection<FileIdentifiableGlobalIdentifier> fileIdentifiableGlobalIdentifiers = inject(FileIdentifiableGlobalIdentifierDao.class).readByCriteria(searchCriteria);
+    	
 		Collection<File> files = new ArrayList<>();
-		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
-			if(studentClassroomSessionDivision.getResults().getReport()!=null)
-				files.add(studentClassroomSessionDivision.getResults().getReport());
+		for(FileIdentifiableGlobalIdentifier fileIdentifiableGlobalIdentifier : fileIdentifiableGlobalIdentifiers)
+			files.add(fileIdentifiableGlobalIdentifier.getFile());
 		return files;
 	}
 	

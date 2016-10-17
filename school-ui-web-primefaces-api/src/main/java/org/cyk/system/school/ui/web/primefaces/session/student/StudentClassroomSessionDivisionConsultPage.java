@@ -16,7 +16,6 @@ import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
-import org.cyk.system.school.business.impl.SchoolReportRepository;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.StudentResultsMetricValue;
@@ -25,8 +24,6 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
-import org.cyk.ui.api.command.AbstractCommandable.Builder;
-import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 
@@ -107,14 +104,6 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 		if(index < metricTables.size())
 			return metricTables.get(index);
 		return null;
-	}
-	
-	@Override
-	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
-		super.processIdentifiableContextualCommandable(commandable);
-		if(identifiable.getResults().getReport()!=null)
-			commandable.addChild(Builder.createReport(identifiable, SchoolReportRepository.getInstance().getReportStudentClassroomSessionDivision()
-					,"school.markscard", null));
 	}
 	
 }

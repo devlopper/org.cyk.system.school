@@ -54,8 +54,6 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	private static final long serialVersionUID = -7434478805525552120L;
 	public static final int DEPLOYMENT_ORDER = CompanyBusinessLayer.DEPLOYMENT_ORDER+1;
 	
-	public static String STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_SHEET_RELATIVEFILEPATH = "report/student/classroom_session_division_sheet.jrxml";
-	
 	private static SchoolBusinessLayer INSTANCE;
 	
 	@Setter private AverageComputationListener averageComputationListener;
@@ -171,7 +169,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     	
     	createReportTemplate(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml", null, null, null);
     	createReportTemplate(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE,"certificat de scolarité",Boolean.TRUE, "report/student/tuition_certificate.jrxml", null, null, null);
-    	createReportTemplate(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET,"bulletin trimestriel",Boolean.TRUE, STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_SHEET_RELATIVEFILEPATH, null, null, null);
+    	createReportTemplate(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET,"bulletin trimestriel",Boolean.TRUE, "report/student/classroom_session_division_sheet.jrxml", null, null, null);
 	}
 
 	@Override
