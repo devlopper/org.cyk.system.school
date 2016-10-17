@@ -18,7 +18,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
-import org.cyk.system.company.business.impl.CompanyBusinessLayerAdapter;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
@@ -254,7 +253,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			}
 		});
 		
-		companyBusinessLayer.getCompanyBusinessLayerListeners().add(new CompanyBusinessLayerAdapter() {
+		CompanyBusinessLayer.Listener.COLLECTION.add(new CompanyBusinessLayer.Listener.Adapter() {
 			private static final long serialVersionUID = 5179809445850168706L;
 
 			@Override
