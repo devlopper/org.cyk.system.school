@@ -151,7 +151,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
 			
 			CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = 
-	    			new CreateReportFileArguments<StudentClassroomSessionDivision>(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET, studentClassroomSessionDivision);
+	    			new CreateReportFileArguments<StudentClassroomSessionDivision>(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET
+	    					, studentClassroomSessionDivision,findReportFile(studentClassroomSessionDivision, SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET, Boolean.FALSE));
+			
 			File file = createReportFile(studentClassroomSessionDivision, reportArguments);
 			
 			if(file==null){
