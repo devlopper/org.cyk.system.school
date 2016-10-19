@@ -17,6 +17,7 @@ import org.cyk.system.school.business.api.session.LevelGroupBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
 import org.cyk.system.school.model.actor.Student;
@@ -37,6 +38,7 @@ import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.ui.api.Icon;
 import org.cyk.ui.api.command.UICommandable;
+import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.api.model.AbstractTree;
 import org.cyk.ui.web.api.WebHierarchyNode;
@@ -61,6 +63,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	
 	public Commandable getAcademicCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable("command.academic.management", null);
+		
 		module.addChild(createListCommandable(AcademicSession.class, null));
 		module.addChild(createListCommandable(LevelTimeDivision.class, null));
 		module.addChild(createListCommandable(ClassroomSession.class, null));
@@ -96,6 +99,38 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 		addReportCommandables(Teacher.class,module, TeacherBusinessImpl.Listener.COLLECTION);
 		return module;
 	}
+	
+	/**/
+	
+	public Commandable getRegularActivitiesCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
+		Commandable module = createModuleCommandable("school.activities", null);
+		if(userSession.hasRole(Role.MANAGER) || userSession.isUserInstanceOf(Teacher.class)){
+			module.addChild(Builder.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
+		}
+		return module;
+	}
+	
+	public Commandable getResultsCardCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
+		Commandable module = (Commandable) createModuleCommandable("school.results", null).setIdentifier(COMMANDABLE_IDENTIFIER_RESULTS);
+		if(userSession.hasRole(Role.MANAGER) || userSession.isUserInstanceOf(Teacher.class)){
+			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
+			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
+		}
+		if(userSession.hasRole(Role.MANAGER)){
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
+			
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks(),null)
+					.setIdentifier(COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS));	
+		}
+		
+		return module;
+	}
+	
+	/**/
 	
 	@Override
 	protected void initialiseNavigatorTree(UserSession userSession) {
@@ -233,4 +268,9 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 			INSTANCE = new SystemMenuBuilder();
 		return INSTANCE;
 	}
+
+	/**/
+	
+	public static final String COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS = "COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS";
+	public static final String COMMANDABLE_IDENTIFIER_RESULTS = "COMMANDABLE_IDENTIFIER_RESULTS";
 }

@@ -320,9 +320,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Override
 	protected void structure(){
 		levelGroupType = create(inject(LevelGroupTypeBusiness.class).instanciateOne("LevelGroupTypeDummy"));
-		LevelGroup levelGroupPrimary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.LEVEL_GROUP_PRIMARY)
+		LevelGroup levelGroupPrimary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY)
 				.setType(levelGroupType));
-		LevelGroup levelGroupSecondary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.LEVEL_GROUP_SECONDARY)
+		LevelGroup levelGroupSecondary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY)
 				.setType(levelGroupType));
 		
 		// Subjects

@@ -30,8 +30,6 @@ import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.session.SchoolReportProducer;
-import org.cyk.system.school.business.api.session.SchoolReportProducer.StudentClassroomSessionDivisionReportParameters;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
@@ -147,21 +145,14 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		//		,inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null) || !Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) ){
-			StudentClassroomSessionDivisionReportParameters parameters = 
-					new StudentClassroomSessionDivisionReportParameters(SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS);
 			
 			CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = 
 	    			new CreateReportFileArguments<StudentClassroomSessionDivision>(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET
 	    					, studentClassroomSessionDivision,findReportFile(studentClassroomSessionDivision, SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET, Boolean.FALSE));
 			
-			File file = createReportFile(studentClassroomSessionDivision, reportArguments);
-			
-			if(file==null){
-				
-			}else{
-				genericDao.update(studentClassroomSessionDivision.getResults());
-				logIdentifiable("Report built",studentClassroomSessionDivision);
-			}
+			createReportFile(studentClassroomSessionDivision, reportArguments);
+			genericDao.update(studentClassroomSessionDivision.getResults());
+			logIdentifiable("Report built",studentClassroomSessionDivision);
 			
 		}else{
 			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
