@@ -31,14 +31,14 @@ import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelSpeciality;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.ui.api.Icon;
-import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.AbstractCommandable.Builder;
+import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.api.model.AbstractTree;
 import org.cyk.ui.web.api.WebHierarchyNode;
@@ -100,6 +100,8 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 		Commandable module = createModuleCommandable("command.student.management", null);
 		module.addChild(createListCommandable(Student.class, null));
 		module.addChild(createListCommandable(StudentClassroomSession.class, null));
+		module.addChild(Builder.createCreateMany(StudentClassroomSession.class, null));
+		module.addChild(Builder.createCreateMany(StudentClassroomSessionDivisionSubject.class, null));
 		addReportCommandables(Student.class,module, StudentBusinessImpl.Listener.COLLECTION);
 		return module;
 	}

@@ -61,7 +61,7 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	
 	@Override
 	public AcademicSession update(AcademicSession academicSession) {
-		academicSession = update(academicSession);
+		academicSession = super.update(academicSession);
 		for(AbstractIdentifiable identifiable : genericDao.use(LevelName.class).select().all()){
 			LevelName levelName = (LevelName) identifiable;
 			//TODO a attribute value copy method should be developed
