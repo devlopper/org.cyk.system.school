@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeDetails;
 import org.cyk.system.company.model.structure.Employee;
-import org.cyk.system.company.ui.web.primefaces.adapter.enterpriseresourceplanning.EmployeeBusinessAdapter;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
@@ -58,8 +57,6 @@ import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.ui.web.primefaces.AbstractSchoolContextListener;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
-import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.StudentBusinessAdapter;
-import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.TeacherBusinessAdapter;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.ui.api.AbstractWindow;
 import org.cyk.ui.web.primefaces.page.AbstractPrimefacesPage.PageInstanceManager;
@@ -138,7 +135,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	
     	SchoolWebManager.getInstance().getListeners().add(new PrimefacesManager());
     	
-    	StudentBusinessImpl.Listener.COLLECTION.add(new StudentBusinessAdapter(){
+    	StudentBusinessImpl.Listener.COLLECTION.add(new StudentBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning(){
     		private static final long serialVersionUID = 1L;
 
 			@Override
@@ -154,8 +151,8 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				}
 			}
     	});
-    	TeacherBusinessImpl.Listener.COLLECTION.add(new TeacherBusinessAdapter());
-    	EmployeeBusinessImpl.Listener.COLLECTION.add(new EmployeeBusinessAdapter());
+    	TeacherBusinessImpl.Listener.COLLECTION.add(new TeacherBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning());
+    	EmployeeBusinessImpl.Listener.COLLECTION.add(new EmployeeBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning());
     	
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, AcademicSession.class);
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, AcademicSession.class);

@@ -49,6 +49,17 @@ public class TeacherBusinessImpl extends AbstractActorBusinessImpl<Teacher, Teac
 				
 				/**/
 				
+				public static class EnterpriseResourcePlanning extends TeacherBusinessImpl.Listener.Adapter.Default implements Serializable {
+					
+					private static final long serialVersionUID = 1L;
+
+					public EnterpriseResourcePlanning() {
+						
+					}
+					
+				}
+
+				
 			}
 			
 		}
