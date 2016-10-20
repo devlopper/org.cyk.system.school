@@ -24,6 +24,7 @@ public class StudentDetailsConfiguration extends ActorDetailsConfiguration imple
 	static{
 		STUDENT_EXTENDED_FIELD_NAMES.addAll(ACTOR_EXTENDED_FIELD_NAMES);
 		STUDENT_EXTENDED_FIELD_NAMES.add(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
+		STUDENT_EXTENDED_FIELD_NAMES.add(StudentEditPage.Form.FIELD_CLASSROOMSESSION);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -42,6 +43,7 @@ public class StudentDetailsConfiguration extends ActorDetailsConfiguration imple
 		public FormControlSetAdapter() {
 			super(Student.class);
 			addFieldNamePairOrder(StudentEditPage.Form.FIELD_NATIONALITY, StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
+			addFieldNamePairOrder(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION, StudentEditPage.Form.FIELD_CLASSROOMSESSION);
 		}
 		
 		@Override
@@ -57,7 +59,8 @@ public class StudentDetailsConfiguration extends ActorDetailsConfiguration imple
 		
 		public DetailsControlSetAdapter(Class<?> identifiableClass) {
 			super(identifiableClass);
-			addFieldNamePairOrder(StudentEditPage.Form.FIELD_NATIONALITY, StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
+			addFieldNamePairOrder(StudentDetails.FIELD_NATIONALITY, StudentDetails.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
+			addFieldNamePairOrder(StudentDetails.FIELD_ADMISSION_LEVEL_TIME_DIVISION, StudentDetails.FIELD_CLASSROOMSESSION);
 		}
 		
 		@Override

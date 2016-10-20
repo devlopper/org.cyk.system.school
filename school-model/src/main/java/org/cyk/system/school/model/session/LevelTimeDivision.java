@@ -12,7 +12,6 @@ import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.time.TimeDivisionType;
-import org.cyk.utility.common.Constant;
 
 @Entity @Getter @Setter @NoArgsConstructor
 public class LevelTimeDivision extends AbstractIdentifiable implements Serializable{
@@ -30,7 +29,7 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 		this.getGlobalIdentifierCreateIfNull().setOrderNumber(orderNumber);
 	}
 	
-	@Override
+	/*@Override
 	public String toString() {
 		return level+Constant.CHARACTER_SPACE.toString()+timeDivisionType+Constant.CHARACTER_SPACE.toString()+globalIdentifier.getOrderNumber();
 	}
@@ -38,7 +37,7 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	@Override
 	public String getUiString() {
 		return level.getUiString()+Constant.CHARACTER_SPACE+timeDivisionType.getUiString()+Constant.CHARACTER_SPACE+globalIdentifier.getOrderNumber();
-	}
+	}*/
 	
 	/**/
 	

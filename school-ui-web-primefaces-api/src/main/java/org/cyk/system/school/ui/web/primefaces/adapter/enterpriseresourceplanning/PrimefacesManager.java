@@ -299,12 +299,13 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 				,StudentEditPage.Form.FIELD_NATIONALITY,StudentEditPage.Form.FIELD_SEX,StudentEditPage.Form.FIELD_LANGUAGE_COLLECTION
 				,StudentEditPage.Form.FIELD_REGISTRATION_DATE)
 				.addControlSetListener(new StudentDetailsConfiguration.FormControlSetAdapter());
-		
+		/*
 		getFormConfiguration(Student.class, Crud.UPDATE).addRequiredFieldNames(StudentEditPage.Form.FIELD_CODE)
 		.addFieldNames(StudentEditPage.Form.FIELD_IMAGE,StudentEditPage.Form.FIELD_NAME,StudentEditPage.Form.FIELD_LAST_NAMES
 				,StudentEditPage.Form.FIELD_BIRTH_DATE,StudentEditPage.Form.FIELD_BIRTH_LOCATION,StudentEditPage.Form.FIELD_NATIONALITY,StudentEditPage.Form.FIELD_SEX
-				,StudentEditPage.Form.FIELD_BLOOD_GROUP,StudentEditPage.Form.FIELD_LANGUAGE_COLLECTION,StudentEditPage.Form.FIELD_REGISTRATION_DATE);
-		
+				,StudentEditPage.Form.FIELD_LANGUAGE_COLLECTION,StudentEditPage.Form.FIELD_REGISTRATION_DATE)
+				.addControlSetListener(new StudentDetailsConfiguration.FormControlSetAdapter());
+		*/
 		getFormConfiguration(Student.class, Crud.DELETE).addFieldNames(StudentEditPage.Form.FIELD_CODE,StudentEditPage.Form.FIELD_IMAGE,StudentEditPage.Form.FIELD_NAME
 				,StudentEditPage.Form.FIELD_LAST_NAMES);
 		

@@ -10,10 +10,10 @@ import lombok.Setter;
 
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.ui.api.model.party.AbstractActorEditFormModel;
-import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
+import org.cyk.ui.web.primefaces.page.party.AbstractActorEditPage;
 
 @Named @ViewScoped @Getter @Setter
-public class TeacherEditPage extends AbstractCrudOnePage<Teacher> implements Serializable {
+public class TeacherEditPage extends AbstractActorEditPage.AbstractDefault.Default<Teacher> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 		
