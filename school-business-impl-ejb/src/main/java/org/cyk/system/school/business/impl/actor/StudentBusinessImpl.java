@@ -39,7 +39,7 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 	protected Collection<? extends org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl.Listener<?>> getListeners() {
 		return Listener.COLLECTION;
 	}
-	
+
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<Student> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
 		return dao.readByClassroomSessionDivision(classroomSessionDivision);

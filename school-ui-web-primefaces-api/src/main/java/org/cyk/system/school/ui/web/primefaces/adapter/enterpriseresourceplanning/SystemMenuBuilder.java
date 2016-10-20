@@ -64,15 +64,34 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	public Commandable getAcademicCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable("command.academic.management", null);
 		
+		if(userSession.hasRole(Role.MANAGER) || userSession.isUserInstanceOf(Teacher.class)){
+			module.addChild(Builder.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
+		}
+		
+		if(userSession.hasRole(Role.MANAGER) || userSession.isUserInstanceOf(Teacher.class)){
+			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
+			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
+		}
+		if(userSession.hasRole(Role.MANAGER)){
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
+			
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks(),null)
+					.setIdentifier(COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS));	
+		}
+		
 		module.addChild(createListCommandable(AcademicSession.class, null));
 		module.addChild(createListCommandable(LevelTimeDivision.class, null));
 		module.addChild(createListCommandable(ClassroomSession.class, null));
-		module.addChild(createListCommandable(ClassroomSessionDivision.class, null));
+		/*module.addChild(createListCommandable(ClassroomSessionDivision.class, null));
 		module.addChild(createListCommandable(ClassroomSessionDivisionSubject.class, null));
 		
 		module.addChild(createListCommandable(Evaluation.class, null));
 		module.addChild(createListCommandable(StudentClassroomSessionDivision.class, null));
-		
+		*/
 		module.addChild(createListCommandable(Subject.class, null));
 		return module;
 	}
