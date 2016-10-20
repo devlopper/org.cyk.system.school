@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ public class Level extends AbstractIdentifiable implements Serializable {
 	
 	@Override
 	public String toString() {
-		return levelName+(speciality==null?"":(" "+speciality));
+		return levelName+(speciality==null?Constant.EMPTY_STRING:(Constant.CHARACTER_SPACE.toString()+speciality));
 	}
 	
 	@Override
@@ -42,6 +43,6 @@ public class Level extends AbstractIdentifiable implements Serializable {
 	}
 	
 	public static final String FIELD_GROUP = "group";
-	public static final String FIELD_LEVEL_NAME = "name";
+	public static final String FIELD_LEVEL_NAME = "levelName";
 	public static final String FIELD_LEVEL_SPECIALITY = "speciality";
 }
