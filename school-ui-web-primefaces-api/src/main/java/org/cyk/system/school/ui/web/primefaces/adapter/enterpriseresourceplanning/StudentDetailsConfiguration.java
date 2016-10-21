@@ -42,8 +42,8 @@ public class StudentDetailsConfiguration extends ActorDetailsConfiguration imple
 		
 		public FormControlSetAdapter() {
 			super(Student.class);
-			addFieldNamePairOrder(StudentEditPage.Form.FIELD_NATIONALITY, StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
-			addFieldNamePairOrder(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION, StudentEditPage.Form.FIELD_CLASSROOMSESSION);
+			//addFieldNamePairOrder(StudentEditPage.Form.FIELD_NATIONALITY, StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
+			//addFieldNamePairOrder(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION, StudentEditPage.Form.FIELD_CLASSROOMSESSION);
 		}
 		
 		@Override
