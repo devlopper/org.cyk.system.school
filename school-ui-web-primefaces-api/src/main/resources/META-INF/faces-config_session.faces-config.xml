@@ -23,6 +23,37 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>schoolEditView</from-outcome>
+			<to-view-id>/private/school/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>schoolConsultView</from-outcome>
+			<to-view-id>/private/school/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>schoolListView</from-outcome>
+			<to-view-id>/private/school/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>levelEditView</from-outcome>
+			<to-view-id>/private/level/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>levelConsultView</from-outcome>
+			<to-view-id>/private/level/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>levelListView</from-outcome>
+			<to-view-id>/private/level/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 	</navigation-rule>
 
 </faces-config>

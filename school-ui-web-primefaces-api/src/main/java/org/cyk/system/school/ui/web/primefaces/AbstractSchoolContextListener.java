@@ -11,7 +11,9 @@ import org.cyk.system.school.business.impl.actor.TeacherDetails;
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.LevelDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
+import org.cyk.system.school.business.impl.session.SchoolDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.SubjectClassroomSessionDetails;
@@ -24,7 +26,9 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
@@ -45,8 +49,10 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryOneFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
-import org.cyk.system.school.ui.web.primefaces.session.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.school.LevelEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.school.SchoolEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionSubjectEditPage;
@@ -83,6 +89,12 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		//uiManager.businessEntityInfos(ClassroomSession.class).setUiConsultViewId("");
 		//IdentifiableConfiguration identifiableConfiguration = uiManager.findConfiguration(ClassroomSession.class);
 		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(School.class, SchoolEditPage.Form.class, SchoolDetails.class,null,null,null));
+		uiManager.configBusinessIdentifiable(School.class, null);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(Level.class, LevelEditPage.Form.class, LevelDetails.class,null,null,null));
+		uiManager.configBusinessIdentifiable(Level.class, null);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(Teacher.class, TeacherEditPage.Form.class, TeacherDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(Teacher.class, null);

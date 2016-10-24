@@ -1,4 +1,4 @@
-package org.cyk.system.school.ui.web.primefaces.session;
+package org.cyk.system.school.ui.web.primefaces.session.school;
 
 import java.io.Serializable;
 

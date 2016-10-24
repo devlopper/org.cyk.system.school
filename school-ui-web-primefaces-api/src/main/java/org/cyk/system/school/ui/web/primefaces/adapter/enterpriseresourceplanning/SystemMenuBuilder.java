@@ -27,16 +27,21 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelGroup;
+import org.cyk.system.school.model.session.LevelGroupType;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelSpeciality;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
+import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.model.subject.SubjectGroup;
 import org.cyk.ui.api.Icon;
+import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.command.menu.SystemMenu;
@@ -148,6 +153,36 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 					.setIdentifier(COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS));	
 		}
 		
+		return module;
+	}
+	
+	/**/
+	
+	@Override
+	protected void addReferences(UserSession userSession,SystemMenu systemMenu, Collection<UICommandable> mobileCommandables) {
+		addReference(userSession, systemMenu, getReferenceSchoolCommandable(userSession, mobileCommandables));
+		addReference(userSession, systemMenu, getReferenceSessionCommandable(userSession, mobileCommandables));
+		super.addReferences(userSession, systemMenu, mobileCommandables);
+	}
+	
+	public Commandable getReferenceSchoolCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
+		Commandable module = createModuleCommandable(UIManager.getInstance().businessEntityInfos(School.class).getUserInterface().getLabelId(), null);
+		module.addChild(createListCommandable(School.class, null));
+		module.addChild(createListCommandable(Subject.class, null));
+		module.addChild(createListCommandable(SubjectGroup.class, null));
+		module.addChild(createListCommandable(LevelGroupType.class, null));
+		module.addChild(createListCommandable(LevelGroup.class, null));
+		module.addChild(createListCommandable(LevelName.class, null));
+		module.addChild(createListCommandable(LevelSpeciality.class, null));
+		module.addChild(createListCommandable(Level.class, null));
+		module.addChild(createListCommandable(EvaluationType.class, null));
+		return module;
+	}
+	
+	public Commandable getReferenceSessionCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
+		Commandable module = createModuleCommandable(UIManager.getInstance().businessEntityInfos(AcademicSession.class).getUserInterface().getLabelId(), null);
+		module.addChild(createListCommandable(AcademicSession.class, null));
+		module.addChild(createListCommandable(LevelTimeDivision.class, null));
 		return module;
 	}
 	
