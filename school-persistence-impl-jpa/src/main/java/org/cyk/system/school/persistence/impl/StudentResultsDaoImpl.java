@@ -18,7 +18,8 @@ public class StudentResultsDaoImpl extends AbstractTypedDao<StudentResults> impl
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
-		registerNamedQuery(readByMetricCollection, "SELECT r FROM StudentResultsMetricValue r WHERE r.metricValue.metric.collection = :metricCollection");
+		registerNamedQuery(readByMetricCollection, "SELECT r FROM StudentResults r WHERE EXISTS "
+				+ "(SELECT r1 FROM StudentResultsMetricValue r1 WHERE r1.studentResults = r AND r1.metricValue.metric.collection = :collection)");
 	}
 	
 	@Override
