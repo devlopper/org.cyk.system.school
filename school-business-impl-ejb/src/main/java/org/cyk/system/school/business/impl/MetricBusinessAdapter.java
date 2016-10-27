@@ -28,11 +28,8 @@ public class MetricBusinessAdapter extends MetricBusinessImpl.Listener.Adapter.D
 	
 	@Override
 	public void beforeDelete(Metric metric) {
-		System.out.println("MetricBusinessAdapter.beforeDelete() 000");
-		//super.beforeDelete(metric);
+		super.beforeDelete(metric);
 		Collection<StudentResultsMetricValue> studentResultsMetricValues = inject(StudentResultsMetricValueDao.class).readByMetric(metric);
-		System.out.println("MetricBusinessAdapter.beforeDelete() 1");
-		System.out.println("MetricBusinessAdapter.beforeDelete() : "+studentResultsMetricValues.size());
 		inject(StudentResultsMetricValueBusiness.class).delete(studentResultsMetricValues);
 	}
 	

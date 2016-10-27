@@ -68,7 +68,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 
-@javax.servlet.annotation.WebListener
+//@javax.servlet.annotation.WebListener
 public class ContextListener extends AbstractSchoolContextListener implements Serializable {
 
 	private static final long serialVersionUID = -9042005596731665575L;
