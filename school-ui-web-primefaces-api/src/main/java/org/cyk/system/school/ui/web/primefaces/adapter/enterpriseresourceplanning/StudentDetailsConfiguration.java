@@ -5,18 +5,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import org.apache.commons.lang3.StringUtils;
-import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
-import org.cyk.ui.api.model.party.AbstractPersonEditFormModel;
 import org.cyk.ui.web.primefaces.adapter.enterpriseresourceplanning.ActorDetailsConfiguration;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter @Setter
 public class StudentDetailsConfiguration extends ActorDetailsConfiguration implements Serializable {
@@ -47,11 +44,6 @@ public class StudentDetailsConfiguration extends ActorDetailsConfiguration imple
 			super(Student.class);
 			//addFieldNamePairOrder(StudentEditPage.Form.FIELD_NATIONALITY, StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
 			//addFieldNamePairOrder(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION, StudentEditPage.Form.FIELD_CLASSROOMSESSION);
-			/*if(Boolean.TRUE.equals(PersonBusiness.FindNamesArguments.FIRST_NAME_IS_FIRST))
-				addFieldNamePairOrder(AbstractPersonEditFormModel.FIELD_NAME, AbstractPersonEditFormModel.FIELD_LAST_NAMES);
-			else
-				addFieldNamePairOrder(AbstractPersonEditFormModel.FIELD_LAST_NAMES, AbstractPersonEditFormModel.FIELD_NAME);
-			*/
 		}
 		
 		@Override
@@ -59,13 +51,6 @@ public class StudentDetailsConfiguration extends ActorDetailsConfiguration imple
 			return STUDENT_EXTENDED_FIELD_NAMES.toArray(new String[]{});
 		}
 		
-		@Override
-		public List<String> getExpectedFieldNames() {
-			List<String> l = super.getExpectedFieldNames();
-			for(String[] f : fieldNamePairOrders)
-				System.out.println(StringUtils.join(f," , "));
-			return l;
-		}
 	}
 	
 	@Getter @Setter @NoArgsConstructor
@@ -77,11 +62,6 @@ public class StudentDetailsConfiguration extends ActorDetailsConfiguration imple
 			super(identifiableClass);
 			addFieldNamePairOrder(StudentDetails.FIELD_NATIONALITY, StudentDetails.FIELD_ADMISSION_LEVEL_TIME_DIVISION);
 			addFieldNamePairOrder(StudentDetails.FIELD_ADMISSION_LEVEL_TIME_DIVISION, StudentDetails.FIELD_CLASSROOMSESSION);
-			/*if(Boolean.TRUE.equals(PersonBusiness.FindNamesArguments.FIRST_NAME_IS_FIRST))
-				addFieldNamePairOrder(AbstractPersonEditFormModel.FIELD_NAME, AbstractPersonEditFormModel.FIELD_LAST_NAMES);
-			else
-				addFieldNamePairOrder(AbstractPersonEditFormModel.FIELD_LAST_NAMES, AbstractPersonEditFormModel.FIELD_NAME);
-			*/
 		}
 		
 		@Override
