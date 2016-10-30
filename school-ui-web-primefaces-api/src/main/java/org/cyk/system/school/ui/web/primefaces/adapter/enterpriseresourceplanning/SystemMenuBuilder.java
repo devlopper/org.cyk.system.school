@@ -88,7 +88,8 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 					.setIdentifier(COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS));	
 		}
 		
-		module.addChild(createListCommandable(ClassroomSession.class, null));
+		//module.addChild(createListCommandable(ClassroomSession.class, null));
+		module.addChild(Builder.createConsult(inject(AcademicSessionBusiness.class).findCurrent(null), null));
 		return module;
 	}
 	

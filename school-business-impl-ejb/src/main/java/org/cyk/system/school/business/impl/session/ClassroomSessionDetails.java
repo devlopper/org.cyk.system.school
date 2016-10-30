@@ -11,13 +11,14 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class ClassroomSessionDetails extends AbstractOutputDetails<ClassroomSession> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private String academicSession,levelTimeDivision,name,coordinator,numberOfStudent;
+	@Input @InputText private String academicSession,levelTimeDivision,suffix,coordinator,numberOfStudent;
 	
 	public ClassroomSessionDetails(ClassroomSession classroomSession) {
 		super(classroomSession);
 		academicSession = formatUsingBusiness(classroomSession.getAcademicSession());
 		levelTimeDivision = formatUsingBusiness(classroomSession.getLevelTimeDivision());
-		name = formatUsingBusiness(classroomSession);
+		//name = formatUsingBusiness(classroomSession);
+		suffix = classroomSession.getSuffix();
 		coordinator = classroomSession.getCoordinator()==null?Constant.EMPTY_STRING:classroomSession.getCoordinator().getPerson().getNames();
 		numberOfStudent=formatNumber(classroomSession.getResults().getNumberOfStudent());
 	}
