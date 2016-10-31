@@ -5,13 +5,13 @@
 
 	<parent>
 		<groupId>org.cyk.system.school</groupId>
-		<artifactId>pom</artifactId>
+		<artifactId>school-_pom</artifactId>
 		<version>0.0.1</version>
 	</parent>
 
 	<name>Application</name>
 
-	<artifactId>application</artifactId>
+	<artifactId>school-application</artifactId>
 	<packaging>ear</packaging>
 
 	<pluginRepositories>
