@@ -30,6 +30,8 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 				{"Number of times school opened","999"}
 				,{"Number of times present","999"}
 				,{"Number of times absent","999"}
+				,{"ONE","999"}
+				,{"SECOND","999"}
 				});
 		
 		report.addLabelValueCollection("OVERALL RESULT",new String[][]{
@@ -45,6 +47,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 				,{"Shows social courtesies", "4"}
 				,{"Demonstrates self-control", "3"}
 				,{"Takes care of school and others materials", "2"}
+				,{"ANOTHER ONE LIne", "1"}
 				});
 		
 		report.addLabelValueCollection("BEHAVIOUR,STUDY AND WORK HABITS",new String[][]{
@@ -53,6 +56,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 				,{"Drawing/Painting", "4"}
 				,{"Punctuality/Regularity", "4"}
 				,{"Works cooperatively in groups", "2"}
+				,{"ANOTHER Second Line", "3"}
 				,{"Listens and follows directions", "2"}
 				});
 		
