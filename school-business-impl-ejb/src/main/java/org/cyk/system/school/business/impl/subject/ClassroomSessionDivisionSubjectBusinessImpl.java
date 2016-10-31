@@ -10,9 +10,13 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
+import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
@@ -133,6 +137,56 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivisionSubject> findByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision,Teacher teacher) {
 		return dao.readByClassroomSessionDivisionByTeacher(classroomSessionDivision,teacher);
+	}
+	
+	/**/
+	
+	public static interface Listener extends AbstractIdentifiableBusinessServiceImpl.Listener<ClassroomSessionDivisionSubject> {
+		
+		/**/
+		
+		Collection<String> getEvaluationTypeCodesToCreate();
+		Listener addEvaluationTypeCodesToCreate(String...codes);
+		Boolean getAutoCreateEvaluationTypeCodesOnCreate();
+		Listener setAutoCreateEvaluationTypeCodesOnCreate(Boolean value);
+		
+		@Getter @Setter
+		public static class Adapter extends AbstractIdentifiableBusinessServiceImpl.Listener.Adapter.Default<ClassroomSessionDivisionSubject> implements Listener {
+			private static final long serialVersionUID = 1L;
+
+			protected Collection<String> evaluationTypeCodesToCreate;
+			protected Boolean autoCreateEvaluationTypeCodesOnCreate;
+			
+			@Override
+			public Listener addEvaluationTypeCodesToCreate(String...codes) {
+				return null;
+			}
+			
+			@Override
+			public Listener setAutoCreateEvaluationTypeCodesOnCreate(Boolean value) {
+				return null;
+			}
+			
+			/**/
+			
+			public static class Default extends Listener.Adapter implements Serializable {
+
+				private static final long serialVersionUID = 1L;
+
+				/**/
+				
+				public static class EnterpriseResourcePlanning extends Default implements Serializable {
+
+					private static final long serialVersionUID = 1L;
+
+					/**/
+					
+					
+				}
+				
+			}
+			
+		}
 	}
 
 }

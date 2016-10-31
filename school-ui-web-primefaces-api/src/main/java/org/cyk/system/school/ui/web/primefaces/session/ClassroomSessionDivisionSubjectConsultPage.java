@@ -9,12 +9,15 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.LectureDetails;
 import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.ui.web.primefaces.Table;
@@ -25,6 +28,8 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
+	private Table<ClassroomSessionDivisionSubjectEvaluationTypeDetails> evaluationTypeTable;
+	
 	private Table<StudentClassroomSessionDivisionSubjectDetails> studentTable;
 	private Table<EvaluationDetails> evaluationTable;
 	private Table<LectureDetails> lectureTable;
@@ -32,6 +37,14 @@ public class ClassroomSessionDivisionSubjectConsultPage extends AbstractConsultP
 	@Override
 	protected void consultInitialisation() {
 		super.consultInitialisation();
+		
+		evaluationTypeTable = (Table<ClassroomSessionDivisionSubjectEvaluationTypeDetails>) createDetailsTable(ClassroomSessionDivisionSubjectEvaluationTypeDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionDivisionSubjectEvaluationType,ClassroomSessionDivisionSubjectEvaluationTypeDetails>(ClassroomSessionDivisionSubjectEvaluationType.class, ClassroomSessionDivisionSubjectEvaluationTypeDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Collection<ClassroomSessionDivisionSubjectEvaluationType> getIdentifiables() {
+				return inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(identifiable);
+			}
+		});
 		
 		studentTable = (Table<StudentClassroomSessionDivisionSubjectDetails>) createDetailsTable(StudentClassroomSessionDivisionSubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDetails>(StudentClassroomSessionDivisionSubject.class, StudentClassroomSessionDivisionSubjectDetails.class){
 			private static final long serialVersionUID = 1L;
