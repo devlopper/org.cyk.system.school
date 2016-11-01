@@ -27,6 +27,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
@@ -45,6 +46,11 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	@Inject
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {
 		super(dao); 
+	}
+	
+	@Override
+	protected Collection<? extends org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl.Listener<?>> getListeners() {
+		return Listener.COLLECTION;
 	}
 	
 	@Override
@@ -143,40 +149,50 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	
 	public static interface Listener extends AbstractIdentifiableBusinessServiceImpl.Listener<ClassroomSessionDivisionSubject> {
 		
+		Collection<Listener> COLLECTION = new ArrayList<>();
+		
 		/**/
 		
-		Collection<String> getEvaluationTypeCodesToCreate();
-		Listener addEvaluationTypeCodesToCreate(String...codes);
-		Boolean getAutoCreateEvaluationTypeCodesOnCreate();
-		Listener setAutoCreateEvaluationTypeCodesOnCreate(Boolean value);
+		Collection<ClassroomSessionDivisionSubjectEvaluationType> getClassroomSessionDivisionSubjectEvaluationTypeModels();
+		Listener addClassroomSessionDivisionSubjectEvaluationTypeModel(ClassroomSessionDivisionSubjectEvaluationType...models);
+		Boolean getUseClassroomSessionDivisionSubjectEvaluationTypeModelsOnCreate();
+		Listener setUseClassroomSessionDivisionSubjectEvaluationTypeModelsOnCreate(Boolean value);
 		
 		@Getter @Setter
 		public static class Adapter extends AbstractIdentifiableBusinessServiceImpl.Listener.Adapter.Default<ClassroomSessionDivisionSubject> implements Listener {
 			private static final long serialVersionUID = 1L;
 
-			protected Collection<String> evaluationTypeCodesToCreate;
-			protected Boolean autoCreateEvaluationTypeCodesOnCreate;
+			protected Collection<ClassroomSessionDivisionSubjectEvaluationType> classroomSessionDivisionSubjectEvaluationTypeModels;
+			protected Boolean useClassroomSessionDivisionSubjectEvaluationTypeModelsOnCreate;
 			
 			@Override
-			public Listener addEvaluationTypeCodesToCreate(String...codes) {
+			public Listener addClassroomSessionDivisionSubjectEvaluationTypeModel(ClassroomSessionDivisionSubjectEvaluationType...models) {
 				return null;
 			}
 			
 			@Override
-			public Listener setAutoCreateEvaluationTypeCodesOnCreate(Boolean value) {
+			public Listener setUseClassroomSessionDivisionSubjectEvaluationTypeModelsOnCreate(Boolean value) {
 				return null;
 			}
 			
 			/**/
 			
 			public static class Default extends Listener.Adapter implements Serializable {
-
 				private static final long serialVersionUID = 1L;
 
+				@Override
+				public void afterCreate(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+					super.afterCreate(classroomSessionDivisionSubject);
+					/*if(Boolean.TRUE.equals(getUseClassroomSessionDivisionSubjectEvaluationTypeModelsOnCreate()))
+						for(ClassroomSessionDivisionSubjectEvaluationType model : getClassroomSessionDivisionSubjectEvaluationTypeModels()){
+							
+						}*/
+							
+				}
+				
 				/**/
 				
 				public static class EnterpriseResourcePlanning extends Default implements Serializable {
-
 					private static final long serialVersionUID = 1L;
 
 					/**/
