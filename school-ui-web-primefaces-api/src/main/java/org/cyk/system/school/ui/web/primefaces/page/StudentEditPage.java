@@ -33,20 +33,18 @@ public class StudentEditPage extends AbstractActorEditPage.AbstractDefault.Defau
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	FormOneData<ContactsForm> contactsForm;
-	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		contactsForm = (FormOneData<ContactsForm>) createFormOneData(new ContactsForm(), crud);
-		contactsForm.setTabTitle("Contacts");
+		//contactsForm = (FormOneData<ContactsForm>) createFormOneData(new ContactsForm(), crud);
+		//contactsForm.setTabTitle("Contacts");
 	}
-	
+	/*
 	@Override
 	protected void create() {
 		//super.create();
 		debug(contactsForm.getData());
-	}
+	}*/
 	
 	public static class Form extends AbstractActorEditFormModel.AbstractDefault.Default<Student> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
@@ -72,13 +70,13 @@ public class StudentEditPage extends AbstractActorEditPage.AbstractDefault.Defau
 		public static final String FIELD_CLASSROOMSESSION = "classroomSession";
 	}
 	
-	public static class ContactsForm extends AbstractBean implements Serializable {
+	/*public static class ContactsForm extends AbstractBean implements Serializable {
 		private static final long serialVersionUID = -751917271358280700L;
 		
 		@Input @InputText String father;
 		@Input @InputText String mother;
 		
-		/**/
+		
 		
 		public static class Parent extends AbstractBean implements Serializable {
 			private static final long serialVersionUID = 1L;
@@ -99,6 +97,6 @@ public class StudentEditPage extends AbstractActorEditPage.AbstractDefault.Defau
 			@Input @InputText private String workPostCode;
 		}
 		
-	}
+	}*/
 
 }
