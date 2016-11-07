@@ -12,7 +12,8 @@
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
  		<ui:param name="pageController" value="#{studentEditPage}" />
  		<ui:define name="body">
- 			<cyk:formOneData value="#{studentEditPage.form}"/>
+ 			<!--cyk:formOneData value="#{studentEditPage.form}"/-->
+ 			<cyk:formOneDataCollection value="#{studentEditPage.formOneDataCollection}" />
  		</ui:define>
  		
  		<ui:define name="contentMenuBar">

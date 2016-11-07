@@ -311,7 +311,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		getFormConfiguration(Student.class, Crud.CREATE).addRequiredFieldNames(StudentEditPage.Form.FIELD_CODE)
 		.addFieldNames(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION,StudentEditPage.Form.FIELD_CLASSROOMSESSION,StudentEditPage.Form.FIELD_IMAGE
 				,StudentEditPage.Form.FIELD_NAME,StudentEditPage.Form.FIELD_LAST_NAMES
-				,StudentEditPage.Form.FIELD_BIRTH_DATE,StudentEditPage.Form.FIELD_BIRTH_LOCATION,LocationFormModel.FIELD_LOCALITY
+				,StudentEditPage.Form.FIELD_BIRTH_DATE,StudentEditPage.Form.FIELD_BIRTH_LOCATION,LocationFormModel.FIELD_LOCALITY,LocationFormModel.FIELD_OTHER_DETAILS
 				,StudentEditPage.Form.FIELD_NATIONALITY,StudentEditPage.Form.FIELD_SEX,StudentEditPage.Form.FIELD_LANGUAGE_COLLECTION,LanguageCollectionFormModel.FIELD_LANGUAGE_1
 				,StudentEditPage.Form.FIELD_REGISTRATION_DATE,StudentEditPage.Form.FIELD_OTHER_DETAILS)
 				.addControlSetListener(new StudentDetailsConfiguration.FormControlSetAdapter());
@@ -319,7 +319,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		getFormConfiguration(Student.class, Crud.UPDATE).addRequiredFieldNames(StudentEditPage.Form.FIELD_CODE)
 		.addFieldNames(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION,StudentEditPage.Form.FIELD_IMAGE
 				,StudentEditPage.Form.FIELD_NAME,StudentEditPage.Form.FIELD_LAST_NAMES
-				,StudentEditPage.Form.FIELD_BIRTH_DATE,StudentEditPage.Form.FIELD_BIRTH_LOCATION,LocationFormModel.FIELD_LOCALITY
+				,StudentEditPage.Form.FIELD_BIRTH_DATE,StudentEditPage.Form.FIELD_BIRTH_LOCATION,LocationFormModel.FIELD_LOCALITY,LocationFormModel.FIELD_OTHER_DETAILS
 				,StudentEditPage.Form.FIELD_NATIONALITY,StudentEditPage.Form.FIELD_SEX,StudentEditPage.Form.FIELD_LANGUAGE_COLLECTION,LanguageCollectionFormModel.FIELD_LANGUAGE_1
 				,StudentEditPage.Form.FIELD_REGISTRATION_DATE,StudentEditPage.Form.FIELD_OTHER_DETAILS)
 				.addControlSetListener(new StudentDetailsConfiguration.FormControlSetAdapter());
