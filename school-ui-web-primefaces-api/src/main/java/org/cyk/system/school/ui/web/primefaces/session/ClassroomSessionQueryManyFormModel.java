@@ -78,6 +78,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				return inject(ClassroomSessionBusiness.class).findAll();
 			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				return inject(ClassroomSessionBusiness.class).findAll();
+			}else if(SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
+				return inject(ClassroomSessionBusiness.class).findAll();
 			}else
 				return inject(ClassroomSessionBusiness.class).findAll();
 		}
@@ -196,6 +198,29 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					
 					
 				});
+			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionSendStudentClassroomSessionDivisionReportFiles()}, page.getActionIdentifier())){
+				/*final Set<TimeDivisionType> timeDivisionTypes = getTimeDivisionTypes(page);
+				page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.FALSE);
+				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
+
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public Boolean build(Object data,Field field) {
+						return ArrayUtils.contains(new String[]{ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_MIN_COUNT
+								,ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_MAX_COUNT
+								,ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED}, field.getName());
+					}
+					
+					@Override
+					public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Object data,Field field) {
+						if(field.getName().equals(ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED) && timeDivisionTypes.size()==1)
+							return timeDivisionTypes.iterator().next().getName();
+						return super.fiedLabel(controlSet,data, field);
+					}
+					
+					
+				});*/
 			}
 		}
 		
@@ -279,6 +304,12 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					ExceptionUtils.getInstance().exception("noresultsfound");
 				WebNavigationManager.getInstance().redirectToDynamicProcessManyPage(SchoolWebManager.getInstance().getOutcomeStudentClassroomSessionConsultManyRank(),StudentClassroomSession.class
 						,studentClassroomSessions,actionIdentifier);
+			}else if(SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
+				/*Collection<StudentClassroomSession> studentClassroomSessions = inject(StudentClassroomSessionBusiness.class).findByCriteria(searchCriteria);
+				if(studentClassroomSessions.isEmpty())
+					ExceptionUtils.getInstance().exception("noresultsfound");
+				WebNavigationManager.getInstance().redirectToDynamicProcessManyPage(SchoolWebManager.getInstance().getOutcomeStudentClassroomSessionConsultManyRank(),StudentClassroomSession.class
+						,studentClassroomSessions,actionIdentifier);*/
 			}
 		}
 		
