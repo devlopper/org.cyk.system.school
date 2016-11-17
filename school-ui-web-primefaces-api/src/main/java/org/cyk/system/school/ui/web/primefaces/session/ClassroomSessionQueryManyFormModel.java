@@ -11,8 +11,11 @@ import java.util.Set;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.root.business.api.file.report.ReportTemplateBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
+import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
@@ -47,6 +50,8 @@ import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyCheck;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
+import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
+import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 import org.cyk.utility.common.computation.ExecutionProgress;
 import org.primefaces.extensions.model.dynaform.DynaFormControl;
 import org.primefaces.extensions.model.dynaform.DynaFormLabel;
@@ -136,6 +141,15 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
 			if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				page.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
+				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier()))
+							return field.getName().equals(ProcessPageAdapter.Form.FIELD_BACKGROUND_IMAGE_FILE);
+						return super.build(data,field);
+					}
+				});
 				page.setExecutionProgress(new ExecutionProgress("Build Student Classroom Session Division Report",null));
 				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());
 				PrimefacesManager.getInstance().configureProgressBar(page.getForm().getSubmitCommandable());
@@ -146,11 +160,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				page.setExecutionProgress(new ExecutionProgress("Compute Student Classroom Session Division "+page.getActionIdentifier(),null));
 				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());
 				PrimefacesManager.getInstance().configureProgressBar(page.getForm().getSubmitCommandable());
-				
 				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
-
 					private static final long serialVersionUID = 1L;
-
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults().equals(page.getActionIdentifier()))
@@ -199,8 +210,9 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					
 				});
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionSendStudentClassroomSessionDivisionReportFiles()}, page.getActionIdentifier())){
-				/*final Set<TimeDivisionType> timeDivisionTypes = getTimeDivisionTypes(page);
-				page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.FALSE);
+				//final Set<TimeDivisionType> timeDivisionTypes = getTimeDivisionTypes(page);
+				page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
+				/*
 				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
 
 					private static final long serialVersionUID = 1L;
@@ -220,7 +232,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					}
 					
 					
-				});*/
+				});
+				*/
 			}
 		}
 		
@@ -246,7 +259,13 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 							}
 					}
 				}
-			
+			if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
+				Collection<File> reportTemplateBackgroundFiles = new ArrayList<>();
+				ReportTemplate reportTemplate = inject(ReportTemplateBusiness.class).find(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET);
+				reportTemplateBackgroundFiles.add(reportTemplate.getBackgroundImage());
+				reportTemplateBackgroundFiles.add(reportTemplate.getDraftBackgroundImage());
+				page.setChoices(ProcessPageAdapter.Form.FIELD_BACKGROUND_IMAGE_FILE, reportTemplateBackgroundFiles);
+			}
 			//page.setChoices(Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED, indexes);
 		}
 		
@@ -336,6 +355,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			@Input @InputNumber private Integer classroomSessionDivisionMaxCount;
 			@Input @InputChoice @InputManyChoice @InputManyCheck private List<Integer> classroomSessionDivisionIndexesRequired;
 			
+			@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private File backgroundImageFile;
+			
 			public static final String FIELD_UPDATE_EVALUATION_RESULTS = "updateEvaluationResults";
 			public static final String FIELD_UPDATE_ATTENDANCE_RESULTS = "updateAttendanceResults";
 			public static final String FIELD_UPDATE_RANK_RESULTS = "updateRankResults";
@@ -343,6 +364,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			public static final String FIELD_CLASSROOMSESSIONDIVISION_MIN_COUNT = "classroomSessionDivisionMinCount";
 			public static final String FIELD_CLASSROOMSESSIONDIVISION_MAX_COUNT = "classroomSessionDivisionMaxCount";
 			public static final String FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED = "classroomSessionDivisionIndexesRequired";
+			
+			public static final String FIELD_BACKGROUND_IMAGE_FILE = "backgroundImageFile";
 		}
 	}
 }
