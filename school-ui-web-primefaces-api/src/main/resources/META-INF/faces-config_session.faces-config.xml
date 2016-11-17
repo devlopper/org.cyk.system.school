@@ -54,6 +54,22 @@
 			<to-view-id>/private/level/list.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionStudentsMetricCollectionEditView</from-outcome>
+			<to-view-id>/private/classroomsessiondivisionstudentsmetriccollection/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionStudentsMetricCollectionConsultView</from-outcome>
+			<to-view-id>/private/classroomsessiondivisionstudentsmetriccollection/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionStudentsMetricCollectionListView</from-outcome>
+			<to-view-id>/private/classroomsessiondivisionstudentsmetriccollection/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 	</navigation-rule>
 
 </faces-config>
