@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.report.ReportTemplateBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
@@ -146,7 +147,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier()))
-							return field.getName().equals(ProcessPageAdapter.Form.FIELD_BACKGROUND_IMAGE_FILE);
+							return field.getName().equals(ProcessPageAdapter.Form.FIELD_DRAFT);
 						return super.build(data,field);
 					}
 				});
@@ -259,13 +260,17 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 							}
 					}
 				}
+			/*
 			if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				Collection<File> reportTemplateBackgroundFiles = new ArrayList<>();
 				ReportTemplate reportTemplate = inject(ReportTemplateBusiness.class).find(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET);
-				reportTemplateBackgroundFiles.add(reportTemplate.getBackgroundImage());
-				reportTemplateBackgroundFiles.add(reportTemplate.getDraftBackgroundImage());
+				if(reportTemplate.getBackgroundImage()!=null)
+					reportTemplateBackgroundFiles.add(reportTemplate.getBackgroundImage());
+				if(reportTemplate.getDraftBackgroundImage()!=null)
+					reportTemplateBackgroundFiles.add(reportTemplate.getDraftBackgroundImage());
 				page.setChoices(ProcessPageAdapter.Form.FIELD_BACKGROUND_IMAGE_FILE, reportTemplateBackgroundFiles);
 			}
+			*/
 			//page.setChoices(Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED, indexes);
 		}
 		
@@ -285,9 +290,11 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				ServiceCallArguments callArguments = new ServiceCallArguments();
 				callArguments.setExecutionProgress(page.getExecutionProgress());
-				Form form = (Form) data;
+				Form form = (Form) data; 
+				CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<StudentClassroomSessionDivision>(null)
+						.setIsDraft(form.getDraft());
 				inject(StudentClassroomSessionDivisionBusiness.class).buildReport(classroomSessionDivisions,form.getUpdateEvaluationResults(),form.getUpdateAttendanceResults()
-						,form.getUpdateRankResults(),schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),callArguments);
+						,form.getUpdateRankResults(),schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),reportArgumentsBuilder,callArguments);
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults()
 					,schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionEvaluationResults(),schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionRankResults()}
 				, actionIdentifier)){
@@ -356,6 +363,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			@Input @InputChoice @InputManyChoice @InputManyCheck private List<Integer> classroomSessionDivisionIndexesRequired;
 			
 			@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private File backgroundImageFile;
+			@Input @InputBooleanButton private Boolean draft=Boolean.FALSE;
 			
 			public static final String FIELD_UPDATE_EVALUATION_RESULTS = "updateEvaluationResults";
 			public static final String FIELD_UPDATE_ATTENDANCE_RESULTS = "updateAttendanceResults";
@@ -365,6 +373,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			public static final String FIELD_CLASSROOMSESSIONDIVISION_MAX_COUNT = "classroomSessionDivisionMaxCount";
 			public static final String FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED = "classroomSessionDivisionIndexesRequired";
 			
+			public static final String FIELD_DRAFT = "draft";
 			public static final String FIELD_BACKGROUND_IMAGE_FILE = "backgroundImageFile";
 		}
 	}

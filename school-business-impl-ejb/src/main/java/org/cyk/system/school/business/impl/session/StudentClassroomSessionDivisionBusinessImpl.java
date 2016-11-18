@@ -25,6 +25,7 @@ import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
+import org.cyk.system.root.persistence.api.file.report.ReportTemplateDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
@@ -140,17 +141,17 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override 
-	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,ServiceCallArguments arguments) {
+	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments,ServiceCallArguments arguments) {
 		//logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 		//		,inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null) || !Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) ){
 			
-			CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = 
-	    			new CreateReportFileArguments<StudentClassroomSessionDivision>(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET
-	    					, studentClassroomSessionDivision,findReportFile(studentClassroomSessionDivision, SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET, Boolean.FALSE));
+					
+			//new CreateReportFileArguments<StudentClassroomSessionDivision>(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET
+	    	//				, studentClassroomSessionDivision,findReportFile(studentClassroomSessionDivision, SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET, Boolean.FALSE));
 			
-			createReportFile(studentClassroomSessionDivision, reportArguments);
+			createReportFile(reportArguments);
 			genericDao.update(studentClassroomSessionDivision.getResults());
 			logIdentifiable("Report built",studentClassroomSessionDivision);
 			
@@ -167,8 +168,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		buildReport(studentClassroomSessionDivision, new ServiceCallArguments());
+	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments) {
+		buildReport(studentClassroomSessionDivision,reportArguments, new ServiceCallArguments());
 	}
 	
 	@Override
@@ -178,7 +179,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 		
 	@Override 
-	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean updateEvaluationResults,Boolean updateAttendanceResults,Boolean updateRankResults,RankOptions<SortableStudentResults> rankOptions,ServiceCallArguments callArguments) {
+	public void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean updateEvaluationResults,Boolean updateAttendanceResults,Boolean updateRankResults
+			,RankOptions<SortableStudentResults> rankOptions,CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder,ServiceCallArguments callArguments) {
 		if(Boolean.TRUE.equals(updateEvaluationResults))
 			updateAverage(classroomSessionDivisions, callArguments);
 		clearCallArgumentsExecution(callArguments);
@@ -188,7 +190,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		if(Boolean.TRUE.equals(updateRankResults))
 			updateRank(classroomSessionDivisions,rankOptions, callArguments);
 		clearCallArgumentsExecution(callArguments);
-		
+		reportArgumentsBuilder.setReportTemplate(inject(ReportTemplateDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET));
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		//debug(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getResults());
@@ -202,7 +204,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
 				logIdentifiable("Cannot build report", studentClassroomSessionDivision);
 			}else{
-				buildReport(studentClassroomSessionDivision);
+				CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = new CreateReportFileArguments.Builder<>(studentClassroomSessionDivision,reportArgumentsBuilder).build();
+				reportArguments.setReportTemplate(inject(ReportTemplateDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET));
+				buildReport(studentClassroomSessionDivision,reportArguments);
 			}
 			
 			addCallArgumentsWorkDoneByStep(callArguments);

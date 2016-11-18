@@ -18,6 +18,7 @@ import lombok.Setter;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
@@ -210,7 +211,9 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		*/
 		if(Boolean.TRUE.equals(buildReportFile)){
 			System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions");
-			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),new ServiceCallArguments());
+			CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<StudentClassroomSessionDivision>(null)
+					.setIsDraft(Boolean.FALSE);
+			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),reportArgumentsBuilder,new ServiceCallArguments());
 			
 			if(Boolean.TRUE.equals(createFileOnDisk)){
 				Collection<File> files = new ArrayList<>();

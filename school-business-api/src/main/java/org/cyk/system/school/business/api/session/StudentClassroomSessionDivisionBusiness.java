@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.model.file.File;
@@ -27,11 +29,11 @@ import lombok.Setter;
 
 public interface StudentClassroomSessionDivisionBusiness extends AbstractStudentResultsBusiness<ClassroomSessionDivision,StudentClassroomSessionDivision,StudentClassroomSessionDivisionSubject> {
 
-	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,ServiceCallArguments arguments);
-	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
+	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments,ServiceCallArguments arguments);
+	void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments);
 	
 	void buildReport(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean updateEvaluationResults,Boolean updateAttendanceResults,Boolean updateRankResults
-			,RankOptions<SortableStudentResults> rankOptions,ServiceCallArguments arguments);
+			,RankOptions<SortableStudentResults> rankOptions,CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder,ServiceCallArguments arguments);
 	
 	//void computeEvaluationResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,ServiceCallArguments arguments);
 	//void computeAttendanceResults(Collection<ClassroomSessionDivision> classroomSessionDivisions);
@@ -65,6 +67,12 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 		private static final long serialVersionUID = 7151479991050865862L;
 		
 	}
+	
+	/**/
+	
+	//TODO to be nicely designed
+	Set<String> EVALUATION_TYPE_CODES=new LinkedHashSet<>();
+	Boolean[] SUM_MARKS = {Boolean.FALSE};
 	
 	//TODO to be moved in Impl
 	public static interface Listener{

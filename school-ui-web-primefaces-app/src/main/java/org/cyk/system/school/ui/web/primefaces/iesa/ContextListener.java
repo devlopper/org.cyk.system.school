@@ -11,6 +11,7 @@ import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeDetails;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
+import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
@@ -33,7 +34,7 @@ import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
-import org.cyk.system.school.business.api.session.SchoolReportProducer;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.MetricBusinessAdapter;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
@@ -130,8 +131,8 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
 		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();
-		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
-    	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
+		StudentClassroomSessionDivisionBusiness.EVALUATION_TYPE_CODES.addAll(Arrays.asList("Test1","Test2","Exam"));
+    	StudentClassroomSessionDivisionBusiness.SUM_MARKS[0] = Boolean.TRUE;
     	
     	SaleConsultPage.SHOW_SALE_PRODUCT_TABLE = Boolean.FALSE;
     	
@@ -240,7 +241,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		
 		@Override
 		public StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
-				StudentClassroomSessionDivisionReportParameters parameters) {
+				CreateReportFileArguments<StudentClassroomSessionDivision> parameters) {
 			LabelValueCollectionReport labelValueCollectionReport;
 			StudentClassroomSessionDivisionReportTemplateFile r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
 			

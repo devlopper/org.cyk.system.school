@@ -11,15 +11,13 @@ import java.util.HashSet;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
+import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
@@ -45,8 +43,8 @@ import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusine
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
-import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
@@ -93,6 +91,9 @@ import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {
@@ -501,8 +502,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	public void produce(Listener listener) {
 		this.listener =listener;
 		rootDataProducerHelper.setBasePackage(SchoolBusinessLayer.class.getPackage());
-		SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.getEvaluationTypeCodes().addAll(Arrays.asList("Test1","Test2","Exam"));
-    	SchoolReportProducer.DEFAULT_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT_PARAMETERS.setSumMarks(Boolean.TRUE);
+		StudentClassroomSessionDivisionBusiness.EVALUATION_TYPE_CODES.addAll(Arrays.asList("Test1","Test2","Exam"));
+    	StudentClassroomSessionDivisionBusiness.SUM_MARKS[0] = Boolean.TRUE;
 		//schoolBusinessLayer.setAverageComputationListener(new Averagec);
 		
     	structure();
@@ -598,7 +599,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	
 		@Override
 		public StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
-				StudentClassroomSessionDivisionReportParameters parameters) {
+				CreateReportFileArguments<StudentClassroomSessionDivision> parameters) {
 			LabelValueCollectionReport labelValueCollectionReport;
 			StudentClassroomSessionDivisionReportTemplateFile report = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
 			
