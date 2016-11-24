@@ -12,11 +12,9 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
-import org.cyk.system.root.business.api.file.report.ReportTemplateBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
 import org.cyk.system.root.model.file.File;
-import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
@@ -336,6 +334,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					ExceptionUtils.getInstance().exception("noresultsfound");
 				WebNavigationManager.getInstance().redirectToDynamicProcessManyPage(SchoolWebManager.getInstance().getOutcomeStudentClassroomSessionConsultManyRank(),StudentClassroomSession.class
 						,studentClassroomSessions,actionIdentifier);*/
+				inject(StudentClassroomSessionDivisionBusiness.class).sendReportFileToEmail(inject(StudentClassroomSessionDivisionBusiness.class)
+						.findByClassroomSessionDivisions(inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessions(classroomSessions)));
 			}
 		}
 		

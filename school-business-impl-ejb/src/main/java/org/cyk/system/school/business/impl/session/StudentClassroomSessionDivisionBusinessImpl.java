@@ -14,15 +14,22 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.FormatterBusiness;
+import org.cyk.system.root.business.api.file.FileBusiness;
+import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
+import org.cyk.system.root.business.api.message.MailBusiness;
+import org.cyk.system.root.business.api.message.MessageSendingBusiness.SendArguments;
+import org.cyk.system.root.model.event.Notification;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.FileIdentifiableGlobalIdentifier;
+import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricValue;
+import org.cyk.system.root.model.party.person.PersonRelationshipType;
 import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
 import org.cyk.system.root.persistence.api.file.report.ReportTemplateDao;
@@ -57,6 +64,7 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+import org.cyk.utility.common.ThreadPoolExecutor;
 import org.cyk.utility.common.cdi.BeanAdapter;
 
 @Stateless
@@ -258,6 +266,39 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision()
 				.getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class)-
 				studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration());
+	}
+	
+	@Override
+	public Collection<File> sendReportFileToEmail(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
+		Collection<Notification> notifications = new ArrayList<>();
+		FileRepresentationType fileRepresentationType = inject(FileRepresentationTypeDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET);
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
+			Notification notification = new Notification();
+			notification.setTitle("Bulletin de "+studentClassroomSessionDivision.getStudent());
+			notification.setMessage("Ici joint le bulletin de "+studentClassroomSessionDivision.getStudent());
+			notification.addReceiverIdentifiers(inject(ElectronicMailBusiness.class).findAddresses(studentClassroomSessionDivision.getStudent().getPerson()
+					, Arrays.asList(PersonRelationshipType.FAMILY_FATHER,PersonRelationshipType.FAMILY_MOTHER)));
+			Collection<File> files = inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision);
+			notification.addFiles(files);
+			
+			notifications.add(notification);
+		}
+		
+		SendArguments sendArguments = new SendArguments();
+		sendArguments.setNumberOfRetry(30l);
+		sendArguments.setNumberOfMillisecondBeforeRetry(1000l * 10);
+		sendArguments.setCorePoolSize(10);
+		sendArguments.setMaximumPoolSize(50);
+		sendArguments.setThreadPoolExecutorListener(new ThreadPoolExecutor.Listener.Adapter.Default() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Throwable getThrowable(Throwable throwable) {
+				return throwable instanceof RuntimeException ? throwable.getCause() : throwable;
+			}
+		});
+		//sendArguments.setDebug(Boolean.TRUE);
+		inject(MailBusiness.class).send(notifications,null,sendArguments);
+		return null;
 	}
 	
 	/**/
