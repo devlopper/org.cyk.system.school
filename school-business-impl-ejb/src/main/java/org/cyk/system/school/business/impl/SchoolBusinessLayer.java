@@ -4,16 +4,16 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.product.IntangibleProductBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyDataProducerHelper;
+import org.cyk.system.company.model.CompanyConstant;
 import org.cyk.system.company.model.product.IntangibleProduct;
 import org.cyk.system.company.model.sale.SalableProduct;
 import org.cyk.system.root.business.api.ClazzBusiness;
+import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
@@ -25,6 +25,7 @@ import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFormatter;
 import org.cyk.system.root.business.impl.BusinessServiceProvider;
 import org.cyk.system.root.business.impl.BusinessServiceProvider.Service;
+import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
@@ -55,6 +56,9 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 import org.cyk.utility.common.computation.DataReadConfiguration;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER) @Getter
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
@@ -88,6 +92,19 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+		PersistDataListener.COLLECTION.add(new PersistDataListener.Adapter.Default(){
+			private static final long serialVersionUID = -950053441831528010L;
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T processPropertyValue(Class<?> aClass,String instanceCode, String name, T value) {
+				if(ArrayUtils.contains(new String[]{CompanyConstant.REPORT_EMPLOYEE_EMPLOYMENT_CONTRACT}, instanceCode)){
+					if(PersistDataListener.BASE_PACKAGE.equals(name))
+						return (T) CompanyBusinessLayer.class.getPackage();
+				}
+				return super.processPropertyValue(aClass, instanceCode, name, value);
+			}
+		});
+		
 		AbstractRootReportProducer.DEFAULT = new AbstractSchoolReportProducer.Default();
 		RootBusinessLayer.GLOBAL_IDENTIFIER_UNBUILDABLE_CLASSES.add(StudentResults.class);
 		registerFormatter(AcademicSession.class, new AbstractFormatter<AcademicSession>() {
@@ -110,6 +127,15 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			@Override
 			public String format(ClassroomSessionDivision classroomSessionDivision, ContentType contentType) {
 				return classroomSessionDivision.getTimeDivisionType().getName()+Constant.CHARACTER_SPACE+(classroomSessionDivision.getOrderNumber());
+			}
+		});
+		
+		registerFormatter(StudentClassroomSessionDivision.class, new AbstractFormatter<StudentClassroomSessionDivision>() {
+			private static final long serialVersionUID = -4793331650394948152L;
+			@Override
+			public String format(StudentClassroomSessionDivision studentClassroomSessionDivision, ContentType contentType) {
+				return inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision(),contentType)+Constant.CHARACTER_SPACE
+						+inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getStudent(),contentType);
 			}
 		});
 		
@@ -179,7 +205,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     	
     	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml");
     	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE,"certificat de scolarité",Boolean.TRUE, "report/student/tuition_certificate.jrxml");
-    	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET,"bulletin trimestriel",Boolean.TRUE, "report/student/classroom_session_division_sheet.jrxml");
+    	//inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET,"bulletin trimestriel",Boolean.TRUE, "report/student/classroom_session_division_sheet.jrxml");
 	}
 	
 	@Override

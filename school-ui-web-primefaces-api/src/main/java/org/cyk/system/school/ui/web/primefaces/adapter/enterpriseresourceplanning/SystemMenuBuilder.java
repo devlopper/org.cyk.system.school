@@ -212,15 +212,15 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 				model.setExpandedIcon(Icon.THING_FOLDER_EXPANDED);
 				if(model.getData() instanceof ClassroomSessionDivisionSubjectEvaluationType){
 					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) model.getData();
-					if(inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
+					if(classroomSessionDivisionSubjectEvaluationType.getCountInterval()!=null && inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
 							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
 						model.setCollapsedIcon(Icon.THING_TABLE);
-						model.setExpandedIcon(Icon.THING_TABLE);
-						Collection<Evaluation> evaluations = inject(EvaluationBusiness.class).findByClassroomSessionDivisionSubjectEvaluationType((ClassroomSessionDivisionSubjectEvaluationType) model.getData());
-						if(evaluations.isEmpty())
-							;
-						else
-							model.getCss().addClass("treenodeevaluationexistclass");
+					model.setExpandedIcon(Icon.THING_TABLE);
+					Collection<Evaluation> evaluations = inject(EvaluationBusiness.class).findByClassroomSessionDivisionSubjectEvaluationType((ClassroomSessionDivisionSubjectEvaluationType) model.getData());
+					if(evaluations.isEmpty())
+						;
+					else
+						model.getCss().addClass("treenodeevaluationexistclass");
 				}
 				return super.createNode(model, parent);
 			}

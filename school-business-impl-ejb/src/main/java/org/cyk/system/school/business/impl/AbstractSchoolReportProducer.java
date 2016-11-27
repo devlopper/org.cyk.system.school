@@ -60,7 +60,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 		
 		if(identifiable instanceof StudentClassroomSessionDivision){
-			if(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET.equals(reportTemplateCode))
+			//if(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET.equals(reportTemplateCode))
 				return StudentClassroomSessionDivisionReportTemplateFile.class;
 		}
 		

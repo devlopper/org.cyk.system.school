@@ -82,13 +82,13 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	
 	public Collection<ClassroomSessionInfos> instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
-			,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Object[][] evaluationTypes,Collection<Subject> subjects,Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections
+			,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,CommonNodeInformations commonNodeInformations,Object[][] evaluationTypes,Collection<Subject> subjects,Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections
 			,MetricCollection[] studentMetricCollections,String[] suffixes,Boolean studentEvaluationRequired,Boolean studentRankable){
 		if(suffixes==null)
 			suffixes = new String[]{null};
 		Collection<ClassroomSessionInfos> classroomSessionInfosCollection = new ArrayList<>();
 		for(String suffix : suffixes){
-			ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision,null);
+			ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision,null,commonNodeInformations);
 			classroomSession.setSuffix(StringUtils.isBlank(suffix)?null:suffix);
 			classroomSession.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(new Date());
 			classroomSession.getExistencePeriod().setToDate(new Date());

@@ -11,10 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.system.school.model.NodeResults;
@@ -23,6 +19,10 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
 public class ClassroomSession extends AbstractIdentifiablePeriod implements Serializable {
@@ -33,17 +33,29 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	@ManyToOne @NotNull private LevelTimeDivision levelTimeDivision;
 	private String suffix;
 	@ManyToOne private Teacher coordinator;
+	@Embedded private CommonNodeInformations nodeInformations;
 	@Embedded private NodeResults results = new NodeResults();
 	
 	@Column(nullable=false) @NotNull private Long numberOfDivisions=0l;
 	
 	@Transient private Collection<ClassroomSessionDivision> divisions = new ArrayList<>();
 	
-	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Teacher coordinator) {
+	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Teacher coordinator,CommonNodeInformations nodeInformations) {
 		super();
 		this.academicSession = academicSession;
 		this.levelTimeDivision = levelTimeDivision;
 		this.coordinator = coordinator;
+		this.nodeInformations = nodeInformations;
+	}
+	
+	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Teacher coordinator) {
+		this(academicSession,levelTimeDivision,coordinator,null);
+	}
+	
+	public CommonNodeInformations getNodeInformations(){
+		if(nodeInformations==null)
+			nodeInformations = new CommonNodeInformations();
+		return nodeInformations;
 	}
 	
 	public NodeResults getResults(){
@@ -68,5 +80,6 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	public static final String FIELD_COORDINATOR = "coordinator";
 	public static final String FIELD_NUMBER_OF_DIVISIONS = "numberOfDivisions";
 	public static final String FIELD_SUFFIX = "suffix";
+	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
 	
 }

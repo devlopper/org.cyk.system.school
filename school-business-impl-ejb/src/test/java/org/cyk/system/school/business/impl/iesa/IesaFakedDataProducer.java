@@ -12,9 +12,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.company.model.CompanyConstant;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
@@ -23,6 +25,7 @@ import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
+import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
@@ -34,6 +37,7 @@ import org.cyk.system.root.model.mathematics.MetricValueInputted;
 import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.persistence.api.file.FileDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
@@ -213,7 +217,42 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Override
 	protected void initialisation() {
 		super.initialisation();
+		PersistDataListener.COLLECTION.add(new PersistDataListener.Adapter.Default(){
+			private static final long serialVersionUID = -950053441831528010L;
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T processPropertyValue(Class<?> aClass,String instanceCode, String name, T value) {
+				if(File.class.equals(aClass)){
+					
+					if(CompanyConstant.FILE_DOCUMENT_HEADER.equals(instanceCode)){
+						if(PersistDataListener.BASE_PACKAGE.equals(name))
+							return (T) SchoolBusinessLayer.class.getPackage();
+						if(PersistDataListener.RELATIVE_PATH.equals(name))
+							return (T) "image/iesa/document_header.png";
+					}else if(CompanyConstant.FILE_DOCUMENT_BACKGROUND.equals(instanceCode)){
+						if(PersistDataListener.BASE_PACKAGE.equals(name))
+							return (T) SchoolBusinessLayer.class.getPackage();
+						if(PersistDataListener.RELATIVE_PATH.equals(name))
+							return (T) "image/iesa/document_background.jpg";
+					}else if(CompanyConstant.FILE_DOCUMENT_BACKGROUND_DRAFT.equals(instanceCode)){
+						if(PersistDataListener.BASE_PACKAGE.equals(name))
+							return (T) SchoolBusinessLayer.class.getPackage();
+						if(PersistDataListener.RELATIVE_PATH.equals(name))
+							return (T) "image/iesa/document_background_draft.jpg";
+					}
+					
+					if(PersistDataListener.BASE_PACKAGE.equals(name))
+						if(StringUtils.startsWith(instanceCode, "Iesa"))
+							return (T) SchoolBusinessLayer.class.getPackage();
+					
+					
+				}
+				
+				return super.processPropertyValue(aClass, instanceCode, name, value);
+			}
+		});
 		
+		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, AcademicSession.class);
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, AcademicSession.class);
 		
@@ -264,7 +303,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			
 			@Override
 			public byte[] getCompanyLogoBytes() {
-				return getResourceAsBytes(SchoolBusinessLayer.class.getPackage(),"image/iesa.png");
+				return getResourceAsBytes(SchoolBusinessLayer.class.getPackage(),"image/iesa/logo.png");
 			}
 			
 			@Override
@@ -367,19 +406,18 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				
 		createMetricCollections();
 		
-    	File reportHeaderFile = createFile("report/iesa/document_header.png","document_header.png");
+    	File documentHeaderFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_HEADER); 
+    	File documentBackgroundImageFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_BACKGROUND); 
+    	File documentBackgroundImageDraftFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_BACKGROUND_DRAFT); 
     	
-    	File reportFilePk = createFile("report/iesa/pkg.jrxml", "studentclassroomsessiondivision_pkg.jrxml");
-		ReportTemplate reportTemplatePk = new ReportTemplate("SCSDRTPK","PK Marks card",Boolean.TRUE,reportFilePk,reportHeaderFile
-				,createFile("report/iesa/studentclassroomsessiondivisionreport_background.jpg","studentclassroomsessiondivisionreport_background.jpg"),null);
-		create(reportTemplatePk);
+    	ReportTemplate reportTemplatePk = rootDataProducerHelper.createReportTemplate("IesaReportTemplatePK","Report Sheet",Boolean.TRUE,"report/iesa/pkg.jrxml",documentHeaderFile
+				, documentBackgroundImageFile, documentBackgroundImageDraftFile);
     	
-		ReportTemplate reportTemplate = new ReportTemplate("SCSDRT","G Marks card",Boolean.TRUE,createFile("report/iesa/g1g12.jrxml", "reportcard.jrxml"),null,null,null);
-		create(reportTemplate);
+		ReportTemplate reportTemplateG1G12 = rootDataProducerHelper.createReportTemplate("IesaReportTemplateG1G12", "Report Sheet"
+				, Boolean.TRUE, "report/iesa/g1g12.jrxml", documentHeaderFile, documentBackgroundImageFile, documentBackgroundImageDraftFile); 
 		
 		Interval interval = inject(IntervalBusiness.class).instanciateOne(null, "A", "1", "2");
 		create(interval);
-		//commonNodeInformations.setClassroomSessionDivisionOrderNumberInterval();
 		
 		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY
 				, TimeDivisionType.TRIMESTER,"50", "2",interval);
@@ -389,7 +427,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						{"A+", "Excellent", "90", "100"},{"A", "Very good", "80", "89.99"},{"B+", "Good", "70", "79.99"},{"B", "Fair", "60", "69.99"}
 						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
 								.instanciateOne("ICP1", "Promotion Scale", new String[][]{
-										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
+										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplateG1G12
 						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2",interval);	
 		//CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
@@ -398,7 +436,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 						{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
 						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
 								.instanciateOne("ICP2", "Promotion Scale", new String[][]{
-										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplate
+										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplateG1G12
 						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50","2",interval);	
 		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
@@ -428,19 +466,19 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	
     	pk = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("PK","Pre-Kindergarten",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
-    			,null, null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE).iterator().next();
+    			,null, null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE).iterator().next();
     	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("K1","Kindergarten 1",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
-    			, null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
+    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
     	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("K2","Kindergarten 2",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
-    			, null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
+    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
     	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("K3","Kindergarten 3",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
-    			, null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
+    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
     	
     	g1 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
-    			, schoolDataProducerHelper.createLevelTimeDivision("G1","Grade 1",levelGroupPrimary,commonNodeInformationsG1G3,gradeIndex++) 
+    			, schoolDataProducerHelper.createLevelTimeDivision("G1","Grade 1",levelGroupPrimary,commonNodeInformationsG1G3,gradeIndex++),null 
     			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3,classroomSessionDivisionStudentsMetricCollections
     			,g1g6MetricCollections,new String[]{"A","B"},Boolean.TRUE,Boolean.TRUE).iterator().next();    	
     	/*g2 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
@@ -487,7 +525,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			,new Object[][]{{evaluationTypeTest1,"0.2","100"},{evaluationTypeTest2,"0.2","100"},{evaluationTypeExam,"0.6","100"}}, subjectsG7G9,classroomSessionDivisionStudentsMetricCollections
     			,g7g12MetricCollections,null,Boolean.TRUE,Boolean.FALSE).iterator().next();
     	*/g12 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
-    			, schoolDataProducerHelper.createLevelTimeDivision("G12","Grade 12",levelGroupSecondary,commonNodeInformationsG10G12,gradeIndex++) 
+    			, schoolDataProducerHelper.createLevelTimeDivision("G12","Grade 12",levelGroupSecondary,commonNodeInformationsG10G12,gradeIndex++) ,null
     			,new Object[][]{{evaluationTypeTest1,"0.2","100"},{evaluationTypeTest2,"0.2","100"},{evaluationTypeExam,"0.6","100"}},subjectsG7G9,classroomSessionDivisionStudentsMetricCollections
     			,g7g12MetricCollections,new String[]{"A","B"},Boolean.TRUE,Boolean.FALSE).iterator().next();
     	
@@ -602,8 +640,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				CreateReportFileArguments<StudentClassroomSessionDivision> parameters) {
 			LabelValueCollectionReport labelValueCollectionReport;
 			StudentClassroomSessionDivisionReportTemplateFile report = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
-			
-			if(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getOrderNumber()>4){
+			if(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getOrderNumber()>=4){
 			
 				report.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 15%","Test 2 15%","Exam 70%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
 				

@@ -12,9 +12,11 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.file.FileBusiness;
+import org.cyk.system.root.business.api.file.FileRepresentationTypeBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
@@ -31,8 +33,6 @@ import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
 import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
-import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
-import org.cyk.system.root.persistence.api.file.report.ReportTemplateDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
@@ -43,7 +43,6 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
-import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -64,6 +63,7 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.ThreadPoolExecutor;
 import org.cyk.utility.common.cdi.BeanAdapter;
 
@@ -150,15 +150,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override 
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments,ServiceCallArguments arguments) {
-		//logTrace("Building Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
-		//		,inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null) || !Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) ){
-			
-					
-			//new CreateReportFileArguments<StudentClassroomSessionDivision>(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET
-	    	//				, studentClassroomSessionDivision,findReportFile(studentClassroomSessionDivision, SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET, Boolean.FALSE));
-			
 			createReportFile(reportArguments);
 			genericDao.update(studentClassroomSessionDivision.getResults());
 			logIdentifiable("Report built",studentClassroomSessionDivision);
@@ -198,7 +191,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		if(Boolean.TRUE.equals(updateRankResults))
 			updateRank(classroomSessionDivisions,rankOptions, callArguments);
 		clearCallArgumentsExecution(callArguments);
-		reportArgumentsBuilder.setReportTemplate(inject(ReportTemplateDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET));
+		//reportArgumentsBuilder.setReportTemplate(inject(ReportTemplateDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET));
 		logTrace("Computing Student ClassroomSessionDivision Report of {} ClassroomSessionDivision(s)", classroomSessionDivisions.size());
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = dao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		//debug(studentClassroomSessionDivisions.iterator().next().getClassroomSessionDivision().getResults());
@@ -212,8 +205,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
 				logIdentifiable("Cannot build report", studentClassroomSessionDivision);
 			}else{
+				reportArgumentsBuilder.setReportTemplate(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision
+						.getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate());
 				CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = new CreateReportFileArguments.Builder<>(studentClassroomSessionDivision,reportArgumentsBuilder).build();
-				reportArguments.setReportTemplate(inject(ReportTemplateDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET));
+				reportArguments.setIdentifiableName(inject(FormatterBusiness.class).format(studentClassroomSessionDivision));
 				buildReport(studentClassroomSessionDivision,reportArguments);
 			}
 			
@@ -268,19 +263,31 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration());
 	}
 	
+	private Collection<FileRepresentationType> getStudentClassroomSessionDivisionResultsFileRepresentationTypes(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions){
+		return inject(ClassroomSessionBusiness.class).findStudentClassroomSessionDivisionResultsFileRepresentationTypes(
+				inject(ClassroomSessionBusiness.class).findByStudentClassroomSessionDivisions(studentClassroomSessionDivisions));
+	}
+	
 	@Override
 	public Collection<File> sendReportFileToEmail(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		Collection<Notification> notifications = new ArrayList<>();
-		FileRepresentationType fileRepresentationType = inject(FileRepresentationTypeDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET);
+		Collection<FileRepresentationType> fileRepresentationTypes = getStudentClassroomSessionDivisionResultsFileRepresentationTypes(studentClassroomSessionDivisions);
+
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
+			FileRepresentationType fileRepresentationType = inject(FileRepresentationTypeBusiness.class).findOne(fileRepresentationTypes
+					, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
+					.getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate().getCode());
+			Collection<File> files = inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision);
 			Notification notification = new Notification();
-			notification.setTitle("Bulletin de "+studentClassroomSessionDivision.getStudent());
-			notification.setMessage("Ici joint le bulletin de "+studentClassroomSessionDivision.getStudent());
+			Collection<String> fileNames = new ArrayList<>();
+			for(File file : files)
+				fileNames.add(file.getName());
+			String fileNamesAsString = StringUtils.join(fileNames,Constant.CHARACTER_COMA.toString());
+			notification.setTitle(fileNamesAsString);
+			notification.setMessage("Ici joint : "+fileNamesAsString);
 			notification.addReceiverIdentifiers(inject(ElectronicMailBusiness.class).findAddresses(studentClassroomSessionDivision.getStudent().getPerson()
 					, Arrays.asList(PersonRelationshipType.FAMILY_FATHER,PersonRelationshipType.FAMILY_MOTHER)));
-			Collection<File> files = inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision);
 			notification.addFiles(files);
-			
 			notifications.add(notification);
 		}
 		
@@ -388,7 +395,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public Collection<File> findReportFiles(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		FileIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new FileIdentifiableGlobalIdentifier.SearchCriteria();
     	searchCriteria.addIdentifiablesGlobalIdentifiers(studentClassroomSessionDivisions);
-    	searchCriteria.addRepresentationType(inject(FileRepresentationTypeDao.class).read(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET));
+    	searchCriteria.addRepresentationTypes(getStudentClassroomSessionDivisionResultsFileRepresentationTypes(studentClassroomSessionDivisions));
     	Collection<FileIdentifiableGlobalIdentifier> fileIdentifiableGlobalIdentifiers = inject(FileIdentifiableGlobalIdentifierDao.class).readByCriteria(searchCriteria);
     	
 		Collection<File> files = new ArrayList<>();

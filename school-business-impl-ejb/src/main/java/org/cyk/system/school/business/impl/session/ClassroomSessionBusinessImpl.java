@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -15,8 +16,10 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
+import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -25,9 +28,9 @@ import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 
-@Stateless
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
@@ -98,6 +101,22 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		if(commonNodeInformations==null)
 			commonNodeInformations = classroomSession.getAcademicSession().getSchool().getNodeInformations();
 		return commonNodeInformations;
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<FileRepresentationType> findStudentClassroomSessionDivisionResultsFileRepresentationTypes(Collection<ClassroomSession> classroomSessions) {
+		Set<String> codes = new LinkedHashSet<>();
+		for(ClassroomSession classroomSession : classroomSessions)
+			codes.add(classroomSession.getNodeInformations().getStudentClassroomSessionDivisionResultsReportTemplate().getCode());
+		return inject(FileRepresentationTypeDao.class).readByGlobalIdentifierCodes(codes);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<ClassroomSession> findByStudentClassroomSessionDivisions(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
+		Collection<ClassroomSession> classroomSessions = new ArrayList<>();
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
+			classroomSessions.add(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession());
+		return classroomSessions;
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)

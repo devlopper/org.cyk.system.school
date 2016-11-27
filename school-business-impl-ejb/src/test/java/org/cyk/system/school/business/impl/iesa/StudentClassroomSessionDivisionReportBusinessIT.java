@@ -1,12 +1,14 @@
 package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
+import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
+import org.cyk.system.root.model.party.person.PersonRelationshipType;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionInfos;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.EvaluationType;
 
@@ -20,13 +22,17 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	inject(StudentBusiness.class).create(
-    			inject(StudentBusiness.class).instanciateManyRandomly(new LinkedHashSet<String>(Arrays.asList("STUD1","STUD2","STUD3","STUD4","STUD5"))));
+    	Student student1 = inject(StudentBusiness.class).instanciateOne();
+    	student1.setCode("STUD1");
+    	student1.setName("komenan");
+    	student1.getPerson().setLastnames("yao christian");
     	
-    	//schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
-    	//		dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
+    	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
     	
-    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2","STUD3"/*,"STUD4","STUD5"*/},
+    	inject(StudentBusiness.class).create(Arrays.asList(student1));
+    	
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{student1.getCode()},
     			dataProducer.getG1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
     	
     	//schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{"STUD1","STUD2"/*,"STUD3","STUD4","STUD5"*/},
@@ -58,12 +64,12 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), new Object[][]{
     		new Object[]{classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     	    		{"STUD1","90","30","60"}
-    	    		,{"STUD2","70","50","60"}
-    	              ,{"STUD3","40","60","40"}
+    	    		//,{"STUD2","70","50","60"}
+    	            //  ,{"STUD3","40","60","40"}
     	              //,{"STUD4","45","45","80"}
     	              //,{"STUD5","20","95","55"}
     	    	}}
-    	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
+    	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
     	
     	/*StudentClassroomSessionDivision studentClassroomSessionDivision = inject(StudentClassroomSessionDivisionBusiness.class).findByStudentByClassroomSessionDivision(
     			inject(StudentBusiness.class).find("STUD1"), classroomSessionDivisionInfos.getClassroomSessionDivision());

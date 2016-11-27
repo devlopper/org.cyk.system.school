@@ -15,7 +15,7 @@ public class LevelName extends AbstractEnumeration implements Serializable{
 	
 	private static final long serialVersionUID = 374208919427476791L;
 	
-	@Embedded private CommonNodeInformations nodeInformations;//Those informations should depend on academic session. so i think we can also declare in ClassroomSession
+	@Embedded private CommonNodeInformations nodeInformations;
 	
 	public LevelName() {}
 

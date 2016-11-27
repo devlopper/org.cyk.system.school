@@ -61,8 +61,8 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	}
 	
 	@Override
-	public ClassroomSessionDivisionSubject create(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-		super.create(classroomSessionDivisionSubject);
+	protected void afterCreate(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		super.afterCreate(classroomSessionDivisionSubject);
 		SubjectClassroomSession subjectClassroomSession = subjectClassroomSessionDao.readBySubjectByClassroomSession(
 				classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
 		if(subjectClassroomSession==null){
@@ -78,8 +78,6 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			studentClassroomSessionDivisionSubject.setCascadeOperationToMaster(Boolean.TRUE);
 			inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentClassroomSessionDivisionSubject);
 		}
-		
-		return classroomSessionDivisionSubject;
 	}
 	
 	private void cascade(ClassroomSessionDivisionSubject classroomSessionDivisionSubject){
@@ -180,16 +178,6 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 1L;
 
-				@Override
-				public void afterCreate(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-					super.afterCreate(classroomSessionDivisionSubject);
-					/*if(Boolean.TRUE.equals(getUseClassroomSessionDivisionSubjectEvaluationTypeModelsOnCreate()))
-						for(ClassroomSessionDivisionSubjectEvaluationType model : getClassroomSessionDivisionSubjectEvaluationTypeModels()){
-							
-						}*/
-							
-				}
-				
 				/**/
 				
 				public static class EnterpriseResourcePlanning extends Default implements Serializable {

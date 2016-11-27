@@ -13,9 +13,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
@@ -29,6 +26,7 @@ import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricValueInputted;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
@@ -66,6 +64,9 @@ import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper implements Serializable {
@@ -228,7 +229,11 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 											, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
 								//assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
 								System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession());
-								writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
+								//writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
+								write(inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(inject(FileRepresentationTypeDao.class)
+										.read(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
+												.getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate().getCode())
+										, studentClassroomSessionDivision).iterator().next());
 								//files.add(studentClassroomSessionDivision.getResults().getReport());	
 							}
 						}
@@ -479,7 +484,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	/**/
 	
-	public void simulateStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Object[][] objects,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean generateReport,Boolean printReport){
+	public void simulateStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Object[][] objects,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean generateReport,Boolean printReport,Boolean email){
 		if(objects!=null)
 			for(Object[] object : objects){
 				createSubjectEvaluations((ClassroomSessionDivisionSubject)object[0],(String[][])object[1]);
@@ -491,7 +496,11 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     	}
     	
     	computeStudentClassroomSessionDivisionResults(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,generateReport,printReport);
-    }
+    	
+    	if(Boolean.TRUE.equals(email))
+    		inject(StudentClassroomSessionDivisionBusiness.class).sendReportFileToEmail(inject(StudentClassroomSessionDivisionBusiness.class)
+				.findByClassroomSessionDivisions(Arrays.asList(classroomSessionDivision)));
+	}
 	
 	public void simulate(SchoolBusinessSimulationParameters parameters){
 		System.out.println("School business simulation started");
