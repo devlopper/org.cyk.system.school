@@ -31,9 +31,11 @@ public class StudentClassroomSessionDivisionDetails extends AbstractStudentResul
 			return;
 		globalAppreciation = studentClassroomSessionDivision.getResults().getAppreciation();
 		conferenceRequested = formatResponse(studentClassroomSessionDivision.getResults().getConferenceRequested());
+		/*
 		if(studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()!=null)
 			numberOfTimeAbsent = numberBusiness.format(inject(ClassroomSessionBusiness.class).convertAttendanceTimeToDivisionDuration(
 					studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration()));
+		*/
 	}
 	
 	/**/

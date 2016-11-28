@@ -24,6 +24,7 @@ import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
@@ -33,12 +34,14 @@ import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricCollectionType;
 import org.cyk.system.root.model.mathematics.MetricValueInputted;
 import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -104,6 +107,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 
 	private static final long serialVersionUID = -1832900422621121762L;
 
+	public static final String MERIC_COLLECTION_STUDENT_ATTENDANCE = "ATTENDANCE";
 	public static final String MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR = "BSWHG1G6";
 	public static final String MERIC_COLLECTION_G7_G12_STUDENT_BEHAVIOUR = "BSWHG7G12";
 	
@@ -193,7 +197,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	
 	private ClassroomSessionInfos pk,k1,k2,k3,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12;
 	private MetricCollection[] pkMetricCollections,k1MetricCollections,k2k3MetricCollections
-	,g1g6MetricCollections,g7g12MetricCollections;
+	,g1g6MetricCollections,g7g12MetricCollections,attendanceMetricCollections;
 	
 	private Collection<ClassroomSessionDivisionSubject> grade1Subjects = new ArrayList<>();
 	private Collection<EvaluationType> evaluationTypes = new ArrayList<>();
@@ -353,6 +357,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 							
 						}
 					}
+					
+					
 				});
 	}
 	
@@ -404,8 +410,6 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		evaluationTypes.add(evaluationTypeTest2 = create(inject(EvaluationTypeBusiness.class).instanciateOne("Test 2")));
 		evaluationTypes.add(evaluationTypeExam = create(inject(EvaluationTypeBusiness.class).instanciateOne("Exam")));
 				
-		createMetricCollections();
-		
     	File documentHeaderFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_HEADER); 
     	File documentBackgroundImageFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_BACKGROUND); 
     	File documentBackgroundImageDraftFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_BACKGROUND_DRAFT); 
@@ -464,23 +468,25 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	
     	Long gradeIndex = 0l;
     	
+    	/*
+   
     	pk = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("PK","Pre-Kindergarten",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
-    			,null, null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE).iterator().next();
+    			,null, null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,attendanceMetricCollections,null,Boolean.FALSE,Boolean.FALSE).iterator().next();
     	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("K1","Kindergarten 1",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
-    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
+    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,attendanceMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
     	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("K2","Kindergarten 2",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
-    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
+    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,attendanceMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
     	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("K3","Kindergarten 3",levelGroupPrimary,commonNodeInformationsPk,gradeIndex++) 
-    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
-    	
+    			, null,null,null,classroomSessionDivisionStudentsMetricCollections,pkMetricCollections,attendanceMetricCollections,null,Boolean.FALSE,Boolean.FALSE);
+    	*/
     	g1 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("G1","Grade 1",levelGroupPrimary,commonNodeInformationsG1G3,gradeIndex++),null 
     			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3,classroomSessionDivisionStudentsMetricCollections
-    			,g1g6MetricCollections,new String[]{"A","B"},Boolean.TRUE,Boolean.TRUE).iterator().next();    	
+    			,g1g6MetricCollections,attendanceMetricCollections,new String[]{"A"/*,"B"*/},Boolean.TRUE,Boolean.TRUE).iterator().next();    	
     	/*g2 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("G2","Grade 2",levelGroupPrimary,commonNodeInformationsG1G3,gradeIndex++) 
     			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3,classroomSessionDivisionStudentsMetricCollections
@@ -524,16 +530,22 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			, schoolDataProducerHelper.createLevelTimeDivision("G11","Grade 12",levelGroupSecondary,commonNodeInformationsG10G12,gradeIndex++) 
     			,new Object[][]{{evaluationTypeTest1,"0.2","100"},{evaluationTypeTest2,"0.2","100"},{evaluationTypeExam,"0.6","100"}}, subjectsG7G9,classroomSessionDivisionStudentsMetricCollections
     			,g7g12MetricCollections,null,Boolean.TRUE,Boolean.FALSE).iterator().next();
-    	*/g12 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
+    	*//*g12 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("G12","Grade 12",levelGroupSecondary,commonNodeInformationsG10G12,gradeIndex++) ,null
     			,new Object[][]{{evaluationTypeTest1,"0.2","100"},{evaluationTypeTest2,"0.2","100"},{evaluationTypeExam,"0.6","100"}},subjectsG7G9,classroomSessionDivisionStudentsMetricCollections
-    			,g7g12MetricCollections,new String[]{"A","B"},Boolean.TRUE,Boolean.FALSE).iterator().next();
+    			,g7g12MetricCollections,attendanceMetricCollections,new String[]{"A","B"},Boolean.TRUE,Boolean.FALSE).iterator().next();
+    	*/
+    	
+    	
     	
     	flush(ClassroomSession.class, classroomSessionBusiness, classroomSessions);
     	flush(ClassroomSessionDivision.class, classroomSessionDivisionBusiness, classroomSessionDivisions);
     	flush(ClassroomSessionDivisionSubject.class, classroomSessionDivisionSubjectBusiness, classroomSessionDivisionSubjects);
     	flush(ClassroomSessionDivisionSubjectEvaluationType.class, subjectEvaluationTypeBusiness, subjectEvaluationTypes);
-    	flush(ClassroomSessionDivisionStudentsMetricCollection.class, classroomSessionDivisionStudentsMetricCollectionBusiness, classroomSessionDivisionStudentsMetricCollections);
+    	//flush(ClassroomSessionDivisionStudentsMetricCollection.class, classroomSessionDivisionStudentsMetricCollectionBusiness, classroomSessionDivisionStudentsMetricCollections);
+    	
+    	System.out.println("Creating metric values");
+    	createMetricCollections(g1);
 	}
 	
 	@Override
@@ -640,26 +652,31 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				CreateReportFileArguments<StudentClassroomSessionDivision> parameters) {
 			LabelValueCollectionReport labelValueCollectionReport;
 			StudentClassroomSessionDivisionReportTemplateFile report = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
-			if(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getOrderNumber()>=4){
-			
+			if(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getOrderNumber()>=-4){
 				report.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 15%","Test 2 15%","Exam 70%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
 				
 				report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 						{"Formname(s)", report.getStudent().getPerson().getNames()}
-						,{"Surname", report.getStudent().getPerson().getSurname()}
-						/*,{"Date of birth", report.getStudent().getPerson().getBirthDate()}
-						,{"Place of birth", report.getStudent().getPerson().getBirthLocation()}
-						,{"Admission No", report.getStudent().getRegistrationCode()}*/
+						,{"Surname", report.getStudent().getPerson().getGlobalIdentifier().getName()}
+						,{"Date of birth", report.getStudent().getPerson().getGlobalIdentifier().getExistencePeriod().getFrom()}
+						,{"Place of birth", report.getStudent().getPerson().getGlobalIdentifier().getBirthLocation()}
+						,{"Admission No", report.getStudent().getGlobalIdentifier().getCode()}
 						,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
 						,{"Gender", report.getStudent().getPerson().getSex()}
 						});
-				
+				/*
 				report.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
 						{"Number of times school opened",report.getClassroomSessionDivision().getOpenedTime()}
 						,{"Number of times present",report.getAttendedTime()}
 						,{"Number of times absent",report.getMissedTime()}
 						});
-				
+				*/
+				addMetricsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()),MERIC_COLLECTION_STUDENT_ATTENDANCE);
+				/*labelValueCollectionReport = new LabelValueCollectionReport();
+				labelValueCollectionReport.setName(report.getCurrentLabelValueCollection().getName());
+				labelValueCollectionReport.setCollection(report.getCurrentLabelValueCollection().getCollection().subList(6, 12));
+				report.getCurrentLabelValueCollection().setCollection(report.getCurrentLabelValueCollection().getCollection().subList(0, 6));
+				*/
 				
 				labelValueCollectionReport = new LabelValueCollectionReport();
 				labelValueCollectionReport.setName("OVERALL RESULT");
@@ -669,7 +686,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					labelValueCollectionReport.add("RANK",report.getRank());
 				report.addLabelValueCollection(labelValueCollectionReport);
 				
-				addStudentResultsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()).getResults(),MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR);
+				addMetricsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()),MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR);
 				labelValueCollectionReport = new LabelValueCollectionReport();
 				labelValueCollectionReport.setName(report.getCurrentLabelValueCollection().getName());
 				labelValueCollectionReport.setCollection(report.getCurrentLabelValueCollection().getCollection().subList(6, 12));
@@ -774,7 +791,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		}
 	}
 	
-	private void createMetricCollections(){
+	private void createMetricCollections(ClassroomSessionInfos g1){/*
 		String[][] valueIntervals = new String[][]{ {"1", "Learning to do", "1", "1"},{"2", "Does sometimes", "2", "2"} ,{"3", "Does regularly", "3", "3"} };
 		pkMetricCollections = new MetricCollection[]{ create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Expressive language",MetricValueType.NUMBER
     			, new String[]{"Participates actively during circle time","Participates in singing rhymes","Can say her name and name of classmates"
@@ -935,6 +952,37 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     					,"Listens and follows directions"}
     	,"Effort Levels", new String[][]{ {"E", "Excellent", "1", "1"},{"G", "Good", "2", "2"},{"S", "Satisfactory", "3", "3"},{"N", "Needs Improvement", "4", "4"}
     	,{"H", "Has no regard", "5", "5"} }).setMetricValueInputted(MetricValueInputted.VALUE_INTERVAL_CODE))};
+		
+		attendanceMetricCollections = new MetricCollection[]{ create(inject(MetricCollectionBusiness.class).instanciateOne(RandomStringUtils.randomAlphanumeric(6),"Attendance",MetricValueType.NUMBER
+    			, new String[]{"Attended","Absent"}
+    	,"Values", new String[][]{ {"E", "Excellent", "0", "1000"} }).setMetricValueInputted(MetricValueInputted.VALUE_INTERVAL_VALUE))};
+		*/
+		MetricCollection attendance = create(inject(MetricCollectionBusiness.class).instanciateOne(MERIC_COLLECTION_STUDENT_ATTENDANCE,"SCHOOL ATTENDANCE"
+				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE),MetricValueType.NUMBER
+			, new String[]{"Number of time present","Number of time absent","Number of time on detention","Number of time suspended"}
+    		,"Number of millisecond", new String[][]{ {"1aze", "Has no regard for the observable traits", "0", "10000"} }));
+		
+		MetricCollection g1g6 = create(inject(MetricCollectionBusiness.class).instanciateOne(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR,"Behaviour,Study and Work Habits"
+				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR),MetricValueType.NUMBER
+			, new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies","Demonstrates self-control"
+    		,"Takes care of school and others materials","Game/Sport","Handwriting","Drawing/Painting","Punctionality/Regularity","Works cooperatively in groups"
+    		,"Listens and follows directions"}
+    		,"Effort Levels", new String[][]{ {"1", "Has no regard for the observable traits", "1", "1"},{"2", "Shows minimal regard for the observable traits", "2", "2"}
+    		,{"3", "Acceptable level of observable traits", "3", "3"},{"4", "Maintains high level of observable traits", "4", "4"}
+    		,{"5", "Maintains an excellent degree of observable traits", "5", "5"} }));
+		
+		MetricCollection g7g12 = create(inject(MetricCollectionBusiness.class).instanciateOne(MERIC_COLLECTION_G7_G12_STUDENT_BEHAVIOUR,"Behaviour,Study and Work Habits"
+				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR),MetricValueType.STRING
+			, new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies","Demonstrates self-control"
+    	    ,"Takes care of school and others materials","Game/Sport","Handwriting","Drawing/Painting","Punctionality/Regularity","Works cooperatively in groups"
+    	    ,"Listens and follows directions"}
+    	    ,"Effort Levels", new String[][]{ {"E", "Excellent", "1", "1"},{"G", "Good", "2", "2"},{"S", "Satisfactory", "3", "3"},{"N", "Needs Improvement", "4", "4"}
+    	    ,{"H", "Has no regard", "5", "5"} }).setMetricValueInputted(MetricValueInputted.VALUE_INTERVAL_CODE));
+		
+		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{g1})
+			inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).create(Arrays.asList(g1g6,attendance), Arrays.asList(classroomSessionInfos.getDivisions().get(0).getClassroomSessionDivision()
+				,classroomSessionInfos.getDivisions().get(1).getClassroomSessionDivision(),classroomSessionInfos.getDivisions().get(2).getClassroomSessionDivision()));
+	
 	}
 
 }

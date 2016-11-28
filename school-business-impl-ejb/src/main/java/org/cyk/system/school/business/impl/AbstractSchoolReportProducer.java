@@ -2,7 +2,7 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +12,7 @@ import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.geography.ContactCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
@@ -23,14 +24,11 @@ import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricDao;
-import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.SchoolConstant;
-import org.cyk.system.school.model.StudentResults;
-import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.StudentReportTemplateFile;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -137,12 +135,14 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		r.getClassroomSessionDivision().setNumberOfStudents(numberBusiness.format(results.getNumberOfStudent()));
 		r.getClassroomSessionDivision().setOpenedTime(format(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class))));
+		
+		/*
 		//debug(r.getClassroomSessionDivision());
 		r.setAttendedTime(format(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getAttendedDuration())));
 		r.setMissedTime(format(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),s.getResults().getLectureAttendance().getMissedDuration())));
-		
+		*/
 		set(student, r.getStudent());
 		
 		if(cs.getCoordinator()!=null)
@@ -270,43 +270,30 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 	}
 	
-	protected String[][] convertStudentResultsMetricValueToArray(Collection<Metric> metrics,Collection<StudentResultsMetricValue> studentResultsMetricValues){
-		Collection<MetricValue> metricValues = new ArrayList<>();
-		for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues)
-			metricValues.add(studentResultsMetricValue.getMetricValue());
-		
-		/*Collection<String> m = new ArrayList<>();
-		for(Metric metric : metrics)
-			m.add(metric.getCode());
-		//System.out.println("Convert student results metric value to array. Metrics="+StringUtils.join(m,",")+" , Values="+StringUtils.join(metricValues,",")+"");
-		//logTrace("Convert student results metric value to array. Metrics={} , Values={}", StringUtils.join(metrics,","),StringUtils.join(metricValues,","));*/
-		return convertToArray(metrics, metricValues);
-	}
 	
-	protected LabelValueCollectionReport addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String metricCollectionCode,String defaultValue){
+	protected LabelValueCollectionReport addMetricsLabelValueCollection(AbstractReportTemplateFile<?> report,AbstractIdentifiable identifiable,String metricCollectionCode,String defaultValue){
 		MetricCollection metricCollection = inject(MetricCollectionDao.class).read(metricCollectionCode);
 		Collection<Metric> metrics = inject(MetricDao.class).readByCollection(metricCollection);
-		Collection<StudentResultsMetricValue> studentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class)
-				.findByStudentResults(studentResults); 
-		LabelValueCollectionReport labelValueCollectionReport =  report.addLabelValueCollection(metricCollection.getName() ,convertStudentResultsMetricValueToArray(metrics, studentResultsMetricValues));
+		Collection<MetricValue> metricValues = inject(MetricValueBusiness.class).findByMetricsByIdentifiables(metrics,Arrays.asList(identifiable)); 
+		LabelValueCollectionReport labelValueCollectionReport =  report.addLabelValueCollection(metricCollection.getName() ,convertToArray(metrics, metricValues));
 		for(LabelValueReport labelValueReport : labelValueCollectionReport.getCollection())
 			if(StringUtils.isBlank(labelValueReport.getValue()))
 				labelValueReport.setValue(defaultValue);
 		return labelValueCollectionReport;
 	}
 	
-	protected LabelValueCollectionReport addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String metricCollectionCode){
-		return addStudentResultsLabelValueCollection(report, studentResults, metricCollectionCode, Constant.EMPTY_STRING);
+	protected LabelValueCollectionReport addMetricsLabelValueCollection(AbstractReportTemplateFile<?> report,AbstractIdentifiable identifiable,String metricCollectionCode){
+		return addMetricsLabelValueCollection(report, identifiable, metricCollectionCode, Constant.EMPTY_STRING);
 	}
 	
-	protected void addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String[][] metricCollections){
+	protected void addMetricsLabelValueCollection(AbstractReportTemplateFile<?> report,AbstractIdentifiable identifiable,String[][] metricCollections){
 		for(String[] metricCollection : metricCollections)
-			addStudentResultsLabelValueCollection(report, studentResults, metricCollection[0],metricCollection[1]);
+			addMetricsLabelValueCollection(report, identifiable, metricCollection[0],metricCollection[1]);
 	}
 	
-	protected void addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,StudentResults studentResults,String[] metricCollectionCodes){
+	protected void addStudentResultsLabelValueCollection(AbstractReportTemplateFile<?> report,AbstractIdentifiable studentSession,String[] metricCollectionCodes){
 		for(String metricCollectionCode : metricCollectionCodes)
-			addStudentResultsLabelValueCollection(report, studentResults, metricCollectionCode);
+			addMetricsLabelValueCollection(report, studentSession, metricCollectionCode);
 	}
 	
 	/**/

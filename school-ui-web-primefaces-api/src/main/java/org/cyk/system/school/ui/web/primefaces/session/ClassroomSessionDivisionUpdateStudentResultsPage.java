@@ -52,10 +52,12 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 				result.setNames(result.getIdentifiable().getStudent().getPerson().getNames());
 				result.setAppreciation(result.getIdentifiable().getResults().getAppreciation());
 				result.setConferenceRequested(result.getIdentifiable().getResults().getConferenceRequested());
+				/*
 				if(result.getIdentifiable().getResults().getLectureAttendance().getAttendedDuration()!=null)
 					result.setNumberOfTimeAbsent(inject(ClassroomSessionBusiness.class)
 					.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),result.getIdentifiable().getResults()
 							.getLectureAttendance().getMissedDuration()));
+							*/
 			}	
 			@Override
 			public void write(Result item) {

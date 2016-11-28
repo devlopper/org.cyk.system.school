@@ -29,6 +29,21 @@ public interface SchoolConstant {
 			public static String SECONDARY = "SECONDARY";
 		}
 		
+		public static class MetricCollectionType implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String STUDENT_BEHAVIOUR = "STUDENT_BEHAVIOUR";
+			public static String STUDENT_ATTENDANCE = "STUDENT_ATTENDANCE";
+		}
+		
+		public static class ReportTemplate implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String STUDENT_REGISTRATION_CERTIFICATE = "STUDENT_REGISTRATION_CERTIFICATE";
+			public static String STUDENT_TUITION_CERTIFICATE = "STUDENT_TUITION_CERTIFICATE";
+		}
+		
+		
 	}
 
 }

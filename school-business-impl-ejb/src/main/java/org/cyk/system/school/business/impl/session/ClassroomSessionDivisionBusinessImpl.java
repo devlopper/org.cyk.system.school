@@ -46,16 +46,16 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 	
 	@Override
-	public ClassroomSessionDivision create(ClassroomSessionDivision classroomSessionDivision) {
+	protected void beforeCreate(ClassroomSessionDivision classroomSessionDivision) {
+		super.beforeCreate(classroomSessionDivision);
 		Long start = classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations().getClassroomSessionDivisionOrderNumberInterval()==null ?
 				0 : inject(IntervalBusiness.class).findGreatestLowestValue(classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations()
 						.getClassroomSessionDivisionOrderNumberInterval()).longValue();
 		classroomSessionDivision.setOrderNumber(start+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()));
 		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
 		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
-		return super.create(classroomSessionDivision);
 	}
-	
+		
 	@Override
 	public void computeResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){

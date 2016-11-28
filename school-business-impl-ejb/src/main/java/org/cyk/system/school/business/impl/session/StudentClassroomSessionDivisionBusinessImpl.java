@@ -19,6 +19,9 @@ import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.file.FileRepresentationTypeBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricValueIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.message.MailBusiness;
 import org.cyk.system.root.business.api.message.MessageSendingBusiness.SendArguments;
@@ -29,10 +32,10 @@ import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
-import org.cyk.system.root.model.mathematics.Metric;
-import org.cyk.system.root.model.mathematics.MetricValue;
+import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
 import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
@@ -43,12 +46,12 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -110,21 +113,27 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			inject(StudentClassroomSessionBusiness.class).create(studentClassroomSession);
 		}
 		
+		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
+				.read(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE))
+				, studentClassroomSessionDivision.getClassroomSessionDivision());
+		inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).create(metricCollections, Arrays.asList(studentClassroomSessionDivision));
+		/*
 		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
-		
+		System.out.println("StudentClassroomSessionDivisionBusinessImpl.create() : "+classroomSessionDivisionStudentsMetricCollections);
 		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections)
 			for(Metric metric : metricDao.readByCollection(classroomSessionDivisionStudentsMetricCollection.getMetricCollection())){
+				//CHECK IF BEHAVIOUR OR ATTENDANCE
 				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
 					.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, null,null,null)));
 			}
-		
-		Collection<StudentClassroomSessionDivisionSubject> studentSubjects = new ArrayList<>();
+		*/
+		Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeOperationToChildren())){
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
-				studentSubjects.add(new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject));
+				studentClassroomSessionDivisionSubjects.add(new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject));
 			}
 		}
-		cascade(studentClassroomSessionDivision, studentClassroomSessionDivision.getResults().getStudentResultsMetricValues(), studentSubjects, Crud.CREATE);
+		cascade(studentClassroomSessionDivision, studentClassroomSessionDivision.getResults().getStudentResultsMetricValues(), studentClassroomSessionDivisionSubjects, Crud.CREATE);
 		
 		return studentClassroomSessionDivision;
 	}
@@ -255,12 +264,13 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public void setNumberOfTimesAbsent(StudentClassroomSessionDivision studentClassroomSessionDivision,BigDecimal value) {
-		studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(inject(ClassroomSessionBusiness.class)
+		/*studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToMillisecond(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),value));
 
 		studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(studentClassroomSessionDivision.getClassroomSessionDivision()
 				.getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class)-
 				studentClassroomSessionDivision.getResults().getLectureAttendance().getMissedDuration());
+		*/
 	}
 	
 	private Collection<FileRepresentationType> getStudentClassroomSessionDivisionResultsFileRepresentationTypes(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions){
@@ -441,7 +451,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	/**/
 	
-	public static interface Listener {
+	public static interface Listener extends org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl.Listener<StudentClassroomSessionDivision> {
 		
 		Collection<Listener> COLLECTION = new ArrayList<>();
 		
@@ -449,17 +459,24 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		/**/
 		
-		public static class Adapter extends BeanAdapter implements Listener,Serializable {
+		public static class Adapter extends org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl.Listener.Adapter.Default<StudentClassroomSessionDivision> implements Listener,Serializable {
 			private static final long serialVersionUID = 2280338625270476061L;
 			@Override
 			public void processOnEvaluationAverageUpdated(Collection<ClassroomSessionDivision> classroomSessionDivisions,BusinessServiceCallArguments<StudentClassroomSessionDivision> callArguments) {}
 			/**/
 			
-			public static class Default extends Adapter implements Serializable {
+			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = 2280338625270476061L;
 				
 				/**/
 				
+				public static class EnterpriseResourcePlanning extends Listener.Adapter.Default implements Serializable{
+					private static final long serialVersionUID = 1L;
+					
+					/**/
+					
+					
+				}
 				
 			}
 		}

@@ -106,11 +106,12 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		public void read() {
 			super.read();
 			//evaluationAverage = identifiable.getResults().getEvaluationSort().getAverage().getValue();
+			/*
 			if(identifiable.getResults().getLectureAttendance().getAttendedDuration()!=null)
 				numberOfTimeAbsent = inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSessionDivision().getClassroomSession(),identifiable.getResults()
 						.getLectureAttendance().getMissedDuration());
-			
+			*/
 			appreciation = identifiable.getResults().getAppreciation();
 			conferenceRequested = identifiable.getResults().getConferenceRequested();
 		}

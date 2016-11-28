@@ -276,7 +276,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				r.setName(r.getName()+" SHEET");
 				String performanceCodeMetricCollectionCode = null;
 				if(LEVEL_NAME_CODE_PK.equals(levelNameCode)){
-					addStudentResultsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()).getResults(), new String[][]{
+					addMetricsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()), new String[][]{
 							{performanceCodeMetricCollectionCode = MERIC_COLLECTION_PK_STUDENT_EXPRESSIVE_LANGUAGE,NOT_APPLICABLE}
 							, {MERIC_COLLECTION_PK_STUDENT_RECEPTIVE_LANGUAGE,NOT_APPLICABLE}
 							, {MERIC_COLLECTION_PK_STUDENT_READING_READNESS,NOT_APPLICABLE}
@@ -287,7 +287,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 							, {MERIC_COLLECTION_PK_STUDENT_FINE_MOTOR_SKILLS,NOT_APPLICABLE}
 						});
 				}else if(LEVEL_NAME_CODE_K1.equals(levelNameCode)){
-					addStudentResultsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()).getResults(), new String[][]{
+					addMetricsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()), new String[][]{
 							{performanceCodeMetricCollectionCode = MERIC_COLLECTION_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING,NOT_APPLICABLE}
 							, {MERIC_COLLECTION_K1_STUDENT_COMMUNICATION_SKILLS,NOT_APPLICABLE}
 							, {MERIC_COLLECTION_K1_STUDENT_SCIENCE,NOT_APPLICABLE}
@@ -297,7 +297,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 							, {MERIC_COLLECTION_K1_STUDENT_SOCIAL_SKILLS,NOT_APPLICABLE}
 						});
 				}else if(LEVEL_NAME_CODE_K2.equals(levelNameCode) || LEVEL_NAME_CODE_K3.equals(levelNameCode)){
-					addStudentResultsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()).getResults(), new String[][]{
+					addMetricsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()), new String[][]{
 							{performanceCodeMetricCollectionCode = MERIC_COLLECTION_K2_K3_STUDENT_READING_READINESS,NOT_APPLICABLE}
 							, {MERIC_COLLECTION_K2_K3_STUDENT_READING,NOT_APPLICABLE}
 							, {MERIC_COLLECTION_K2_K3_STUDENT_WRITING,NOT_APPLICABLE}
@@ -351,7 +351,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 					labelValueCollectionReport.add("RANK",r.getRank());
 				r.addLabelValueCollection(labelValueCollectionReport);
 				
-				addStudentResultsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()).getResults(), studentBehaviourMetricCollectionCode);
+				addMetricsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()), studentBehaviourMetricCollectionCode);
 				labelValueCollectionReport = new LabelValueCollectionReport();
 				labelValueCollectionReport.setName(r.getCurrentLabelValueCollection().getName());
 				labelValueCollectionReport.setCollection(r.getCurrentLabelValueCollection().getCollection().subList(6, 12));

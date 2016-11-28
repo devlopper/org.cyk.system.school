@@ -15,18 +15,30 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
+import org.cyk.system.root.business.api.mathematics.MetricBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
+import org.cyk.system.root.business.api.time.AttendanceMetricValueBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.Metric;
+import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.model.mathematics.MetricValueInputted;
+import org.cyk.system.root.model.time.AttendanceMetricValue;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
+import org.cyk.system.root.persistence.api.time.AttendanceMetricValueDao;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
@@ -43,11 +55,11 @@ import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjec
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -58,7 +70,6 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionStudentsMetricCollectionDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.FileExtension;
@@ -85,7 +96,6 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Inject private TimeDivisionTypeDao timeDivisionTypeDao;
 	@Inject private SubjectDao subjectDao;
 	@Inject private TeacherDao teacherDao;
-	@Inject private ClassroomSessionDivisionStudentsMetricCollectionDao classroomSessionDivisionStudentsMetricCollectionDao;
 	
 	@Inject private SchoolBusinessLayer schoolBusinessLayer;
 	
@@ -261,9 +271,12 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
 				
 				if(Boolean.TRUE.equals(attendance)){
-					studentClassroomSessionDivision.getResults().getLectureAttendance().setAttendedDuration(randomDataProvider.randomInt(0, 1)*t);
-					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDuration(randomDataProvider.randomInt(0, 1)*t);
-					studentClassroomSessionDivision.getResults().getLectureAttendance().setMissedDurationJustified(randomDataProvider.randomInt(0, 1)*t);
+					Collection<AttendanceMetricValue> attendanceMetricValues = inject(AttendanceMetricValueDao.class).readByAttendanceByCodes(
+							studentClassroomSessionDivision.getResults().getLectureAttendance(),AttendanceMetricValue.NUMBER_OF_MILLISECOND_ATTENDED
+							,AttendanceMetricValue.NUMBER_OF_MILLISECOND_MISSED);
+					inject(AttendanceMetricValueBusiness.class).setValue(attendanceMetricValues, AttendanceMetricValue.NUMBER_OF_MILLISECOND_ATTENDED, new BigDecimal(randomDataProvider.randomInt(0, 1)*t));
+					inject(AttendanceMetricValueBusiness.class).setValue(attendanceMetricValues, AttendanceMetricValue.NUMBER_OF_MILLISECOND_MISSED, new BigDecimal(randomDataProvider.randomInt(0, 1)*t));
+					
 					//studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
 				}
 				/*
@@ -295,22 +308,26 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		
 		if(Boolean.TRUE.equals(metric)){
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
-				Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = 
-						classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(studentClassroomSessionDivision.getClassroomSessionDivision());
-				for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
-					IntervalCollection intervalCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection().getValueIntervalCollection();
+				Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
+						.read(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE))
+						, studentClassroomSessionDivision.getClassroomSessionDivision());
+				for(MetricCollection metricCollection : metricCollections){
+					Collection<Metric> metrics = inject(MetricBusiness.class).findByCollections(metricCollections);
+					
+					IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
 					inject(IntervalCollectionBusiness.class).load(intervalCollection);
 					List<Interval> intervals = new ArrayList<>(inject(IntervalBusiness.class).findByCollection(intervalCollection));
-					Collection<StudentResultsMetricValue> studentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class)
-							.findByStudentResults(studentClassroomSessionDivision.getResults());
-					for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
-						studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
-						if(MetricValueInputted.VALUE_INTERVAL_CODE.equals(studentResultsMetricValue.getMetricValue().getMetric().getCollection().getValueInputted()))
-							studentResultsMetricValue.getMetricValue().setStringValue( ((Interval)RandomDataProvider.getInstance().randomFromList(intervals)).getCode() );
+					Collection<MetricValue> metricValues = inject(MetricValueBusiness.class).findByMetricsByIdentifiables(metrics,Arrays.asList(studentClassroomSessionDivision));
+					Collection<AbstractIdentifiable> c = new ArrayList<>();
+					for(MetricValue metricValue : metricValues){
+						metricValue.getNumberValue().setUser(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+						if(MetricValueInputted.VALUE_INTERVAL_CODE.equals(metricValue.getMetric().getCollection().getValueInputted()))
+							metricValue.setStringValue( ((Interval)RandomDataProvider.getInstance().randomFromList(intervals)).getCode() );
 						else
-							studentResultsMetricValue.getMetricValue().setStringValue(RandomStringUtils.randomAlphabetic(1));
+							metricValue.setStringValue(RandomStringUtils.randomAlphabetic(1));
+						c.add(metricValue);
 					}
-					studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);
+					inject(GenericBusiness.class).update(c);
 				}
 			}
 		}
@@ -391,10 +408,11 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		deleteStudentClassroomSession(studentClassroomSession, null);
 	}
 	
+	@Deprecated
 	public void updateStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues,String[] values) {
 		int i = 0;
 		for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues)
-			studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(values[i++]));
+			studentResultsMetricValue.getMetricValue().getNumberValue().setUser(new BigDecimal(values[i++]));
 		inject(StudentClassroomSessionDivisionBusiness.class).update(studentClassroomSessionDivision, new ArrayList<>(studentResultsMetricValues));
 		Collection<StudentResultsMetricValue> updateStudentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class).findByStudentResults(studentClassroomSessionDivision.getResults());
 		assertEquals("Student classroom session division metrics count", studentResultsMetricValues.size(), updateStudentResultsMetricValues.size());
