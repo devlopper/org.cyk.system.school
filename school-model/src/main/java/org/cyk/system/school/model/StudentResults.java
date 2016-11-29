@@ -1,8 +1,6 @@
 package org.cyk.system.school.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
@@ -12,11 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.Transient;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -25,6 +18,10 @@ import org.cyk.system.root.model.mathematics.Sort;
 import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.model.time.Attendance;
 import org.cyk.utility.common.Constant;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor
 public class StudentResults extends AbstractIdentifiable implements Serializable {
@@ -71,16 +68,6 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	private String appreciation;
 	
 	private Boolean conferenceRequested;
-	
-	@Transient private Collection<StudentResultsMetricValue> studentResultsMetricValues;
-	
-	/**/
-	
-	public Collection<StudentResultsMetricValue> getStudentResultsMetricValues(){
-		if(studentResultsMetricValues==null)
-			studentResultsMetricValues = new ArrayList<>();
-		return studentResultsMetricValues;
-	}
 	
 	public Sort getEvaluationSort(){
 		if(evaluationSort==null)

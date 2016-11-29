@@ -11,7 +11,6 @@ import org.cyk.system.school.business.impl.actor.TeacherDetails;
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
-import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionStudentsMetricCollectionDetails;
 import org.cyk.system.school.business.impl.session.LevelDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.SchoolDetails;
@@ -27,7 +26,6 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.School;
@@ -43,7 +41,6 @@ import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionQueryOneFormModel;
-import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionStudentsMetricCollectionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEvaluationTypeEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEvaluationTypeQueryFormModel;
@@ -133,9 +130,6 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		uiManager.configBusinessIdentifiable(ClassroomSessionDivision.class, null);
 		webNavigationManager.useDynamicSelectView(ClassroomSessionDivision.class);
 		AbstractSelectOnePage.Listener.COLLECTION.add(new ClassroomSessionDivisionQueryOneFormModel.PageAdapter());
-		
-		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionStudentsMetricCollection.class, ClassroomSessionDivisionStudentsMetricCollectionEditPage.Form.class, ClassroomSessionDivisionStudentsMetricCollectionDetails.class,null,null,null));
-		uiManager.configBusinessIdentifiable(ClassroomSessionDivisionStudentsMetricCollection.class, null);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(ClassroomSessionDivisionSubject.class, ClassroomSessionDivisionSubjectEditPage.Form.class, ClassroomSessionDivisionSubjectDetails.class
 				,ClassroomSessionDivisionSubjectQueryFormModel.class,null,null));

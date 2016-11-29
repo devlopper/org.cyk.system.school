@@ -25,7 +25,6 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelGroupType;
@@ -169,7 +168,6 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 		Commandable module = createModuleCommandable(UIManager.getInstance().businessEntityInfos(AcademicSession.class).getUserInterface().getLabelId(), null);
 		module.addChild(createListCommandable(AcademicSession.class, null));
 		module.addChild(createListCommandable(LevelTimeDivision.class, null));
-		module.addChild(createListCommandable(ClassroomSessionDivisionStudentsMetricCollection.class, null));
 		return module;
 	}
 	

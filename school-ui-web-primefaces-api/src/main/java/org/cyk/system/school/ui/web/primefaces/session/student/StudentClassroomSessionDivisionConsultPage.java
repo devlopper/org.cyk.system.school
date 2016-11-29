@@ -1,31 +1,23 @@
 package org.cyk.system.school.ui.web.primefaces.session.student;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails.StudentClassroomSessionDivisionSubjectDetails;
-import org.cyk.system.school.model.StudentResultsMetricValue;
-import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
-import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultPage<StudentClassroomSessionDivision> implements Serializable {
@@ -37,7 +29,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 	public static Boolean LOAD_EVALUATIONS = Boolean.FALSE;
 	
 	private Table<AbstractStudentClassroomSessionDivisionSubjectDetails> subjectTable;
-	private List<Table<StudentResultsMetricValueDetails>> metricTables = new ArrayList<>();
+	//private List<Table<StudentResultsMetricValueDetails>> metricTables = new ArrayList<>();
 	private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations;
 	private Boolean showReport = Boolean.FALSE;
 		
@@ -79,7 +71,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				return "model.entity.subject";
 			}
 		});
-		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : inject(ClassroomSessionDivisionStudentsMetricCollectionBusiness.class).findByClassroomSessionDivision(identifiable.getClassroomSessionDivision())){
+		/*for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : inject(ClassroomSessionDivisionStudentsMetricCollectionBusiness.class).findByClassroomSessionDivision(identifiable.getClassroomSessionDivision())){
 			final MetricCollection metricCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection();
 			Table<StudentResultsMetricValueDetails> table;
 			metricTables.add(table = (Table<StudentResultsMetricValueDetails>) createDetailsTable(StudentResultsMetricValueDetails.class, 
@@ -97,13 +89,13 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			}));
 			table.setTitle(metricCollection.getName());
 			
-		}
+		}*/
 	}
-	
+	/*
 	public Table<StudentResultsMetricValueDetails> getMetricTable(Integer index){
-		if(index < metricTables.size())
-			return metricTables.get(index);
+		//if(index < metricTables.size())
+		//	return metricTables.get(index);
 		return null;
-	}
+	}*/
 	
 }

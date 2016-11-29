@@ -11,7 +11,6 @@ import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessi
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
-import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionStudentsMetricCollectionDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
@@ -32,11 +31,9 @@ import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
-import org.cyk.system.school.ui.web.primefaces.StudentResultsMetricValueDetails;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
-import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionStudentsMetricCollectionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
@@ -66,14 +63,12 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		configureClassroomSessionDivisionClass();
 		configureClassroomSessionDivisionSubjectClass();
 		configureClassroomSessionDivisionSubjectEvaluationTypeClass();
-		configureClassroomSessionDivisionStudentsMetricCollectionDetailsClass();
 		
 		configureStudentClass();
 		configureStudentClassroomSessionClass();
 		configureStudentClassroomSessionDivisionClass();
 		configureStudentClassroomSessionDivisionSubjectClass();
 		configureStudentClassroomSessionDivisionSubjectEvaluationClass();
-		configureStudentResultsMetricValueDetailsClass();
 		
 		configureTeacherClass();
 		
@@ -310,40 +305,6 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		});
 	}
 	
-	protected void configureClassroomSessionDivisionStudentsMetricCollectionDetailsClass() {
-		getFormConfiguration(ClassroomSessionDivisionSubject.class, Crud.CREATE).addFieldNames(ClassroomSessionDivisionStudentsMetricCollectionEditPage.Form.FIELD_CLASSROOM_SESSION_DIVISION
-				,ClassroomSessionDivisionStudentsMetricCollectionEditPage.Form.FIELD_METRIC_COLLECTION);
-		
-		registerDetailsConfiguration(ClassroomSessionDivisionStudentsMetricCollectionDetails.class, new DetailsConfiguration(){
-			private static final long serialVersionUID = 1L;
-			@SuppressWarnings("rawtypes")
-			@Override
-			public ControlSetAdapter.Details getFormControlSetAdapter(Class clazz) {
-				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
-					private static final long serialVersionUID = 1L;
-					@Override
-					public Boolean build(Object data,Field field) {
-						if(data instanceof ClassroomSessionDivisionStudentsMetricCollectionDetails)
-							return isFieldNameIn(field,ClassroomSessionDivisionStudentsMetricCollectionDetails.FIELD_CLASSROOM_SESSION_DIVISION
-									,ClassroomSessionDivisionStudentsMetricCollectionDetails.FIELD_METRIC_COLLECTION);
-						return Boolean.FALSE;
-					}
-				};
-			}
-			
-			@Override
-			public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz,AbstractPrimefacesPage page) {
-				return new DetailsConfiguration.DefaultColumnAdapter(){
-					private static final long serialVersionUID = 1L;
-					@Override
-					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field, ClassroomSessionDivisionStudentsMetricCollectionDetails.FIELD_METRIC_COLLECTION);
-					}
-				};
-			}
-		});
-	}
-	
 	protected void configureStudentClass() {
 		getFormConfiguration(Student.class, Crud.CREATE).addRequiredFieldNames(StudentEditPage.Form.FIELD_CODE)
 		.addFieldNames(StudentEditPage.Form.FIELD_ADMISSION_LEVEL_TIME_DIVISION,StudentEditPage.Form.FIELD_CLASSROOMSESSION,StudentEditPage.Form.FIELD_IMAGE
@@ -470,22 +431,6 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 			};
 		}
 		
-	}
-	
-	protected void configureStudentResultsMetricValueDetailsClass() {
-		registerDetailsConfiguration(StudentResultsMetricValueDetails.class, new DetailsConfiguration(){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public ColumnAdapter getTableColumnAdapter() {
-				return new DetailsConfiguration.DefaultColumnAdapter(){
-					private static final long serialVersionUID = 1L;
-					@Override
-					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field,StudentResultsMetricValueDetails.FIELD_NAME,StudentResultsMetricValueDetails.FIELD_VALUE);
-					}
-				};
-			}
-		});
 	}
 	
 	/**/

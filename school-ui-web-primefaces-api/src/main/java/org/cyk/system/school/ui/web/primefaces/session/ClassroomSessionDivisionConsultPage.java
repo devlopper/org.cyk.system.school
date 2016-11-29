@@ -8,23 +8,19 @@ import java.util.Set;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
-import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionStudentsMetricCollectionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
-import org.cyk.ui.web.primefaces.Table;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,20 +29,6 @@ import lombok.Setter;
 public class ClassroomSessionDivisionConsultPage extends AbstractClassLevelConsultPage<ClassroomSessionDivision,ClassroomSessionDivisionDetails,ClassroomSessionDivisionSubject,ClassroomSessionDivisionSubjectDetails,StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails,StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDetails> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
-	
-	private Table<ClassroomSessionDivisionStudentsMetricCollectionDetails> classroomSessionDivisionStudentsMetricCollectionTable;
-	
-	@Override
-	protected void consultInitialisation() {
-		super.consultInitialisation();
-		classroomSessionDivisionStudentsMetricCollectionTable = (Table<ClassroomSessionDivisionStudentsMetricCollectionDetails>) createDetailsTable(ClassroomSessionDivisionStudentsMetricCollectionDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionDivisionStudentsMetricCollection,ClassroomSessionDivisionStudentsMetricCollectionDetails>(ClassroomSessionDivisionStudentsMetricCollection.class, ClassroomSessionDivisionStudentsMetricCollectionDetails.class){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public Collection<ClassroomSessionDivisionStudentsMetricCollection> getIdentifiables() {
-				return inject(ClassroomSessionDivisionStudentsMetricCollectionBusiness.class).findByClassroomSessionDivision(identifiable);
-			}
-		});
-	}
 	
 	@Override
 	protected String getContentTitleIdentifiableText() {

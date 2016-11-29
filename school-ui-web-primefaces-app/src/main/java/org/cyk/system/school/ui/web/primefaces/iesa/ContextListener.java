@@ -19,7 +19,6 @@ import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.geography.ContactCollectionDetails;
-import org.cyk.system.root.business.impl.mathematics.MetricBusinessImpl;
 import org.cyk.system.root.business.impl.party.person.JobDetails;
 import org.cyk.system.root.business.impl.party.person.MedicalDetails;
 import org.cyk.system.root.business.impl.party.person.MedicalInformationsAllergyDetails;
@@ -38,7 +37,6 @@ import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
-import org.cyk.system.school.business.impl.MetricBusinessAdapter;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
@@ -161,8 +159,6 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	});
     	TeacherBusinessImpl.Listener.COLLECTION.add(new TeacherBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning());
     	EmployeeBusinessImpl.Listener.COLLECTION.add(new EmployeeBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning());
-    	
-    	MetricBusinessImpl.Listener.COLLECTION.add(new MetricBusinessAdapter());
     	
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, AcademicSession.class);
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, AcademicSession.class);

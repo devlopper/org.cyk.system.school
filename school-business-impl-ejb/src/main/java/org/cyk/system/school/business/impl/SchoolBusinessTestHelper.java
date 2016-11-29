@@ -16,34 +16,19 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.FileBusiness;
-import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
-import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
-import org.cyk.system.root.business.api.mathematics.MetricBusiness;
-import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.business.api.time.AttendanceMetricValueBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
-import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
-import org.cyk.system.root.model.mathematics.Interval;
-import org.cyk.system.root.model.mathematics.IntervalCollection;
-import org.cyk.system.root.model.mathematics.Metric;
-import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.root.model.mathematics.MetricValue;
-import org.cyk.system.root.model.mathematics.MetricValueInputted;
-import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.time.AttendanceMetricValue;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
-import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.time.AttendanceMetricValueDao;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
-import org.cyk.system.school.business.api.StudentResultsMetricValueBusiness;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
@@ -58,7 +43,6 @@ import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.model.SchoolConstant;
-import org.cyk.system.school.model.StudentResultsMetricValue;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -413,22 +397,6 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		deleteStudentClassroomSession(studentClassroomSession, null);
 	}
 	
-	@Deprecated
-	public void updateStudentClassroomSessionDivision(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentResultsMetricValue> studentResultsMetricValues,String[] values) {
-		int i = 0;
-		for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues)
-			studentResultsMetricValue.getMetricValue().getNumberValue().setUser(new BigDecimal(values[i++]));
-		inject(StudentClassroomSessionDivisionBusiness.class).update(studentClassroomSessionDivision, new ArrayList<>(studentResultsMetricValues));
-		Collection<StudentResultsMetricValue> updateStudentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class).findByStudentResults(studentClassroomSessionDivision.getResults());
-		assertEquals("Student classroom session division metrics count", studentResultsMetricValues.size(), updateStudentResultsMetricValues.size());
-		
-		for(StudentResultsMetricValue u : studentResultsMetricValues)
-			for(StudentResultsMetricValue s : updateStudentResultsMetricValues)
-				if(u.getIdentifier().equals(s.getIdentifier())){
-					assertEquals("Student results identifier", u.getIdentifier(), s.getIdentifier());
-					assertEquals("Student results metric value", u.getMetricValue().getNumberValue(), s.getMetricValue().getNumberValue());
-				}
-	}
 	
 	/**/
 	

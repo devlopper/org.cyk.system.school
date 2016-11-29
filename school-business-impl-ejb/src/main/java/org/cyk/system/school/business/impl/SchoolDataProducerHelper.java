@@ -9,9 +9,6 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.impl.RootDataProducerHelper;
@@ -24,7 +21,6 @@ import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelGroup;
@@ -37,6 +33,9 @@ import org.cyk.system.school.model.subject.Subject;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.joda.time.DateTimeConstants;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton
 public class SchoolDataProducerHelper extends AbstractBean implements Serializable {
@@ -82,7 +81,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	
 	public Collection<ClassroomSessionInfos> instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
-			,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,CommonNodeInformations commonNodeInformations,Object[][] evaluationTypes,Collection<Subject> subjects,Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections
+			,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,CommonNodeInformations commonNodeInformations,Object[][] evaluationTypes,Collection<Subject> subjects
 			,MetricCollection[] behaviourStudentMetricCollections,MetricCollection[] attendanceStudentMetricCollections,String[] suffixes,Boolean studentEvaluationRequired,Boolean studentRankable){
 		if(suffixes==null)
 			suffixes = new String[]{null};
@@ -96,11 +95,11 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(classroomSession);
 			classroomSessionInfosCollection.add(classroomSessionInfos);
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,classroomSessionDivisionStudentsMetricCollections,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,classroomSessionDivisionStudentsMetricCollections,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,classroomSessionDivisionStudentsMetricCollections,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
 		}
 		return classroomSessionInfosCollection;
 	}
@@ -113,7 +112,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	
 	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
-			,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects,Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections
+			,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects
 			,MetricCollection[] behaviourStudentMetricCollections,MetricCollection[] attendanceStudentMetricCollections,Boolean studentEvaluationRequired,Boolean studentRankable){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));

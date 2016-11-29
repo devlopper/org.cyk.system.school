@@ -34,7 +34,6 @@ import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.root.model.mathematics.MetricCollectionType;
 import org.cyk.system.root.model.mathematics.MetricValueInputted;
 import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.security.Installation;
@@ -47,7 +46,6 @@ import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionStudentsMetricCollectionBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
@@ -69,7 +67,6 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionDivisionStudentsMetricCollection;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelGroup;
@@ -172,7 +169,6 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Inject private ClassroomSessionDivisionBusiness classroomSessionDivisionBusiness;
 	@Inject private ClassroomSessionDivisionSubjectBusiness classroomSessionDivisionSubjectBusiness;
 	@Inject private ClassroomSessionDivisionSubjectDao classroomSessionDivisionSubjectDao;
-	@Inject private ClassroomSessionDivisionStudentsMetricCollectionBusiness classroomSessionDivisionStudentsMetricCollectionBusiness;
 	@Inject private LectureBusiness lectureBusiness;
 	@Inject private TeacherDao teacherDao;
 	@Inject private StudentDao studentDao;
@@ -464,7 +460,6 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	Collection<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>(); 
     	Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new ArrayList<>();
     	Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes = new ArrayList<>(); 
-    	Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = new ArrayList<>(); 
     	
     	Long gradeIndex = 0l;
     	
@@ -485,7 +480,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	*/
     	g1 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("G1","Grade 1",levelGroupPrimary,commonNodeInformationsG1G3,gradeIndex++),null 
-    			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3,classroomSessionDivisionStudentsMetricCollections
+    			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3
     			,g1g6MetricCollections,attendanceMetricCollections,new String[]{"A"/*,"B"*/},Boolean.TRUE,Boolean.TRUE).iterator().next();    	
     	/*g2 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("G2","Grade 2",levelGroupPrimary,commonNodeInformationsG1G3,gradeIndex++) 
