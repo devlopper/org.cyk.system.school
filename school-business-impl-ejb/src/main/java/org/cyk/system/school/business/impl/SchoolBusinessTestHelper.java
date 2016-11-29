@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +35,7 @@ import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.model.mathematics.MetricValueInputted;
+import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.time.AttendanceMetricValue;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
@@ -307,29 +309,32 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivisions);
 		
 		if(Boolean.TRUE.equals(metric)){
-			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
+			inject(MetricValueBusiness.class).updateManyRandomly(new LinkedHashSet<String>(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR
+					,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE)), classroomSessionDivisions, studentClassroomSessionDivisions);
+			/*for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 				Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
 						.read(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE))
 						, studentClassroomSessionDivision.getClassroomSessionDivision());
 				for(MetricCollection metricCollection : metricCollections){
-					Collection<Metric> metrics = inject(MetricBusiness.class).findByCollections(metricCollections);
-					
+					Collection<Metric> metrics = inject(MetricBusiness.class).findByCollection(metricCollection);
 					IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
 					inject(IntervalCollectionBusiness.class).load(intervalCollection);
 					List<Interval> intervals = new ArrayList<>(inject(IntervalBusiness.class).findByCollection(intervalCollection));
 					Collection<MetricValue> metricValues = inject(MetricValueBusiness.class).findByMetricsByIdentifiables(metrics,Arrays.asList(studentClassroomSessionDivision));
 					Collection<AbstractIdentifiable> c = new ArrayList<>();
 					for(MetricValue metricValue : metricValues){
-						metricValue.getNumberValue().setUser(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
-						if(MetricValueInputted.VALUE_INTERVAL_CODE.equals(metricValue.getMetric().getCollection().getValueInputted()))
-							metricValue.setStringValue( ((Interval)RandomDataProvider.getInstance().randomFromList(intervals)).getCode() );
-						else
-							metricValue.setStringValue(RandomStringUtils.randomAlphabetic(1));
+						if(MetricValueType.NUMBER.equals(metricCollection.getValueType())){
+							metricValue.getNumberValue().setUser(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
+						}else
+							if(MetricValueInputted.VALUE_INTERVAL_CODE.equals(metricValue.getMetric().getCollection().getValueInputted()))
+								metricValue.setStringValue( ((Interval)RandomDataProvider.getInstance().randomFromList(intervals)).getCode() );
+							else
+								metricValue.setStringValue(RandomStringUtils.randomAlphabetic(1));
 						c.add(metricValue);
 					}
 					inject(GenericBusiness.class).update(c);
 				}
-			}
+			}*/
 		}
 	}
 	public void randomValues(Boolean metric,Boolean attendance,Boolean appreciation){

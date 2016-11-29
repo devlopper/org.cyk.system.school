@@ -30,6 +30,8 @@ import org.cyk.system.root.business.impl.party.person.SignatureDetails;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
+import org.cyk.system.root.model.mathematics.MetricValueIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
@@ -69,7 +71,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 
-//@javax.servlet.annotation.WebListener
+@javax.servlet.annotation.WebListener
 public class ContextListener extends AbstractSchoolContextListener implements Serializable {
 
 	private static final long serialVersionUID = -9042005596731665575L;
@@ -128,6 +130,9 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
+		MetricCollectionIdentifiableGlobalIdentifier.define(ClassroomSessionDivision.class);
+		MetricValueIdentifiableGlobalIdentifier.define(StudentClassroomSessionDivision.class);
+		
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
 		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();

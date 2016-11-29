@@ -107,7 +107,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	public Collection<FileRepresentationType> findStudentClassroomSessionDivisionResultsFileRepresentationTypes(Collection<ClassroomSession> classroomSessions) {
 		Set<String> codes = new LinkedHashSet<>();
 		for(ClassroomSession classroomSession : classroomSessions)
-			codes.add(classroomSession.getNodeInformations().getStudentClassroomSessionDivisionResultsReportTemplate().getCode());
+			codes.add(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getStudentClassroomSessionDivisionResultsReportTemplate().getCode());
 		return inject(FileRepresentationTypeDao.class).readByGlobalIdentifierCodes(codes);
 	}
 	

@@ -11,7 +11,7 @@ import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.AbstractContextListener;
 import org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning.PrimefacesManager;
 
-@javax.servlet.annotation.WebListener
+//@javax.servlet.annotation.WebListener
 public class ContextListener extends AbstractContextListener implements Serializable {
 
 	private static final long serialVersionUID = -9042005596731665575L;

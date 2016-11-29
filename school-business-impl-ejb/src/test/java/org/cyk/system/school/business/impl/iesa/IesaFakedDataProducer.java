@@ -960,7 +960,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		MetricCollection attendance = create(inject(MetricCollectionBusiness.class).instanciateOne(MERIC_COLLECTION_STUDENT_ATTENDANCE,"SCHOOL ATTENDANCE"
 				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE),MetricValueType.NUMBER
 			, new String[]{"Number of time present","Number of time absent","Number of time on detention","Number of time suspended"}
-    		,"Number of millisecond", new String[][]{ {"1aze", "Has no regard for the observable traits", "0", "10000"} }));
+    		,null, null));
 		
 		MetricCollection g1g6 = create(inject(MetricCollectionBusiness.class).instanciateOne(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR,"Behaviour,Study and Work Habits"
 				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR),MetricValueType.NUMBER
