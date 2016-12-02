@@ -8,15 +8,16 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.cyk.system.root.model.AbstractModelElement;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.TimeDivisionType;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Embeddable @Getter @Setter @NoArgsConstructor
 public class CommonNodeInformations extends AbstractModelElement implements Serializable {
@@ -24,6 +25,8 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	private static final long serialVersionUID = 3372342222993865767L;
 	
 	@ManyToOne @JoinColumn(name="resultsReportTemplate") private ReportTemplate studentClassroomSessionDivisionResultsReportTemplate;
+	@ManyToOne private Person studentClassroomSessionDivisionResultsReportSigner;
+	
 	@ManyToOne private IntervalCollection studentSubjectAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionDivisionAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionAverageScale;

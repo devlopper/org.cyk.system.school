@@ -22,7 +22,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputManyPickList;
 import lombok.Getter;
 import lombok.Setter;
 
-@Named @ViewScoped @Getter @Setter
+@Named @ViewScoped @Getter @Setter @Deprecated
 public class StudentClassroomSessionDivisionMergeReportPage extends AbstractCrudOnePage<StudentClassroomSessionDivision> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;

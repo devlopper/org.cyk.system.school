@@ -42,6 +42,7 @@ import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
 import org.cyk.system.school.business.impl.actor.TeacherDetails;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -73,9 +74,6 @@ import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
 public class ContextListener extends AbstractSchoolContextListener implements Serializable {
 
 	private static final long serialVersionUID = -9042005596731665575L;
-	
-	public static final String MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR = "BSWHG1G6";
-	public static final String MERIC_COLLECTION_G7_G12_STUDENT_BEHAVIOUR = "BSWHG7G12";
 	
 	public static final String LEVEL_NAME_CODE_PK = "PK";
 	public static final String LEVEL_NAME_CODE_K1 = "K1";
@@ -324,22 +322,22 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 					name += " LOWER";
 					testCoef = "15";
 					examCoef = "70";
-					studentBehaviourMetricCollectionCode = MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR;
+					studentBehaviourMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT;
 				}else if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_G4,LEVEL_NAME_CODE_G5,LEVEL_NAME_CODE_G6},levelNameCode)){
 					name += " UPPER";
 					testCoef = "15";
 					examCoef = "70";
-					studentBehaviourMetricCollectionCode = MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR;
+					studentBehaviourMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT;
 				}else if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_G7,LEVEL_NAME_CODE_G8,LEVEL_NAME_CODE_G9},levelNameCode)){
 					name += " JUNIOR HIGH SCHOOL";
 					testCoef = "20";
 					examCoef = "60";
-					studentBehaviourMetricCollectionCode = MERIC_COLLECTION_G7_G12_STUDENT_BEHAVIOUR;
+					studentBehaviourMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_SECONDARY_STUDENT;
 				}else if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_G10,LEVEL_NAME_CODE_G11,LEVEL_NAME_CODE_G12},levelNameCode)){
 					name += " SENIOR HIGH SCHOOL";
 					testCoef = "20";
 					examCoef = "60";
-					studentBehaviourMetricCollectionCode = MERIC_COLLECTION_G7_G12_STUDENT_BEHAVIOUR;
+					studentBehaviourMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_SECONDARY_STUDENT;
 				}
 				
 				r.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 "+testCoef+"%","Test 2 "+testCoef+"%","Exam "+examCoef+"%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
@@ -364,7 +362,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 					((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
 					,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 				
-				addIntervalCollectionLabelValueCollection(r,inject(MetricCollectionDao.class).read(MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR).getValueIntervalCollection()
+				addIntervalCollectionLabelValueCollection(r,inject(MetricCollectionDao.class).read(studentBehaviourMetricCollectionCode).getValueIntervalCollection()
 						,Boolean.TRUE,Boolean.FALSE,null);
 				
 			}
@@ -384,9 +382,9 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 								,(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()));
 			
 				r.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
-					{"CONFERENCE REQUESTED",studentClassroomSessionDivision.getResults().getConferenceRequested()==null?"NO"
+					/*{"CONFERENCE REQUESTED",studentClassroomSessionDivision.getResults().getConferenceRequested()==null?"NO"
 							:studentClassroomSessionDivision.getResults().getConferenceRequested()?"YES":"NO"}
-					,{"NEXT OPENING",format(nextClassroomSessionDivision.getExistencePeriod().getFromDate())}
+					,*/{"NEXT OPENING",format(nextClassroomSessionDivision.getExistencePeriod().getFromDate())}
 					,{"NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getExistencePeriod().getToDate())}
 					});
 			}

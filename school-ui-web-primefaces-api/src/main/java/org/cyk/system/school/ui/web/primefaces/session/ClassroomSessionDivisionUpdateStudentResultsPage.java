@@ -51,7 +51,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 				result.setRegistrationCode(result.getIdentifiable().getStudent().getCode());
 				result.setNames(result.getIdentifiable().getStudent().getPerson().getNames());
 				result.setAppreciation(result.getIdentifiable().getResults().getAppreciation());
-				result.setConferenceRequested(result.getIdentifiable().getResults().getConferenceRequested());
+				//result.setConferenceRequested(result.getIdentifiable().getResults().getConferenceRequested());
 				/*
 				if(result.getIdentifiable().getResults().getLectureAttendance().getAttendedDuration()!=null)
 					result.setNumberOfTimeAbsent(inject(ClassroomSessionBusiness.class)
@@ -63,7 +63,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 			public void write(Result item) {
 				super.write(item);
 				item.getIdentifiable().getResults().setAppreciation(item.getAppreciation());
-				item.getIdentifiable().getResults().setConferenceRequested(item.getConferenceRequested());
+				//item.getIdentifiable().getResults().setConferenceRequested(item.getConferenceRequested());
 				
 				if(item.getNumberOfTimeAbsent()==null){
 					
@@ -126,7 +126,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 		private String registrationCode;
 		private String names;
 		private String appreciation;
-		private Boolean conferenceRequested;
+		//private Boolean conferenceRequested;
 		private BigDecimal numberOfTimeAbsent;
 	}
 

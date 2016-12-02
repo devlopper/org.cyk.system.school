@@ -7,30 +7,20 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import org.cyk.system.company.business.api.sale.SaleBusiness;
-import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionTuitionEditPage extends AbstractCrudOnePage<StudentClassroomSession> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	@Override
-	protected void initialisation() {
-		super.initialisation();
-		if(identifiable.getTuitionSale()==null){
-			identifiable.setTuitionSale(inject(SaleBusiness.class).instanciateOne(null, null,identifiable.getStudent().getCode()
-					, null, "false", new String[][]{ {SchoolConstant.INTANGIBLE_PRODUCT_TUITION,"1"} }));
-		}
-	}
 	
 	@Override
 	public String getTitle() {

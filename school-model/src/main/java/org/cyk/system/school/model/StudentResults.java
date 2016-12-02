@@ -67,7 +67,7 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	@Column(length= 1024 * 1)
 	private String appreciation;
 	
-	private Boolean conferenceRequested;
+	//private Boolean conferenceRequested;//TODO can be removed
 	
 	public Sort getEvaluationSort(){
 		if(evaluationSort==null)
@@ -92,9 +92,9 @@ public class StudentResults extends AbstractIdentifiable implements Serializable
 	public String getLogMessage() {
 		return String.format(LOG_FORMAT, evaluationSort==null ?Constant.EMPTY_STRING:evaluationSort.getLogMessage()
 				,lectureAttendance==null ?Constant.EMPTY_STRING:lectureAttendance.getLogMessage()
-						,lectureAttendanceSort==null ?Constant.EMPTY_STRING:lectureAttendanceSort.getLogMessage(),appreciation,conferenceRequested);
+						,lectureAttendanceSort==null ?Constant.EMPTY_STRING:lectureAttendanceSort.getLogMessage(),appreciation);
 	}
-	private static final String LOG_FORMAT = StudentResults.class.getSimpleName()+"(%s %s %s APP=%s CR=%s)";
+	private static final String LOG_FORMAT = StudentResults.class.getSimpleName()+"(%s %s %s APP=%s)";
 
 	public static final String FIELD_EVALUATION_SORT = "evaluationSort";
 	

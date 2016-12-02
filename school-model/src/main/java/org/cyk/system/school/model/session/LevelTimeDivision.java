@@ -6,12 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.utility.common.Constant;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.time.TimeDivisionType;
 
 @Entity @Getter @Setter @NoArgsConstructor
 public class LevelTimeDivision extends AbstractIdentifiable implements Serializable{
@@ -29,15 +30,15 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 		this.getGlobalIdentifierCreateIfNull().setOrderNumber(orderNumber);
 	}
 	
-	/*@Override
+	@Override
 	public String toString() {
-		return level+Constant.CHARACTER_SPACE.toString()+timeDivisionType+Constant.CHARACTER_SPACE.toString()+globalIdentifier.getOrderNumber();
+		return level+Constant.CHARACTER_SPACE.toString()+timeDivisionType+Constant.CHARACTER_SPACE.toString()+getOrderNumber();
 	}
 	
 	@Override
 	public String getUiString() {
-		return level.getUiString()+Constant.CHARACTER_SPACE+timeDivisionType.getUiString()+Constant.CHARACTER_SPACE+globalIdentifier.getOrderNumber();
-	}*/
+		return level.getUiString()+Constant.CHARACTER_SPACE+timeDivisionType.getUiString()+Constant.CHARACTER_SPACE+getOrderNumber();
+	}
 	
 	/**/
 	

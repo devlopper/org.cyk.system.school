@@ -3,7 +3,6 @@ package org.cyk.system.school.business.impl.subject;
 import java.io.Serializable;
 import java.util.Collection;
 
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -21,7 +20,6 @@ import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSub
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.utility.common.Constant;
 
-@Stateless
 public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubjectEvaluationType, ClassroomSessionDivisionSubjectEvaluationTypeDao> implements ClassroomSessionDivisionSubjectEvaluationTypeBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;

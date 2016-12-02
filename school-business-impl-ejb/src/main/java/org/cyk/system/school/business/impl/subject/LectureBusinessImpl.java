@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.api.event.EventBusiness;
@@ -11,7 +10,6 @@ import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
 
-@Stateless
 public class LectureBusinessImpl extends AbstractTypedBusinessService<Lecture, LectureDao> implements LectureBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;

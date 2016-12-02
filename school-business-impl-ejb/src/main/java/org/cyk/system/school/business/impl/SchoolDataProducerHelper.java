@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -81,8 +84,8 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	
 	public Collection<ClassroomSessionInfos> instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
-			,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,CommonNodeInformations commonNodeInformations,Object[][] evaluationTypes,Collection<Subject> subjects
-			,MetricCollection[] behaviourStudentMetricCollections,MetricCollection[] attendanceStudentMetricCollections,String[] suffixes,Boolean studentEvaluationRequired,Boolean studentRankable){
+			,Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,CommonNodeInformations commonNodeInformations,Object[][] evaluationTypes,Collection<Subject> subjects
+			,String[] suffixes,String[] metricCollectionCodes,Boolean studentEvaluationRequired,Boolean studentRankable){
 		if(suffixes==null)
 			suffixes = new String[]{null};
 		Collection<ClassroomSessionInfos> classroomSessionInfosCollection = new ArrayList<>();
@@ -94,12 +97,15 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			classroomSessions.add(classroomSession);
 			ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(classroomSession);
 			classroomSessionInfosCollection.add(classroomSessionInfos);
-			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
-			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
-			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,behaviourStudentMetricCollections,attendanceStudentMetricCollections,studentEvaluationRequired,studentRankable));
+			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
+					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
+					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable));
+			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
+					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
+					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable));
+			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
+					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
+					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable));
 		}
 		return classroomSessionInfosCollection;
 	}
@@ -112,8 +118,8 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	
 	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
-			,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects
-			,MetricCollection[] behaviourStudentMetricCollections,MetricCollection[] attendanceStudentMetricCollections,Boolean studentEvaluationRequired,Boolean studentRankable){
+			,Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects
+			,String[] metricCollectionCodes,Boolean studentEvaluationRequired,Boolean studentRankable){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));
 		classroomSessionDivision.setStudentEvaluationRequired(studentEvaluationRequired);
@@ -122,6 +128,9 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		classroomSessionDivisions.add(classroomSessionDivision);
 		classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(new Date());
 		classroomSessionDivision.getExistencePeriod().setToDate(new Date());
+		
+		for(MetricCollection metricCollection : inject(MetricCollectionDao.class).read(Arrays.asList(metricCollectionCodes)))
+			metricCollectionIdentifiableGlobalIdentifiers.add(new MetricCollectionIdentifiableGlobalIdentifier(metricCollection, classroomSessionDivision));
 		
 		for(Listener listener : Listener.COLLECTION)
 			listener.classroomSessionDivisionCreated(classroomSessionDivision);

@@ -293,8 +293,9 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivisions);
 		
 		if(Boolean.TRUE.equals(metric)){
-			inject(MetricValueBusiness.class).updateManyRandomly(new LinkedHashSet<String>(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR
-					,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE)), classroomSessionDivisions, studentClassroomSessionDivisions);
+			inject(MetricValueBusiness.class).updateManyRandomly(new LinkedHashSet<String>(Arrays.asList(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
+					,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT))
+					, classroomSessionDivisions, studentClassroomSessionDivisions);
 			/*for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 				Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
 						.read(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE))

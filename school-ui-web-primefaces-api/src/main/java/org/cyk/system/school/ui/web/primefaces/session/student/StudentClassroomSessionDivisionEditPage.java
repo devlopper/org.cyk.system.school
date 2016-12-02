@@ -21,7 +21,6 @@ import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricValue;
-import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.UIManager;
@@ -34,11 +33,7 @@ import org.cyk.ui.web.primefaces.MetricValueCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
-import org.cyk.utility.common.annotation.user.interfaces.InputChoice.ChoiceSet;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
-import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
-import org.cyk.utility.common.annotation.user.interfaces.InputOneRadio;
 import org.cyk.utility.common.annotation.user.interfaces.InputTextarea;
 
 import lombok.Getter;
@@ -55,9 +50,9 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	protected void initialisation() {
 		super.initialisation();
 		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeBusiness
-				.class).find(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE))
+				.class).find(Arrays.asList(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT
+						,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT))
 				, identifiable.getClassroomSessionDivision());
-		
 		MetricValueCollection metricValueCollection = null;
 		for(MetricCollection metricCollection : metricCollections){
 			final MetricCollection lMetricCollection = metricCollection;			
@@ -117,7 +112,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		private static final long serialVersionUID = -4741435164709063863L;
 		//@Input @InputNumber private BigDecimal evaluationAverage;
 		@Input @InputTextarea @NotNull private String appreciation;
-		@Input /*@InputBooleanButton*/ @InputChoice(set=ChoiceSet.YES_NO) @InputOneChoice @InputOneRadio @NotNull private Boolean conferenceRequested;
+		//@Input /*@InputBooleanButton*/ @InputChoice(set=ChoiceSet.YES_NO) @InputOneChoice @InputOneRadio @NotNull private Boolean conferenceRequested;
 		
 		@Override
 		public void read() {
@@ -130,7 +125,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 						.getLectureAttendance().getMissedDuration());
 			*/
 			appreciation = identifiable.getResults().getAppreciation();
-			conferenceRequested = identifiable.getResults().getConferenceRequested();
+			//conferenceRequested = identifiable.getResults().getConferenceRequested();
 		}
 		
 		@Override
@@ -138,7 +133,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			super.write();
 			//identifiable.getResults().getEvaluationSort().getAverage().setValue(evaluationAverage);
 			identifiable.getResults().setAppreciation(appreciation);
-			identifiable.getResults().setConferenceRequested(conferenceRequested);
+			//identifiable.getResults().setConferenceRequested(conferenceRequested);
 			/*if(numberOfTimeAbsent==null){
 				
 			}else{

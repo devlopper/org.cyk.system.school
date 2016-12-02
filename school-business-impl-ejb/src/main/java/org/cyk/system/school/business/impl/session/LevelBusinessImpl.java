@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -15,7 +14,6 @@ import org.cyk.system.school.business.api.session.LevelBusiness;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.persistence.api.session.LevelDao;
 
-@Stateless
 public class LevelBusinessImpl extends AbstractTypedBusinessService<Level, LevelDao> implements LevelBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;

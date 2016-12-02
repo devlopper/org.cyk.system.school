@@ -96,7 +96,19 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 			dao.update(classroomSessionDivision);
 		}
 	}
-
+	/*
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<MetricCollection> findMetricCollectionsByMetricCollectionTypes(Collection<ClassroomSessionDivision> classroomSessionDivisions
+			,Collection<org.cyk.system.root.model.mathematics.MetricCollectionType> metricCollectionTypes) {
+		Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers 
+			= inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).findByTypesByIdentifiables(metricCollectionTypes, classroomSessionDivisions);
+		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions)
+			for(org.cyk.system.root.model.mathematics.MetricCollectionType metricCollectionType : metricCollectionTypes)
+				if
+		return null;
+	}
+	*/
+	
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession) {

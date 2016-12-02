@@ -103,7 +103,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		}
 		
 		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
-				.read(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE))
+				.read(Arrays.asList(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT
+						,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT))
 				, studentClassroomSessionDivision.getClassroomSessionDivision());
 		inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).create(metricCollections, Arrays.asList(studentClassroomSessionDivision));
 		/*

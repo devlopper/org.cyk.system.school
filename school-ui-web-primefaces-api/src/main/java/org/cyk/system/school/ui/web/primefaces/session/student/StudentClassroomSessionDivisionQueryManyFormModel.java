@@ -7,9 +7,7 @@ import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.model.AbstractQueryManyFormModel;
-import org.cyk.ui.web.api.WebNavigationManager;
 import org.cyk.ui.web.primefaces.page.AbstractSelectManyPage;
-import org.cyk.utility.common.FileExtension;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,8 +37,8 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractQ
 		
 		@Override
 		public void serve(AbstractSelectManyPage<?> selectManyPage,Object data, String actionIdentifier) {
-			WebNavigationManager.getInstance().redirectToFileConsultManyPage(inject(StudentClassroomSessionDivisionBusiness.class)
-					.findReportFiles(((StudentClassroomSessionDivisionQueryManyFormModel)data).getIdentifiables()), FileExtension.PDF);
+			//WebNavigationManager.getInstance().redirectToFileConsultManyPage(inject(StudentClassroomSessionDivisionBusiness.class)
+			//		.findReportFiles(((StudentClassroomSessionDivisionQueryManyFormModel)data).getIdentifiables()), FileExtension.PDF);
 		}
 		
 	}

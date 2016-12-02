@@ -26,11 +26,37 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	student1.setCode("STUD1");
     	student1.setName("komenan");
     	student1.getPerson().setLastnames("yao christian");
-    	
     	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
     	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
     	
-    	inject(StudentBusiness.class).create(Arrays.asList(student1));
+    	Student pkStudent = inject(StudentBusiness.class).instanciateOne();
+    	pkStudent.setCode("PK_STUD1");
+    	pkStudent.setName("Zadi");
+    	pkStudent.getPerson().setLastnames("leon");
+    	//inject(ElectronicMailBusiness.class).setAddress(pkStudent.getPerson(), PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
+    	//inject(ElectronicMailBusiness.class).setAddress(pkStudent.getPerson(), PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
+    	
+    	Student k1Student = inject(StudentBusiness.class).instanciateOne();
+    	k1Student.setCode("K1_STUD1");
+    	k1Student.setName("Kacou");
+    	k1Student.getPerson().setLastnames("philipe");
+    	
+    	Student k2Student = inject(StudentBusiness.class).instanciateOne();
+    	k2Student.setCode("K2_STUD1");
+    	k2Student.setName("Anza");
+    	k2Student.getPerson().setLastnames("roger");
+    	
+    	Student k3Student = inject(StudentBusiness.class).instanciateOne();
+    	k3Student.setCode("K3_STUD1");
+    	k3Student.setName("Aka");
+    	k3Student.getPerson().setLastnames("clarisse");
+    	
+    	inject(StudentBusiness.class).create(Arrays.asList(pkStudent,k1Student,k2Student,k3Student,student1));
+    	
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k1Student.getCode()},dataProducer.getK1().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k2Student.getCode()},dataProducer.getK2().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k3Student.getCode()},dataProducer.getK3().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{student1.getCode()},
     			dataProducer.getG1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
@@ -60,7 +86,25 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getPk().division(0).getClassroomSessionDivision(), null
     	//		, Boolean.TRUE,Boolean.TRUE);
     	
-    	ClassroomSessionDivisionInfos classroomSessionDivisionInfos = dataProducer.getG1().division(0);
+    	ClassroomSessionDivisionInfos classroomSessionDivisionInfos = null;
+    	
+    	classroomSessionDivisionInfos = dataProducer.getPk().division(0);
+    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), null
+    			,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
+    	
+    	classroomSessionDivisionInfos = dataProducer.getK1().division(0);
+    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), null
+    			,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
+    	
+    	classroomSessionDivisionInfos = dataProducer.getK2().division(0);
+    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), null
+    			,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
+    	
+    	classroomSessionDivisionInfos = dataProducer.getK3().division(0);
+    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), null
+    			,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
+    	
+    	classroomSessionDivisionInfos = dataProducer.getG1().division(0);
     	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), new Object[][]{
     		new Object[]{classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{
     	    		{"STUD1","90","30","60"}

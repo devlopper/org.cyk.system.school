@@ -362,8 +362,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	}
 	
 	protected void configureStudentClassroomSessionDivisionClass() {
-		getFormConfiguration(StudentClassroomSessionDivision.class, Crud.READ).addRequiredFieldNames(StudentClassroomSessionDivisionDetails.FIELD_NUMBER_OF_TIME_ABSENT
-				,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED
+		getFormConfiguration(StudentClassroomSessionDivision.class, Crud.READ).addRequiredFieldNames(/*StudentClassroomSessionDivisionDetails.FIELD_NUMBER_OF_TIME_ABSENT
+				,*/StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION/*,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED*/
 				,StudentClassroomSessionDivisionDetails.FIELD_STUDENT);
 		registerDetailsConfiguration(StudentClassroomSessionDivisionDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
@@ -388,8 +388,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					@Override
 					public Boolean isColumn(Field field) {
 						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION
-								,StudentClassroomSessionDivisionDetails.FIELD_NUMBER_OF_TIME_ABSENT,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
-								,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED);
+								/*,StudentClassroomSessionDivisionDetails.FIELD_NUMBER_OF_TIME_ABSENT*/,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
+								/*,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED*/);
 					}
 				};
 			}

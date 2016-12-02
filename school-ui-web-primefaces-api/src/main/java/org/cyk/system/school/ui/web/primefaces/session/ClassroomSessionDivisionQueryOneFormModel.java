@@ -54,7 +54,7 @@ public class ClassroomSessionDivisionQueryOneFormModel extends AbstractClassroom
 						,UIManager.getInstance().businessEntityInfos(StudentClassroomSessionDivision.class).getUserInterface().getLabelId()))); 
 			}else if(SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
 				WebNavigationManager.getInstance().redirectToDynamicConsultOne(((ClassroomSessionDivisionQueryOneFormModel)data).getIdentifiable()
-						,Arrays.asList(new Parameter(UniformResourceLocatorParameter.TAB_ID,SchoolConstant.UI_TAB_BROADSHEET_ID))); 
+						,Arrays.asList(new Parameter(UniformResourceLocatorParameter.TAB_ID,SchoolConstant.Code.UserInterface.TAB_BROADSHEET))); 
 			}
 		}
 	}

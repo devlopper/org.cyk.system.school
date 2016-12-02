@@ -20,13 +20,11 @@ import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsOutputDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
-import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
-import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.ui.api.AbstractUserSession;
 import org.cyk.ui.api.model.table.Cell;
 import org.cyk.ui.api.model.table.Column;
@@ -65,7 +63,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		studentTable = (Table<RESULT_OUTPUT>) createDetailsTable(getResultOutputClass(), getResultTableCreationListener());
 		studentTable.getAddRowCommandable().addParameter(identifiable);
 		
-		if(SchoolConstant.UI_TAB_BROADSHEET_ID.equals(selectedTabId)){
+		if(SchoolConstant.Code.UserInterface.TAB_BROADSHEET.equals(selectedTabId)){
 			subLevels = new ArrayList<>(getSubLevels());
 		}
 		
@@ -95,7 +93,7 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 			}
 			@Override
 			public String getTitleId() {
-				return SchoolConstant.UI_TAB_BROADSHEET_ID;
+				return SchoolConstant.Code.UserInterface.TAB_BROADSHEET;
 			}
 			
 		});

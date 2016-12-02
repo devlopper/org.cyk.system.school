@@ -12,10 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.NodeResults;
@@ -25,6 +21,10 @@ import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
 public class ClassroomSessionDivision extends AbstractIdentifiablePeriod implements Serializable {
 
@@ -32,6 +32,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 
 	@ManyToOne @NotNull private ClassroomSession classroomSession;
 	@ManyToOne @NotNull private TimeDivisionType timeDivisionType;
+	
 	@Column(nullable=false) @NotNull private Long numberOfSubjects=0l;
 	@Embedded private NodeResults results = new NodeResults();
 	
