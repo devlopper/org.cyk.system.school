@@ -39,6 +39,7 @@ import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -686,7 +687,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			LabelValueCollectionReport labelValueCollectionReport;
 			StudentClassroomSessionDivisionReportTemplateFile report = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
 			String levelNameCode = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getCode();
-			String effortLevelsIntervalCollectionCode = null,schoolCommunicationMetricCollectionCode=null;
+			String effortLevelsIntervalCollectionCode = null,effortLevelsMetricCollectionCode = null,schoolCommunicationMetricCollectionCode=null;
 			addPupilsDetails(report);
 			addMetricsLabelValueCollection(report, studentClassroomSessionDivision,StringUtils.startsWith(levelNameCode, "G") ? 
 					SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT : SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT);
@@ -705,7 +706,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					labelValueCollectionReport.add("RANK",report.getRank());
 				report.addLabelValueCollection(labelValueCollectionReport);
 				
-				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT);
+				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,effortLevelsMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT);
 				labelValueCollectionReport = new LabelValueCollectionReport();
 				labelValueCollectionReport.setName(report.getCurrentLabelValueCollection().getName());
 				labelValueCollectionReport.setCollection(report.getCurrentLabelValueCollection().getCollection().subList(6, 12));
@@ -715,11 +716,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				
 				addIntervalCollectionLabelValueCollection(report,inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
 					studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
-					,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
+					,null,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 				schoolCommunicationMetricCollectionCode = SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT;
 				effortLevelsIntervalCollectionCode = SchoolConstant.Code.IntervalCollection.BEHAVIOUR_PRIMARY_STUDENT;
 			}else if(ArrayUtils.contains(new String[]{SchoolConstant.Code.LevelName.PK},levelNameCode)){
-				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE);
+				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,effortLevelsMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_NUMERACY_DEVELOPMENT);
@@ -731,7 +732,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				effortLevelsIntervalCollectionCode = SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT;
 				schoolCommunicationMetricCollectionCode = SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT;
 			}else if(ArrayUtils.contains(new String[]{SchoolConstant.Code.LevelName.K1},levelNameCode)){
-				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING);
+				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,effortLevelsMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_COMMUNICATION_SKILLS);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SCIENCE);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SOCIAL_STUDIES);
@@ -741,7 +742,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				schoolCommunicationMetricCollectionCode = SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT;
 				effortLevelsIntervalCollectionCode = SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT;
 			}else if(ArrayUtils.contains(new String[]{SchoolConstant.Code.LevelName.K2,SchoolConstant.Code.LevelName.K3},levelNameCode)){
-				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING_READINESS);
+				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,effortLevelsMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING_READINESS);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WRITING);
 				addMetricsLabelValueCollection(report, studentClassroomSessionDivision,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_LISTENING_SPEAKING_VIEWING);
@@ -758,7 +759,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				else if(ArrayUtils.contains(new String[]{SchoolConstant.Code.LevelName.K3},levelNameCode))
 					effortLevelsIntervalCollectionCode = SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT;
 			}
-			addIntervalCollectionLabelValueCollection(report,inject(IntervalCollectionDao.class).read(effortLevelsIntervalCollectionCode),Boolean.TRUE,Boolean.FALSE,null);
+			addIntervalCollectionLabelValueCollection(report,inject(IntervalCollectionDao.class).read(effortLevelsIntervalCollectionCode)
+					,inject(MetricCollectionDao.class).read(effortLevelsMetricCollectionCode),Boolean.TRUE,Boolean.FALSE,null);
 			addSchoolCommunications(report, studentClassroomSessionDivision,schoolCommunicationMetricCollectionCode);
 			return report;
 		}

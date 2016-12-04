@@ -7,7 +7,7 @@ import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
-import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionDivisionInfos;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.EvaluationType;
@@ -86,34 +86,14 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	//schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(dataProducer.getPk().division(0).getClassroomSessionDivision(), null
     	//		, Boolean.TRUE,Boolean.TRUE);
     	
-    	ClassroomSessionDivisionInfos classroomSessionDivisionInfos = null;
     	
-    	classroomSessionDivisionInfos = dataProducer.getPk().division(0);
-    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), null
-    			,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
-    	
-    	classroomSessionDivisionInfos = dataProducer.getK1().division(0);
-    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), null
-    			,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
-    	
-    	classroomSessionDivisionInfos = dataProducer.getK2().division(0);
-    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), null
-    			,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
-    	
-    	classroomSessionDivisionInfos = dataProducer.getK3().division(0);
-    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), null
-    			,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
-    	
-    	classroomSessionDivisionInfos = dataProducer.getG1().division(0);
-    	schoolBusinessTestHelper.simulateStudentClassroomSessionDivisionReport(classroomSessionDivisionInfos.getClassroomSessionDivision(), new Object[][]{
-    		new Object[]{classroomSessionDivisionInfos.subject(0).getClassroomSessionDivisionSubject(),new String[][]{
-    	    		{"STUD1","90","30","60"}
-    	    		//,{"STUD2","70","50","60"}
-    	            //  ,{"STUD3","40","60","40"}
-    	              //,{"STUD4","45","45","80"}
-    	              //,{"STUD5","20","95","55"}
-    	    	}}
-    	},Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.TRUE,Boolean.FALSE);
+    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
+    		{SchoolConstant.Code.LevelName.PK,null,1l}
+    		,{SchoolConstant.Code.LevelName.K1,null,1l}
+    		,{SchoolConstant.Code.LevelName.K2,null,1l}
+    		,{SchoolConstant.Code.LevelName.K3,null,1l}
+    		,{SchoolConstant.Code.LevelName.G1,null,1l}
+    	}, Boolean.TRUE, Boolean.FALSE);
     	
     	/*StudentClassroomSessionDivision studentClassroomSessionDivision = inject(StudentClassroomSessionDivisionBusiness.class).findByStudentByClassroomSessionDivision(
     			inject(StudentBusiness.class).find("STUD1"), classroomSessionDivisionInfos.getClassroomSessionDivision());

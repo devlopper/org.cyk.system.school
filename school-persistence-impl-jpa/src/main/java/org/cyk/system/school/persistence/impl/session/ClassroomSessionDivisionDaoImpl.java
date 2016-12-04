@@ -10,9 +10,11 @@ import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.session.LevelNameDao;
 import org.cyk.utility.common.computation.ArithmeticOperator;
 
 public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomSessionDivision> implements ClassroomSessionDivisionDao,Serializable {
@@ -20,21 +22,34 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 	private static final long serialVersionUID = 6306356272165070761L;
 	
     private String readByClassroomSession,readByClassroomSessions,countByClassroomSession,readByClassroomSessionByOrderNumber,readByClassroomSessionByIndexByTeacher
-    	,readByClassroomSessionByTeacher,readByClassroomSessionsByOrderNumber,readByLevelTimeDivision;
+    	,readByClassroomSessionByTeacher,readByClassroomSessionsByOrderNumber,readByLevelTimeDivision
+    	,readByLevelNameByClassroomSessionDivisionOrderNumber,readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber;
      
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation(); 
         registerNamedQuery(readByClassroomSession, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
-        registerNamedQuery(readByClassroomSessionByTeacher, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE aClassroomSessionDivision.classroomSession=:classroomSession AND EXISTS( "
-				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision AND aSubject.teacher=:teacher"
+        registerNamedQuery(readByClassroomSessionByTeacher, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE"
+        		+ " aClassroomSessionDivision.classroomSession=:classroomSession AND EXISTS( "
+				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision"
+				+ " AND aSubject.teacher=:teacher"
 				+ " )");
         registerNamedQuery(readByClassroomSessionByIndexByTeacher, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
         		+ " aClassroomSessionDivision.classroomSession=:classroomSession AND aClassroomSessionDivision.globalIdentifier.orderNumber=:pindex AND EXISTS( "
-				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision AND aSubject.teacher=:teacher"
+				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision"
+				+ " AND aSubject.teacher=:teacher"
 				+ " )");
         registerNamedQuery(readByLevelTimeDivision, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
         		+ " aClassroomSessionDivision.classroomSession.levelTimeDivision=:levelTimeDivision ");
+        registerNamedQuery(readByLevelNameByClassroomSessionDivisionOrderNumber, "SELECT aClassroomSessionDivision"
+        		+ " FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
+        		+ " aClassroomSessionDivision.classroomSession.levelTimeDivision.level.levelName=:levelName"
+        		+ " AND aClassroomSessionDivision.globalIdentifier.orderNumber = :orderNumber");
+        registerNamedQuery(readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber, "SELECT aClassroomSessionDivision"
+        		+ " FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
+        		+ " aClassroomSessionDivision.classroomSession.levelTimeDivision.level.levelName=:levelName"
+        		+ " AND aClassroomSessionDivision.classroomSession.suffix = :suffix"
+        		+ " AND aClassroomSessionDivision.globalIdentifier.orderNumber = :orderNumber");
         registerNamedQuery(readByClassroomSessionByOrderNumber, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
         		.and(getGlobalIdentifierFieldPath(GlobalIdentifier.FIELD_ORDER_NUMBER), PARAMETER_INDEX,ArithmeticOperator.EQ));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
@@ -90,6 +105,21 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 	@Override
 	public Collection<ClassroomSessionDivision> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision) {
 		return namedQuery(readByLevelTimeDivision).parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision)
+                .resultMany();
+	}
+	
+	@Override
+	public Collection<ClassroomSessionDivision> readByLevelNameByClassroomSessionDivisionOrderNumber(String levelNameCode, Long classroomSessionDivisionOrderNumber) {
+		return namedQuery(readByLevelNameByClassroomSessionDivisionOrderNumber).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
+				.parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber)
+                .resultMany();
+	}
+	
+	@Override
+	public Collection<ClassroomSessionDivision> readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(String levelNameCode,String classroomSessionSuffix, Long classroomSessionDivisionOrderNumber) {
+		return namedQuery(readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
+				.parameter(ClassroomSession.FIELD_SUFFIX, classroomSessionSuffix)
+				.parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber)
                 .resultMany();
 	}
 	

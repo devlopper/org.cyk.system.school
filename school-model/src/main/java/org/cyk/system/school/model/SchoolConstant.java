@@ -201,6 +201,9 @@ public interface SchoolConstant {
 			private static final long serialVersionUID = 1L;
 			
 			public static String TEST = "TEST";
+			public static String TEST1 = "TEST1";
+			public static String TEST2 = "TEST2";
+			
 			public static String EXAM = "EXAM";
 			
 		}

@@ -312,7 +312,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				}
 				
 				labelValueCollectionReport = addIntervalCollectionLabelValueCollection(r,inject(MetricCollectionDao.class).read(performanceCodeMetricCollectionCode).getValueIntervalCollection()
-						,Boolean.TRUE,Boolean.FALSE,null);
+						,null,Boolean.TRUE,Boolean.FALSE,null);
 				labelValueCollectionReport.add("NA", "Not Assessed");
 			}else{
 				String studentBehaviourMetricCollectionCode = null;
@@ -360,10 +360,10 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				
 				addIntervalCollectionLabelValueCollection(r,inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
 					((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
-					,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
+					,null,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 				
 				addIntervalCollectionLabelValueCollection(r,inject(MetricCollectionDao.class).read(studentBehaviourMetricCollectionCode).getValueIntervalCollection()
-						,Boolean.TRUE,Boolean.FALSE,null);
+						,null,Boolean.TRUE,Boolean.FALSE,null);
 				
 			}
 			

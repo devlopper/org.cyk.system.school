@@ -23,6 +23,7 @@ public interface ClassroomSessionDivisionBusiness extends TypedBusiness<Classroo
 	ClassroomSessionDivision findByClassroomSessionByOrderNumber(ClassroomSession classroomSession,Long orderNumber);
 
 	Collection<ClassroomSessionDivision> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
-	
+	Collection<ClassroomSessionDivision> findByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(String levelNameCode,String classroomSessionSuffix,Long classroomSessionDivisionOrderNumber);
+	Collection<ClassroomSessionDivision> findByLevelNameByClassroomSessionDivisionOrderNumber(String levelNameCode,Long classroomSessionDivisionOrderNumber);
 	
 }

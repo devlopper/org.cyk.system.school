@@ -22,7 +22,6 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOpti
 import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.business.api.time.AttendanceMetricValueBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
-import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.time.AttendanceMetricValue;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
@@ -57,8 +56,8 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
-import org.cyk.utility.common.FileExtension;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
 
@@ -190,7 +189,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}
 
 	public void createSubjectEvaluation(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,String[][] details){
-		createSubjectEvaluation(evaluationTypeBusiness.findBySubjectByEvaluationType(subject, evaluationType),details);
+		createSubjectEvaluation(evaluationTypeBusiness.findByClassroomSessionDivisionSubjectByEvaluationType(subject, evaluationType),details);
 	}
 	
 	public void computeStudentClassroomSessionDivisionResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
@@ -213,7 +212,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),reportArgumentsBuilder,new ServiceCallArguments());
 			
 			if(Boolean.TRUE.equals(createFileOnDisk)){
-				Collection<File> files = new ArrayList<>();
+				//Collection<File> files = new ArrayList<>();
 				for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
 					classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).find(classroomSessionDivision.getIdentifier());
 					if(classroomSessionDivisionIndexes==null || classroomSessionDivisionIndexes.isEmpty()
@@ -235,7 +234,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 						}
 					}
 				}
-				writeStream(inject(FileBusiness.class).merge(files, FileExtension.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
+				//writeStream(inject(FileBusiness.class).merge(files, FileExtension.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
 	    	}
 		}
 	}
@@ -263,25 +262,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					inject(AttendanceMetricValueBusiness.class).setValue(attendanceMetricValues, AttendanceMetricValue.NUMBER_OF_MILLISECOND_ATTENDED, new BigDecimal(randomDataProvider.randomInt(0, 1)*t));
 					inject(AttendanceMetricValueBusiness.class).setValue(attendanceMetricValues, AttendanceMetricValue.NUMBER_OF_MILLISECOND_MISSED, new BigDecimal(randomDataProvider.randomInt(0, 1)*t));
 					
-					//studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
 				}
-				/*
-				if(Boolean.TRUE.equals(metric)){
-					Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = 
-							classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
-					for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections){
-						IntervalCollection intervalCollection = classroomSessionDivisionStudentsMetricCollection.getMetricCollection().getValueIntervalCollection();
-						inject(IntervalCollectionBusiness.class).load(intervalCollection);
-						Collection<StudentResultsMetricValue> studentResultsMetricValues = inject(StudentResultsMetricValueBusiness.class)
-								.findByStudentResults(studentClassroomSessionDivision.getResults());
-						for(StudentResultsMetricValue studentResultsMetricValue : studentResultsMetricValues){
-							studentResultsMetricValue.getMetricValue().setNumberValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
-							studentResultsMetricValue.getMetricValue().setStringValue(RandomStringUtils.randomAlphabetic(1));
-						}
-						studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision,studentResultsMetricValues);	
-					}
-				}
-				*/
+				
 				if(Boolean.TRUE.equals(appreciation)){
 					studentClassroomSessionDivision.getResults().setAppreciation(RandomStringUtils.randomAlphabetic(appreciationLenght));
 					//studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivision);
@@ -296,30 +278,6 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			inject(MetricValueBusiness.class).updateManyRandomly(new LinkedHashSet<String>(Arrays.asList(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 					,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT))
 					, classroomSessionDivisions, studentClassroomSessionDivisions);
-			/*for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
-				Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
-						.read(Arrays.asList(SchoolConstant.Code.MetricCollectionType.STUDENT_BEHAVIOUR,SchoolConstant.Code.MetricCollectionType.STUDENT_ATTENDANCE))
-						, studentClassroomSessionDivision.getClassroomSessionDivision());
-				for(MetricCollection metricCollection : metricCollections){
-					Collection<Metric> metrics = inject(MetricBusiness.class).findByCollection(metricCollection);
-					IntervalCollection intervalCollection = metricCollection.getValueIntervalCollection();
-					inject(IntervalCollectionBusiness.class).load(intervalCollection);
-					List<Interval> intervals = new ArrayList<>(inject(IntervalBusiness.class).findByCollection(intervalCollection));
-					Collection<MetricValue> metricValues = inject(MetricValueBusiness.class).findByMetricsByIdentifiables(metrics,Arrays.asList(studentClassroomSessionDivision));
-					Collection<AbstractIdentifiable> c = new ArrayList<>();
-					for(MetricValue metricValue : metricValues){
-						if(MetricValueType.NUMBER.equals(metricCollection.getValueType())){
-							metricValue.getNumberValue().setUser(new BigDecimal(RandomDataProvider.getInstance().randomInt(intervalCollection.getLowestValue().intValue(), intervalCollection.getHighestValue().intValue())));
-						}else
-							if(MetricValueInputted.VALUE_INTERVAL_CODE.equals(metricValue.getMetric().getCollection().getValueInputted()))
-								metricValue.setStringValue( ((Interval)RandomDataProvider.getInstance().randomFromList(intervals)).getCode() );
-							else
-								metricValue.setStringValue(RandomStringUtils.randomAlphabetic(1));
-						c.add(metricValue);
-					}
-					inject(GenericBusiness.class).update(c);
-				}
-			}*/
 		}
 	}
 	public void randomValues(Boolean metric,Boolean attendance,Boolean appreciation){
@@ -492,6 +450,28 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     	if(Boolean.TRUE.equals(email))
     		inject(StudentClassroomSessionDivisionBusiness.class).sendReportFileToEmail(inject(StudentClassroomSessionDivisionBusiness.class)
 				.findByClassroomSessionDivisions(Arrays.asList(classroomSessionDivision)));
+	}
+	
+	public void generateStudentClassroomSessionDivisionReport(Object[][] classroomSessionInfos,Boolean print,Boolean email){
+		for(Object[] classroomSessionInfo : classroomSessionInfos){
+			ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
+	    			.findByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber((String)classroomSessionInfo[0],(String)classroomSessionInfo[1]
+	    					, (Long)classroomSessionInfo[2]).iterator().next();
+			Object[][] objects = null;
+			if(Boolean.TRUE.equals(classroomSessionDivision.getStudentEvaluationRequired())){
+				Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = inject(StudentClassroomSessionDivisionSubjectDao.class)
+						.readByClassroomSessionDivision(classroomSessionDivision);
+				if(!studentClassroomSessionDivisionSubjects.isEmpty()){
+					StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = studentClassroomSessionDivisionSubjects.iterator().next();
+					objects = new Object[][]{
+			    		new Object[]{studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject(),new String[][]{
+		    	    		{studentClassroomSessionDivisionSubjects.iterator().next().getStudent().getCode(),"90","30","60"}
+		    	    	}}
+					};
+				}
+			}
+			simulateStudentClassroomSessionDivisionReport(classroomSessionDivision, objects, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, print, email);
+		}
 	}
 	
 	public void simulate(SchoolBusinessSimulationParameters parameters){

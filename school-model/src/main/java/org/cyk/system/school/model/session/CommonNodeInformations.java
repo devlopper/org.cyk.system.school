@@ -25,7 +25,7 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	private static final long serialVersionUID = 3372342222993865767L;
 	
 	@ManyToOne @JoinColumn(name="resultsReportTemplate") private ReportTemplate studentClassroomSessionDivisionResultsReportTemplate;
-	@ManyToOne private Person studentClassroomSessionDivisionResultsReportSigner;
+	@ManyToOne @JoinColumn(name="resultsReportSigner") private Person studentClassroomSessionDivisionResultsReportSigner;
 	
 	@ManyToOne private IntervalCollection studentSubjectAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionDivisionAverageScale;

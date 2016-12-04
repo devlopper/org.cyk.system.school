@@ -24,8 +24,6 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	@Inject private ClassroomSessionDivisionSubjectDao classroomSessionDivisionSubjectDao;
-	
 	@Inject
 	public ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl(ClassroomSessionDivisionSubjectEvaluationTypeDao dao) {
 		super(dao); 
@@ -41,6 +39,9 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 	
 	@Override
 	public ClassroomSessionDivisionSubjectEvaluationType create(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+		ClassroomSessionDivisionSubjectEvaluationType existing = dao.readByClassroomSessionDivisionSubjectByEvaluationType(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject()
+				, classroomSessionDivisionSubjectEvaluationType.getEvaluationType());
+		exceptionUtils().exception(existing!=null, "classroomSessionDivisionSubjectEvaluationType.alreadyexists");//TODO create shortcut method
 		if(classroomSessionDivisionSubjectEvaluationType.getCountInterval()!=null){
 			if(StringUtils.isBlank(classroomSessionDivisionSubjectEvaluationType.getCode()))
 				classroomSessionDivisionSubjectEvaluationType.setCode(StringUtils.join(new String[]{classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getCode()
@@ -48,13 +49,13 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 			inject(IntervalBusiness.class).create(classroomSessionDivisionSubjectEvaluationType.getCountInterval());
 		}
 		commonUtils.increment(Long.class, classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject(), ClassroomSessionDivisionSubject.FIELD_NUMBER_OF_EVALUATION_TYPES, 1l);
-		classroomSessionDivisionSubjectDao.update(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
+		inject(ClassroomSessionDivisionSubjectDao.class).update(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
 		return super.create(classroomSessionDivisionSubjectEvaluationType);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public ClassroomSessionDivisionSubjectEvaluationType findBySubjectByEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName) {
-		return dao.readBySubjectByEvaluationType(subject, evaluationTypeName);
+	public ClassroomSessionDivisionSubjectEvaluationType findByClassroomSessionDivisionSubjectByEvaluationType(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,EvaluationType evaluationType) {
+		return dao.readByClassroomSessionDivisionSubjectByEvaluationType(classroomSessionDivisionSubject, evaluationType);
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

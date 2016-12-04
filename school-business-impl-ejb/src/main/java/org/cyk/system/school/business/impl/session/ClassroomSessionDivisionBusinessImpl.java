@@ -140,4 +140,15 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		return dao.readByLevelTimeDivision(levelTimeDivision); 
 	}
 	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSessionDivision> findByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(String levelNameCode,String classroomSessionSuffix, Long classroomSessionDivisionOrderNumber) {
+		if(classroomSessionSuffix==null)
+			return findByLevelNameByClassroomSessionDivisionOrderNumber(levelNameCode, classroomSessionDivisionOrderNumber);
+		return dao.readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(levelNameCode,classroomSessionSuffix,classroomSessionDivisionOrderNumber);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSessionDivision> findByLevelNameByClassroomSessionDivisionOrderNumber(String levelNameCode, Long classroomSessionDivisionOrderNumber) {
+		return dao.readByLevelNameByClassroomSessionDivisionOrderNumber(levelNameCode,classroomSessionDivisionOrderNumber);
+	}
 }

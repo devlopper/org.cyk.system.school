@@ -23,4 +23,7 @@ public interface ClassroomSessionDivisionDao extends TypedDao<ClassroomSessionDi
 
 	Collection<ClassroomSessionDivision> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 
+	Collection<ClassroomSessionDivision> readByLevelNameByClassroomSessionDivisionOrderNumber(String levelNameCode,Long classroomSessionDivisionOrderNumber);
+	Collection<ClassroomSessionDivision> readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(String levelNameCode,String suffix,Long classroomSessionDivisionOrderNumber);
+
 }

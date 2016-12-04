@@ -15,18 +15,18 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeDaoImpl extends Abstra
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readBySubjectByEvaluationType,readByClassroomSessionDivisionSubject;
+	private String readByClassroomSessionDivisionSubjectByEvaluationType,readByClassroomSessionDivisionSubject;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
-		registerNamedQuery(readBySubjectByEvaluationType, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT).and(ClassroomSessionDivisionSubjectEvaluationType.FIELD_TYPE));
+		registerNamedQuery(readByClassroomSessionDivisionSubjectByEvaluationType, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT).and(ClassroomSessionDivisionSubjectEvaluationType.FIELD_TYPE));
 		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT));
 	}
 	
 	@Override
-	public ClassroomSessionDivisionSubjectEvaluationType readBySubjectByEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName) {
-		return namedQuery(readBySubjectByEvaluationType).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT, subject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_TYPE, evaluationTypeName)
+	public ClassroomSessionDivisionSubjectEvaluationType readByClassroomSessionDivisionSubjectByEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName) {
+		return namedQuery(readByClassroomSessionDivisionSubjectByEvaluationType).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT, subject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_TYPE, evaluationTypeName)
 				.ignoreThrowable(NoResultException.class).resultOne();
 	}
 
