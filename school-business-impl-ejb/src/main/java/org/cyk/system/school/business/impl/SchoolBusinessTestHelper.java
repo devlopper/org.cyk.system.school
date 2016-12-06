@@ -20,12 +20,9 @@ import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
-import org.cyk.system.root.business.api.time.AttendanceMetricValueBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
-import org.cyk.system.root.model.time.AttendanceMetricValue;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
-import org.cyk.system.root.persistence.api.time.AttendanceMetricValueDao;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
@@ -256,11 +253,11 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
 				
 				if(Boolean.TRUE.equals(attendance)){
-					Collection<AttendanceMetricValue> attendanceMetricValues = inject(AttendanceMetricValueDao.class).readByAttendanceByCodes(
-							studentClassroomSessionDivision.getResults().getLectureAttendance(),AttendanceMetricValue.NUMBER_OF_MILLISECOND_ATTENDED
-							,AttendanceMetricValue.NUMBER_OF_MILLISECOND_MISSED);
-					inject(AttendanceMetricValueBusiness.class).setValue(attendanceMetricValues, AttendanceMetricValue.NUMBER_OF_MILLISECOND_ATTENDED, new BigDecimal(randomDataProvider.randomInt(0, 1)*t));
-					inject(AttendanceMetricValueBusiness.class).setValue(attendanceMetricValues, AttendanceMetricValue.NUMBER_OF_MILLISECOND_MISSED, new BigDecimal(randomDataProvider.randomInt(0, 1)*t));
+					//Collection<AttendanceMetricValue> attendanceMetricValues = inject(AttendanceMetricValueDao.class).readByAttendanceByCodes(
+					//		studentClassroomSessionDivision.getResults().getLectureAttendance(),AttendanceMetricValue.NUMBER_OF_MILLISECOND_ATTENDED
+					//		,AttendanceMetricValue.NUMBER_OF_MILLISECOND_MISSED);
+					//inject(AttendanceMetricValueBusiness.class).setValue(attendanceMetricValues, AttendanceMetricValue.NUMBER_OF_MILLISECOND_ATTENDED, new BigDecimal(randomDataProvider.randomInt(0, 1)*t));
+					//inject(AttendanceMetricValueBusiness.class).setValue(attendanceMetricValues, AttendanceMetricValue.NUMBER_OF_MILLISECOND_MISSED, new BigDecimal(randomDataProvider.randomInt(0, 1)*t));
 					
 				}
 				

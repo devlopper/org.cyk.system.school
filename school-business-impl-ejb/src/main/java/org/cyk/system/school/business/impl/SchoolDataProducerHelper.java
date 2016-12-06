@@ -124,7 +124,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
     			,new BigDecimal("1"));
 		classroomSessionDivision.setStudentEvaluationRequired(studentEvaluationRequired);
 		classroomSessionDivision.setStudentRankable(studentRankable);
-		classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().setUser(new BigDecimal(DateTimeConstants.MILLIS_PER_DAY * 45l));
+		classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().set(DateTimeConstants.MILLIS_PER_DAY * 45l);
 		classroomSessionDivisions.add(classroomSessionDivision);
 		classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(new Date());
 		classroomSessionDivision.getExistencePeriod().setToDate(new Date());

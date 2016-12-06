@@ -16,7 +16,6 @@ import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
-import org.cyk.system.root.business.api.time.AttendanceMetricValueBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.event.Event;
@@ -30,7 +29,6 @@ import org.cyk.system.root.model.time.AttendanceMetricValue;
 import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.root.persistence.api.event.EventMissedDao;
 import org.cyk.system.root.persistence.api.event.EventPartyDao;
-import org.cyk.system.root.persistence.api.time.AttendanceMetricValueDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.AbstractStudentResult;
@@ -226,7 +224,7 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 				}*/	
 			}else{
 				//Just recompute derived attributes
-				attendanceMetricValues = inject(AttendanceMetricValueDao.class).readByAttendance(attendance);
+				//attendanceMetricValues = inject(AttendanceMetricValueDao.class).readByAttendance(attendance);
 				/*System.out.println("AbstractStudentResultsBusinessImpl.updateAttendance() : "+result.getCode());
 				for(AttendanceMetricValue attendanceMetricValue : attendanceMetricValues){
 					System.out.println(attendanceMetricValue.getCode());
@@ -249,8 +247,8 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 				
 				*/
 			}
-			if(attendanceMetricValues!=null)
-				inject(AttendanceMetricValueBusiness.class).update(attendanceMetricValues);
+			//if(attendanceMetricValues!=null)
+			//	inject(AttendanceMetricValueBusiness.class).update(attendanceMetricValues);
 			dao.update(result);
 			addCallArgumentsWorkDoneByStep(callArguments);
 		}

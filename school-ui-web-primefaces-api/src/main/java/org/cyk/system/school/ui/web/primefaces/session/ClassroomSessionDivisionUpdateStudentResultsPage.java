@@ -77,7 +77,7 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 		resultCollection.getAddCommandable().setRendered(Boolean.FALSE);
 		
 		maximumMissedDuration = inject(ClassroomSessionBusiness.class)
-				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class));
+				.convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getExistencePeriod().getNumberOfMillisecond().get());
 	}
 	
 	@Override

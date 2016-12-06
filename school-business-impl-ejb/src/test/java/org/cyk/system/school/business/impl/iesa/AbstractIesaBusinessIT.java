@@ -9,7 +9,6 @@ import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArgumen
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
-import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
@@ -30,7 +29,6 @@ public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
     protected void installApplication(Boolean fake){
     	
     	super.installApplication(fake);
-    	AbstractRootReportProducer.DEFAULT = new IesaFakedDataProducer.ReportProducer();
     	Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	
     	StudentBusinessImpl.Listener.Adapter listener = new StudentBusinessImpl.Listener.Adapter.Default(){

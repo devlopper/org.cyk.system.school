@@ -360,7 +360,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	protected Long getAttendableDuration(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return studentClassroomSessionDivision.getClassroomSessionDivision().getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class);
+		return studentClassroomSessionDivision.getClassroomSessionDivision().getExistencePeriod().getNumberOfMillisecond().get();
 	}
 	
 	@Override

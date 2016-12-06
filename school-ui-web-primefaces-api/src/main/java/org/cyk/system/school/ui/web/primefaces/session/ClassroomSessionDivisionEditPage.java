@@ -106,7 +106,7 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 			fromDate = identifiable.getExistencePeriod().getFromDate();
 			toDate = identifiable.getExistencePeriod().getToDate();
 			if(identifiable.getExistencePeriod().getNumberOfMillisecond()!=null)
-				duration = inject(ClassroomSessionBusiness.class).convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getExistencePeriod().getNumberOfMillisecond().getSystemAs(Long.class));
+				duration = inject(ClassroomSessionBusiness.class).convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSession(),identifiable.getExistencePeriod().getNumberOfMillisecond().get());
 		}
 		
 		@Override
@@ -117,8 +117,8 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 			if(duration==null)
 				identifiable.getExistencePeriod().getNumberOfMillisecond().setSystem(null);
 			else
-				identifiable.getExistencePeriod().getNumberOfMillisecond().setSystem(new BigDecimal(
-						inject(ClassroomSessionBusiness.class).convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),duration)));
+				identifiable.getExistencePeriod().getNumberOfMillisecond().setSystem(
+						inject(ClassroomSessionBusiness.class).convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),duration));
 		}
 		
 		public static final String FIELD_DURATION = "duration";

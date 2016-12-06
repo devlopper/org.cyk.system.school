@@ -134,7 +134,11 @@ public interface SchoolConstant {
 			public static String COMMUNICATION_KINDERGARTEN_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.COMMUNICATION
 					,LevelGroup.KINDERGARTEN,Student.class); 
 			
-			public static String BEHAVIOUR_KINDERGARTEN_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,Student.class); 
+			//public static String BEHAVIOUR_KINDERGARTEN_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,Student.class); 
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class);
+			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class);
+			public static String BEHAVIOUR_KINDERGARTEN_K2_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K2,Student.class);
+			
 			public static String BEHAVIOUR_PRIMARY_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.PRIMARY,Student.class);
 			public static String BEHAVIOUR_SECONDARY_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.SECONDARY,Student.class);
 			
@@ -173,7 +177,8 @@ public interface SchoolConstant {
 			
 			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
 					,LevelName.PK,Student.class);
-			
+			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
+					,LevelName.K1,Student.class);
 			public static String BEHAVIOUR_KINDERGARTEN_K2_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
 					,LevelName.K2,Student.class);
 			

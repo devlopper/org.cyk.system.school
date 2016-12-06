@@ -34,13 +34,12 @@ import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
-import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionType;
-import org.cyk.system.root.model.mathematics.MetricValueInputted;
-import org.cyk.system.root.model.mathematics.MetricValueType;
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.root.model.security.Role;
-import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
+import org.cyk.system.root.model.value.ValueProperties;
+import org.cyk.system.root.model.value.ValueSet;
+import org.cyk.system.root.model.value.ValueType;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
@@ -101,6 +100,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void initialisation() {
 		INSTANCE = this;
 		super.initialisation();
+		AbstractSchoolReportProducer.DEFAULT = new AbstractSchoolReportProducer.Default();
 		PersistDataListener.COLLECTION.add(new PersistDataListener.Adapter.Default(){
 			private static final long serialVersionUID = -950053441831528010L;
 			@SuppressWarnings("unchecked")
@@ -228,213 +228,222 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     			,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT,SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_KINDERGARTEN_STUDENT
     			,SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_PRIMARY_STUDENT,SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_SECONDARY_STUDENT);
 		
-		IntervalCollection intervalCollection = create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT
-				,"Skills performance levels",Constant.CHARACTER_UNDESCORE.toString(),new String[][]{ {"1", "Learning to do", "1", "1"},{"2", "Does sometimes", "2", "2"}
-				,{"3", "Does regulary", "3", "3"} }));
+		ValueProperties valueProperties = null;
 		
 		//PK
 		
+		valueProperties = create(new ValueProperties(create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT
+				,"Skills performance levels",new String[][]{ {"1", "Learning to do", "1", "1"},{"2", "Does sometimes", "2", "2"},{"3", "Does regulary", "3", "3"} }))
+				, ValueType.STRING, ValueSet.INTERVAL_RELATIVE_CODE, Boolean.TRUE, notAssessed, notAssessedAbbreviation));
+		
 		create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE
-    			,"Expressive language",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Expressive language",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Participates actively during circle time","Participates in singing rhymes","Can say her name and name of classmates"
 					,"Can respond appropriately to “how are you?”","Can say his/her age","Can say the name of her school","Names objects in the classroom and school environment"
 					,"Uses at least one of the following words “me”,“I”, “he”, “she”, “you”","Talks in two or three word phrases and longer sentences"
 					,"Can use “and” to connect words/phrases","Talks with words in correct order","Can be engaged in conversations"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE
-    			,"Receptive language",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Receptive language",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Responds to her name when called","Retrieves named objects","Follows simple instructions (across the classroom) – stand, sit, bring your cup"
 					,"Understands facial expressions and tone of voice","Understands 2-3 step instructions"
 					,"Understands positional words – In and out - Up and down - On and under - Forward and backward","Understands the concept “Give and Take”"
 					,"Talks about feelings"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS
-    			,"Reading readness",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Reading readness",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Shows interest in book/stories","Names familiar objects in pictures/books – vegetables, fruits, animals","Tells what action is going on in pictures"
 					,"Handling books – carrying a book, turning the pages of a book, placing a book back in the shelf","Listening for different sounds in the environment"
 					,"Identifying objects that begin with a particular sound","Identifying pictures that begin with a particular sound","Recognizes the written letters of the alphabet"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_NUMERACY_DEVELOPMENT
-    			,"Numeracy development",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Numeracy development",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Sorts objects by shape","Sorts objects by size","Participates in reciting different counting rhymes, songs, stories and games","Verbally count forward to 10"
 					,"Can count 1-10 objects","Identifies the written numerals 1-10","Reproducing Patterns","Identifies the 3 basic geometric shapes ( circle,triangle and square)"
 					,"Identifies more shapes ( Star, diamond, heart,cross ,crescent)"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_ARTS_MUSIC
-    			,"Arts and music",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Arts and music",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Moves expressively to sounds and music – nodding, clapping, movement of body","Participates in musical activities"
 					,"Hums or sing words of songs","Participates in role play","Shows satisfaction with completed work"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT
-    			,"Social and emotional development",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Social and emotional development",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Initiates interaction with adults","Initiates interaction with classmates","Participates in group activities"
 					,"Takes turns during group activities","Greets people – hello and goodbye","Says “please” and “thank you”","Asks for help in doing things when needed"
 					,"Shows sympathy, offers to help or helps others","Can express dissatisfaction and other emotions – body language or words"
 					,"Responds to correction – stops the misbehaviour"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_GROSS_MOTOR_SKILLS
-    			,"Gross motor skills",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Gross motor skills",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Can run well without falling","Can kick a ball","Climbs up ladder and slides down slide without help","Walks up and down stairs unassisted"
 					,"Can stand on one foot for a few seconds without support","Throws a ball into a basket from a short distance"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_FINE_MOTOR_SKILLS
-    			,"Fine motor skills",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Fine motor skills",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Scribbles spontaneously","Can scribble to and from, in circular motions and in lines","Can place simple pieces in a puzzle board"
 					,"Can build a tower of at least 3-5 blocks","Develops good pencil grip and control"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	//KG1
     	
+    	valueProperties = create(new ValueProperties(create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT
+				,"Skills performance levels",new String[][]{ {"1", "Emerging", "1", "1"},{"2", "Developing", "2", "2"},{"3", "Proficient", "3", "3"}
+				,{"4", "Exemplary", "4", "4"} })), ValueType.STRING, ValueSet.INTERVAL_RELATIVE_CODE, Boolean.TRUE, notAssessed, notAssessedAbbreviation));
+    	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING
-    			,"English/language Arts/reading",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"English/language Arts/reading",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Reads independently with understanding","Comprehends a variety of texts","Applies a variety of strategies to comprehend printed tex"
 					,"Reads to access and utilize information from written and electronic sources","Demonstrates understanding of letter-sound associations"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_COMMUNICATION_SKILLS
-    			,"Communication skills",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Communication skills",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Contributes ideas to discussions","Contributes ideas to discussions","Write for a variety of purposes","Writes well-organized compositions"
 					,"Uses appropriate writing skills","Write legibly","Revises, edits and proofreads work"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SCIENCE
-    			,"Science",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Science",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Understands and applies scientific process","Understands and applies knowledge of key concepts"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SOCIAL_STUDIES
-    			,"Social studies",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Social studies",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Gathers and organizes information","Understands and applies knowledge of key concepts"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_MATHEMATICS
-    			,"Mathematics",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Mathematics",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Demonstrates understanding of number sense","Reads and interprets data","Applies problem-solving strategies"
 					,"Communicates mathematically"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_WORK_HABITS
-    			,"Work habits",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Work habits",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Follows directions","Uses time and materials constructively","Works independently","Completes class assignments"
 					,"Completes homework assignments ","Listens attentively"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SOCIAL_SKILLS
-    			,"Social skills",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Social skills",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Cooperates with others","Shows respect for others","Participates in classroom activities","Follows classroom/school rules"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	//KG2 & KG3
     	
-    	intervalCollection = create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT,"Skills performance levels"
-				,Constant.CHARACTER_UNDESCORE.toString(),new String[][]{{"4","Meets and applies expectations/standards independently","4","4"}
+    	valueProperties = create(new ValueProperties(create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT,"Skills performance levels"
+				,new String[][]{{"4","Meets and applies expectations/standards independently","4","4"}
 				,{"3","Meets and applies expectations/standards with support","3","3"},{"2","Does not meets and applies expectations/standards; but shows growth with support","2","2"}
-				,{"1","Does not meets and applies expectations/standards; shows no growth even with support","1","1"}}));
+				,{"1","Does not meets and applies expectations/standards; shows no growth even with support","1","1"}})), ValueType.STRING, ValueSet.INTERVAL_RELATIVE_CODE
+    			, Boolean.TRUE, notAssessed, notAssessedAbbreviation));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING_READINESS
-    			,"Reading Readiness",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Reading Readiness",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Demonstrates concepts of print","Identifies and produces rhyming words","Segments and blends sounds"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING
-    			,"Reading",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Reading",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Answers questions about essential narrative elements","Reads high frequency words","Blends sounds to read words","Reads simple text"
 					,"Developmental Reading assessment"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WRITING
-    			,"Writing",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Writing",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Writes first and last name","Expresses ideas through independent writing"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_LISTENING_SPEAKING_VIEWING
-    			,"Listening, speaking and viewing",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Listening, speaking and viewing",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Uses oral language to communicate effectively","Recites short poems and songs","Follows two-step oral directions","Makes predictions and retells"
 					,"Comprehends information through listening","Demonstrates comprehension of information through speaking"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_ALPHABET_IDENTIFICATION
-    			,"Alphabet identification",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Alphabet identification",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Identifies Upper-Case","Identifies Lower-Case","Produces Letter Sounds","Prints Letters Correctly"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_MATHEMATICS
-    			,"Mathematics",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Mathematics",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Number and Operations","Geometry","Measurement","Algebraic Thinking"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_SCIENCE_SOCIAL_STUDIES_MORAL_EDUCATION
-    			,"Science, social studies and moral education",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Science, social studies and moral education",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Science","Social Studies","Moral Education"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_ART_CRAFT
-    			,"Art and craft",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Art and craft",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Performance","Initiative"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
 
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_MUSIC
-    			,"Music",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Music",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Performance","Initiative"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_PHYSICAL_EDUCATION
-    			,"Physical education",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Physical education",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Performance","Initiative"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WORK_BEHAVIOUR_HABITS
-    			,"Work and behaviour habits",inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
+    			,"Work and behaviour habits",SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
 			, new String[]{"Follows directions","Uses time and materials constructively","Works independently","Completes class assignments","Completes homework assignments"
 					,"Listens attentively","Cooperates with others","Shows respect for others","Participates in classroom activities","Follows classroom/school rules"}
-    		,intervalCollection).setValueIsNullable(Boolean.TRUE).setNullValueString(notAssessed).setNullValueAbbreviation(notAssessedAbbreviation));
+    		).setValueProperties(valueProperties));
     	
     	// G1 - G12
     	
-    	intervalCollection = create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_PRIMARY_STUDENT,"Effort Levels"
-				,Constant.CHARACTER_UNDESCORE.toString(),new String[][]{ {"1", "Has no regard for the observable traits", "1", "1"},{"2", "Shows minimal regard for the observable traits"
+    	valueProperties = create(new ValueProperties(create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_PRIMARY_STUDENT,"Effort Levels"
+				,new String[][]{ {"1", "Has no regard for the observable traits", "1", "1"},{"2", "Shows minimal regard for the observable traits"
 					, "2", "2"},{"3", "Acceptable level of observable traits", "3", "3"},{"4", "Maintains high level of observable traits", "4", "4"}
-					,{"5", "Maintains an excellent degree of observable traits", "5", "5"} }));
+					,{"5", "Maintains an excellent degree of observable traits", "5", "5"} })), ValueType.STRING, ValueSet.INTERVAL_RELATIVE_CODE
+    			, Boolean.FALSE, notAssessed, notAssessedAbbreviation));
     	
     	String[] items = new String[]{"Respect authority","Works independently and neatly","Completes homework and class work on time","Shows social courtesies"
     			,"Demonstrates self-control","Takes care of school and others materials","Event management skills","Game/Sport","Handwriting","Drawing/Painting"
     			,"Punctionality/Regularity","Works cooperatively in groups","Listens and follows directions","Community"};
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT,"Behaviour,Study and Work Habits"
-				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.NUMBER
-			, items,intervalCollection));
+				,SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT, items).setValueProperties(valueProperties));
 		
-    	intervalCollection = create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_SECONDARY_STUDENT,"Effort Levels"
-				,Constant.CHARACTER_UNDESCORE.toString(),new String[][]{ {"E", "Excellent", "1", "1"},{"G", "Good", "2", "2"},{"S", "Satisfactory", "3", "3"}
-				,{"N", "Needs Improvement", "4", "4"},{"H", "Has no regard", "5", "5"} }));
+    	valueProperties = create(new ValueProperties(create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_SECONDARY_STUDENT,"Effort Levels"
+				,new String[][]{ {"E", "Excellent", "1", "1"},{"G", "Good", "2", "2"},{"S", "Satisfactory", "3", "3"}
+				,{"N", "Needs Improvement", "4", "4"},{"H", "Has no regard", "5", "5"} })), ValueType.STRING, ValueSet.INTERVAL_RELATIVE_CODE
+    			, Boolean.FALSE, notAssessed, notAssessedAbbreviation));
     	
 		create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.BEHAVIOUR_SECONDARY_STUDENT,"Behaviour,Study and Work Habits"
-				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT),MetricValueType.STRING
-			, items, intervalCollection).setMetricValueInputted(MetricValueInputted.VALUE_INTERVAL_CODE));
+				,SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT, items).setValueProperties(valueProperties));
+		
+		valueProperties = create(new ValueProperties(null, ValueType.BOOLEAN, null, Boolean.FALSE, null, null));
 		
 		metricsCommon = new String[]{"Conference requested"};
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT,"School communications"
-				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT),MetricValueType.BOOLEAN
-			, ArrayUtils.addAll(metricsCommon),null, null));
+				,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT, ArrayUtils.addAll(metricsCommon)).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT,"School communications"
-				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT),MetricValueType.BOOLEAN
-			, ArrayUtils.addAll(metricsCommon,"Promotion in danger"),null, null));
+				,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT, ArrayUtils.addAll(metricsCommon,"Promotion in danger")).setValueProperties(valueProperties));
+    	
+    	valueProperties = create(new ValueProperties(null, ValueType.NUMBER, null, Boolean.FALSE, null, null));
     	
     	metricsCommon = new String[]{"Number of time present","Number of time absent"};
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT,"School attendance"
-				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT),MetricValueType.NUMBER
-			, ArrayUtils.addAll(metricsCommon,"Number of time on detention","Number of time suspended"),null, null));
+				,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT
+			, ArrayUtils.addAll(metricsCommon,"Number of time on detention","Number of time suspended")).setValueProperties(valueProperties));
     	
     	create(inject(MetricCollectionBusiness.class).instanciateOne(SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT,"School attendance"
-				,inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT),MetricValueType.NUMBER, metricsCommon,null, null));
+				,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT, metricsCommon).setValueProperties(valueProperties));
 	}
 	
 	
