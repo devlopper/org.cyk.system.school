@@ -11,7 +11,6 @@ import java.util.List;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.impl.RootDataProducerHelper;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
@@ -20,7 +19,6 @@ import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
-import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -33,6 +31,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.cdi.BeanAdapter;
 import org.joda.time.DateTimeConstants;
@@ -64,22 +63,12 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		return commonNodeInformations;
 	}
 	
-	public Subject instanciateOneSubject(String code,String name,ArrayList<Subject>[] collections){
-		Subject subject = inject(SubjectBusiness.class).instanciateOne(code,name);
-		if(collections!=null)
+	public void addSubjects(Collection<String> subjectCodes,ArrayList<Subject>[] collections){
+		if(collections!=null){
+			Collection<Subject> subjects = inject(SubjectDao.class).read(subjectCodes);
 			for(Collection<Subject> collection : collections)
-				collection.add(subject);
-		return subject;
-	}
-	public Subject instanciateOneSubject(String name,ArrayList<Subject>[] collections){
-		return instanciateOneSubject(name, name, collections);
-	}
-	
-	public Subject createOneSubject(String code,String name,ArrayList<Subject>[] collections){
-		return (Subject) inject(GenericBusiness.class).create(instanciateOneSubject(code,name, collections));
-	}
-	public Subject createOneSubject(String name,ArrayList<Subject>[] collections){
-		return createOneSubject(name, name, collections);
+				collection.addAll(subjects);
+		}
 	}
 	
 	public Collection<ClassroomSessionInfos> instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
@@ -107,6 +96,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
 					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable));
 		}
+		System.out.println(levelTimeDivision.getLevel().getLevelName().getName()+" instanciated");
 		return classroomSessionInfosCollection;
 	}
 	/*
@@ -130,7 +120,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		classroomSessionDivision.getExistencePeriod().setToDate(new Date());
 		
 		for(MetricCollection metricCollection : inject(MetricCollectionDao.class).read(Arrays.asList(metricCollectionCodes)))
-			metricCollectionIdentifiableGlobalIdentifiers.add(new MetricCollectionIdentifiableGlobalIdentifier(metricCollection, classroomSessionDivision));
+			metricCollectionIdentifiableGlobalIdentifiers.add(new MetricCollectionIdentifiableGlobalIdentifier(metricCollection, classroomSessionDivision,null));
 		
 		for(Listener listener : Listener.COLLECTION)
 			listener.classroomSessionDivisionCreated(classroomSessionDivision);

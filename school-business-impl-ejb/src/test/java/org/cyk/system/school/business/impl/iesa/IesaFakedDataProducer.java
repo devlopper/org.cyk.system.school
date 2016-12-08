@@ -20,7 +20,6 @@ import org.cyk.system.company.model.CompanyConstant;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
-import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.PersistDataListener;
@@ -34,13 +33,12 @@ import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalI
 import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileDao;
+import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.session.LevelGroupBusiness;
-import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
@@ -49,7 +47,6 @@ import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
-import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
@@ -77,6 +74,7 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
+import org.cyk.system.school.persistence.api.session.LevelGroupDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
@@ -92,58 +90,8 @@ import lombok.Setter;
 public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {
 
 	private static final long serialVersionUID = -1832900422621121762L;
-	/*
-	public static final String MERIC_COLLECTION_STUDENT_ATTENDANCE = "ATTENDANCE";
-	public static final String MERIC_COLLECTION_G1_G6_STUDENT_BEHAVIOUR = "BSWHG1G6";
-	public static final String MERIC_COLLECTION_G7_G12_STUDENT_BEHAVIOUR = "BSWHG7G12";
-	*/
-	public static final String LEVEL_NAME_CODE_PK = "PK";
-	public static final String LEVEL_NAME_CODE_K1 = "K1";
-	public static final String LEVEL_NAME_CODE_K2 = "K2";
-	public static final String LEVEL_NAME_CODE_K3 = "K3";
-	public static final String LEVEL_NAME_CODE_G1 = "G1";
-	public static final String LEVEL_NAME_CODE_G2 = "G2";
-	public static final String LEVEL_NAME_CODE_G3 = "G3";
-	public static final String LEVEL_NAME_CODE_G4 = "G4";
-	public static final String LEVEL_NAME_CODE_G5 = "G5";
-	public static final String LEVEL_NAME_CODE_G6 = "G6";
-	public static final String LEVEL_NAME_CODE_G7 = "G7";
-	public static final String LEVEL_NAME_CODE_G8 = "G8";
-	public static final String LEVEL_NAME_CODE_G9 = "G9";
-	public static final String LEVEL_NAME_CODE_G10 = "G10";
-	public static final String LEVEL_NAME_CODE_G11 = "G11";
-	public static final String LEVEL_NAME_CODE_G12 = "G12";
-	
+		
 	public static final String REPORT_CYK_GLOBAL_RANKABLE = "CYK_GLOBAL_RANKABLE";
-	
-	public static final String MERIC_COLLECTION_PK_STUDENT_EXPRESSIVE_LANGUAGE = "MCPKSEL";
-	public static final String MERIC_COLLECTION_PK_STUDENT_RECEPTIVE_LANGUAGE = "MCPKSRL";
-	public static final String MERIC_COLLECTION_PK_STUDENT_READING_READNESS = "MCPKSRR";
-	public static final String MERIC_COLLECTION_PK_STUDENT_NUMERACY_DEVELOPMENT = "MCPKSND";
-	public static final String MERIC_COLLECTION_PK_STUDENT_ARTS_MUSIC = "MCPKSAM";
-	public static final String MERIC_COLLECTION_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT = "MCPKSSED";
-	public static final String MERIC_COLLECTION_PK_STUDENT_GROSS_MOTOR_SKILLS = "MCPKSGMS";
-	public static final String MERIC_COLLECTION_PK_STUDENT_FINE_MOTOR_SKILLS = "MCPKSFMS";
-	
-	public static final String MERIC_COLLECTION_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING = "MCK1SELAR";
-	public static final String MERIC_COLLECTION_K1_STUDENT_COMMUNICATION_SKILLS = "MCK1SCS";
-	public static final String MERIC_COLLECTION_K1_STUDENT_SCIENCE = "MCK1SS";
-	public static final String MERIC_COLLECTION_K1_STUDENT_SOCIAL_STUDIES = "MCK1SSS";
-	public static final String MERIC_COLLECTION_K1_STUDENT_MATHEMATICS = "MCK1SM";
-	public static final String MERIC_COLLECTION_K1_STUDENT_WORK_HABITS = "MCK1SWH";
-	public static final String MERIC_COLLECTION_K1_STUDENT_SOCIAL_SKILLS = "MCK1SSSK";
-	
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_READING_READINESS = "MCK2K3SRR";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_READING = "MCK2K3SR";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_WRITING = "MCK2K3SW";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_LISTENING_SPEAKING_VIEWING = "MCK2K3SLSV";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_ALPHABET_IDENTIFICATION = "MCK2K3SAI";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_MATHEMATICS = "MCK2K3SM";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_SCIENCE_SOCIAL_STUDIES_MORAL_EDUCATION = "MCK2K3SSSSME";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_ART_CRAFT = "MCK2K3SAC";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_MUSIC = "MCK2K3SMM";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_PHYSICAL_EDUCATION = "MCK2K3SPE";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_WORK_BEHAVIOUR_HABITS = "MCK2K3SWBH";
 	
 	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
 	@Inject private CompanyBusiness companyBusiness;
@@ -325,48 +273,41 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void structure(){
-		levelGroupType = create(inject(LevelGroupTypeBusiness.class).instanciateOne("LevelGroupTypeDummy"));
-		LevelGroup levelGroupKindergarten = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.KINDERGARTEN)
-				.setType(levelGroupType));
-		LevelGroup levelGroupPrimary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY)
-				.setType(levelGroupType));
-		LevelGroup levelGroupSecondary = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY)
-				.setType(levelGroupType));
+		LevelGroup levelGroupKindergarten = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.KINDERGARTEN);
+		LevelGroup levelGroupPrimary = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.PRIMARY);
+		LevelGroup levelGroupSecondary = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.SECONDARY);
 		
 		// Subjects
-		schoolDataProducerHelper.createOneSubject("Mathematics",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
-    	schoolDataProducerHelper.createOneSubject("Grammar",new ArrayList[]{subjectsG1G3,subjectsG4G6});
-    	schoolDataProducerHelper.createOneSubject("Reading & Comprehension",new ArrayList[]{subjectsG1G3});
-    	schoolDataProducerHelper.createOneSubject("Hand writing",new ArrayList[]{subjectsG1G3});
-    	schoolDataProducerHelper.createOneSubject("Spelling",new ArrayList[]{subjectsG1G3,subjectsG4G6});
-    	schoolDataProducerHelper.createOneSubject("Phonics",new ArrayList[]{subjectsG1G3,subjectsG4G6});
-    	schoolDataProducerHelper.createOneSubject("Creative writing",new ArrayList[]{subjectsG1G3,subjectsG4G6});
-    	schoolDataProducerHelper.createOneSubject("Moral education",new ArrayList[]{subjectsG1G3,subjectsG4G6});
-    	schoolDataProducerHelper.createOneSubject("Social Studies",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
-    	schoolDataProducerHelper.createOneSubject("Science",new ArrayList[]{subjectsG1G3,subjectsG4G6});
-    	schoolDataProducerHelper.createOneSubject("French",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
-    	schoolDataProducerHelper.createOneSubject("Art & Craft",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
-    	schoolDataProducerHelper.createOneSubject("Music",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
-    	schoolDataProducerHelper.createOneSubject("ICT",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
-    	schoolDataProducerHelper.createOneSubject("Physical education",new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
+		schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.MATHEMATICS),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.GRAMMAR),new ArrayList[]{subjectsG1G3,subjectsG4G6});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.READING_COMPREHENSION),new ArrayList[]{subjectsG1G3});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.HANDWRITING),new ArrayList[]{subjectsG1G3});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.SPELLING),new ArrayList[]{subjectsG1G3,subjectsG4G6});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.PHONICS),new ArrayList[]{subjectsG1G3,subjectsG4G6});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.CREATIVE_WRITING),new ArrayList[]{subjectsG1G3,subjectsG4G6});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.MORAL_EDUCATION),new ArrayList[]{subjectsG1G3,subjectsG4G6});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.SOCIAL_STUDIES),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.SCIENCE),new ArrayList[]{subjectsG1G3,subjectsG4G6});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.FRENCH),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.ART_CRAFT),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.MUSIC),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.ICT_COMPUTER),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.PHYSICAL_EDUCATION),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
     	
-    	schoolDataProducerHelper.createOneSubject("Litterature",new ArrayList[]{subjectsG4G6});
-    	schoolDataProducerHelper.createOneSubject("Comprehension",new ArrayList[]{subjectsG4G6});
-    	schoolDataProducerHelper.createOneSubject("History",new ArrayList[]{subjectsG4G6,subjectsG7G9,subjectsG10G12});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.LITERATURE),new ArrayList[]{subjectsG4G6});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.COMPREHENSION),new ArrayList[]{subjectsG4G6});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.HISTORY),new ArrayList[]{subjectsG4G6,subjectsG7G9,subjectsG10G12});
     	
-    	schoolDataProducerHelper.createOneSubject("English Language",new ArrayList[]{subjectsG7G9,subjectsG10G12});
-    	schoolDataProducerHelper.createOneSubject("Literature in english",new ArrayList[]{subjectsG7G9,subjectsG10G12});
-    	schoolDataProducerHelper.createOneSubject("Geography",new ArrayList[]{subjectsG7G9,subjectsG10G12});
-    	schoolDataProducerHelper.createOneSubject("Physics",new ArrayList[]{subjectsG7G9,subjectsG10G12});
-    	schoolDataProducerHelper.createOneSubject("Chemistry",new ArrayList[]{subjectsG7G9});
-    	schoolDataProducerHelper.createOneSubject("Biology",new ArrayList[]{subjectsG7G9});
-    	schoolDataProducerHelper.createOneSubject("Spanish",new ArrayList[]{subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.ENGLISH_FIRST_LANGUAGE),new ArrayList[]{subjectsG7G9,subjectsG10G12});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.LITERATURE_IN_ENGLISH),new ArrayList[]{subjectsG7G9,subjectsG10G12});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.GEOGRAPHY),new ArrayList[]{subjectsG7G9,subjectsG10G12});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.PHYSICS),new ArrayList[]{subjectsG7G9,subjectsG10G12});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.CHEMISTRY),new ArrayList[]{subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.BIOLOGY),new ArrayList[]{subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.SPANISH),new ArrayList[]{subjectsG7G9});
     	
-    	schoolDataProducerHelper.createOneSubject("Sociology",new ArrayList[]{subjectsG10G12});
-    	schoolDataProducerHelper.createOneSubject("Religious studies/Divinity",new ArrayList[]{subjectsG10G12});
-    	schoolDataProducerHelper.createOneSubject("Core mathematics",new ArrayList[]{subjectsG10G12});
-    	schoolDataProducerHelper.createOneSubject("Advanced mathematics",new ArrayList[]{subjectsG10G12});
-		
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.SOCIOLOGY),new ArrayList[]{subjectsG10G12});
+    	
 		//Evaluation Type
 		evaluationTypes.add(evaluationTypeTest1 = create(inject(EvaluationTypeBusiness.class).instanciateOne("Test 1")));
 		evaluationTypes.add(evaluationTypeTest2 = create(inject(EvaluationTypeBusiness.class).instanciateOne("Test 2")));
@@ -400,22 +341,14 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		CommonNodeInformations commonNodeInformationsK2K3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplateK2K3, TimeDivisionType.DAY
 				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex,interval);
 		
-		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(inject(IntervalCollectionBusiness.class)
-				.instanciateOne("G1G6Grade", "Grade", new String[][]{
-						{"A+", "Excellent", "90", "100"},{"A", "Very good", "80", "89.99"},{"B+", "Good", "70", "79.99"},{"B", "Fair", "60", "69.99"}
-						,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
-								.instanciateOne("ICP1", "Promotion Scale", new String[][]{
-										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplateG1G12
-						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50",classroomSessionDivisionIndex,interval);	
-		//CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
+		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(inject(IntervalCollectionDao.class)
+				.read(SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT),inject(IntervalCollectionDao.class)
+				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex,interval);
+		CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
-		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(create(inject(IntervalCollectionBusiness.class)
-				.instanciateOne("G7G12Grade", "Grade", new String[][]{
-						{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
-						,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}})),create(inject(IntervalCollectionBusiness.class)
-								.instanciateOne("ICP2", "Promotion Scale", new String[][]{
-										{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}})), reportTemplateG1G12
-						, TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50",classroomSessionDivisionIndex,interval);	
+		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(inject(IntervalCollectionDao.class)
+				.read(SchoolConstant.Code.IntervalCollection.GRADING_SCALE_SECONDARY_STUDENT),inject(IntervalCollectionDao.class)
+				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex,interval);	
 		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);

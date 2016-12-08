@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,13 +15,21 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
+import org.cyk.system.root.business.api.value.ValueBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
+import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.model.value.Value;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
@@ -268,13 +275,27 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			}			
 		}
 		
-		System.out.println("Updating "+studentClassroomSessionDivisions.size()+" student classroom session division(s)");
+		//System.out.println("Updating "+studentClassroomSessionDivisions.size()+" student classroom session division(s)");
 		studentClassroomSessionDivisionBusiness.update(studentClassroomSessionDivisions);
 		
 		if(Boolean.TRUE.equals(metric)){
-			inject(MetricValueBusiness.class).updateManyRandomly(new LinkedHashSet<String>(Arrays.asList(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
-					,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT))
-					, classroomSessionDivisions, studentClassroomSessionDivisions);
+			Collection<MetricValue> metricValues = inject(MetricValueBusiness.class).findByCollectionCodesByCollectionIdentifiablesByMetricIdentifiables(
+					SchoolConstant.Code.MetricCollectionType._STUDENT, classroomSessionDivisions, studentClassroomSessionDivisions);
+			inject(MetricValueBusiness.class).setValueRandomly(metricValues);
+			inject(GenericBusiness.class).update(commonUtils.castCollection(metricValues, AbstractIdentifiable.class));
+			
+			MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria();
+			searchCriteria.addIdentifiablesGlobalIdentifiers(studentClassroomSessionDivisions)
+				.addMetricCollectionTypes(inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType._STUDENT));
+			
+			Collection<MetricCollectionIdentifiableGlobalIdentifier> studentClassroomSessionDivisionMetricCollections = inject(MetricCollectionIdentifiableGlobalIdentifierDao.class)
+					.readByCriteria(searchCriteria);
+			Collection<Value> values = new ArrayList<>();
+			for(MetricCollectionIdentifiableGlobalIdentifier metricCollectionIdentifiableGlobalIdentifier : studentClassroomSessionDivisionMetricCollections)
+				if(metricCollectionIdentifiableGlobalIdentifier.getValue()!=null)
+					values.add(metricCollectionIdentifiableGlobalIdentifier.getValue());
+			inject(ValueBusiness.class).setRandomly(values);
+			inject(GenericBusiness.class).update(commonUtils.castCollection(values, AbstractIdentifiable.class));
 		}
 	}
 	public void randomValues(Boolean metric,Boolean attendance,Boolean appreciation){

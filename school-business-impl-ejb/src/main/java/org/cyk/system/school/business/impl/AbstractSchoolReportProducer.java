@@ -23,11 +23,13 @@ import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
+import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.SchoolConstant;
+import org.cyk.system.school.model.SchoolConstant.Code.LevelName;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.StudentReportTemplateFile;
@@ -122,6 +124,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		File backgroundImageFile = createReportFileArguments.getBackgroundImageFile();
 		if(backgroundImageFile!=null)
 			r.setBackgroundImage(inject(FileBusiness.class).findInputStream(backgroundImageFile));
+		
 		inject(ContactCollectionBusiness.class).load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
 		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContactCollection());
 		if(cs.getCoordinator()!=null)
@@ -417,6 +420,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			}
 			addIntervalCollectionLabelValueCollection(report,inject(IntervalCollectionDao.class).read(effortLevelsIntervalCollectionCode)
 					,inject(MetricCollectionDao.class).read(effortLevelsMetricCollectionCode).getValueProperties(),Boolean.TRUE,Boolean.FALSE,null);
+			if(LevelName.K1.equals(levelNameCode))
+				addIntervalCollectionLabelValueCollection(report,inject(IntervalCollectionDao.class).read(SchoolConstant.Code.IntervalCollection.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT)
+						,inject(ValuePropertiesDao.class).read(SchoolConstant.Code.ValueProperties.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT),Boolean.TRUE,Boolean.FALSE,null);
 			addSchoolCommunications(report, studentClassroomSessionDivision,schoolCommunicationMetricCollectionCode);
 			return report;
 		}

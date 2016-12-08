@@ -1,9 +1,11 @@
 package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
@@ -12,6 +14,7 @@ import org.cyk.system.company.model.CompanyConstant;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.business.api.ClazzBusiness;
 import org.cyk.system.root.business.api.FormatterBusiness;
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
@@ -36,12 +39,16 @@ import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.root.model.mathematics.MetricCollectionType;
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
+import org.cyk.system.root.model.party.person.JobTitle;
 import org.cyk.system.root.model.security.Role;
 import org.cyk.system.root.model.value.ValueProperties;
 import org.cyk.system.root.model.value.ValueSet;
 import org.cyk.system.root.model.value.ValueType;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.LevelGroupBusiness;
+import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
+import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
 import org.cyk.system.school.model.SchoolConstant;
@@ -51,6 +58,8 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.LevelGroup;
+import org.cyk.system.school.model.session.LevelGroupType;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
@@ -58,8 +67,10 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
+import org.cyk.utility.common.CommonUtils.ReadExcelSheetArguments;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
@@ -209,19 +220,41 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Override
 	protected void persistData() {
-		//create(inject(IntangibleProductBusiness.class).instanciateOne(SchoolConstant.INTANGIBLE_PRODUCT_TUITION));
-    	//create(new SalableProduct(getEnumeration(IntangibleProduct.class, SchoolConstant.INTANGIBLE_PRODUCT_TUITION), null));
-    	
-    	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml");
+		inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml");
     	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE,"certificat de scolarité",Boolean.TRUE, "report/student/tuition_certificate.jrxml");
     	//inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET,"bulletin trimestriel",Boolean.TRUE, "report/student/classroom_session_division_sheet.jrxml");
     	
-    	metricColletions();
+    	createSubjects();
+    	createMetricColletions();
+    	createLevels();
     	
+    	createEnumeration(JobTitle.class,SchoolConstant.Code.JobTitle.DIRECTOR_OF_STUDIES, "Directeur des études");
+	}
+	
+	private void createLevels(){
+		LevelGroupType levelGroupTypeKindergarten = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.KINDERGARTEN));
+		LevelGroupType levelGroupTypePrimary = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.PRIMARY));
+		LevelGroupType levelGroupTypeSecondary = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.SECONDARY));
+		
+		LevelGroup levelGroup;
+		
+		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.KINDERGARTEN).setType(levelGroupTypeKindergarten));
+		
+		levelGroup = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY).setType(levelGroupTypePrimary));
+		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY_LOWER).setType(levelGroupTypePrimary)
+				.setParent(levelGroup));
+		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY_HIGHER).setType(levelGroupTypePrimary)
+				.setParent(levelGroup));
+		
+		levelGroup = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY).setType(levelGroupTypeSecondary));
+		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY_LOWER).setType(levelGroupTypeSecondary)
+				.setParent(levelGroup));
+		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY_HIGHER).setType(levelGroupTypeSecondary)
+				.setParent(levelGroup));
 	}
 	
 	//TODO labels must be changed in french
-	private void metricColletions(){
+	private void createMetricColletions(){
 		String[] metricsCommon = null;
 		String notAssessed = "Not Assessed",notAssessedAbbreviation = "NA";
 		createEnumerations(MetricCollectionType.class,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT,SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT
@@ -293,6 +326,13 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     		).setValueProperties(valueProperties));
     	
     	//KG1
+    	
+    	valueProperties = new ValueProperties(create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT
+				,"Content marking codes",new String[][]{ {"F", "0 - 69.99", "0", "69.99"},{"D", "70 - 76", "70", "76"},{"C", "77 - 84", "77", "84"}
+				,{"B", "85 - 93", "85", "93"},{"A", "94 - 100", "94", "100"}}))
+				, ValueType.STRING, ValueSet.INTERVAL_RELATIVE_CODE, Boolean.TRUE, notAssessed, notAssessedAbbreviation);
+    	valueProperties.setCode(SchoolConstant.Code.ValueProperties.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT);
+    	create(valueProperties);
     	
     	valueProperties = create(new ValueProperties(create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT
 				,"Skills performance levels",new String[][]{ {"1", "Emerging", "1", "1"},{"2", "Developing", "2", "2"},{"3", "Proficient", "3", "3"}
@@ -405,6 +445,20 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     	
     	// G1 - G12
     	
+    	create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT, "Grading Scale", new String[][]{
+    		{"A+", "Excellent", "90", "100"},{"A", "Very good", "80", "89.99"},{"B+", "Good", "70", "79.99"},{"B", "Fair", "60", "69.99"}
+    		,{"C+", "Satisfactory", "55", "59.99"},{"C", "Barely satisfactory", "50", "54.99"},{"E", "Fail", "0", "49.99"}}));
+    	
+		create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT, "Promotion Scale", new String[][]{
+			{"P", "Promoted", "50", "100"},{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}}));
+		
+		create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.GRADING_SCALE_SECONDARY_STUDENT, "Grading Scale", new String[][]{
+			{"A*", "Outstanding", "90", "100"},{"A", "Excellent", "80", "89.99"},{"B", "Very Good", "70", "79.99"},{"C", "Good", "60", "69.99"}
+			,{"D", "Satisfactory", "50", "59.99"},{"E", "Fail", "0", "49.99"}}));
+		/*
+		create(inject(IntervalCollectionBusiness.class).instanciateOne("ICP2", "Promotion Scale", new String[][]{{"P", "Promoted", "50", "100"}
+			,{"PT", "Promoted on trial", "45", "49.99"},{"NP", "Not promoted", "0", "44.99"}}));	
+    	*/
     	valueProperties = create(new ValueProperties(create(inject(IntervalCollectionBusiness.class).instanciateOne(SchoolConstant.Code.IntervalCollection.BEHAVIOUR_PRIMARY_STUDENT,"Effort Levels"
 				,new String[][]{ {"1", "Has no regard for the observable traits", "1", "1"},{"2", "Shows minimal regard for the observable traits"
 					, "2", "2"},{"3", "Acceptable level of observable traits", "3", "3"},{"4", "Maintains high level of observable traits", "4", "4"}
@@ -446,6 +500,18 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT, metricsCommon).setValueProperties(valueProperties));
 	}
 	
+	private void createSubjects(){
+		try {
+			ReadExcelSheetArguments readExcelSheetArguments = new ReadExcelSheetArguments();
+			readExcelSheetArguments.setWorkbookBytes(IOUtils.toByteArray(getClass().getResourceAsStream("data.xls")));
+	    	readExcelSheetArguments.setSheetIndex(0);
+	    	List<String[]> list = commonUtils.readExcelSheet(readExcelSheetArguments);
+			create(inject(SubjectBusiness.class).instanciateMany(list));
+			System.out.println("subjects created : "+list.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	protected void persistSecurityData(){

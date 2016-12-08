@@ -149,6 +149,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 				{"Follows classroom/school rules","NA"}});
 		
 		addSkillPerformanceLevels(report);
+		addContentMarkingCodes(report);
 		addSchoolCommunications(report,Boolean.TRUE);
 		
 		return collection;
@@ -237,6 +238,11 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	
 	private static void addSkillPerformanceLevels(StudentClassroomSessionDivisionReportTemplateFile report){
 		report.addLabelValueCollection("SKILLS PERFORMANCE LEVELS",new String[][]{{"3","Does regularly"},{"2","Does sometimes"},{"1","Learning to do"},{"NA","Not Assessed"}});
+	}
+	
+	private static void addContentMarkingCodes(StudentClassroomSessionDivisionReportTemplateFile report){
+		report.addLabelValueCollection("CONTENT MARKING CODES",new String[][]{{"A","94 - 100"},{"B","85 - 93"},{"C","77 - 84"}
+		,{"D","70 - 76"},{"F","0 - 75"},{"NA","Not Assessed"}});
 	}
 	
 	private static void addPerformanceCodes(StudentClassroomSessionDivisionReportTemplateFile report){

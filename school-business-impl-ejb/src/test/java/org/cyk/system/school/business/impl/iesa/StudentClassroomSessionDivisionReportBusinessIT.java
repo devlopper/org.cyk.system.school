@@ -50,21 +50,23 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	
     	inject(StudentBusiness.class).create(Arrays.asList(pkStudent,k1Student,k2Student,k3Student,student1));
     	
-    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	/*schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k1Student.getCode()},dataProducer.getK1().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k2Student.getCode()},dataProducer.getK2().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k3Student.getCode()},dataProducer.getK3().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	*/
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{student1.getCode()},
     			dataProducer.getG1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
+    	
     	
     	schoolBusinessTestHelper.getEvaluationTypes().addAll(rootDataProducerHelper.getEnumerations(EvaluationType.class));
     	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
-    		{SchoolConstant.Code.LevelName.PK,null,1l}
+    		/*{SchoolConstant.Code.LevelName.PK,null,1l}
     		,{SchoolConstant.Code.LevelName.K1,null,1l}
     		,{SchoolConstant.Code.LevelName.K2,null,1l}
     		,{SchoolConstant.Code.LevelName.K3,null,1l}
-    		,{SchoolConstant.Code.LevelName.G1,"A",1l}
+    		,*/{SchoolConstant.Code.LevelName.G1,"A",1l}
     	}, Boolean.TRUE, Boolean.FALSE);
     	
     	/*

@@ -20,6 +20,7 @@ import org.cyk.system.root.business.api.file.FileRepresentationTypeBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricValueIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.message.MailBusiness;
@@ -34,7 +35,9 @@ import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
 import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
+import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -87,9 +90,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	public StudentClassroomSessionDivision create(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		super.create(studentClassroomSessionDivision);
-		
+	protected void afterCreate(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		super.afterCreate(studentClassroomSessionDivision);	
 		Student student = studentClassroomSessionDivision.getStudent();
 		ClassroomSessionDivision classroomSessionDivision = studentClassroomSessionDivision.getClassroomSessionDivision();
 		ClassroomSession classroomSession = classroomSessionDivision.getClassroomSession();
@@ -103,9 +105,15 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		}
 		
 		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
-				.read(Arrays.asList(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT
-						,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT))
+				.read(SchoolConstant.Code.MetricCollectionType._STUDENT)
 				, studentClassroomSessionDivision.getClassroomSessionDivision());
+		if(SchoolConstant.Code.LevelName.K1.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel()
+				.getLevelName().getCode())){
+			inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).create(inject(MetricCollectionDao.class)
+					.read(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_EVALUATED), Arrays.asList(studentClassroomSessionDivision)
+					,inject(ValuePropertiesDao.class).read(SchoolConstant.Code.ValueProperties.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT));
+		}
+			
 		inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).create(metricCollections, Arrays.asList(studentClassroomSessionDivision));
 		/*
 		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
@@ -124,8 +132,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			}
 		}
 		cascade(studentClassroomSessionDivision, studentClassroomSessionDivisionSubjects, Crud.CREATE);
-		
-		return studentClassroomSessionDivision;
 	}
 	
 	private void cascade(StudentClassroomSessionDivision studentClassroomSessionDivision
