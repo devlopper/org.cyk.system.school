@@ -12,15 +12,20 @@ public class ClassroomSessionDivisionDetails extends AbstractOutputDetails<Class
 	private static final long serialVersionUID = -4741435164709063863L;
 	
 	@IncludeInputs private ClassroomSessionDetails classroomSessionDetails;
-	@Input @InputText private String classroomSession;
+	@Input @InputText private String classroomSession,timeDivisionType,numberOfSubjects;
 	
 	public ClassroomSessionDivisionDetails(ClassroomSessionDivision classroomSessionDivision) {
 		super(classroomSessionDivision);
 		classroomSessionDetails = new ClassroomSessionDetails(classroomSessionDivision.getClassroomSession());
 		classroomSession = formatUsingBusiness(classroomSessionDivision.getClassroomSession());
+		timeDivisionType = formatUsingBusiness(classroomSessionDivision.getTimeDivisionType());
+		numberOfSubjects = formatNumber(classroomSessionDivision.getNumberOfSubjects());
+		existencePeriod.setDuration(formatNumber(classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().get()));
 	}
 	
 	public static final String FIELD_CLASSROOM_SESSION_DETAILS = "classroomSessionDetails";
 	public static final String FIELD_CLASSROOM_SESSION = "classroomSession";
+	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
+	public static final String FIELD_NUMBER_OF_SUBJECTS = "numberOfSubjects";
 	
 }

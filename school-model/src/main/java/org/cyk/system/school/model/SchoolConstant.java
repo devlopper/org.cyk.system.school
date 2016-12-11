@@ -7,6 +7,10 @@ import java.util.Collection;
 
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.Evaluation;
 
 public interface SchoolConstant {
 
@@ -27,7 +31,12 @@ public interface SchoolConstant {
 			private static final long serialVersionUID = 1L;
 			
 			public static String DIRECTOR_OF_STUDIES = "DIRECTOR_OF_STUDIES"; 
+		}
+		
+		public static class TimeDivisionType implements Serializable {
+			private static final long serialVersionUID = 1L;
 			
+			public static String ATTENDANCE = org.cyk.system.root.model.time.TimeDivisionType.DAY; 
 		}
 		
 		public static class ValueProperties implements Serializable {
@@ -229,6 +238,15 @@ public interface SchoolConstant {
 			public static String BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WORK_BEHAVIOUR_HABITS = "MCK2K3SWBH";
 		}
 		
+		public static class Metric implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT = RootConstant.Code.generate("NUMBEROFTIMEABSENT",Student.class);
+			public static String ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT = RootConstant.Code.generate("NUMBEROFTIMEPRESENT",Student.class); 
+			public static String ATTENDANCE_NUMBER_OF_TIME_DETENTION_STUDENT = RootConstant.Code.generate("NUMBEROFTIMEDETENTION",Student.class); 
+			public static String ATTENDANCE_NUMBER_OF_TIME_SUSPENDED_STUDENT = RootConstant.Code.generate("NUMBEROFTIMESUSPENDED",Student.class); 
+		}
+		
 		public static class IntervalCollection implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
@@ -252,11 +270,27 @@ public interface SchoolConstant {
 			public static String PROMOTION_SCALE_STUDENT = RootConstant.Code.generate("PROMOTIONSCALE",Student.class);
 		}
 		
+		public static class Interval implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String EVALUATION_COUNT_BY_TYPE = RootConstant.Code.generate(Evaluation.class,"COUNTBY",ClassroomSessionDivisionSubjectEvaluationType.class);
+			public static String DIVISION_COUNT_BY_CLASSROOM_SESSION = RootConstant.Code.generate(ClassroomSessionDivision.class,"COUNTBY",ClassroomSession.class);
+		}
+		
 		public static class ReportTemplate implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			public static String STUDENT_REGISTRATION_CERTIFICATE = "STUDENT_REGISTRATION_CERTIFICATE";
 			public static String STUDENT_TUITION_CERTIFICATE = "STUDENT_TUITION_CERTIFICATE";
+			
+			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_PK_STUDENT = RootConstant.Code.generate(ClassroomSessionDivision.class
+					,"Results",LevelGroup.KINDERGARTEN,LevelName.PK,Student.class);
+			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K1_STUDENT = RootConstant.Code.generate(ClassroomSessionDivision.class
+					,"Results",LevelGroup.KINDERGARTEN,LevelName.K1,Student.class);
+			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K2_STUDENT = RootConstant.Code.generate(ClassroomSessionDivision.class
+					,"Results",LevelGroup.KINDERGARTEN,LevelName.K2,Student.class);
+			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K3_STUDENT = RootConstant.Code.generate(ClassroomSessionDivision.class
+					,"Results",LevelGroup.KINDERGARTEN,LevelName.K3,Student.class);
 		}
 		
 		public static class Role implements Serializable {
@@ -275,6 +309,8 @@ public interface SchoolConstant {
 			public static String TEST2 = "TEST2";
 			
 			public static String EXAM = "EXAM";
+			
+			public static final Collection<String> COLLECTION = new ArrayList<>();
 			
 		}
 		

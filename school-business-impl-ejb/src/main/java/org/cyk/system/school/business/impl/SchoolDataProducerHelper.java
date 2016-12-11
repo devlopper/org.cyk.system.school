@@ -13,12 +13,13 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.impl.RootDataProducerHelper;
 import org.cyk.system.root.model.file.report.ReportTemplate;
-import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.persistence.api.mathematics.IntervalDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -54,12 +55,12 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	
 	public CommonNodeInformations instanciateOneCommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale
 			,ReportTemplate reportTemplate,String attendanceTimeDivisionTypeCode,String classroomSessionTimeDivisionTypeCode,String evaluationPassAverage
-			,String currentClassroomSessionDivisionIndex,Interval interval){
+			,String currentClassroomSessionDivisionIndex){
 		CommonNodeInformations commonNodeInformations = new CommonNodeInformations(intervalCollection,studentClassroomSessionAveragePromotionScale,reportTemplate
 				,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,attendanceTimeDivisionTypeCode),new BigDecimal(evaluationPassAverage));
 		commonNodeInformations.setClassroomSessionTimeDivisionType(RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class, classroomSessionTimeDivisionTypeCode));
 		commonNodeInformations.setCurrentClassroomSessionDivisionIndex(new Long(currentClassroomSessionDivisionIndex));
-		commonNodeInformations.setClassroomSessionDivisionOrderNumberInterval(interval);
+		commonNodeInformations.setClassroomSessionDivisionOrderNumberInterval(inject(IntervalDao.class).read(SchoolConstant.Code.Interval.DIVISION_COUNT_BY_CLASSROOM_SESSION));
 		return commonNodeInformations;
 	}
 	
@@ -88,13 +89,13 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			classroomSessionInfosCollection.add(classroomSessionInfos);
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
 					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable,1l));
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
 					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable,2l));
 			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
 					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
-					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable));
+					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable,3l));
 		}
 		System.out.println(levelTimeDivision.getLevel().getLevelName().getName()+" instanciated");
 		return classroomSessionInfosCollection;
@@ -109,7 +110,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
 			,Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects
-			,String[] metricCollectionCodes,Boolean studentEvaluationRequired,Boolean studentRankable){
+			,String[] metricCollectionCodes,Boolean studentEvaluationRequired,Boolean studentRankable,Long orderNumber){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));
 		classroomSessionDivision.setStudentEvaluationRequired(studentEvaluationRequired);
@@ -123,7 +124,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			metricCollectionIdentifiableGlobalIdentifiers.add(new MetricCollectionIdentifiableGlobalIdentifier(metricCollection, classroomSessionDivision,null));
 		
 		for(Listener listener : Listener.COLLECTION)
-			listener.classroomSessionDivisionCreated(classroomSessionDivision);
+			listener.classroomSessionDivisionCreated(classroomSessionDivision,orderNumber);
 		
 		ClassroomSessionDivisionInfos classroomSessionDivisionInfos = new ClassroomSessionDivisionInfos(classroomSessionDivision);
 		
@@ -254,7 +255,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		
 		/**/
 		
-		void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision);
+		void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision,Long orderNumber);
 		void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType);
 		
 		public static class Adapter extends BeanAdapter implements Listener,Serializable{
@@ -263,7 +264,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			/**/
 			
 			@Override
-			public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {}
+			public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision,Long orderNumber) {}
 			
 			@Override
 			public void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {}

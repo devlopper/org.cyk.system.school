@@ -5,16 +5,13 @@ import java.util.Arrays;
 
 import javax.servlet.ServletContextEvent;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeDetails;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
-import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
-import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
@@ -27,16 +24,12 @@ import org.cyk.system.root.business.impl.party.person.PersonDetails;
 import org.cyk.system.root.business.impl.party.person.PersonRelationshipDetails;
 import org.cyk.system.root.business.impl.party.person.SignatureDetails;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValueIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.party.person.Person;
-import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
@@ -52,13 +45,11 @@ import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.ui.web.primefaces.AbstractSchoolContextListener;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
@@ -75,54 +66,6 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 
 	private static final long serialVersionUID = -9042005596731665575L;
 	
-	public static final String LEVEL_NAME_CODE_PK = "PK";
-	public static final String LEVEL_NAME_CODE_K1 = "K1";
-	public static final String LEVEL_NAME_CODE_K2 = "K2";
-	public static final String LEVEL_NAME_CODE_K3 = "K3";
-	public static final String LEVEL_NAME_CODE_G1 = "G1";
-	public static final String LEVEL_NAME_CODE_G2 = "G2";
-	public static final String LEVEL_NAME_CODE_G3 = "G3";
-	public static final String LEVEL_NAME_CODE_G4 = "G4";
-	public static final String LEVEL_NAME_CODE_G5 = "G5";
-	public static final String LEVEL_NAME_CODE_G6 = "G6";
-	public static final String LEVEL_NAME_CODE_G7 = "G7";
-	public static final String LEVEL_NAME_CODE_G8 = "G8";
-	public static final String LEVEL_NAME_CODE_G9 = "G9";
-	public static final String LEVEL_NAME_CODE_G10 = "G10";
-	public static final String LEVEL_NAME_CODE_G11 = "G11";
-	public static final String LEVEL_NAME_CODE_G12 = "G12";
-	
-	public static final String REPORT_CYK_GLOBAL_RANKABLE = "CYK_GLOBAL_RANKABLE";
-	
-	public static final String MERIC_COLLECTION_PK_STUDENT_EXPRESSIVE_LANGUAGE = "MCPKSEL";
-	public static final String MERIC_COLLECTION_PK_STUDENT_RECEPTIVE_LANGUAGE = "MCPKSRL";
-	public static final String MERIC_COLLECTION_PK_STUDENT_READING_READNESS = "MCPKSRR";
-	public static final String MERIC_COLLECTION_PK_STUDENT_NUMERACY_DEVELOPMENT = "MCPKSND";
-	public static final String MERIC_COLLECTION_PK_STUDENT_ARTS_MUSIC = "MCPKSAM";
-	public static final String MERIC_COLLECTION_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT = "MCPKSSED";
-	public static final String MERIC_COLLECTION_PK_STUDENT_GROSS_MOTOR_SKILLS = "MCPKSGMS";
-	public static final String MERIC_COLLECTION_PK_STUDENT_FINE_MOTOR_SKILLS = "MCPKSFMS";
-	
-	public static final String MERIC_COLLECTION_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING = "MCK1SELAR";
-	public static final String MERIC_COLLECTION_K1_STUDENT_COMMUNICATION_SKILLS = "MCK1SCS";
-	public static final String MERIC_COLLECTION_K1_STUDENT_SCIENCE = "MCK1SS";
-	public static final String MERIC_COLLECTION_K1_STUDENT_SOCIAL_STUDIES = "MCK1SSS";
-	public static final String MERIC_COLLECTION_K1_STUDENT_MATHEMATICS = "MCK1SM";
-	public static final String MERIC_COLLECTION_K1_STUDENT_WORK_HABITS = "MCK1SWH";
-	public static final String MERIC_COLLECTION_K1_STUDENT_SOCIAL_SKILLS = "MCK1SSSK";
-	
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_READING_READINESS = "MCK2K3SRR";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_READING = "MCK2K3SR";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_WRITING = "MCK2K3SW";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_LISTENING_SPEAKING_VIEWING = "MCK2K3SLSV";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_ALPHABET_IDENTIFICATION = "MCK2K3SAI";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_MATHEMATICS = "MCK2K3SM";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_SCIENCE_SOCIAL_STUDIES_MORAL_EDUCATION = "MCK2K3SSSSME";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_ART_CRAFT = "MCK2K3SAC";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_MUSIC = "MCK2K3SMM";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_PHYSICAL_EDUCATION = "MCK2K3SPE";
-	public static final String MERIC_COLLECTION_K2_K3_STUDENT_WORK_BEHAVIOUR_HABITS = "MCK2K3SWBH";
-	
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
@@ -131,8 +74,8 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
-		AbstractSchoolReportProducer.DEFAULT = new ReportProducer();
-		StudentClassroomSessionDivisionBusiness.EVALUATION_TYPE_CODES.addAll(Arrays.asList("Test1","Test2","Exam"));
+		SchoolConstant.Code.EvaluationType.COLLECTION.addAll(Arrays.asList(SchoolConstant.Code.EvaluationType.TEST1
+				,SchoolConstant.Code.EvaluationType.TEST2,SchoolConstant.Code.EvaluationType.EXAM));
     	StudentClassroomSessionDivisionBusiness.SUM_MARKS[0] = Boolean.TRUE;
     	
     	SaleConsultPage.SHOW_SALE_PRODUCT_TABLE = Boolean.FALSE;
@@ -221,11 +164,11 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 			super(studentSubject);
 			for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
 				if(studentSubjectEvaluation.getStudentSubject().equals(studentSubject)){
-					if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Test1"))
+					if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals(SchoolConstant.Code.EvaluationType.TEST1))
 						test1 = numberBusiness.format(studentSubjectEvaluation.getValue());
-					else if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Test2"))
+					else if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals(SchoolConstant.Code.EvaluationType.TEST2))
 						test2 = numberBusiness.format(studentSubjectEvaluation.getValue());
-					else if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals("Exam"))
+					else if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals(SchoolConstant.Code.EvaluationType.EXAM))
 						exam = numberBusiness.format(studentSubjectEvaluation.getValue());
 				}					
 			}
@@ -234,195 +177,6 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		public static final String FIELD_TEST2 = "test2";
 		public static final String FIELD_EXAM = "exam";
 	}
-	
-	public static class ReportProducer extends AbstractSchoolReportProducer{
-		private static final long serialVersionUID = 246685915578107971L;
-		
-		@Override
-		public StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision,
-				CreateReportFileArguments<StudentClassroomSessionDivision> parameters) {
-			LabelValueCollectionReport labelValueCollectionReport;
-			StudentClassroomSessionDivisionReportTemplateFile r = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,parameters);
-			
-			AcademicSession as = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
-			r.getAcademicSession().setFromDateToDate(timeBusiness.findYear(as.getExistencePeriod().getFromDate())+"/"+timeBusiness.findYear(as.getExistencePeriod().getToDate())+" ACADEMIC SESSION");
-		
-			r.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
-					{"Formname(s)", r.getStudent().getPerson().getLastnames()}
-					/*,{"Surname", r.getStudent().getPerson().getName()}
-					,{"Date of birth", r.getStudent().getPerson().getBirthDate()}
-					,{"Place of birth", r.getStudent().getPerson().getBirthLocation()}
-					,{"Admission No", r.getStudent().getRegistrationCode()}*/
-					,{"Class", r.getClassroomSessionDivision().getClassroomSession().getName()}
-					,{"Gender", r.getStudent().getPerson().getSex()}
-					});
-			
-			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
-					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
-					,{"Number of times present",r.getAttendedTime()}
-					,{"Number of times absent",r.getMissedTime()}
-					});
-			
-			FormatArguments formatArguments = new FormatArguments();
-			formatArguments.setIsRank(Boolean.TRUE);
-			formatArguments.setType(CharacterSet.LETTER);
-			String name = numberBusiness.format(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber(), formatArguments).toUpperCase();
-			r.setName(name+" TERM , "+studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup().getName().toUpperCase()
-					+" REPORT");
-			
-			String levelNameCode = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getCode();
-			if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_PK,LEVEL_NAME_CODE_K1,LEVEL_NAME_CODE_K2,LEVEL_NAME_CODE_K3},levelNameCode)){
-				r.setName(r.getName()+" SHEET");
-				String performanceCodeMetricCollectionCode = null;
-				if(LEVEL_NAME_CODE_PK.equals(levelNameCode)){
-					addMetricsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()), new String[][]{
-							{performanceCodeMetricCollectionCode = MERIC_COLLECTION_PK_STUDENT_EXPRESSIVE_LANGUAGE,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_PK_STUDENT_RECEPTIVE_LANGUAGE,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_PK_STUDENT_READING_READNESS,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_PK_STUDENT_NUMERACY_DEVELOPMENT,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_PK_STUDENT_ARTS_MUSIC,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_PK_STUDENT_GROSS_MOTOR_SKILLS,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_PK_STUDENT_FINE_MOTOR_SKILLS,NOT_APPLICABLE}
-						});
-				}else if(LEVEL_NAME_CODE_K1.equals(levelNameCode)){
-					addMetricsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()), new String[][]{
-							{performanceCodeMetricCollectionCode = MERIC_COLLECTION_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K1_STUDENT_COMMUNICATION_SKILLS,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K1_STUDENT_SCIENCE,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K1_STUDENT_SOCIAL_STUDIES,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K1_STUDENT_MATHEMATICS,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K1_STUDENT_WORK_HABITS,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K1_STUDENT_SOCIAL_SKILLS,NOT_APPLICABLE}
-						});
-				}else if(LEVEL_NAME_CODE_K2.equals(levelNameCode) || LEVEL_NAME_CODE_K3.equals(levelNameCode)){
-					addMetricsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()), new String[][]{
-							{performanceCodeMetricCollectionCode = MERIC_COLLECTION_K2_K3_STUDENT_READING_READINESS,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_READING,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_WRITING,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_LISTENING_SPEAKING_VIEWING,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_ALPHABET_IDENTIFICATION,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_MATHEMATICS,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_SCIENCE_SOCIAL_STUDIES_MORAL_EDUCATION,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_ART_CRAFT,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_MUSIC,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_PHYSICAL_EDUCATION,NOT_APPLICABLE}
-							, {MERIC_COLLECTION_K2_K3_STUDENT_WORK_BEHAVIOUR_HABITS,NOT_APPLICABLE}
-						});
-				}
-				
-				labelValueCollectionReport = addIntervalCollectionLabelValueCollection(r,inject(MetricCollectionDao.class).read(performanceCodeMetricCollectionCode).getValueIntervalCollection()
-						,null,Boolean.TRUE,Boolean.FALSE,null);
-				labelValueCollectionReport.add("NA", "Not Assessed");
-			}else{
-				String studentBehaviourMetricCollectionCode = null;
-				r.setName(r.getName()+" CARD");
-				String testCoef = null,examCoef = "";	
-				if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_G1,LEVEL_NAME_CODE_G2,LEVEL_NAME_CODE_G3},levelNameCode)){
-					name += " LOWER";
-					testCoef = "15";
-					examCoef = "70";
-					studentBehaviourMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT;
-				}else if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_G4,LEVEL_NAME_CODE_G5,LEVEL_NAME_CODE_G6},levelNameCode)){
-					name += " UPPER";
-					testCoef = "15";
-					examCoef = "70";
-					studentBehaviourMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT;
-				}else if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_G7,LEVEL_NAME_CODE_G8,LEVEL_NAME_CODE_G9},levelNameCode)){
-					name += " JUNIOR HIGH SCHOOL";
-					testCoef = "20";
-					examCoef = "60";
-					studentBehaviourMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_SECONDARY_STUDENT;
-				}else if(ArrayUtils.contains(new String[]{LEVEL_NAME_CODE_G10,LEVEL_NAME_CODE_G11,LEVEL_NAME_CODE_G12},levelNameCode)){
-					name += " SENIOR HIGH SCHOOL";
-					testCoef = "20";
-					examCoef = "60";
-					studentBehaviourMetricCollectionCode = SchoolConstant.Code.MetricCollection.BEHAVIOUR_SECONDARY_STUDENT;
-				}
-				
-				r.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 "+testCoef+"%","Test 2 "+testCoef+"%","Exam "+examCoef+"%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
-				
-				labelValueCollectionReport = new LabelValueCollectionReport();
-				labelValueCollectionReport.setName("OVERALL RESULT");
-				labelValueCollectionReport.add("AVERAGE",r.getAverage());
-				labelValueCollectionReport.add("GRADE",r.getAverageScale());
-				if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentRankable()))
-					labelValueCollectionReport.add("RANK",r.getRank());
-				r.addLabelValueCollection(labelValueCollectionReport);
-				
-				addMetricsLabelValueCollection(r, ((StudentClassroomSessionDivision)r.getSource()), studentBehaviourMetricCollectionCode);
-				labelValueCollectionReport = new LabelValueCollectionReport();
-				labelValueCollectionReport.setName(r.getCurrentLabelValueCollection().getName());
-				labelValueCollectionReport.setCollection(r.getCurrentLabelValueCollection().getCollection().subList(6, 12));
-				r.getCurrentLabelValueCollection().setCollection(r.getCurrentLabelValueCollection().getCollection().subList(0, 6));
-				
-				r.addLabelValueCollection(labelValueCollectionReport);
-				
-				addIntervalCollectionLabelValueCollection(r,inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
-					((StudentClassroomSessionDivision)r.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
-					,null,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
-				
-				addIntervalCollectionLabelValueCollection(r,inject(MetricCollectionDao.class).read(studentBehaviourMetricCollectionCode).getValueIntervalCollection()
-						,null,Boolean.TRUE,Boolean.FALSE,null);
-				
-			}
-			
-			if(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==3){
-				/*labelValue("school.report.studentclassroomsessiondivision.block.informations.annualaverage", "To Compute");
-				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualgrade", "To Compute");
-				labelValue("school.report.studentclassroomsessiondivision.block.informations.annualrank", "To Compute");
-				//labelValue("school.report.studentclassroomsessiondivision.block.informations.promotion", 
-				//		studentClassroomSessionDivision.get "To Compute");
-				labelValue("school.report.studentclassroomsessiondivision.block.informations.nextacademicsession", 
-						format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getNextStartingDate()));
-				*/
-			}else{
-				ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
-						.readByClassroomSessionByOrderNumber(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
-								,(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()));
-			
-				r.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
-					/*{"CONFERENCE REQUESTED",studentClassroomSessionDivision.getResults().getConferenceRequested()==null?"NO"
-							:studentClassroomSessionDivision.getResults().getConferenceRequested()?"YES":"NO"}
-					,*/{"NEXT OPENING",format(nextClassroomSessionDivision.getExistencePeriod().getFromDate())}
-					,{"NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getExistencePeriod().getToDate())}
-					});
-			}
-		
-			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
-					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
-					,{"Number of times present",r.getAttendedTime()}
-					,{"Number of times absent",r.getMissedTime()}
-					});
-			
-			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
-					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
-					,{"Number of times present",r.getAttendedTime()}
-					,{"Number of times absent",r.getMissedTime()}
-					});
-			
-			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
-					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
-					,{"Number of times present",r.getAttendedTime()}
-					,{"Number of times absent",r.getMissedTime()}
-					});
-			
-			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
-					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
-					,{"Number of times present",r.getAttendedTime()}
-					,{"Number of times absent",r.getMissedTime()}
-					});
-			
-			r.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
-					{"Number of times school opened",r.getClassroomSessionDivision().getOpenedTime()}
-					,{"Number of times present",r.getAttendedTime()}
-					,{"Number of times absent",r.getMissedTime()}
-					});
-			
-			return r;
-		}
-		
-    }
 	
 	/**/
 

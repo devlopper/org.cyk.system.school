@@ -34,6 +34,7 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
@@ -206,8 +207,10 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	}
 	
 	protected void configureClassroomSessionDivisionClass() {
-		getFormConfiguration(ClassroomSessionDivision.class, Crud.READ).addFieldNames(ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER
-				,ClassroomSessionDivisionDetails.FIELD_WEIGHT);
+		getFormConfiguration(ClassroomSessionDivision.class, Crud.UPDATE).addFieldNames(ClassroomSessionDivisionEditPage.Form.FIELD_FROM_DATE
+				,ClassroomSessionDivisionEditPage.Form.FIELD_TO_DATE,ClassroomSessionDivisionEditPage.Form.FIELD_DURATION);
+		getFormConfiguration(ClassroomSessionDivision.class, Crud.READ).addFieldNames(ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION
+				,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER,ClassroomSessionDivisionDetails.FIELD_WEIGHT);
 		
 		registerDetailsConfiguration(ClassroomSessionDivisionDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
@@ -219,8 +222,10 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(data instanceof ClassroomSessionDivisionDetails)
-							return isFieldNameIn(field,ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER
-									,ClassroomSessionDivisionDetails.FIELD_WEIGHT);
+							return isFieldNameIn(field,ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionDivisionDetails.FIELD_TIME_DIVISION_TYPE
+									,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER,ClassroomSessionDivisionDetails.FIELD_WEIGHT
+									,ClassroomSessionDivisionDetails.FIELD_EXISTENCE_PERIOD,PeriodDetails.FIELD_FROM_DATE,PeriodDetails.FIELD_TO_DATE
+									,PeriodDetails.FIELD_DURATION);
 						return Boolean.FALSE;
 					}
 				};
@@ -232,7 +237,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field,ClassroomSessionDivisionDetails.FIELD_NAME);
+						return isFieldNameIn(field,ClassroomSessionDivisionDetails.FIELD_TIME_DIVISION_TYPE,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER
+								,ClassroomSessionDivisionDetails.FIELD_WEIGHT,ClassroomSessionDivisionDetails.FIELD_EXISTENCE_PERIOD,PeriodDetails.FIELD_FROM_DATE
+								,PeriodDetails.FIELD_TO_DATE,PeriodDetails.FIELD_DURATION);
 					}
 				};
 			}

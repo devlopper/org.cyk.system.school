@@ -370,6 +370,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
+	protected Long getAttendableDurationUnit(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		return inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
+				.getAttendanceTimeDivisionType().getDuration();
+	}
+	
+	@Override
 	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
 		return classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentClassroomSessionDivisionAverageScale();
 	}

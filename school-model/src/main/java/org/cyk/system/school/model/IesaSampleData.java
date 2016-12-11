@@ -12,53 +12,42 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 
 	private static final long serialVersionUID = -1887987316565799879L;
 	
-	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForOtherGrade(){
+	protected static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForOtherGrade__(Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
-		
+		report.setProvisional(provisional);
 		addPupilsDetails(report);
 		addSchoolAttendance(report);
-		
-		report.addLabelValueCollection("OVERALL RESULT",new String[][]{
-				{"AVERAGE","78.15"}
-				,{"GRADE","A+"}
-				,{"RANK","24"}
-				});
-		
-		
+		addOverallResult(report);
 		addBehaviour1(report);
 		addBehaviour2(report);
-		
-		report.addLabelValueCollection("GRADING SCALE",new String[][]{
-				{"A+", "Excellent","90 - 100"}
-				,{"A",  "Very Good","80 - 89.99"}
-				,{"B+", "Good","70 - 79.99"}
-				,{"B",  "Fair","60 - 69.99"}
-				,{"C+", "Satisfactory","55 - 59.99"}
-				,{"C",  "Barely satisfactory","50 - 54.99"}
-				,{"E",  "Fail","00 - 49.99"}
-				});
-				
-		report.addLabelValueCollection("EFFORT LEVELS",new String[][]{
-				{"1", "Has no regard for the observable traits"}
-				,{"2", "Shows minimal regard for the observable traits"}
-				,{"3", "Acceptable level of observable traits"}
-				,{"4", "Maintains high level of observable traits"}
-				,{"5", "Maintains an excellent degree of observable traits"}
-				});
-		
-
+		addGradingScale(report);
+		addEffortLevels(report);
 		addSchoolCommunications(report,Boolean.FALSE);
-		
-		report.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 15%","Test 2 15%","Exam 70%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
-		
+		addSubjectsTableColumnNames(report);
 		return collection;
 	}
 	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForOtherGrade(){
+		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(Boolean.FALSE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionProvisionalReportsForOtherGrade(){
+		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(Boolean.TRUE);
+	}
+	
 	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForPreKinderGarten(){
+		return __createStudentClassroomSessionDivisionReportsForPreKinderGarten__(Boolean.FALSE);
+	}
+		
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionProvisionalReportsForPreKinderGarten(){
+		return __createStudentClassroomSessionDivisionReportsForPreKinderGarten__(Boolean.TRUE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForPreKinderGarten__(Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
-		
+		report.setProvisional(provisional);
 		report.setName("PRE-KINDERGARTEN REPORT SHEET");
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
@@ -112,9 +101,17 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForKG1(){
+		return __createStudentClassroomSessionDivisionReportsForKG1__(Boolean.FALSE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionProvisionalReportsForKG1(){
+		return __createStudentClassroomSessionDivisionReportsForKG1__(Boolean.TRUE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForKG1__(Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
-		
+		report.setProvisional(provisional);
 		report.setName("KINDERGARTEN REPORT SHEET");
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
@@ -156,9 +153,17 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForKG2KG3(){
+		return __createStudentClassroomSessionDivisionReportsForKG2KG3__(Boolean.FALSE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionProvisionalReportsForKG2KG3(){
+		return __createStudentClassroomSessionDivisionReportsForKG2KG3__(Boolean.TRUE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForKG2KG3__(Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
-		
+		report.setProvisional(provisional);
 		report.setName("KINDERGARTEN REPORT SHEET");
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
@@ -204,6 +209,10 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		return collection;
 	}
 	
+	private static void addSubjectsTableColumnNames(StudentClassroomSessionDivisionReportTemplateFile report){
+		report.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 15%","Test 2 15%","Exam 70%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
+	}
+	
 	private static void addPupilsDetails(StudentClassroomSessionDivisionReportTemplateFile report){
 		report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
 			{"Formname(s)", report.getStudent().getPerson().getLastnames()}
@@ -223,6 +232,36 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 			,{"Number of times absent","999"}
 			,{"Number of time suspended","999"}
 			,{"Number of time on detention","999"}
+			});
+	}
+	
+	private static void addOverallResult(StudentClassroomSessionDivisionReportTemplateFile report){
+		report.addLabelValueCollection("OVERALL RESULT",new String[][]{
+			{"AVERAGE","78.15"}
+			,{"GRADE","A+"}
+			,{"RANK","24"}
+			});
+	}
+	
+	private static void addGradingScale(StudentClassroomSessionDivisionReportTemplateFile report){
+		report.addLabelValueCollection("GRADING SCALE",new String[][]{
+			{"A+", "Excellent","90 - 100"}
+			,{"A",  "Very Good","80 - 89.99"}
+			,{"B+", "Good","70 - 79.99"}
+			,{"B",  "Fair","60 - 69.99"}
+			,{"C+", "Satisfactory","55 - 59.99"}
+			,{"C",  "Barely satisfactory","50 - 54.99"}
+			,{"E",  "Fail","00 - 49.99"}
+			});
+	}
+	
+	private static void addEffortLevels(StudentClassroomSessionDivisionReportTemplateFile report){
+		report.addLabelValueCollection("EFFORT LEVELS",new String[][]{
+			{"1", "Has no regard for the observable traits"}
+			,{"2", "Shows minimal regard for the observable traits"}
+			,{"3", "Acceptable level of observable traits"}
+			,{"4", "Maintains high level of observable traits"}
+			,{"5", "Maintains an excellent degree of observable traits"}
 			});
 	}
 	

@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.model.file.File;
@@ -69,7 +67,6 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	/**/
 	
 	//TODO to be nicely designed
-	Set<String> EVALUATION_TYPE_CODES=new LinkedHashSet<>();
 	Boolean[] SUM_MARKS = {Boolean.FALSE};
 	
 	//TODO to be moved in Impl

@@ -11,7 +11,6 @@ import java.util.HashSet;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.CompanyBusiness;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
@@ -19,11 +18,12 @@ import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.model.CompanyConstant;
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.root.business.api.BusinessService.BusinessServiceCallArguments;
-import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
@@ -34,6 +34,7 @@ import org.cyk.system.root.model.security.Installation;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
+import org.cyk.system.root.persistence.api.mathematics.IntervalDao;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -44,7 +45,6 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
-import org.cyk.system.school.business.api.subject.EvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.LectureBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
@@ -77,6 +77,7 @@ import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.LevelGroupDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
+import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.cyk.utility.common.generator.RandomDataProvider;
@@ -230,19 +231,22 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			private static final long serialVersionUID = -5301917191935456060L;
 
 			@Override
-    		public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {
-    			super.classroomSessionDivisionCreated(classroomSessionDivision);
-    			classroomSessionDivision.getExistencePeriod().setFromDate(new DateTime(2016, 4, 4, 0, 0).toDate());
-    			classroomSessionDivision.getExistencePeriod().setToDate(new DateTime(2016, 6, 13, 0, 0).toDate());
-    			classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().set(48l * DateTimeConstants.MILLIS_PER_DAY);
+    		public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision,Long orderNumber) {
+    			super.classroomSessionDivisionCreated(classroomSessionDivision,orderNumber);
+    			if(orderNumber==1){
+					classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().set(63l * DateTimeConstants.MILLIS_PER_DAY);
+				}else if(orderNumber==2){
+					classroomSessionDivision.getExistencePeriod().setFromDate(new DateTime(2017, 1, 9, 0, 0).toDate());
+	    			classroomSessionDivision.getExistencePeriod().setToDate(new DateTime(2017, 3, 27, 0, 0).toDate());
+				}
     			classroomSessionDivision.setStudentSubjectAttendanceAggregated(Boolean.FALSE);
     		}
 			
 			@Override
 			public void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 				super.classroomSessionDivisionSubjectEvaluationTypeCreated(classroomSessionDivisionSubjectEvaluationType);
-				classroomSessionDivisionSubjectEvaluationType.setCountInterval(inject(IntervalBusiness.class).instanciateOne(null
-						, RandomStringUtils.randomAlphanumeric(6), "1", "1"));
+				classroomSessionDivisionSubjectEvaluationType.setMaximumValue(new BigDecimal("100"));
+				classroomSessionDivisionSubjectEvaluationType.setCountInterval(inject(IntervalDao.class).read(SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE));
 			}
     	});
 		
@@ -274,8 +278,10 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	@Override
 	protected void structure(){
 		LevelGroup levelGroupKindergarten = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.KINDERGARTEN);
-		LevelGroup levelGroupPrimary = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.PRIMARY);
-		LevelGroup levelGroupSecondary = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.SECONDARY);
+		LevelGroup levelGroupPrimaryLower = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.PRIMARY_LOWER);
+		LevelGroup levelGroupPrimaryHigher = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.PRIMARY_HIGHER);
+		LevelGroup levelGroupSecondaryLower = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.SECONDARY_LOWER);
+		LevelGroup levelGroupSecondaryHigher = inject(LevelGroupDao.class).read(SchoolConstant.Code.LevelGroup.SECONDARY_HIGHER);
 		
 		// Subjects
 		schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.MATHEMATICS),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
@@ -293,6 +299,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.MUSIC),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
     	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.ICT_COMPUTER),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
     	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.PHYSICAL_EDUCATION),new ArrayList[]{subjectsG1G3,subjectsG4G6,subjectsG7G9});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.LITERATURE),new ArrayList[]{subjectsG1G3});
+    	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.COMPREHENSION),new ArrayList[]{subjectsG1G3});
     	
     	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.LITERATURE),new ArrayList[]{subjectsG4G6});
     	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.COMPREHENSION),new ArrayList[]{subjectsG4G6});
@@ -309,9 +317,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	schoolDataProducerHelper.addSubjects(Arrays.asList(SchoolConstant.Code.Subject.SOCIOLOGY),new ArrayList[]{subjectsG10G12});
     	
 		//Evaluation Type
-		evaluationTypes.add(evaluationTypeTest1 = create(inject(EvaluationTypeBusiness.class).instanciateOne("Test 1")));
-		evaluationTypes.add(evaluationTypeTest2 = create(inject(EvaluationTypeBusiness.class).instanciateOne("Test 2")));
-		evaluationTypes.add(evaluationTypeExam = create(inject(EvaluationTypeBusiness.class).instanciateOne("Exam")));
+    	evaluationTypes.add(evaluationTypeTest1 = inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.TEST1));
+		evaluationTypes.add(evaluationTypeTest2 = inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.TEST2));
+		evaluationTypes.add(evaluationTypeExam = inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.EXAM));
 				
     	File documentHeaderFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_HEADER); 
     	File documentBackgroundImageFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_BACKGROUND); 
@@ -329,26 +337,24 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		ReportTemplate reportTemplateG1G12 = rootDataProducerHelper.createReportTemplate("IesaReportTemplateG1G12", "Report Sheet"
 				, Boolean.TRUE, "report/iesa/g1g12.jrxml", documentHeaderFile, documentBackgroundImageFile, documentBackgroundImageDraftFile); 
 		
-		Interval interval = inject(IntervalBusiness.class).instanciateOne(null, "A", "1", "2");
-		create(interval);
 		String classroomSessionDivisionIndex = "1";
 		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY
-				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex,interval);
+				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
 		
 		CommonNodeInformations commonNodeInformationsK1 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplateK1, TimeDivisionType.DAY
-				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex,interval);
+				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
 		
 		CommonNodeInformations commonNodeInformationsK2K3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplateK2K3, TimeDivisionType.DAY
-				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex,interval);
+				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
 		
 		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(inject(IntervalCollectionDao.class)
 				.read(SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT),inject(IntervalCollectionDao.class)
-				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex,interval);
+				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex);
 		CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
 		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(inject(IntervalCollectionDao.class)
 				.read(SchoolConstant.Code.IntervalCollection.GRADING_SCALE_SECONDARY_STUDENT),inject(IntervalCollectionDao.class)
-				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex,interval);	
+				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex);	
 		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);
@@ -361,9 +367,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		
     	createMetricCollections();
     	
-    	inject(TeacherBusiness.class).create(inject(TeacherBusiness.class).instanciateManyRandomly(numbreOfTeachers));
+    	inject(GenericBusiness.class).create(commonUtils.castCollection(inject(TeacherBusiness.class).instanciateManyRandomly(numbreOfTeachers),AbstractIdentifiable.class));
 		flush("Teachers");
-		inject(StudentBusiness.class).create(inject(StudentBusiness.class).instanciateManyRandomly(numbreOfStudents));
+		inject(GenericBusiness.class).create(commonUtils.castCollection(inject(StudentBusiness.class).instanciateManyRandomly(numbreOfStudents),AbstractIdentifiable.class));
 		flush("Students");
 		
     	school.getOwnedCompany().getCompany().setManager(personDao.readOneRandomly());
@@ -440,7 +446,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	
     	g1 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
     			,metricCollectionIdentifiableGlobalIdentifiers,academicSession
-    			, schoolDataProducerHelper.createLevelTimeDivision(SchoolConstant.Code.LevelName.G1,"Grade 1",levelGroupPrimary,commonNodeInformationsG1G3,gradeIndex++),null 
+    			, schoolDataProducerHelper.createLevelTimeDivision(SchoolConstant.Code.LevelName.G1,"Grade 1",levelGroupPrimaryLower,commonNodeInformationsG1G3,gradeIndex++),null 
     			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3
     			,new String[]{"A","B"},new String[]{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT,SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT
     					,SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT},Boolean.TRUE,Boolean.TRUE).iterator().next();  
@@ -511,7 +517,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	public void produce(Listener listener) {
 		this.listener =listener;
 		rootDataProducerHelper.setBasePackage(SchoolBusinessLayer.class.getPackage());
-		StudentClassroomSessionDivisionBusiness.EVALUATION_TYPE_CODES.addAll(Arrays.asList("Test1","Test2","Exam"));
+		SchoolConstant.Code.EvaluationType.COLLECTION.addAll(Arrays.asList(SchoolConstant.Code.EvaluationType.TEST1,SchoolConstant.Code.EvaluationType.TEST2
+				,SchoolConstant.Code.EvaluationType.EXAM));
     	StudentClassroomSessionDivisionBusiness.SUM_MARKS[0] = Boolean.TRUE;
 		//schoolBusinessLayer.setAverageComputationListener(new Averagec);
 		

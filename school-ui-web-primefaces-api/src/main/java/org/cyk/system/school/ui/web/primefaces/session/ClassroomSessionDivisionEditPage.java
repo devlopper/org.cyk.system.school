@@ -96,6 +96,7 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 	public static class Form extends AbstractFormModel<ClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		
+		//TODO use PeriodFormModel instead
 		@Input @InputCalendar private Date fromDate;
 		@Input @InputCalendar private Date toDate;
 		@Input @InputNumber private BigDecimal duration;
@@ -115,12 +116,14 @@ public class ClassroomSessionDivisionEditPage extends AbstractCrudOnePage<Classr
 			identifiable.getExistencePeriod().setFromDate(fromDate);
 			identifiable.getExistencePeriod().setToDate(toDate);
 			if(duration==null)
-				identifiable.getExistencePeriod().getNumberOfMillisecond().setSystem(null);
+				identifiable.getExistencePeriod().getNumberOfMillisecond().set(null);
 			else
-				identifiable.getExistencePeriod().getNumberOfMillisecond().setSystem(
+				identifiable.getExistencePeriod().getNumberOfMillisecond().set(
 						inject(ClassroomSessionBusiness.class).convertAttendanceTimeToMillisecond(identifiable.getClassroomSession(),duration));
 		}
 		
+		public static final String FIELD_FROM_DATE = "fromDate";
+		public static final String FIELD_TO_DATE = "toDate";
 		public static final String FIELD_DURATION = "duration";
 			
 	}

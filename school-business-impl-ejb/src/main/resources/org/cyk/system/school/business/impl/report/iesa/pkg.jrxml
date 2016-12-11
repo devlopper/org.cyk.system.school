@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="680"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -124,6 +124,9 @@
 	</field>
 	<field name="headerImage" class="java.io.InputStream">
 		<fieldDescription><![CDATA[headerImage]]></fieldDescription>
+	</field>
+    <field name="provisional" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[provisional]]></fieldDescription>
 	</field>
 	<field name="labelValueCollectionAtIndex0" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
 		<fieldDescription><![CDATA[labelValueCollectionAtIndex0]]></fieldDescription>
@@ -259,7 +262,9 @@
 				</componentElement>
 			</frame>
 			<frame>
-				<reportElement mode="Transparent" x="385" y="0" width="170" height="50" backcolor="#9999FF" uuid="1417754e-aadb-4e8a-82ed-bead42153fec"/>
+				<reportElement mode="Transparent" x="385" y="0" width="170" height="50" backcolor="#9999FF" uuid="1417754e-aadb-4e8a-82ed-bead42153fec">
+					<printWhenExpression><![CDATA[$F{provisional} == false]]></printWhenExpression>
+				</reportElement>
 				<textField>
 					<reportElement style="block header" x="0" y="0" width="170" height="13" uuid="8e5e4903-eb2c-4ca6-bd96-030cc5bd8df6"/>
 					<textElement markup="styled"/>
@@ -711,7 +716,9 @@
 				</componentElement>
 			</frame>
 			<frame>
-				<reportElement positionType="Float" mode="Transparent" x="385" y="36" width="170" height="80" backcolor="#FFFF33" uuid="2261a94c-5493-40ea-9f3a-b21167bb1ca1"/>
+				<reportElement positionType="Float" mode="Transparent" x="385" y="36" width="170" height="80" backcolor="#FFFF33" uuid="2261a94c-5493-40ea-9f3a-b21167bb1ca1">
+					<printWhenExpression><![CDATA[$F{provisional} == false]]></printWhenExpression>
+				</reportElement>
 				<box rightPadding="0">
 					<pen lineWidth="0.25" lineColor="#00CCCC"/>
 					<topPen lineWidth="0.0" lineColor="#00CCCC"/>
@@ -745,7 +752,9 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement positionType="Float" x="385" y="118" width="170" height="89" uuid="ad594a11-3e61-4f8c-820b-4879f36773e3"/>
+				<reportElement positionType="Float" x="385" y="118" width="170" height="89" uuid="ad594a11-3e61-4f8c-820b-4879f36773e3">
+					<printWhenExpression><![CDATA[$F{provisional} == false]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<pen lineWidth="0.25" lineColor="#00CCCC"/>
 					<topPen lineWidth="0.0" lineColor="#00CCCC"/>
@@ -827,7 +836,9 @@
 				</textField>
 			</frame>
 			<frame>
-				<reportElement positionType="Float" mode="Transparent" x="385" y="263" width="170" height="50" backcolor="#9999FF" uuid="e7d90b40-4626-4b14-a6d2-0d8090d748ff"/>
+				<reportElement positionType="Float" mode="Transparent" x="385" y="263" width="170" height="50" backcolor="#9999FF" uuid="e7d90b40-4626-4b14-a6d2-0d8090d748ff">
+					<printWhenExpression><![CDATA[$F{provisional} == false]]></printWhenExpression>
+				</reportElement>
 				<textField>
 					<reportElement style="block header" x="0" y="0" width="170" height="13" uuid="a40151f4-3bf6-472c-9b3a-f8b8ae12a681"/>
 					<textElement markup="styled"/>

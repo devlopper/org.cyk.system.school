@@ -24,7 +24,10 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 
 	private static final long serialVersionUID = 3372342222993865767L;
 	
+	//TODO do ReportTemplateIdentifiable concept
 	@ManyToOne @JoinColumn(name="resultsReportTemplate") private ReportTemplate studentClassroomSessionDivisionResultsReportTemplate;
+	//@ManyToOne @JoinColumn(name="provisionalResultsReportTemplate") private ReportTemplate studentClassroomSessionDivisionProvisionalResultsReportTemplate;
+	
 	@ManyToOne @JoinColumn(name="resultsReportSigner") private Person studentClassroomSessionDivisionResultsReportSigner;
 	
 	@ManyToOne private IntervalCollection studentSubjectAverageScale;
@@ -44,9 +47,11 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	private Long currentClassroomSessionDivisionIndex;
 	
 	public CommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale
-			,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate,TimeDivisionType attendanceTimeDivisionType,BigDecimal evaluationPassAverage) {
+			,ReportTemplate studentClassroomSessionDivisionResultsReportTemplate/*,ReportTemplate studentClassroomSessionDivisionProvisionalResultsReportTemplate*/
+			,TimeDivisionType attendanceTimeDivisionType,BigDecimal evaluationPassAverage) {
 		super();
 		this.studentClassroomSessionDivisionResultsReportTemplate = studentClassroomSessionDivisionResultsReportTemplate;
+		//this.studentClassroomSessionDivisionProvisionalResultsReportTemplate = studentClassroomSessionDivisionProvisionalResultsReportTemplate;
 		this.studentSubjectAverageScale = intervalCollection;
 		this.studentClassroomSessionDivisionAverageScale = intervalCollection;
 		this.studentClassroomSessionAverageScale = intervalCollection;

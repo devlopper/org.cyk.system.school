@@ -296,6 +296,19 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					values.add(metricCollectionIdentifiableGlobalIdentifier.getValue());
 			inject(ValueBusiness.class).setRandomly(values);
 			inject(GenericBusiness.class).update(commonUtils.castCollection(values, AbstractIdentifiable.class));
+			/*
+			MetricValueIdentifiableGlobalIdentifier.SearchCriteria s = new MetricValueIdentifiableGlobalIdentifier.SearchCriteria();
+			s.addMetrics(Arrays.asList(
+				inject(MetricBusiness.class).find(SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT)
+				,inject(MetricBusiness.class).find(SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT)
+				,inject(MetricBusiness.class).find(SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT)
+				));
+			s.addIdentifiablesGlobalIdentifiers(studentClassroomSessionDivisions);
+			
+			for(MetricValueIdentifiableGlobalIdentifier f : inject(MetricValueIdentifiableGlobalIdentifierDao.class).readByCriteria(s)){
+				f.getMetricValue().getValue().getNumberValue().set(new BigDecimal(RandomDataProvider.getInstance().randomInt(0, 1000 * 3600 * 24 * 63)));
+				inject(GenericBusiness.class).update(f.getMetricValue().getValue());
+			}*/
 		}
 	}
 	public void randomValues(Boolean metric,Boolean attendance,Boolean appreciation){

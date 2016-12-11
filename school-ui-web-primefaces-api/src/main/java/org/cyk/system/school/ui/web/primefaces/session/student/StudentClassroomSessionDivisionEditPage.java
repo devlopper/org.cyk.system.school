@@ -63,8 +63,31 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 					return inject(MetricValueBusiness.class).findByMetricsByIdentifiables(inject(MetricBusiness.class).findByCollection(lMetricCollection)
 							, Arrays.asList(identifiable));
 				}
+				
+				/*@Override
+				public void instanciated(AbstractItemCollection<Item, MetricValue, SelectItem> itemCollection,Item item) {
+					super.instanciated(itemCollection, item);
+					if(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT.endsWith(lMetricCollection.getType().getCode())){
+						if(getMetricValue(item.getIdentifiable()).getValue().getNumberValue().get()!=null){
+							BigDecimal numberOfMillisecond = getMetricValue(item.getIdentifiable()).getValue().getNumberValue().get();
+							item.setNumberValue(inject(ClassroomSessionBusiness.class).convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSessionDivision()
+									.getClassroomSession(),numberOfMillisecond.longValue()));
+						}
+					}
+				}
+				
+				@Override
+				public void write(Item item) {
+					super.write(item);
+					if(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT.endsWith(lMetricCollection.getType().getCode())){
+						if(getMetricValue(item.getIdentifiable()).getValue().getNumberValue().get()!=null){
+							item.getIdentifiable().getValue().getNumberValue().set(new BigDecimal(inject(ClassroomSessionBusiness.class).convertAttendanceTimeToMillisecond(identifiable.getClassroomSessionDivision()
+									.getClassroomSession(),item.getNumberValue()==null ? BigDecimal.ZERO : item.getNumberValue())));
+						}
+					}
+				}*/
 			});
-			//metricValueCollection.addNullChoice();
+			
 			metricValueCollections.add(metricValueCollection);
 		}
 	}
@@ -81,13 +104,13 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			return metricValueCollections.get(index);
 		return null;
 	}
-	/*	
-	@Override
+		
+	/*@Override
 	protected void update() {
 		List<MetricValue> metricValues = new ArrayList<>();
 		for(MetricValueCollection metricValueCollection : metricValueCollections)
 			metricValues.addAll(metricValueCollection.getIdentifiables());
-		update(identifiable, metricValues);
+		update(identifiable);
 	}*/
 	
 	@Override
@@ -95,8 +118,9 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		if(Crud.UPDATE.equals(crud)){
 			Collection<AbstractIdentifiable> collection = new ArrayList<>();
 			for(MetricValueCollection metricValueCollection : metricValueCollections)
-				for(AbstractIdentifiable metricValue : metricValueCollection.getIdentifiables())
+				for(AbstractIdentifiable metricValue : metricValueCollection.getIdentifiables()){
 					collection.add(metricValue);
+				}
 			return collection;
 		}
 		return super.getIdentifiables();

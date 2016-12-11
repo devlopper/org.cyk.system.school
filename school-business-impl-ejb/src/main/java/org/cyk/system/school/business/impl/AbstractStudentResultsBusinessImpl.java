@@ -1,7 +1,9 @@
 package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,7 +17,9 @@ import org.cyk.system.root.business.api.event.EventMissedBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
+import org.cyk.system.root.business.api.mathematics.MetricBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
+import org.cyk.system.root.business.api.value.ValueBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.event.Event;
@@ -24,14 +28,18 @@ import org.cyk.system.root.model.event.EventParty;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.time.Attendance;
 import org.cyk.system.root.model.time.AttendanceMetricValue;
+import org.cyk.system.root.model.value.Value;
 import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.root.persistence.api.event.EventMissedDao;
 import org.cyk.system.root.persistence.api.event.EventPartyDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricValueDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.AbstractStudentResult;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.Lecture;
@@ -246,6 +254,21 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 					//attendance.setAttendedDuration(attendableDuration-attendance.getMissedDuration());
 				
 				*/
+				
+				//TODO think better
+				Metric numberOfTimePresentMetric = inject(MetricBusiness.class).find(SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT
+						,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT);
+				Metric numberOfTimeAbsentMetric = inject(MetricBusiness.class).find(SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT
+						,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT);
+				
+				Value numberOfTimePresent = inject(MetricValueDao.class).readByMetrics(Arrays.asList(numberOfTimePresentMetric)).iterator().next().getValue();
+				Value numberOfTimeAbsent = inject(MetricValueDao.class).readByMetrics(Arrays.asList(numberOfTimeAbsentMetric)).iterator().next().getValue();
+				Long duration = getAttendableDuration(result);
+				
+				if(numberOfTimeAbsent.getNumberValue().get()!=null){
+					numberOfTimePresent.getNumberValue().set(new BigDecimal(duration).subtract(numberOfTimeAbsent.getNumberValue().get()));
+					inject(ValueBusiness.class).update(numberOfTimePresent);
+				}
 			}
 			//if(attendanceMetricValues!=null)
 			//	inject(AttendanceMetricValueBusiness.class).update(attendanceMetricValues);
@@ -304,6 +327,8 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 	protected abstract Boolean isLectureAttendanceAggregatable(RESULT result);
 	
 	protected abstract Long getAttendableDuration(RESULT result);
+	
+	protected abstract Long getAttendableDurationUnit(RESULT result);
 	
 	protected abstract LEVEL level(Lecture lecture);
 	

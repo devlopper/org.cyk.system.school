@@ -2,6 +2,7 @@ package org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanni
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.system.root.business.api.Crud;
@@ -182,7 +183,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	@Override
 	protected <TYPE> Collection<TYPE> getNavigatorTreeNodeDatas(Class<TYPE> dataClass,UserSession userSession) {
 		if(userSession.hasRole(Role.MANAGER)){
-			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findAll();
+			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findHierarchies();
 		}else{
 			Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());
 			if(teacher==null)
@@ -227,9 +228,14 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 			public Collection<?> children(Object object) { 
 				if(object instanceof LevelGroup){
 					LevelGroup levelGroup = (LevelGroup) object;
-					if(Boolean.TRUE.equals(userSession.getIsManager()))
-						return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroup(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup);
-					else{
+					if(Boolean.TRUE.equals(userSession.getIsManager())){
+						Collection<Object> collection = new ArrayList<>();
+						for(Object o : ((LevelGroup)levelGroup).getChildren())
+							collection.add(o);
+						for(Object o : inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroup(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup))
+							collection.add(o);
+						return collection;
+					}else{
 						Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());
 						if(teacher!=null)
 							return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroupByTeacher(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup,teacher);

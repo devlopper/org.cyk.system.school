@@ -260,6 +260,12 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		return null;
 	}
 
+	@Override
+	protected Long getAttendableDurationUnit(StudentClassroomSession result) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	/**/
 	

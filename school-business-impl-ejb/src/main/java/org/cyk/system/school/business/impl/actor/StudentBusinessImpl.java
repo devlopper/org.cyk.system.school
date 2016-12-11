@@ -4,13 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import org.cyk.system.root.business.api.language.LanguageCollectionBusiness;
 import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
@@ -25,7 +21,9 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 
-@Stateless
+import lombok.Getter;
+import lombok.Setter;
+
 public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, StudentDao,SearchCriteria> implements StudentBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;

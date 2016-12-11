@@ -2,12 +2,15 @@ package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
 
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.subject.EvaluationType;
+import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
+import org.cyk.utility.common.CommonUtils;
 
 public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
 
@@ -19,10 +22,12 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	Student student1 = inject(StudentBusiness.class).instanciateOne();
+    	Student student1 = inject(StudentBusiness.class).instanciateOneRandomly();
     	student1.setCode("STUD1");
     	student1.setName("komenan");
     	student1.getPerson().setLastnames("yao christian");
+    	if(student1.getPerson().getContactCollection()!=null && student1.getPerson().getContactCollection().getElectronicMails()!=null)
+    		student1.getPerson().getContactCollection().getElectronicMails().clear();
     	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
     	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
     	
@@ -48,7 +53,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	k3Student.setName("Aka");
     	k3Student.getPerson().setLastnames("clarisse");
     	
-    	inject(StudentBusiness.class).create(Arrays.asList(pkStudent,k1Student,k2Student,k3Student,student1));
+    	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(pkStudent,k1Student,k2Student,k3Student,student1),AbstractIdentifiable.class));
     	
     	/*schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k1Student.getCode()},dataProducer.getK1().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
@@ -59,7 +64,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     			dataProducer.getG1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
     	
     	
-    	schoolBusinessTestHelper.getEvaluationTypes().addAll(rootDataProducerHelper.getEnumerations(EvaluationType.class));
+    	schoolBusinessTestHelper.getEvaluationTypes().addAll(inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.COLLECTION));
     	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
     		/*{SchoolConstant.Code.LevelName.PK,null,1l}

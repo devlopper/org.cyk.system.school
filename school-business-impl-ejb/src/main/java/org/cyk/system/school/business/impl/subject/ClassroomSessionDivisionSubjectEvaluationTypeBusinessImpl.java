@@ -8,8 +8,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
@@ -18,7 +16,6 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
-import org.cyk.utility.common.Constant;
 
 public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubjectEvaluationType, ClassroomSessionDivisionSubjectEvaluationTypeDao> implements ClassroomSessionDivisionSubjectEvaluationTypeBusiness,Serializable {
 
@@ -38,21 +35,15 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 	}
 	
 	@Override
-	public ClassroomSessionDivisionSubjectEvaluationType create(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+	protected void beforeCreate(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+		super.beforeCreate(classroomSessionDivisionSubjectEvaluationType);
 		ClassroomSessionDivisionSubjectEvaluationType existing = dao.readByClassroomSessionDivisionSubjectByEvaluationType(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject()
 				, classroomSessionDivisionSubjectEvaluationType.getEvaluationType());
 		exceptionUtils().exception(existing!=null, "classroomSessionDivisionSubjectEvaluationType.alreadyexists");//TODO create shortcut method
-		if(classroomSessionDivisionSubjectEvaluationType.getCountInterval()!=null){
-			if(StringUtils.isBlank(classroomSessionDivisionSubjectEvaluationType.getCode()))
-				classroomSessionDivisionSubjectEvaluationType.setCode(StringUtils.join(new String[]{classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getCode()
-					,classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getCode()},Constant.CHARACTER_UNDESCORE));
-			inject(IntervalBusiness.class).create(classroomSessionDivisionSubjectEvaluationType.getCountInterval());
-		}
 		commonUtils.increment(Long.class, classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject(), ClassroomSessionDivisionSubject.FIELD_NUMBER_OF_EVALUATION_TYPES, 1l);
 		inject(ClassroomSessionDivisionSubjectDao.class).update(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
-		return super.create(classroomSessionDivisionSubjectEvaluationType);
 	}
-	
+		
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public ClassroomSessionDivisionSubjectEvaluationType findByClassroomSessionDivisionSubjectByEvaluationType(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,EvaluationType evaluationType) {
 		return dao.readByClassroomSessionDivisionSubjectByEvaluationType(classroomSessionDivisionSubject, evaluationType);
