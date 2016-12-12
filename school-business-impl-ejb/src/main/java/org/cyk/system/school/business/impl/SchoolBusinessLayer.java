@@ -223,7 +223,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	}
 	
 	@Override
-	protected void persistData() {
+	protected void persistStructureData() {
 		inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml");
     	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE,"certificat de scolarité",Boolean.TRUE, "report/student/tuition_certificate.jrxml");
     	//inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET,"bulletin trimestriel",Boolean.TRUE, "report/student/classroom_session_division_sheet.jrxml");
@@ -573,11 +573,12 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		//UniformResourceLocator classroomSessionDivisionUpdateStudentReport = new UniformResourceLocator("/private/classroomsessiondivision/updatestudentreport.jsf");
 		
 		instanciateUserAccountsFromActors(inject(TeacherDao.class).readAll(), userRole,teacherRole);
-		
-		/*inject(UniformResourceLocatorBusiness.class).create(rootDataProducerHelper.getUniformResourceLocators());
-		inject(RoleUniformResourceLocatorBusiness.class).create(rootDataProducerHelper.getRoleUniformResourceLocators());
-		inject(UserAccountBusiness.class).create(rootDataProducerHelper.getUserAccounts());
+		/*
+		inject(GenericBusiness.class).create(commonUtils.castCollection(rootDataProducerHelper.getUniformResourceLocators(),AbstractIdentifiable.class));
+		inject(GenericBusiness.class).create(commonUtils.castCollection(rootDataProducerHelper.getRoleUniformResourceLocators(),AbstractIdentifiable.class));
+		inject(GenericBusiness.class).create(commonUtils.castCollection(rootDataProducerHelper.getUserAccounts(),AbstractIdentifiable.class));
 		*/
+		
 	}
 	
 	@Override

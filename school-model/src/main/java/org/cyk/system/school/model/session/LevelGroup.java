@@ -17,7 +17,7 @@ public class LevelGroup extends AbstractDataTree<LevelGroupType> implements Seri
 
 	private static final long serialVersionUID = -6128937819261060725L;
 
-	@Embedded private CommonNodeInformations nodeInformations;
+	@Embedded private CommonNodeInformations nodeInformations = new CommonNodeInformations();
 	
 	public LevelGroup(AbstractDataTree<LevelGroupType> parent, LevelGroupType type, String code,String name) {
 		super(parent, type, code);
@@ -26,5 +26,16 @@ public class LevelGroup extends AbstractDataTree<LevelGroupType> implements Seri
 	
 	public LevelGroup(AbstractDataTree<LevelGroupType> parent, LevelGroupType type, String code) {
 		super(parent,type,code);
+	}
+	
+	public LevelGroup setNodeInformations(CommonNodeInformations nodeInformations){
+		this.nodeInformations = nodeInformations;
+		return this;
+	}
+	
+	public CommonNodeInformations getNodeInformations(){
+		if(nodeInformations==null)
+			nodeInformations = new CommonNodeInformations();
+		return nodeInformations;
 	}
 }

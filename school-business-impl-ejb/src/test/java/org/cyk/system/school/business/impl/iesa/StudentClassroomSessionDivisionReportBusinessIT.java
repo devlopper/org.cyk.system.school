@@ -5,7 +5,11 @@ import java.util.Arrays;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
+import org.cyk.system.root.model.value.Value;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
+import org.cyk.system.root.persistence.api.value.ValueDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
@@ -55,11 +59,11 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	
     	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(pkStudent,k1Student,k2Student,k3Student,student1),AbstractIdentifiable.class));
     	
-    	/*schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k1Student.getCode()},dataProducer.getK1().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k2Student.getCode()},dataProducer.getK2().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k3Student.getCode()},dataProducer.getK3().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
-    	*/
+    	
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{student1.getCode()},
     			dataProducer.getG1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
     	
@@ -67,12 +71,12 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	schoolBusinessTestHelper.getEvaluationTypes().addAll(inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.COLLECTION));
     	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
-    		/*{SchoolConstant.Code.LevelName.PK,null,1l}
+    		{SchoolConstant.Code.LevelName.PK,null,1l}
     		,{SchoolConstant.Code.LevelName.K1,null,1l}
     		,{SchoolConstant.Code.LevelName.K2,null,1l}
     		,{SchoolConstant.Code.LevelName.K3,null,1l}
-    		,*/{SchoolConstant.Code.LevelName.G1,"A",1l}
-    	}, Boolean.TRUE, Boolean.FALSE);
+    		,{SchoolConstant.Code.LevelName.G1,"A",1l}
+    	}, Boolean.FALSE, Boolean.FALSE);
     	
     	/*
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{

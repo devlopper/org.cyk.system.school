@@ -34,9 +34,7 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private IntervalCollection studentClassroomSessionDivisionAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionAverageScale;
 	@ManyToOne private IntervalCollection studentClassroomSessionAveragePromotionScale;
-	
 	@ManyToOne private TimeDivisionType attendanceTimeDivisionType;
-	
 	@Column private Boolean aggregateAttendance;
 	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal evaluationPassAverage;
 	
@@ -58,6 +56,21 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 		this.studentClassroomSessionAveragePromotionScale = studentClassroomSessionAveragePromotionScale;
 		this.attendanceTimeDivisionType = attendanceTimeDivisionType;
 		this.evaluationPassAverage = evaluationPassAverage;
+	}
+	
+	public void set(CommonNodeInformations commonNodeInformations){
+		this.studentClassroomSessionDivisionResultsReportTemplate = commonNodeInformations.studentClassroomSessionDivisionResultsReportTemplate;
+		this.studentClassroomSessionDivisionResultsReportSigner = commonNodeInformations.studentClassroomSessionDivisionResultsReportSigner;
+		this.studentSubjectAverageScale = commonNodeInformations.studentSubjectAverageScale;
+		this.studentClassroomSessionDivisionAverageScale = commonNodeInformations.studentClassroomSessionDivisionAverageScale;
+		this.studentClassroomSessionAverageScale = commonNodeInformations.studentClassroomSessionAverageScale;
+		this.studentClassroomSessionAveragePromotionScale = commonNodeInformations.studentClassroomSessionAveragePromotionScale;
+		this.attendanceTimeDivisionType = commonNodeInformations.attendanceTimeDivisionType;
+		this.aggregateAttendance = commonNodeInformations.aggregateAttendance;
+		this.evaluationPassAverage = commonNodeInformations.evaluationPassAverage;
+		this.classroomSessionTimeDivisionType = commonNodeInformations.classroomSessionTimeDivisionType;
+		this.classroomSessionDivisionOrderNumberInterval = commonNodeInformations.classroomSessionDivisionOrderNumberInterval;
+		this.currentClassroomSessionDivisionIndex = commonNodeInformations.currentClassroomSessionDivisionIndex;
 	}
 	
 	@Override

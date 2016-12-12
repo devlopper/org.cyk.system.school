@@ -18,7 +18,9 @@ import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MetricBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
+import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.api.value.ValueBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.AbstractIdentifiable;
@@ -29,12 +31,12 @@ import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
-import org.cyk.system.root.model.time.Attendance;
-import org.cyk.system.root.model.time.AttendanceMetricValue;
+import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.value.Value;
 import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.root.persistence.api.event.EventMissedDao;
 import org.cyk.system.root.persistence.api.event.EventPartyDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricValueDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
@@ -198,8 +200,6 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 			Collection<EventMissed> eventMisseds,BusinessServiceCallArguments<RESULT> callArguments) {
 		for(RESULT result : results){
 			setCallArgumentsCurrentExecutionStep(callArguments, result);
-			Attendance attendance = result.getResults().getLectureAttendance();
-			Collection<AttendanceMetricValue> attendanceMetricValues = null;
 			if(Boolean.TRUE.equals(isLectureAttendanceAggregatable(result))){
 				/*//Initialize for computation
 				attendance.setAttendedDuration(0l);
@@ -254,21 +254,34 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 					//attendance.setAttendedDuration(attendableDuration-attendance.getMissedDuration());
 				
 				*/
-				
 				//TODO think better
-				Metric numberOfTimePresentMetric = inject(MetricBusiness.class).find(SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT
-						,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT);
-				Metric numberOfTimeAbsentMetric = inject(MetricBusiness.class).find(SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT
-						,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT);
-				
-				Value numberOfTimePresent = inject(MetricValueDao.class).readByMetrics(Arrays.asList(numberOfTimePresentMetric)).iterator().next().getValue();
-				Value numberOfTimeAbsent = inject(MetricValueDao.class).readByMetrics(Arrays.asList(numberOfTimeAbsentMetric)).iterator().next().getValue();
-				Long duration = getAttendableDuration(result);
-				
-				if(numberOfTimeAbsent.getNumberValue().get()!=null){
-					numberOfTimePresent.getNumberValue().set(new BigDecimal(duration).subtract(numberOfTimeAbsent.getNumberValue().get()));
-					inject(ValueBusiness.class).update(numberOfTimePresent);
+				Collection<MetricCollection> attendanceMetricCollections = inject(MetricCollectionBusiness.class)
+						.findByTypeByIdentifiable(inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT), level(result));
+				//MetricCollection attendanceMetricCollection = attendanceMetricCollections.iterator().next();
+				for(MetricCollection attendanceMetricCollection : attendanceMetricCollections){
+					Metric numberOfTimePresentMetric = inject(MetricBusiness.class).find(attendanceMetricCollection.getCode()
+							,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT);
+					Metric numberOfTimeAbsentMetric = inject(MetricBusiness.class).find(attendanceMetricCollection.getCode()
+							,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT);
+					
+					Value numberOfTimePresent = inject(MetricValueDao.class).readByMetrics(Arrays.asList(numberOfTimePresentMetric)).iterator().next().getValue();
+					Value numberOfTimeAbsent = inject(MetricValueDao.class).readByMetrics(Arrays.asList(numberOfTimeAbsentMetric)).iterator().next().getValue();
+					Long duration = getAttendableDuration(result);
+					
+					MeasureBusiness measureBusiness = inject(MeasureBusiness.class);
+					System.out.println("P : "+measureBusiness.computeQuotient(numberOfTimePresent.getMeasure(), (BigDecimal)numberOfTimePresent.get())
+						+" A : "+measureBusiness.computeQuotient(numberOfTimeAbsent.getMeasure(), (BigDecimal)numberOfTimeAbsent.get()));
+					
+					if(numberOfTimeAbsent.getNumberValue().get()!=null){
+						numberOfTimePresent.getNumberValue().set(new BigDecimal(duration).subtract(numberOfTimeAbsent.getNumberValue().get()));
+						System.out.println(measureBusiness.computeQuotient(numberOfTimePresent.getMeasure(), (BigDecimal)numberOfTimePresent.get())+" = "
+						+measureBusiness.computeQuotient(numberOfTimePresent.getMeasure(), new BigDecimal(duration))
+						+" - "+measureBusiness.computeQuotient(numberOfTimeAbsent.getMeasure(), (BigDecimal)numberOfTimeAbsent.get()));
+						inject(ValueBusiness.class).update(numberOfTimePresent);
+						break;
+					}	
 				}
+				
 			}
 			//if(attendanceMetricValues!=null)
 			//	inject(AttendanceMetricValueBusiness.class).update(attendanceMetricValues);
@@ -328,7 +341,7 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 	
 	protected abstract Long getAttendableDuration(RESULT result);
 	
-	protected abstract Long getAttendableDurationUnit(RESULT result);
+	//protected abstract String getAttendableDurationMetricCollectionCode(RESULT result);//TODO to be re think
 	
 	protected abstract LEVEL level(Lecture lecture);
 	

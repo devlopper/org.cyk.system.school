@@ -12,6 +12,7 @@ import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.LevelNameDao;
 import org.cyk.utility.common.computation.ArithmeticOperator;
 
 public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> implements ClassroomSessionDao,Serializable {
@@ -19,7 +20,7 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 	private static final long serialVersionUID = 6306356272165070761L;
 
 	private String readByAcademicSession,readByAcademicSessionByTeacher,readByLevelTimeDivision,readByAcademicSessionByLevelTimeDivisionBySuffix
-		,readByAcademicSessionByLevelGroup,readByAcademicSessionByLevelGroupByTeacher;
+		,readByAcademicSessionByLevelGroup,readByAcademicSessionByLevelGroupByTeacher,readByLevelNameBySuffix,readByLevelName,readWhereSuffixIsNullByLevelName;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
@@ -37,6 +38,17 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision.classroomSession=aClassroomSession AND aSubject.teacher=:teacher"
 				+ " )");
 		registerNamedQuery(readByLevelTimeDivision, _select().where(ClassroomSession.FIELD_LEVEL_TIME_DIVISION));
+		registerNamedQuery(readByLevelNameBySuffix, "SELECT aClassroomSession"
+        		+ " FROM ClassroomSession aClassroomSession WHERE "
+        		+ " aClassroomSession.levelTimeDivision.level.levelName=:levelName"
+        		+ " AND aClassroomSession.suffix = :suffix");
+		registerNamedQuery(readWhereSuffixIsNullByLevelName, "SELECT aClassroomSession"
+        		+ " FROM ClassroomSession aClassroomSession WHERE "
+        		+ " aClassroomSession.levelTimeDivision.level.levelName=:levelName"
+        		+ " AND aClassroomSession.suffix IS NULL");
+		registerNamedQuery(readByLevelName, "SELECT aClassroomSession"
+        		+ " FROM ClassroomSession aClassroomSession WHERE "
+        		+ " aClassroomSession.levelTimeDivision.level.levelName=:levelName");
 	}
 	
 	@Override
@@ -73,7 +85,28 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 				.parameter(PARAMETER_GROUP, levelGroup).parameter(ClassroomSessionDivisionSubject.FIELD_TEACHER, teacher).resultMany();
 	}
 	
+	@Override
+	public Collection<ClassroomSession> readByLevelNameBySuffix(String levelNameCode, String suffix) {
+		return namedQuery(readByLevelNameBySuffix).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
+				.parameter(ClassroomSession.FIELD_SUFFIX, suffix).resultMany();
+	}
+	
+	@Override
+	public Collection<ClassroomSession> readByLevelName(String levelNameCode) {
+		return namedQuery(readByLevelNameBySuffix).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
+				.resultMany();
+	}
+	
+	@Override
+	public Collection<ClassroomSession> readWhereSuffixIsNullByLevelName(String levelNameCode) {
+		return namedQuery(readWhereSuffixIsNullByLevelName).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
+				.resultMany();
+	}
+	
 	private static final String PARAMETER_GROUP = "pgroup";
+
+	
+
 	
 }
  

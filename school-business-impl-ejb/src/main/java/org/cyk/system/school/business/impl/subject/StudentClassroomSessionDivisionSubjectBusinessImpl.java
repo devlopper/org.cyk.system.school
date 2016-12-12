@@ -181,12 +181,6 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 	public Collection<StudentClassroomSessionDivisionSubject> findByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision,Teacher teacher) {
 		return dao.readByClassroomSessionDivisionByTeacher(classroomSessionDivision,teacher);
 	}
-
-	@Override
-	protected Long getAttendableDurationUnit(StudentClassroomSessionDivisionSubject result) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	 
 	/**/
 	

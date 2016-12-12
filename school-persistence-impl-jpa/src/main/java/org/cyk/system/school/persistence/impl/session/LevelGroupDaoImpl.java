@@ -29,7 +29,9 @@ public class LevelGroupDaoImpl extends AbstractDataTreeDaoImpl<LevelGroup,LevelG
 		*/
 		registerNamedQuery(readByAcademicSessionByTeacher, "SELECT levelGroup FROM LevelGroup levelGroup WHERE EXISTS( "
 				+ "SELECT csds FROM ClassroomSessionDivisionSubject csds WHERE csds.classroomSessionDivision.classroomSession.levelTimeDivision.level.group = levelGroup "
-				+ "AND csds.teacher = :teacher AND csds.classroomSessionDivision.classroomSession.academicSession = :academicSession )");
+				+ "AND csds.teacher = :teacher AND csds.classroomSessionDivision.classroomSession.academicSession = :academicSession ) "
+				+ "OR EXISTS ( SELECT cs FROM ClassroomSession cs WHERE cs.levelTimeDivision.level.group = levelGroup "
+				+ "AND cs.coordinator = :teacher AND cs.academicSession = :academicSession )");
 	}
 	
 	@Override

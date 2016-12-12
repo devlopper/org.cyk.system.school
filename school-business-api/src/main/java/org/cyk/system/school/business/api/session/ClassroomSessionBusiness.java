@@ -31,6 +31,7 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	Long convertAttendanceTimeToMillisecond(ClassroomSession classroomSession,BigDecimal duration);
 	Collection<ClassroomSession> findByAcademicSessionByLevelGroup(AcademicSession academicSession,LevelGroup levelGroup);
 	Collection<ClassroomSession> findByAcademicSessionByLevelGroupByTeacher(AcademicSession academicSession,LevelGroup levelGroup,Teacher teacher);
-
+	Collection<ClassroomSession> findByLevelNameBySuffix(String levelNameCode,String suffix);
+	
 	void computeResults(Collection<ClassroomSession> classroomSessions,Collection<StudentClassroomSession> studentClassroomSessions);
 }

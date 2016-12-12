@@ -12,6 +12,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
@@ -144,4 +145,14 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	public Collection<ClassroomSession> findByAcademicSessionByLevelGroupByTeacher(AcademicSession academicSession,LevelGroup levelGroup, Teacher teacher) {
 		return dao.readByAcademicSessionByLevelGroupByTeacher(academicSession,levelGroup,teacher);
 	}
+
+	
+	@Override
+	public Collection<ClassroomSession> findByLevelNameBySuffix(String levelNameCode, String suffix) {
+		if(StringUtils.isNotBlank(suffix))
+			return dao.readByLevelNameBySuffix(levelNameCode,suffix);
+		return dao.readWhereSuffixIsNullByLevelName(levelNameCode);
+	}
+
+	
 }

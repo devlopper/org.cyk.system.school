@@ -107,6 +107,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
 				.read(SchoolConstant.Code.MetricCollectionType._STUDENT)
 				, studentClassroomSessionDivision.getClassroomSessionDivision());
+		//TODO to be re think
 		if(SchoolConstant.Code.LevelName.K1.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel()
 				.getLevelName().getCode())){
 			inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).create(inject(MetricCollectionDao.class)
@@ -115,16 +116,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		}
 			
 		inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).create(metricCollections, Arrays.asList(studentClassroomSessionDivision));
-		/*
-		Collection<ClassroomSessionDivisionStudentsMetricCollection> classroomSessionDivisionStudentsMetricCollections = classroomSessionDivisionStudentsMetricCollectionDao.readByClassroomSessionDivision(classroomSessionDivision);
-		System.out.println("StudentClassroomSessionDivisionBusinessImpl.create() : "+classroomSessionDivisionStudentsMetricCollections);
-		for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : classroomSessionDivisionStudentsMetricCollections)
-			for(Metric metric : metricDao.readByCollection(classroomSessionDivisionStudentsMetricCollection.getMetricCollection())){
-				//CHECK IF BEHAVIOUR OR ATTENDANCE
-				studentClassroomSessionDivision.getResults().getStudentResultsMetricValues()
-					.add(new StudentResultsMetricValue(studentClassroomSessionDivision.getResults(), new MetricValue(metric, null,null,null)));
-			}
-		*/
+		
 		Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeOperationToChildren())){
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
@@ -287,7 +279,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				fileNames.add(file.getName());
 			String fileNamesAsString = StringUtils.join(fileNames,Constant.CHARACTER_COMA.toString());
 			notification.setTitle(fileNamesAsString);
-			notification.setMessage("Ici joint : "+fileNamesAsString);
+			notification.setMessage("Find attached : "+fileNamesAsString);
 			notification.addReceiverIdentifiers(inject(ElectronicMailBusiness.class).findAddresses(studentClassroomSessionDivision.getStudent().getPerson()
 					, Arrays.asList(PersonRelationshipType.FAMILY_FATHER,PersonRelationshipType.FAMILY_MOTHER)));
 			notification.addFiles(files);
@@ -367,12 +359,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override
 	protected Long getAttendableDuration(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		return studentClassroomSessionDivision.getClassroomSessionDivision().getExistencePeriod().getNumberOfMillisecond().get();
-	}
-	
-	@Override
-	protected Long getAttendableDurationUnit(StudentClassroomSessionDivision studentClassroomSessionDivision) {
-		return inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
-				.getAttendanceTimeDivisionType().getDuration();
 	}
 	
 	@Override

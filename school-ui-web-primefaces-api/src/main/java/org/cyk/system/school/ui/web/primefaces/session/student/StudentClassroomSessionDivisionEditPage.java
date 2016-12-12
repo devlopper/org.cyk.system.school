@@ -16,11 +16,15 @@ import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionTypeBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValue;
+import org.cyk.system.root.model.value.Value;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.UIManager;
@@ -59,33 +63,37 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			metricValueCollection = (MetricValueCollection) createMetricValueCollection(metricCollection,new MetricValueCollection.Adapter(){
 				private static final long serialVersionUID = -3872058204105902514L;
 				@Override
-				public Collection<MetricValue> load() { 
-					return inject(MetricValueBusiness.class).findByMetricsByIdentifiables(inject(MetricBusiness.class).findByCollection(lMetricCollection)
-							, Arrays.asList(identifiable));
-				}
-				
-				/*@Override
-				public void instanciated(AbstractItemCollection<Item, MetricValue, SelectItem> itemCollection,Item item) {
-					super.instanciated(itemCollection, item);
-					if(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT.endsWith(lMetricCollection.getType().getCode())){
-						if(getMetricValue(item.getIdentifiable()).getValue().getNumberValue().get()!=null){
-							BigDecimal numberOfMillisecond = getMetricValue(item.getIdentifiable()).getValue().getNumberValue().get();
-							item.setNumberValue(inject(ClassroomSessionBusiness.class).convertAttendanceTimeToDivisionDuration(identifiable.getClassroomSessionDivision()
-									.getClassroomSession(),numberOfMillisecond.longValue()));
-						}
+				public Collection<Value> load() {
+					Collection<Value> values = new ArrayList<>();
+					for(MetricValue metricValue : inject(MetricValueBusiness.class).findByMetricsByIdentifiables(inject(MetricBusiness.class).findByCollection(lMetricCollection)
+							, Arrays.asList(identifiable)))
+						values.add(metricValue.getValue());
+					/*
+					MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria();
+					for(MetricCollectionIdentifiableGlobalIdentifier metricCollectionIdentifiableGlobalIdentifier : inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).findByCriteria(searchCriteria)){
+						metricValues.add(metricCollectionIdentifiableGlobalIdentifier.getValue());
 					}
+					*/
+					return values;
 				}
 				
+			});
+			
+			metricValueCollections.add(metricValueCollection);
+		}
+		
+		MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria();
+		searchCriteria.addIdentifiableGlobalIdentifier(identifiable).addMetricCollectionTypes(inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code
+				.MetricCollectionType._STUDENT));
+		for(MetricCollectionIdentifiableGlobalIdentifier metricCollectionIdentifiableGlobalIdentifier : inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).findByCriteria(searchCriteria)){
+			final MetricCollectionIdentifiableGlobalIdentifier lMetricCollectionIdentifiableGlobalIdentifier = metricCollectionIdentifiableGlobalIdentifier;			
+			metricValueCollection = (MetricValueCollection) createMetricValueCollection(lMetricCollectionIdentifiableGlobalIdentifier,new MetricValueCollection.Adapter(){
+				private static final long serialVersionUID = -3872058204105902514L;
 				@Override
-				public void write(Item item) {
-					super.write(item);
-					if(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT.endsWith(lMetricCollection.getType().getCode())){
-						if(getMetricValue(item.getIdentifiable()).getValue().getNumberValue().get()!=null){
-							item.getIdentifiable().getValue().getNumberValue().set(new BigDecimal(inject(ClassroomSessionBusiness.class).convertAttendanceTimeToMillisecond(identifiable.getClassroomSessionDivision()
-									.getClassroomSession(),item.getNumberValue()==null ? BigDecimal.ZERO : item.getNumberValue())));
-						}
-					}
-				}*/
+				public Collection<Value> load() {
+					return Arrays.asList(lMetricCollectionIdentifiableGlobalIdentifier.getValue());
+				}
+				
 			});
 			
 			metricValueCollections.add(metricValueCollection);
@@ -99,7 +107,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		return (ItemCollection<TYPE, IDENTIFIABLE>) new MetricValueCollection(identifier);
 	}
 	
-	public AbstractMetricValueCollection<MetricValueCollection.Item,MetricValue> getMetricValueCollection(Integer index){
+	public AbstractMetricValueCollection<MetricValueCollection.Item,Value> getMetricValueCollection(Integer index){
 		if(index < metricValueCollections.size())
 			return metricValueCollections.get(index);
 		return null;
