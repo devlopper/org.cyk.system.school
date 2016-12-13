@@ -39,14 +39,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdentifiable,LEVEL_OUTPUT,SUB_LEVEL extends AbstractIdentifiable,SUB_LEVEL_OUTPUT,RESULT extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStudentResultsOutputDetails<LEVEL, RESULT, DETAIL>,DETAIL extends AbstractStudentResult<?, ?>,DETAIL_OUTPUT> extends AbstractConsultPage<LEVEL> implements Serializable {
+public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdentifiable,LEVEL_OUTPUT,SUB_LEVEL extends AbstractIdentifiable,SUB_LEVEL_OUTPUT,RESULT 
+extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStudentResultsOutputDetails<LEVEL, RESULT, DETAIL>,DETAIL extends AbstractStudentResult<?, ?>
+,DETAIL_OUTPUT> extends AbstractConsultPage<LEVEL> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	protected Teacher teacher;
 	protected Boolean isCoordinator;
 	protected List<SUB_LEVEL> subLevels;
-	protected Integer numberOfColumnBeforeLevels = 2;
+	protected Integer numberOfColumnBeforeLevels = 1;
 	
 	protected Table<SUB_LEVEL_OUTPUT> subLevelTable;
 	protected Table<RESULT_OUTPUT> studentTable;
@@ -67,7 +69,8 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 			subLevels = new ArrayList<>(getSubLevels());
 		}
 		
-		broadsheetTable = (Table<RESULT_OUTPUT>) createDetailsTable(getResultOutputClass(), new DetailsConfigurationListener.Table.Adapter<RESULT,RESULT_OUTPUT>(getResultClass(), getResultOutputClass()){
+		broadsheetTable = (Table<RESULT_OUTPUT>) createDetailsTable(getResultOutputClass(), new DetailsConfigurationListener.Table.Adapter<RESULT,RESULT_OUTPUT>(
+				getResultClass(), getResultOutputClass()){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<RESULT> getIdentifiables() {
@@ -98,9 +101,10 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 			
 		});
 		
-		broadsheetTable.getColumnListeners().add(new ColumnAdapter<>(userSession, teacher, isCoordinator, getSubLevelClass(), subLevels, 2, getResultTableBroadsheetFieldNameSet()));		
+		broadsheetTable.getColumnListeners().add(new ColumnAdapter<>(userSession, teacher, isCoordinator, getSubLevelClass(), subLevels, numberOfColumnBeforeLevels
+				, getResultTableBroadsheetFieldNameSet()));		
 		broadsheetTable.getCellListeners().add(getBroadsheetTableCellAdapter(subLevels));
-
+		
 		//if(Boolean.TRUE.equals(isBroadsheetColumnTitleRotated()))
 		//	broadsheetTable.setUpdateStyleClass("broadsheetTableStyleClass");
 	
@@ -219,6 +223,13 @@ public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdenti
 		}
 		
 		protected String getDetailAverageColumnName(Column column){
+			/*System.out.println(subLevels);
+			System.out.println(numberOfColumnBeforeLevels);
+			System.out.println(column.getTitle()+" : "+column.getIndex().intValue());*/
+			//if(column.getIndex().intValue()-numberOfColumnBeforeLevels<0)
+			//	return "NULL";
+			//System.out.println("AbstractClassLevelConsultPage.ColumnAdapter.getDetailAverageColumnName() : "+column.getIndex().intValue()+"-"+numberOfColumnBeforeLevels
+			//		+"="+(column.getIndex().intValue()-numberOfColumnBeforeLevels));
 			return inject(FormatterBusiness.class).format(subLevels.get(column.getIndex().intValue()-numberOfColumnBeforeLevels));
 		}
 		

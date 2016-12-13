@@ -19,7 +19,7 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readByAcademicSession,readByAcademicSessionByTeacher,readByLevelTimeDivision,readByAcademicSessionByLevelTimeDivisionBySuffix
+	private String readByAcademicSession,readByAcademicSessionByTeacher,readByAcademicSessionByCoordinator,readByLevelTimeDivision,readByAcademicSessionByLevelTimeDivisionBySuffix
 		,readByAcademicSessionByLevelGroup,readByAcademicSessionByLevelGroupByTeacher,readByLevelNameBySuffix,readByLevelName,readWhereSuffixIsNullByLevelName;
 	
 	@Override
@@ -30,9 +30,11 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 				.and(ClassroomSession.FIELD_LEVEL_TIME_DIVISION).and(ClassroomSession.FIELD_SUFFIX));
 		registerNamedQuery(readByAcademicSessionByLevelGroup, _select().where(ClassroomSession.FIELD_ACADEMIC_SESSION)
 				.and(commonUtils.attributePath(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, LevelTimeDivision.FIELD_LEVEL,Level.FIELD_GROUP),PARAMETER_GROUP,ArithmeticOperator.EQ));
-		registerNamedQuery(readByAcademicSessionByTeacher, "SELECT aClassroomSession FROM ClassroomSession aClassroomSession WHERE aClassroomSession.academicSession=:academicSession AND EXISTS( "
-				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision.classroomSession=aClassroomSession AND aSubject.teacher=:teacher"
-				+ " )");
+		registerNamedQuery(readByAcademicSessionByTeacher, "SELECT aClassroomSession FROM ClassroomSession aClassroomSession WHERE aClassroomSession.academicSession=:academicSession "
+				+ "AND (aClassroomSession.coordinator=:teacher OR EXISTS(SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision.classroomSession=aClassroomSession AND aSubject.teacher=:teacher"
+				+ " ))");
+		registerNamedQuery(readByAcademicSessionByCoordinator, "SELECT aClassroomSession FROM ClassroomSession aClassroomSession WHERE aClassroomSession.academicSession=:academicSession "
+				+ "AND aClassroomSession.coordinator=:coordinator");
 		registerNamedQuery(readByAcademicSessionByLevelGroupByTeacher, "SELECT aClassroomSession FROM ClassroomSession aClassroomSession WHERE aClassroomSession.academicSession=:academicSession AND "
 				+ " aClassroomSession.levelTimeDivision.level.group = :"+PARAMETER_GROUP+" AND EXISTS( "
 				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision.classroomSession=aClassroomSession AND aSubject.teacher=:teacher"
@@ -62,6 +64,12 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 				.parameter(ClassroomSessionDivisionSubject.FIELD_TEACHER, teacher).resultMany();
 	}
 
+	@Override
+	public Collection<ClassroomSession> readByAcademicSessionByCoordinator(AcademicSession academicSession,Teacher coordinator) {
+		return namedQuery(readByAcademicSessionByCoordinator).parameter(ClassroomSession.FIELD_ACADEMIC_SESSION, academicSession)
+				.parameter(ClassroomSession.FIELD_COORDINATOR, coordinator).resultMany();
+	}
+	
 	@Override
 	public Collection<ClassroomSession> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision) {
 		return namedQuery(readByLevelTimeDivision).parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision).resultMany();

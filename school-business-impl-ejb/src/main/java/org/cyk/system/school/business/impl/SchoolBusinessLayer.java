@@ -552,7 +552,16 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		
 		instanciateRoleUniformResourceLocator(userRole, uniformResourceLocatorBusiness.instanciateOne("/private/index.jsf",new String[]{})
 				,uniformResourceLocatorBusiness.instanciateOne("/private/file/consultmany.jsf",new String[]{})
-				,uniformResourceLocatorBusiness.instanciateOne("/private/classroomsessiondivision/consult.jsf",new String[]{UniformResourceLocatorParameter.TAB_ID,"school.broadsheet" }));
+				/*,uniformResourceLocatorBusiness.instanciateOne("/private/classroomsessiondivision/consult.jsf"
+						,new String[]{UniformResourceLocatorParameter.TAB_ID,"school.broadsheet" })
+				*/
+				,uniformResourceLocatorBusiness.instanciateOne("/private/classroomsessiondivision/consult.jsf"
+						,new String[]{})
+				,uniformResourceLocatorBusiness.instanciateOne("/private/__dynamic__/select/selectone.jsf"
+						,new String[]{UniformResourceLocatorParameter.ACTION_IDENTIFIER,"auscsdr",UniformResourceLocatorParameter.CLASS,"ClassroomSessionDivision" })
+				,uniformResourceLocatorBusiness.instanciateOne("/private/__dynamic__/select/selectone.jsf"
+						,new String[]{UniformResourceLocatorParameter.ACTION_IDENTIFIER,"accsdbs",UniformResourceLocatorParameter.CLASS,"ClassroomSessionDivision" })
+			);
 		
 		instanciateRoleUniformResourceLocator(managerRole,uniformResourceLocatorBusiness.instanciateManyCrud(Student.class)
 				,uniformResourceLocatorBusiness.instanciateManyCrud(Teacher.class)
@@ -568,6 +577,12 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				,uniformResourceLocatorBusiness.instanciateManyBusinessCrud(StudentClassroomSessionDivision.class, Boolean.FALSE, Boolean.TRUE, Boolean.TRUE,null, null, null)
 				,uniformResourceLocatorBusiness.instanciateManyBusinessCrud(StudentClassroomSessionDivisionSubject.class, Boolean.FALSE, Boolean.TRUE, Boolean.TRUE,Boolean.TRUE, null, null)
 				,uniformResourceLocatorBusiness.instanciateManyBusinessCrud(Evaluation.class, Boolean.FALSE, Boolean.TRUE, Boolean.TRUE,null, null, null));
+		
+		///private/__dynamic__/select/selectone.jsf?actid=auscsdr&clazz=ClassroomSessionDivision
+
+		///private/classroomsessiondivision/consult.jsf?clazz=ClassroomSessionDivision&identifiable=1060&crud=read
+
+		///private/__dynamic__/select/selectone.jsf?actid=accsdbs&clazz=ClassroomSessionDivision
 		
 		//UniformResourceLocator classroomSessionDivisionUpdateStudentResults = new UniformResourceLocator("/private/classroomsessiondivision/updatestudentresults.jsf");
 		//UniformResourceLocator classroomSessionDivisionUpdateStudentReport = new UniformResourceLocator("/private/classroomsessiondivision/updatestudentreport.jsf");

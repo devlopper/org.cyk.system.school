@@ -7,12 +7,11 @@ import java.util.Collection;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-
 import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.root.model.party.person.JobTitle;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.party.person.PersonTitle;
@@ -56,6 +55,8 @@ import org.cyk.ui.web.primefaces.page.AbstractBusinessEntityFormOnePage;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
 import org.primefaces.model.TreeNode;
+
+import lombok.Getter;
 
 @Named @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolWebManager.DEPLOYMENT_ORDER) @Getter
 public class SchoolWebManager extends AbstractPrimefacesManager implements Serializable {
@@ -126,18 +127,18 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		
 		systemMenu.getReferenceEntities().add(getControlPanelCommandable(userSession, null));
 		
-		initialiseNavigatorTree(userSession);
+		//initialiseNavigatorTree(userSession);
 		return systemMenu;
 	}
 	
 	public void configureBroadSheetTable(Table<?> table){
 		
 	}
-	
+	/*
 	@Override
 	public void initialiseNavigatorTree(UserSession userSession) {
 		//userSession.setNavigatorTree(getNavigator(TreeNode.class,HierarchyNode.class,LevelGroup.class,userSession));
-	}
+	}*/
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -358,18 +359,24 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	public void initialiseSelectClassroomSession(final AbstractBusinessEntityFormOnePage<?> page,final String classroomSessionFieldName,final String classroomSessionDivisionFieldName
 			,final String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName) {
-		
+		String actionIdentifier = webManager.getRequestParameter(UniformResourceLocatorParameter.ACTION_IDENTIFIER);
 		Collection<ClassroomSession> classroomSessions = null;
 		AcademicSession academicSession = inject(AcademicSessionBusiness.class).findCurrent(null);
 		final Teacher teacher = page.getUserSession().getUserAccount().getUser() instanceof Person 
 				? inject(TeacherBusiness.class).findByPerson((Person) page.getUserSession().getUserAccount().getUser()) : null;
 		
 		if(!Boolean.TRUE.equals(page.getUserSession().getIsManager()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
-			classroomSessions = teacher==null?null:inject(ClassroomSessionBusiness.class).findByAcademicSessionByTeacher(academicSession,teacher);
+			if(teacher==null)
+				;
+			else{
+				if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults().equals(actionIdentifier))
+					classroomSessions = inject(ClassroomSessionBusiness.class).findByAcademicSessionByCoordinator(academicSession,teacher);
+				else
+					classroomSessions = inject(ClassroomSessionBusiness.class).findByAcademicSessionByTeacher(academicSession,teacher);
+			}
 		}else {
 			classroomSessions = inject(ClassroomSessionBusiness.class).findByAcademicSession(academicSession);
 		}
-		
 		//page.setChoices(classroomSessionFieldName, classroomSessions);
 		
 		selectClassroomSession(page, teacher, (ClassroomSession) page.setChoicesAndGetAutoSelected(classroomSessionFieldName, classroomSessions), classroomSessionFieldName, classroomSessionDivisionFieldName

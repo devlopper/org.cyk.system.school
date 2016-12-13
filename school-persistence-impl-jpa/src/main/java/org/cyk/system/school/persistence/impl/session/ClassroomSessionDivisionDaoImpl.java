@@ -30,9 +30,9 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
         super.namedQueriesInitialisation(); 
         registerNamedQuery(readByClassroomSession, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
         registerNamedQuery(readByClassroomSessionByTeacher, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE"
-        		+ " aClassroomSessionDivision.classroomSession=:classroomSession AND EXISTS( "
+        		+ " aClassroomSessionDivision.classroomSession=:classroomSession AND ( aClassroomSessionDivision.classroomSession.coordinator=:teacher OR EXISTS( "
 				+ " SELECT aSubject FROM ClassroomSessionDivisionSubject aSubject WHERE aSubject.classroomSessionDivision=aClassroomSessionDivision"
-				+ " AND aSubject.teacher=:teacher"
+				+ " AND aSubject.teacher=:teacher)"
 				+ " )");
         registerNamedQuery(readByClassroomSessionByIndexByTeacher, "SELECT aClassroomSessionDivision FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
         		+ " aClassroomSessionDivision.classroomSession=:classroomSession AND aClassroomSessionDivision.globalIdentifier.orderNumber=:pindex AND EXISTS( "

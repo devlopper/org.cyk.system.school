@@ -20,6 +20,7 @@ import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiable
 import org.cyk.system.root.business.api.mathematics.MetricCollectionTypeBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValue;
@@ -67,13 +68,8 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 					Collection<Value> values = new ArrayList<>();
 					for(MetricValue metricValue : inject(MetricValueBusiness.class).findByMetricsByIdentifiables(inject(MetricBusiness.class).findByCollection(lMetricCollection)
 							, Arrays.asList(identifiable)))
-						values.add(metricValue.getValue());
-					/*
-					MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria();
-					for(MetricCollectionIdentifiableGlobalIdentifier metricCollectionIdentifiableGlobalIdentifier : inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).findByCriteria(searchCriteria)){
-						metricValues.add(metricCollectionIdentifiableGlobalIdentifier.getValue());
-					}
-					*/
+						if(!RootConstant.Code.getRelativeCode(metricValue.getMetric()).equals(SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT))
+							values.add(metricValue.getValue());
 					return values;
 				}
 				

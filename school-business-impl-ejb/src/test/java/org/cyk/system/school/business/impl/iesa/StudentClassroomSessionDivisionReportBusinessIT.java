@@ -5,11 +5,7 @@ import java.util.Arrays;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
-import org.cyk.system.root.model.value.Value;
-import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
-import org.cyk.system.root.persistence.api.value.ValueDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
@@ -76,7 +72,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     		,{SchoolConstant.Code.LevelName.K2,null,1l}
     		,{SchoolConstant.Code.LevelName.K3,null,1l}
     		,{SchoolConstant.Code.LevelName.G1,"A",1l}
-    	}, Boolean.FALSE, Boolean.FALSE);
+    	}, Boolean.TRUE, Boolean.FALSE);
     	
     	/*
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{

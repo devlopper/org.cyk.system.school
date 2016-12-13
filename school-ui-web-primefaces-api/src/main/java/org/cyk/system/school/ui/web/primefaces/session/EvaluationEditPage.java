@@ -12,9 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
@@ -25,6 +22,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
+import org.cyk.ui.api.command.menu.AbstractSystemMenuBuilder;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
@@ -39,6 +37,9 @@ import org.cyk.utility.common.annotation.user.interfaces.InputCalendar;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
@@ -132,11 +133,13 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		setChoices(Form.FIELD_TYPE, inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void create() {
 		identifiable.setStudentSubjectEvaluations(markCollection.getIdentifiables());
 		super.create();
-		schoolWebManager.initialiseNavigatorTree(userSession);
+		//schoolWebManager.initialiseNavigatorTree(userSession);
+		AbstractSystemMenuBuilder.DEFAULT.initialiseNavigatorTree(userSession);//TODO do it well
 	}
 	
 	@Override
@@ -144,10 +147,12 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		inject(EvaluationBusiness.class).save(identifiable,markCollection.getIdentifiables());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void delete() {
 		super.delete();
-		schoolWebManager.initialiseNavigatorTree(userSession);
+		//schoolWebManager.initialiseNavigatorTree(userSession);
+		AbstractSystemMenuBuilder.DEFAULT.initialiseNavigatorTree(userSession);//TODO do it well
 	}
 	
 	@Override

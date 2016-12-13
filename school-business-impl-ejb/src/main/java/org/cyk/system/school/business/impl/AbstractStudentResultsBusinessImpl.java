@@ -19,8 +19,8 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MetricBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
-import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.api.value.ValueBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.AbstractIdentifiable;
@@ -37,7 +37,6 @@ import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.root.persistence.api.event.EventMissedDao;
 import org.cyk.system.root.persistence.api.event.EventPartyDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
-import org.cyk.system.root.persistence.api.mathematics.MetricValueDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.AbstractStudentResult;
@@ -264,22 +263,29 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 					Metric numberOfTimeAbsentMetric = inject(MetricBusiness.class).find(attendanceMetricCollection.getCode()
 							,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT);
 					
-					Value numberOfTimePresent = inject(MetricValueDao.class).readByMetrics(Arrays.asList(numberOfTimePresentMetric)).iterator().next().getValue();
-					Value numberOfTimeAbsent = inject(MetricValueDao.class).readByMetrics(Arrays.asList(numberOfTimeAbsentMetric)).iterator().next().getValue();
+					Value numberOfTimePresent = inject(MetricValueBusiness.class).findByMetricsByIdentifiables(Arrays.asList(numberOfTimePresentMetric)
+							,Arrays.asList(result)).iterator().next().getValue();
+					Value numberOfTimeAbsent = inject(MetricValueBusiness.class).findByMetricsByIdentifiables(Arrays.asList(numberOfTimeAbsentMetric)
+							,Arrays.asList(result)).iterator().next().getValue();
 					Long duration = getAttendableDuration(result);
 					
-					MeasureBusiness measureBusiness = inject(MeasureBusiness.class);
-					System.out.println("P : "+measureBusiness.computeQuotient(numberOfTimePresent.getMeasure(), (BigDecimal)numberOfTimePresent.get())
-						+" A : "+measureBusiness.computeQuotient(numberOfTimeAbsent.getMeasure(), (BigDecimal)numberOfTimeAbsent.get()));
+					//MeasureBusiness measureBusiness = inject(MeasureBusiness.class);
+					//System.out.println("P : "+measureBusiness.computeQuotient(numberOfTimePresent.getMeasure(), (BigDecimal)numberOfTimePresent.get())
+					//	+" A : "+measureBusiness.computeQuotient(numberOfTimeAbsent.getMeasure(), (BigDecimal)numberOfTimeAbsent.get()));
+					/*
+					if(numberOfTimePresent.getNumberValue().get()==null)	
+						numberOfTimePresent.getNumberValue().set(BigDecimal.ZERO);
 					
+					if(numberOfTimeAbsent.getNumberValue().get()==null)	
+						numberOfTimeAbsent.getNumberValue().set(BigDecimal.ZERO);
+					*/
 					if(numberOfTimeAbsent.getNumberValue().get()!=null){
 						numberOfTimePresent.getNumberValue().set(new BigDecimal(duration).subtract(numberOfTimeAbsent.getNumberValue().get()));
-						System.out.println(measureBusiness.computeQuotient(numberOfTimePresent.getMeasure(), (BigDecimal)numberOfTimePresent.get())+" = "
-						+measureBusiness.computeQuotient(numberOfTimePresent.getMeasure(), new BigDecimal(duration))
-						+" - "+measureBusiness.computeQuotient(numberOfTimeAbsent.getMeasure(), (BigDecimal)numberOfTimeAbsent.get()));
 						inject(ValueBusiness.class).update(numberOfTimePresent);
-						break;
+						//break;
 					}	
+					
+					break;
 				}
 				
 			}

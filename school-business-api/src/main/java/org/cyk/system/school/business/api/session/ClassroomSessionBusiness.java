@@ -18,6 +18,7 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 
 	Collection<ClassroomSession> findByAcademicSession(AcademicSession academicSession);
 	Collection<ClassroomSession> findByAcademicSessionByTeacher(AcademicSession academicSession,Teacher teacher);
+	Collection<ClassroomSession> findByAcademicSessionByCoordinator(AcademicSession academicSession, Teacher coordinator);
 	
 	Collection<ClassroomSession> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 	
@@ -34,4 +35,5 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	Collection<ClassroomSession> findByLevelNameBySuffix(String levelNameCode,String suffix);
 	
 	void computeResults(Collection<ClassroomSession> classroomSessions,Collection<StudentClassroomSession> studentClassroomSessions);
+	
 }

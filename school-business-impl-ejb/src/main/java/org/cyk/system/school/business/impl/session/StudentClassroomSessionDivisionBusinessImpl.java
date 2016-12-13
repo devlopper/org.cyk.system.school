@@ -19,6 +19,8 @@ import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.file.FileRepresentationTypeBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
+import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
+import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricValueIdentifiableGlobalIdentifierBusiness;
@@ -146,6 +148,16 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments,ServiceCallArguments arguments) {
 		if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null) || !Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) ){
+			
+			FormatArguments formatArguments = new FormatArguments();
+			formatArguments.setIsRank(Boolean.TRUE);
+			formatArguments.setType(CharacterSet.LETTER);
+			String nameFormat = numberBusiness.format(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber(), formatArguments).toUpperCase();
+			nameFormat += " TERM , %s REPORT SHEET";
+			
+			reportArguments.setIdentifiableName(String.format(nameFormat, studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
+					.getLevelTimeDivision().getLevel().getLevelName().getName().toUpperCase()));
+			
 			createReportFile(reportArguments);
 			genericDao.update(studentClassroomSessionDivision.getResults());
 			logIdentifiable("Report built",studentClassroomSessionDivision);
@@ -202,7 +214,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				reportArgumentsBuilder.setReportTemplate(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision
 						.getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate());
 				CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = new CreateReportFileArguments.Builder<>(studentClassroomSessionDivision,reportArgumentsBuilder).build();
-				reportArguments.setIdentifiableName(inject(FormatterBusiness.class).format(studentClassroomSessionDivision));
 				buildReport(studentClassroomSessionDivision,reportArguments);
 			}
 			

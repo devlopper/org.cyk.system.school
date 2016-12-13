@@ -108,7 +108,7 @@ public class ClassroomSessionDivisionConsultPage extends AbstractClassLevelConsu
 	
 	@Override
 	protected CellAdapter<ClassroomSessionDivisionSubject, StudentClassroomSessionDivisionSubject, StudentClassroomSessionDivisionDetails> getBroadsheetTableCellAdapter(List<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects) {
-		return new CellAdapter<ClassroomSessionDivisionSubject, StudentClassroomSessionDivisionSubject, StudentClassroomSessionDivisionDetails>(2,classroomSessionDivisionSubjects) {
+		return new CellAdapter<ClassroomSessionDivisionSubject, StudentClassroomSessionDivisionSubject, StudentClassroomSessionDivisionDetails>(numberOfColumnBeforeLevels,classroomSessionDivisionSubjects) {
 			private static final long serialVersionUID = 7951604788207259255L;
 			@Override
 			protected ClassroomSessionDivisionSubject getSubLevel(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject) {

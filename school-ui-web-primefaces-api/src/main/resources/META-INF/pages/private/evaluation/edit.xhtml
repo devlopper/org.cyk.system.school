@@ -23,7 +23,7 @@
  					
  					<pe:inputNumber id="markValue" value="#{item.value}" required="#{true}" autocomplete="false" binding="#{mark}"
  						minValue="0" maxValue="#{evaluationEditPage.maximumValue}" disabled="#{not item.applicable}"
- 						decimalPlaces="#{evaluationEditPage.decimalPlaces}"  requiredMessage="#{item.names} - #{uiManager.textInputValueRequired('school.mark')}"
+ 						decimalPlaces="#{evaluationEditPage.decimalPlaces}"  requiredMessage="#{item.student} - #{uiManager.textInputValueRequired('school.mark')}"
  						rendered="#{evaluationEditPage.form.editable}"/>
  					<h:outputText value="#{item.valueAsString}" rendered="#{not evaluationEditPage.form.editable}" />
  				</p:column>
