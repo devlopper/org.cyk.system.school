@@ -104,7 +104,7 @@ extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStude
 		broadsheetTable.getColumnListeners().add(new ColumnAdapter<>(userSession, teacher, isCoordinator, getSubLevelClass(), subLevels, numberOfColumnBeforeLevels
 				, getResultTableBroadsheetFieldNameSet()));		
 		broadsheetTable.getCellListeners().add(getBroadsheetTableCellAdapter(subLevels));
-		
+		broadsheetTable.setShowActionsColumn(Boolean.FALSE);
 		//if(Boolean.TRUE.equals(isBroadsheetColumnTitleRotated()))
 		//	broadsheetTable.setUpdateStyleClass("broadsheetTableStyleClass");
 	

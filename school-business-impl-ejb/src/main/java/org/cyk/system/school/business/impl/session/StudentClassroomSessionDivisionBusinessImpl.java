@@ -106,19 +106,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			inject(StudentClassroomSessionBusiness.class).create(studentClassroomSession);
 		}
 		
-		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
-				.read(SchoolConstant.Code.MetricCollectionType._STUDENT)
-				, studentClassroomSessionDivision.getClassroomSessionDivision());
-		//TODO to be re think
-		if(SchoolConstant.Code.LevelName.K1.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel()
-				.getLevelName().getCode())){
-			inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).create(inject(MetricCollectionDao.class)
-					.read(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_EVALUATED), Arrays.asList(studentClassroomSessionDivision)
-					,inject(ValuePropertiesDao.class).read(SchoolConstant.Code.ValueProperties.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT));
-		}
-			
-		inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).create(metricCollections, Arrays.asList(studentClassroomSessionDivision));
-		
 		Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeOperationToChildren())){
 			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
@@ -128,10 +115,27 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		cascade(studentClassroomSessionDivision, studentClassroomSessionDivisionSubjects, Crud.CREATE);
 	}
 	
-	private void cascade(StudentClassroomSessionDivision studentClassroomSessionDivision
-			,Collection<StudentClassroomSessionDivisionSubject> studentSubjects,Crud crud){
-
-		logTrace("Student classroomsession division. {} , {} : {}", studentClassroomSessionDivision.getStudent().getCode(),studentClassroomSessionDivision.getClassroomSessionDivision().getIdentifier(),crud);
+	private void cascade(StudentClassroomSessionDivision studentClassroomSessionDivision,Collection<StudentClassroomSessionDivisionSubject> studentSubjects,Crud crud){
+		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeDao.class)
+				.read(SchoolConstant.Code.MetricCollectionType._STUDENT), studentClassroomSessionDivision.getClassroomSessionDivision());
+		//TODO to be re think
+		if(Crud.CREATE.equals(crud)){
+			if(SchoolConstant.Code.LevelName.K1.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel()
+					.getLevelName().getCode())){
+				inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).create(inject(MetricCollectionDao.class)
+						.read(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_EVALUATED), Arrays.asList(studentClassroomSessionDivision)
+						,inject(ValuePropertiesDao.class).read(SchoolConstant.Code.ValueProperties.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT));
+			}
+				
+			inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).create(metricCollections, Arrays.asList(studentClassroomSessionDivision));	
+		}else if(Crud.DELETE.equals(crud)){
+			if(SchoolConstant.Code.LevelName.K1.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel()
+					.getLevelName().getCode())){
+				inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).delete(inject(MetricCollectionDao.class)
+						.read(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_EVALUATED), Arrays.asList(studentClassroomSessionDivision));
+			}
+			inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).delete(metricCollections, Arrays.asList(studentClassroomSessionDivision));	
+		}
 		
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDao,StudentClassroomSessionDivisionSubjectBusiness>(null,inject(StudentClassroomSessionDivisionSubjectBusiness.class))
 			.operate(studentSubjects, crud);

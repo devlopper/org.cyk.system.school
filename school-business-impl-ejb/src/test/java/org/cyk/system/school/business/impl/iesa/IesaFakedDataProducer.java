@@ -382,7 +382,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     	Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers = new ArrayList<>(); 
     	
     	Long gradeIndex = 0l;
-    	
+    	/*
     	pk = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
     			,metricCollectionIdentifiableGlobalIdentifiers,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision(SchoolConstant.Code.LevelName.PK,"Pre-Kindergarten",levelGroupKindergarten,commonNodeInformationsPk,gradeIndex++) 
@@ -396,7 +396,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_GROSS_MOTOR_SKILLS
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_FINE_MOTOR_SKILLS
     					,SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT},Boolean.FALSE,Boolean.FALSE).iterator().next();
-    	
+    	*/
     	k1 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
     			,metricCollectionIdentifiableGlobalIdentifiers,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision(SchoolConstant.Code.LevelName.K1,"Kindergarten 1",levelGroupKindergarten,commonNodeInformationsK1,gradeIndex++) 
@@ -409,7 +409,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_WORK_HABITS
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SOCIAL_SKILLS
     					,SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT},Boolean.FALSE,Boolean.FALSE).iterator().next();
-    	
+    	/*
     	k2 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
     			,metricCollectionIdentifiableGlobalIdentifiers,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision(SchoolConstant.Code.LevelName.K2,"Kindergarten 2",levelGroupKindergarten,commonNodeInformationsK2K3,gradeIndex++) 
@@ -443,7 +443,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_PHYSICAL_EDUCATION
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WORK_BEHAVIOUR_HABITS
     					,SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT},Boolean.FALSE,Boolean.FALSE).iterator().next();
-    	
+    	*/
     	g1 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
     			,metricCollectionIdentifiableGlobalIdentifiers,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision(SchoolConstant.Code.LevelName.G1,"Grade 1",levelGroupPrimaryLower,commonNodeInformationsG1G3,gradeIndex++),null 
@@ -501,16 +501,12 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     			,g7g12MetricCollections,attendanceMetricCollections,new String[]{"A","B"},Boolean.TRUE,Boolean.FALSE).iterator().next();
     	*/
     	
-    	
-    	
     	flush(ClassroomSession.class, classroomSessionBusiness, classroomSessions);
     	flush(ClassroomSessionDivision.class, classroomSessionDivisionBusiness, classroomSessionDivisions);
     	flush(ClassroomSessionDivisionSubject.class, classroomSessionDivisionSubjectBusiness, classroomSessionDivisionSubjects);
     	flush(ClassroomSessionDivisionSubjectEvaluationType.class, subjectEvaluationTypeBusiness, subjectEvaluationTypes);
     	flush(MetricCollectionIdentifiableGlobalIdentifier.class, inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class)
     			, metricCollectionIdentifiableGlobalIdentifiers);
-    	
-    	
 	}
 	
 	@Override

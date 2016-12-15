@@ -61,9 +61,6 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Override
 	public StudentClassroomSession create(StudentClassroomSession studentClassroomSession) {
 		super.create(studentClassroomSession);
-		logInstanceCreated(studentClassroomSession);
-		//logTrace("Student {} for classroomsession {} registered", studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
-		
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeOperationToChildren())){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
