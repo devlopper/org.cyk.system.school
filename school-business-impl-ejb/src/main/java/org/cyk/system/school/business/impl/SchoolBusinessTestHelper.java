@@ -23,9 +23,9 @@ import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.business.api.value.ValueBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValue;
-import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.model.value.Value;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
@@ -560,7 +560,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		inject(ClassroomSessionBusiness.class).create(customClassroomSession);
 		Collection<ClassroomSessionDivision> customClassroomSessionDivisions = new ArrayList<>();
 		ClassroomSessionDivision customClassroomSessionDivision = new ClassroomSessionDivision(customClassroomSession
-				, timeDivisionTypeDao.read(TimeDivisionType.TRIMESTER), BigDecimal.ONE);
+				, timeDivisionTypeDao.read(RootConstant.Code.TimeDivisionType.TRIMESTER), BigDecimal.ONE);
 		customClassroomSessionDivision.getExistencePeriod().setFromDate(new Date());
 		customClassroomSessionDivision.getExistencePeriod().setToDate(new Date());
 		inject(ClassroomSessionDivisionBusiness.class).create(customClassroomSessionDivision);

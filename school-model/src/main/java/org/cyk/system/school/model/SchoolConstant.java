@@ -36,7 +36,7 @@ public interface SchoolConstant {
 		public static class TimeDivisionType implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String ATTENDANCE = org.cyk.system.root.model.time.TimeDivisionType.DAY; 
+			public static String ATTENDANCE = RootConstant.Code.TimeDivisionType.DAY; 
 		}
 		
 		public static class ValueProperties implements Serializable {
@@ -106,6 +106,29 @@ public interface SchoolConstant {
 			public static String G10 = "G10";
 			public static String G11 = "G11";
 			public static String G12 = "G12";
+			
+		}
+		
+		public static class LevelTimeDivision implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String PK_YEAR_1 = RootConstant.Code.generate(LevelName.PK,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K1_YEAR_1 = RootConstant.Code.generate(LevelName.K1,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K2_YEAR_1 = RootConstant.Code.generate(LevelName.K2,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K3_YEAR_1 = RootConstant.Code.generate(LevelName.K3,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G1_YEAR_1 = RootConstant.Code.generate(LevelName.G1,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G2_YEAR_1 = RootConstant.Code.generate(LevelName.G2,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G3_YEAR_1 = RootConstant.Code.generate(LevelName.G3,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G4_YEAR_1 = RootConstant.Code.generate(LevelName.G4,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G5_YEAR_1 = RootConstant.Code.generate(LevelName.G5,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G6_YEAR_1 = RootConstant.Code.generate(LevelName.G6,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G7_YEAR_1 = RootConstant.Code.generate(LevelName.G7,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G8_YEAR_1 = RootConstant.Code.generate(LevelName.G8,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G9_YEAR_1 = RootConstant.Code.generate(LevelName.G9,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G10_YEAR_1 = RootConstant.Code.generate(LevelName.G10,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G11_YEAR_1 = RootConstant.Code.generate(LevelName.G11,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G12_YEAR_1 = RootConstant.Code.generate(LevelName.G12,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			//public static String G13_YEAR_1 = RootConstant.Code.generate(LevelName.G13,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
 			
 		}
 		

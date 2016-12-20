@@ -24,6 +24,7 @@ import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl
 import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.party.ApplicationBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
@@ -31,7 +32,6 @@ import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.security.Installation;
-import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalDao;
@@ -338,23 +338,23 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				, Boolean.TRUE, "report/iesa/g1g12.jrxml", documentHeaderFile, documentBackgroundImageFile, documentBackgroundImageDraftFile); 
 		
 		String classroomSessionDivisionIndex = "1";
-		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, TimeDivisionType.DAY
-				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
+		CommonNodeInformations commonNodeInformationsPk = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplatePk, RootConstant.Code.TimeDivisionType.DAY
+				, RootConstant.Code.TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
 		
-		CommonNodeInformations commonNodeInformationsK1 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplateK1, TimeDivisionType.DAY
-				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
+		CommonNodeInformations commonNodeInformationsK1 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplateK1, RootConstant.Code.TimeDivisionType.DAY
+				, RootConstant.Code.TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
 		
-		CommonNodeInformations commonNodeInformationsK2K3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplateK2K3, TimeDivisionType.DAY
-				, TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
+		CommonNodeInformations commonNodeInformationsK2K3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(null,null, reportTemplateK2K3, RootConstant.Code.TimeDivisionType.DAY
+				, RootConstant.Code.TimeDivisionType.TRIMESTER,"50", classroomSessionDivisionIndex);
 		
 		CommonNodeInformations commonNodeInformationsG1G3 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(inject(IntervalCollectionDao.class)
 				.read(SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT),inject(IntervalCollectionDao.class)
-				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex);
+				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,RootConstant.Code.TimeDivisionType.DAY, RootConstant.Code.TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex);
 		CommonNodeInformations commonNodeInformationsG4G6 = commonNodeInformationsG1G3;
 		
 		CommonNodeInformations commonNodeInformationsG7G9 = schoolDataProducerHelper.instanciateOneCommonNodeInformations(inject(IntervalCollectionDao.class)
 				.read(SchoolConstant.Code.IntervalCollection.GRADING_SCALE_SECONDARY_STUDENT),inject(IntervalCollectionDao.class)
-				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,TimeDivisionType.DAY, TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex);	
+				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,RootConstant.Code.TimeDivisionType.DAY, RootConstant.Code.TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex);	
 		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
 		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);

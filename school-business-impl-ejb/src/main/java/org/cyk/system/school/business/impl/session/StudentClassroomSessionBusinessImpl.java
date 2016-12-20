@@ -89,7 +89,10 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 			//logTrace("Moving student from classroom session {} to {}", currentStudentClassroomSession.getClassroomSession(),studentClassroomSession.getClassroomSession());
 			
 		}
-	
+		if(studentClassroomSession.getDetailCollection()!=null && studentClassroomSession.getDetailCollection().isSynchonizationEnabled()){
+			inject(StudentClassroomSessionDivisionBusiness.class).update(studentClassroomSession.getDetailCollection().getCollection());
+		}
+		
 		if(studentClassroomSession.getTuitionSale()!=null && studentClassroomSession.getTuitionSale().getIdentifier()==null){
 			inject(SaleBusiness.class).create(studentClassroomSession.getTuitionSale());
 		}

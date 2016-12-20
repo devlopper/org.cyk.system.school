@@ -20,7 +20,7 @@ public class StudentClassroomSessionDivisionSubjectEvaluation extends AbstractId
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne @NotNull private Evaluation evaluation;
-	@ManyToOne @NotNull private StudentClassroomSessionDivisionSubject studentSubject;
+	@ManyToOne @NotNull private StudentClassroomSessionDivisionSubject studentSubject;//TODO must be renamed to studentClassroomSessionDivisionSubject
 	@Column(precision=5,scale=FLOAT_SCALE) @NotNull private BigDecimal value;
 
 	public StudentClassroomSessionDivisionSubjectEvaluation(Evaluation evaluation,StudentClassroomSessionDivisionSubject studentSubject, BigDecimal value) {
@@ -29,13 +29,13 @@ public class StudentClassroomSessionDivisionSubjectEvaluation extends AbstractId
 		this.studentSubject = studentSubject;
 		this.value = value;
 	}
-	/*
+	
 	@Override
 	public String toString() {
-		return subjectEvaluation.getType().getSubject().getIdentifier()+":"+studentSubject.getStudent().getCode()+":"+value;
-	}*/
+		return evaluation.getClassroomSessionDivisionSubjectEvaluationType()+":"+studentSubject.getStudent().getCode()+":"+value;
+	}
 	
 	public static final String FIELD_EVALUATION = "evaluation";
-	public static final String FIELD_STUDENT_SUBJECT = "studentSubject";
+	public static final String FIELD_STUDENT_SUBJECT = "studentSubject"; //TODO must be renamed to studentClassroomSessionDivisionSubject
 	public static final String FIELD_VALUE = "value";
 }

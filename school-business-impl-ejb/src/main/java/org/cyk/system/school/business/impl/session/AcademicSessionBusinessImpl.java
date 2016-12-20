@@ -10,10 +10,11 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
+import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.impl.time.AbstractIdentifiablePeriodBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.LevelName;
@@ -24,8 +25,6 @@ import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
 public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusinessImpl<AcademicSession, AcademicSessionDao> implements AcademicSessionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
-	
-	@Inject private TimeDivisionTypeBusiness timeDivisionTypeBusiness;
 	
 	@Inject
 	public AcademicSessionBusinessImpl(AcademicSessionDao dao) {
@@ -50,13 +49,14 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public BigDecimal convertAttendanceTimeToDivisionDuration(Long millisecond) {
-		return millisecond==null?BigDecimal.ZERO
-				:timeDivisionTypeBusiness.convertToDivisionDuration(findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType(), millisecond);
+		TimeDivisionType timeDivisionType = findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType();
+		return millisecond == null ? BigDecimal.ZERO : inject(MeasureBusiness.class).computeQuotient(timeDivisionType.getMeasure(), new BigDecimal(millisecond));
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Long convertAttendanceTimeToMillisecond(BigDecimal duration) {
-		return duration==null?0:timeDivisionTypeBusiness.convertToMillisecond(findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType(), duration);
+		TimeDivisionType timeDivisionType = findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType();
+		return duration == null ? 0 : inject(MeasureBusiness.class).computeMultiple(timeDivisionType.getMeasure(), duration).longValue();
 	}
 	
 	@Override

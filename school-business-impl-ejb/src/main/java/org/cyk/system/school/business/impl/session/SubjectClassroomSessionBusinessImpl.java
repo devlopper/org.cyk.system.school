@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
@@ -74,6 +75,11 @@ public class SubjectClassroomSessionBusinessImpl extends AbstractTypedBusinessSe
 	@Override
 	public SubjectClassroomSession findBySubjectByClassroomSession(Subject subject, ClassroomSession classroomSession) {
 		return dao.readBySubjectByClassroomSession(subject, classroomSession);
+	}
+
+	@Override
+	public Collection<SubjectClassroomSession> findByClassroomSessionByStudent(ClassroomSession classroomSession,Student student) {
+		return dao.readByClassroomSessionByStudent(classroomSession,student);
 	}
 
 	

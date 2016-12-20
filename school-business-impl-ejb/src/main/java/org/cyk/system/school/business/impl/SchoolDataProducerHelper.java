@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.impl.RootDataProducerHelper;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
@@ -111,7 +112,8 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
 			,Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects
 			,String[] metricCollectionCodes,Boolean studentEvaluationRequired,Boolean studentRankable,Long orderNumber){
-		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,TimeDivisionType.TRIMESTER)
+		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class
+				,RootConstant.Code.TimeDivisionType.TRIMESTER)
     			,new BigDecimal("1"));
 		classroomSessionDivision.setStudentEvaluationRequired(studentEvaluationRequired);
 		classroomSessionDivision.setStudentRankable(studentRankable);
@@ -169,8 +171,8 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		commonNodeInformations.setAggregateAttendance(Boolean.FALSE);
 		LevelName _levelName = RootDataProducerHelper.getInstance().createEnumeration(LevelName.class,levelCode,levelName);
 		_levelName.setNodeInformations(commonNodeInformations);
-		return RootDataProducerHelper.getInstance().create(new LevelTimeDivision(RootDataProducerHelper.getInstance().create(new Level(levelGroup,_levelName))
-				, RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,TimeDivisionType.YEAR),index));
+		return RootDataProducerHelper.getInstance().create(new LevelTimeDivision(null,RootDataProducerHelper.getInstance().create(new Level(levelGroup,_levelName))
+				, RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,RootConstant.Code.TimeDivisionType.YEAR),index));
 	}
 	
 	/**/

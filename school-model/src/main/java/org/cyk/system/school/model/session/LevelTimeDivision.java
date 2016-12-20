@@ -23,10 +23,11 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	
 	@ManyToOne @NotNull private TimeDivisionType timeDivisionType;
 
-	public LevelTimeDivision(Level level, TimeDivisionType timeDivisionType,Long orderNumber) {
+	public LevelTimeDivision(String code,Level level, TimeDivisionType timeDivisionType,Long orderNumber) {
 		super();
 		this.level = level;
 		this.timeDivisionType = timeDivisionType;
+		this.setCode(code);
 		this.getGlobalIdentifierCreateIfNull().setOrderNumber(orderNumber);
 	}
 	

@@ -15,16 +15,21 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
-import org.cyk.system.root.business.api.time.TimeDivisionTypeBusiness;
+import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
+import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
+import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
@@ -46,6 +51,13 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
 			return new Object[]{classroomSession.getLevelTimeDivision(),classroomSession.getSuffix()};
 		return super.getPropertyValueTokens(classroomSession, name);
+	}
+	
+	@Override
+	protected void afterCreate(ClassroomSession classroomSession) {
+		super.afterCreate(classroomSession);
+		if(classroomSession.getDivisions().isSynchonizationEnabled())
+			inject(ClassroomSessionDivisionBusiness.class).create(classroomSession.getDivisions().getCollection());
 	}
 
 	@Override
@@ -127,13 +139,15 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public BigDecimal convertAttendanceTimeToDivisionDuration(ClassroomSession classroomSession,Long millisecond) {
+		TimeDivisionType timeDivisionType = findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType();
 		return millisecond==null?BigDecimal.ZERO
-				:inject(TimeDivisionTypeBusiness.class).convertToDivisionDuration(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), millisecond);
+				:inject(MeasureBusiness.class).computeQuotient(timeDivisionType.getMeasure(), new BigDecimal(millisecond));
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Long convertAttendanceTimeToMillisecond(ClassroomSession classroomSession,BigDecimal duration) {
-		return duration==null?0l:inject(TimeDivisionTypeBusiness.class).convertToMillisecond(findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType(), duration);
+		TimeDivisionType timeDivisionType = findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType();
+		return duration==null?0l:inject(MeasureBusiness.class).computeMultiple(timeDivisionType.getMeasure(), duration).longValue();
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
@@ -151,13 +165,35 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		return dao.readByAcademicSessionByLevelGroupByTeacher(academicSession,levelGroup,teacher);
 	}
 
-	
-	@Override
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<ClassroomSession> findByLevelNameBySuffix(String levelNameCode, String suffix) {
 		if(StringUtils.isNotBlank(suffix))
 			return dao.readByLevelNameBySuffix(levelNameCode,suffix);
 		return dao.readWhereSuffixIsNullByLevelName(levelNameCode);
 	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<ClassroomSession> findByLevelName(String levelNameCode) {
+		return findByLevelNameBySuffix(levelNameCode,null);
+	}
 
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Collection<ClassroomSession> findByCriteria(SearchCriteria searchCriteria) {
+		if(searchCriteria.getAcademicSessions().isEmpty())
+			searchCriteria.addAcademicSession(inject(AcademicSessionBusiness.class).findCurrent(null));
+		return dao.readByCriteria(searchCriteria);
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+	public Long countByCriteria(SearchCriteria searchCriteria) {
+		return dao.countByCriteria(searchCriteria);
+	}
+	
+	@Override
+	protected void prepareFindByCriteria(AbstractFieldValueSearchCriteriaSet searchCriteria) {
+		super.prepareFindByCriteria(searchCriteria);
+		if(((SearchCriteria)searchCriteria).getAcademicSessions().isEmpty())
+			((SearchCriteria)searchCriteria).addAcademicSession(inject(AcademicSessionBusiness.class).findCurrent(null));
+	}
 	
 }

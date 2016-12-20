@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.root.model.time.ScheduleCollection;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
@@ -45,6 +46,9 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	
 	@Embedded private NodeResults results = new NodeResults();
 	
+	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivisionSubjectEvaluationType> evaluationTypes;
+	private Boolean autoCreateStudentClassroomSessionDivisionSubject;
+	
 	/**
 	 * The time table
 	 */
@@ -67,9 +71,15 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 		return results;
 	}
 	
+	public IdentifiableRuntimeCollection<ClassroomSessionDivisionSubjectEvaluationType> getEvaluationTypes(){
+		if(evaluationTypes == null)
+			evaluationTypes = new IdentifiableRuntimeCollection<>();
+		return evaluationTypes;
+	}
+	
 	@Override
 	public String toString() {
-		return subject.toString();
+		return classroomSessionDivision.getCode()+"|"+subject.getCode();
 	}
 	
 	@Override

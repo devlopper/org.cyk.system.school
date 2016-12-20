@@ -16,4 +16,5 @@ public class LevelGroupTypeBusinessImpl extends AbstractDataTreeTypeBusinessImpl
         super(dao);
     } 
 
+	
 }

@@ -283,6 +283,12 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>subjectClassroomSessionAssignToStudentClassroomSessionView</from-outcome>
+			<to-view-id>/private/subjectclassroomsession/assigntostudentclassroomsession.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>
 
 </faces-config>

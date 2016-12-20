@@ -37,9 +37,6 @@ public class ClassroomSessionDivisionSubjectEvaluationType extends AbstractIdent
 		this.maximumValue = maximumValue;
 	}
 	
-	public static final String FIELD_SUBJECT = "classroomSessionDivisionSubject";
-	public static final String FIELD_TYPE = "evaluationType";
-	
 	@Override
 	public String getUiString() {
 		return evaluationType.getUiString();
@@ -57,4 +54,6 @@ public class ClassroomSessionDivisionSubjectEvaluationType extends AbstractIdent
 	private static final String LOG_FORMAT = ClassroomSessionDivisionSubjectEvaluationType.class.getSimpleName()+"(SUBJECT=%s TYPE=%s)";
 	
 	public static final String FIELD_NUMBER_OF_EVALUATIONS = "numberOfEvaluations";
+	public static final String FIELD_SUBJECT = "classroomSessionDivisionSubject";
+	public static final String FIELD_TYPE = "evaluationType";
 }

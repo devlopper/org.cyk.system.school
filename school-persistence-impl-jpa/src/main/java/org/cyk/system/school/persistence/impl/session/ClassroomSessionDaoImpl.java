@@ -3,10 +3,13 @@ package org.cyk.system.school.persistence.impl.session;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
+import org.cyk.system.root.persistence.impl.QueryWrapper;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
@@ -51,6 +54,11 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 		registerNamedQuery(readByLevelName, "SELECT aClassroomSession"
         		+ " FROM ClassroomSession aClassroomSession WHERE "
         		+ " aClassroomSession.levelTimeDivision.level.levelName=:levelName");
+		
+		registerNamedQuery(readByCriteria, _select().whereAttributeIdentifierIn(ClassroomSession.FIELD_ACADEMIC_SESSION)
+				.and().whereAttributeIdentifierIn(ClassroomSession.FIELD_LEVEL_TIME_DIVISION)
+				.and().where(ClassroomSession.FIELD_SUFFIX, ArithmeticOperator.LIKE)
+				);
 	}
 	
 	@Override
@@ -111,9 +119,36 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 				.resultMany();
 	}
 	
+	@Override
+	public Collection<ClassroomSession> readDuplicates(ClassroomSession classroomSession) {
+		return null;//readByCriteria(new SearchCriteria().add);
+	}
+	
+	@Override
+	protected void applySearchCriteriaParameters(QueryWrapper<?> queryWrapper,AbstractFieldValueSearchCriteriaSet searchCriteria) {
+		super.applySearchCriteriaParameters(queryWrapper, searchCriteria);
+		queryWrapper.parameterAttributeIdentifiers(ClassroomSession.FIELD_ACADEMIC_SESSION, ((SearchCriteria)searchCriteria).getAcademicSessions());
+		queryWrapper.parameterAttributeIdentifiers(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, ((SearchCriteria)searchCriteria).getLevelTimeDivisions());
+		queryWrapper.parameterLike(ClassroomSession.FIELD_SUFFIX, ((SearchCriteria)searchCriteria).getSuffixes().iterator().next());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<ClassroomSession> readByCriteria(SearchCriteria criteria) {
+		QueryWrapper<?> queryWrapper = namedQuery(readByCriteria);
+		applySearchCriteriaParameters(queryWrapper, criteria);
+		return (Collection<ClassroomSession>) queryWrapper.resultMany();
+	}
+
+	@Override
+	public Long countByCriteria(SearchCriteria criteria) {
+		QueryWrapper<?> queryWrapper = countNamedQuery(countByCriteria);
+		applySearchCriteriaParameters(queryWrapper, criteria);
+		return (Long) queryWrapper.resultOne();
+	}
+	
 	private static final String PARAMETER_GROUP = "pgroup";
 
-	
 
 	
 }

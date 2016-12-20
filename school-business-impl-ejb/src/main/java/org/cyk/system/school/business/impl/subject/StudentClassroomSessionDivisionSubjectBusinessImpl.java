@@ -23,6 +23,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
+import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
@@ -41,24 +42,29 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 	}
 	
 	@Override
-	public StudentClassroomSessionDivisionSubject create(StudentClassroomSessionDivisionSubject studentSubject) {
-		studentSubject = super.create(studentSubject);
-		Student student = studentSubject.getStudent();
-		ClassroomSessionDivision classroomSessionDivision = studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
+	protected void beforeCreate(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject) {
+		super.beforeCreate(studentClassroomSessionDivisionSubject);
+		exceptionUtils().exists(dao.readByStudentByClassroomSessionDivisionBySubject(studentClassroomSessionDivisionSubject.getStudent()
+				, studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision()
+				, studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject().getSubject()));
+	}
+	
+	@Override
+	protected void afterCreate(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject) {
+		super.afterCreate(studentClassroomSessionDivisionSubject);
+		Student student = studentClassroomSessionDivisionSubject.getStudent();
+		ClassroomSessionDivision classroomSessionDivision = studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision();
 		
-		if(Boolean.TRUE.equals(studentSubject.getCascadeOperationToMaster())){
+		if(Boolean.TRUE.equals(studentClassroomSessionDivisionSubject.getCascadeOperationToMaster())){
 			StudentClassroomSessionDivision studentClassroomSessionDivision = studentClassroomSessionDivisionDao.readByStudentByClassroomSessionDivision(student, classroomSessionDivision);
 			if(studentClassroomSessionDivision==null){
 				studentClassroomSessionDivision = new StudentClassroomSessionDivision(student, classroomSessionDivision);
-				studentClassroomSessionDivision.setCascadeOperationToChildren(studentSubject.getCascadeOperationToChildren());
-				studentClassroomSessionDivision.setCascadeOperationToMaster(studentSubject.getCascadeOperationToMaster());
+				studentClassroomSessionDivision.setCascadeOperationToChildren(studentClassroomSessionDivisionSubject.getCascadeOperationToChildren());
+				studentClassroomSessionDivision.setCascadeOperationToMaster(studentClassroomSessionDivisionSubject.getCascadeOperationToMaster());
 				inject(StudentClassroomSessionDivisionBusiness.class).create(studentClassroomSessionDivision);
 			}
 		}
-		cascade(studentSubject,Crud.CREATE);
-		logInstanceCreated(studentSubject);
-		//logTrace("Student {} for subject {} registered", studentSubject.getStudent(),studentSubject.getClassroomSessionDivisionSubject());
-		return studentSubject;
+		cascade(studentClassroomSessionDivisionSubject,Crud.CREATE);
 	}
 	
 	private void cascade(StudentClassroomSessionDivisionSubject studentSubject,Crud crud){
@@ -180,6 +186,16 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentClassroomSessionDivisionSubject> findByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision,Teacher teacher) {
 		return dao.readByClassroomSessionDivisionByTeacher(classroomSessionDivision,teacher);
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public StudentClassroomSessionDivisionSubject findByStudentByClassroomSessionDivisionBySubject(Student student,ClassroomSessionDivision classroomSessionDivision, Subject subject) {
+		return dao.readByStudentByClassroomSessionDivisionBySubject(student,classroomSessionDivision,subject);
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSessionDivisionSubject> findByClassroomSessions(Collection<ClassroomSession> classroomSessions) {
+		return dao.readByClassroomSessions(classroomSessions);
 	}
 	 
 	/**/

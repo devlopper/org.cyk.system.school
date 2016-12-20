@@ -79,6 +79,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	protected String outcomeStudentClassroomSessionDivisionMergeReport  = "studentClassroomSessionDivisionMergeReportView";
 	protected final String outcomeDefineTuition = "studentClassroomSessionTuitionEditView";
 	protected final String outcomeStudentClassroomSessionConsultManyRank = "studentClassroomSessionConsultManyRankView";
+	protected final String outcomeAssignSubjectClassroomSessionToStudentClassroomSession = "subjectClassroomSessionAssignToStudentClassroomSessionView";
 	/*private String outcomeClassroomSessionMainDetails;
 	private String outcomeClassroomSessionDivisionDetails;
 	private String outcomeClassroomSessionSubjectDetails;

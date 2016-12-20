@@ -3,7 +3,10 @@ package org.cyk.system.school.persistence.impl.subject;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.persistence.NoResultException;
+
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
+import org.cyk.system.root.persistence.impl.QueryWrapper;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -18,12 +21,14 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 	private static final long serialVersionUID = 6306356272165070761L;
 
    private String readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readByClassroomSessions,readByClassroomSessionDivisionByTeacher
-   	,readByClassroomSessionBySubject;
+   	,readByClassroomSessionBySubject,readByClassroomSessionDivisionBySubject;
     
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
         registerNamedQuery(readByClassroomSessionDivision, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION));
+        registerNamedQuery(readByClassroomSessionDivisionBySubject, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION)
+        		.and(ClassroomSessionDivisionSubject.FIELD_SUBJECT));
         registerNamedQuery(readByClassroomSessionDivisionByTeacher, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION)
         		.and(ClassroomSessionDivisionSubject.FIELD_TEACHER));
         registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
@@ -71,5 +76,24 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 				.resultMany();
 	}
 	
+	@Override
+	public ClassroomSessionDivisionSubject readByClassroomSessionDivisionBySubject(ClassroomSessionDivision classroomSessionDivision,Subject subject) {
+		return readByClassroomSessionDivisionBySubjectQuery(classroomSessionDivision, subject).ignoreThrowable(NoResultException.class).resultOne();
+	}
+	
+	@Override
+	public Collection<ClassroomSessionDivisionSubject> readManyByClassroomSessionDivisionBySubject(ClassroomSessionDivision classroomSessionDivision,Subject subject) {
+		return readByClassroomSessionDivisionBySubjectQuery(classroomSessionDivision, subject).resultMany();
+	}
+	
+	private QueryWrapper<ClassroomSessionDivisionSubject> readByClassroomSessionDivisionBySubjectQuery(ClassroomSessionDivision classroomSessionDivision,Subject subject) {
+		return namedQuery(readByClassroomSessionDivisionBySubject).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOMSESSIONDIVISION, classroomSessionDivision)
+				.parameter(ClassroomSessionDivisionSubject.FIELD_SUBJECT, subject);
+	}
+	
+	@Override
+	public Collection<ClassroomSessionDivisionSubject> readDuplicates(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		return readManyByClassroomSessionDivisionBySubject(classroomSessionDivisionSubject.getClassroomSessionDivision(), classroomSessionDivisionSubject.getSubject());
+	}
 }
  

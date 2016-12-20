@@ -37,7 +37,7 @@ public class StudentClassroomSessionDivisionSubject extends AbstractStudentResul
 	
 	@Override
 	public String toString() {
-		return getLogMessage();
+		return student.getCode()+"|"+classroomSessionDivisionSubject;
 		//return student+" "+classroomSessionDivisionSubject;
 	}
 	

@@ -20,8 +20,7 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-    private String readByClassroomSession,readByStudentByClassroomSession,readByAcademicSession,readByClassroomSessions,readByLevelTimeDivision
-    	,readByCriteria,countByCriteria;
+    private String readByClassroomSession,readByStudentByClassroomSession,readByAcademicSession,readByClassroomSessions,readByLevelTimeDivision;
     
     @Override
     protected void namedQueriesInitialisation() {

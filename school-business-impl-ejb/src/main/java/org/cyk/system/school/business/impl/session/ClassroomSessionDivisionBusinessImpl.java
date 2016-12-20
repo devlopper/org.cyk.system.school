@@ -19,6 +19,7 @@ import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -54,6 +55,13 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		classroomSessionDivision.setOrderNumber(start+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()));
 		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
 		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
+	}
+	
+	@Override
+	protected void afterCreate(ClassroomSessionDivision classroomSessionDivision) {
+		super.afterCreate(classroomSessionDivision);
+		if(classroomSessionDivision.getSubjects().isSynchonizationEnabled())
+			inject(ClassroomSessionDivisionSubjectBusiness.class).create(classroomSessionDivision.getSubjects().getCollection());
 	}
 		
 	@Override

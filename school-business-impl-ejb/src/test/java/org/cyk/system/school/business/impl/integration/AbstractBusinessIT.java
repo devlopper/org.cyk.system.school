@@ -21,8 +21,7 @@ import org.cyk.system.root.business.impl.validation.DefaultValidator;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
 import org.cyk.system.root.business.impl.validation.ValidatorMap;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.message.SmtpProperties;
-import org.cyk.system.root.model.security.Credentials;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.root.persistence.api.message.SmtpPropertiesDao;
 import org.cyk.system.root.persistence.impl.GenericDaoImpl;
@@ -88,7 +87,7 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     }
 	
     @Override
-    protected final void populate() {}
+    protected void populate() {}
 
     protected void installApplication(Boolean fake){
     	schoolBusinessLayer.installApplication(fake);
@@ -97,15 +96,8 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     protected void installApplication(){
     	long t = System.currentTimeMillis();
     	installApplication(Boolean.TRUE);
-    	SmtpProperties smtpProperties = inject(SmtpPropertiesDao.class).read(SmtpProperties.DEFAULT);
-    	smtpProperties.setFrom("kycdev@gmail.com");
-    	smtpProperties.setCredentials(new Credentials("kycdev@gmail.com", "p@ssw0rd*"));
-    	smtpProperties.setHost("smtp.gmail.com");
-    	smtpProperties.setPort(465);
-		smtpProperties.getSocketFactory().setPort(465);
-		update(smtpProperties);
-		
-		RootBusinessLayer.getInstance().setDefaultSmtpProperties(inject(SmtpPropertiesDao.class).read(SmtpProperties.DEFAULT));
+    	
+		RootBusinessLayer.getInstance().setDefaultSmtpProperties(inject(SmtpPropertiesDao.class).read(RootConstant.Code.SmtpProperties.DEFAULT));
 		
     	produce(getFakedDataProducer());
     	System.out.println( ((System.currentTimeMillis()-t)/1000)+" s" );

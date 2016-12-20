@@ -21,5 +21,5 @@ public interface StudentClassroomSessionDivisionSubjectEvaluationBusiness extend
 	Collection<StudentClassroomSessionDivisionSubjectEvaluation> findByStudentByClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision);
 	
 	Collection<StudentClassroomSessionDivisionSubjectEvaluation> findByEvaluation(Evaluation evaluation,Boolean includeAll);
-	
+
 }

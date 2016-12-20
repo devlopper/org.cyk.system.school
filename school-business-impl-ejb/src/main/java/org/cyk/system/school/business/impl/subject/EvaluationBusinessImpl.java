@@ -70,7 +70,7 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 		Collection<StudentClassroomSessionDivisionSubjectEvaluation> database = inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class)
 				.readByEvaluation(evaluation);
 		
-		delete(StudentClassroomSessionDivisionSubjectEvaluation.class,inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class),database, evaluation.getStudentSubjectEvaluations());
+		delete(StudentClassroomSessionDivisionSubjectEvaluation.class,database, evaluation.getStudentSubjectEvaluations());
 		
 		save(evaluation);
 		return evaluation;

@@ -1,6 +1,8 @@
 package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -42,16 +44,20 @@ import org.cyk.system.root.model.mathematics.MetricCollectionType;
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.root.model.party.person.JobTitle;
 import org.cyk.system.root.model.security.Role;
+import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.model.value.NullString;
 import org.cyk.system.root.model.value.ValueProperties;
 import org.cyk.system.root.model.value.ValueSet;
 import org.cyk.system.root.model.value.ValueType;
+import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.root.persistence.api.value.NullStringDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.LevelBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
+import org.cyk.system.school.business.api.session.LevelTimeDivisionBusiness;
 import org.cyk.system.school.business.api.subject.SubjectBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
@@ -62,8 +68,12 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelGroupType;
+import org.cyk.system.school.model.session.LevelName;
+import org.cyk.system.school.model.session.LevelSpeciality;
+import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
@@ -72,8 +82,10 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
+import org.cyk.system.school.persistence.api.session.LevelNameDao;
 import org.cyk.utility.common.CommonUtils.ReadExcelSheetArguments;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
@@ -95,6 +107,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Setter private Script averageComputationScript;
 	
 	private String actionCreateSubjectEvaluation = "acse";
+	private String actionAssignSubjectClassroomSessionToStudentClassroomSession = "aascstscs";
 	private String actionUpdateStudentClassroomSessionDivisionResults = "auscsdr";
 	private String actionComputeStudentClassroomSessionDivisionEvaluationResults = "acscsder";
 	private String actionComputeStudentClassroomSessionEvaluationResults = "acscser";
@@ -237,32 +250,49 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	}
 	
 	private void createLevels(){
+		
+		createFromExcelSheet(LevelGroupType.class);
+		createFromExcelSheet(LevelGroup.class);
+		createFromExcelSheet(LevelSpeciality.class);
+		createFromExcelSheet(LevelName.class);
+		createFromExcelSheet(Level.class);
+		createFromExcelSheet(LevelTimeDivision.class);
+		/*
 		LevelGroupType levelGroupTypeKindergarten = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.KINDERGARTEN));
 		LevelGroupType levelGroupTypePrimary = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.PRIMARY));
 		LevelGroupType levelGroupTypeSecondary = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.SECONDARY));
 		
-		LevelGroup levelGroup;
+		LevelGroup levelPrimaryGroup,levelSecondaryGroup;
 		
 		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.KINDERGARTEN).setType(levelGroupTypeKindergarten));
 		
-		levelGroup = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY).setType(levelGroupTypePrimary));
+		levelPrimaryGroup = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY).setType(levelGroupTypePrimary));
 		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY_LOWER).setType(levelGroupTypePrimary)
-				.setParent(levelGroup));
+				.setParent(levelPrimaryGroup));
 		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY_HIGHER).setType(levelGroupTypePrimary)
-				.setParent(levelGroup));
+				.setParent(levelPrimaryGroup));
 		
-		levelGroup = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY).setType(levelGroupTypeSecondary));
+		levelSecondaryGroup = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY).setType(levelGroupTypeSecondary));
 		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY_LOWER).setType(levelGroupTypeSecondary)
-				.setParent(levelGroup));
+				.setParent(levelSecondaryGroup));
 		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY_HIGHER).setType(levelGroupTypeSecondary)
-				.setParent(levelGroup));
+				.setParent(levelSecondaryGroup));
+		
+		Collection<Level> levels = new ArrayList<>();
+		levels.add(inject(LevelBusiness.class).instanciateOne(levelGroupCode, levelNameCode, levelSpecialityCode));
+		
+		Collection<LevelTimeDivision> levelTimeDivisions = new ArrayList<>();
+		levelTimeDivisions.add(inject(LevelTimeDivisionBusiness.class).instanciateOne(code, levelCode, timeDivisionTypeCode, orderNumber));
+		
+		create(new LevelTimeDivision(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,create(new Level(levelPrimaryGroup
+				, createEnumeration(LevelName.class, SchoolConstant.Code.LevelName.G1))),inject(TimeDivisionTypeDao.class).read(TimeDivisionType.YEAR), 0l));
+		*/
 	}
 	
 	private void createIntervals(){
-		create(inject(IntervalBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE, "Nombre d'évaluation par type", "1", "1"}
-		,null));
+		create(inject(IntervalBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE, "Nombre d'évaluation par type", "1", "1"}));
 		create(inject(IntervalBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Interval.DIVISION_COUNT_BY_CLASSROOM_SESSION, "Nombre de division par classe"
-				, "1", "3"},null));
+				, "1", "3"}));
 	}
 	
 	private void createEvaluations(){
@@ -531,16 +561,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	}
 	
 	private void createSubjects(){
-		try {
-			ReadExcelSheetArguments readExcelSheetArguments = new ReadExcelSheetArguments();
-			readExcelSheetArguments.setWorkbookBytes(IOUtils.toByteArray(getClass().getResourceAsStream("data.xls")));
-	    	readExcelSheetArguments.setSheetIndex(0);
-	    	List<String[]> list = commonUtils.readExcelSheet(readExcelSheetArguments);
-			create(inject(SubjectBusiness.class).instanciateMany(list));
-			System.out.println("subjects created : "+list.size());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		createFromExcelSheet(Subject.class);
 	}
 	
 	@Override

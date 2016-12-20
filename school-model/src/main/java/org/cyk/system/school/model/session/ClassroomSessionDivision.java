@@ -2,8 +2,6 @@ package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -12,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.NodeResults;
@@ -41,7 +40,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	private Boolean studentRankable=Boolean.TRUE;
 	private Boolean studentSubjectRankable=Boolean.TRUE;
 	
-	@Transient private Collection<ClassroomSessionDivisionSubject> subjects = new ArrayList<>();
+	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> subjects;
 	
 	public ClassroomSessionDivision(ClassroomSession classroomSession,TimeDivisionType timeDivisionType, BigDecimal weight) {
 		super();
@@ -54,6 +53,12 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 		if(results==null)
 			results = new NodeResults();
 		return results;
+	}
+	
+	public IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> getSubjects(){
+		if(subjects == null)
+			subjects = new IdentifiableRuntimeCollection<>();
+		return subjects;
 	}
 	
 	@Override

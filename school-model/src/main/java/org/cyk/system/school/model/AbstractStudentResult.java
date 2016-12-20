@@ -10,13 +10,14 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter @MappedSuperclass @ModelBean(crudStrategy=CrudStrategy.BUSINESS)
 public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdentifiable implements Serializable {
@@ -27,10 +28,9 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	
 	@OneToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE}) protected StudentResults results;
 	
-	@Transient protected Collection<DETAIL> details = new ArrayList<>();
+	@Transient protected Collection<DETAIL> details = new ArrayList<>();//TODO to be removed to use only detailCollection
 	
-	//@Transient protected Boolean cascadeTopDownOnCreate = Boolean.TRUE;
-	//@Transient protected Boolean cascadeBottomUpOnCreate = Boolean.FALSE;
+	@Transient protected IdentifiableRuntimeCollection<DETAIL> detailCollection = new IdentifiableRuntimeCollection<>();
 	
 	{
 		cascadeOperationToChildren = Boolean.TRUE;

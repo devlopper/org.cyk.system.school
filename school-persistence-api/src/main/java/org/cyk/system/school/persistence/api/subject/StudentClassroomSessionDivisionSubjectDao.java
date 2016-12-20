@@ -9,6 +9,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Subject;
 
 public interface StudentClassroomSessionDivisionSubjectDao extends TypedDao<StudentClassroomSessionDivisionSubject> /*AbstractStudentResultsDao<ClassroomSessionDivisionSubject,StudentSubject,StudentSubjectEvaluation>*/ {
 
@@ -30,5 +31,9 @@ public interface StudentClassroomSessionDivisionSubjectDao extends TypedDao<Stud
 	Collection<StudentClassroomSessionDivisionSubject> readByStudent(Student student);
 	Collection<StudentClassroomSessionDivisionSubject> readByStudentByClassroomSession(Student student,ClassroomSession classroomSession);
 	Collection<StudentClassroomSessionDivisionSubject> readByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision, Teacher teacher);
+	StudentClassroomSessionDivisionSubject readByStudentByClassroomSessionDivisionBySubject(Student student,ClassroomSessionDivision classroomSessionDivision, Subject subject);
 	
+	/**/
+	
+	Collection<StudentClassroomSessionDivisionSubject> readDuplicatesByStudentByClassroomSessionDivisionBySubject(Student student,ClassroomSessionDivision classroomSessionDivision, Subject subject);
 }

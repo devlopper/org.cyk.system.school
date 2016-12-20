@@ -226,7 +226,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			
 			sr.setAverage(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()):NOT_APPLICABLE);
 			sr.setAverageCoefficiented(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()
-					.multiply(studentSubject.getClassroomSessionDivisionSubject().getWeight())):NOT_APPLICABLE);
+					.multiply(studentSubject.getClassroomSessionDivisionSubject().getWeight()==null?BigDecimal.ONE:studentSubject.getClassroomSessionDivisionSubject().getWeight())):NOT_APPLICABLE);
 			sr.setRank(applicable?inject(MathematicsBusiness.class).format(studentSubject.getResults().getEvaluationSort().getRank()):NOT_APPLICABLE);	
 			
 			//if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
@@ -271,7 +271,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	protected BigDecimal getMarkValue(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation){
 		BigDecimal value = studentSubjectEvaluation.getValue();
 		if(Boolean.FALSE.equals(studentSubjectEvaluation.getEvaluation().getCoefficientApplied()))
-			value = value.multiply(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getWeight());
+			value = value.multiply(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getWeight()==null
+			?BigDecimal.ONE:studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getWeight());
 		return value;
 	}
 	
@@ -284,7 +285,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		if(metricValue.getValue().getNumberValue().get()!=null 
 				&& metricValue.getMetric().getCollection().getType().getCode().equals(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT)){
 			TimeDivisionType timeDivisionType = inject(TimeDivisionTypeDao.class).read(SchoolConstant.Code.TimeDivisionType.ATTENDANCE);
-			return String.valueOf(metricValue.getValue().getNumberValue().get().longValue() / timeDivisionType.getDuration());
+			return String.valueOf(metricValue.getValue().getNumberValue().get().longValue() / timeDivisionType.getMeasure().getValue().longValue());
 		}
 		/*if(ArrayUtils.contains(new String[]{SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT		
 				, SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT},RootConstant.Code.getRelativeCode(metricValue.getMetric()))){
@@ -423,6 +424,13 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentRankable()))
 					labelValueCollectionReport.add("RANK",report.getRank());
 				report.addLabelValueCollection(labelValueCollectionReport);
+				
+				//if("BEHAVIOURPRIMARYSTUDENT".equals(effortLevelsMetricCollectionCode))
+				//	effortLevelsMetricCollectionCode = "BEHAVIOURPSSTUDENT";
+				//if()
+				//effortLevelsMetricCollectionCode = StringUtils.replace(effortLevelsMetricCollectionCode, "PRIMARY", "PS");
+				//effortLevelsIntervalCollectionCode = StringUtils.replace(effortLevelsIntervalCollectionCode, "PRIMARY", "PS");
+				
 				addMetricsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()), effortLevelsMetricCollectionCode);
 				report.getCurrentLabelValueCollection().setName(StringUtils.upperCase(report.getCurrentLabelValueCollection().getName()));
 				labelValueCollectionReport = new LabelValueCollectionReport();

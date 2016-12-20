@@ -13,6 +13,9 @@ import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.session.LevelBusiness;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.persistence.api.session.LevelDao;
+import org.cyk.system.school.persistence.api.session.LevelGroupDao;
+import org.cyk.system.school.persistence.api.session.LevelNameDao;
+import org.cyk.system.school.persistence.api.session.LevelSpecialityDao;
 
 public class LevelBusinessImpl extends AbstractTypedBusinessService<Level, LevelDao> implements LevelBusiness,Serializable {
 
@@ -39,6 +42,23 @@ public class LevelBusinessImpl extends AbstractTypedBusinessService<Level, Level
 				return new Object[]{level.getLevelName()};
 			}
 		return super.getPropertyValueTokens(level, name);
+	}
+	
+	@Override
+	public Level instanciateOne(String levelGroupCode, String levelNameCode, String levelSpecialityCode) {
+		Level level = new Level(inject(LevelGroupDao.class).read(levelGroupCode), inject(LevelNameDao.class).read(levelNameCode)
+				, inject(LevelSpecialityDao.class).read(levelSpecialityCode));
+		return level;
+	}
+
+	@Override
+	public Level instanciateOne(String[] values) {
+		Level level = instanciateOne();
+		level.setCode(values[0]);
+		level.setLevelName(inject(LevelNameDao.class).read(values[1]));
+		level.setSpeciality(inject(LevelSpecialityDao.class).read(values[2]));
+		level.setGroup(inject(LevelGroupDao.class).read(values[3]));
+		return level;
 	}
 	
 	/**/

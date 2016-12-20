@@ -5,4 +5,6 @@ import org.cyk.system.school.model.session.Level;
 
 public interface LevelBusiness extends TypedBusiness<Level> {
 
+	Level instanciateOne(String levelGroupCode,String levelNameCode,String levelSpecialityCode);
+	
 }

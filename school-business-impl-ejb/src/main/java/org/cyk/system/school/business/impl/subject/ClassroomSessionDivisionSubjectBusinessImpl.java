@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl.subject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -10,15 +11,14 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
@@ -29,19 +29,19 @@ import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Stateless
 public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubject, ClassroomSessionDivisionSubjectDao> implements ClassroomSessionDivisionSubjectBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
-	
-	@Inject private SubjectClassroomSessionDao subjectClassroomSessionDao;
-	@Inject private ClassroomSessionDivisionDao classroomSessionDivisionDao;
 	
 	@Inject
 	public ClassroomSessionDivisionSubjectBusinessImpl(ClassroomSessionDivisionSubjectDao dao) {
@@ -61,22 +61,31 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	}
 	
 	@Override
+	public Collection<ClassroomSessionDivisionSubject> findDuplicates(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		return Arrays.asList(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionBySubject(classroomSessionDivisionSubject.getClassroomSessionDivision()
+				, classroomSessionDivisionSubject.getSubject()));
+	}
+	
+	@Override
 	protected void afterCreate(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		super.afterCreate(classroomSessionDivisionSubject);
-		SubjectClassroomSession subjectClassroomSession = subjectClassroomSessionDao.readBySubjectByClassroomSession(
+		SubjectClassroomSession subjectClassroomSession = inject(SubjectClassroomSessionDao.class).readBySubjectByClassroomSession(
 				classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
 		if(subjectClassroomSession==null){
-			subjectClassroomSession = new SubjectClassroomSession(classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
-			subjectClassroomSessionDao.create(subjectClassroomSession);
+			subjectClassroomSession = new SubjectClassroomSession(classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject
+				.getClassroomSessionDivision().getClassroomSession());
+			inject(SubjectClassroomSessionBusiness.class).create(subjectClassroomSession);
 		}
 		commonUtils.increment(Long.class, classroomSessionDivisionSubject.getClassroomSessionDivision(), ClassroomSessionDivision.FIELD_NUMBER_OF_SUBJECTS, 1l);
-		classroomSessionDivisionDao.update(classroomSessionDivisionSubject.getClassroomSessionDivision());
+		inject(ClassroomSessionDivisionBusiness.class).update(classroomSessionDivisionSubject.getClassroomSessionDivision());
 		
-		for(Student student : inject(StudentDao.class).readByClassroomSessionDivision(classroomSessionDivisionSubject.getClassroomSessionDivision())){
-			StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student,classroomSessionDivisionSubject);
-			studentClassroomSessionDivisionSubject.setCascadeOperationToChildren(Boolean.FALSE);
-			studentClassroomSessionDivisionSubject.setCascadeOperationToMaster(Boolean.TRUE);
-			inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentClassroomSessionDivisionSubject);
+		if(Boolean.TRUE.equals(classroomSessionDivisionSubject.getAutoCreateStudentClassroomSessionDivisionSubject())){
+			for(Student student : inject(StudentDao.class).readByClassroomSessionDivision(classroomSessionDivisionSubject.getClassroomSessionDivision())){
+				StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student,classroomSessionDivisionSubject);
+				studentClassroomSessionDivisionSubject.setCascadeOperationToChildren(Boolean.FALSE);
+				studentClassroomSessionDivisionSubject.setCascadeOperationToMaster(Boolean.TRUE);
+				inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentClassroomSessionDivisionSubject);
+			}
 		}
 	}
 	
@@ -141,6 +150,11 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivisionSubject> findByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision,Teacher teacher) {
 		return dao.readByClassroomSessionDivisionByTeacher(classroomSessionDivision,teacher);
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public ClassroomSessionDivisionSubject findByClassroomSessionDivisionBySubject(ClassroomSessionDivision classroomSessionDivision,Subject subject) {
+		return dao.readByClassroomSessionDivisionBySubject(classroomSessionDivision,subject);
 	}
 	
 	/**/

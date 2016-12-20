@@ -120,6 +120,8 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 						;
 					else{
 						weightedValues.add(weightedValue);
+						if(weightedValue.getWeight()==null)
+							weightedValue.setWeight(BigDecimal.ONE);
 						//System.out.println(result.getStudent().getCode()+" , "+weightedValue.getValue()+" , "+weightedValue.getWeight());
 					}
 				}

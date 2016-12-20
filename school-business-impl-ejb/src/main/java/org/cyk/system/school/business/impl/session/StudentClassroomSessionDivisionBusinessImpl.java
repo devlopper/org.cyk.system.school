@@ -92,6 +92,12 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
+	protected void beforeCreate(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		super.beforeCreate(studentClassroomSessionDivision);
+		exceptionUtils().exists(dao.readByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision()));
+	}
+	
+	@Override
 	protected void afterCreate(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		super.afterCreate(studentClassroomSessionDivision);	
 		Student student = studentClassroomSessionDivision.getStudent();
@@ -139,6 +145,19 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDao,StudentClassroomSessionDivisionSubjectBusiness>(null,inject(StudentClassroomSessionDivisionSubjectBusiness.class))
 			.operate(studentSubjects, crud);
+	}
+	
+	@Override
+	public StudentClassroomSessionDivision update(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		if(studentClassroomSessionDivision.getDetailCollection()!=null && studentClassroomSessionDivision.getDetailCollection().isSynchonizationEnabled()){
+			for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : studentClassroomSessionDivision.getDetailCollection().getCollection())
+				createIfNotIdentified(studentClassroomSessionDivisionSubject);
+			
+			delete(StudentClassroomSessionDivisionSubject.class, inject(StudentClassroomSessionDivisionSubjectDao.class)
+					.readByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision())
+					, studentClassroomSessionDivision.getDetailCollection().getCollection());
+		}
+		return super.update(studentClassroomSessionDivision);
 	}
 	
 	@Override

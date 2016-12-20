@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
+
+    <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
+ 		<ui:param name="pageController" value="#{subjectClassroomSessionAssignToStudentClassroomSessionPage}" />
+ 		<ui:define name="body">
+ 			<cyk:formOneData value="#{subjectClassroomSessionAssignToStudentClassroomSessionPage.form}"/>
+ 			
+ 			<style>
+ 				.mysubjects tbody tr td:nth-child(odd){
+ 					width: 18px;
+ 					padding: 0px;
+ 				}
+ 			</style>
+ 			
+ 			<cyk:itemCollection value="#{subjectClassroomSessionAssignToStudentClassroomSessionPage.studentSubjectCollection}" >
+ 				<p:column headerText="#{uiManager.text('model.entity.classroomSession')}" width="80">
+ 					<h:outputText value="#{item.classroomSession}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('model.entity.student')}" width="100">
+ 					<h:outputText value="#{item.student}" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('model.entity.subjectClassroomSession')}" >
+ 					
+ 					<p:selectManyCheckbox value="#{item.selectedSubjectClassroomSessions}" converter="#{objectConverter}" layout="grid" columns="5" styleClass="mysubjects">
+						<f:selectItems value="#{item.subjectClassroomSessionChoices}" var="subjectClassroomSession" itemLabel="#{subjectClassroomSession.subject.name}" 
+							itemValue="#{subjectClassroomSession}" />
+					</p:selectManyCheckbox>	
+ 					
+ 				</p:column>
+ 			</cyk:itemCollection>
+ 		</ui:define>
+ 		
+ 		<ui:define name="contentMenuBar">
+ 			<cyk:command value="#{subjectClassroomSessionAssignToStudentClassroomSessionPage.form.submitCommandable}" executeParameter="#{subjectClassroomSessionAssignToStudentClassroomSessionPage.form.data}" />
+ 		</ui:define>
+ 	</ui:decorate>
+ 
+</html>

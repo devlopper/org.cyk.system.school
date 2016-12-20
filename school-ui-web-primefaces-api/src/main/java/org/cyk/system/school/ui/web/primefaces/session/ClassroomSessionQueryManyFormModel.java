@@ -337,6 +337,9 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 						,studentClassroomSessions,actionIdentifier);
 			}else if(SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
 				inject(StudentClassroomSessionDivisionBusiness.class).sendReportFileToEmail(getStudentClassroomSessionDivision(classroomSessions));
+			}else if(SchoolBusinessLayer.getInstance().getActionAssignSubjectClassroomSessionToStudentClassroomSession().equals(actionIdentifier)){
+				WebNavigationManager.getInstance().redirectToDynamicProcessManyPage(SchoolWebManager.getInstance().getOutcomeAssignSubjectClassroomSessionToStudentClassroomSession(),StudentClassroomSession.class
+						,inject(StudentClassroomSessionBusiness.class).findByClassroomSessions(classroomSessions),actionIdentifier);
 			}
 		}
 		
