@@ -9,9 +9,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.company.business.api.sale.SaleBusiness;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -32,6 +34,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
+import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
@@ -59,16 +62,22 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	}
 	
 	@Override
-	public StudentClassroomSession create(StudentClassroomSession studentClassroomSession) {
-		super.create(studentClassroomSession);
+	protected Object[] getPropertyValueTokens(StudentClassroomSession studentClassroomSession, String name) {
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name)){
+			return new Object[]{studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession()};
+		}
+		return super.getPropertyValueTokens(studentClassroomSession, name);
+	}
+	
+	@Override
+	protected void afterCreate(StudentClassroomSession studentClassroomSession) {
+		super.afterCreate(studentClassroomSession);
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeOperationToChildren())){
 			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
 				studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
 		}
 		cascade(studentClassroomSession, studentClassroomSessionDivisions, Crud.CREATE);
-		
-		return studentClassroomSession;
 	}
 	
 	private void cascade(StudentClassroomSession studentClassroomSession,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Crud crud){
@@ -258,6 +267,15 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	public Long countByCriteria(SearchCriteria criteria) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public StudentClassroomSession instanciateOne(String[] values) {
+		StudentClassroomSession studentClassroomSession = instanciateOne();
+		Integer index = 0;
+		studentClassroomSession.setStudent(inject(StudentDao.class).read(values[index++]));
+		studentClassroomSession.setClassroomSession(inject(ClassroomSessionDao.class).read(values[index++]));
+		return studentClassroomSession;
 	}
 	
 	/**/

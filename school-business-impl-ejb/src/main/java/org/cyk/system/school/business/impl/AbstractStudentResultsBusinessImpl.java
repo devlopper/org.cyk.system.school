@@ -74,13 +74,13 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 	}
 	
 	@Override
-	public RESULT create(RESULT identifiable) {
+	protected void beforeCreate(RESULT identifiable) {
+		super.beforeCreate(identifiable);
 		if(identifiable.getResults()==null){
 			identifiable.setResults(new StudentResults());
 			if(identifiable.getStudent()!=null)
 				identifiable.getResults().setCode(identifiable.getStudent().getCode());
 		}
-		return super.create(identifiable);
 	}
 	
 	@Override
@@ -135,7 +135,7 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 				Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
 				//debug(result.getResults());
 				//setting
-				result.getResults().getEvaluationSort().setAverage(average); 
+				result.getResults().getEvaluationSort().setAverage(average);
 				result.getResults().getEvaluationSort().setAverageAppreciatedInterval(intervalBusiness.findByCollectionByValue(averageAppreciatedIntervalCollection(level(result)),average.getValue(), 2));
 				result.getResults().getEvaluationSort().setAveragePromotedInterval(intervalBusiness.findByCollectionByValue(averagePromotedIntervalCollection(level(result)),average.getValue(), 2));
 				logIdentifiable("Average computed", result);

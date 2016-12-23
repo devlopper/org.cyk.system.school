@@ -29,7 +29,7 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne private ClassroomSession classroomSession;
-	@ManyToOne private Sale tuitionSale;
+	@ManyToOne private Sale tuitionSale;//TODO to be deleted. Use SaleIdent....
 	
 	public StudentClassroomSession(Student student,ClassroomSession classroomSession) {
 		super();

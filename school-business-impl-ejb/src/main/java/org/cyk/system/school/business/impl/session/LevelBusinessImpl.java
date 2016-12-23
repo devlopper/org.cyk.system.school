@@ -36,11 +36,7 @@ public class LevelBusinessImpl extends AbstractTypedBusinessService<Level, Level
 	@Override
 	protected Object[] getPropertyValueTokens(Level level, String name) {
 		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
-			if(Boolean.TRUE.equals(PROPERTY_VALUE_TOKENS_CONCATENATE_WITH_GROUP_LEVELNAME_SPECIALITY))
-				return new Object[]{level.getGroup(),level.getLevelName(),level.getSpeciality()};
-			else{
-				return new Object[]{level.getLevelName()};
-			}
+			return new Object[]{level.getLevelName(),level.getSpeciality()};
 		return super.getPropertyValueTokens(level, name);
 	}
 	
@@ -54,10 +50,10 @@ public class LevelBusinessImpl extends AbstractTypedBusinessService<Level, Level
 	@Override
 	public Level instanciateOne(String[] values) {
 		Level level = instanciateOne();
-		level.setCode(values[0]);
-		level.setLevelName(inject(LevelNameDao.class).read(values[1]));
-		level.setSpeciality(inject(LevelSpecialityDao.class).read(values[2]));
-		level.setGroup(inject(LevelGroupDao.class).read(values[3]));
+		Integer index = 0;
+		level.setLevelName(inject(LevelNameDao.class).read(values[index++]));
+		level.setSpeciality(inject(LevelSpecialityDao.class).read(values[index++]));
+		level.setGroup(inject(LevelGroupDao.class).read(values[index++]));
 		return level;
 	}
 	

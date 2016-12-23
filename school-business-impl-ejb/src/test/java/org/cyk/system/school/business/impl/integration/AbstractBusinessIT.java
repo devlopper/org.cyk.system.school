@@ -29,6 +29,8 @@ import org.cyk.system.root.persistence.impl.PersistenceIntegrationTestHelper;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
+import org.cyk.system.school.model.session.AcademicSession;
+import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
 import org.cyk.utility.common.test.TestEnvironmentListener;
 import org.cyk.utility.test.ArchiveBuilder;
 import org.cyk.utility.test.Transaction;
@@ -81,6 +83,8 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
 	
     @Inject protected UserTransaction userTransaction;
 	
+    protected AcademicSession academicSession;
+    
     @Override
     public EntityManager getEntityManager() {
         return g.getEntityManager();
@@ -100,6 +104,7 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
 		RootBusinessLayer.getInstance().setDefaultSmtpProperties(inject(SmtpPropertiesDao.class).read(RootConstant.Code.SmtpProperties.DEFAULT));
 		
     	produce(getFakedDataProducer());
+    	academicSession = inject(AcademicSessionDao.class).readOneRandomly();
     	System.out.println( ((System.currentTimeMillis()-t)/1000)+" s" );
     }
     

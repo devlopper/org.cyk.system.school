@@ -1,7 +1,5 @@
 package org.cyk.system.school.business.impl.iesa;
 
-import org.cyk.system.school.business.impl.SchoolDataProducerHelper.ClassroomSessionInfos;
-
 public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
@@ -15,9 +13,9 @@ public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	schoolBusinessTestHelper.getEvaluationTypes().addAll(dataProducer.getEvaluationTypes());
     	
     	//schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
-    	ClassroomSessionInfos grade = dataProducer.getG1();
-    	/*StudentClassroomSession studentClassroomSession = */schoolBusinessTestHelper.createStudentClassroomSession("STUD1", grade.getClassroomSession()
-    			,new Object[][]{ {15},{15},{15} });
+    	//ClassroomSessionInfos grade = dataProducer.getG1();
+    	/*StudentClassroomSession studentClassroomSession = */
+    	//schoolBusinessTestHelper.createStudentClassroomSession("STUD1", grade.getClassroomSession(),new Object[][]{ {15},{15},{15} });
     	
     	//StudentClassroomSessionDivision studentClassroomSessionDivision = inject(StudentClassroomSessionDivisionBusiness.class)
     	//		.findByStudentByClassroomSessionDivision(inject(StudentBusiness.class).find("STUD1"), grade.division(0).getClassroomSessionDivision());

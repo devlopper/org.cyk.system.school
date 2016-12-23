@@ -1,22 +1,20 @@
 package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.lang.annotation.Annotation;
+import java.math.BigDecimal;
 
 import javax.inject.Singleton;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.business.impl.CompanyDataProducerHelper;
 import org.cyk.system.company.model.CompanyConstant;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.business.api.ClazzBusiness;
 import org.cyk.system.root.business.api.FormatterBusiness;
-import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
@@ -33,6 +31,7 @@ import org.cyk.system.root.business.impl.BusinessServiceProvider;
 import org.cyk.system.root.business.impl.BusinessServiceProvider.Service;
 import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
+import org.cyk.system.root.business.impl.RootDataProducerHelper;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
@@ -40,25 +39,26 @@ import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.Script;
+import org.cyk.system.root.model.file.report.ReportTemplate;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.MetricCollectionType;
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
-import org.cyk.system.root.model.party.person.JobTitle;
 import org.cyk.system.root.model.security.Role;
+import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.model.value.NullString;
 import org.cyk.system.root.model.value.ValueProperties;
 import org.cyk.system.root.model.value.ValueSet;
 import org.cyk.system.root.model.value.ValueType;
-import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
+import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
+import org.cyk.system.root.persistence.api.mathematics.IntervalDao;
 import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.root.persistence.api.value.NullStringDao;
+import org.cyk.system.root.persistence.impl.globalidentification.GlobalIdentifierPersistenceMappingConfiguration;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
-import org.cyk.system.school.business.api.session.LevelBusiness;
-import org.cyk.system.school.business.api.session.LevelGroupBusiness;
-import org.cyk.system.school.business.api.session.LevelGroupTypeBusiness;
-import org.cyk.system.school.business.api.session.LevelTimeDivisionBusiness;
-import org.cyk.system.school.business.api.subject.SubjectBusiness;
+import org.cyk.system.school.business.api.session.SchoolBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
 import org.cyk.system.school.model.SchoolConstant;
@@ -68,12 +68,14 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelGroupType;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelSpeciality;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
@@ -82,11 +84,10 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
-import org.cyk.system.school.persistence.api.session.LevelNameDao;
-import org.cyk.utility.common.CommonUtils.ReadExcelSheetArguments;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
@@ -228,6 +229,96 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		
 		studentEvaluationResultsRankOptions.setType(RankType.EXAEQUO);
 		studentEvaluationResultsRankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
+		
+		GlobalIdentifierPersistenceMappingConfiguration configuration = new GlobalIdentifierPersistenceMappingConfiguration();
+		GlobalIdentifierPersistenceMappingConfiguration.Property property = new GlobalIdentifierPersistenceMappingConfiguration.Property(
+				commonUtils.attributePath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_CODE),new javax.persistence.Column() {
+			@Override public Class<? extends Annotation> annotationType() {return null;}
+			@Override public boolean updatable() {return false;}	
+			@Override public boolean unique() {return Boolean.TRUE;}
+			@Override public String table() {return null;}
+			@Override public int scale() {return 0;}
+			@Override public int precision() {return 0;}
+			@Override public boolean nullable() {return false;}
+			@Override public String name() {return null;}
+			@Override public int length() {return 0;}
+			@Override public boolean insertable() {return false;}
+			@Override public String columnDefinition() {return null;}
+		});
+        configuration.addProperties(property);
+        GlobalIdentifierPersistenceMappingConfiguration.register(LevelName.class, configuration);
+        
+        configuration = new GlobalIdentifierPersistenceMappingConfiguration();
+		property = new GlobalIdentifierPersistenceMappingConfiguration.Property(
+				commonUtils.attributePath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_CODE),new javax.persistence.Column() {
+			@Override public Class<? extends Annotation> annotationType() {return null;}
+			@Override public boolean updatable() {return false;}	
+			@Override public boolean unique() {return Boolean.TRUE;}
+			@Override public String table() {return null;}
+			@Override public int scale() {return 0;}
+			@Override public int precision() {return 0;}
+			@Override public boolean nullable() {return false;}
+			@Override public String name() {return null;}
+			@Override public int length() {return 0;}
+			@Override public boolean insertable() {return false;}
+			@Override public String columnDefinition() {return null;}
+		});
+        configuration.addProperties(property);
+        GlobalIdentifierPersistenceMappingConfiguration.register(StudentClassroomSession.class, configuration);
+        
+        configuration = new GlobalIdentifierPersistenceMappingConfiguration();
+		property = new GlobalIdentifierPersistenceMappingConfiguration.Property(
+				commonUtils.attributePath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_CODE),new javax.persistence.Column() {
+			@Override public Class<? extends Annotation> annotationType() {return null;}
+			@Override public boolean updatable() {return false;}	
+			@Override public boolean unique() {return Boolean.TRUE;}
+			@Override public String table() {return null;}
+			@Override public int scale() {return 0;}
+			@Override public int precision() {return 0;}
+			@Override public boolean nullable() {return false;}
+			@Override public String name() {return null;}
+			@Override public int length() {return 0;}
+			@Override public boolean insertable() {return false;}
+			@Override public String columnDefinition() {return null;}
+		});
+        configuration.addProperties(property);
+        GlobalIdentifierPersistenceMappingConfiguration.register(StudentClassroomSessionDivision.class, configuration);
+        
+        configuration = new GlobalIdentifierPersistenceMappingConfiguration();
+		property = new GlobalIdentifierPersistenceMappingConfiguration.Property(
+				commonUtils.attributePath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_CODE),new javax.persistence.Column() {
+			@Override public Class<? extends Annotation> annotationType() {return null;}
+			@Override public boolean updatable() {return false;}	
+			@Override public boolean unique() {return Boolean.TRUE;}
+			@Override public String table() {return null;}
+			@Override public int scale() {return 0;}
+			@Override public int precision() {return 0;}
+			@Override public boolean nullable() {return false;}
+			@Override public String name() {return null;}
+			@Override public int length() {return 0;}
+			@Override public boolean insertable() {return false;}
+			@Override public String columnDefinition() {return null;}
+		});
+        configuration.addProperties(property);
+        GlobalIdentifierPersistenceMappingConfiguration.register(StudentClassroomSessionDivisionSubject.class, configuration);
+        
+        configuration = new GlobalIdentifierPersistenceMappingConfiguration();
+		property = new GlobalIdentifierPersistenceMappingConfiguration.Property(
+				commonUtils.attributePath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_CODE),new javax.persistence.Column() {
+			@Override public Class<? extends Annotation> annotationType() {return null;}
+			@Override public boolean updatable() {return false;}	
+			@Override public boolean unique() {return Boolean.TRUE;}
+			@Override public String table() {return null;}
+			@Override public int scale() {return 0;}
+			@Override public int precision() {return 0;}
+			@Override public boolean nullable() {return false;}
+			@Override public String name() {return null;}
+			@Override public int length() {return 0;}
+			@Override public boolean insertable() {return false;}
+			@Override public String columnDefinition() {return null;}
+		});
+        configuration.addProperties(property);
+        GlobalIdentifierPersistenceMappingConfiguration.register(StudentClassroomSessionDivisionSubjectEvaluation.class, configuration);
 	}
 	
 	@Override
@@ -239,14 +330,29 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void persistStructureData() {
 		inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml");
     	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE,"certificat de scolarité",Boolean.TRUE, "report/student/tuition_certificate.jrxml");
-    	//inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET,"bulletin trimestriel",Boolean.TRUE, "report/student/classroom_session_division_sheet.jrxml");
     	
     	createIntervals();
     	createSubjects();
     	createMetricColletions();
     	createLevels();
     	createEvaluations();
-    	createEnumeration(JobTitle.class,SchoolConstant.Code.JobTitle.DIRECTOR_OF_STUDIES, "Directeur des études");
+    	
+    	createSchool();
+	}
+	
+	private void createSchool(){
+		ReportTemplate reportTemplate = rootDataProducerHelper.createReportTemplate("SchoolStudentClassroomSessionDivisionResultsReportTemplate", "Report Sheet"
+				, Boolean.TRUE, "report/iesa/g1g12.jrxml", null, null, null); 
+		
+		create(inject(SchoolBusiness.class).instanciateOne(new String[]{RootConstant.Code.TimeDivisionType.TRIMESTER,"1"
+				,SchoolConstant.Code.Interval.DIVISION_COUNT_BY_CLASSROOM_SESSION,reportTemplate.getCode(),SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT
+				,SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT ,SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT
+				,SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT,RootConstant.Code.TimeDivisionType.DAY,"50"}));
+		
+		create(inject(AcademicSessionBusiness.class).instanciateOne(new String[]{PersistDataListener.Adapter.process(AcademicSession.class, null
+				, commonUtils.attributePath(AcademicSession.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_FROM_DATE), "4/10/2000")
+				,PersistDataListener.Adapter.process(AcademicSession.class, null
+				, commonUtils.attributePath(AcademicSession.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_FROM_DATE), "20/05/2001")}));
 	}
 	
 	private void createLevels(){
@@ -257,49 +363,26 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		createFromExcelSheet(LevelName.class);
 		createFromExcelSheet(Level.class);
 		createFromExcelSheet(LevelTimeDivision.class);
-		/*
-		LevelGroupType levelGroupTypeKindergarten = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.KINDERGARTEN));
-		LevelGroupType levelGroupTypePrimary = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.PRIMARY));
-		LevelGroupType levelGroupTypeSecondary = create(inject(LevelGroupTypeBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroupType.SECONDARY));
 		
-		LevelGroup levelPrimaryGroup,levelSecondaryGroup;
-		
-		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.KINDERGARTEN).setType(levelGroupTypeKindergarten));
-		
-		levelPrimaryGroup = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY).setType(levelGroupTypePrimary));
-		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY_LOWER).setType(levelGroupTypePrimary)
-				.setParent(levelPrimaryGroup));
-		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.PRIMARY_HIGHER).setType(levelGroupTypePrimary)
-				.setParent(levelPrimaryGroup));
-		
-		levelSecondaryGroup = (LevelGroup) create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY).setType(levelGroupTypeSecondary));
-		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY_LOWER).setType(levelGroupTypeSecondary)
-				.setParent(levelSecondaryGroup));
-		create(inject(LevelGroupBusiness.class).instanciateOne(SchoolConstant.Code.LevelGroup.SECONDARY_HIGHER).setType(levelGroupTypeSecondary)
-				.setParent(levelSecondaryGroup));
-		
-		Collection<Level> levels = new ArrayList<>();
-		levels.add(inject(LevelBusiness.class).instanciateOne(levelGroupCode, levelNameCode, levelSpecialityCode));
-		
-		Collection<LevelTimeDivision> levelTimeDivisions = new ArrayList<>();
-		levelTimeDivisions.add(inject(LevelTimeDivisionBusiness.class).instanciateOne(code, levelCode, timeDivisionTypeCode, orderNumber));
-		
-		create(new LevelTimeDivision(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,create(new Level(levelPrimaryGroup
-				, createEnumeration(LevelName.class, SchoolConstant.Code.LevelName.G1))),inject(TimeDivisionTypeDao.class).read(TimeDivisionType.YEAR), 0l));
-		*/
 	}
 	
 	private void createIntervals(){
+		createFromExcelSheet(Interval.class);
+		/*
 		create(inject(IntervalBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE, "Nombre d'évaluation par type", "1", "1"}));
 		create(inject(IntervalBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Interval.DIVISION_COUNT_BY_CLASSROOM_SESSION, "Nombre de division par classe"
 				, "1", "3"}));
+				*/
 	}
 	
 	private void createEvaluations(){
+		createFromExcelSheet(EvaluationType.class);
+		/*
 		createEnumeration(EvaluationType.class,SchoolConstant.Code.EvaluationType.TEST, "Test");
 		createEnumeration(EvaluationType.class,SchoolConstant.Code.EvaluationType.TEST1, "Test 1");
 		createEnumeration(EvaluationType.class,SchoolConstant.Code.EvaluationType.TEST2, "Test 2");
 		createEnumeration(EvaluationType.class,SchoolConstant.Code.EvaluationType.EXAM, "Examen");
+		*/
 	}
 	
 	/*private void createReportTemplates(){

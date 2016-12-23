@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
@@ -14,9 +15,11 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Subject;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.SubjectDao;
 
 public class SubjectClassroomSessionBusinessImpl extends AbstractTypedBusinessService<SubjectClassroomSession, SubjectClassroomSessionDao> implements SubjectClassroomSessionBusiness,Serializable {
 
@@ -28,20 +31,21 @@ public class SubjectClassroomSessionBusinessImpl extends AbstractTypedBusinessSe
 	}
 	
 	@Override
-	public SubjectClassroomSession create(SubjectClassroomSession subjectClassroomSession) {
-		super.create(subjectClassroomSession);
-		Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionDao.class).readByClassroomSession(subjectClassroomSession.getClassroomSession());
-		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
-			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = new ClassroomSessionDivisionSubject(classroomSessionDivision, subjectClassroomSession.getSubject()
-					, subjectClassroomSession.getWeight(), subjectClassroomSession.getTeacher());
-			
-			inject(ClassroomSessionDivisionSubjectBusiness.class).create(classroomSessionDivisionSubject);
+	protected void afterCreate(SubjectClassroomSession subjectClassroomSession) {
+		super.afterCreate(subjectClassroomSession);		
+		if(Boolean.TRUE.equals(subjectClassroomSession.getCascadeOperationToChildren())){
+			Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionDao.class).readByClassroomSession(subjectClassroomSession.getClassroomSession());
+			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
+				ClassroomSessionDivisionSubject classroomSessionDivisionSubject = new ClassroomSessionDivisionSubject(classroomSessionDivision, subjectClassroomSession.getSubject()
+						, subjectClassroomSession.getWeight(), subjectClassroomSession.getTeacher());
+				inject(ClassroomSessionDivisionSubjectBusiness.class).create(classroomSessionDivisionSubject);
+			}	
 		}
-		return subjectClassroomSession;
 	}
 	
 	@Override
-	public SubjectClassroomSession update(SubjectClassroomSession subjectClassroomSession) {
+	protected void beforeUpdate(SubjectClassroomSession subjectClassroomSession) {
+		super.beforeUpdate(subjectClassroomSession);
 		SubjectClassroomSession oldSubjectClassroomSession = dao.read(subjectClassroomSession.getIdentifier());
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionBySubject(oldSubjectClassroomSession.getClassroomSession(), oldSubjectClassroomSession.getSubject())){
 			classroomSessionDivisionSubject.setSubject(subjectClassroomSession.getSubject());
@@ -52,14 +56,13 @@ public class SubjectClassroomSessionBusinessImpl extends AbstractTypedBusinessSe
 			}
 			inject(ClassroomSessionDivisionSubjectDao.class).update(classroomSessionDivisionSubject);
 		}
-		return super.update(subjectClassroomSession);
 	}
-	
+		
 	@Override
-	public SubjectClassroomSession delete(SubjectClassroomSession subjectClassroomSession) {
+	protected void beforeDelete(SubjectClassroomSession subjectClassroomSession) {
+		super.beforeDelete(subjectClassroomSession);
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionBySubject(subjectClassroomSession.getClassroomSession(), subjectClassroomSession.getSubject()))
 			inject(ClassroomSessionDivisionSubjectBusiness.class).delete(classroomSessionDivisionSubject);
-		return super.delete(subjectClassroomSession);
 	}
 
 	@Override
@@ -82,6 +85,15 @@ public class SubjectClassroomSessionBusinessImpl extends AbstractTypedBusinessSe
 		return dao.readByClassroomSessionByStudent(classroomSession,student);
 	}
 
-	
+	@Override
+	public SubjectClassroomSession instanciateOne(String[] values) {
+		SubjectClassroomSession subjectClassroomSession = instanciateOne();
+		Integer index = 0;
+		subjectClassroomSession.setSubject(inject(SubjectDao.class).read(values[index++]));
+		String classroomSessionCode = values[index++];
+		if(StringUtils.isNotBlank(classroomSessionCode))
+			subjectClassroomSession.setClassroomSession(inject(ClassroomSessionDao.class).read(classroomSessionCode));
+		return subjectClassroomSession;
+	}
 	
 }

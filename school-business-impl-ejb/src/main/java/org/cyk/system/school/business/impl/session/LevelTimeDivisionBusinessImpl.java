@@ -1,6 +1,7 @@
 package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -22,8 +23,6 @@ public class LevelTimeDivisionBusinessImpl extends AbstractTypedBusinessService<
 
 	private static final long serialVersionUID = -3799482462496328200L;
 	
-	public static Boolean PROPERTY_VALUE_TOKENS_CONCATENATE_WITH_TIMEDIVISIONTYPE = Boolean.TRUE;
-	
 	@Inject
 	public LevelTimeDivisionBusinessImpl(LevelTimeDivisionDao dao) {
 		super(dao);  
@@ -43,11 +42,7 @@ public class LevelTimeDivisionBusinessImpl extends AbstractTypedBusinessService<
 	@Override
 	protected Object[] getPropertyValueTokens(LevelTimeDivision levelTimeDivision, String name) {
 		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
-			if(Boolean.TRUE.equals(PROPERTY_VALUE_TOKENS_CONCATENATE_WITH_TIMEDIVISIONTYPE))
-				return new Object[]{levelTimeDivision.getLevel(),levelTimeDivision.getTimeDivisionType()};
-			else{
-				return new Object[]{levelTimeDivision.getLevel()};
-			}
+			return new Object[]{levelTimeDivision.getLevel(),levelTimeDivision.getTimeDivisionType(),levelTimeDivision.getOrderNumber()};
 		return super.getPropertyValueTokens(levelTimeDivision, name);
 	}
 	
@@ -65,9 +60,10 @@ public class LevelTimeDivisionBusinessImpl extends AbstractTypedBusinessService<
 	@Override
 	public LevelTimeDivision instanciateOne(String[] values) {
 		LevelTimeDivision levelTimeDivision = instanciateOne();
-		levelTimeDivision.setCode(values[0]);
-		levelTimeDivision.setLevel(inject(LevelDao.class).read(values[1]));
-		levelTimeDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(values[2]));
+		Integer index = 0;
+		levelTimeDivision.setLevel(inject(LevelDao.class).read(values[index++]));
+		levelTimeDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(values[index++]));
+		levelTimeDivision.setOrderNumber(new BigDecimal(values[index++]).longValue());
 		return levelTimeDivision;
 	}
 	

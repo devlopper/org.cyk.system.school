@@ -4,24 +4,25 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.validation.constraints.NotNull;
 
 import org.cyk.system.school.model.AbstractNodeAggregatedResult;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.subject.Subject;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor
 public class SubjectClassroomSession extends AbstractNodeAggregatedResult implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne private Subject subject;
-	@ManyToOne private ClassroomSession classroomSession;
+	@ManyToOne @NotNull private Subject subject;
+	@ManyToOne @NotNull private ClassroomSession classroomSession;
 	
-	private Teacher teacher;
+	@ManyToOne private Teacher teacher;
 	
 	public SubjectClassroomSession(Subject subject,ClassroomSession classroomSession) {
 		super();

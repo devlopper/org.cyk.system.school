@@ -117,7 +117,8 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 	
 	@Override
 	public Collection<ClassroomSessionDivision> readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(String levelNameCode,String classroomSessionSuffix, Long classroomSessionDivisionOrderNumber) {
-		return namedQuery(readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
+		return namedQuery(readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber)
+				.parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
 				.parameter(ClassroomSession.FIELD_SUFFIX, classroomSessionSuffix)
 				.parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber)
                 .resultMany();

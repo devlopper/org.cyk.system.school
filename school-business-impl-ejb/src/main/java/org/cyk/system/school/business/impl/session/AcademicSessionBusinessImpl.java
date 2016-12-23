@@ -10,12 +10,14 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.impl.time.AbstractIdentifiablePeriodBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.SchoolBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.School;
@@ -72,4 +74,19 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 		return academicSession;
 	}
 	
+	@Override
+	public AcademicSession instanciateOne() {
+		AcademicSession academicSession = super.instanciateOne();
+		academicSession.setSchool(inject(SchoolBusiness.class).findDefault());
+		return academicSession;
+	}
+	
+	@Override
+	public AcademicSession instanciateOne(String[] values) {
+		AcademicSession academicSession = instanciateOne();
+		Integer index = 0;
+		academicSession.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(inject(TimeBusiness.class).parse(values[index++]));
+    	academicSession.getExistencePeriod().setToDate(inject(TimeBusiness.class).parse(values[index++]));
+		return academicSession;
+	}
 }

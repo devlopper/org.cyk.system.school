@@ -35,7 +35,10 @@ import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.persistence.api.actor.TeacherDao;
+import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
 
@@ -49,7 +52,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Override
 	protected Object[] getPropertyValueTokens(ClassroomSession classroomSession, String name) {
 		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
-			return new Object[]{classroomSession.getLevelTimeDivision(),classroomSession.getSuffix()};
+			return new Object[]{classroomSession.getAcademicSession(),classroomSession.getLevelTimeDivision(),classroomSession.getSuffix()};
 		return super.getPropertyValueTokens(classroomSession, name);
 	}
 	
@@ -179,13 +182,13 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<ClassroomSession> findByCriteria(SearchCriteria searchCriteria) {
-		if(searchCriteria.getAcademicSessions().isEmpty())
-			searchCriteria.addAcademicSession(inject(AcademicSessionBusiness.class).findCurrent(null));
+		prepareFindByCriteria(searchCriteria);
 		return dao.readByCriteria(searchCriteria);
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Long countByCriteria(SearchCriteria searchCriteria) {
+		prepareFindByCriteria(searchCriteria);
 		return dao.countByCriteria(searchCriteria);
 	}
 	
@@ -194,6 +197,41 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		super.prepareFindByCriteria(searchCriteria);
 		if(((SearchCriteria)searchCriteria).getAcademicSessions().isEmpty())
 			((SearchCriteria)searchCriteria).addAcademicSession(inject(AcademicSessionBusiness.class).findCurrent(null));
+	}
+	
+	@Override
+	public ClassroomSession instanciateOne() {
+		ClassroomSession classroomSession = super.instanciateOne();
+		classroomSession.setAcademicSession(inject(AcademicSessionBusiness.class).findCurrent(null));
+		return classroomSession;
+	}
+	
+	@Override
+	public ClassroomSession instanciateOne(String[] values) {
+		ClassroomSession classroomSession = instanciateOne();
+		Integer index = 0;
+		String code = StringUtils.defaultIfBlank(values[index++], null);
+		if(StringUtils.isNotBlank(code))
+			classroomSession.setAcademicSession(inject(AcademicSessionDao.class).read(code));
+		classroomSession.setLevelTimeDivision(inject(LevelTimeDivisionDao.class).read(values[index++]));
+		classroomSession.setSuffix(StringUtils.defaultIfBlank(values[index++],null));
+		
+		code = StringUtils.defaultIfBlank(values[index++], null);
+		if(StringUtils.isNotBlank(code))
+			classroomSession.setCoordinator(inject(TeacherDao.class).read(code));
+		
+		//String[] subjects = StringUtils.split(values[index++],";");
+		/*
+		Integer numberOfTrimester = Integer.parseInt(values[index++]);
+		TimeDivisionType timeDivisionType = inject(TimeDivisionTypeDao.class).read(values[index++]);
+		classroomSession.getDivisions().setSynchonizationEnabled(Boolean.TRUE);
+		for(int i = 0; i<numberOfTrimester;i++){
+			ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision();
+			classroomSessionDivision.setClassroomSession(classroomSession);
+			classroomSessionDivision.setTimeDivisionType(timeDivisionType);
+		}
+		*/
+		return classroomSession;
 	}
 	
 }

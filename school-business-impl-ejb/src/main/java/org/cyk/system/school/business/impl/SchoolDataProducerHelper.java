@@ -25,9 +25,6 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.CommonNodeInformations;
-import org.cyk.system.school.model.session.Level;
-import org.cyk.system.school.model.session.LevelGroup;
-import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
@@ -73,33 +70,28 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		}
 	}
 	
-	public Collection<ClassroomSessionInfos> instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
-			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
+	public void instanciateOneClassroomSession(Collection<ClassroomSession> classroomSessions
 			,Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers,AcademicSession academicSession,LevelTimeDivision levelTimeDivision,CommonNodeInformations commonNodeInformations,Object[][] evaluationTypes,Collection<Subject> subjects
 			,String[] suffixes,String[] metricCollectionCodes,Boolean studentEvaluationRequired,Boolean studentRankable){
 		if(suffixes==null)
 			suffixes = new String[]{null};
-		Collection<ClassroomSessionInfos> classroomSessionInfosCollection = new ArrayList<>();
 		for(String suffix : suffixes){
-			ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision,null,commonNodeInformations);
+			ClassroomSession classroomSession = new ClassroomSession(academicSession, levelTimeDivision,null,null,commonNodeInformations);
 			classroomSession.setSuffix(StringUtils.isBlank(suffix)?null:suffix);
 			classroomSession.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(new Date());
 			classroomSession.getExistencePeriod().setToDate(new Date());
 			classroomSessions.add(classroomSession);
-			ClassroomSessionInfos classroomSessionInfos = new ClassroomSessionInfos(classroomSession);
-			classroomSessionInfosCollection.add(classroomSessionInfos);
-			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
-					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
+			classroomSession.getDivisions().setSynchonizationEnabled(Boolean.TRUE);
+			
+			classroomSession.getDivisions().getCollection().add(createClassroomSessionDivision(metricCollectionIdentifiableGlobalIdentifiers,classroomSession
 					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable,1l));
-			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
-					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
+			classroomSession.getDivisions().getCollection().add(createClassroomSessionDivision(metricCollectionIdentifiableGlobalIdentifiers,classroomSession
 					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable,2l));
-			classroomSessionInfos.getDivisions().add(createClassroomSessionDivision(classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
-					,metricCollectionIdentifiableGlobalIdentifiers,classroomSessionInfos.getClassroomSession()
+			classroomSession.getDivisions().getCollection().add(createClassroomSessionDivision(metricCollectionIdentifiableGlobalIdentifiers,classroomSession
 					,evaluationTypes,subjects,metricCollectionCodes,studentEvaluationRequired,studentRankable,3l));
+			
 		}
 		System.out.println(levelTimeDivision.getLevel().getLevelName().getName()+" instanciated");
-		return classroomSessionInfosCollection;
 	}
 	/*
 	private void grade(Collection<ClassroomSession> classroomSessions,Collection<ClassroomSessionDivision> classroomSessionDivisions
@@ -108,9 +100,8 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		grade(classroomSessions, classroomSessionDivisions, classroomSessionDivisionSubjects, subjectEvaluationTypes, academicSession, levelTimeDivision, subjects,new String[]{""});
 	}*/
 	
-	private ClassroomSessionDivisionInfos createClassroomSessionDivision(Collection<ClassroomSessionDivision> classroomSessionDivisions
-			,Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes
-			,Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects
+	private ClassroomSessionDivision createClassroomSessionDivision(
+			Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers,ClassroomSession classroomSession,Object[][] evaluationTypes,Collection<Subject> subjects
 			,String[] metricCollectionCodes,Boolean studentEvaluationRequired,Boolean studentRankable,Long orderNumber){
 		ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision(classroomSession,RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class
 				,RootConstant.Code.TimeDivisionType.TRIMESTER)
@@ -118,61 +109,44 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		classroomSessionDivision.setStudentEvaluationRequired(studentEvaluationRequired);
 		classroomSessionDivision.setStudentRankable(studentRankable);
 		classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().set(DateTimeConstants.MILLIS_PER_DAY * 45l);
-		classroomSessionDivisions.add(classroomSessionDivision);
 		classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(new Date());
 		classroomSessionDivision.getExistencePeriod().setToDate(new Date());
+		classroomSessionDivision.setOrderNumber(orderNumber);
 		
 		for(MetricCollection metricCollection : inject(MetricCollectionDao.class).read(Arrays.asList(metricCollectionCodes)))
 			metricCollectionIdentifiableGlobalIdentifiers.add(new MetricCollectionIdentifiableGlobalIdentifier(metricCollection, classroomSessionDivision,null));
 		
 		for(Listener listener : Listener.COLLECTION)
-			listener.classroomSessionDivisionCreated(classroomSessionDivision,orderNumber);
+			listener.classroomSessionDivisionCreated(classroomSessionDivision);
 		
-		ClassroomSessionDivisionInfos classroomSessionDivisionInfos = new ClassroomSessionDivisionInfos(classroomSessionDivision);
-		
+		classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
 		if(subjects!=null)
 			for(Subject subject : subjects){
-				classroomSessionDivisionInfos.getSubjects().add(createClassroomSessionDivisionSubject(classroomSessionDivisionSubjects,subjectEvaluationTypes,classroomSessionDivision,subject,evaluationTypes));
+				classroomSessionDivision.getSubjects().getCollection().add(
+						createClassroomSessionDivisionSubject(classroomSessionDivision,subject,evaluationTypes));
 			}
-		/*
-		if(behaviourStudentMetricCollections!=null)
-			for(MetricCollection metricCollection : behaviourStudentMetricCollections)
-				classroomSessionDivisionStudentsMetricCollections.add(new ClassroomSessionDivisionStudentsMetricCollection(classroomSessionDivision, metricCollection,ClassroomSessionDivisionStudentsMetricCollection.Type.BEHAVIOUR));
-    	
-		if(attendanceStudentMetricCollections!=null)
-			for(MetricCollection metricCollection : attendanceStudentMetricCollections)
-				classroomSessionDivisionStudentsMetricCollections.add(new ClassroomSessionDivisionStudentsMetricCollection(classroomSessionDivision, metricCollection,ClassroomSessionDivisionStudentsMetricCollection.Type.ATTENDANCE));
-    	*/
 		
-		return classroomSessionDivisionInfos;
+		return classroomSessionDivision;
 	}
 	
-	private ClassroomSessionDivisionSubjectInfos createClassroomSessionDivisionSubject(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects
-			,Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes,ClassroomSessionDivision classroomSessionDivision,Subject subject,Object[][] evaluationTypes){
+	private ClassroomSessionDivisionSubject createClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subject,Object[][] evaluationTypes){
 		ClassroomSessionDivisionSubject classroomSessionDivisionSubject = new ClassroomSessionDivisionSubject(classroomSessionDivision,subject,BigDecimal.ONE,null);
-		classroomSessionDivisionSubjects.add(classroomSessionDivisionSubject);
-		ClassroomSessionDivisionSubjectInfos classroomSessionDivisionSubjectInfos = new ClassroomSessionDivisionSubjectInfos(classroomSessionDivisionSubject);
+		classroomSessionDivisionSubject.getEvaluationTypes().setSynchonizationEnabled(Boolean.TRUE);
+		//classroomSessionDivisionSubjects.add(classroomSessionDivisionSubject);
 		for(Object[] evaluationType : evaluationTypes){
 			Object[] infos = evaluationType;
-			classroomSessionDivisionSubjectInfos.getEvaluationTypes().add(createSubjectEvaluationType(subjectEvaluationTypes,classroomSessionDivisionSubject, (EvaluationType)infos[0], new BigDecimal((String)infos[1]),new BigDecimal((String)infos[2])));
+			ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = 
+					createSubjectEvaluationType(classroomSessionDivisionSubject, (EvaluationType)infos[0], new BigDecimal((String)infos[1]),new BigDecimal((String)infos[2]));
+			classroomSessionDivisionSubject.getEvaluationTypes().getCollection().add(classroomSessionDivisionSubjectEvaluationType);
 		}
-		return classroomSessionDivisionSubjectInfos;
+		return classroomSessionDivisionSubject;
 	}
 	
-	private ClassroomSessionDivisionSubjectEvaluationType createSubjectEvaluationType(Collection<ClassroomSessionDivisionSubjectEvaluationType> subjectEvaluationTypes,ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient,BigDecimal maximalValue){
+	private ClassroomSessionDivisionSubjectEvaluationType createSubjectEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType name,BigDecimal coefficient,BigDecimal maximalValue){
 		ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType = new ClassroomSessionDivisionSubjectEvaluationType(subject,name,coefficient,maximalValue);
 		for(Listener listener : Listener.COLLECTION)
 			listener.classroomSessionDivisionSubjectEvaluationTypeCreated(subjectEvaluationType);
-		subjectEvaluationTypes.add(subjectEvaluationType);
 		return subjectEvaluationType;
-	}
-	
-	public LevelTimeDivision createLevelTimeDivision(String levelCode,String levelName,LevelGroup levelGroup,CommonNodeInformations commonNodeInformations,Long index){
-		commonNodeInformations.setAggregateAttendance(Boolean.FALSE);
-		LevelName _levelName = RootDataProducerHelper.getInstance().createEnumeration(LevelName.class,levelCode,levelName);
-		_levelName.setNodeInformations(commonNodeInformations);
-		return RootDataProducerHelper.getInstance().create(new LevelTimeDivision(null,RootDataProducerHelper.getInstance().create(new Level(levelGroup,_levelName))
-				, RootDataProducerHelper.getInstance().getEnumeration(TimeDivisionType.class,RootConstant.Code.TimeDivisionType.YEAR),index));
 	}
 	
 	/**/
@@ -257,7 +231,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 		
 		/**/
 		
-		void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision,Long orderNumber);
+		void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision);
 		void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType);
 		
 		public static class Adapter extends BeanAdapter implements Listener,Serializable{
@@ -266,7 +240,7 @@ public class SchoolDataProducerHelper extends AbstractBean implements Serializab
 			/**/
 			
 			@Override
-			public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision,Long orderNumber) {}
+			public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {}
 			
 			@Override
 			public void classroomSessionDivisionSubjectEvaluationTypeCreated(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {}

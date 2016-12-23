@@ -18,16 +18,22 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
+import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 
 @Stateless
 public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivision, ClassroomSessionDivisionDao> implements ClassroomSessionDivisionBusiness,Serializable {
@@ -41,17 +47,18 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	
 	@Override
 	protected Object[] getPropertyValueTokens(ClassroomSessionDivision classroomSessionDivision, String name) {
-		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
+		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name)){
 			return new Object[]{classroomSessionDivision.getClassroomSession(),classroomSessionDivision.getTimeDivisionType(),classroomSessionDivision.getOrderNumber()};
+		}
 		return super.getPropertyValueTokens(classroomSessionDivision, name);
 	}
 	
 	@Override
 	protected void beforeCreate(ClassroomSessionDivision classroomSessionDivision) {
 		super.beforeCreate(classroomSessionDivision);
-		Long start = classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations().getClassroomSessionDivisionOrderNumberInterval()==null ?
-				0 : inject(IntervalBusiness.class).findGreatestLowestValue(classroomSessionDivision.getClassroomSession().getAcademicSession().getNodeInformations()
-						.getClassroomSessionDivisionOrderNumberInterval()).longValue();
+		CommonNodeInformations nodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSessionDivision.getClassroomSession());
+		Long start = nodeInformations.getClassroomSessionDivisionOrderNumberInterval()==null ?
+				1 : inject(IntervalBusiness.class).findGreatestLowestValue(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()).longValue();
 		classroomSessionDivision.setOrderNumber(start+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()));
 		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
 		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
@@ -90,8 +97,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 					classroomSessionDivision.getResults().setAverageLowest(s.getResults().getEvaluationSort().getAverage().getValue());	
 				
 				//TODO should be take first on subject if null on higher
-				if(s.getResults().getEvaluationSort().getAverage().getValue().compareTo(s.getClassroomSessionDivision().getClassroomSession().getAcademicSession()
-						.getNodeInformations().getEvaluationPassAverage())>=0){
+				if(s.getResults().getEvaluationSort().getAverage().getValue().compareTo(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
+						s.getClassroomSessionDivision().getClassroomSession()).getEvaluationPassAverage())>=0){
 					results.setNumberOfStudentPassingEvaluationAverage(results.getNumberOfStudentPassingEvaluationAverage()+1);
 				}
 			}
@@ -158,5 +165,24 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivision> findByLevelNameByClassroomSessionDivisionOrderNumber(String levelNameCode, Long classroomSessionDivisionOrderNumber) {
 		return dao.readByLevelNameByClassroomSessionDivisionOrderNumber(levelNameCode,classroomSessionDivisionOrderNumber);
+	}
+	
+	@Override
+	public ClassroomSessionDivision instanciateOne(String[] values) {
+		ClassroomSessionDivision classroomSessionDivision = instanciateOne();
+		Integer index = 0;
+		classroomSessionDivision.setClassroomSession(inject(ClassroomSessionDao.class).read(values[index++]));
+		classroomSessionDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(values[index++]));
+		
+		classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+		for(SubjectClassroomSession subjectClassroomSession : inject(SubjectClassroomSessionDao.class).readByClassroomSession(classroomSessionDivision.getClassroomSession())){
+			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).instanciateOne();
+			classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);
+			classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
+			classroomSessionDivisionSubject.setSubject(subjectClassroomSession.getSubject());
+			classroomSessionDivisionSubject.setWeight(subjectClassroomSession.getWeight());
+			classroomSessionDivisionSubject.setTeacher(subjectClassroomSession.getTeacher());
+		}
+		return classroomSessionDivision;
 	}
 }

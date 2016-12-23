@@ -43,7 +43,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	
 	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivision> divisions;
 	
-	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Teacher coordinator,CommonNodeInformations nodeInformations) {
+	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,String suffix,Teacher coordinator,CommonNodeInformations nodeInformations) {
 		super();
 		this.academicSession = academicSession;
 		this.levelTimeDivision = levelTimeDivision;
@@ -51,8 +51,8 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 		this.nodeInformations = nodeInformations;
 	}
 	
-	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,Teacher coordinator) {
-		this(academicSession,levelTimeDivision,coordinator,null);
+	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,String suffix,Teacher coordinator) {
+		this(academicSession,levelTimeDivision,suffix,coordinator,null);
 	}
 	
 	public CommonNodeInformations getNodeInformations(){

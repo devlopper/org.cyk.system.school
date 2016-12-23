@@ -16,6 +16,14 @@ public class EvaluationTypeBusinessImpl extends AbstractEnumerationBusinessImpl<
 	@Inject
 	public EvaluationTypeBusinessImpl(EvaluationTypeDao dao) {
 		super(dao); 
-	}   
+	}
+	
+	@Override
+	public EvaluationType instanciateOne(String[] values) {
+		EvaluationType evaluationType = super.instanciateOne(values);
+		Integer index = 10;
+		evaluationType.setMaximum(commonUtils.getBigDecimal(values[index++]));
+		return evaluationType;
+	}
 	
 }

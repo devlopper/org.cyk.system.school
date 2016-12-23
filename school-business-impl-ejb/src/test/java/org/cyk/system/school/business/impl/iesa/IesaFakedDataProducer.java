@@ -32,6 +32,7 @@ import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.security.Installation;
+import org.cyk.system.root.persistence.api.GenericDao;
 import org.cyk.system.root.persistence.api.file.FileDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalDao;
@@ -75,6 +76,7 @@ import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.LevelGroupDao;
+import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
@@ -129,7 +131,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	,subjectArtAndCraft,subjectMusic,subjectICT,subjectPhysicalEducation,subjectGrammar,subjectReadingComprehension,subjectHandWriting,
 	subjectSpelling,subjectPhonics,subjectCreativeWriting,subjectMoralEducation,subjectScience;
 	
-	private ClassroomSessionInfos pk,k1,k2,k3,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12;
+	//private ClassroomSessionInfos pk,k1,k2,k3,g1,g2,g3,g4,g5,g6,g7,g8,g9,g10,g11,g12;
 	private MetricCollection[] pkMetricCollections,k1MetricCollections,k2k3MetricCollections
 	,g1g6MetricCollections,g7g12MetricCollections,attendanceMetricCollections;
 	
@@ -231,11 +233,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			private static final long serialVersionUID = -5301917191935456060L;
 
 			@Override
-    		public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision,Long orderNumber) {
-    			super.classroomSessionDivisionCreated(classroomSessionDivision,orderNumber);
-    			if(orderNumber==1){
+    		public void classroomSessionDivisionCreated(ClassroomSessionDivision classroomSessionDivision) {
+    			super.classroomSessionDivisionCreated(classroomSessionDivision);
+    			if(classroomSessionDivision.getOrderNumber()==1){
 					classroomSessionDivision.getExistencePeriod().getNumberOfMillisecond().set(63l * DateTimeConstants.MILLIS_PER_DAY);
-				}else if(orderNumber==2){
+				}else if(classroomSessionDivision.getOrderNumber()==2){
 					classroomSessionDivision.getExistencePeriod().setFromDate(new DateTime(2017, 1, 9, 0, 0).toDate());
 	    			classroomSessionDivision.getExistencePeriod().setToDate(new DateTime(2017, 3, 27, 0, 0).toDate());
 				}
@@ -250,7 +252,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			}
     	});
 		
-		org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionBusinessImpl.Listener.COLLECTION.add(
+		/*org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionBusinessImpl.Listener.COLLECTION.add(
 				new org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionBusinessImpl.Listener.Adapter.Default(){
 					private static final long serialVersionUID = 1L;
 
@@ -271,7 +273,7 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 					}
 					
 					
-				});
+				});*/
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -357,14 +359,6 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 				.read(SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT),reportTemplateG1G12,RootConstant.Code.TimeDivisionType.DAY, RootConstant.Code.TimeDivisionType.TRIMESTER, "50", classroomSessionDivisionIndex);	
 		CommonNodeInformations commonNodeInformationsG10G12 = commonNodeInformationsG7G9;
 		
-		School school = new School(ownedCompanyBusiness.findDefaultOwnedCompany(),commonNodeInformationsG1G3);
-    	create(school);
-    	
-    	AcademicSession academicSession = new AcademicSession(school,commonNodeInformationsG1G3,new Date());
-    	academicSession.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(new Date());
-    	academicSession.getExistencePeriod().setToDate(new Date(academicSession.getExistencePeriod().getFromDate().getTime()+DateTimeConstants.MILLIS_PER_DAY*355));
-    	academicSession = create(academicSession);
-		
     	createMetricCollections();
     	
     	inject(GenericBusiness.class).create(commonUtils.castCollection(inject(TeacherBusiness.class).instanciateManyRandomly(numbreOfTeachers),AbstractIdentifiable.class));
@@ -372,8 +366,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		inject(GenericBusiness.class).create(commonUtils.castCollection(inject(StudentBusiness.class).instanciateManyRandomly(numbreOfStudents),AbstractIdentifiable.class));
 		flush("Students");
 		
-    	school.getOwnedCompany().getCompany().setManager(personDao.readOneRandomly());
-    	companyBusiness.update(school.getOwnedCompany().getCompany());
+    	//school.getOwnedCompany().getCompany().setManager(personDao.readOneRandomly());
+    	//companyBusiness.update(school.getOwnedCompany().getCompany());
     	    	
     	Collection<ClassroomSession> classroomSessions = new ArrayList<>(); 
     	Collection<ClassroomSessionDivision> classroomSessionDivisions = new ArrayList<>(); 
@@ -397,9 +391,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_FINE_MOTOR_SKILLS
     					,SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT},Boolean.FALSE,Boolean.FALSE).iterator().next();
     	*/
-    	k1 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
-    			,metricCollectionIdentifiableGlobalIdentifiers,academicSession
-    			, schoolDataProducerHelper.createLevelTimeDivision(SchoolConstant.Code.LevelName.K1,"Kindergarten 1",levelGroupKindergarten,commonNodeInformationsK1,gradeIndex++) 
+    	/*
+    	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,metricCollectionIdentifiableGlobalIdentifiers,academicSession
+    			,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1) 
     			,null,null,null,null,new String[]{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_COMMUNICATION_SKILLS
@@ -408,7 +402,8 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_MATHEMATICS
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_WORK_HABITS
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SOCIAL_SKILLS
-    					,SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT},Boolean.FALSE,Boolean.FALSE).iterator().next();
+    					,SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT},Boolean.FALSE,Boolean.FALSE);
+    	*/
     	/*
     	k2 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
     			,metricCollectionIdentifiableGlobalIdentifiers,academicSession
@@ -444,14 +439,14 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
     					,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WORK_BEHAVIOUR_HABITS
     					,SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT},Boolean.FALSE,Boolean.FALSE).iterator().next();
     	*/
-    	g1 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes
-    			,metricCollectionIdentifiableGlobalIdentifiers,academicSession
-    			, schoolDataProducerHelper.createLevelTimeDivision(SchoolConstant.Code.LevelName.G1,"Grade 1",levelGroupPrimaryLower,commonNodeInformationsG1G3,gradeIndex++),null 
+    	/*
+    	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,metricCollectionIdentifiableGlobalIdentifiers,academicSession
+    			, inject(GenericDao.class).read(LevelTimeDivision.class, SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1),null 
     			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3
     			,new String[]{"A","B"},new String[]{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT,SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT
-    					,SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT},Boolean.TRUE,Boolean.TRUE).iterator().next();  
+    					,SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT},Boolean.TRUE,Boolean.TRUE);  
     	
-    	
+    	*/
     	/*g2 = schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,classroomSessionDivisions,classroomSessionDivisionSubjects,subjectEvaluationTypes,academicSession
     			, schoolDataProducerHelper.createLevelTimeDivision("G2","Grade 2",levelGroupPrimary,commonNodeInformationsG1G3,gradeIndex++) 
     			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3,classroomSessionDivisionStudentsMetricCollections
@@ -529,11 +524,11 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 	protected void doBusiness(Listener listener){
 		//ExecutorService executor = Executors.newFixedThreadPool(5);
 		//Collection<StudentSubject> studentSubjects = new ArrayList<>();
-		for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{g1,g2,g3,g4,g5,g6,g7,g8,g9}){
+		/*for(ClassroomSessionInfos classroomSessionInfos : new ClassroomSessionInfos[]{g1,g2,g3,g4,g5,g6,g7,g8,g9}){
 			Collection<Student> students = studentDao.readManyRandomly(numbreOfStudentsByClassroomSession);
 			createStudentClassroomSessions(classroomSessionInfos, students);	
 			//executor.execute(new ClassroomsessionBusinessProducer(classroomSessionInfos, listener, students,studentSubjects));
-		}
+		}*/
 		//executor.shutdown();
         //while (!executor.isTerminated()) {}
 		

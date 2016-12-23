@@ -470,7 +470,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				,String metricCollectionCode){
 			addMetricsLabelValueCollection(report, studentClassroomSessionDivision,metricCollectionCode);
 			report.getCurrentLabelValueCollection().getCollection().add(0, new LabelValueReport(report.getCurrentLabelValueCollection(),null,"Number of time school opened"
-					, (studentClassroomSessionDivision.getClassroomSessionDivision().getExistencePeriod().getNumberOfMillisecond().get()
+					, (studentClassroomSessionDivision.getClassroomSessionDivision().getExistencePeriod().getNumberOfMillisecond().get(0l)
 							/DateTimeConstants.MILLIS_PER_DAY)+""));
 			
 		}
@@ -497,9 +497,13 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
 						.readByClassroomSessionByOrderNumber(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 								,(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()+1));
-			
-				labelValueCollectionReport.add("NEXT OPENING",format(nextClassroomSessionDivision.getBirthDate()));
-				labelValueCollectionReport.add("NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getDeathDate()));
+				if(nextClassroomSessionDivision==null){
+					
+				}else{
+					labelValueCollectionReport.add("NEXT OPENING",format(nextClassroomSessionDivision.getBirthDate()));
+					labelValueCollectionReport.add("NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getDeathDate()));	
+				}
+				
 			}
 		}
 		

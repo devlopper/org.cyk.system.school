@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
@@ -133,12 +134,12 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 	
 	@Override
 	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSessionDivisionSubject subject) {
-		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentSubjectAverageScale();
+		return inject(ClassroomSessionBusiness.class).findCommonNodeInformations(subject.getClassroomSessionDivision().getClassroomSession()).getStudentSubjectAverageScale();
 	}
 	
 	@Override
 	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSessionDivisionSubject subject) {
-		return subject.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getNodeInformations().getStudentSubjectAverageScale();
+		return inject(ClassroomSessionBusiness.class).findCommonNodeInformations(subject.getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionAveragePromotionScale();
 	}
 	
 	@Override

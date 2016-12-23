@@ -1,35 +1,64 @@
 package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
+import java.util.Date;
 
+import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.party.person.PersonRelationshipType;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.AcademicSession;
+import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.utility.common.CommonUtils;
+import org.joda.time.DateTimeConstants;
 
 public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
  
     @Override
+    protected void populate() {
+    	super.populate();
+    	//installApplication();
+    }
+    
+    @Override
     protected void businesses() {
     	dataProducer.setGenerateCompleteAcademicSession(Boolean.FALSE);
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
+    	ClassroomSession classroomSession = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
+    			.instanciateOne(new String[]{null,SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,"A",null}));
+    	String classroomSessionCode = classroomSession.getCode();
+    	create(inject(SubjectClassroomSessionBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Subject.ACCOUNTING,classroomSessionCode}));
+    	create(inject(ClassroomSessionDivisionBusiness.class).instanciateOne(new String[]{classroomSessionCode,RootConstant.Code.TimeDivisionType.TRIMESTER}));
+    	
+    	/*
+    	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,metricCollectionIdentifiableGlobalIdentifiers,academicSession
+    			, inject(GenericDao.class).read(LevelTimeDivision.class, SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1),null 
+    			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3
+    			,new String[]{"A","B"},new String[]{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT,SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT
+    					,SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT},Boolean.TRUE,Boolean.TRUE);  
+    	*/
     	Student student1 = inject(StudentBusiness.class).instanciateOneRandomly();
     	student1.setCode("STUD1");
     	student1.setName("komenan");
     	student1.getPerson().setLastnames("yao christian");
     	if(student1.getPerson().getContactCollection()!=null && student1.getPerson().getContactCollection().getElectronicMails()!=null)
     		student1.getPerson().getContactCollection().getElectronicMails().clear();
-    	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
-    	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
+    	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
+    	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
     	
     	Student pkStudent = inject(StudentBusiness.class).instanciateOne();
     	pkStudent.setCode("PK_STUD1");
@@ -55,40 +84,28 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	
     	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(pkStudent,k1Student,k2Student,k3Student,student1),AbstractIdentifiable.class));
     	
-    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
+    	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{"STUD1",classroomSessionCode}));
+    	
+    	/*schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k1Student.getCode()},dataProducer.getK1().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k2Student.getCode()},dataProducer.getK2().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
     	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{k3Student.getCode()},dataProducer.getK3().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
-    	
-    	schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{student1.getCode()},
-    			dataProducer.getG1().getClassroomSession(), new Object[][]{{15},{15},{15}}); 
-    	
+    	*/
+    	/*schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{student1.getCode()},
+    			inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(SchoolConstant.Code.LevelName.G1,"A").iterator().next() , new Object[][]{{15},{15},{15}}); 
+    	*/
     	
     	schoolBusinessTestHelper.getEvaluationTypes().addAll(inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.COLLECTION));
     	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
-    		{SchoolConstant.Code.LevelName.PK,null,1l}
+    		/*{SchoolConstant.Code.LevelName.PK,null,1l}
     		,{SchoolConstant.Code.LevelName.K1,null,1l}
     		,{SchoolConstant.Code.LevelName.K2,null,1l}
     		,{SchoolConstant.Code.LevelName.K3,null,1l}
-    		,{SchoolConstant.Code.LevelName.G1,"A",1l}
+    		,*/{SchoolConstant.Code.LevelName.G1,"A",1l}
     	}, Boolean.TRUE, Boolean.FALSE);
     	
-    	/*
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
-    		{SchoolConstant.Code.LevelName.PK,null,1l}
-    		,{SchoolConstant.Code.LevelName.PK,null,1l}
-    		,{SchoolConstant.Code.LevelName.PK,null,1l}
-    		,{SchoolConstant.Code.LevelName.PK,null,1l}
-    		,{SchoolConstant.Code.LevelName.PK,null,1l}
-    	}, Boolean.FALSE, Boolean.FALSE);
-    	*/
-    	/*
-    	inject(StudentClassroomSessionBusiness.class).updateAverage(Arrays.asList(dataProducer.getG1().getClassroomSession()), new BusinessServiceCallArguments<StudentClassroomSession>());
-    	inject(StudentClassroomSessionBusiness.class).updateRank(Arrays.asList(dataProducer.getG1().getClassroomSession()), 
-    			schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), new BusinessServiceCallArguments<StudentClassroomSession>());
-
-    	*/
+    	
     }
         
 }

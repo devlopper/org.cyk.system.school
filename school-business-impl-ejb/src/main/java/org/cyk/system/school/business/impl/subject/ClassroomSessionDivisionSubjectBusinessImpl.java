@@ -3,7 +3,6 @@ package org.cyk.system.school.business.impl.subject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
@@ -17,9 +16,11 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Student;
@@ -28,11 +29,13 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 
 import lombok.Getter;
@@ -59,13 +62,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			return new Object[]{classroomSessionDivisionSubject.getClassroomSessionDivision(),classroomSessionDivisionSubject.getSubject()};
 		return super.getPropertyValueTokens(classroomSessionDivisionSubject, name);
 	}
-	
-	@Override
-	public Collection<ClassroomSessionDivisionSubject> findDuplicates(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-		return Arrays.asList(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionBySubject(classroomSessionDivisionSubject.getClassroomSessionDivision()
-				, classroomSessionDivisionSubject.getSubject()));
-	}
-	
+		
 	@Override
 	protected void afterCreate(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		super.afterCreate(classroomSessionDivisionSubject);
@@ -78,6 +75,10 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		}
 		commonUtils.increment(Long.class, classroomSessionDivisionSubject.getClassroomSessionDivision(), ClassroomSessionDivision.FIELD_NUMBER_OF_SUBJECTS, 1l);
 		inject(ClassroomSessionDivisionBusiness.class).update(classroomSessionDivisionSubject.getClassroomSessionDivision());
+		
+		if(classroomSessionDivisionSubject.getEvaluationTypes().isSynchonizationEnabled()){
+			inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).create(classroomSessionDivisionSubject.getEvaluationTypes().getCollection());
+		}
 		
 		if(Boolean.TRUE.equals(classroomSessionDivisionSubject.getAutoCreateStudentClassroomSessionDivisionSubject())){
 			for(Student student : inject(StudentDao.class).readByClassroomSessionDivision(classroomSessionDivisionSubject.getClassroomSessionDivision())){
@@ -126,8 +127,8 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 							results.setAverageHighest(value);
 						}
 						//TODO should be take first on subject if null on higher
-						if(value.compareTo(studentSubject.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession().getAcademicSession()
-								.getNodeInformations().getEvaluationPassAverage())>=0){
+						if(value.compareTo(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentSubject.getClassroomSessionDivisionSubject()
+								.getClassroomSessionDivision().getClassroomSession()).getEvaluationPassAverage())>=0){
 							results.setNumberOfStudentPassingEvaluationAverage(results.getNumberOfStudentPassingEvaluationAverage()+1);
 						}
 					}
@@ -155,6 +156,16 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public ClassroomSessionDivisionSubject findByClassroomSessionDivisionBySubject(ClassroomSessionDivision classroomSessionDivision,Subject subject) {
 		return dao.readByClassroomSessionDivisionBySubject(classroomSessionDivision,subject);
+	}
+	
+	@Override
+	public ClassroomSessionDivisionSubject instanciateOne() {
+		ClassroomSessionDivisionSubject classroomSessionDivisionSubject = super.instanciateOne();
+		classroomSessionDivisionSubject.getEvaluationTypes().setSynchonizationEnabled(Boolean.TRUE);
+		for(EvaluationType evaluationType : inject(EvaluationTypeDao.class).readAll())
+			classroomSessionDivisionSubject.getEvaluationTypes().getCollection().add(new ClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubject
+					, evaluationType, evaluationType.getWeight(), evaluationType.getMaximum()));
+		return classroomSessionDivisionSubject;
 	}
 	
 	/**/

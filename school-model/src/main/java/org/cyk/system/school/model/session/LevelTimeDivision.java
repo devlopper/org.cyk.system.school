@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.time.TimeDivisionType;
-import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,12 +32,12 @@ public class LevelTimeDivision extends AbstractIdentifiable implements Serializa
 	
 	@Override
 	public String toString() {
-		return level+Constant.CHARACTER_SPACE.toString()+timeDivisionType+Constant.CHARACTER_SPACE.toString()+getOrderNumber();
+		return getCode();
 	}
 	
 	@Override
 	public String getUiString() {
-		return level.getUiString()+Constant.CHARACTER_SPACE+timeDivisionType.getUiString()+Constant.CHARACTER_SPACE+getOrderNumber();
+		return getCode();
 	}
 	
 	/**/

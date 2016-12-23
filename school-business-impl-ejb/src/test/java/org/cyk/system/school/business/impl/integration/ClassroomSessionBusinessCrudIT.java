@@ -53,7 +53,7 @@ public class ClassroomSessionBusinessCrudIT extends AbstractBusinessIT {
     			@Override
     			public void run() {
     				ClassroomSession classroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
-    						,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1), null);
+    						,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1), null,null);
     				classroomSession.setSuffix(suffix);
     				create(classroomSession);
     			}
@@ -78,7 +78,7 @@ public class ClassroomSessionBusinessCrudIT extends AbstractBusinessIT {
 			private static final long serialVersionUID = -8176804174113453706L;
 			@Override protected void code() {
 				create(new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
-						,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1), null));
+						,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1), null,null));
 			}
 		}.execute();
     }

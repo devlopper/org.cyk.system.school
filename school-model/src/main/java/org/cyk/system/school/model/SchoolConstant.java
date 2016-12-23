@@ -109,26 +109,48 @@ public interface SchoolConstant {
 			
 		}
 		
+		public static class Level implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String PK = RootConstant.Code.generate(LevelName.PK);
+			public static String K1 = RootConstant.Code.generate(LevelName.K1);
+			public static String K2 = RootConstant.Code.generate(LevelName.K2);
+			public static String K3 = RootConstant.Code.generate(LevelName.K3);
+			public static String G1 = RootConstant.Code.generate(LevelName.G1);
+			public static String G2 = RootConstant.Code.generate(LevelName.G2);
+			public static String G3 = RootConstant.Code.generate(LevelName.G3);
+			public static String G4 = RootConstant.Code.generate(LevelName.G4);
+			public static String G5 = RootConstant.Code.generate(LevelName.G5);
+			public static String G6 = RootConstant.Code.generate(LevelName.G6);
+			public static String G7 = RootConstant.Code.generate(LevelName.G7);
+			public static String G8 = RootConstant.Code.generate(LevelName.G8);
+			public static String G9 = RootConstant.Code.generate(LevelName.G9);
+			public static String G10 = RootConstant.Code.generate(LevelName.G10);
+			public static String G11 = RootConstant.Code.generate(LevelName.G11);
+			public static String G12 = RootConstant.Code.generate(LevelName.G12);
+			
+		}
+		
 		public static class LevelTimeDivision implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String PK_YEAR_1 = RootConstant.Code.generate(LevelName.PK,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String K1_YEAR_1 = RootConstant.Code.generate(LevelName.K1,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String K2_YEAR_1 = RootConstant.Code.generate(LevelName.K2,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String K3_YEAR_1 = RootConstant.Code.generate(LevelName.K3,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G1_YEAR_1 = RootConstant.Code.generate(LevelName.G1,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G2_YEAR_1 = RootConstant.Code.generate(LevelName.G2,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G3_YEAR_1 = RootConstant.Code.generate(LevelName.G3,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G4_YEAR_1 = RootConstant.Code.generate(LevelName.G4,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G5_YEAR_1 = RootConstant.Code.generate(LevelName.G5,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G6_YEAR_1 = RootConstant.Code.generate(LevelName.G6,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G7_YEAR_1 = RootConstant.Code.generate(LevelName.G7,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G8_YEAR_1 = RootConstant.Code.generate(LevelName.G8,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G9_YEAR_1 = RootConstant.Code.generate(LevelName.G9,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G10_YEAR_1 = RootConstant.Code.generate(LevelName.G10,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G11_YEAR_1 = RootConstant.Code.generate(LevelName.G11,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G12_YEAR_1 = RootConstant.Code.generate(LevelName.G12,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
-			//public static String G13_YEAR_1 = RootConstant.Code.generate(LevelName.G13,org.cyk.system.root.model.RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String PK_YEAR_1 = RootConstant.Code.generate(Level.PK,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K1_YEAR_1 = RootConstant.Code.generate(Level.K1,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K2_YEAR_1 = RootConstant.Code.generate(Level.K2,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K3_YEAR_1 = RootConstant.Code.generate(Level.K3,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G1_YEAR_1 = RootConstant.Code.generate(Level.G1,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G2_YEAR_1 = RootConstant.Code.generate(Level.G2,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G3_YEAR_1 = RootConstant.Code.generate(Level.G3,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G4_YEAR_1 = RootConstant.Code.generate(Level.G4,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G5_YEAR_1 = RootConstant.Code.generate(Level.G5,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G6_YEAR_1 = RootConstant.Code.generate(Level.G6,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G7_YEAR_1 = RootConstant.Code.generate(Level.G7,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G8_YEAR_1 = RootConstant.Code.generate(Level.G8,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G9_YEAR_1 = RootConstant.Code.generate(Level.G9,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G10_YEAR_1 = RootConstant.Code.generate(Level.G10,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G11_YEAR_1 = RootConstant.Code.generate(Level.G11,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G12_YEAR_1 = RootConstant.Code.generate(Level.G12,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			//public static String G13_YEAR_1 = RootConstant.Code.generate(Level.G13,RootConstant.Code.TimeDivisionType.YEAR,"1");
 			
 		}
 		

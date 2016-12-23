@@ -184,7 +184,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			if(StringUtils.isBlank(detail[1]))
 				continue;
 			Student student = studentBusiness.find(detail[0]);
-			StudentClassroomSessionDivisionSubject studentSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(student, subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
+			StudentClassroomSessionDivisionSubject studentSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(student
+					, subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
 			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
 		}
 		//debug(subjectEvaluation);
@@ -499,7 +500,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		    	    		{studentClassroomSessionDivisionSubjects.iterator().next().getStudent().getCode(),"90","30","60"}
 		    	    	}}
 					};
-				}
+				}else
+					System.out.println("No StudentClassroomSessionDivisionSubject found. "+StringUtils.join(classroomSessionInfo,","));
 			}
 			simulateStudentClassroomSessionDivisionReport(classroomSessionDivision, objects, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, print, email);
 		}
@@ -554,7 +556,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		
 		System.out.println("Creating custom classroom session");
 		ClassroomSession customClassroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
-				, levelTimeDivisionDao.readOneRandomly(), null);
+				, levelTimeDivisionDao.readOneRandomly(), null,null);
 		customClassroomSession.getExistencePeriod().setFromDate(new Date());
 		customClassroomSession.getExistencePeriod().setToDate(new Date());
 		inject(ClassroomSessionBusiness.class).create(customClassroomSession);

@@ -1,9 +1,6 @@
 package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,12 +17,13 @@ public class SubjectBusinessImpl extends AbstractEnumerationBusinessImpl<Subject
 	public SubjectBusinessImpl(SubjectDao dao) {
 		super(dao); 
 	}
-
+	
 	@Override
-	public Collection<Subject> instanciateMany(List<String[]> values) {
-		Collection<Subject> subjects = new ArrayList<>();
-		for(String[] value : values)
-			subjects.add(new Subject(value[0], value[2], null));
-		return subjects;
+	public Subject instanciateOne(String[] values) {
+		Subject subject = instanciateOne();
+		Integer index = 0;
+		subject.setCode(values[index++]);
+		subject.setName(values[index++]);
+		return subject;
 	}
 }

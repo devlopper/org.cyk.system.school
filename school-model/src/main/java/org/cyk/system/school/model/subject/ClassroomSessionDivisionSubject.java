@@ -57,11 +57,11 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	@Transient private Collection<Evaluation> evaluations = new ArrayList<>();
 	@Transient private Collection<Lecture> lectures = new ArrayList<>();
 	
-	public ClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subject, BigDecimal coefficient,Teacher teacher) {
+	public ClassroomSessionDivisionSubject(ClassroomSessionDivision classroomSessionDivision,Subject subject, BigDecimal weight,Teacher teacher) {
 		super();
 		this.classroomSessionDivision = classroomSessionDivision;
 		this.subject = subject;
-		getGlobalIdentifierCreateIfNull().setWeight(coefficient);
+		getGlobalIdentifierCreateIfNull().setWeight(weight);
 		this.teacher = teacher;
 	}
 	
