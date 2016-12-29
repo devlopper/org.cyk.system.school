@@ -20,19 +20,19 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeDaoImpl extends Abstra
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
-		registerNamedQuery(readByClassroomSessionDivisionSubjectByEvaluationType, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT).and(ClassroomSessionDivisionSubjectEvaluationType.FIELD_TYPE));
-		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT));
+		registerNamedQuery(readByClassroomSessionDivisionSubjectByEvaluationType, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT).and(ClassroomSessionDivisionSubjectEvaluationType.FIELD_EVALUATION_TYPE));
+		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT));
 	}
 	
 	@Override
 	public ClassroomSessionDivisionSubjectEvaluationType readByClassroomSessionDivisionSubjectByEvaluationType(ClassroomSessionDivisionSubject subject,EvaluationType evaluationTypeName) {
-		return namedQuery(readByClassroomSessionDivisionSubjectByEvaluationType).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT, subject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_TYPE, evaluationTypeName)
+		return namedQuery(readByClassroomSessionDivisionSubjectByEvaluationType).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, subject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_EVALUATION_TYPE, evaluationTypeName)
 				.ignoreThrowable(NoResultException.class).resultOne();
 	}
 
 	@Override
 	public Collection<ClassroomSessionDivisionSubjectEvaluationType> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-		return namedQuery(readByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT, classroomSessionDivisionSubject).resultMany();
+		return namedQuery(readByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, classroomSessionDivisionSubject).resultMany();
 	}
 	
 }

@@ -1,13 +1,15 @@
 package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
-import java.util.Date;
 
-import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
+import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
+import org.cyk.system.root.persistence.api.GenericDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -15,12 +17,10 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
-import org.cyk.system.school.model.session.School;
-import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.utility.common.CommonUtils;
-import org.joda.time.DateTimeConstants;
+import org.cyk.utility.common.Constant;
 
 public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
 
@@ -39,17 +39,81 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	installApplication();
     	
     	ClassroomSession classroomSession = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-    			.instanciateOne(new String[]{null,SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,"A",null}));
-    	String classroomSessionCode = classroomSession.getCode();
-    	create(inject(SubjectClassroomSessionBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Subject.ACCOUNTING,classroomSessionCode}));
-    	create(inject(ClassroomSessionDivisionBusiness.class).instanciateOne(new String[]{classroomSessionCode,RootConstant.Code.TimeDivisionType.TRIMESTER}));
+    		.instanciateOne(new String[]{null,SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,"A",null
+    		,StringUtils.join(new String[]{
+    			StringUtils.join(new String[]{"1"},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{"2"},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{"3"},Constant.CHARACTER_COMA.toString())
+    			},Constant.CHARACTER_VERTICAL_BAR.toString())
+    		
+    		,StringUtils.join(new String[]{
+    			StringUtils.join(new String[]{SchoolConstant.Code.Subject.ACCOUNTING},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{SchoolConstant.Code.Subject.ART_CRAFT},Constant.CHARACTER_COMA.toString())
+    		},Constant.CHARACTER_VERTICAL_BAR.toString())
+    		
+    		,StringUtils.join(new String[]{
+    			StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.TEST1,"0.15"},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.TEST2,"0.15"},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.EXAM,"0.7"},Constant.CHARACTER_COMA.toString())
+    			},Constant.CHARACTER_VERTICAL_BAR.toString())
+    		
+    		,StringUtils.join(new String[]{
+				StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT},Constant.CHARACTER_COMA.toString())
+			},Constant.CHARACTER_VERTICAL_BAR.toString())
+        		
+    		
+    		}));
     	
+    	String classroomSessionCode = classroomSession.getCode();
+    	    	
+    	ClassroomSession classroomSessionPk = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
+    		.instanciateOne(new String[]{null,SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1,null,null
+    		,StringUtils.join(new String[]{
+    			StringUtils.join(new String[]{"1"},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{"2"},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{"3"},Constant.CHARACTER_COMA.toString())
+    			},Constant.CHARACTER_VERTICAL_BAR.toString())
+    		
+    		,StringUtils.join(new String[]{
+    			
+    		},Constant.CHARACTER_VERTICAL_BAR.toString())
+    		
+    		,StringUtils.join(new String[]{
+    			
+    			},Constant.CHARACTER_VERTICAL_BAR.toString())
+    		
+    		,StringUtils.join(new String[]{
+				StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS},Constant.CHARACTER_COMA.toString())
+			},Constant.CHARACTER_VERTICAL_BAR.toString())
+    			
+    		}));
+    	
+    	String classroomSessionPkCode = classroomSessionPk.getCode();
     	/*
-    	schoolDataProducerHelper.instanciateOneClassroomSession(classroomSessions,metricCollectionIdentifiableGlobalIdentifiers,academicSession
-    			, inject(GenericDao.class).read(LevelTimeDivision.class, SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1),null 
-    			,new Object[][]{{evaluationTypeTest1,"0.15","100"},{evaluationTypeTest2,"0.15","100"},{evaluationTypeExam,"0.7","100"}}, subjectsG1G3
-    			,new String[]{"A","B"},new String[]{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT,SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT
-    					,SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT},Boolean.TRUE,Boolean.TRUE);  
+    	create(inject(SubjectClassroomSessionBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Subject.ACCOUNTING,classroomSessionPkCode}));
+    	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(
+    			new String[]{classroomSessionPkCode,RootConstant.Code.TimeDivisionType.TRIMESTER,null,null,null,null,null,null});
+    	classroomSessionDivision.getGlobalIdentifierCreateIfNull();
+    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().setSynchonizationEnabled(Boolean.TRUE);
+    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
+    		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class
+    				,SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT), classroomSessionDivision, null));
+    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
+		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class
+				,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE), classroomSessionDivision, null));
+    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
+		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class
+				,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE), classroomSessionDivision, null));
+    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
+		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class
+				,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS), classroomSessionDivision, null));
+    	create(classroomSessionDivision);
     	*/
     	Student student1 = inject(StudentBusiness.class).instanciateOneRandomly();
     	student1.setCode("STUD1");
@@ -60,13 +124,13 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
     	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
     	
-    	Student pkStudent = inject(StudentBusiness.class).instanciateOne();
+    	Student pkStudent = inject(StudentBusiness.class).instanciateOneRandomly();
     	pkStudent.setCode("PK_STUD1");
     	pkStudent.setName("Zadi");
     	pkStudent.getPerson().setLastnames("leon");
     	//inject(ElectronicMailBusiness.class).setAddress(pkStudent.getPerson(), PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
     	//inject(ElectronicMailBusiness.class).setAddress(pkStudent.getPerson(), PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
-    	
+    	/*
     	Student k1Student = inject(StudentBusiness.class).instanciateOne();
     	k1Student.setCode("K1_STUD1");
     	k1Student.setName("Kacou");
@@ -81,9 +145,10 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	k3Student.setCode("K3_STUD1");
     	k3Student.setName("Aka");
     	k3Student.getPerson().setLastnames("clarisse");
+    	*/
+    	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(pkStudent/*,k1Student,k2Student,k3Student*/,student1),AbstractIdentifiable.class));
     	
-    	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(pkStudent,k1Student,k2Student,k3Student,student1),AbstractIdentifiable.class));
-    	
+    	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{"PK_STUD1",classroomSessionPkCode}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{"STUD1",classroomSessionCode}));
     	
     	/*schoolBusinessTestHelper.createStudentClassroomSessions(new String[]{pkStudent.getCode()},dataProducer.getPk().getClassroomSession(), new Object[][]{{0},{0},{0}}); 
@@ -95,17 +160,20 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     			inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(SchoolConstant.Code.LevelName.G1,"A").iterator().next() , new Object[][]{{15},{15},{15}}); 
     	*/
     	
-    	schoolBusinessTestHelper.getEvaluationTypes().addAll(inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.COLLECTION));
+    	//schoolBusinessTestHelper.getEvaluationTypes().addAll(inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.COLLECTION));
     	
+    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.PK,null,1l}}, Boolean.TRUE, Boolean.FALSE);
+    	//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.G1,"A",1l}}, Boolean.TRUE, Boolean.FALSE);
+    	
+    	/*
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
-    		/*{SchoolConstant.Code.LevelName.PK,null,1l}
+    		{SchoolConstant.Code.LevelName.PK,null,1l}
     		,{SchoolConstant.Code.LevelName.K1,null,1l}
     		,{SchoolConstant.Code.LevelName.K2,null,1l}
     		,{SchoolConstant.Code.LevelName.K3,null,1l}
-    		,*/{SchoolConstant.Code.LevelName.G1,"A",1l}
+    		,{SchoolConstant.Code.LevelName.G1,"A",1l}
     	}, Boolean.TRUE, Boolean.FALSE);
-    	
-    	
+    	*/
     }
         
 }

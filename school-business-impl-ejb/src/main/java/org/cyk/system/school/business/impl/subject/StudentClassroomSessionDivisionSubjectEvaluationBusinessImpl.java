@@ -57,7 +57,7 @@ public class StudentClassroomSessionDivisionSubjectEvaluationBusinessImpl extend
 					.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject())){
 				Boolean found = Boolean.FALSE;
 				for(StudentClassroomSessionDivisionSubjectEvaluation s : collection){
-					if(s.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier())){
+					if(s.getStudentClassroomSessionDivisionSubject().getIdentifier().equals(studentSubject.getIdentifier())){
 						found = Boolean.TRUE;
 						break;
 					}

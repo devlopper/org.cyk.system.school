@@ -8,11 +8,13 @@ import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
@@ -28,13 +30,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {ClassroomSession.FIELD_ACADEMIC_SESSION, ClassroomSession.FIELD_SUFFIX})}) 
 public class ClassroomSession extends AbstractIdentifiablePeriod implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne @NotNull private AcademicSession academicSession;
+	@ManyToOne @JoinColumn(name=COLUMN_ACADEMIC_SESSION) @NotNull private AcademicSession academicSession;
 	@ManyToOne @NotNull private LevelTimeDivision levelTimeDivision;
-	private String suffix;//TODO create a Suffix class
+	@ManyToOne @JoinColumn(name=COLUMN_SUFFIX) private ClassroomSessionSuffix suffix;
 	@ManyToOne private Teacher coordinator;
 	@Embedded private CommonNodeInformations nodeInformations;
 	@Embedded private NodeResults results = new NodeResults();
@@ -75,7 +78,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	
 	@Override
 	public String toString() {
-		return levelTimeDivision.toString()+(StringUtils.isBlank(suffix) ? Constant.EMPTY_STRING : (Constant.CHARACTER_SPACE+suffix));
+		return levelTimeDivision.toString()+(suffix == null ? Constant.EMPTY_STRING : suffix);
 	}	
 	
 	@Override
@@ -90,6 +93,11 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	public static final String FIELD_NUMBER_OF_DIVISIONS = "numberOfDivisions";
 	public static final String FIELD_SUFFIX = "suffix";
 	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
+	
+	/**/
+	
+	public static final String COLUMN_ACADEMIC_SESSION = "academicSession";
+	public static final String COLUMN_SUFFIX = "suffix";
 	
 	/**/
 	

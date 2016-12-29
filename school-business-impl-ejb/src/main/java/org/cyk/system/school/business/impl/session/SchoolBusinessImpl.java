@@ -53,8 +53,6 @@ public class SchoolBusinessImpl extends AbstractTypedBusinessService<School, Sch
 		school.getNodeInformations().setAttendanceTimeDivisionType(inject(TimeDivisionTypeDao.class).read(values[index++]));
 		school.getNodeInformations().setEvaluationPassAverage(commonUtils.getBigDecimal(values[index++]));
 		
-		
-		
 		return school;
 	}
 }

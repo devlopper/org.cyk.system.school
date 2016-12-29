@@ -20,18 +20,18 @@ public class EvaluationDaoImpl extends AbstractTypedDao<Evaluation> implements E
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
 		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(commonUtils.attributePath(Evaluation.FIELD_TYPE
-				, ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT), ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT));
+				, ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT), ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT));
 		registerNamedQuery(readByClassroomSessionDivisionSubjectEvaluationType, _select().where(Evaluation.FIELD_TYPE));
 	}
 	
 	@Override
 	public Collection<Evaluation> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-		return namedQuery(readByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT, classroomSessionDivisionSubject).resultMany();
+		return namedQuery(readByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, classroomSessionDivisionSubject).resultMany();
 	}
 	
 	@Override
 	public Long countByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-		return countNamedQuery(countByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_SUBJECT, classroomSessionDivisionSubject).resultOne();
+		return countNamedQuery(countByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, classroomSessionDivisionSubject).resultOne();
 	}
 
 	@Override

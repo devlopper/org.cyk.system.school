@@ -6,9 +6,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
-import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.model.search.IntegerSearchCriteria;
 import org.cyk.system.school.model.AbstractStudentResult;
@@ -24,12 +27,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS,genderType=GenderType.MALE)
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {StudentClassroomSession.COLUMN_STUDENT
+		, StudentClassroomSession.COLUMN_CLASSROOM_SESSION})})
 public class StudentClassroomSession extends AbstractStudentResult<ClassroomSession,StudentClassroomSessionDivision> implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne private ClassroomSession classroomSession;
-	@ManyToOne private Sale tuitionSale;//TODO to be deleted. Use SaleIdent....
+	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION) @NotNull private ClassroomSession classroomSession;
 	
 	public StudentClassroomSession(Student student,ClassroomSession classroomSession) {
 		super();
@@ -53,9 +57,11 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 	}
 	private static final String LOG_FORMAT = StudentClassroomSession.class.getSimpleName()+"(STUD=%s CLASS=%s %s)";
 	
-	public static final String FIELD_CLASSROOMSESSION = "classroomSession";
+	public static final String FIELD_CLASSROOM_SESSION = "classroomSession";
 	
 	/**/
+	
+	public static final String COLUMN_CLASSROOM_SESSION = "classroomSession";
 	
 	@Getter @Setter
 	public static class SearchCriteria extends AbstractFieldValueSearchCriteriaSet implements Serializable {

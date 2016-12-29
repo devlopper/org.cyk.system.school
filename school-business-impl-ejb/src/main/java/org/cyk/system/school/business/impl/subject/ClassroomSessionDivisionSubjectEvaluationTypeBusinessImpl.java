@@ -8,8 +8,10 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
@@ -52,6 +54,24 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivisionSubjectEvaluationType> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		return dao.readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+	}
+	
+	@Override
+	public ClassroomSessionDivisionSubjectEvaluationType instanciateOne(String[] values) {
+		ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = instanciateOne();
+		Integer index = 0;
+		String value;
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubjectEvaluationType.setClassroomSessionDivisionSubject(read(ClassroomSessionDivisionSubject.class, value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubjectEvaluationType.setEvaluationType(read(EvaluationType.class, value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubjectEvaluationType.setCountInterval(read(Interval.class, value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubjectEvaluationType.setMaximumValue(commonUtils.getBigDecimal(value));
+		else if(classroomSessionDivisionSubjectEvaluationType.getEvaluationType()!=null)
+			classroomSessionDivisionSubjectEvaluationType.setMaximumValue(classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getMaximum());
+		return classroomSessionDivisionSubjectEvaluationType;
 	}
 
 	

@@ -1,24 +1,18 @@
 package org.cyk.system.school.business.impl.integration;
 
 import java.util.Arrays;
-import java.util.Date;
 
-import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.model.SchoolConstant;
-import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
-import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.CommonUtils.Execution;
-import org.joda.time.DateTimeConstants;
-import org.junit.Test;
 
 public class ClassroomSessionBusinessCrudIT extends AbstractBusinessIT {
 
@@ -54,7 +48,7 @@ public class ClassroomSessionBusinessCrudIT extends AbstractBusinessIT {
     			public void run() {
     				ClassroomSession classroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
     						,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1), null,null);
-    				classroomSession.setSuffix(suffix);
+    				//classroomSession.setSuffix(suffix);
     				create(classroomSession);
     			}
     		});

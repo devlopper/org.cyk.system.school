@@ -16,8 +16,8 @@ public class StudentClassroomSessionDivisionSubjectEvaluationDetails extends Abs
 	
 	public StudentClassroomSessionDivisionSubjectEvaluationDetails(StudentClassroomSessionDivisionSubjectEvaluation studentClassroomSessionDivisionSubjectEvaluation) {
 		super(studentClassroomSessionDivisionSubjectEvaluation);
-		names = studentClassroomSessionDivisionSubjectEvaluation.getStudentSubject().getStudent().getCode()+Constant.CHARACTER_SLASH
-				+studentClassroomSessionDivisionSubjectEvaluation.getStudentSubject().getStudent().getPerson().getNames();
+		names = studentClassroomSessionDivisionSubjectEvaluation.getStudentClassroomSessionDivisionSubject().getStudent().getCode()+Constant.CHARACTER_SLASH
+				+studentClassroomSessionDivisionSubjectEvaluation.getStudentClassroomSessionDivisionSubject().getStudent().getPerson().getNames();
 		mark = formatNumber(studentClassroomSessionDivisionSubjectEvaluation.getValue());
 	}
 	

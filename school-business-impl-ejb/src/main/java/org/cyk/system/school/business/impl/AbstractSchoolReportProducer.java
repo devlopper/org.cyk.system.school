@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,8 @@ import org.cyk.system.root.business.api.geography.ContactCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments.CharacterSet;
+import org.cyk.system.root.business.api.value.ValueBusiness.DeriveArguments;
+import org.cyk.system.root.business.api.value.ValueCollectionBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
@@ -21,11 +24,10 @@ import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
-import org.cyk.system.root.model.mathematics.MetricValue;
-import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.model.value.Value;
+import org.cyk.system.root.model.value.ValueCollection;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
-import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
@@ -39,6 +41,7 @@ import org.cyk.system.school.model.actor.StudentReportTemplateFile;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
@@ -58,9 +61,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	@Override
 	public Class<?> getReportTemplateFileClass(AbstractIdentifiable identifiable, String reportTemplateCode) {
 		if(identifiable instanceof Student){
-			if(SchoolConstant.REPORT_STUDENT_REGISTRATION_CERTIFICATE.equals(reportTemplateCode))
+			if(SchoolConstant.Code.ReportTemplate.STUDENT_REGISTRATION_CERTIFICATE.equals(reportTemplateCode))
 				return StudentReportTemplateFile.class;
-			if(SchoolConstant.REPORT_STUDENT_TUITION_CERTIFICATE.equals(reportTemplateCode))
+			if(SchoolConstant.Code.ReportTemplate.STUDENT_TUITION_CERTIFICATE.equals(reportTemplateCode))
 				return StudentReportTemplateFile.class;
 		}
 		
@@ -162,7 +165,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		r.setComments(s.getResults().getAppreciation());
 		
-		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired())){
+		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired()) && s.getResults().getEvaluationSort().getAverage().getValue()!=null){
 			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
 			r.setAverageScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
 			r.setRank(inject(MathematicsBusiness.class).format(s.getResults().getEvaluationSort().getRank()));
@@ -179,10 +182,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		//debug(s.getResults().getEvaluationSort().getAverageInterval());
 			
 		
-		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.title",new Object[]{csd.getUiString()}));
-		r.setSubjectsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.subject"));
-		r.setCommentsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.comments"));
-		r.setSchoolStampBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.block.schoolstamp"));
+		r.setName(languageBusiness.findText("school.report.studentclassroomsessiondivision.results.title",new Object[]{csd.getUiString()}));
+		r.setSubjectsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.results.block.subject"));
+		r.setCommentsBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.results.block.comments"));
+		r.setSchoolStampBlockTitle(languageBusiness.findText("school.report.studentclassroomsessiondivision.results.block.schoolstamp"));
 		
 		//r.setMissedTime((s.getResults().getLectureAttendance().getMissedDuration()/DateUtils.MILLIS_PER_HOUR) +"");
 		//r.setMissedTimeJustified((s.getResults().getLectureAttendance().getMissedDurationJustified()/DateUtils.MILLIS_PER_HOUR)+"");
@@ -255,7 +258,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		for(String evaluationTypeCode : SchoolConstant.Code.EvaluationType.COLLECTION){
 			for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
 				if(getEvaluationTypeCode(studentSubjectEvaluation).equals(evaluationTypeCode) 
-						&& studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier()) 
+						&& studentSubjectEvaluation.getStudentClassroomSessionDivisionSubject().getIdentifier().equals(studentSubject.getIdentifier()) 
 						){
 					BigDecimal value = getMarkValue(studentSubjectEvaluation);
 					if(Boolean.TRUE.equals(StudentClassroomSessionDivisionBusiness.SUM_MARKS[0]))
@@ -279,7 +282,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReportTemplateFile r,CreateReportFileArguments<?> arguments){
 		
 	}
-	
+	/*
 	@Override
 	protected String formatMetricValue(MetricValue metricValue) {
 		if(metricValue.getValue().getNumberValue().get()!=null 
@@ -287,14 +290,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			TimeDivisionType timeDivisionType = inject(TimeDivisionTypeDao.class).read(SchoolConstant.Code.TimeDivisionType.ATTENDANCE);
 			return String.valueOf(metricValue.getValue().getNumberValue().get().longValue() / timeDivisionType.getMeasure().getValue().longValue());
 		}
-		/*if(ArrayUtils.contains(new String[]{SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT		
-				, SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT},RootConstant.Code.getRelativeCode(metricValue.getMetric()))){
-			TimeDivisionType timeDivisionType = inject(TimeDivisionTypeDao.class).read(SchoolConstant.Code.TimeDivisionType.ATTENDANCE);
-			return String.valueOf(metricValue.getValue().getNumberValue().get().longValue() / timeDivisionType.getDuration());
-		}*/
 		return super.formatMetricValue(metricValue);
 	}
-		
+	*/	
 	/**/
 	
 	public static interface Listener extends AbstractCompanyReportProducer.Listener {
@@ -385,8 +383,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					}
 				}
 			}else{
-				report.setName(String.format(nameFormat, studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel()
-						.getLevelName().getName(),"CARD"));
+				Level level = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel();
+				if(level.getGroup()!=null)
+					report.setName(String.format(nameFormat, level.getGroup().getName(),"CARD"));
 				//r.setSubjectsBlockTitle("COGNITIVE ASSESSMENT");
 				String testCoef = null,examCoef = "";	
 				if(ArrayUtils.contains(new String[]{SchoolConstant.Code.LevelName.G1,SchoolConstant.Code.LevelName.G2,SchoolConstant.Code.LevelName.G3},levelNameCode)){
@@ -425,12 +424,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					labelValueCollectionReport.add("RANK",report.getRank());
 				report.addLabelValueCollection(labelValueCollectionReport);
 				
-				//if("BEHAVIOURPRIMARYSTUDENT".equals(effortLevelsMetricCollectionCode))
-				//	effortLevelsMetricCollectionCode = "BEHAVIOURPSSTUDENT";
-				//if()
-				//effortLevelsMetricCollectionCode = StringUtils.replace(effortLevelsMetricCollectionCode, "PRIMARY", "PS");
-				//effortLevelsIntervalCollectionCode = StringUtils.replace(effortLevelsIntervalCollectionCode, "PRIMARY", "PS");
-				
 				addMetricsLabelValueCollection(report, ((StudentClassroomSessionDivision)report.getSource()), effortLevelsMetricCollectionCode);
 				report.getCurrentLabelValueCollection().setName(StringUtils.upperCase(report.getCurrentLabelValueCollection().getName()));
 				labelValueCollectionReport = new LabelValueCollectionReport();
@@ -445,6 +438,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					,null,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 				report.getCurrentLabelValueCollection().setName(StringUtils.upperCase(report.getCurrentLabelValueCollection().getName()));		
 			}
+			
 			addIntervalCollectionLabelValueCollection(report,inject(IntervalCollectionDao.class).read(effortLevelsIntervalCollectionCode)
 					,inject(MetricCollectionDao.class).read(effortLevelsMetricCollectionCode).getValueProperties(),Boolean.TRUE,Boolean.FALSE,null);
 			if(LevelName.K1.equals(levelNameCode))
@@ -455,15 +449,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 		
 		protected void addPupilsDetails(StudentClassroomSessionDivisionReportTemplateFile report){
-			report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
-				{"Formname(s)", report.getStudent().getPerson().getLastnames()}
-				,{"Surname", report.getStudent().getPerson().getGlobalIdentifier().getName()}
-				,{"Date of birth", report.getStudent().getPerson().getGlobalIdentifier().getExistencePeriod().getFrom()}
-				,{"Place of birth", report.getStudent().getPerson().getGlobalIdentifier().getBirthLocation()}
-				,{"Admission No", report.getStudent().getGlobalIdentifier().getCode()}
-				,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
-				,{"Gender", report.getStudent().getPerson().getSex()}
-				});
+			DeriveArguments deriveArguments = new DeriveArguments();
+			deriveArguments.addInput(report).setActor(report.getStudent()).addInput(report.getClassroomSessionDivision().getClassroomSession());
+			addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_STUDENT,deriveArguments);
 		}
 		
 		protected void addAttednanceDetails(StudentClassroomSessionDivisionReportTemplateFile report,StudentClassroomSessionDivision studentClassroomSessionDivision
@@ -511,6 +499,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	/**/
 	
-	public static final String LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID = "school.report.studentclassroomsessiondivision.block.overallresult.grade";
+	public static final String LABEL_VALUE_STUDENTCLASSROOMSESSIONDIVISION_BLOCK_OVERALLRESULT_GRADE_ID = "school.report.studentclassroomsessiondivision.results.block.overallresult.grade";
 	
 }

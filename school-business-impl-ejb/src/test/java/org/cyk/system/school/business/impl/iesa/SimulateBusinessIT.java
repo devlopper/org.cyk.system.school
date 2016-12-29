@@ -1,7 +1,7 @@
 package org.cyk.system.school.business.impl.iesa;
 
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.SchoolBusinessSimulationParameters;
-import org.cyk.system.school.model.subject.Evaluation;
+import org.cyk.system.school.model.SchoolConstant;
 
 public class SimulateBusinessIT extends AbstractIesaBusinessIT {
 
@@ -13,7 +13,7 @@ public class SimulateBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
 
-    	Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
+    	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     
     	SchoolBusinessSimulationParameters parameters = new SchoolBusinessSimulationParameters();
 

@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cyk.system.root.model.file.report.AbstractIdentifiableReport;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.cyk.utility.common.generator.AbstractGeneratable;
-
 @Getter @Setter @NoArgsConstructor
-public class ClassroomSessionReport extends AbstractGeneratable<ClassroomSessionReport> implements Serializable {
+public class ClassroomSessionReport extends AbstractIdentifiableReport<ClassroomSessionReport> implements Serializable {
 
 	private static final long serialVersionUID = -6025941646465245555L;
 	

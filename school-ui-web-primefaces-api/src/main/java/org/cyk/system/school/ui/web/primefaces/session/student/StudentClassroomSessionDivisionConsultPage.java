@@ -59,7 +59,7 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 					studentSubject.getDetails().clear();
 					for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations)
-						if(studentSubjectEvaluation.getStudentSubject().getIdentifier().equals(studentSubject.getIdentifier())){
+						if(studentSubjectEvaluation.getStudentClassroomSessionDivisionSubject().getIdentifier().equals(studentSubject.getIdentifier())){
 							studentSubject.getDetails().add(studentSubjectEvaluation);
 						}
 				}

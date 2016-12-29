@@ -15,6 +15,7 @@ import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
 import org.cyk.system.school.persistence.api.session.LevelNameDao;
 import org.cyk.utility.common.computation.ArithmeticOperator;
 
@@ -84,9 +85,9 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 	}
 	
     @Override
-    public ClassroomSession readByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffix) {
+    public ClassroomSession readByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffixCode) {
     	return namedQuery(readByAcademicSessionByLevelTimeDivisionBySuffix).parameter(ClassroomSession.FIELD_ACADEMIC_SESSION, academicSession)
-    			.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, academicSession).parameter(ClassroomSession.FIELD_SUFFIX, academicSession).resultOne();
+    			.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision).parameter(ClassroomSession.FIELD_SUFFIX, suffixCode).resultOne();
     }
 
 	@Override
@@ -102,9 +103,9 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 	}
 	
 	@Override
-	public Collection<ClassroomSession> readByLevelNameBySuffix(String levelNameCode, String suffix) {
+	public Collection<ClassroomSession> readByLevelNameBySuffix(String levelNameCode, String suffixCode) {
 		return namedQuery(readByLevelNameBySuffix).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
-				.parameter(ClassroomSession.FIELD_SUFFIX, suffix).resultMany();
+				.parameter(ClassroomSession.FIELD_SUFFIX, inject(ClassroomSessionSuffixDao.class).read(suffixCode)).resultMany();
 	}
 	
 	@Override

@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.cyk.system.root.model.RootConstant.Code.generate;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 
@@ -16,12 +18,6 @@ public interface SchoolConstant {
 
 	String REPORT_CYK_GLOBAL_RANKABLE = "CYK_GLOBAL_RANKABLE";
 	
-	/**/
-	
-	String REPORT_STUDENT_REGISTRATION_CERTIFICATE = "STUDENT_REGISTRATION_CERTIFICATE";
-	String REPORT_STUDENT_TUITION_CERTIFICATE = "STUDENT_TUTION_CERTIFICATE";
-	//String REPORT_STUDENT_CLASSROOM_SESSION_DIVISION_SHEET = "STUDENT_CLASSROOM_SESSION_DIVISION_SHEET";
-
 	/**/
 	
 	public static class Code implements Serializable {
@@ -42,7 +38,10 @@ public interface SchoolConstant {
 		public static class ValueProperties implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT = RootConstant.Code.generate(MetricCollection.class,"VALUE"
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
+					,LevelName.PK,Student.class);
+			
+			public static String METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT = generate(MetricCollection.class,"VALUE"
 					,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class); 
 			
 		}
@@ -77,11 +76,11 @@ public interface SchoolConstant {
 			
 			public static String KINDERGARTEN = "KINDERGARTEN";
 			public static String PRIMARY = "PRIMARY";
-			public static String PRIMARY_LOWER = RootConstant.Code.generate(PRIMARY,"LOWER");
-			public static String PRIMARY_HIGHER = RootConstant.Code.generate(PRIMARY,"HIGHER");
+			public static String PRIMARY_LOWER = generate(PRIMARY,"LOWER");
+			public static String PRIMARY_HIGHER = generate(PRIMARY,"HIGHER");
 			public static String SECONDARY = "SECONDARY";
-			public static String SECONDARY_LOWER = RootConstant.Code.generate(SECONDARY,"LOWER");
-			public static String SECONDARY_HIGHER = RootConstant.Code.generate(SECONDARY,"HIGHER");
+			public static String SECONDARY_LOWER = generate(SECONDARY,"LOWER");
+			public static String SECONDARY_HIGHER = generate(SECONDARY,"HIGHER");
 			public static String LICENSE = "LICENSE";
 			public static String MASTER = "MASTER";
 			public static String DOCTORATE = "DOCTORATE";
@@ -112,45 +111,45 @@ public interface SchoolConstant {
 		public static class Level implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String PK = RootConstant.Code.generate(LevelName.PK);
-			public static String K1 = RootConstant.Code.generate(LevelName.K1);
-			public static String K2 = RootConstant.Code.generate(LevelName.K2);
-			public static String K3 = RootConstant.Code.generate(LevelName.K3);
-			public static String G1 = RootConstant.Code.generate(LevelName.G1);
-			public static String G2 = RootConstant.Code.generate(LevelName.G2);
-			public static String G3 = RootConstant.Code.generate(LevelName.G3);
-			public static String G4 = RootConstant.Code.generate(LevelName.G4);
-			public static String G5 = RootConstant.Code.generate(LevelName.G5);
-			public static String G6 = RootConstant.Code.generate(LevelName.G6);
-			public static String G7 = RootConstant.Code.generate(LevelName.G7);
-			public static String G8 = RootConstant.Code.generate(LevelName.G8);
-			public static String G9 = RootConstant.Code.generate(LevelName.G9);
-			public static String G10 = RootConstant.Code.generate(LevelName.G10);
-			public static String G11 = RootConstant.Code.generate(LevelName.G11);
-			public static String G12 = RootConstant.Code.generate(LevelName.G12);
+			public static String PK = generate(LevelName.PK);
+			public static String K1 = generate(LevelName.K1);
+			public static String K2 = generate(LevelName.K2);
+			public static String K3 = generate(LevelName.K3);
+			public static String G1 = generate(LevelName.G1);
+			public static String G2 = generate(LevelName.G2);
+			public static String G3 = generate(LevelName.G3);
+			public static String G4 = generate(LevelName.G4);
+			public static String G5 = generate(LevelName.G5);
+			public static String G6 = generate(LevelName.G6);
+			public static String G7 = generate(LevelName.G7);
+			public static String G8 = generate(LevelName.G8);
+			public static String G9 = generate(LevelName.G9);
+			public static String G10 = generate(LevelName.G10);
+			public static String G11 = generate(LevelName.G11);
+			public static String G12 = generate(LevelName.G12);
 			
 		}
 		
 		public static class LevelTimeDivision implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String PK_YEAR_1 = RootConstant.Code.generate(Level.PK,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String K1_YEAR_1 = RootConstant.Code.generate(Level.K1,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String K2_YEAR_1 = RootConstant.Code.generate(Level.K2,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String K3_YEAR_1 = RootConstant.Code.generate(Level.K3,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G1_YEAR_1 = RootConstant.Code.generate(Level.G1,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G2_YEAR_1 = RootConstant.Code.generate(Level.G2,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G3_YEAR_1 = RootConstant.Code.generate(Level.G3,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G4_YEAR_1 = RootConstant.Code.generate(Level.G4,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G5_YEAR_1 = RootConstant.Code.generate(Level.G5,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G6_YEAR_1 = RootConstant.Code.generate(Level.G6,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G7_YEAR_1 = RootConstant.Code.generate(Level.G7,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G8_YEAR_1 = RootConstant.Code.generate(Level.G8,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G9_YEAR_1 = RootConstant.Code.generate(Level.G9,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G10_YEAR_1 = RootConstant.Code.generate(Level.G10,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G11_YEAR_1 = RootConstant.Code.generate(Level.G11,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			public static String G12_YEAR_1 = RootConstant.Code.generate(Level.G12,RootConstant.Code.TimeDivisionType.YEAR,"1");
-			//public static String G13_YEAR_1 = RootConstant.Code.generate(Level.G13,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String PK_YEAR_1 = generate(Level.PK,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K1_YEAR_1 = generate(Level.K1,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K2_YEAR_1 = generate(Level.K2,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String K3_YEAR_1 = generate(Level.K3,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G1_YEAR_1 = generate(Level.G1,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G2_YEAR_1 = generate(Level.G2,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G3_YEAR_1 = generate(Level.G3,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G4_YEAR_1 = generate(Level.G4,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G5_YEAR_1 = generate(Level.G5,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G6_YEAR_1 = generate(Level.G6,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G7_YEAR_1 = generate(Level.G7,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G8_YEAR_1 = generate(Level.G8,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G9_YEAR_1 = generate(Level.G9,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G10_YEAR_1 = generate(Level.G10,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G11_YEAR_1 = generate(Level.G11,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			public static String G12_YEAR_1 = generate(Level.G12,RootConstant.Code.TimeDivisionType.YEAR,"1");
+			//public static String G13_YEAR_1 = generate(Level.G13,RootConstant.Code.TimeDivisionType.YEAR,"1");
 			
 		}
 		
@@ -212,16 +211,25 @@ public interface SchoolConstant {
 			
 		}
 		
+		public static class ClassroomSessionSuffix implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String A = "A ";
+			public static String B = "B ";
+			public static String C = "C ";
+			
+		}
+		
 		public static class MetricCollectionType implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String ATTENDANCE_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollectionType.ATTENDANCE,Student.class); 
-			public static String BEHAVIOUR_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,Student.class);
-			public static String COMMUNICATION_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollectionType.COMMUNICATION,Student.class); 
+			public static String ATTENDANCE_STUDENT = generate(RootConstant.Code.MetricCollectionType.ATTENDANCE,Student.class); 
+			public static String BEHAVIOUR_STUDENT = generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,Student.class);
+			public static String COMMUNICATION_STUDENT = generate(RootConstant.Code.MetricCollectionType.COMMUNICATION,Student.class); 
 			
-			public static String BEHAVIOUR_KINDERGARTEN_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.KINDERGARTEN,Student.class); 
-			public static String BEHAVIOUR_PRIMARY_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.PRIMARY,Student.class);
-			public static String BEHAVIOUR_SECONDARY_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.SECONDARY,Student.class);
+			public static String BEHAVIOUR_KINDERGARTEN_STUDENT = generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.KINDERGARTEN,Student.class); 
+			public static String BEHAVIOUR_PRIMARY_STUDENT = generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.PRIMARY,Student.class);
+			public static String BEHAVIOUR_SECONDARY_STUDENT = generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.SECONDARY,Student.class);
 		
 			public static final Collection<String> _STUDENT = new ArrayList<>(Arrays.asList(ATTENDANCE_STUDENT,BEHAVIOUR_STUDENT,COMMUNICATION_STUDENT));
 		}
@@ -229,31 +237,31 @@ public interface SchoolConstant {
 		public static class MetricCollection implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String ATTENDANCE_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.ATTENDANCE,Student.class); 
-			public static String ATTENDANCE_KINDERGARTEN_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.ATTENDANCE
+			public static String ATTENDANCE_STUDENT = generate(RootConstant.Code.MetricCollection.ATTENDANCE,Student.class); 
+			public static String ATTENDANCE_KINDERGARTEN_STUDENT = generate(RootConstant.Code.MetricCollection.ATTENDANCE
 					,LevelGroup.KINDERGARTEN,Student.class); 
 			
-			public static String BEHAVIOUR_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,Student.class);
-			public static String COMMUNICATION_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.COMMUNICATION,Student.class); 
-			public static String COMMUNICATION_KINDERGARTEN_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.COMMUNICATION
+			public static String BEHAVIOUR_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,Student.class);
+			public static String COMMUNICATION_STUDENT = generate(RootConstant.Code.MetricCollection.COMMUNICATION,Student.class); 
+			public static String COMMUNICATION_KINDERGARTEN_STUDENT = generate(RootConstant.Code.MetricCollection.COMMUNICATION
 					,LevelGroup.KINDERGARTEN,Student.class); 
 			
-			//public static String BEHAVIOUR_KINDERGARTEN_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,Student.class); 
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class);
-			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class);
-			public static String BEHAVIOUR_KINDERGARTEN_K2_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K2,Student.class);
+			//public static String BEHAVIOUR_KINDERGARTEN_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,Student.class); 
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class);
+			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class);
+			public static String BEHAVIOUR_KINDERGARTEN_K2_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K2,Student.class);
 			
-			public static String BEHAVIOUR_PRIMARY_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.PRIMARY,Student.class);
-			public static String BEHAVIOUR_SECONDARY_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.SECONDARY,Student.class);
+			public static String BEHAVIOUR_PRIMARY_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.PRIMARY,Student.class);
+			public static String BEHAVIOUR_SECONDARY_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.SECONDARY,Student.class);
 			
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE = "MCPKSEL";
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE = "MCPKSRL";
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS = "MCPKSRR";
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_NUMERACY_DEVELOPMENT = "MCPKSND";
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_ARTS_MUSIC = "MCPKSAM";
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT = "MCPKSSED";
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_GROSS_MOTOR_SKILLS = "MCPKSGMS";
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_FINE_MOTOR_SKILLS = "MCPKSFMS";
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"EXPRESSIVELANGUAGE");
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"RECEPTIVELANGUAGE");
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"READINGREADNESS");
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_NUMERACY_DEVELOPMENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"NUMERACYDEVELOPMENT");
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_ARTS_MUSIC = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"ARTSMUSIC");
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"SOCIALEMOTIONALDEVELOPMENT");
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_GROSS_MOTOR_SKILLS = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"GROSSMOTORSKILLS");
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_FINE_MOTOR_SKILLS = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"FINEMOTORSKILLS");
 			
 			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING = "MCK1SELAR";
 			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT_COMMUNICATION_SKILLS = "MCK1SCS";
@@ -286,40 +294,40 @@ public interface SchoolConstant {
 		public static class Metric implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT = RootConstant.Code.generate("NUMBEROFTIMEABSENT",Student.class);
-			public static String ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT = RootConstant.Code.generate("NUMBEROFTIMEPRESENT",Student.class); 
-			public static String ATTENDANCE_NUMBER_OF_TIME_DETENTION_STUDENT = RootConstant.Code.generate("NUMBEROFTIMEDETENTION",Student.class); 
-			public static String ATTENDANCE_NUMBER_OF_TIME_SUSPENDED_STUDENT = RootConstant.Code.generate("NUMBEROFTIMESUSPENDED",Student.class); 
+			public static String ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT = generate("NUMBEROFTIMEABSENT",Student.class);
+			public static String ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT = generate("NUMBEROFTIMEPRESENT",Student.class); 
+			public static String ATTENDANCE_NUMBER_OF_TIME_DETENTION_STUDENT = generate("NUMBEROFTIMEDETENTION",Student.class); 
+			public static String ATTENDANCE_NUMBER_OF_TIME_SUSPENDED_STUDENT = generate("NUMBEROFTIMESUSPENDED",Student.class); 
 		}
 		
 		public static class IntervalCollection implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
+			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
 					,LevelName.PK,Student.class);
-			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
+			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
 					,LevelName.K1,Student.class);
-			public static String BEHAVIOUR_KINDERGARTEN_K2_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
+			public static String BEHAVIOUR_KINDERGARTEN_K2_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN
 					,LevelName.K2,Student.class);
 			
-			public static String BEHAVIOUR_PRIMARY_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.PRIMARY,Student.class);
+			public static String BEHAVIOUR_PRIMARY_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.PRIMARY,Student.class);
 			
-			public static String BEHAVIOUR_SECONDARY_STUDENT = RootConstant.Code.generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.SECONDARY,Student.class);
+			public static String BEHAVIOUR_SECONDARY_STUDENT = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.SECONDARY,Student.class);
 			
-			public static String METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT = RootConstant.Code.generate(MetricCollection.class,"VALUE"
+			public static String METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT = generate(MetricCollection.class,"VALUE"
 					,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class); 
 			
-			public static String GRADING_SCALE_PRIMARY_STUDENT = RootConstant.Code.generate("GRADINGSCALE",LevelGroup.PRIMARY,Student.class);
-			public static String GRADING_SCALE_SECONDARY_STUDENT = RootConstant.Code.generate("GRADINGSCALE",LevelGroup.SECONDARY,Student.class);
+			public static String GRADING_SCALE_PRIMARY_STUDENT = generate("GRADINGSCALE",LevelGroup.PRIMARY,Student.class);
+			public static String GRADING_SCALE_SECONDARY_STUDENT = generate("GRADINGSCALE",LevelGroup.SECONDARY,Student.class);
 			
-			public static String PROMOTION_SCALE_STUDENT = RootConstant.Code.generate("PROMOTIONSCALE",Student.class);
+			public static String PROMOTION_SCALE_STUDENT = generate("PROMOTIONSCALE",Student.class);
 		}
 		
 		public static class Interval implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String EVALUATION_COUNT_BY_TYPE = RootConstant.Code.generate(Evaluation.class,"COUNTBY",ClassroomSessionDivisionSubjectEvaluationType.class);
-			public static String DIVISION_COUNT_BY_CLASSROOM_SESSION = RootConstant.Code.generate(ClassroomSessionDivision.class,"COUNTBY",ClassroomSession.class);
+			public static String EVALUATION_COUNT_BY_TYPE = generate(Evaluation.class,"COUNTBY",ClassroomSessionDivisionSubjectEvaluationType.class);
+			public static String DIVISION_COUNT_BY_CLASSROOM_SESSION = generate(ClassroomSessionDivision.class,"COUNTBY",ClassroomSession.class);
 		}
 		
 		public static class ReportTemplate implements Serializable {
@@ -328,14 +336,15 @@ public interface SchoolConstant {
 			public static String STUDENT_REGISTRATION_CERTIFICATE = "STUDENT_REGISTRATION_CERTIFICATE";
 			public static String STUDENT_TUITION_CERTIFICATE = "STUDENT_TUITION_CERTIFICATE";
 			
-			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_PK_STUDENT = RootConstant.Code.generate(ClassroomSessionDivision.class
-					,"Results",LevelGroup.KINDERGARTEN,LevelName.PK,Student.class);
-			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K1_STUDENT = RootConstant.Code.generate(ClassroomSessionDivision.class
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_PK = generate(ClassroomSessionDivision.class
+					,"Results",LevelGroup.KINDERGARTEN,LevelName.PK);
+			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K1_STUDENT = generate(ClassroomSessionDivision.class
 					,"Results",LevelGroup.KINDERGARTEN,LevelName.K1,Student.class);
-			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K2_STUDENT = RootConstant.Code.generate(ClassroomSessionDivision.class
+			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K2_STUDENT = generate(ClassroomSessionDivision.class
 					,"Results",LevelGroup.KINDERGARTEN,LevelName.K2,Student.class);
-			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K3_STUDENT = RootConstant.Code.generate(ClassroomSessionDivision.class
+			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K3_STUDENT = generate(ClassroomSessionDivision.class
 					,"Results",LevelGroup.KINDERGARTEN,LevelName.K3,Student.class);
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS = generate(StudentClassroomSessionDivision.class,"Results");
 		}
 		
 		public static class Role implements Serializable {
@@ -356,6 +365,26 @@ public interface SchoolConstant {
 			public static String EXAM = "EXAM";
 			
 			public static final Collection<String> COLLECTION = new ArrayList<>();
+			
+		}
+		
+		public static class ValueCollection implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_STUDENT = "STUDENTCLASSROOMSESSIONDIVISIONRESULTSSTUDENT";
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_ATTENDANCE = "STUDENTCLASSROOMSESSIONDIVISIONRESULTSATTENDANCE";
+			
+		}
+		
+	}
+	
+	public static class Configuration {
+		
+		public static class Evaluation implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static Boolean COEFFICIENT_APPLIED = Boolean.FALSE;
+			
 			
 		}
 		

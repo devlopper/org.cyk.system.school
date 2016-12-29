@@ -27,9 +27,9 @@ public class LectureDaoImpl extends AbstractTypedDao<Lecture> implements Lecture
         registerNamedQuery(readBySubjects, _select().whereIdentifierIn(Lecture.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT));
         
         registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(commonUtils.attributePath(Lecture.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT
-        		, StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION)));
+        		, StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION)));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(commonUtils.attributePath(Lecture.FIELD_CLASSROOMSESSIONDIVISIONSUBJECT
-        		, StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION,StudentClassroomSession.FIELD_CLASSROOMSESSION)));
+        		, StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION,StudentClassroomSession.FIELD_CLASSROOM_SESSION)));
     }
     
 	@Override

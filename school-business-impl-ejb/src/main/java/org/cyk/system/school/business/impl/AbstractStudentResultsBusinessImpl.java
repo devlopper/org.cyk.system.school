@@ -69,7 +69,7 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 	@Override
 	protected Object[] getPropertyValueTokens(RESULT result, String name) {
 		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
-			return new Object[]{result.getStudent()};
+			return new Object[]{result.getStudent(),level(result)};
 		return super.getPropertyValueTokens(result, name);
 	}
 	

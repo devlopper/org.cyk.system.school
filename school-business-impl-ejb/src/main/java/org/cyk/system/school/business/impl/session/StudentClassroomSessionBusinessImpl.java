@@ -9,11 +9,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.cyk.system.company.business.api.sale.SaleBusiness;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
-import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -62,14 +59,6 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	}
 	
 	@Override
-	protected Object[] getPropertyValueTokens(StudentClassroomSession studentClassroomSession, String name) {
-		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name)){
-			return new Object[]{studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession()};
-		}
-		return super.getPropertyValueTokens(studentClassroomSession, name);
-	}
-	
-	@Override
 	protected void afterCreate(StudentClassroomSession studentClassroomSession) {
 		super.afterCreate(studentClassroomSession);
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
@@ -102,9 +91,6 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 			inject(StudentClassroomSessionDivisionBusiness.class).update(studentClassroomSession.getDetailCollection().getCollection());
 		}
 		
-		if(studentClassroomSession.getTuitionSale()!=null && studentClassroomSession.getTuitionSale().getIdentifier()==null){
-			inject(SaleBusiness.class).create(studentClassroomSession.getTuitionSale());
-		}
 		return super.update(studentClassroomSession);
 	}
 	

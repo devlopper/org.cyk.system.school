@@ -10,7 +10,7 @@ public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
-    	schoolBusinessTestHelper.getEvaluationTypes().addAll(dataProducer.getEvaluationTypes());
+    	//schoolBusinessTestHelper.getEvaluationTypes().addAll(dataProducer.getEvaluationTypes());
     	
     	//schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});
     	//ClassroomSessionInfos grade = dataProducer.getG1();

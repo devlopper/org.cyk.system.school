@@ -8,7 +8,6 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.BusinessEntityInfos;
 import org.cyk.system.root.business.api.Crud;
@@ -45,9 +44,7 @@ public class StudentClassroomSessionDivisionSubjectDeleteManyPage extends Abstra
 			
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubject> create() {
-				System.out.println(inject(StudentClassroomSessionDivisionSubjectDao.class).countAll());
 				Collection<StudentClassroomSessionDivisionSubject> collection = inject(StudentClassroomSessionDivisionSubjectDao.class).readDuplicates();
-				System.out.println(collection.size());
 				//for(StudentClassroomSessionDivisionSubject i : collection)
 				//	System.out.println(i);
 				Collection<StudentClassroomSessionDivisionSubject> collection2 = new ArrayList<>();

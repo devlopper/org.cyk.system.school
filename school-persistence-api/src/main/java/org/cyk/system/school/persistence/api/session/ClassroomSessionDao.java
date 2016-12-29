@@ -17,10 +17,10 @@ public interface ClassroomSessionDao extends TypedDao<ClassroomSession> {
 	Collection<ClassroomSession> readByAcademicSessionByTeacher(AcademicSession academicSession, Teacher teacher);
 	Collection<ClassroomSession> readByAcademicSessionByCoordinator(AcademicSession academicSession,Teacher coordinator);
 	
-	ClassroomSession readByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffix);
+	ClassroomSession readByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffixCode);
 	Collection<ClassroomSession> readByAcademicSessionByLevelGroup(AcademicSession academicSession, LevelGroup levelGroup);
 	Collection<ClassroomSession> readByAcademicSessionByLevelGroupByTeacher(AcademicSession academicSession,LevelGroup levelGroup, Teacher teacher);
-	Collection<ClassroomSession> readByLevelNameBySuffix(String levelNameCode, String suffix);
+	Collection<ClassroomSession> readByLevelNameBySuffix(String levelNameCode, String suffixCode);
 	Collection<ClassroomSession> readWhereSuffixIsNullByLevelName(String levelNameCode);
 	Collection<ClassroomSession> readByLevelName(String levelNameCode);
 	

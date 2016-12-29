@@ -42,6 +42,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	
 	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> subjects;
 	
+	
 	public ClassroomSessionDivision(ClassroomSession classroomSession,TimeDivisionType timeDivisionType, BigDecimal weight) {
 		super();
 		this.timeDivisionType = timeDivisionType;

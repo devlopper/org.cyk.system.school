@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
@@ -24,7 +26,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne protected Student student;
+	@ManyToOne @JoinColumn(name=COLUMN_STUDENT) @NotNull protected Student student;
 	
 	@OneToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE}) protected StudentResults results;
 	
@@ -54,4 +56,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	public static final String FIELD_STUDENT = "student";
 	public static final String FIELD_RESULTS = "results";
 
+	/**/
+	
+	public static final String COLUMN_STUDENT = "student";
 }

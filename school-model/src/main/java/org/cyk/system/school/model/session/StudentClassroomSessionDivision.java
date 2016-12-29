@@ -3,7 +3,11 @@ package org.cyk.system.school.model.session;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
@@ -17,13 +21,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS,genderType=GenderType.MALE)
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {StudentClassroomSessionDivision.COLUMN_STUDENT
+		, StudentClassroomSessionDivision.COLUMN_CLASSROOM_SESSION_DIVISION})})
 public class StudentClassroomSessionDivision extends AbstractStudentResult<ClassroomSessionDivision,StudentClassroomSessionDivisionSubject> implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne private ClassroomSessionDivision classroomSessionDivision;
-	
-	//@ManyToOne private StudentClassroomSession studentClassroomSession;
+	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION_DIVISION) @NotNull private ClassroomSessionDivision classroomSessionDivision;
 	
 	/**/
 		
@@ -49,9 +53,12 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 	}
 	private static final String LOG_FORMAT = StudentClassroomSessionDivision.class.getSimpleName()+"(STUD=%s DIV=%s %s)";
 	
-	public static final String FIELD_CLASSROOMSESSIONDIVISION = "classroomSessionDivision";
+	public static final String FIELD_CLASSROOM_SESSION_DIVISION = "classroomSessionDivision";
 	
 	/**/
+	
+	public static final String COLUMN_CLASSROOM_SESSION_DIVISION = "classroomSessionDivision";
+	
 	/*
 	@Getter @Setter
 	public static class SearchCriteria extends AbstractFieldValueSearchCriteriaSet implements Serializable {

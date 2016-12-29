@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
@@ -24,10 +25,8 @@ public class Evaluation extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	public static Boolean COEFFICIENT_APPLIED = Boolean.FALSE;
-	
 	@JoinColumn(name="type") @ManyToOne @NotNull private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
-	@NotNull private Boolean coefficientApplied = COEFFICIENT_APPLIED;
+	@NotNull private Boolean coefficientApplied = SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED;
 	
 	@Transient private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations;
 

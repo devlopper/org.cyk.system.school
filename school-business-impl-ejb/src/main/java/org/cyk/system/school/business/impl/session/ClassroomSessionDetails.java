@@ -17,8 +17,7 @@ public class ClassroomSessionDetails extends AbstractOutputDetails<ClassroomSess
 		super(classroomSession);
 		academicSession = formatUsingBusiness(classroomSession.getAcademicSession());
 		levelTimeDivision = formatUsingBusiness(classroomSession.getLevelTimeDivision());
-		//name = formatUsingBusiness(classroomSession);
-		suffix = classroomSession.getSuffix();
+		suffix = formatUsingBusiness(classroomSession.getSuffix());
 		coordinator = classroomSession.getCoordinator()==null?Constant.EMPTY_STRING:classroomSession.getCoordinator().getPerson().getNames();
 		numberOfStudent=formatNumber(classroomSession.getResults().getNumberOfStudent());
 	}

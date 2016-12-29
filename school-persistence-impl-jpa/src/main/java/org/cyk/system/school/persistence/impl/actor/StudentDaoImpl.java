@@ -26,7 +26,7 @@ public class StudentDaoImpl extends AbstractActorDaoImpl<Student,SearchCriteria>
 	
 	@Override
 	public Collection<Student> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
-		return namedQuery(readByClassroomSessionDivision).parameter(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION, classroomSessionDivision)
+		return namedQuery(readByClassroomSessionDivision).parameter(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision)
 				.resultMany();
 	}
 

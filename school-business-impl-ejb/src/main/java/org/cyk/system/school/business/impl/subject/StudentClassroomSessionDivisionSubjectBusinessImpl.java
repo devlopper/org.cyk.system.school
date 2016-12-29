@@ -99,7 +99,7 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 
 	@Override
 	protected Student student(StudentClassroomSessionDivisionSubjectEvaluation detail) {
-		return detail.getStudentSubject().getStudent();
+		return detail.getStudentClassroomSessionDivisionSubject().getStudent();
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 	 
 	@Override
 	protected ClassroomSessionDivisionSubject level(StudentClassroomSessionDivisionSubjectEvaluation detail) {
-		return detail.getStudentSubject().getClassroomSessionDivisionSubject();
+		return detail.getStudentClassroomSessionDivisionSubject().getClassroomSessionDivisionSubject();
 	}
 
 	@Override

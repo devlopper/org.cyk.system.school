@@ -11,7 +11,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.FormatterBusiness;
@@ -33,7 +32,6 @@ import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.FileIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
-import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
@@ -85,13 +83,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	protected Object[] getPropertyValueTokens(StudentClassroomSessionDivision studentClassroomSessionDivision, String name) {
-		if(ArrayUtils.contains(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}, name))
-			return new Object[]{studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision()};
-		return super.getPropertyValueTokens(studentClassroomSessionDivision, name);
-	}
-	
-	@Override
 	protected void beforeCreate(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		super.beforeCreate(studentClassroomSessionDivision);
 		exceptionUtils().exists(dao.readByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision()));
@@ -132,7 +123,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 						.read(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_EVALUATED), Arrays.asList(studentClassroomSessionDivision)
 						,inject(ValuePropertiesDao.class).read(SchoolConstant.Code.ValueProperties.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT));
 			}
-				
 			inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).create(metricCollections, Arrays.asList(studentClassroomSessionDivision));	
 		}else if(Crud.DELETE.equals(crud)){
 			if(SchoolConstant.Code.LevelName.K1.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel()
@@ -169,9 +159,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override 
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments,ServiceCallArguments arguments) {
-		if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
+		/*if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null) || !Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) ){
-			
+		*/	
 			FormatArguments formatArguments = new FormatArguments();
 			formatArguments.setIsRank(Boolean.TRUE);
 			formatArguments.setType(CharacterSet.LETTER);
@@ -185,10 +175,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			genericDao.update(studentClassroomSessionDivision.getResults());
 			logIdentifiable("Report built",studentClassroomSessionDivision);
 			
-		}else{
+		/*}else{
 			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 					,inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision()));
-		}
+		}*/
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -230,15 +220,15 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				callArguments.getExecutionProgress().setCurrentExecutionStep(inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession())
 						+" - "+inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getStudent()));
 			}
-			if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
+			/*if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 					&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
 				logIdentifiable("Cannot build report", studentClassroomSessionDivision);
-			}else{
+			}else{*/
 				reportArgumentsBuilder.setReportTemplate(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision
 						.getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate());
 				CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = new CreateReportFileArguments.Builder<>(studentClassroomSessionDivision,reportArgumentsBuilder).build();
 				buildReport(studentClassroomSessionDivision,reportArguments);
-			}
+			//}
 			
 			addCallArgumentsWorkDoneByStep(callArguments);
 		}

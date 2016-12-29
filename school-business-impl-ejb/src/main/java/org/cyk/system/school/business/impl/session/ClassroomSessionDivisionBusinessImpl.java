@@ -12,12 +12,16 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
+import org.cyk.system.root.model.mathematics.MetricCollection;
+import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
+import org.cyk.system.root.persistence.api.GenericDao;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -34,6 +38,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
+import org.cyk.utility.common.Constant;
 
 @Stateless
 public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivision, ClassroomSessionDivisionDao> implements ClassroomSessionDivisionBusiness,Serializable {
@@ -60,8 +65,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		Long start = nodeInformations.getClassroomSessionDivisionOrderNumberInterval()==null ?
 				1 : inject(IntervalBusiness.class).findGreatestLowestValue(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()).longValue();
 		classroomSessionDivision.setOrderNumber(start+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()));
-		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
-		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
+		
 	}
 	
 	@Override
@@ -69,6 +73,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		super.afterCreate(classroomSessionDivision);
 		if(classroomSessionDivision.getSubjects().isSynchonizationEnabled())
 			inject(ClassroomSessionDivisionSubjectBusiness.class).create(classroomSessionDivision.getSubjects().getCollection());
+		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
+		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
 	}
 		
 	@Override
@@ -156,10 +162,10 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public Collection<ClassroomSessionDivision> findByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(String levelNameCode,String classroomSessionSuffix, Long classroomSessionDivisionOrderNumber) {
-		if(classroomSessionSuffix==null)
+	public Collection<ClassroomSessionDivision> findByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(String levelNameCode,String classroomSessionSuffixCode, Long classroomSessionDivisionOrderNumber) {
+		if(classroomSessionSuffixCode==null)
 			return findByLevelNameByClassroomSessionDivisionOrderNumber(levelNameCode, classroomSessionDivisionOrderNumber);
-		return dao.readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(levelNameCode,classroomSessionSuffix,classroomSessionDivisionOrderNumber);
+		return dao.readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(levelNameCode,classroomSessionSuffixCode,classroomSessionDivisionOrderNumber);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
@@ -171,10 +177,34 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	public ClassroomSessionDivision instanciateOne(String[] values) {
 		ClassroomSessionDivision classroomSessionDivision = instanciateOne();
 		Integer index = 0;
-		classroomSessionDivision.setClassroomSession(inject(ClassroomSessionDao.class).read(values[index++]));
-		classroomSessionDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(values[index++]));
+		String value;
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivision.setClassroomSession(inject(ClassroomSessionDao.class).read(value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivision.setOrderNumber(Long.parseLong(value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivision.setWeight(new BigDecimal(value));
 		
 		classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+		if(StringUtils.isNotBlank(value = values[index++]))
+			for(String subjectCode : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
+				ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class)
+						.instanciateOne(new String[]{null,subjectCode,null,values[index]});
+				classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);
+				classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
+			}
+		
+		classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().setSynchonizationEnabled(Boolean.TRUE);
+		if(StringUtils.isNotBlank(value = values[++index]))
+			for(String metricCollectionCode : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
+		    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
+		    		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class,metricCollectionCode)
+		    				, classroomSessionDivision, null));
+			}
+		
+		
 		for(SubjectClassroomSession subjectClassroomSession : inject(SubjectClassroomSessionDao.class).readByClassroomSession(classroomSessionDivision.getClassroomSession())){
 			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).instanciateOne();
 			classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);

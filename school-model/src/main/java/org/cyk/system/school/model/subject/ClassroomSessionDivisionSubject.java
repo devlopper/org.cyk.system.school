@@ -8,8 +8,11 @@ import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -28,13 +31,15 @@ import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {ClassroomSessionDivisionSubject.COLUMN_CLASSROOM_SESSION_DIVISION
+		, ClassroomSessionDivisionSubject.COLUMN_SUBJECT})})
 public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne @NotNull private ClassroomSessionDivision classroomSessionDivision;
+	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION_DIVISION) @NotNull private ClassroomSessionDivision classroomSessionDivision;
 	
-	@ManyToOne @NotNull private Subject subject;
+	@ManyToOne @JoinColumn(name=COLUMN_SUBJECT) @NotNull private Subject subject;
 		
 	@ManyToOne private ClassroomSessionDivisionSubjectGroup group;
 	
@@ -47,7 +52,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	@Embedded private NodeResults results = new NodeResults();
 	
 	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivisionSubjectEvaluationType> evaluationTypes;
-	private Boolean autoCreateStudentClassroomSessionDivisionSubject;
+	@Transient private Boolean autoCreateStudentClassroomSessionDivisionSubject;
 	
 	/**
 	 * The time table
@@ -95,10 +100,14 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	
 	/**/
 
-	public static final String FIELD_CLASSROOMSESSIONDIVISION = "classroomSessionDivision";
+	public static final String FIELD_CLASSROOM_SESSION_DIVISION = "classroomSessionDivision";
 	public static final String FIELD_SUBJECT = "subject";
 	public static final String FIELD_GROUP = "group";
 	public static final String FIELD_TEACHER = "teacher";
 	public static final String FIELD_NUMBER_OF_EVALUATION_TYPES = "numberOfEvaluationTypes";
 	
+	/**/
+	
+	public static final String COLUMN_CLASSROOM_SESSION_DIVISION = "classroomSessionDivision";
+	public static final String COLUMN_SUBJECT = "subject";
 }

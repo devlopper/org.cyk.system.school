@@ -11,6 +11,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
@@ -29,14 +30,16 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
-import org.cyk.system.school.model.subject.EvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
+import org.cyk.system.school.persistence.api.actor.TeacherDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
-import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.SubjectDao;
+import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -157,14 +160,31 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	public ClassroomSessionDivisionSubject findByClassroomSessionDivisionBySubject(ClassroomSessionDivision classroomSessionDivision,Subject subject) {
 		return dao.readByClassroomSessionDivisionBySubject(classroomSessionDivision,subject);
 	}
-	
+		
 	@Override
-	public ClassroomSessionDivisionSubject instanciateOne() {
-		ClassroomSessionDivisionSubject classroomSessionDivisionSubject = super.instanciateOne();
+	public ClassroomSessionDivisionSubject instanciateOne(String[] values) {
+		ClassroomSessionDivisionSubject classroomSessionDivisionSubject = instanciateOne();
+		Integer index = 0;
+		String value;
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubject.setClassroomSessionDivision(inject(ClassroomSessionDivisionDao.class).read(value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubject.setSubject(inject(SubjectDao.class).read(value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubject.setTeacher(inject(TeacherDao.class).read(value));
 		classroomSessionDivisionSubject.getEvaluationTypes().setSynchonizationEnabled(Boolean.TRUE);
-		for(EvaluationType evaluationType : inject(EvaluationTypeDao.class).readAll())
-			classroomSessionDivisionSubject.getEvaluationTypes().getCollection().add(new ClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubject
-					, evaluationType, evaluationType.getWeight(), evaluationType.getMaximum()));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			for(String evaluationTypeInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
+				String[] array = StringUtils.split(evaluationTypeInfos,Constant.CHARACTER_COMA.toString());
+				ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class)
+						.instanciateOne(new String[]{null,commonUtils.getValueAt(array, 0),commonUtils.getValueAt(array, 1),commonUtils.getValueAt(array, 2)});
+				classroomSessionDivisionSubjectEvaluationType.setClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+				classroomSessionDivisionSubject.getEvaluationTypes().getCollection().add(classroomSessionDivisionSubjectEvaluationType);
+			}
+		/*
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubject.setGroup(inject(ClassroomSessionDivisionSubjectGroupDao.class).read(value));
+		*/
 		return classroomSessionDivisionSubject;
 	}
 	

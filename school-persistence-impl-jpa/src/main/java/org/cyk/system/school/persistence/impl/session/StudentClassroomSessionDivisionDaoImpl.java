@@ -29,46 +29,46 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
-        registerNamedQuery(readByStudentClassroomSessionDivision, _select().where(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION));
+        registerNamedQuery(readByStudentClassroomSessionDivision, _select().where(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION));
         
-        registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
-        		, StudentClassroomSession.FIELD_CLASSROOMSESSION),StudentClassroomSession.FIELD_CLASSROOMSESSION));
-        registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION));
+        registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
+        		, StudentClassroomSession.FIELD_CLASSROOM_SESSION),StudentClassroomSession.FIELD_CLASSROOM_SESSION));
+        registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION));
         registerNamedQuery(readByStudentByClassroomSessionDivision, _select().where(StudentClassroomSessionDivision.FIELD_STUDENT)
-        		.and(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION));
+        		.and(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION));
         
         registerNamedQuery(readByClassroomSessionDivisionOrderNumber, _select()
-        		.where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION,ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_ORDER_NUMBER), GlobalIdentifier.FIELD_ORDER_NUMBER));
+        		.where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION,ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_ORDER_NUMBER), GlobalIdentifier.FIELD_ORDER_NUMBER));
         
         registerNamedQuery(readByStudentByClassroomSession, _select().where(StudentClassroomSessionDivision.FIELD_STUDENT)
-        		.and(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION, StudentClassroomSession.FIELD_CLASSROOMSESSION)
-        				, StudentClassroomSession.FIELD_CLASSROOMSESSION,ArithmeticOperator.EQ));
+        		.and(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION, StudentClassroomSession.FIELD_CLASSROOM_SESSION)
+        				, StudentClassroomSession.FIELD_CLASSROOM_SESSION,ArithmeticOperator.EQ));
         
-        registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
-        		, StudentClassroomSession.FIELD_CLASSROOMSESSION)));
+        registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
+        		, StudentClassroomSession.FIELD_CLASSROOM_SESSION)));
         
         registerNamedQuery(readByClassroomSessionByTeacher, "SELECT r FROM StudentClassroomSessionDivision r WHERE r.classroomSessionDivision.classroomSession = :classroomSession AND "
         		+ "EXISTS( SELECT rr FROM ClassroomSessionDivisionSubject rr WHERE rr.teacher = :teacher AND rr.classroomSessionDivision = r.classroomSessionDivision)");
     
-        registerNamedQuery(readByLevelTimeDivision, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION
+        registerNamedQuery(readByLevelTimeDivision, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
         		, ClassroomSessionDivision.FIELD_CLASSROOMSESSION,ClassroomSession.FIELD_LEVEL_TIME_DIVISION),ClassroomSession.FIELD_LEVEL_TIME_DIVISION));
     }
     
 	@Override
 	public Collection<StudentClassroomSessionDivision> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
-		return namedQuery(readByStudentClassroomSessionDivision).parameter(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION, classroomSessionDivision).resultMany();
+		return namedQuery(readByStudentClassroomSessionDivision).parameter(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision).resultMany();
 	}
 
 	@Override
 	public StudentClassroomSessionDivision readByStudentByClassroomSessionDivision(Student student, ClassroomSessionDivision classroomSessionDivision) {
 		return namedQuery(readByStudentByClassroomSessionDivision).
-				parameter(StudentClassroomSessionDivision.FIELD_STUDENT, student).parameter(StudentClassroomSessionDivision.FIELD_CLASSROOMSESSIONDIVISION, classroomSessionDivision)
+				parameter(StudentClassroomSessionDivision.FIELD_STUDENT, student).parameter(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision)
 				.ignoreThrowable(NoResultException.class).resultOne();
 	}
 
 	@Override
 	public Collection<StudentClassroomSessionDivision> readByClassroomSession(ClassroomSession classroomSession) {
-		return namedQuery(readByClassroomSession).parameter(StudentClassroomSession.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
+		return namedQuery(readByClassroomSession).parameter(StudentClassroomSession.FIELD_CLASSROOM_SESSION, classroomSession).resultMany();
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 	@Override
 	public Collection<StudentClassroomSessionDivision> readByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return namedQuery(readByStudentByClassroomSession).parameter(StudentClassroomSessionDivision.FIELD_STUDENT, student)
-				.parameter(StudentClassroomSession.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
+				.parameter(StudentClassroomSession.FIELD_CLASSROOM_SESSION, classroomSession).resultMany();
 	}
 	
 	@Override

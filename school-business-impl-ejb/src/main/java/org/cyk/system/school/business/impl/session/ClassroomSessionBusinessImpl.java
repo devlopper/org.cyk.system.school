@@ -17,6 +17,7 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
@@ -30,6 +31,8 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
@@ -39,6 +42,7 @@ import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
+import org.cyk.utility.common.Constant;
 
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
 
@@ -210,27 +214,33 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	public ClassroomSession instanciateOne(String[] values) {
 		ClassroomSession classroomSession = instanciateOne();
 		Integer index = 0;
-		String code = StringUtils.defaultIfBlank(values[index++], null);
-		if(StringUtils.isNotBlank(code))
-			classroomSession.setAcademicSession(inject(AcademicSessionDao.class).read(code));
-		classroomSession.setLevelTimeDivision(inject(LevelTimeDivisionDao.class).read(values[index++]));
-		classroomSession.setSuffix(StringUtils.defaultIfBlank(values[index++],null));
+		String value;
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSession.setAcademicSession(inject(AcademicSessionDao.class).read(value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSession.setLevelTimeDivision(inject(LevelTimeDivisionDao.class).read(value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSession.setSuffix(read(ClassroomSessionSuffix.class, value));
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSession.setCoordinator(inject(TeacherDao.class).read(value));
 		
-		code = StringUtils.defaultIfBlank(values[index++], null);
-		if(StringUtils.isNotBlank(code))
-			classroomSession.setCoordinator(inject(TeacherDao.class).read(code));
-		
-		//String[] subjects = StringUtils.split(values[index++],";");
-		/*
-		Integer numberOfTrimester = Integer.parseInt(values[index++]);
-		TimeDivisionType timeDivisionType = inject(TimeDivisionTypeDao.class).read(values[index++]);
 		classroomSession.getDivisions().setSynchonizationEnabled(Boolean.TRUE);
-		for(int i = 0; i<numberOfTrimester;i++){
-			ClassroomSessionDivision classroomSessionDivision = new ClassroomSessionDivision();
-			classroomSessionDivision.setClassroomSession(classroomSession);
-			classroomSessionDivision.setTimeDivisionType(timeDivisionType);
+		if(StringUtils.isNotBlank(value = values[index++])){
+			for(String classroomSessionDivisionInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
+				String[] array = StringUtils.split(classroomSessionDivisionInfos, Constant.CHARACTER_COMA.toString());
+				ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
+						.instanciateOne(new String[]{null,RootConstant.Code.TimeDivisionType.TRIMESTER,array[0],commonUtils.getValueAt(array, 1),values[index]
+								,values[index+1],values[index+2]});
+				classroomSessionDivision.setClassroomSession(classroomSession);
+				classroomSession.getDivisions().getCollection().add(classroomSessionDivision);
+			}
 		}
-		*/
+		/*
+		if(StringUtils.isNotBlank(value = values[index = index + 2])){
+			for(String metricCollectionInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
+				
+			}
+		}*/
 		return classroomSession;
 	}
 	
