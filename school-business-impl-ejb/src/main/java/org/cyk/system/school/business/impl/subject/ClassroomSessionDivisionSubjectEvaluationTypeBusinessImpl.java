@@ -67,10 +67,17 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 			classroomSessionDivisionSubjectEvaluationType.setEvaluationType(read(EvaluationType.class, value));
 		if(StringUtils.isNotBlank(value = values[index++]))
 			classroomSessionDivisionSubjectEvaluationType.setCountInterval(read(Interval.class, value));
+		
+		if(StringUtils.isNotBlank(value = values[index++]))
+			classroomSessionDivisionSubjectEvaluationType.setWeight(commonUtils.getBigDecimal(value));
+		else if(classroomSessionDivisionSubjectEvaluationType.getEvaluationType()!=null)
+			classroomSessionDivisionSubjectEvaluationType.setWeight(classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getWeight());
+		
 		if(StringUtils.isNotBlank(value = values[index++]))
 			classroomSessionDivisionSubjectEvaluationType.setMaximumValue(commonUtils.getBigDecimal(value));
 		else if(classroomSessionDivisionSubjectEvaluationType.getEvaluationType()!=null)
 			classroomSessionDivisionSubjectEvaluationType.setMaximumValue(classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getMaximum());
+
 		return classroomSessionDivisionSubjectEvaluationType;
 	}
 

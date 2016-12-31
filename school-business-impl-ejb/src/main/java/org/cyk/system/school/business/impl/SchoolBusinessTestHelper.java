@@ -497,7 +497,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = studentClassroomSessionDivisionSubjects.iterator().next();
 					objects = new Object[][]{
 			    		new Object[]{studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject(),new String[][]{
-		    	    		{studentClassroomSessionDivisionSubjects.iterator().next().getStudent().getCode(),"90","30","60"}
+		    	    		{studentClassroomSessionDivisionSubjects.iterator().next().getStudent().getCode(),"93","33","63"}
 		    	    	}}
 					};
 				}else

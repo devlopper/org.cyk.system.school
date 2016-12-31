@@ -177,7 +177,8 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			for(String evaluationTypeInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
 				String[] array = StringUtils.split(evaluationTypeInfos,Constant.CHARACTER_COMA.toString());
 				ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class)
-						.instanciateOne(new String[]{null,commonUtils.getValueAt(array, 0),commonUtils.getValueAt(array, 1),commonUtils.getValueAt(array, 2)});
+						.instanciateOne(new String[]{null,commonUtils.getValueAt(array, 0),commonUtils.getValueAt(array, 1),commonUtils.getValueAt(array, 2)
+								,commonUtils.getValueAt(array, 3),commonUtils.getValueAt(array, 4)});
 				classroomSessionDivisionSubjectEvaluationType.setClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
 				classroomSessionDivisionSubject.getEvaluationTypes().getCollection().add(classroomSessionDivisionSubjectEvaluationType);
 			}

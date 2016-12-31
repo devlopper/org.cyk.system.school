@@ -21,8 +21,9 @@ import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
+import org.cyk.system.root.model.time.Period;
+import org.cyk.system.root.model.value.LongValue;
 import org.cyk.system.root.persistence.api.GenericDao;
-import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
@@ -39,6 +40,7 @@ import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.LogMessage;
 
 @Stateless
 public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivision, ClassroomSessionDivisionDao> implements ClassroomSessionDivisionBusiness,Serializable {
@@ -175,17 +177,19 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	
 	@Override
 	public ClassroomSessionDivision instanciateOne(String[] values) {
+		LogMessage.Builder logMessageBuilder = new LogMessage.Builder("Instanciate", "div from values "+StringUtils.join(values,Constant.CHARACTER_COMA.toString()));
 		ClassroomSessionDivision classroomSessionDivision = instanciateOne();
 		Integer index = 0;
 		String value;
-		if(StringUtils.isNotBlank(value = values[index++]))
-			classroomSessionDivision.setClassroomSession(inject(ClassroomSessionDao.class).read(value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			classroomSessionDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			classroomSessionDivision.setOrderNumber(Long.parseLong(value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			classroomSessionDivision.setWeight(new BigDecimal(value));
+		SetListener listener = new SetListener.Adapter.Default(values, 0, logMessageBuilder);
+		set(classroomSessionDivision, ClassroomSessionDivision.FIELD_CLASSROOMSESSION, listener);
+		set(classroomSessionDivision, ClassroomSessionDivision.FIELD_TIME_DIVISION_TYPE, listener);
+		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull(), GlobalIdentifier.FIELD_ORDER_NUMBER, listener);
+		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull(), GlobalIdentifier.FIELD_WEIGHT, listener);
+		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod(), Period.FIELD_FROM_DATE, listener);
+		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod(), Period.FIELD_TO_DATE, listener);
+		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod().getNumberOfMillisecond(), LongValue.FIELD_USER, listener.setFieldType(Long.class));
+		index = listener.getIndex();
 		
 		classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
 		if(StringUtils.isNotBlank(value = values[index++]))
@@ -213,6 +217,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 			classroomSessionDivisionSubject.setWeight(subjectClassroomSession.getWeight());
 			classroomSessionDivisionSubject.setTeacher(subjectClassroomSession.getTeacher());
 		}
+		logTrace(logMessageBuilder);
 		return classroomSessionDivision;
 	}
 }

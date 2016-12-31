@@ -17,7 +17,6 @@ import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
-import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
@@ -32,16 +31,12 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.persistence.api.actor.TeacherDao;
-import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
-import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.utility.common.Constant;
 
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
@@ -147,8 +142,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public BigDecimal convertAttendanceTimeToDivisionDuration(ClassroomSession classroomSession,Long millisecond) {
 		TimeDivisionType timeDivisionType = findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType();
-		return millisecond==null?BigDecimal.ZERO
-				:inject(MeasureBusiness.class).computeQuotient(timeDivisionType.getMeasure(), new BigDecimal(millisecond));
+		return millisecond==null?BigDecimal.ZERO:inject(MeasureBusiness.class).computeQuotient(timeDivisionType.getMeasure(), new BigDecimal(millisecond));
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
@@ -215,22 +209,22 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		ClassroomSession classroomSession = instanciateOne();
 		Integer index = 0;
 		String value;
-		if(StringUtils.isNotBlank(value = values[index++]))
-			classroomSession.setAcademicSession(inject(AcademicSessionDao.class).read(value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			classroomSession.setLevelTimeDivision(inject(LevelTimeDivisionDao.class).read(value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			classroomSession.setSuffix(read(ClassroomSessionSuffix.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			classroomSession.setCoordinator(inject(TeacherDao.class).read(value));
+		SetListener listener = new SetListener.Adapter.Default(values, 0, null);
+		set(classroomSession, ClassroomSession.FIELD_ACADEMIC_SESSION, listener);
+		set(classroomSession, ClassroomSession.FIELD_LEVEL_TIME_DIVISION, listener);
+		set(classroomSession, ClassroomSession.FIELD_SUFFIX, listener);
+		set(classroomSession, ClassroomSession.FIELD_COORDINATOR, listener);
 		
+		index = listener.getIndex();
+		String classroomSessionTimeDivisionTypeCode = values[index++];
 		classroomSession.getDivisions().setSynchonizationEnabled(Boolean.TRUE);
 		if(StringUtils.isNotBlank(value = values[index++])){
 			for(String classroomSessionDivisionInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
 				String[] array = StringUtils.split(classroomSessionDivisionInfos, Constant.CHARACTER_COMA.toString());
 				ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
-						.instanciateOne(new String[]{null,RootConstant.Code.TimeDivisionType.TRIMESTER,array[0],commonUtils.getValueAt(array, 1),values[index]
-								,values[index+1],values[index+2]});
+						.instanciateOne(new String[]{null,classroomSessionTimeDivisionTypeCode,commonUtils.getValueAt(array, 0),commonUtils.getValueAt(array, 1)
+								,commonUtils.getValueAt(array, 2),commonUtils.getValueAt(array, 3),commonUtils.getValueAt(array, 4)
+								,commonUtils.getValueAt(values, index),commonUtils.getValueAt(values, index+1),commonUtils.getValueAt(values, index+2)});
 				classroomSessionDivision.setClassroomSession(classroomSession);
 				classroomSession.getDivisions().getCollection().add(classroomSessionDivision);
 			}

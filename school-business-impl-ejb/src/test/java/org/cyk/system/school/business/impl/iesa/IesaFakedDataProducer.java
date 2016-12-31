@@ -145,17 +145,17 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 			public <T> T processPropertyValue(Class<?> aClass,String instanceCode, String name, T value) {
 				if(File.class.equals(aClass)){
 					
-					if(CompanyConstant.FILE_DOCUMENT_HEADER.equals(instanceCode)){
+					if(CompanyConstant.Code.File.DOCUMENT_HEADER.equals(instanceCode)){
 						if(PersistDataListener.BASE_PACKAGE.equals(name))
 							return (T) SchoolBusinessLayer.class.getPackage();
 						if(PersistDataListener.RELATIVE_PATH.equals(name))
 							return (T) "image/iesa/document_header.png";
-					}else if(CompanyConstant.FILE_DOCUMENT_BACKGROUND.equals(instanceCode)){
+					}else if(CompanyConstant.Code.File.DOCUMENT_BACKGROUND.equals(instanceCode)){
 						if(PersistDataListener.BASE_PACKAGE.equals(name))
 							return (T) SchoolBusinessLayer.class.getPackage();
 						if(PersistDataListener.RELATIVE_PATH.equals(name))
 							return (T) "image/iesa/document_background.jpg";
-					}else if(CompanyConstant.FILE_DOCUMENT_BACKGROUND_DRAFT.equals(instanceCode)){
+					}else if(CompanyConstant.Code.File.DOCUMENT_BACKGROUND_DRAFT.equals(instanceCode)){
 						if(PersistDataListener.BASE_PACKAGE.equals(name))
 							return (T) SchoolBusinessLayer.class.getPackage();
 						if(PersistDataListener.RELATIVE_PATH.equals(name))
@@ -278,9 +278,9 @@ public class IesaFakedDataProducer extends AbstractSchoolFakedDataProducer imple
 		evaluationTypes.add(evaluationTypeTest2 = inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.TEST2));
 		evaluationTypes.add(evaluationTypeExam = inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.EXAM));
 		/*		
-    	File documentHeaderFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_HEADER); 
-    	File documentBackgroundImageFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_BACKGROUND); 
-    	File documentBackgroundImageDraftFile = inject(FileDao.class).read(CompanyConstant.FILE_DOCUMENT_BACKGROUND_DRAFT); 
+    	File documentHeaderFile = inject(FileDao.class).read(CompanyConstant.Code.File.DOCUMENT_HEADER); 
+    	File documentBackgroundImageFile = inject(FileDao.class).read(CompanyConstant.Code.File.DOCUMENT_BACKGROUND); 
+    	File documentBackgroundImageDraftFile = inject(FileDao.class).read(CompanyConstant.Code.File.DOCUMENT_BACKGROUND_DRAFT); 
     	
     	ReportTemplate reportTemplatePk = rootDataProducerHelper.createReportTemplate("IesaReportTemplatePK","Report Sheet",Boolean.TRUE,"report/iesa/pkg.jrxml",documentHeaderFile
 				, documentBackgroundImageFile, documentBackgroundImageDraftFile);

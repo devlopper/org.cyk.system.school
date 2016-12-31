@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.EvaluationType;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 
 public interface ClassroomSessionDivisionSubjectEvaluationTypeDao extends TypedDao<ClassroomSessionDivisionSubjectEvaluationType> {
@@ -12,5 +13,7 @@ public interface ClassroomSessionDivisionSubjectEvaluationTypeDao extends TypedD
 	ClassroomSessionDivisionSubjectEvaluationType readByClassroomSessionDivisionSubjectByEvaluationType(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,EvaluationType evaluationType);
 
 	Collection<ClassroomSessionDivisionSubjectEvaluationType> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
+
+	Collection<ClassroomSessionDivisionSubjectEvaluationType> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 	
 }

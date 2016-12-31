@@ -7,20 +7,16 @@ import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
-import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
-import org.cyk.system.root.persistence.api.GenericDao;
+import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
-import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
-import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.utility.common.CommonUtils;
 import org.cyk.utility.common.Constant;
+import org.joda.time.DateTimeConstants;
 
 public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
 
@@ -37,13 +33,13 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	dataProducer.setGenerateCompleteAcademicSession(Boolean.FALSE);
     	dataProducer.setNumbreOfStudents(0);
     	installApplication();
-    	
+    	String d = String.valueOf(63*inject(MeasureDao.class).read(RootConstant.Code.Measure.TIME_DAY).getValue().longValue());
     	ClassroomSession classroomSession = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-    		.instanciateOne(new String[]{null,SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,"A",null
+    		.instanciateOne(new String[]{null,SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,"A",null,RootConstant.Code.TimeDivisionType.TRIMESTER
     		,StringUtils.join(new String[]{
-    			StringUtils.join(new String[]{"1"},Constant.CHARACTER_COMA.toString())
-    			,StringUtils.join(new String[]{"2"},Constant.CHARACTER_COMA.toString())
-    			,StringUtils.join(new String[]{"3"},Constant.CHARACTER_COMA.toString())
+    			StringUtils.join(new String[]{"1","1","1/1/2000","1/4/2000",d},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{"2","1","1/5/2000","1/8/2000",d},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{"3","1","1/9/2000","1/12/2000",d},Constant.CHARACTER_COMA.toString())
     			},Constant.CHARACTER_VERTICAL_BAR.toString())
     		
     		,StringUtils.join(new String[]{
@@ -53,9 +49,9 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     		},Constant.CHARACTER_VERTICAL_BAR.toString())
     		
     		,StringUtils.join(new String[]{
-    			StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.TEST1,"0.15"},Constant.CHARACTER_COMA.toString())
-    			,StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.TEST2,"0.15"},Constant.CHARACTER_COMA.toString())
-    			,StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.EXAM,"0.7"},Constant.CHARACTER_COMA.toString())
+    			StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.TEST1,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.15","100"},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.TEST2,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.15","100"},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{SchoolConstant.Code.EvaluationType.EXAM,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.7","100"},Constant.CHARACTER_COMA.toString())
     			},Constant.CHARACTER_VERTICAL_BAR.toString())
     		
     		,StringUtils.join(new String[]{
@@ -70,51 +66,37 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	String classroomSessionCode = classroomSession.getCode();
     	    	
     	ClassroomSession classroomSessionPk = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-    		.instanciateOne(new String[]{null,SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1,null,null
-    		,StringUtils.join(new String[]{
-    			StringUtils.join(new String[]{"1"},Constant.CHARACTER_COMA.toString())
-    			,StringUtils.join(new String[]{"2"},Constant.CHARACTER_COMA.toString())
-    			,StringUtils.join(new String[]{"3"},Constant.CHARACTER_COMA.toString())
+    		.instanciateOne(new String[]{null,SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1,null,null,RootConstant.Code.TimeDivisionType.TRIMESTER
+			,StringUtils.join(new String[]{
+    			StringUtils.join(new String[]{"1","1","1/1/2000","1/4/2000",d},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{"2","1","1/5/2000","1/8/2000",d},Constant.CHARACTER_COMA.toString())
+    			,StringUtils.join(new String[]{"3","1","1/9/2000","1/12/2000",d},Constant.CHARACTER_COMA.toString())
     			},Constant.CHARACTER_VERTICAL_BAR.toString())
-    		
+    		    		
     		,StringUtils.join(new String[]{
     			
     		},Constant.CHARACTER_VERTICAL_BAR.toString())
     		
     		,StringUtils.join(new String[]{
     			
-    			},Constant.CHARACTER_VERTICAL_BAR.toString())
+    		},Constant.CHARACTER_VERTICAL_BAR.toString())
     		
     		,StringUtils.join(new String[]{
 				StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT},Constant.CHARACTER_COMA.toString())
 				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE},Constant.CHARACTER_COMA.toString())
 				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE},Constant.CHARACTER_COMA.toString())
 				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_NUMERACY_DEVELOPMENT},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_ARTS_MUSIC},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_GROSS_MOTOR_SKILLS},Constant.CHARACTER_COMA.toString())
+				,StringUtils.join(new String[]{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_FINE_MOTOR_SKILLS},Constant.CHARACTER_COMA.toString())
 			},Constant.CHARACTER_VERTICAL_BAR.toString())
     			
     		}));
     	
     	String classroomSessionPkCode = classroomSessionPk.getCode();
-    	/*
-    	create(inject(SubjectClassroomSessionBusiness.class).instanciateOne(new String[]{SchoolConstant.Code.Subject.ACCOUNTING,classroomSessionPkCode}));
-    	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(
-    			new String[]{classroomSessionPkCode,RootConstant.Code.TimeDivisionType.TRIMESTER,null,null,null,null,null,null});
-    	classroomSessionDivision.getGlobalIdentifierCreateIfNull();
-    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().setSynchonizationEnabled(Boolean.TRUE);
-    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
-    		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class
-    				,SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT), classroomSessionDivision, null));
-    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
-		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class
-				,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE), classroomSessionDivision, null));
-    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
-		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class
-				,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE), classroomSessionDivision, null));
-    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
-		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class
-				,SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS), classroomSessionDivision, null));
-    	create(classroomSessionDivision);
-    	*/
+    	
     	Student student1 = inject(StudentBusiness.class).instanciateOneRandomly();
     	student1.setCode("STUD1");
     	student1.setName("komenan");
@@ -163,7 +145,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	//schoolBusinessTestHelper.getEvaluationTypes().addAll(inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.COLLECTION));
     	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.PK,null,1l}}, Boolean.TRUE, Boolean.FALSE);
-    	//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.G1,"A",1l}}, Boolean.TRUE, Boolean.FALSE);
+    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.G1,"A",1l}}, Boolean.TRUE, Boolean.FALSE);
     	
     	/*
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{

@@ -41,6 +41,8 @@ public class SchoolBusinessImpl extends AbstractTypedBusinessService<School, Sch
 	public School instanciateOne(String[] values) {
 		School school = instanciateOne();
 		Integer index = 0;
+		school.setCode(values[index++]);
+		school.setName(values[index++]);
 		school.getNodeInformations().setClassroomSessionTimeDivisionType(inject(TimeDivisionTypeDao.class).read(values[index++]));
 		school.getNodeInformations().setCurrentClassroomSessionDivisionIndex(new Long(values[index++]));
 		school.getNodeInformations().setClassroomSessionDivisionOrderNumberInterval(inject(IntervalDao.class).read(values[index++]));

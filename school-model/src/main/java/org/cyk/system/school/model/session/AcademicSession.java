@@ -28,7 +28,7 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 		
 	@Embedded private CommonNodeInformations nodeInformations;
 	
-	@Temporal(value=TemporalType.DATE) private Date nextStartingDate;
+	@Temporal(value=TemporalType.DATE) private Date nextStartingDate;//TODO to be deleted. look for the next to get the from date
 	
 	public AcademicSession(School school,CommonNodeInformations nodeInformations,Date nextStartingDate) {
 		super();
@@ -37,4 +37,9 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 		this.nextStartingDate = nextStartingDate;
 	} 
 	
+	public CommonNodeInformations getNodeInformations(){
+		if(nodeInformations==null)
+			nodeInformations = new CommonNodeInformations();
+		return nodeInformations;
+	}
 }

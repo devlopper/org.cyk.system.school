@@ -7,7 +7,6 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
-import org.cyk.system.company.business.impl.CompanyDataProducerHelper;
 import org.cyk.system.company.model.CompanyConstant;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.business.api.ClazzBusiness;
@@ -34,8 +33,9 @@ import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.RootConstant;
+import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.Script;
-import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
@@ -43,7 +43,6 @@ import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionType;
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.root.model.security.Role;
-import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.value.NullString;
 import org.cyk.system.root.model.value.Value;
 import org.cyk.system.root.model.value.ValueCollection;
@@ -54,7 +53,6 @@ import org.cyk.system.root.model.value.ValueType;
 import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
-import org.cyk.system.school.business.api.session.SchoolBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
 import org.cyk.system.school.model.SchoolConstant;
@@ -71,6 +69,7 @@ import org.cyk.system.school.model.session.LevelGroupType;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.LevelSpeciality;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
@@ -129,7 +128,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			@SuppressWarnings("unchecked")
 			@Override
 			public <T> T processPropertyValue(Class<?> aClass,String instanceCode, String name, T value) {
-				if(ArrayUtils.contains(new String[]{CompanyConstant.REPORT_EMPLOYEE_EMPLOYMENT_CONTRACT}, instanceCode)){
+				if(ArrayUtils.contains(new String[]{CompanyConstant.Code.ReportTemplate.EMPLOYEE_EMPLOYMENT_CONTRACT}, instanceCode)){
 					if(PersistDataListener.BASE_PACKAGE.equals(name))
 						return (T) CompanyBusinessLayer.class.getPackage();
 				}
@@ -236,14 +235,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Override
 	protected void persistStructureData() {
-		inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.Code.ReportTemplate.STUDENT_REGISTRATION_CERTIFICATE,"certificat d'inscription",Boolean.TRUE, "report/student/registration_certificate.jrxml");
-    	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.Code.ReportTemplate.STUDENT_TUITION_CERTIFICATE,"certificat de scolarité",Boolean.TRUE, "report/student/tuition_certificate.jrxml");
-    	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.Code.ReportTemplate.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS
-    			,"Report Sheet",Boolean.TRUE, "report/iesa/g1g12.jrxml");
-    	inject(CompanyDataProducerHelper.class).createReportTemplate(SchoolConstant.Code.ReportTemplate.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_PK
-    			,"Report Sheet",Boolean.TRUE, "report/iesa/pkg.jrxml");
-    	
-    	createFiles();
+		createFiles();
     	createIntervals();
     	createValues();
     	
@@ -257,7 +249,10 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	}
 	
 	private void createFiles(){
+		createFromExcelSheet(File.class);
 		createFromExcelSheet(Script.class);
+		createFromExcelSheet(ReportTemplate.class);
+		
 	}
 	
 	private void createValues(){
@@ -268,20 +263,11 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	}
 	
 	private void createSchool(){
-		create(inject(SchoolBusiness.class).instanciateOne(new String[]{RootConstant.Code.TimeDivisionType.TRIMESTER,"1"
-				,SchoolConstant.Code.Interval.DIVISION_COUNT_BY_CLASSROOM_SESSION,SchoolConstant.Code.ReportTemplate.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_PK
-				,SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT,SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT 
-				,SchoolConstant.Code.IntervalCollection.GRADING_SCALE_PRIMARY_STUDENT,SchoolConstant.Code.IntervalCollection.PROMOTION_SCALE_STUDENT
-				,RootConstant.Code.TimeDivisionType.DAY,"50"}));
-		
-		create(inject(AcademicSessionBusiness.class).instanciateOne(new String[]{PersistDataListener.Adapter.process(AcademicSession.class, null
-				, commonUtils.attributePath(AcademicSession.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_FROM_DATE), "4/10/2000")
-				,PersistDataListener.Adapter.process(AcademicSession.class, null
-				, commonUtils.attributePath(AcademicSession.FIELD_GLOBAL_IDENTIFIER, GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_FROM_DATE), "20/05/2001")}));
+		createFromExcelSheet(School.class);
+		createFromExcelSheet(AcademicSession.class);
 	}
 	
 	private void createLevels(){
-		
 		createFromExcelSheet(LevelGroupType.class);
 		createFromExcelSheet(LevelGroup.class);
 		createFromExcelSheet(LevelSpeciality.class);

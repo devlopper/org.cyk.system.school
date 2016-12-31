@@ -24,4 +24,10 @@ public class LevelName extends AbstractEnumeration implements Serializable{
 		this.nodeInformations = nodeInformations;
 	}
 	
+	public CommonNodeInformations getNodeInformations(){
+		if(nodeInformations==null)
+			nodeInformations = new CommonNodeInformations();
+		return nodeInformations;
+	}
+	
 }

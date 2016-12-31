@@ -85,6 +85,8 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	public AcademicSession instanciateOne(String[] values) {
 		AcademicSession academicSession = instanciateOne();
 		Integer index = 0;
+		academicSession.setCode(values[index++]);
+		academicSession.setName(values[index++]);
 		academicSession.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(inject(TimeBusiness.class).parse(values[index++]));
     	academicSession.getExistencePeriod().setToDate(inject(TimeBusiness.class).parse(values[index++]));
 		return academicSession;

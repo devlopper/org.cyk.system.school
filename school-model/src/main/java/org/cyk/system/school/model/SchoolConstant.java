@@ -330,21 +330,34 @@ public interface SchoolConstant {
 			public static String DIVISION_COUNT_BY_CLASSROOM_SESSION = generate(ClassroomSessionDivision.class,"COUNTBY",ClassroomSession.class);
 		}
 		
-		public static class ReportTemplate implements Serializable {
+		public static class File implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
 			public static String STUDENT_REGISTRATION_CERTIFICATE = "STUDENT_REGISTRATION_CERTIFICATE";
 			public static String STUDENT_TUITION_CERTIFICATE = "STUDENT_TUITION_CERTIFICATE";
 			
-			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_PK = generate(ClassroomSessionDivision.class
-					,"Results",LevelGroup.KINDERGARTEN,LevelName.PK);
-			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K1_STUDENT = generate(ClassroomSessionDivision.class
-					,"Results",LevelGroup.KINDERGARTEN,LevelName.K1,Student.class);
-			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K2_STUDENT = generate(ClassroomSessionDivision.class
-					,"Results",LevelGroup.KINDERGARTEN,LevelName.K2,Student.class);
-			public static String CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K3_STUDENT = generate(ClassroomSessionDivision.class
-					,"Results",LevelGroup.KINDERGARTEN,LevelName.K3,Student.class);
-			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS = generate(StudentClassroomSessionDivision.class,"Results");
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_PK = generate(StudentClassroomSessionDivision.class
+					,"RESULTS",LevelGroup.KINDERGARTEN,LevelName.PK);
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K1 = generate(StudentClassroomSessionDivision.class
+					,"RESULTS",LevelGroup.KINDERGARTEN,LevelName.K1);
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K2K3 = generate(StudentClassroomSessionDivision.class
+					,"RESULTS",LevelGroup.KINDERGARTEN,LevelName.K2,LevelName.K3);
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS = generate(StudentClassroomSessionDivision.class,"RESULTS");
+		}
+		
+		public static class ReportTemplate implements Serializable {
+			private static final long serialVersionUID = 1L;
+			
+			public static String STUDENT_REGISTRATION_CERTIFICATE = "STUDENTREGISTRATIONCERTIFICATE";
+			public static String STUDENT_TUITION_CERTIFICATE = "STUDENTTUITIONCERTIFICATE";
+			
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_PK = generate(StudentClassroomSessionDivision.class
+					,"RESULTS",LevelGroup.KINDERGARTEN,LevelName.PK);
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K1 = generate(StudentClassroomSessionDivision.class
+					,"RESULTS",LevelGroup.KINDERGARTEN,LevelName.K1);
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K2K3 = generate(StudentClassroomSessionDivision.class
+					,"RESULTS",LevelGroup.KINDERGARTEN,LevelName.K2,LevelName.K3);
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS = generate(StudentClassroomSessionDivision.class,"RESULTS");
 		}
 		
 		public static class Role implements Serializable {
@@ -373,7 +386,8 @@ public interface SchoolConstant {
 			
 			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_STUDENT = "STUDENTCLASSROOMSESSIONDIVISIONRESULTSSTUDENT";
 			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_ATTENDANCE = "STUDENTCLASSROOMSESSIONDIVISIONRESULTSATTENDANCE";
-			
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_OVEL_ALL_RESULTS = "STUDENTCLASSROOMSESSIONDIVISIONRESULTSOVERALLRESULTS";
+			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_SCHOOL_COMMUNICATION = "STUDENTCLASSROOMSESSIONDIVISIONRESULTSSCHOOLCOMMUNICATION";
 		}
 		
 	}

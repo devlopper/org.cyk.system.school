@@ -6,22 +6,25 @@ import java.util.Collection;
 import javax.persistence.NoResultException;
 
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.EvaluationType;
-import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 
 public class ClassroomSessionDivisionSubjectEvaluationTypeDaoImpl extends AbstractTypedDao<ClassroomSessionDivisionSubjectEvaluationType> implements ClassroomSessionDivisionSubjectEvaluationTypeDao,Serializable {
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readByClassroomSessionDivisionSubjectByEvaluationType,readByClassroomSessionDivisionSubject;
+	private String readByClassroomSessionDivisionSubjectByEvaluationType,readByClassroomSessionDivisionSubject,readByClassroomSessionDivision;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
 		registerNamedQuery(readByClassroomSessionDivisionSubjectByEvaluationType, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT).and(ClassroomSessionDivisionSubjectEvaluationType.FIELD_EVALUATION_TYPE));
 		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT));
+		registerNamedQuery(readByClassroomSessionDivision, _select().where(commonUtils.attributePath(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, ClassroomSessionDivisionSubject.COLUMN_CLASSROOM_SESSION_DIVISION)
+				,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION));
 	}
 	
 	@Override
@@ -33,6 +36,11 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeDaoImpl extends Abstra
 	@Override
 	public Collection<ClassroomSessionDivisionSubjectEvaluationType> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		return namedQuery(readByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, classroomSessionDivisionSubject).resultMany();
+	}
+	
+	@Override
+	public Collection<ClassroomSessionDivisionSubjectEvaluationType> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
+		return namedQuery(readByClassroomSessionDivision).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision).resultMany();
 	}
 	
 }
