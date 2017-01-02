@@ -40,7 +40,6 @@ import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.utility.common.Constant;
-import org.cyk.utility.common.LogMessage;
 
 @Stateless
 public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivision, ClassroomSessionDivisionDao> implements ClassroomSessionDivisionBusiness,Serializable {
@@ -176,6 +175,51 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	}
 	
 	@Override
+	protected ClassroomSessionDivision __instanciateOne__(String[] values,org.cyk.system.root.business.api.TypedBusiness.InstanciateOneListener<ClassroomSessionDivision> listener) {
+		listener.getInstance().getGlobalIdentifierCreateIfNull();
+		set(listener.getSetListener(), ClassroomSessionDivision.FIELD_CLASSROOMSESSION);
+		set(listener.getSetListener(), ClassroomSessionDivision.FIELD_TIME_DIVISION_TYPE);
+		set(listener.getSetListener(), ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_ORDER_NUMBER);
+		set(listener.getSetListener(), ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_WEIGHT);
+		set(listener.getSetListener(), ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_FROM_DATE);
+		set(listener.getSetListener(), ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_TO_DATE);
+		set(listener.getSetListener().setFieldType(Long.class), ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_NUMBER_OF_MILLISECOND
+				, LongValue.FIELD_USER);
+		
+		ClassroomSessionDivision classroomSessionDivision = listener.getInstance();
+		Integer index = listener.getSetListener().getIndex();
+		String value;
+		
+		classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+		if(StringUtils.isNotBlank(value = values[index++]))
+			for(String subjectCode : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
+				ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class)
+						.instanciateOne(new String[]{null,subjectCode,null,values[index]});
+				classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);
+				classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
+			}
+		
+		classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().setSynchonizationEnabled(Boolean.TRUE);
+		if(StringUtils.isNotBlank(value = values[++index]))
+			for(String metricCollectionCode : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
+		    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
+		    		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class,metricCollectionCode)
+		    				, classroomSessionDivision, null));
+			}
+		
+		
+		for(SubjectClassroomSession subjectClassroomSession : inject(SubjectClassroomSessionDao.class).readByClassroomSession(classroomSessionDivision.getClassroomSession())){
+			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).instanciateOne();
+			classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);
+			classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
+			classroomSessionDivisionSubject.setSubject(subjectClassroomSession.getSubject());
+			classroomSessionDivisionSubject.setWeight(subjectClassroomSession.getWeight());
+			classroomSessionDivisionSubject.setTeacher(subjectClassroomSession.getTeacher());
+		}
+		return classroomSessionDivision;
+	}
+	
+	/*@Override
 	public ClassroomSessionDivision instanciateOne(String[] values) {
 		LogMessage.Builder logMessageBuilder = new LogMessage.Builder("Instanciate", "div from values "+StringUtils.join(values,Constant.CHARACTER_COMA.toString()));
 		ClassroomSessionDivision classroomSessionDivision = instanciateOne();
@@ -219,5 +263,5 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		}
 		logTrace(logMessageBuilder);
 		return classroomSessionDivision;
-	}
+	}*/
 }

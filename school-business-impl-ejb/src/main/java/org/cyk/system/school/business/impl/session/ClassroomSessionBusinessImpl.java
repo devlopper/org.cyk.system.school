@@ -205,6 +205,32 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	}
 	
 	@Override
+	protected ClassroomSession __instanciateOne__(String[] values,org.cyk.system.root.business.api.TypedBusiness.InstanciateOneListener<ClassroomSession> listener) {
+		ClassroomSession classroomSession = listener.getInstance();
+		set(listener.getSetListener(), ClassroomSession.FIELD_ACADEMIC_SESSION);
+		set(listener.getSetListener(), ClassroomSession.FIELD_LEVEL_TIME_DIVISION);
+		set(listener.getSetListener(), ClassroomSession.FIELD_SUFFIX);
+		set(listener.getSetListener(), ClassroomSession.FIELD_COORDINATOR);
+		
+		Integer index = listener.getSetListener().getIndex();
+		String value;
+		String classroomSessionTimeDivisionTypeCode = values[index++];
+		classroomSession.getDivisions().setSynchonizationEnabled(Boolean.TRUE);
+		if(StringUtils.isNotBlank(value = values[index++])){
+			for(String classroomSessionDivisionInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
+				String[] array = StringUtils.split(classroomSessionDivisionInfos, Constant.CHARACTER_COMA.toString());
+				ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
+						.instanciateOne(new String[]{null,classroomSessionTimeDivisionTypeCode,commonUtils.getValueAt(array, 0),commonUtils.getValueAt(array, 1)
+								,commonUtils.getValueAt(array, 2),commonUtils.getValueAt(array, 3),commonUtils.getValueAt(array, 4)
+								,commonUtils.getValueAt(values, index),commonUtils.getValueAt(values, index+1),commonUtils.getValueAt(values, index+2)});
+				classroomSessionDivision.setClassroomSession(classroomSession);
+				classroomSession.getDivisions().getCollection().add(classroomSessionDivision);
+			}
+		}
+		return classroomSession;
+	}
+	/*
+	@Override
 	public ClassroomSession instanciateOne(String[] values) {
 		ClassroomSession classroomSession = instanciateOne();
 		Integer index = 0;
@@ -229,13 +255,8 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 				classroomSession.getDivisions().getCollection().add(classroomSessionDivision);
 			}
 		}
-		/*
-		if(StringUtils.isNotBlank(value = values[index = index + 2])){
-			for(String metricCollectionInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
-				
-			}
-		}*/
 		return classroomSession;
 	}
+	*/
 	
 }
