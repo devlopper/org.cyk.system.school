@@ -185,6 +185,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		set(listener.getSetListener(), ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_TO_DATE);
 		set(listener.getSetListener().setFieldType(Long.class), ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_NUMBER_OF_MILLISECOND
 				, LongValue.FIELD_USER);
+		set(listener.getSetListener().setFieldType(null), ClassroomSessionDivision.FIELD_STUDENT_EVALUATION_REQUIRED);
+		set(listener.getSetListener(), ClassroomSessionDivision.FIELD_STUDENT_SUBJECT_ATTENDANCE_AGGREGATED);
 		
 		ClassroomSessionDivision classroomSessionDivision = listener.getInstance();
 		Integer index = listener.getSetListener().getIndex();
@@ -219,49 +221,4 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		return classroomSessionDivision;
 	}
 	
-	/*@Override
-	public ClassroomSessionDivision instanciateOne(String[] values) {
-		LogMessage.Builder logMessageBuilder = new LogMessage.Builder("Instanciate", "div from values "+StringUtils.join(values,Constant.CHARACTER_COMA.toString()));
-		ClassroomSessionDivision classroomSessionDivision = instanciateOne();
-		Integer index = 0;
-		String value;
-		SetListener listener = new SetListener.Adapter.Default(values, 0, logMessageBuilder);
-		set(classroomSessionDivision, ClassroomSessionDivision.FIELD_CLASSROOMSESSION, listener);
-		set(classroomSessionDivision, ClassroomSessionDivision.FIELD_TIME_DIVISION_TYPE, listener);
-		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull(), GlobalIdentifier.FIELD_ORDER_NUMBER, listener);
-		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull(), GlobalIdentifier.FIELD_WEIGHT, listener);
-		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod(), Period.FIELD_FROM_DATE, listener);
-		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod(), Period.FIELD_TO_DATE, listener);
-		set(classroomSessionDivision.getGlobalIdentifierCreateIfNull().getExistencePeriod().getNumberOfMillisecond(), LongValue.FIELD_USER, listener.setFieldType(Long.class));
-		index = listener.getIndex();
-		
-		classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
-		if(StringUtils.isNotBlank(value = values[index++]))
-			for(String subjectCode : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
-				ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class)
-						.instanciateOne(new String[]{null,subjectCode,null,values[index]});
-				classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);
-				classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
-			}
-		
-		classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().setSynchonizationEnabled(Boolean.TRUE);
-		if(StringUtils.isNotBlank(value = values[++index]))
-			for(String metricCollectionCode : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
-		    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
-		    		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class,metricCollectionCode)
-		    				, classroomSessionDivision, null));
-			}
-		
-		
-		for(SubjectClassroomSession subjectClassroomSession : inject(SubjectClassroomSessionDao.class).readByClassroomSession(classroomSessionDivision.getClassroomSession())){
-			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).instanciateOne();
-			classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);
-			classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
-			classroomSessionDivisionSubject.setSubject(subjectClassroomSession.getSubject());
-			classroomSessionDivisionSubject.setWeight(subjectClassroomSession.getWeight());
-			classroomSessionDivisionSubject.setTeacher(subjectClassroomSession.getTeacher());
-		}
-		logTrace(logMessageBuilder);
-		return classroomSessionDivision;
-	}*/
 }

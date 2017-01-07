@@ -82,5 +82,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	public static final String FIELD_TIME_DIVISION_TYPE = "timeDivisionType";
 	public static final String FIELD_RESULTS = "results";
 	public static final String FIELD_NUMBER_OF_SUBJECTS = "numberOfSubjects";
+	public static final String FIELD_STUDENT_EVALUATION_REQUIRED = "studentEvaluationRequired";
+	public static final String FIELD_STUDENT_SUBJECT_ATTENDANCE_AGGREGATED = "studentSubjectAttendanceAggregated";
 	
 }

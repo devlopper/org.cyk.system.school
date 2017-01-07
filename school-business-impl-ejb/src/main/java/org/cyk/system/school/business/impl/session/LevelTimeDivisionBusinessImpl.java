@@ -1,7 +1,6 @@
 package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -58,12 +57,12 @@ public class LevelTimeDivisionBusinessImpl extends AbstractTypedBusinessService<
 	}
 	
 	@Override
-	public LevelTimeDivision instanciateOne(String[] values) {
-		LevelTimeDivision levelTimeDivision = instanciateOne();
-		Integer index = 0;
-		levelTimeDivision.setLevel(inject(LevelDao.class).read(values[index++]));
-		levelTimeDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(values[index++]));
-		levelTimeDivision.setOrderNumber(new BigDecimal(values[index++]).longValue());
+	protected LevelTimeDivision __instanciateOne__(String[] values,InstanciateOneListener<LevelTimeDivision> listener) {
+		LevelTimeDivision levelTimeDivision = listener.getInstance();
+		levelTimeDivision.getGlobalIdentifierCreateIfNull();
+		set(listener.getSetListener(), LevelTimeDivision.FIELD_LEVEL);
+		set(listener.getSetListener(), LevelTimeDivision.FIELD_TIME_DIVISION_TYPE);
+		set(listener.getSetListener(), LevelTimeDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_ORDER_NUMBER);
 		return levelTimeDivision;
 	}
 	

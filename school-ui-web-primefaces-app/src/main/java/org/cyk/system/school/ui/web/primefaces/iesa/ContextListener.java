@@ -1,7 +1,6 @@
 package org.cyk.system.school.ui.web.primefaces.iesa;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 import javax.servlet.ServletContextEvent;
 
@@ -29,7 +28,6 @@ import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalI
 import org.cyk.system.root.model.mathematics.MetricValueIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
-import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
@@ -74,9 +72,8 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
-		SchoolConstant.Code.EvaluationType.COLLECTION.addAll(Arrays.asList(SchoolConstant.Code.EvaluationType.TEST1
-				,SchoolConstant.Code.EvaluationType.TEST2,SchoolConstant.Code.EvaluationType.EXAM));
-    	StudentClassroomSessionDivisionBusiness.SUM_MARKS[0] = Boolean.TRUE;
+		
+		SchoolConstant.Configuration.Evaluation.SUM_ON_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT = Boolean.TRUE;
     	
     	SaleConsultPage.SHOW_SALE_PRODUCT_TABLE = Boolean.FALSE;
     	
@@ -173,9 +170,11 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				}					
 			}
 		}
+		
 		public static final String FIELD_TEST1 = "test1";
 		public static final String FIELD_TEST2 = "test2";
 		public static final String FIELD_EXAM = "exam";
+		
 	}
 	
 	/**/

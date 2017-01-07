@@ -30,4 +30,5 @@ public class LevelName extends AbstractEnumeration implements Serializable{
 		return nodeInformations;
 	}
 	
+	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
 }

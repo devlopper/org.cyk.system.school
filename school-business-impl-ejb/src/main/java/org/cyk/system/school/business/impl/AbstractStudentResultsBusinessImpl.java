@@ -3,7 +3,6 @@ package org.cyk.system.school.business.impl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,11 +16,7 @@ import org.cyk.system.root.business.api.event.EventMissedBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
-import org.cyk.system.root.business.api.mathematics.MetricBusiness;
-import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
-import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
-import org.cyk.system.root.business.api.value.ValueBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.event.Event;
@@ -30,17 +25,12 @@ import org.cyk.system.root.model.event.EventParty;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
-import org.cyk.system.root.model.mathematics.Metric;
-import org.cyk.system.root.model.mathematics.MetricCollection;
-import org.cyk.system.root.model.value.Value;
 import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.root.persistence.api.event.EventMissedDao;
 import org.cyk.system.root.persistence.api.event.EventPartyDao;
-import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.AbstractStudentResult;
-import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.Lecture;
@@ -232,67 +222,9 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 								}	
 				}*/	
 			}else{
-				//Just recompute derived attributes
-				//attendanceMetricValues = inject(AttendanceMetricValueDao.class).readByAttendance(attendance);
-				/*System.out.println("AbstractStudentResultsBusinessImpl.updateAttendance() : "+result.getCode());
-				for(AttendanceMetricValue attendanceMetricValue : attendanceMetricValues){
-					System.out.println(attendanceMetricValue.getCode());
-					debug(attendanceMetricValue);
-				}*/
-				/*
-				AttendanceMetricValue attendedAttendanceMetricValue = inject(AttendanceMetricValueBusiness.class).findOne(attendanceMetricValues
-						, AttendanceMetricValue.NUMBER_OF_MILLISECOND_ATTENDED);
-				AttendanceMetricValue missedAttendanceMetricValue = inject(AttendanceMetricValueBusiness.class).findOne(attendanceMetricValues
-						, AttendanceMetricValue.NUMBER_OF_MILLISECOND_MISSED);
-				Long attendableDuration = getAttendableDuration(result);
-				if(attendableDuration==null)
-					logTrace("No attendable duration has been set for {}", result.getLogMessage());
-				else if(missedAttendanceMetricValue.getMetricValue().getNumberValue().get(Boolean.TRUE)==null)
-					logTrace("No missed duration has been set for {}", result.getLogMessage());
-				else
-					attendedAttendanceMetricValue.getMetricValue().getNumberValue().addUser(new BigDecimal(attendableDuration)
-							.subtract(missedAttendanceMetricValue.getMetricValue().getNumberValue().get(Boolean.TRUE)));
-					//attendance.setAttendedDuration(attendableDuration-attendance.getMissedDuration());
 				
-				*/
-				//TODO think better
-				Collection<MetricCollection> attendanceMetricCollections = inject(MetricCollectionBusiness.class)
-						.findByTypeByIdentifiable(inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT), level(result));
-				//MetricCollection attendanceMetricCollection = attendanceMetricCollections.iterator().next();
-				for(MetricCollection attendanceMetricCollection : attendanceMetricCollections){
-					Metric numberOfTimePresentMetric = inject(MetricBusiness.class).find(attendanceMetricCollection.getCode()
-							,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_PRESENT_STUDENT);
-					Metric numberOfTimeAbsentMetric = inject(MetricBusiness.class).find(attendanceMetricCollection.getCode()
-							,SchoolConstant.Code.Metric.ATTENDANCE_NUMBER_OF_TIME_ABSENT_STUDENT);
-					
-					Value numberOfTimePresent = inject(MetricValueBusiness.class).findByMetricsByIdentifiables(Arrays.asList(numberOfTimePresentMetric)
-							,Arrays.asList(result)).iterator().next().getValue();
-					Value numberOfTimeAbsent = inject(MetricValueBusiness.class).findByMetricsByIdentifiables(Arrays.asList(numberOfTimeAbsentMetric)
-							,Arrays.asList(result)).iterator().next().getValue();
-					Long duration = getAttendableDuration(result);
-					
-					//MeasureBusiness measureBusiness = inject(MeasureBusiness.class);
-					//System.out.println("P : "+measureBusiness.computeQuotient(numberOfTimePresent.getMeasure(), (BigDecimal)numberOfTimePresent.get())
-					//	+" A : "+measureBusiness.computeQuotient(numberOfTimeAbsent.getMeasure(), (BigDecimal)numberOfTimeAbsent.get()));
-					/*
-					if(numberOfTimePresent.getNumberValue().get()==null)	
-						numberOfTimePresent.getNumberValue().set(BigDecimal.ZERO);
-					
-					if(numberOfTimeAbsent.getNumberValue().get()==null)	
-						numberOfTimeAbsent.getNumberValue().set(BigDecimal.ZERO);
-					*/
-					if(numberOfTimeAbsent.getNumberValue().get()!=null){
-						numberOfTimePresent.getNumberValue().set(new BigDecimal(duration).subtract(numberOfTimeAbsent.getNumberValue().get()));
-						inject(ValueBusiness.class).update(numberOfTimePresent);
-						//break;
-					}	
-					
-					break;
-				}
 				
 			}
-			//if(attendanceMetricValues!=null)
-			//	inject(AttendanceMetricValueBusiness.class).update(attendanceMetricValues);
 			dao.update(result);
 			addCallArgumentsWorkDoneByStep(callArguments);
 		}

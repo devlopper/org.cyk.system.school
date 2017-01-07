@@ -2,7 +2,6 @@ package org.cyk.system.school.business.api.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
@@ -18,7 +17,6 @@ import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
-import org.cyk.utility.common.cdi.BeanAdapter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -66,34 +64,6 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	
 	/**/
 	
-	//TODO to be nicely designed
-	Boolean[] SUM_MARKS = {Boolean.FALSE};
-	
-	//TODO to be moved in Impl
-	public static interface Listener{
-		
-		Collection<Listener> COLLECTION = new ArrayList<>();
-		
-		void loadedOnBuildReport(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions);
-		void computingOnBuildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
-		void computedOnBuildReport(StudentClassroomSessionDivision studentClassroomSessionDivision);
-		
-		/**/
-		
-		public static class Adapter extends BeanAdapter implements Listener,Serializable{
-			private static final long serialVersionUID = -9048282379616583423L;
-			@Override
-			public void loadedOnBuildReport(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {}
-			
-			@Override
-			public void computedOnBuildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {}
-			
-			@Override
-			public void computingOnBuildReport(StudentClassroomSessionDivision studentClassroomSessionDivision) {}
-			
-		}		
-	}
-
 	Collection<StudentClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession);
 	Collection<StudentClassroomSessionDivision> findByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
 	Collection<StudentClassroomSessionDivision> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);

@@ -40,4 +40,7 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	
 	Collection<ClassroomSession> findByCriteria(SearchCriteria searchCriteria);
 	Long countByCriteria(SearchCriteria searchCriteria);
+	
+	ClassroomSession instanciateOne(String levelTimeDivisionCode, String suffixCode,String coordinatorCode, String timeDivisionTypeCode,
+			String[][] divisions, String[][] subjects, String[][] evaluationTypes, String[][] metricCollections);
 }

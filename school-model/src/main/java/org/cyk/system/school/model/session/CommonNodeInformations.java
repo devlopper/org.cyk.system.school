@@ -26,7 +26,6 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	
 	//TODO do ReportTemplateIdentifiable concept
 	@ManyToOne @JoinColumn(name="resultsReportTemplate") private ReportTemplate studentClassroomSessionDivisionResultsReportTemplate;
-	//@ManyToOne @JoinColumn(name="provisionalResultsReportTemplate") private ReportTemplate studentClassroomSessionDivisionProvisionalResultsReportTemplate;
 	
 	@ManyToOne @JoinColumn(name="resultsReportSigner") private Person studentClassroomSessionDivisionResultsReportSigner;
 	
@@ -78,4 +77,16 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 		return toString();
 	}	
 	
+	public static final String FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE = "studentClassroomSessionDivisionResultsReportTemplate";
+	public static final String FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER = "studentClassroomSessionDivisionResultsReportSigner";
+	public static final String FIELD_STUDENT_SUBJECT_AVERAGESCALE = "studentSubjectAverageScale";
+	public static final String FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE = "studentClassroomSessionDivisionAverageScale";
+	public static final String FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE = "studentClassroomSessionAverageScale";
+	public static final String FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE = "studentClassroomSessionAveragePromotionScale";
+	public static final String FIELD_ATTENDANCE_TIME_DIVISION_TYPE = "attendanceTimeDivisionType";
+	public static final String FIELD_AGGREGATE_ATTENDANCE = "aggregateAttendance";
+	public static final String FIELD_EVALUATION_PASS_AVERAGE = "evaluationPassAverage";
+	public static final String FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE = "classroomSessionTimeDivisionType";
+	public static final String FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL = "classroomSessionDivisionOrderNumberInterval";
+	public static final String FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX = "currentClassroomSessionDivisionIndex";
 }

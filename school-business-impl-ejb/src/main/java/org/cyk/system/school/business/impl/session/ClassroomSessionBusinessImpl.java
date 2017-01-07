@@ -220,43 +220,27 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 			for(String classroomSessionDivisionInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
 				String[] array = StringUtils.split(classroomSessionDivisionInfos, Constant.CHARACTER_COMA.toString());
 				ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
-						.instanciateOne(new String[]{null,classroomSessionTimeDivisionTypeCode,commonUtils.getValueAt(array, 0),commonUtils.getValueAt(array, 1)
-								,commonUtils.getValueAt(array, 2),commonUtils.getValueAt(array, 3),commonUtils.getValueAt(array, 4)
-								,commonUtils.getValueAt(values, index),commonUtils.getValueAt(values, index+1),commonUtils.getValueAt(values, index+2)});
+					.instanciateOne(new String[]{null,classroomSessionTimeDivisionTypeCode,commonUtils.getValueAt(array, 0),commonUtils.getValueAt(array, 1)
+						,commonUtils.getValueAt(array, 2),commonUtils.getValueAt(array, 3),commonUtils.getValueAt(array, 4),commonUtils.getValueAt(array, 5)
+						,commonUtils.getValueAt(array, 6),commonUtils.getValueAt(values, index),commonUtils.getValueAt(values, index+1)
+						,commonUtils.getValueAt(values, index+2)});
 				classroomSessionDivision.setClassroomSession(classroomSession);
 				classroomSession.getDivisions().getCollection().add(classroomSessionDivision);
 			}
 		}
 		return classroomSession;
 	}
-	/*
+	
 	@Override
-	public ClassroomSession instanciateOne(String[] values) {
-		ClassroomSession classroomSession = instanciateOne();
-		Integer index = 0;
-		String value;
-		SetListener listener = new SetListener.Adapter.Default(values, 0, null);
-		set(classroomSession, ClassroomSession.FIELD_ACADEMIC_SESSION, listener);
-		set(classroomSession, ClassroomSession.FIELD_LEVEL_TIME_DIVISION, listener);
-		set(classroomSession, ClassroomSession.FIELD_SUFFIX, listener);
-		set(classroomSession, ClassroomSession.FIELD_COORDINATOR, listener);
-		
-		index = listener.getIndex();
-		String classroomSessionTimeDivisionTypeCode = values[index++];
-		classroomSession.getDivisions().setSynchonizationEnabled(Boolean.TRUE);
-		if(StringUtils.isNotBlank(value = values[index++])){
-			for(String classroomSessionDivisionInfos : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
-				String[] array = StringUtils.split(classroomSessionDivisionInfos, Constant.CHARACTER_COMA.toString());
-				ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
-						.instanciateOne(new String[]{null,classroomSessionTimeDivisionTypeCode,commonUtils.getValueAt(array, 0),commonUtils.getValueAt(array, 1)
-								,commonUtils.getValueAt(array, 2),commonUtils.getValueAt(array, 3),commonUtils.getValueAt(array, 4)
-								,commonUtils.getValueAt(values, index),commonUtils.getValueAt(values, index+1),commonUtils.getValueAt(values, index+2)});
-				classroomSessionDivision.setClassroomSession(classroomSession);
-				classroomSession.getDivisions().getCollection().add(classroomSessionDivision);
-			}
-		}
-		return classroomSession;
+	public ClassroomSession instanciateOne(String levelTimeDivisionCode,String suffixCode,String coordinatorCode,String timeDivisionTypeCode,String[][] divisions,String[][] subjects,String[][] evaluationTypes,String[][] metricCollections){
+		return inject(ClassroomSessionBusiness.class)
+    		.instanciateOne(new String[]{null,levelTimeDivisionCode,suffixCode,coordinatorCode,timeDivisionTypeCode
+    		,commonUtils.convertToString(divisions, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
+    		,commonUtils.convertToString(subjects, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
+    		,commonUtils.convertToString(evaluationTypes, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
+    		,commonUtils.convertToString(metricCollections, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
+        		
+    		});
 	}
-	*/
 	
 }

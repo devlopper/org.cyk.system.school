@@ -30,10 +30,10 @@ public class StudentClassroomSessionBusinessCrudIT extends AbstractIesaBusinessI
 
     private static final long serialVersionUID = -6691092648665798471L;
  
-    @Override
+    /*@Override
 	protected void populate() {
     	installApplication();
-	}
+	}*/
 
 	@Override
     protected void businesses() {

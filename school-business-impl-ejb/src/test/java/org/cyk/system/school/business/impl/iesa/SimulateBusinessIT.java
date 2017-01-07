@@ -20,10 +20,6 @@ public class SimulateBusinessIT extends AbstractIesaBusinessIT {
     	parameters.setGeneratedClassroomSessionCountByLevel(null);
     	parameters.getClassroomSessionDivisionIndexes().add(0);
     	
-    	schoolBusinessTestHelper.setCustomClassroomSessionDivisionSubjectEvaluationTypeInfos(new Object[][]{
-    		{dataProducer.getEvaluationTypeTest1(),"0.15","100"},{dataProducer.getEvaluationTypeTest2(),"0.15","100"},{dataProducer.getEvaluationTypeExam(),"0.7","100"}
-    	});
-    	
     	schoolBusinessTestHelper.simulate(parameters);
     }
     

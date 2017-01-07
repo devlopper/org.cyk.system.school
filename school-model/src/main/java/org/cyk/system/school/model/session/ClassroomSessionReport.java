@@ -15,11 +15,11 @@ public class ClassroomSessionReport extends AbstractIdentifiableReport<Classroom
 
 	private static final long serialVersionUID = -6025941646465245555L;
 	
-	private String name,numberOfStudents,average,highestAverage,lowestAverage;
+	private String numberOfStudents,average,highestAverage,lowestAverage;
 	
 	@Override
 	public void generate() {
-		name = (String) provider.randomFromList(RANDOM_NAMES);
+		globalIdentifier.setName((String) provider.randomFromList(RANDOM_NAMES));
 		numberOfStudents = provider.randomPositiveInt(20)+"";
 		average = provider.randomPositiveInt(20)+"";
 		highestAverage = provider.randomPositiveInt(20)+"";

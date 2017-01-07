@@ -425,7 +425,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	}*/
 	
 	public void createSubjectEvaluations(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,String[][] details,Boolean assertAverage,Boolean assertRank){
-		Collection<EvaluationType> evaluationTypes = inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.COLLECTION);
+		Collection<EvaluationType> evaluationTypes = inject(EvaluationTypeDao.class).readAll();
 		int i = 1;
 		for(EvaluationType evaluationType : evaluationTypes){
 			createSubjectEvaluation(classroomSessionDivisionSubject, evaluationType, extract(details, i++));

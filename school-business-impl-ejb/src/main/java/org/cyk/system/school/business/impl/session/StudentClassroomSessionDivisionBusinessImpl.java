@@ -161,7 +161,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments,ServiceCallArguments arguments) {
 		/*if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null) || !Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) ){
-		*/	
+		*/	/*
 			FormatArguments formatArguments = new FormatArguments();
 			formatArguments.setIsRank(Boolean.TRUE);
 			formatArguments.setType(CharacterSet.LETTER);
@@ -170,7 +170,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			
 			reportArguments.setIdentifiableName(String.format(nameFormat, studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 					.getLevelTimeDivision().getLevel().getLevelName().getName().toUpperCase()));
-			
+			*/
 			createReportFile(reportArguments);
 			genericDao.update(studentClassroomSessionDivision.getResults());
 			logIdentifiable("Report built",studentClassroomSessionDivision);

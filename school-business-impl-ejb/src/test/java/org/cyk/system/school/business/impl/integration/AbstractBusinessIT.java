@@ -31,6 +31,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
+import org.cyk.utility.common.file.ExcelSheetReader;
 import org.cyk.utility.common.test.TestEnvironmentListener;
 import org.cyk.utility.test.ArchiveBuilder;
 import org.cyk.utility.test.Transaction;
@@ -91,7 +92,24 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     }
 	
     @Override
-    protected void populate() {}
+    protected void populate() {
+    	RootDataProducerHelper.Listener.COLLECTION.add(new RootDataProducerHelper.Listener.Adapter.Default(){
+    		private static final long serialVersionUID = 1L;
+
+			@Override
+    		public ExcelSheetReader processExcelSheetReader(ExcelSheetReader excelSheetReader) {
+    			if(excelSheetReader.getName().equals("Country"))
+    				excelSheetReader.setRowCount(2);
+    			return super.processExcelSheetReader(excelSheetReader);
+    		}
+    	});
+    	installApplication();
+    }
+    
+    @Override
+    protected Boolean populateInTransaction() {
+    	return Boolean.FALSE;
+    }
 
     protected void installApplication(Boolean fake){
     	schoolBusinessLayer.installApplication(fake);

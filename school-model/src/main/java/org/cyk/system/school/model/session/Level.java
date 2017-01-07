@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.utility.common.Constant;
@@ -18,7 +19,7 @@ public class Level extends AbstractIdentifiable implements Serializable {
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne private LevelGroup group;
-	@ManyToOne private LevelName levelName;
+	@ManyToOne @NotNull private LevelName levelName;
 	@ManyToOne private LevelSpeciality speciality;
 	
 	public Level(LevelGroup group,LevelName levelName, LevelSpeciality speciality) {

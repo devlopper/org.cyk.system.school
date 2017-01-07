@@ -55,43 +55,43 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		addPupilsDetails(report);
 		addSchoolAttendance(report);
 		
-		report.addLabelValueCollection("EXPRESSIVE LANGUAGE",new String[][]{{"Participates actively during circle time","1"}
+		report.addLabelValues("EXPRESSIVE LANGUAGE",new String[][]{{"Participates actively during circle time","1"}
 				,{"Participates in singing rhymes","NA"},{"Can say her name and name of classmates","1"},{"Can respond appropriately to “how are you?”","1"}
 				,{"Can say his/her age","1"},{"Can say the name of her school","1"},{"Names objects in the classroom and school environment","1"}
 				,{"Uses at least one of the following words “me”,“I”, “he”, “she”, “you”","1"},{"Talks in two or three word phrases and longer sentences","1"}
 				,{"Can use “and” to connect words/phrases","1"},{"Talks with words in correct order","1"},{"Can be engaged in conversations","1"}});
 		
-		report.addLabelValueCollection("RECEPTIVE LANGUAGE",new String[][]{{"Responds to her name when called","1"}
+		report.addLabelValues("RECEPTIVE LANGUAGE",new String[][]{{"Responds to her name when called","1"}
 				,{"Retrieves named objects","1"},{"Follows simple instructions (across the classroom) – stand, sit, bring your cup","1"}
 				,{"Understands facial expressions and tone of voice","1"},{"Understands 2-3 step instructions","NA"}
 				,{"Understands positional words – In and out - Up and down - On and under - Forward and backward","1"},{"Understands the concept “Give and Take”","1"}
 				,{"Talks about feelings","1"}});
 		
-		report.addLabelValueCollection("READING READINESS",new String[][]{{"Shows interest in books/stories","1"}
+		report.addLabelValues("READING READINESS",new String[][]{{"Shows interest in books/stories","1"}
 				,{"Names familiar objects in pictures/books – vegetables, fruits, animals","1"},{"Tells what action is going on in pictures","1"}
 				,{"Handling books – carrying a book, turning the pages of a book, placing a book back in the shelf","NA"},{"Listening for different sounds in the environment","NA"}
 				,{"Identifying objects that begin with a particular sound","NA"},{"Identifying pictures that begin with a particular sound","NA"}
 				,{"Recognizes the written letters of the alphabet","1"}});
 		
-		report.addLabelValueCollection("NUMERACY DEVELOPMENT",new String[][]{{"Sorts objects by shape","1"}
+		report.addLabelValues("NUMERACY DEVELOPMENT",new String[][]{{"Sorts objects by shape","1"}
 				,{"Sorts objects by size","1"},{"Participates in reciting different counting rhymes, songs, stories and games","1"}
 				,{"Verbally count forward to 10","1"},{"Can count 1-10 objects","1"},{"Identifies the written numerals 1-10","1"}
 				,{"Reproducing Patterns","NA"},{"Identifies the 3 basic geometric shapes ( circle,triangle and square)","1"}
 				,{"Identifies more shapes ( Star, diamond, heart,cross ,crescent)","NA"}});
 		
-		report.addLabelValueCollection("ARTS AND MUSIC",new String[][]{{"Moves expressively to sounds and music – nodding, clapping, movement of body","2"},
+		report.addLabelValues("ARTS AND MUSIC",new String[][]{{"Moves expressively to sounds and music – nodding, clapping, movement of body","2"},
 				{"Participates in musical activities","1"},{"Hums or sing words of songs","1"},{"Participates in role play","1"},{"Shows satisfaction with completed work","1"}});
 		
-		report.addLabelValueCollection("SOCIAL AND EMOTIONAL DEVELOPMENT",new String[][]{{"Initiates interaction with adults","NA"},{"Initiates interaction with classmates","1"},
+		report.addLabelValues("SOCIAL AND EMOTIONAL DEVELOPMENT",new String[][]{{"Initiates interaction with adults","NA"},{"Initiates interaction with classmates","1"},
 				{"Participates in group activities","1"},{"Takes turns during group activities","1"},{"Greets people – hello and goodbye","1"},{"Says “please” and “thank you”","1"},
 				{"Asks for help in doing things when needed","1"},{"Shows sympathy, offers to help or helps others","1"},{"Can express dissatisfaction and other emotions – body language or words","2"},
 				{"Responds to correction – stops the misbehaviour","2"}});
 		
-		report.addLabelValueCollection("GROSS MOTOR SKILLS",new String[][]{{"Can run well without falling","2"},
+		report.addLabelValues("GROSS MOTOR SKILLS",new String[][]{{"Can run well without falling","2"},
 				{"Can kick a ball","1"},{"Climbs up ladder and slides down slide without help","2"},
 				{"Walks up and down stairs unassisted","NA"},{"Can stand on one foot for a few seconds without support","NA"},{"Throws a ball into a basket from a short distance","1"}});
 		
-		report.addLabelValueCollection("FINE MOTOR SKILLS",new String[][]{{"Scribbles spontaneously","2"},{"Can scribble to and from, in circular motions and in lines","2"},
+		report.addLabelValues("FINE MOTOR SKILLS",new String[][]{{"Scribbles spontaneously","2"},{"Can scribble to and from, in circular motions and in lines","2"},
 				{"Can place simple pieces in a puzzle board","1"},{"Can build a tower of at least 3-5 blocks","2"},{"Develops good pencil grip and control","1"}});
 		
 		addSkillPerformanceLevels(report);
@@ -119,29 +119,29 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		addPupilsDetails(report);
 		addSchoolAttendance(report);
 
-		report.addLabelValueCollection("ENGLISH/LANGUAGE ARTS/READING",new String[][]{{"Reads independently with understanding","1"}
+		report.addLabelValues("ENGLISH/LANGUAGE ARTS/READING",new String[][]{{"Reads independently with understanding","1"}
 				,{"Comprehends a variety of texts","NA"},{"Applies a variety of strategies to comprehendcprinted text","1"}
 				,{"Reads to access and utilize information from written and electronic sources","1"}
 				,{"Demonstrates understanding of letter-sound associations","1"}});
 		
-		report.addLabelValueCollection("COMMUNICATION SKILLS",new String[][]{{"Contributes ideas to discussions","1"}
+		report.addLabelValues("COMMUNICATION SKILLS",new String[][]{{"Contributes ideas to discussions","1"}
 				,{"Communicates ideas effectively","1"},{"Write for a variety of purposes","1"}
 				,{"Writes well-organized compositions","1"},{"Uses appropriate writing skills","NA"}
 				,{"Write legibly","1"},{"Revises, edits and proofreads work","1"}});
 		
-		report.addLabelValueCollection("SCIENCE",new String[][]{{"Understands and applies scientific process","1"}
+		report.addLabelValues("SCIENCE",new String[][]{{"Understands and applies scientific process","1"}
 			,{"Understands and applies knowledge of key concepts","1"}});
 		
-		report.addLabelValueCollection("SOCIAL STUDIES",new String[][]{{"Gathers and organizes information","1"}
+		report.addLabelValues("SOCIAL STUDIES",new String[][]{{"Gathers and organizes information","1"}
 				,{"Understands and applies knowledge of key concepts","1"}});
 				
-		report.addLabelValueCollection("MATHEMATICS",new String[][]{{"Demonstrates understanding of number sense","2"},
+		report.addLabelValues("MATHEMATICS",new String[][]{{"Demonstrates understanding of number sense","2"},
 				{"Reads and interprets data","1"},{"Applies problem-solving strategies","1"},{"Communicates mathematically","1"}});
 		
-		report.addLabelValueCollection("WORK HABITS",new String[][]{{"Follows directions","NA"},{"Uses time and materials constructively","1"},
+		report.addLabelValues("WORK HABITS",new String[][]{{"Follows directions","NA"},{"Uses time and materials constructively","1"},
 				{"Works independently","1"},{"Completes class assignments","1"},{"Completes homework assignments","1"},{"Listens attentively","1"}});
 		
-		report.addLabelValueCollection("SOCIAL SKILLS",new String[][]{{"Cooperates with others","2"},
+		report.addLabelValues("SOCIAL SKILLS",new String[][]{{"Cooperates with others","2"},
 				{"Shows respect for others","1"},{"Participates in classroom activities","2"},
 				{"Follows classroom/school rules","NA"}});
 		
@@ -171,35 +171,35 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		addPupilsDetails(report);
 		addSchoolAttendance(report);
 
-		report.addLabelValueCollection("READING READINESS",new String[][]{{"Demonstrates concepts of print","1"}
+		report.addLabelValues("READING READINESS",new String[][]{{"Demonstrates concepts of print","1"}
 				,{"Identifies and produces rhyming words","NA"},{"Segments and blends sounds","2"}});
 		
-		report.addLabelValueCollection("READING",new String[][]{{"Answers questions about essential narrative elements","1"}
+		report.addLabelValues("READING",new String[][]{{"Answers questions about essential narrative elements","1"}
 				,{"Reads high frequency words","1"},{"Blends sounds to read words","1"}
 				,{"Reads simple text","1"},{"Developmental Reading assessment","NA"}});
 		
-		report.addLabelValueCollection("WRITING",new String[][]{{"Writes first and last name","1"}
+		report.addLabelValues("WRITING",new String[][]{{"Writes first and last name","1"}
 				,{"Expresses ideas through independent writing","1"}});
 		
-		report.addLabelValueCollection("LISTENING, SPEAKING AND VIEWING",new String[][]{{"Uses oral language to communicate effectively","1"}
+		report.addLabelValues("LISTENING, SPEAKING AND VIEWING",new String[][]{{"Uses oral language to communicate effectively","1"}
 				,{"Recites short poems and songs","1"},{"Follows two-step oral directions","1"}
 				,{"Makes predictions and retells","1"},{"Comprehends information through listening","1"},{"Demonstrates comprehension of information through speaking","1"}
 				});
 		
-		report.addLabelValueCollection("ALPHABET IDENTIFICATION",new String[][]{{"Identifies Upper-Case","2"},
+		report.addLabelValues("ALPHABET IDENTIFICATION",new String[][]{{"Identifies Upper-Case","2"},
 				{"Identifies Lower-Case","1"},{"Produces Letter Sounds","1"},{"Prints Letters Correctly","1"}});
 		
-		report.addLabelValueCollection("MATHEMATICS",new String[][]{{"Number and Operations","NA"},{"Geometry","1"},{"Measurement","1"},{"Algebraic Thinking","1"}});
+		report.addLabelValues("MATHEMATICS",new String[][]{{"Number and Operations","NA"},{"Geometry","1"},{"Measurement","1"},{"Algebraic Thinking","1"}});
 		
-		report.addLabelValueCollection("SCIENCE, SOCIAL STUDIES AND MORAL EDUCATION",new String[][]{{"Science","2"},{"Social Studies","1"},{"Moral Education","2"}});
+		report.addLabelValues("SCIENCE, SOCIAL STUDIES AND MORAL EDUCATION",new String[][]{{"Science","2"},{"Social Studies","1"},{"Moral Education","2"}});
 		
-		report.addLabelValueCollection("ART and CRAFT",new String[][]{{"Performance","2"},{"Initiative","1"}});
+		report.addLabelValues("ART and CRAFT",new String[][]{{"Performance","2"},{"Initiative","1"}});
 		
-		report.addLabelValueCollection("MUSIC",new String[][]{{"Performance","2"},{"Initiative","1"}});
+		report.addLabelValues("MUSIC",new String[][]{{"Performance","2"},{"Initiative","1"}});
 		
-		report.addLabelValueCollection("PHYSICAL EDUCATION",new String[][]{{"Performance","2"},{"Initiative","1"}});
+		report.addLabelValues("PHYSICAL EDUCATION",new String[][]{{"Performance","2"},{"Initiative","1"}});
 		
-		report.addLabelValueCollection("WORK and BEHAVIOUR HABITS",new String[][]{{"Follows directions","2"},{"Uses time and materials constructively","1"},{"Works independently","NA"}
+		report.addLabelValues("WORK and BEHAVIOUR HABITS",new String[][]{{"Follows directions","2"},{"Uses time and materials constructively","1"},{"Works independently","NA"}
 		,{"Completes class assignments","1"},{"Completes homework assignments","2"},{"Listens attentively","3"},{"Cooperates with others","NA"},{"Shows respect for others","3"}
 		,{"Participates in classroom activities","2"},{"Follows classroom/school rules","5"}});
 		
@@ -214,7 +214,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addPupilsDetails(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("PUPIL'S DETAILS",new String[][]{
+		report.addLabelValues("PUPIL'S DETAILS",new String[][]{
 			{"Formname(s)", report.getStudent().getPerson().getLastnames()}
 			,{"Surname", report.getStudent().getPerson().getGlobalIdentifier().getName()}
 			,{"Date of birth", report.getStudent().getPerson().getGlobalIdentifier().getExistencePeriod().getFrom()}
@@ -226,7 +226,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addSchoolAttendance(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("SCHOOL ATTENDANCE",new String[][]{
+		report.addLabelValues("SCHOOL ATTENDANCE",new String[][]{
 			{"Number of times school opened","999"}
 			,{"Number of times present","999"}
 			,{"Number of times absent","999"}
@@ -236,7 +236,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addOverallResult(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("OVERALL RESULT",new String[][]{
+		report.addLabelValues("OVERALL RESULT",new String[][]{
 			{"AVERAGE","78.15"}
 			,{"GRADE","A+"}
 			,{"RANK","24"}
@@ -244,7 +244,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addGradingScale(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("GRADING SCALE",new String[][]{
+		report.addLabelValues("GRADING SCALE",new String[][]{
 			{"A+", "Excellent","90 - 100"}
 			,{"A",  "Very Good","80 - 89.99"}
 			,{"B+", "Good","70 - 79.99"}
@@ -256,7 +256,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addEffortLevels(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("EFFORT LEVELS",new String[][]{
+		report.addLabelValues("EFFORT LEVELS",new String[][]{
 			{"1", "Has no regard for the observable traits"}
 			,{"2", "Shows minimal regard for the observable traits"}
 			,{"3", "Acceptable level of observable traits"}
@@ -266,7 +266,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addSchoolCommunications(StudentClassroomSessionDivisionReportTemplateFile report,Boolean kindergarten){
-		report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS",new String[][]{
+		report.addLabelValues("HOME/SCHOOL COMMUNICATIONS",new String[][]{
 			{Boolean.TRUE.equals(kindergarten) ? null : "ANNUAL AVERAGE",Boolean.TRUE.equals(kindergarten) ? null : "90"}
 			,{Boolean.TRUE.equals(kindergarten) ? null : "ANNUAL GRADE",Boolean.TRUE.equals(kindergarten) ? null : "B+"}
 			,{Boolean.TRUE.equals(kindergarten) ? null : "ANNUAL RANK",Boolean.TRUE.equals(kindergarten) ? null : "25"}
@@ -276,22 +276,22 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addSkillPerformanceLevels(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("SKILLS PERFORMANCE LEVELS",new String[][]{{"3","Does regularly"},{"2","Does sometimes"},{"1","Learning to do"},{"NA","Not Assessed"}});
+		report.addLabelValues("SKILLS PERFORMANCE LEVELS",new String[][]{{"3","Does regularly"},{"2","Does sometimes"},{"1","Learning to do"},{"NA","Not Assessed"}});
 	}
 	
 	private static void addContentMarkingCodes(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("CONTENT MARKING CODES",new String[][]{{"A","94 - 100"},{"B","85 - 93"},{"C","77 - 84"}
+		report.addLabelValues("CONTENT MARKING CODES",new String[][]{{"A","94 - 100"},{"B","85 - 93"},{"C","77 - 84"}
 		,{"D","70 - 76"},{"F","0 - 75"},{"NA","Not Assessed"}});
 	}
 	
 	private static void addPerformanceCodes(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("PERFORMANCE CODES",new String[][]{{"4","Meets and applies expectations/standards independently"}
+		report.addLabelValues("PERFORMANCE CODES",new String[][]{{"4","Meets and applies expectations/standards independently"}
 		,{"3","Meets and applies expectations/standards with support"},{"2","Does not meets and applies expectations/standards; but shows growth with support"}
 		,{"1","Does not meets and applies expectations/standards; shows no growth even with support"},{"NA","Not Assessed"}});
 	}
 	
 	private static void addBehaviour1(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("BEHAVIOUR,STUDY AND WORK HABITS",new String[][]{
+		report.addLabelValues("BEHAVIOUR,STUDY AND WORK HABITS",new String[][]{
 			{"Respects authority", "4"}
 			,{"Works independently and neatly", "2"}
 			,{"Completes homework and class work on time", "3"}
@@ -303,7 +303,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addBehaviour2(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValueCollection("BEHAVIOUR,STUDY AND WORK HABITS",new String[][]{
+		report.addLabelValues("BEHAVIOUR,STUDY AND WORK HABITS",new String[][]{
 			{"Game/Sport", "4"}
 			,{"Handwriting", "3"}
 			,{"Drawing/Painting", "4"}

@@ -30,13 +30,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(genderType=GenderType.FEMALE,crudStrategy=CrudStrategy.BUSINESS)
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {ClassroomSession.FIELD_ACADEMIC_SESSION, ClassroomSession.FIELD_SUFFIX})}) 
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {ClassroomSession.FIELD_ACADEMIC_SESSION,ClassroomSession.FIELD_LEVEL_TIME_DIVISION, ClassroomSession.FIELD_SUFFIX})}) 
 public class ClassroomSession extends AbstractIdentifiablePeriod implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne @JoinColumn(name=COLUMN_ACADEMIC_SESSION) @NotNull private AcademicSession academicSession;
-	@ManyToOne @NotNull private LevelTimeDivision levelTimeDivision;
+	@ManyToOne @JoinColumn(name=COLUMN_LEVEL_TIME_DIVISION) @NotNull private LevelTimeDivision levelTimeDivision;
 	@ManyToOne @JoinColumn(name=COLUMN_SUFFIX) private ClassroomSessionSuffix suffix;
 	@ManyToOne private Teacher coordinator;
 	@Embedded private CommonNodeInformations nodeInformations;
@@ -97,6 +97,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	/**/
 	
 	public static final String COLUMN_ACADEMIC_SESSION = "academicSession";
+	public static final String COLUMN_LEVEL_TIME_DIVISION = "levelTimeDivision";
 	public static final String COLUMN_SUFFIX = "suffix";
 	
 	/**/
@@ -128,4 +129,8 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 			return addLevelTimeDivisions(Arrays.asList(levelTimeDivision));
 		}
 	}
+	
+	/**/
+	
+	
 }

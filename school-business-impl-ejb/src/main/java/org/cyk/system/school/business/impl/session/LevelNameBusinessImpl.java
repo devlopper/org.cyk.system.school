@@ -4,14 +4,9 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.impl.AbstractEnumerationBusinessImpl;
-import org.cyk.system.root.model.file.report.ReportTemplate;
-import org.cyk.system.root.model.mathematics.Interval;
-import org.cyk.system.root.model.mathematics.IntervalCollection;
-import org.cyk.system.root.model.party.person.Person;
-import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.LevelNameBusiness;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.persistence.api.session.LevelNameDao;
 
@@ -22,35 +17,24 @@ public class LevelNameBusinessImpl extends AbstractEnumerationBusinessImpl<Level
 	@Inject
 	public LevelNameBusinessImpl(LevelNameDao dao) {
 		super(dao); 
-	}   
+	}
 	
 	@Override
-	public LevelName instanciateOne(String[] values) {
-		LevelName levelName = super.instanciateOne(values);
-		Integer index = 10;
-		String value;
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setClassroomSessionTimeDivisionType(read(TimeDivisionType.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setCurrentClassroomSessionDivisionIndex(Long.parseLong(value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setClassroomSessionDivisionOrderNumberInterval(read(Interval.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setStudentClassroomSessionDivisionResultsReportTemplate(read(ReportTemplate.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setStudentClassroomSessionDivisionResultsReportSigner(read(Person.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setStudentSubjectAverageScale(read(IntervalCollection.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setStudentClassroomSessionDivisionAverageScale(read(IntervalCollection.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setStudentClassroomSessionAverageScale(read(IntervalCollection.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setStudentClassroomSessionAveragePromotionScale(read(IntervalCollection.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setAttendanceTimeDivisionType(read(TimeDivisionType.class, value));
-		if(StringUtils.isNotBlank(value = values[index++]))
-			levelName.getNodeInformations().setEvaluationPassAverage(commonUtils.getBigDecimal(value));
-		return levelName;
+	protected LevelName __instanciateOne__(String[] values,InstanciateOneListener<LevelName> listener) {
+		super.__instanciateOne__(values, listener);
+		set(listener.getSetListener().setIndex(10), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_SUBJECT_AVERAGESCALE);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_ATTENDANCE_TIME_DIVISION_TYPE);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_EVALUATION_PASS_AVERAGE);
+		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_AGGREGATE_ATTENDANCE);
+		return listener.getInstance();
 	}
+
 }

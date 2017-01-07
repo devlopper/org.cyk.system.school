@@ -4,23 +4,22 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cyk.system.root.model.file.report.AbstractIdentifiableReport;
+
 import lombok.Getter;
 import lombok.Setter;
 
-import org.cyk.utility.common.generator.AbstractGeneratable;
-
 @Getter @Setter
-public class ClassroomSessionDivisionSubjectReport extends AbstractGeneratable<ClassroomSessionDivisionSubjectReport> implements Serializable {
+public class ClassroomSessionDivisionSubjectReport extends AbstractIdentifiableReport<ClassroomSessionDivisionSubjectReport> implements Serializable {
 
 	private static final long serialVersionUID = -4651687386219470908L;
 
-	private String name,numberOfStudents,coefficient,highestAverage,average;
+	private String numberOfStudents,highestAverage,average;
 	
 	@Override
 	public void generate() {
-		name = (String) provider.randomFromList(RANDOM_NAMES);
+		globalIdentifier.setName((String) provider.randomFromList(RANDOM_NAMES));
 		numberOfStudents = provider.randomPositiveInt(50)+"";
-		coefficient = positiveFloatNumber(999, 0, 99);
 		highestAverage = positiveFloatNumber(999, 0, 99);
 		average = positiveFloatNumber(999, 0, 99);
 	}
