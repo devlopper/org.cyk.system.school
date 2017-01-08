@@ -226,12 +226,14 @@ public interface SchoolConstant {
 			public static String ATTENDANCE_STUDENT = generate(RootConstant.Code.MetricCollectionType.ATTENDANCE,Student.class); 
 			public static String BEHAVIOUR_STUDENT = generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,Student.class);
 			public static String COMMUNICATION_STUDENT = generate(RootConstant.Code.MetricCollectionType.COMMUNICATION,Student.class); 
+			public static String COMMUNICATION_KINDERGARTEN_STUDENT = generate(RootConstant.Code.MetricCollectionType.COMMUNICATION,LevelGroup.KINDERGARTEN,Student.class); 
 			
 			public static String BEHAVIOUR_KINDERGARTEN_STUDENT = generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.KINDERGARTEN,Student.class); 
 			public static String BEHAVIOUR_PRIMARY_STUDENT = generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.PRIMARY,Student.class);
 			public static String BEHAVIOUR_SECONDARY_STUDENT = generate(RootConstant.Code.MetricCollectionType.BEHAVIOUR,LevelGroup.SECONDARY,Student.class);
 		
-			public static final Collection<String> _STUDENT = new ArrayList<>(Arrays.asList(ATTENDANCE_STUDENT,BEHAVIOUR_STUDENT,COMMUNICATION_STUDENT));
+			//TODO to be nicely designed
+			public static final Collection<String> _STUDENT = new ArrayList<>(Arrays.asList(ATTENDANCE_STUDENT,BEHAVIOUR_STUDENT,BEHAVIOUR_KINDERGARTEN_STUDENT,COMMUNICATION_STUDENT,COMMUNICATION_KINDERGARTEN_STUDENT));
 		}
 		
 		public static class MetricCollection implements Serializable {
@@ -263,7 +265,7 @@ public interface SchoolConstant {
 			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_GROSS_MOTOR_SKILLS = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"GROSSMOTORSKILLS");
 			public static String BEHAVIOUR_KINDERGARTEN_PK_STUDENT_FINE_MOTOR_SKILLS = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.PK,Student.class,"FINEMOTORSKILLS");
 			
-			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class,"LANGUAGEARTSREADING");
+			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class,"ENGLISHLANGUAGEARTSREADING");
 			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT_COMMUNICATION_SKILLS = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class,"COMMUNICATIONSKILLS");
 			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SCIENCE = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class,"SCIENCE");
 			public static String BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SOCIAL_STUDIES = generate(RootConstant.Code.MetricCollection.BEHAVIOUR,LevelGroup.KINDERGARTEN,LevelName.K1,Student.class,"SOCIALSTUDIES");

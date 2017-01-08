@@ -204,7 +204,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().setSynchonizationEnabled(Boolean.TRUE);
 		if(StringUtils.isNotBlank(value = values[++index]))
 			for(String metricCollectionCode : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
-		    	classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
+				classroomSessionDivision.getMetricCollectionIdentifiableGlobalIdentifiers().getCollection()
 		    		.add(new MetricCollectionIdentifiableGlobalIdentifier(inject(GenericDao.class).read(MetricCollection.class,metricCollectionCode)
 		    				, classroomSessionDivision, null));
 			}
