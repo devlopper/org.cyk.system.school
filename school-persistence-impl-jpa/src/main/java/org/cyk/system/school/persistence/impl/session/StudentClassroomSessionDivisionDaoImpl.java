@@ -9,6 +9,7 @@ import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelTimeDivision;
@@ -24,7 +25,7 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 
     private String readByStudentClassroomSessionDivision,readByStudentByClassroomSessionDivision,readByClassroomSession
     	,readByClassroomSessionDivisions,readByClassroomSessions,readByStudentByClassroomSession,readByClassroomSessionDivisionOrderNumber
-    	,readByClassroomSessionByTeacher,readByLevelTimeDivision;
+    	,readByClassroomSessionByTeacher,readByLevelTimeDivision,readByAcademicSession,readByAcademicSessionByClassroomSessionDivisionOrderNumber;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -40,6 +41,12 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
         registerNamedQuery(readByClassroomSessionDivisionOrderNumber, _select()
         		.where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION,ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_ORDER_NUMBER), GlobalIdentifier.FIELD_ORDER_NUMBER));
         
+        registerNamedQuery(readByAcademicSessionByClassroomSessionDivisionOrderNumber, _select()
+        		.where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
+                		, ClassroomSessionDivision.FIELD_CLASSROOMSESSION,ClassroomSession.FIELD_ACADEMIC_SESSION),ClassroomSession.FIELD_ACADEMIC_SESSION)
+        		.and(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION,ClassroomSessionDivision.FIELD_GLOBAL_IDENTIFIER
+        				,GlobalIdentifier.FIELD_ORDER_NUMBER), GlobalIdentifier.FIELD_ORDER_NUMBER,ArithmeticOperator.EQ));
+        
         registerNamedQuery(readByStudentByClassroomSession, _select().where(StudentClassroomSessionDivision.FIELD_STUDENT)
         		.and(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION, StudentClassroomSession.FIELD_CLASSROOM_SESSION)
         				, StudentClassroomSession.FIELD_CLASSROOM_SESSION,ArithmeticOperator.EQ));
@@ -52,6 +59,9 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
     
         registerNamedQuery(readByLevelTimeDivision, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
         		, ClassroomSessionDivision.FIELD_CLASSROOMSESSION,ClassroomSession.FIELD_LEVEL_TIME_DIVISION),ClassroomSession.FIELD_LEVEL_TIME_DIVISION));
+        
+        registerNamedQuery(readByAcademicSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
+        		, ClassroomSessionDivision.FIELD_CLASSROOMSESSION,ClassroomSession.FIELD_ACADEMIC_SESSION),ClassroomSession.FIELD_ACADEMIC_SESSION));
     }
     
 	@Override
@@ -102,6 +112,17 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 	@Override
 	public Collection<StudentClassroomSessionDivision> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision) {
 		return namedQuery(readByLevelTimeDivision).parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION,levelTimeDivision).resultMany();
+	}
+
+	@Override
+	public Collection<StudentClassroomSessionDivision> readByAcademicSession(AcademicSession academicSession) {
+		return namedQuery(readByAcademicSession).parameter(ClassroomSession.FIELD_ACADEMIC_SESSION,academicSession).resultMany();
+	}
+
+	@Override
+	public Collection<StudentClassroomSessionDivision> readByAcademicSessionByClassroomSessionDivisionOrderNumber(AcademicSession academicSession, Long classroomSessionDivisionOrderNumber) {
+		return namedQuery(readByAcademicSessionByClassroomSessionDivisionOrderNumber).parameter(ClassroomSession.FIELD_ACADEMIC_SESSION,academicSession)
+				.parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber).resultMany();
 	}
 
 }

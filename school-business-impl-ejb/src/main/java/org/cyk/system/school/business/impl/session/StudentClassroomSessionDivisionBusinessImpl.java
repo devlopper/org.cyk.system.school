@@ -47,6 +47,7 @@ import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelTimeDivision;
@@ -320,7 +321,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 				return throwable instanceof RuntimeException ? throwable.getCause() : throwable;
 			}
 		});
-		//sendArguments.setDebug(Boolean.TRUE);
+		
 		inject(MailBusiness.class).send(notifications,null,sendArguments);
 		return null;
 	}
@@ -425,6 +426,11 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionOrderNumber(Long classroomSessionDivisionOrderNumber) {
 		return dao.readByClassroomSessionDivisionIndex(classroomSessionDivisionOrderNumber);
 	}
+	
+	@Override
+	public Collection<StudentClassroomSessionDivision> findByAcademicSessionByClassroomSessionDivisionOrderNumber(AcademicSession academicSession, Long classroomSessionDivisionOrderNumber) {
+		return dao.readByAcademicSessionByClassroomSessionDivisionOrderNumber(academicSession, classroomSessionDivisionOrderNumber);
+	}
 
 	/**/
 	
@@ -489,5 +495,10 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentClassroomSessionDivision> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision) {
 		return dao.readByLevelTimeDivision(levelTimeDivision);
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSessionDivision> findByAcademicSession(AcademicSession academicSession) {
+		return dao.readByAcademicSession(academicSession);
 	}
 }

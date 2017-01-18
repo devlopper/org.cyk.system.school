@@ -15,6 +15,7 @@ import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
+import org.cyk.system.root.business.impl.NumberStringFormatter;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -263,12 +264,12 @@ extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStude
 									results.getNumberOfStudent());
 						}else if(row.getData().getIdentifier().equals(AbstractOutputDetails.IDENTIFIER_3)){
 							if(results.getNumberOfStudentPassingEvaluationAverage()!=null && results.getNumberOfStudent()!=null && results.getNumberOfStudent()>0){
-								NumberBusiness.FormatArguments formatArguments = new NumberBusiness.FormatArguments();
-								formatArguments.setIsPercentage(Boolean.TRUE);
-								formatArguments.setPercentageSymbol(null);
 								BigDecimal percentage = new BigDecimal(results.getNumberOfStudentPassingEvaluationAverage()).
 										divide(new BigDecimal(results.getNumberOfStudent()),4,RoundingMode.HALF_DOWN);
-								cell.setValue(inject(NumberBusiness.class).format(percentage,formatArguments));
+								NumberStringFormatter numberStringFormatter = new NumberStringFormatter(percentage,null);
+								numberStringFormatter.setIsPercentage(Boolean.TRUE);
+								numberStringFormatter.setPercentageSymbol(null);
+								cell.setValue(inject(NumberBusiness.class).format(numberStringFormatter));
 							}
 						}
 					}

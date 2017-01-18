@@ -42,4 +42,11 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 			nodeInformations = new CommonNodeInformations();
 		return nodeInformations;
 	}
+	
+	/**/
+	
+	public static final String FIELD_SCHOOL = "school";
+	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
+	public static final String FIELD_NEXT_STARTING_DATE = "nextStartingDate";
+	
 }

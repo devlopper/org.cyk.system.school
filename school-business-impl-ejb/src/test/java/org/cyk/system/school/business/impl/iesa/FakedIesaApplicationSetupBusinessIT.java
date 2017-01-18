@@ -2,23 +2,29 @@ package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
 
+import javax.inject.Inject;
+
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
+import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
+import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.utility.common.CommonUtils;
 
-public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
+public class FakedIesaApplicationSetupBusinessIT extends AbstractBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
-     
+    
+    @Inject private IesaFakedDataProducer iesaFakedDataProducer;
+    
     @Override
     protected void businesses() {
     	String d = String.valueOf(63*inject(MeasureDao.class).read(RootConstant.Code.Measure.TIME_DAY).getValue().longValue());
@@ -40,7 +46,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	
     	ClassroomSession classroomSessionK1 = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
         		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1, null,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-        		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
+        		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
         		, new String[][]{}
         		, new String[][]{}
         		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT}
@@ -164,26 +170,14 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentK3.getCode(),classroomSessionK3.getCode()}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentG1A.getCode(),classroomSessionG1A.getCode()}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentG8A.getCode(),classroomSessionG8A.getCode()}));
-    	/*
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.PK,null,1l}}, Boolean.TRUE, Boolean.FALSE);
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.K1,null,1l}}, Boolean.TRUE, Boolean.FALSE);
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.K2,null,1l}}, Boolean.TRUE, Boolean.FALSE);
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.K3,null,1l}}, Boolean.TRUE, Boolean.FALSE);
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.G1,SchoolConstant.Code.ClassroomSessionSuffix.A
-    		,1l}}, Boolean.TRUE, Boolean.FALSE);
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.G8,SchoolConstant.Code.ClassroomSessionSuffix.A
-    		,1l}}, Boolean.TRUE, Boolean.FALSE);
-    	*/
     	
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
-    		{SchoolConstant.Code.LevelName.PK,null,1l}
-    		,{SchoolConstant.Code.LevelName.K1,null,1l}
-    		,{SchoolConstant.Code.LevelName.K2,null,1l}
-    		,{SchoolConstant.Code.LevelName.K3,null,1l}
-    		//,{SchoolConstant.Code.LevelName.G1,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
-    		//,{SchoolConstant.Code.LevelName.G8,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
-    	}, Boolean.TRUE, Boolean.FALSE);
     	
+    	System.exit(0);
+    }
+    
+    @Override
+    protected AbstractFakedDataProducer getFakedDataProducer() {
+    	return iesaFakedDataProducer;
     }
         
 }

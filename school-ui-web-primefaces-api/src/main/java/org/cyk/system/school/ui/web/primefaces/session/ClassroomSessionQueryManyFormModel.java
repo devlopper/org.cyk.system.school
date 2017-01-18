@@ -3,6 +3,7 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -13,9 +14,13 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.persistence.api.party.person.PersonRelationshipTypeDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -23,6 +28,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.CommonNodeInformations;
@@ -44,6 +50,8 @@ import org.cyk.utility.common.annotation.FieldOverrides;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
+import org.cyk.utility.common.annotation.user.interfaces.InputChoiceAutoComplete;
+import org.cyk.utility.common.annotation.user.interfaces.InputManyAutoComplete;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyCheck;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
@@ -111,14 +119,6 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 
 		public ProcessPageAdapter() {
 			super(ClassroomSession.class);
-		}
-		
-		private Collection<ClassroomSession> getClassroomSessions(AbstractProcessManyPage<?> page){
-			Collection<ClassroomSession> classroomSessions = new ArrayList<>();
-			for(Object object : page.getElements()){
-				classroomSessions.add((ClassroomSession) object);
-			}
-			return classroomSessions;
 		}
 		
 		private Set<TimeDivisionType> getTimeDivisionTypes(AbstractProcessManyPage<?> page){
@@ -208,29 +208,28 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				});
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionSendStudentClassroomSessionDivisionReportFiles()}, page.getActionIdentifier())){
 				//final Set<TimeDivisionType> timeDivisionTypes = getTimeDivisionTypes(page);
+				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = getStudentClassroomSessionDivision(commonUtils.castCollection(page
+						.getElements(), ClassroomSession.class));
+				Collection<Student> students = new ArrayList<>();
+				for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
+					students.add(studentClassroomSessionDivision.getStudent());
 				page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
-				/*
+				Collection<Person> persons = inject(PersonBusiness.class).get(students);
+				Collection<Person> parents = inject(PersonBusiness.class).findByPersonRelationshipPerson2ByPersonRelationshipTypes(persons, inject(PersonRelationshipTypeDao.class)
+						.read(Arrays.asList(RootConstant.Code.PersonRelationshipType.FAMILY_FATHER,RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER)));
+				((SendMessageForm)page.getForm().getData()).setReceivers((List<Person>) parents);
+				
 				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
 
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public Boolean build(Object data,Field field) {
-						return ArrayUtils.contains(new String[]{ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_MIN_COUNT
-								,ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_MAX_COUNT
-								,ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED}, field.getName());
+						return ArrayUtils.contains(new String[]{ProcessPageAdapter.SendMessageForm.FIELD_RECEIVERS}, field.getName());
 					}
-					
-					@Override
-					public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Object data,Field field) {
-						if(field.getName().equals(ProcessPageAdapter.Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED) && timeDivisionTypes.size()==1)
-							return timeDivisionTypes.iterator().next().getName();
-						return super.fiedLabel(controlSet,data, field);
-					}
-					
 					
 				});
-				*/
+				
 			}
 		}
 		
@@ -240,7 +239,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			Set<TimeDivisionType> timeDivisionTypes = getTimeDivisionTypes(page);
 			Set<Byte> indexes = new LinkedHashSet<>();
 			//Set<TimeDivisionType> timeDivisionTypesProcessed = new LinkedHashSet<>();
-			Collection<ClassroomSession> classroomSessions = getClassroomSessions(page);
+			Collection<ClassroomSession> classroomSessions = commonUtils.castCollection(page.getElements(), ClassroomSession.class);
 			@SuppressWarnings("unchecked")
 			org.cyk.ui.api.data.collector.control.InputChoice<?,?,?,?,?,SelectItem> input = page.getForm().findInputByClassByFieldName(org.cyk.ui.api.data.collector.control.InputChoice.class, Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED);
 			if(input!=null)
@@ -280,7 +279,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		@Override
 		public void serve(AbstractProcessManyPage<?> page,Object data, String actionIdentifier) {
 			SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
-			Collection<ClassroomSession> classroomSessions = getClassroomSessions(page);
+			Collection<ClassroomSession> classroomSessions = commonUtils.castCollection(page.getElements(), ClassroomSession.class);
 			
 			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
 				/*Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionsByOrderNumber(classroomSessions,
@@ -345,6 +344,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		
 		@Override
 		public Class<?> getFormDataClass(AbstractProcessManyPage<?> processManyPage,String actionIdentifier) {
+			if(SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier))
+				return SendMessageForm.class;
 			return Form.class;
 		}
 		
@@ -352,7 +353,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		public Boolean getShowForm(AbstractProcessManyPage<?> processManyPage,String actionIdentifier) {
 			return ArrayUtils.contains(new String[]{SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles()
 					,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults()
-					,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks()}, actionIdentifier);
+					,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks()
+					,SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles()}, actionIdentifier);
 		}
 		
 		@Getter @Setter
@@ -379,6 +381,17 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			
 			public static final String FIELD_DRAFT = "draft";
 			public static final String FIELD_BACKGROUND_IMAGE_FILE = "backgroundImageFile";
+		}
+		
+		@Getter @Setter
+		public static class SendMessageForm extends AbstractFormModel<ClassroomSession> implements Serializable{
+			private static final long serialVersionUID = -4741435164709063863L;
+			
+			@Input @InputChoice @InputChoiceAutoComplete @InputManyChoice @InputManyAutoComplete private List<StudentClassroomSessionDivision> studentClassroomSessionDivisions;
+			@Input @InputChoice @InputChoiceAutoComplete @InputManyChoice @InputManyAutoComplete private List<Person> receivers;
+			
+			public static final String FIELD_RECEIVERS = "receivers";
+			
 		}
 	}
 }

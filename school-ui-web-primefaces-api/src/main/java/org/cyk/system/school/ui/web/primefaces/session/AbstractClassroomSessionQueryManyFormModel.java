@@ -15,6 +15,7 @@ public abstract class AbstractClassroomSessionQueryManyFormModel<SESSION extends
 	
 	/**/
 	
+	
 	@Getter @Setter
 	public static class AbstractClassroomSessionSelectManyPageAdapter<SESSION extends AbstractIdentifiable> extends AbstractSelectManyPage.Listener.Adapter.Default<SESSION,String> implements Serializable {
 

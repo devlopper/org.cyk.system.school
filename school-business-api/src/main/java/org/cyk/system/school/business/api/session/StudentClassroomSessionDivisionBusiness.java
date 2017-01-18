@@ -11,6 +11,7 @@ import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.subject.AbstractStudentResultsBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
+import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.LevelTimeDivision;
@@ -67,4 +68,6 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	Collection<StudentClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession);
 	Collection<StudentClassroomSessionDivision> findByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
 	Collection<StudentClassroomSessionDivision> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
+	Collection<StudentClassroomSessionDivision> findByAcademicSession(AcademicSession academicSession);
+	Collection<StudentClassroomSessionDivision> findByAcademicSessionByClassroomSessionDivisionOrderNumber(AcademicSession academicSession, Long classroomSessionDivisionOrderNumber);
 }

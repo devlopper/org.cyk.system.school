@@ -11,9 +11,9 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.language.LanguageCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
-import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.api.time.TimeBusiness;
+import org.cyk.system.root.business.impl.NumberStringFormatter;
 import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
 import org.cyk.system.root.model.party.person.MedicalInformations;
 import org.cyk.system.root.model.security.UserAccount;
@@ -99,10 +99,10 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 					public void beforeCreate(Student student) {
 						super.beforeCreate(student);
 						if(StringUtils.isBlank(student.getCode())){
-							NumberBusiness.FormatArguments orderNumberFormatArguments = new FormatArguments();
-							orderNumberFormatArguments.setWidth(4);
+							NumberStringFormatter orderNumberFormatter = new NumberStringFormatter(inject(StudentDao.class).countAll()+1,null);
+							orderNumberFormatter.setWidth(4);
 							student.setCode(getCodePrefix()+Constant.CHARACTER_SLASH+inject(TimeBusiness.class).findYear(inject(AcademicSessionBusiness.class).findCurrent(null).getBirthDate())
-									+inject(PersonBusiness.class).findInitials(student.getPerson())+inject(NumberBusiness.class).format(inject(StudentDao.class).countAll()+1,orderNumberFormatArguments)
+									+inject(PersonBusiness.class).findInitials(student.getPerson())+inject(NumberBusiness.class).format(orderNumberFormatter)
 									+Constant.CHARACTER_HYPHEN+student.getAdmissionLevelTimeDivision().getLevel().getGroup().getCode()
 									);
 						}

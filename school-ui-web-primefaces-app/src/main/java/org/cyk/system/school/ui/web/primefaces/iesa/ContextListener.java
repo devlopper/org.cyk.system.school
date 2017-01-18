@@ -4,15 +4,10 @@ import java.io.Serializable;
 
 import javax.servlet.ServletContextEvent;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeDetails;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
-import org.cyk.system.root.business.api.mathematics.NumberBusiness;
-import org.cyk.system.root.business.api.mathematics.NumberBusiness.FormatArguments;
-import org.cyk.system.root.business.api.party.person.PersonBusiness;
-import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.geography.ContactCollectionDetails;
 import org.cyk.system.root.business.impl.party.person.JobDetails;
@@ -27,7 +22,6 @@ import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValueIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.party.person.Person;
-import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.actor.StudentDetails;
 import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
@@ -47,13 +41,11 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
-import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.ui.web.primefaces.AbstractSchoolContextListener;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.ui.api.AbstractWindow;
 import org.cyk.ui.web.primefaces.page.AbstractPrimefacesPage.PageInstanceManager;
-import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
@@ -81,20 +73,12 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	
     	StudentBusinessImpl.Listener.COLLECTION.add(new StudentBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning(){
     		private static final long serialVersionUID = 1L;
-
-			@Override
-			public void beforeCreate(Student student) {
-				super.beforeCreate(student);
-				if(StringUtils.isBlank(student.getCode())){
-					NumberBusiness.FormatArguments orderNumberFormatArguments = new FormatArguments();
-					orderNumberFormatArguments.setWidth(4);
-					student.setCode("IESA"+Constant.CHARACTER_SLASH+inject(TimeBusiness.class).findYear(inject(AcademicSessionBusiness.class).findCurrent(null).getBirthDate())
-							+inject(PersonBusiness.class).findInitials(student.getPerson())+inject(NumberBusiness.class).format(inject(StudentDao.class).countAll()+1,orderNumberFormatArguments)
-							+Constant.CHARACTER_HYPHEN+student.getAdmissionLevelTimeDivision().getLevel().getGroup().getCode()
-							);
-				}
-			}
+    		@Override
+    		public String getCodePrefix() {
+    			return "IESA";
+    		}
     	});
+    	
     	TeacherBusinessImpl.Listener.COLLECTION.add(new TeacherBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning());
     	EmployeeBusinessImpl.Listener.COLLECTION.add(new EmployeeBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning());
     	

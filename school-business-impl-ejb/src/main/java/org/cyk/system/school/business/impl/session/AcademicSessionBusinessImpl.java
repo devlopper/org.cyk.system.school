@@ -62,6 +62,13 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	}
 	
 	@Override
+	protected void beforeCreate(AcademicSession academicSession) {
+		super.beforeCreate(academicSession);
+		if(academicSession.getNodeInformations().getAttendanceTimeDivisionType()==null)
+			academicSession.getNodeInformations().set(academicSession.getSchool().getNodeInformations());
+	}
+	
+	@Override
 	public AcademicSession update(AcademicSession academicSession) {
 		academicSession = super.update(academicSession);
 		for(AbstractIdentifiable identifiable : genericDao.use(LevelName.class).select().all()){

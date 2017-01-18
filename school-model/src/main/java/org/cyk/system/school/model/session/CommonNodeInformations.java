@@ -36,11 +36,8 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 	@ManyToOne private TimeDivisionType attendanceTimeDivisionType;
 	@Column private Boolean aggregateAttendance;
 	@Column(precision=5,scale=FLOAT_SCALE) private BigDecimal evaluationPassAverage;
-	
 	@ManyToOne private TimeDivisionType classroomSessionTimeDivisionType;
-	
 	@ManyToOne private Interval classroomSessionDivisionOrderNumberInterval;
-	
 	private Long currentClassroomSessionDivisionIndex;
 	
 	public CommonNodeInformations(IntervalCollection intervalCollection,IntervalCollection studentClassroomSessionAveragePromotionScale

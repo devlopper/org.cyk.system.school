@@ -10,10 +10,9 @@ public class IesaApplicationSetupBusinessIT extends AbstractBusinessIT {
     private static final long serialVersionUID = -6691092648665798471L;
     
     @Inject private IesaFakedDataProducer iesaFakedDataProducer;
-    
+   
     @Override
     protected void businesses() {
-    	installApplication();
     	System.exit(0);
     }
     

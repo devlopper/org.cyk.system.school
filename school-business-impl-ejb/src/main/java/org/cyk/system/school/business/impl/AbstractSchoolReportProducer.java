@@ -293,9 +293,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			LabelValueCollectionReport labelValueCollectionReport;
 			StudentClassroomSessionDivisionReportTemplateFile report = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision,arguments);
 			
-			//AcademicSession as = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
-			//report.getAcademicSession().setFromDateToDate(timeBusiness.findYear(as.getBirthDate())+"/"+timeBusiness.findYear(as.getDeathDate())+" ACADEMIC SESSION");
-		
 			String levelNameCode = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getCode();
 			String effortLevelsMetricCollectionCode = null,effortLevelsIntervalCollectionCode = null,schoolCommunicationMetricCollectionCode=null;
 			addPupilsDetails(report);
@@ -306,12 +303,19 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			arguments.getReportTemplate().getResultFileNamingScript().getInputs().put("studentClassroomSessionDivision", studentClassroomSessionDivision);
 			report.setName((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getResultFileNamingScript()));
 			arguments.setIdentifiableName(report.getName());
-			
+			/*
+			Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers = inject(MetricCollectionIdentifiableGlobalIdentifierDao.class)
+				.readByCriteria(new MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria().addIdentifiableGlobalIdentifier(studentClassroomSessionDivision
+				.getClassroomSessionDivision()).addMetricCollectionType(inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_KINDERGARTEN_STUDENT)));
+					MetricCollection metricCollection = metricCollectionIdentifiableGlobalIdentifiers.iterator().next().getMetricCollection();
+			*/
 			if(ArrayUtils.contains(new String[]{SchoolConstant.Code.LevelName.PK,SchoolConstant.Code.LevelName.K1,SchoolConstant.Code.LevelName.K2
 					,SchoolConstant.Code.LevelName.K3},levelNameCode)){
+				
 				Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers = inject(MetricCollectionIdentifiableGlobalIdentifierDao.class)
 				.readByCriteria(new MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria().addIdentifiableGlobalIdentifier(studentClassroomSessionDivision.getClassroomSessionDivision())
 						.addMetricCollectionType(inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_KINDERGARTEN_STUDENT)));
+				
 				MetricCollection metricCollection = metricCollectionIdentifiableGlobalIdentifiers.iterator().next().getMetricCollection();
 				effortLevelsMetricCollectionCode = metricCollection.getCode();
 				effortLevelsIntervalCollectionCode = metricCollection.getValueProperties().getIntervalCollection().getCode();
@@ -426,10 +430,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				if(nextClassroomSessionDivision==null){
 					
 				}else{
-					//addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_SCHOOL_COMMUNICATION
-					//		, new Derive.Adapter.Default().addInputs(report,report.getClassroomSessionDivision()));
-					//report.addLabelValue("NEXT OPENING",format(nextClassroomSessionDivision.getBirthDate()));
-					//report.addLabelValue("NEXT TERM EXAMINATION",format(nextClassroomSessionDivision.getDeathDate()));	
+					
 					
 				}
 				

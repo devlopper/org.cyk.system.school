@@ -153,6 +153,7 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		uiManager.configBusinessIdentifiable(StudentClassroomSessionDivision.class, null);
 		webNavigationManager.useDynamicSelectView(StudentClassroomSessionDivision.class);
 		AbstractSelectManyPage.Listener.COLLECTION.add(new StudentClassroomSessionDivisionQueryManyFormModel.PageAdapter());
+		AbstractProcessManyPage.Listener.COLLECTION.add(new StudentClassroomSessionDivisionQueryManyFormModel.ProcessPageAdapter());
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(StudentClassroomSessionDivisionSubject.class, StudentClassroomSessionDivisionSubjectEditPage.Form.class, StudentClassroomSessionDivisionSubjectDetails.class
 				,null,null,null));
