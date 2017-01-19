@@ -6,41 +6,50 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
+
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.api.geography.ContactBusiness;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
-import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.business.api.party.person.PersonRelationshipBusiness;
+import org.cyk.system.root.business.impl.AbstractOutputDetails;
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.geography.ElectronicMail;
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.root.model.party.person.PersonRelationship;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.ui.web.primefaces.session.AbstractStudentClassroomSessionDivisionQueryManyFormModel;
 import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
+import org.cyk.ui.api.data.collector.form.ControlSet;
 import org.cyk.ui.api.model.AbstractQueryManyFormModel;
+import org.cyk.ui.api.model.table.Cell;
+import org.cyk.ui.api.model.table.CellAdapter;
+import org.cyk.ui.api.model.table.Column;
+import org.cyk.ui.api.model.table.ColumnAdapter;
+import org.cyk.ui.api.model.table.Row;
 import org.cyk.ui.web.api.WebManager;
-import org.cyk.ui.web.api.WebNavigationManager;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.AbstractProcessManyPage;
 import org.cyk.ui.web.primefaces.page.AbstractSelectManyPage;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.annotation.FieldOverrides;
-import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputBooleanButton;
-import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
-import org.cyk.utility.common.annotation.user.interfaces.InputManyCheck;
-import org.cyk.utility.common.annotation.user.interfaces.InputManyChoice;
-import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
-import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
-import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
+import org.cyk.utility.common.builder.UrlStringBuilder;
 import org.cyk.utility.common.cdi.AbstractBean;
 import org.omnifaces.util.Faces;
+import org.primefaces.extensions.model.dynaform.DynaFormControl;
+import org.primefaces.extensions.model.dynaform.DynaFormLabel;
+import org.primefaces.extensions.model.dynaform.DynaFormModel;
+import org.primefaces.extensions.model.dynaform.DynaFormRow;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,8 +57,6 @@ import lombok.Setter;
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryManyFormModel.FIELD_IDENTIFIABLES,type=ClassroomSession.class)})
 public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractStudentClassroomSessionDivisionQueryManyFormModel<StudentClassroomSessionDivision> implements Serializable {
 	private static final long serialVersionUID = -3756660150800681378L;
-	
-	
 	
 	/**/
 	
@@ -82,19 +89,15 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractS
 		}
 		
 		@Override
-		public void serve(AbstractSelectManyPage<?> selectManyPage, Object data, String actionIdentifier) {
+		public UrlStringBuilder getRedirectUrlStringBuilder(AbstractSelectManyPage<?> selectManyPage, Object data,String actionIdentifier) {
+			UrlStringBuilder urlStringBuilder = super.getRedirectUrlStringBuilder(selectManyPage, data, actionIdentifier);
 			if(SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
-				@SuppressWarnings({ "unchecked", "rawtypes" })
-				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = ((AbstractQueryManyFormModel)data).getIdentifiables();
-				WebNavigationManager.getInstance().redirectToDynamicProcessManyPage(StudentClassroomSessionDivision.class, studentClassroomSessionDivisions
-						, actionIdentifier,new Object[]{ inject(UIManager.class).businessEntityInfos(PersonRelationshipType.class).getIdentifier()
-								,inject(WebManager.class).encodeIdentifiablesAsRequestParameterValue(((StudentClassroomSessionDivisionQueryManyFormModel)data)
-										.getPersonRelationshipTypes())
-						,UniformResourceLocatorParameter.ENCODED,inject(UIManager.class).businessEntityInfos(PersonRelationshipType.class).getIdentifier()});
-				//EditManyPage(SchoolWebManager.getInstance().getOutcomeEditStudentClassroomSessionDivisionEvaluationAverage()
-						//,StudentClassroomSessionDivision.class,studentClassroomSessionDivisions);
-			}else
-				super.serve(selectManyPage, data, actionIdentifier);
+				urlStringBuilder.getQueryStringBuilder().addParameter(inject(UIManager.class).businessEntityInfos(PersonRelationshipType.class).getIdentifier()
+					,inject(WebManager.class).encodeIdentifiablesAsRequestParameterValue(((StudentClassroomSessionDivisionQueryManyFormModel)data)
+					.getPersonRelationshipTypes())).addParameter(UniformResourceLocatorParameter.ENCODED,inject(UIManager.class)
+							.businessEntityInfos(PersonRelationshipType.class).getIdentifier());
+			}
+			return urlStringBuilder;
 		}
 	}
 	
@@ -107,47 +110,69 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractS
 			super(StudentClassroomSessionDivision.class);
 		}
 		
+		private Collection<PersonRelationshipType> getPersonRelationshipTypes(){
+			return inject(WebManager.class).decodeIdentifiablesRequestParameter(PersonRelationshipType.class
+					, inject(UIManager.class).businessEntityInfos(PersonRelationshipType.class).getIdentifier(), Faces.getRequest());
+		}
+		
 		@Override
 		protected void initialiseProcessOnInitialisationEnded(final AbstractProcessManyPage<?> page) {
 			super.initialiseProcessOnInitialisationEnded(page);
 			SchoolBusinessLayer schoolBusinessLayer = SchoolBusinessLayer.getInstance();
 			page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
 			if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionSendStudentClassroomSessionDivisionReportFiles()}, page.getActionIdentifier())){
-				Collection<PersonRelationshipType> personRelationshipTypes = inject(WebManager.class).decodeIdentifiablesRequestParameter(PersonRelationshipType.class
-						, inject(UIManager.class).businessEntityInfos(PersonRelationshipType.class).getIdentifier(), Faces.getRequest());
-				((SendMessageForm)page.getForm().getData()).setPersonRelationshipTypes(personRelationshipTypes.toString());
-				
-				System.out.println(personRelationshipTypes);
-				
-				Collection<Student> students = new ArrayList<>();
+				Collection<Person> studentPersons = new ArrayList<>();
 				for(StudentClassroomSessionDivision studentClassroomSessionDivision : commonUtils.castCollection(page.getElements(), StudentClassroomSessionDivision.class))
-					students.add(studentClassroomSessionDivision.getStudent());
+					studentPersons.add(studentClassroomSessionDivision.getStudent().getPerson());				
+				final List<PersonRelationshipType> personRelationshipTypes = (List<PersonRelationshipType>) getPersonRelationshipTypes();
+				final Collection<PersonRelationship> personRelationships = inject(PersonRelationshipBusiness.class).findByPerson2ByTypes(studentPersons,personRelationshipTypes);
+				//Collection<Person> parentPersons = inject(PersonBusiness.class).findByPersonRelationshipPerson2ByPersonRelationshipTypes(studentPersons,personRelationshipTypes);
+				//Collection<Person> person1s = inject(PersonBusiness.class).getPerson1(personRelationships);
+				inject(ContactBusiness.class).findByCollectionsByClass(inject(PersonBusiness.class).getContactCollections(inject(PersonBusiness.class)
+						.getPerson1(personRelationships)),ElectronicMail.class);
+				
 				page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
-				Collection<Person> persons = inject(PersonBusiness.class).get(students);
-				Collection<Person> parents = inject(PersonBusiness.class).findByPersonRelationshipPerson2ByPersonRelationshipTypes(persons, personRelationshipTypes);
-				((SendMessageForm)page.getForm().getData()).setReceivers(parents.toString());
-				
-				System.out.println(parents);
-				
 				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
-
 					private static final long serialVersionUID = 1L;
-
 					@Override
-					public Boolean build(Object data,Field field) {
-						return ArrayUtils.contains(new String[]{ProcessPageAdapter.SendMessageForm.FIELD_PERSON_RELATIONSHIP_TYPES
-								,ProcessPageAdapter.SendMessageForm.FIELD_RECEIVERS}, field.getName());
+					public String fiedLabel(ControlSet<Object, DynaFormModel, DynaFormRow, DynaFormLabel, DynaFormControl, SelectItem> controlSet,Object data, Field field) {
+						if(AbstractOutputDetails.isExtendedFieldName(field.getName()))
+							return personRelationshipTypes.get(AbstractOutputDetails.getExtendedFieldNameIndex(field.getName())).getName();
+						return super.fiedLabel(controlSet, data, field);
 					}
-					
 				});
 				
+				page.getTable().getColumnListeners().add(new ColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public void added(Column column) {
+						super.added(column);
+						if(AbstractOutputDetails.isExtendedFieldName(column.getField().getName())){
+							column.setTitle(personRelationshipTypes.get(AbstractOutputDetails.getExtendedFieldNameIndex(column.getField().getName())).getName());
+						}
+					}
+				});
+				
+				page.getTable().getCellListeners().add(new CellAdapter<Object>(){
+					@Override
+					public void added(Row<Object> row, Column column, Cell cell) {
+						super.added(row, column, cell);
+						if(AbstractOutputDetails.isExtendedFieldName(column.getField().getName())){
+							PersonRelationshipType personRelationshipType = personRelationshipTypes.get(AbstractOutputDetails.getExtendedFieldNameIndex(column.getField().getName()));
+							StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) ((Item)row.getData()).getMaster();
+							for(PersonRelationship personRelationship : personRelationships){
+								if(personRelationship.getType().equals(personRelationshipType) 
+										&& personRelationship.getPerson2().equals(studentClassroomSessionDivision.getStudent().getPerson())){
+									cell.setValue(commonUtils.concatenate(cell.getValue(), new String[]{inject(PersonBusiness.class).findNames(personRelationship.getPerson1())
+											+Constant.CHARACTER_LEFT_PARENTHESIS+StringUtils.join(personRelationship.getPerson1().getContactCollection().getElectronicMails()
+													,Constant.CHARACTER_COMA.toString())+Constant.CHARACTER_RIGHT_PARENTHESIS}
+										, Constant.CHARACTER_COMA.toString()));
+								}
+							}
+						}
+					}
+				});
 			}
-		}
-		
-		@Override
-		protected void initialiseProcessOnAfterInitialisationEnded(final AbstractProcessManyPage<?> page) {
-			super.initialiseProcessOnAfterInitialisationEnded(page);
-			
 		}
 		
 		@Override
@@ -169,41 +194,43 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractS
 			return ArrayUtils.contains(new String[]{SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles()}, actionIdentifier);
 		}
 		
+		@Override
+		public Class<?> getItemClass(AbstractProcessManyPage<?> page) {
+			return Item.class;
+		}
+		
+		@Override
+		public Boolean isItemTableColumn(AbstractProcessManyPage<?> processManyPage, Field field) {
+			if(AbstractOutputDetails.isExtendedFieldName(field.getName())){
+				return AbstractOutputDetails.getExtendedFieldNameIndex(field.getName()) < getPersonRelationshipTypes().size();
+			}
+			
+			return ArrayUtils.contains(new String[]{Item.FIELD_NAME}, field.getName());
+		}
+		
 		@Getter @Setter
 		public static class Form extends AbstractFormModel<StudentClassroomSessionDivision> implements Serializable{
 			private static final long serialVersionUID = -4741435164709063863L;
-			@Input @InputBooleanButton private Boolean updateEvaluationResults=Boolean.TRUE;
-			@Input @InputBooleanButton private Boolean updateAttendanceResults=Boolean.TRUE;
-			@Input @InputBooleanButton private Boolean updateRankResults=Boolean.TRUE;
 			
-			@Input @InputNumber private Integer classroomSessionDivisionMinCount;
-			@Input @InputNumber private Integer classroomSessionDivisionMaxCount;
-			@Input @InputChoice @InputManyChoice @InputManyCheck private List<Integer> classroomSessionDivisionIndexesRequired;
-			
-			@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private File backgroundImageFile;
-			@Input @InputBooleanButton private Boolean draft=Boolean.FALSE;
-			
-			public static final String FIELD_UPDATE_EVALUATION_RESULTS = "updateEvaluationResults";
-			public static final String FIELD_UPDATE_ATTENDANCE_RESULTS = "updateAttendanceResults";
-			public static final String FIELD_UPDATE_RANK_RESULTS = "updateRankResults";
-			
-			public static final String FIELD_CLASSROOMSESSIONDIVISION_MIN_COUNT = "classroomSessionDivisionMinCount";
-			public static final String FIELD_CLASSROOMSESSIONDIVISION_MAX_COUNT = "classroomSessionDivisionMaxCount";
-			public static final String FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED = "classroomSessionDivisionIndexesRequired";
-			
-			public static final String FIELD_DRAFT = "draft";
-			public static final String FIELD_BACKGROUND_IMAGE_FILE = "backgroundImageFile";
 		}
 		
 		@Getter @Setter
 		public static class SendMessageForm extends AbstractFormModel<StudentClassroomSessionDivision> implements Serializable{
 			private static final long serialVersionUID = -4741435164709063863L;
 			
-			@Input(readOnly=true,disabled=true) @InputText private String personRelationshipTypes;
-			@Input(readOnly=true,disabled=true) @InputText private String receivers;
 			
-			public static final String FIELD_PERSON_RELATIONSHIP_TYPES = "personRelationshipTypes";
-			public static final String FIELD_RECEIVERS = "receivers";
+			
+		}
+		
+		@Getter @Setter
+		public static class Item extends AbstractProcessManyPage.ProcessItem implements Serializable{
+			
+			private static final long serialVersionUID = -4741435164709063863L;
+			
+			public Item(AbstractIdentifiable identifiable) {
+				super(identifiable);
+			}
+			
 			
 		}
 	}

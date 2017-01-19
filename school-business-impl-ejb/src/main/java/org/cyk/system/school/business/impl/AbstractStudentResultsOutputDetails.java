@@ -22,6 +22,7 @@ import lombok.Setter;
 	@IncludeInputs private StudentDetails studentDetails;
 	@Input @InputText private String student;
 	
+	//TODO to be deleted , use __fXX__ from super class
 	@Input @InputText private String detail0Average,detail1Average,detail2Average,detail3Average,detail4Average,detail5Average,detail6Average,detail7Average
 		,detail8Average;
 	@Input @InputText private String detail9Average,detail10Average,detail11Average,detail12Average,detail13Average,detail14Average,detail15Average,detail16Average;

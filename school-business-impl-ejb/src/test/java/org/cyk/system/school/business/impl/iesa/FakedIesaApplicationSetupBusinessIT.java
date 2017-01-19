@@ -6,9 +6,11 @@ import javax.inject.Inject;
 
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
+import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -163,6 +165,16 @@ public class FakedIesaApplicationSetupBusinessIT extends AbstractBusinessIT {
     	
     	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(studentPK1,studentK1,studentK2,studentK3,studentG1A,studentG8A)
     			,AbstractIdentifiable.class));
+    	
+    	Person parent = inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER);
+    	parent.setName("komenan");
+    	parent.setLastnames("n'dri jean");
+    	update(parent);
+    	
+    	parent = inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER);
+    	parent.setName("komenan");
+    	parent.setLastnames("sandrine meliane");
+    	update(parent);
     	
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentPK1.getCode(),classroomSessionPK1.getCode()}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentK1.getCode(),classroomSessionK1.getCode()}));
