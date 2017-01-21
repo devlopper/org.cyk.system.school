@@ -27,6 +27,8 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.Level;
+import org.cyk.system.school.model.session.LevelGroup;
+import org.cyk.system.school.model.session.LevelGroupType;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.session.StudentClassroomSession;
@@ -49,6 +51,8 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryOneFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.LevelGroupForm;
+import org.cyk.system.school.ui.web.primefaces.session.LevelGroupTypeForm;
 import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
@@ -89,6 +93,9 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		//uiManager.businessEntityInfos(ClassroomSession.class).setUiConsultViewId("");
 		//IdentifiableConfiguration identifiableConfiguration = uiManager.findConfiguration(ClassroomSession.class);
 		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(LevelGroupType.class, LevelGroupTypeForm.class, LevelGroupTypeForm.class,null,null,null));
+		uiManager.registerConfiguration(new IdentifiableConfiguration(LevelGroup.class, LevelGroupForm.class, LevelGroupForm.class,null,null,null));
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(School.class, SchoolEditPage.Form.class, SchoolDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(School.class, null);
