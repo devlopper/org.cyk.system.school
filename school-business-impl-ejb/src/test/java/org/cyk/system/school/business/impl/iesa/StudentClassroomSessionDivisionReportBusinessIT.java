@@ -40,7 +40,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	
     	ClassroomSession classroomSessionK1 = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
         		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1, null,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-        		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
+        		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
         		, new String[][]{}
         		, new String[][]{}
         		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT}
@@ -94,7 +94,12 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	ClassroomSession classroomSessionG1A = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
     		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, SchoolConstant.Code.ClassroomSessionSuffix.A,null, RootConstant.Code.TimeDivisionType.TRIMESTER
     		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-    		, new String[][]{{SchoolConstant.Code.Subject.ACCOUNTING},{SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS},{SchoolConstant.Code.Subject.ART_CRAFT}}
+    		, new String[][]{{SchoolConstant.Code.Subject.ACCOUNTING},{SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS},{SchoolConstant.Code.Subject.ART_CRAFT}
+    			,{SchoolConstant.Code.Subject.ART_DESIGN},{SchoolConstant.Code.Subject.BIOLOGY},{SchoolConstant.Code.Subject.BUSINESS_STUDIES}
+    			,{SchoolConstant.Code.Subject.CHECKPOINT_ENGLISH_LEVEL},{SchoolConstant.Code.Subject.CHECKPOINT_MATHEMATICS},{SchoolConstant.Code.Subject.CHECKPOINT_SCIENCES}
+    			,{SchoolConstant.Code.Subject.CHEMISTRY},{SchoolConstant.Code.Subject.CHINESE_MANDARIN},{SchoolConstant.Code.Subject.COMPREHENSION}
+    			,{SchoolConstant.Code.Subject.CORE_MATHEMATICS},{SchoolConstant.Code.Subject.DEVELOPMENT_STUDIES},{SchoolConstant.Code.Subject.EARTH_SCIENCES}
+    			,{SchoolConstant.Code.Subject.ECONOMICS},{SchoolConstant.Code.Subject.ENGLISH_FIRST_LANGUAGE},{SchoolConstant.Code.Subject.ENGLISH_LANGUAGE}}
     		, new String[][]{{SchoolConstant.Code.EvaluationType.TEST1,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.15","100"}
     			,{SchoolConstant.Code.EvaluationType.TEST2,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.15","100"}
     			,{SchoolConstant.Code.EvaluationType.EXAM,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.7","100"}}
@@ -176,11 +181,11 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	*/
     	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
-    		{SchoolConstant.Code.LevelName.PK,null,1l}
-    		,{SchoolConstant.Code.LevelName.K1,null,1l}
-    		,{SchoolConstant.Code.LevelName.K2,null,1l}
-    		,{SchoolConstant.Code.LevelName.K3,null,1l}
-    		//,{SchoolConstant.Code.LevelName.G1,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
+    		//{SchoolConstant.Code.LevelName.PK,null,1l}
+    		//,{SchoolConstant.Code.LevelName.K1,null,1l}
+    		//,{SchoolConstant.Code.LevelName.K2,null,1l}
+    		//,{SchoolConstant.Code.LevelName.K3,null,1l}
+    		/*,*/{SchoolConstant.Code.LevelName.G1,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
     		//,{SchoolConstant.Code.LevelName.G8,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
     	}, Boolean.TRUE, Boolean.FALSE);
     	

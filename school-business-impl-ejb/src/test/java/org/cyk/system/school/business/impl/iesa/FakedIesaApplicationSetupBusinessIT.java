@@ -169,6 +169,7 @@ public class FakedIesaApplicationSetupBusinessIT extends AbstractBusinessIT {
     	Person parent = inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER);
     	parent.setName("komenan");
     	parent.setLastnames("n'dri jean");
+    	//parent.getContactCollection().getcoll
     	update(parent);
     	
     	parent = inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER);
