@@ -94,12 +94,12 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	ClassroomSession classroomSessionG1A = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
     		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, SchoolConstant.Code.ClassroomSessionSuffix.A,null, RootConstant.Code.TimeDivisionType.TRIMESTER
     		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-    		, new String[][]{{SchoolConstant.Code.Subject.ACCOUNTING},{SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS},{SchoolConstant.Code.Subject.ART_CRAFT}
+    		, new String[][]{{SchoolConstant.Code.Subject.ACCOUNTING}/*,{SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS},{SchoolConstant.Code.Subject.ART_CRAFT}
     			,{SchoolConstant.Code.Subject.ART_DESIGN},{SchoolConstant.Code.Subject.BIOLOGY},{SchoolConstant.Code.Subject.BUSINESS_STUDIES}
     			,{SchoolConstant.Code.Subject.CHECKPOINT_ENGLISH_LEVEL},{SchoolConstant.Code.Subject.CHECKPOINT_MATHEMATICS},{SchoolConstant.Code.Subject.CHECKPOINT_SCIENCES}
     			,{SchoolConstant.Code.Subject.CHEMISTRY},{SchoolConstant.Code.Subject.CHINESE_MANDARIN},{SchoolConstant.Code.Subject.COMPREHENSION}
     			,{SchoolConstant.Code.Subject.CORE_MATHEMATICS},{SchoolConstant.Code.Subject.DEVELOPMENT_STUDIES},{SchoolConstant.Code.Subject.EARTH_SCIENCES}
-    			,{SchoolConstant.Code.Subject.ECONOMICS},{SchoolConstant.Code.Subject.ENGLISH_FIRST_LANGUAGE},{SchoolConstant.Code.Subject.ENGLISH_LANGUAGE}}
+    			,{SchoolConstant.Code.Subject.ECONOMICS},{SchoolConstant.Code.Subject.ENGLISH_FIRST_LANGUAGE},{SchoolConstant.Code.Subject.ENGLISH_LANGUAGE}*/}
     		, new String[][]{{SchoolConstant.Code.EvaluationType.TEST1,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.15","100"}
     			,{SchoolConstant.Code.EvaluationType.TEST2,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.15","100"}
     			,{SchoolConstant.Code.EvaluationType.EXAM,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.7","100"}}
@@ -116,6 +116,16 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT},{SchoolConstant.Code.MetricCollection.BEHAVIOUR_SECONDARY_STUDENT}
     			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT}}));
     	
+    	ClassroomSession classroomSessionG9A = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
+        		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.G9_YEAR_1, SchoolConstant.Code.ClassroomSessionSuffix.A,null, RootConstant.Code.TimeDivisionType.TRIMESTER
+        				, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
+        		, new String[][]{{SchoolConstant.Code.Subject.CHEMISTRY},{SchoolConstant.Code.Subject.BUSINESS_STUDIES},{SchoolConstant.Code.Subject.CHECKPOINT_ENGLISH_LEVEL}}
+        		, new String[][]{{SchoolConstant.Code.EvaluationType.TEST1,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.2","100"}
+        			,{SchoolConstant.Code.EvaluationType.TEST2,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.2","100"}
+        			,{SchoolConstant.Code.EvaluationType.EXAM,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.6","100"}}
+        		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT},{SchoolConstant.Code.MetricCollection.BEHAVIOUR_SECONDARY_STUDENT}
+        			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT}}));
+    	
     	Student studentG1A = inject(StudentBusiness.class).instanciateOneRandomly();
     	studentG1A.setCode("STUDG1A");
     	studentG1A.setName("komenan");
@@ -131,6 +141,13 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	studentG8A.getPerson().setLastnames("gérard");
     	if(studentG8A.getPerson().getContactCollection()!=null && studentG8A.getPerson().getContactCollection().getElectronicMails()!=null)
     		studentG8A.getPerson().getContactCollection().getElectronicMails().clear();
+    	
+    	Student studentG9A = inject(StudentBusiness.class).instanciateOneRandomly();
+    	studentG9A.setCode("STUDG9A");
+    	studentG9A.setName("djedje");
+    	studentG9A.getPerson().setLastnames("madi");
+    	if(studentG9A.getPerson().getContactCollection()!=null && studentG9A.getPerson().getContactCollection().getElectronicMails()!=null)
+    		studentG9A.getPerson().getContactCollection().getElectronicMails().clear();
     	
     	Student studentPK1 = inject(StudentBusiness.class).instanciateOneRandomly();
     	studentPK1.setCode("STUDPK");
@@ -160,7 +177,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	if(studentK3.getPerson().getContactCollection()!=null && studentK3.getPerson().getContactCollection().getElectronicMails()!=null)
     		studentK3.getPerson().getContactCollection().getElectronicMails().clear();
     	
-    	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(studentPK1,studentK1,studentK2,studentK3,studentG1A,studentG8A)
+    	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(studentPK1,studentK1,studentK2,studentK3,studentG1A,studentG8A,studentG9A)
     			,AbstractIdentifiable.class));
     	
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentPK1.getCode(),classroomSessionPK1.getCode()}));
@@ -169,6 +186,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentK3.getCode(),classroomSessionK3.getCode()}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentG1A.getCode(),classroomSessionG1A.getCode()}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentG8A.getCode(),classroomSessionG8A.getCode()}));
+    	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentG9A.getCode(),classroomSessionG9A.getCode()}));
     	/*
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.PK,null,1l}}, Boolean.TRUE, Boolean.FALSE);
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{{SchoolConstant.Code.LevelName.K1,null,1l}}, Boolean.TRUE, Boolean.FALSE);
@@ -185,8 +203,9 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     		//,{SchoolConstant.Code.LevelName.K1,null,1l}
     		//,{SchoolConstant.Code.LevelName.K2,null,1l}
     		//,{SchoolConstant.Code.LevelName.K3,null,1l}
-    		/*,*/{SchoolConstant.Code.LevelName.G1,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
+    		//,{SchoolConstant.Code.LevelName.G1,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
     		//,{SchoolConstant.Code.LevelName.G8,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
+    		/*,*/{SchoolConstant.Code.LevelName.G9,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
     	}, Boolean.TRUE, Boolean.FALSE);
     	
     }

@@ -15,7 +15,13 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	protected static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForOtherGrade__(Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
-		report.setProvisional(provisional);
+		report.setIsDraft(provisional);
+		if(Boolean.TRUE.equals(report.getIsDraft())){
+			report.getAcademicSession().getCompany().setDraftBackground(Boolean.TRUE);
+			report.getAcademicSession().getCompany().generate();
+			report.setBackgroundImage(report.getAcademicSession().getCompany().getBackgroundImage());
+			report.setFooter("This Provisional Results Information is not an official document and is for information only.");
+		}
 		addPupilsDetails(report);
 		addSchoolAttendance(report);
 		addOverallResult(report);
@@ -47,7 +53,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForPreKinderGarten__(Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
-		report.setProvisional(provisional);
+		report.setIsDraft(provisional);
 		report.setName("PRE-KINDERGARTEN REPORT SHEET");
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
@@ -111,7 +117,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForKG1__(Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
-		report.setProvisional(provisional);
+		report.setIsDraft(provisional);
 		report.setName("KINDERGARTEN REPORT SHEET");
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
@@ -163,7 +169,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForKG2KG3__(Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
-		report.setProvisional(provisional);
+		report.setIsDraft(provisional);
 		report.setName("KINDERGARTEN REPORT SHEET");
 		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
 		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");

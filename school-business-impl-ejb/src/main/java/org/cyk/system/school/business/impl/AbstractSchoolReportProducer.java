@@ -185,16 +185,17 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		Collection<EvaluationType> evaluationTypes = inject(EvaluationTypeDao.class).readAll();
 		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 			Boolean applicable = studentSubject.getResults().getEvaluationSort().getAverage().getValue()!=null;
-			
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport();
 			classroomSessionDivisionSubjectReport.setAverage(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverage()):NOT_APPLICABLE);
 			classroomSessionDivisionSubjectReport.getGlobalIdentifier().setWeight(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getWeight()):NOT_APPLICABLE);
 			classroomSessionDivisionSubjectReport.setHighestAverage(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverageHighest()):NOT_APPLICABLE);
 			classroomSessionDivisionSubjectReport.getGlobalIdentifier().setName(studentSubject.getClassroomSessionDivisionSubject().getSubject().getName());
 			classroomSessionDivisionSubjectReport.setNumberOfStudents(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getNumberOfStudent()):NOT_APPLICABLE);
-			
+			//classroomSessionDivisionSubjectReport.getAverageScale().setSource(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval());
 			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r,classroomSessionDivisionSubjectReport);
+			
 			r.getSubjects().add(sr);
+			
 			
 			for(int i=0;i<evaluationTypes.size();i++){
 				sr.getMarks().add(NOT_APPLICABLE);
@@ -213,8 +214,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			
 			//if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
 				set(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval(), sr.getAverageScale());
-				if(applicable)
+				if(applicable){
 					sr.getAverageScale().getGlobalIdentifier().setCode(RootConstant.Code.getRelativeCode(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
+				}
 			//}else
 				//sr.getAverageScale().setCode(NOT_APPLICABLE);
 			

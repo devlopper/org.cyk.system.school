@@ -37,6 +37,8 @@ public class StudentClassroomSessionDivisionReportTemplateFile extends AbstractR
 	private ActorReport student = new ActorReport();
 	private ActorReport signer = new ActorReport();
 	private ActorReport commentator = new ActorReport();
+	
+	private Collection<StudentClassroomSessionDivisionReport> previousStudentClassroomSessionDivision = new ArrayList<>();
 
 	@Override
 	public void generate() {
@@ -46,13 +48,14 @@ public class StudentClassroomSessionDivisionReportTemplateFile extends AbstractR
 		schoolStampBlockTitle = "SCHOOL STAMP AND SIGNATURE";
 	
 		academicSession.getCompany().getGlobalIdentifier().setGenerateImage(Boolean.TRUE);
+		academicSession.getCompany().setGenerateBackground(Boolean.TRUE);
 		academicSession.generate();
 		
 		if(Boolean.TRUE.equals(generateHeaderImage))
 			headerImage = inputStream(provider.documentHeader().getBytes());
 		
 		if(Boolean.TRUE.equals(generateBackgroundImage)) 
-			backgroundImage = inputStream(provider.companyLogo().getBytes());
+			backgroundImage = academicSession.getCompany().getBackgroundImage(); //inputStream(provider.companyLogo().getBytes());
 		
 		student.getPerson().getGlobalIdentifier().setGenerateImage(Boolean.TRUE);
 		student.generate();
