@@ -67,7 +67,7 @@
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
-		<field name="studentClassroomSessionDivision" class="org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile">
+		<field name="studentClassroomSessionDivision" class="org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport">
 			<fieldDescription><![CDATA[studentClassroomSessionDivision]]></fieldDescription>
 		</field>
 		<field name="teacher" class="org.cyk.system.root.model.party.person.ActorReport">
@@ -135,16 +135,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="classroomSessionDivision" class="org.cyk.system.school.model.session.ClassroomSessionDivisionReport">
-		<fieldDescription><![CDATA[classroomSessionDivision]]></fieldDescription>
-	</field>
-	<field name="rank" class="java.lang.String">
-		<fieldDescription><![CDATA[rank]]></fieldDescription>
-	</field>
-	<field name="subjects" class="java.util.Collection">
-		<fieldDescription><![CDATA[subjects]]></fieldDescription>
-	</field>
-	<field name="signer" class="org.cyk.system.root.model.party.person.ActorReport">
+	<field name="signer" class="org.cyk.system.root.model.party.person.PersonReport">
 		<fieldDescription><![CDATA[signer]]></fieldDescription>
 	</field>
 	<field name="footer" class="java.lang.String">
@@ -153,51 +144,8 @@
 	<field name="isDraft" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[isDraft]]></fieldDescription>
 	</field>
-	<field name="commentator" class="org.cyk.system.root.model.party.person.ActorReport">
-		<fieldDescription><![CDATA[commentator]]></fieldDescription>
-	</field>
-	<field name="comments" class="java.lang.String">
-		<fieldDescription><![CDATA[comments]]></fieldDescription>
-	</field>
-	<field name="academicSession" class="org.cyk.system.school.model.session.AcademicSessionReport">
-		<fieldDescription><![CDATA[academicSession]]></fieldDescription>
-	</field>
-	<field name="missedTime" class="java.lang.String">
-		<fieldDescription><![CDATA[missedTime]]></fieldDescription>
-	</field>
-	<field name="student" class="org.cyk.system.root.model.party.person.ActorReport">
-		<fieldDescription><![CDATA[student]]></fieldDescription>
-	</field>
-	<field name="missedTimeJustified" class="java.lang.String">
-		<fieldDescription><![CDATA[missedTimeJustified]]></fieldDescription>
-	</field>
-	<field name="totalCoefficient" class="java.lang.String">
-		<fieldDescription><![CDATA[totalCoefficient]]></fieldDescription>
-	</field>
-	<field name="average" class="java.lang.String">
-		<fieldDescription><![CDATA[average]]></fieldDescription>
-	</field>
-	<field name="totalAverageCoefficiented" class="java.lang.String">
-		<fieldDescription><![CDATA[totalAverageCoefficiented]]></fieldDescription>
-	</field>
-	<field name="totalAverage" class="java.lang.String">
-		<fieldDescription><![CDATA[totalAverage]]></fieldDescription>
-	</field>
-	<field name="markTotals" class="java.util.List">
-		<fieldDescription><![CDATA[markTotals]]></fieldDescription>
-	</field>
 	<field name="name" class="java.lang.String">
 		<fieldDescription><![CDATA[name]]></fieldDescription>
-	</field>
-	<field name="subjectsBlockTitle" class="java.lang.String"/>
-	<field name="subjectsTableColumnNames" class="java.util.List">
-		<fieldDescription><![CDATA[subjectsTableColumnNames]]></fieldDescription>
-	</field>
-	<field name="commentsBlockTitle" class="java.lang.String">
-		<fieldDescription><![CDATA[commentsBlockTitle]]></fieldDescription>
-	</field>
-	<field name="schoolStampBlockTitle" class="java.lang.String">
-		<fieldDescription><![CDATA[schoolStampBlockTitle]]></fieldDescription>
 	</field>
 	<field name="backgroundImage" class="java.io.InputStream">
 		<fieldDescription><![CDATA[backgroundImage]]></fieldDescription>
@@ -228,6 +176,9 @@
 	</field>
 	<field name="labelValueCollectionAtIndex7" class="org.cyk.system.root.model.file.report.LabelValueCollectionReport">
 		<fieldDescription><![CDATA[labelValueCollectionAtIndex7]]></fieldDescription>
+	</field>
+	<field name="studentClassroomSessionDivision" class="org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport">
+		<fieldDescription><![CDATA[studentClassroomSessionDivision]]></fieldDescription>
 	</field>
 	<background>
 		<band height="802" splitType="Stretch">
@@ -261,7 +212,7 @@
 					<textElement textAlignment="Center" markup="styled">
 						<font size="11" isBold="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{academicSession}.getFromDateToDate()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getAcademicSession().getFromDateToDate()+"</font>"]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -279,7 +230,7 @@
 				</textField>
 				<image isUsingCache="false" onErrorType="Blank">
 					<reportElement x="2" y="19" width="64" height="70" uuid="1e10220e-5880-4b76-a166-a93abc111a9b"/>
-					<imageExpression><![CDATA[$F{student}.getPerson().getGlobalIdentifier().getImage()]]></imageExpression>
+					<imageExpression><![CDATA[$F{studentClassroomSessionDivision}.getStudent().getPerson().getGlobalIdentifier().getImage()]]></imageExpression>
 				</image>
 				<componentElement>
 					<reportElement key="table 1" x="68" y="15" width="222" height="74" backcolor="#FF66CC" uuid="711cc9eb-d9e1-40ef-8d1d-c907bf767ba5"/>
@@ -392,19 +343,19 @@
 					<textElement markup="styled">
 						<font size="9"/>
 					</textElement>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{subjectsBlockTitle}+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsBlockTitle()+"</font>"]]></textFieldExpression>
 				</textField>
 				<componentElement>
 					<reportElement key="table 2" x="0" y="12" width="555" height="36" uuid="68657a31-e9fb-40e2-99b6-b3069f952bde"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-						<datasetRun subDataset="Subjects Dataset" uuid="b5c7b352-ecca-4b2d-be57-34e79e3bd611">
+						<datasetRun subDataset="Subjects Dataset" uuid="0120e555-ad22-4d64-b67c-ead896044034">
 							<datasetParameter name="CYK_TEXT_STATIC_FONT_NAME">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_STATIC_FONT_NAME}]]></datasetParameterExpression>
 							</datasetParameter>
 							<datasetParameter name="CYK_TEXT_DYNAMIC_FONT_NAME">
 								<datasetParameterExpression><![CDATA[$P{CYK_TEXT_DYNAMIC_FONT_NAME}]]></datasetParameterExpression>
 							</datasetParameter>
-							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{subjects})]]></dataSourceExpression>
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{studentClassroomSessionDivision}.getSubjects())]]></dataSourceExpression>
 						</datasetRun>
 						<jr:column width="14" uuid="69de708c-96fc-4309-9dfa-516dfcbcba61">
 							<jr:columnHeader style="table TH" height="38" rowSpan="1">
@@ -934,26 +885,26 @@
 						<leftPen lineWidth="1.0"/>
 					</box>
 					<textElement markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{commentsBlockTitle}+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getCommentsBlockTitle()+"</font>"]]></textFieldExpression>
 				</textField>
 				<image hAlign="Center" isUsingCache="false" onErrorType="Blank">
 					<reportElement x="54" y="68" width="170" height="40" uuid="5df88f9c-cfd0-4d8c-99f8-46f7e049db74"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
-					<imageExpression><![CDATA[$F{commentator}.getPerson().getSignatureSpecimen()]]></imageExpression>
+					<imageExpression><![CDATA[$F{studentClassroomSessionDivision}.getCommentator().getPerson().getSignatureSpecimen()]]></imageExpression>
 				</image>
 				<textField>
 					<reportElement x="0" y="108" width="277" height="13" uuid="a6cfe002-7b37-4421-8f2d-bc1802bb083c"/>
 					<textElement textAlignment="Center" markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{commentator}.getPerson().getTitle()+" "+$F{commentator}.getPerson().getNames()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getCommentator().getPerson().getTitle()+" "+$F{studentClassroomSessionDivision}.getCommentator().getPerson().getNames()+"</font>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="2" y="13" width="275" height="54" uuid="fe518cec-68b5-471a-aeaa-44736fb02614"/>
 					<textElement markup="styled">
 						<paragraph leftIndent="5"/>
 					</textElement>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{comments}+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getComments()+"</font>"]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
@@ -971,24 +922,24 @@
 						<rightPen lineWidth="1.0"/>
 					</box>
 					<textElement markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{schoolStampBlockTitle}+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSchoolStampBlockTitle()+"</font>"]]></textFieldExpression>
 				</textField>
 				<image scaleImage="RetainShape" hAlign="Center" isUsingCache="false" onErrorType="Blank">
 					<reportElement x="54" y="27" width="170" height="40" uuid="8cdb6d70-e6da-41ae-863b-41162f2f9736"/>
 					<box>
 						<bottomPen lineWidth="1.0"/>
 					</box>
-					<imageExpression><![CDATA[$F{signer}.getPerson().getSignatureSpecimen()]]></imageExpression>
+					<imageExpression><![CDATA[$F{signer}.getSignatureSpecimen()]]></imageExpression>
 				</image>
 				<textField>
 					<reportElement x="0" y="69" width="278" height="13" uuid="b98a9418-fe5f-4cca-a1f8-36455e59936c"/>
 					<textElement textAlignment="Center" markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>"+$F{signer}.getPerson().getTitle()+" "+$F{signer}.getPerson().getNames()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>"+$F{signer}.getTitle()+" "+$F{signer}.getNames()+"</font>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="82" width="278" height="13" uuid="b9911f47-d81e-42ad-a299-b00fac13741e"/>
 					<textElement textAlignment="Center" markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{signer}.getPerson().getJobTitle()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{signer}.getJobTitle()+"</font>"]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

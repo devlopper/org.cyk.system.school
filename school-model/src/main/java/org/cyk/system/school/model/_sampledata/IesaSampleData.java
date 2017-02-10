@@ -1,4 +1,4 @@
-package org.cyk.system.school.model;
+package org.cyk.system.school.model._sampledata;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -16,10 +16,12 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.setIsDraft(provisional);
+		report.setName("G1-G12 REPORT SHEET");
+		report.getStudentClassroomSessionDivision().getClassroomSessionDivision().setAverage("12");
 		if(Boolean.TRUE.equals(report.getIsDraft())){
-			report.getAcademicSession().getCompany().setDraftBackground(Boolean.TRUE);
-			report.getAcademicSession().getCompany().generate();
-			report.setBackgroundImage(report.getAcademicSession().getCompany().getBackgroundImage());
+			report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().setDraftBackground(Boolean.TRUE);
+			report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().generate();
+			report.setBackgroundImage(report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().getBackgroundImage());
 			report.setFooter("This Provisional Results Information is not an official document and is for information only.");
 		}
 		addPupilsDetails(report);
@@ -55,8 +57,8 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.setIsDraft(provisional);
 		report.setName("PRE-KINDERGARTEN REPORT SHEET");
-		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
-		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
+		report.getStudentClassroomSessionDivision().setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
+		report.getStudentClassroomSessionDivision().setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
 				
 		addPupilsDetails(report);
 		addSchoolAttendance(report);
@@ -119,8 +121,8 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.setIsDraft(provisional);
 		report.setName("KINDERGARTEN REPORT SHEET");
-		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
-		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
+		report.getStudentClassroomSessionDivision().setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
+		report.getStudentClassroomSessionDivision().setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
 				
 		addPupilsDetails(report);
 		addSchoolAttendance(report);
@@ -171,8 +173,8 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.setIsDraft(provisional);
 		report.setName("KINDERGARTEN REPORT SHEET");
-		report.setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
-		report.setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
+		report.getStudentClassroomSessionDivision().setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
+		report.getStudentClassroomSessionDivision().setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
 				
 		addPupilsDetails(report);
 		addSchoolAttendance(report);
@@ -216,18 +218,18 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	private static void addSubjectsTableColumnNames(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 15%","Test 2 15%","Exam 70%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
+		report.getStudentClassroomSessionDivision().addSubjectsTableColumnNames("No.","SUBJECTS","Test 1 15%","Test 2 15%","Exam 70%","TOTAL 100%","GRADE","RANK","OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
 	}
 	
 	private static void addPupilsDetails(StudentClassroomSessionDivisionReportTemplateFile report){
 		report.addLabelValues("PUPIL'S DETAILS",new String[][]{
-			{"Formname(s)", report.getStudent().getPerson().getLastnames()}
-			,{"Surname", report.getStudent().getPerson().getGlobalIdentifier().getName()}
-			,{"Date of birth", report.getStudent().getPerson().getGlobalIdentifier().getExistencePeriod().getFrom()}
-			,{"Place of birth", report.getStudent().getPerson().getGlobalIdentifier().getBirthLocation()}
-			,{"Admission No", report.getStudent().getGlobalIdentifier().getCode()}
-			,{"Class", report.getClassroomSessionDivision().getClassroomSession().getName()}
-			,{"Gender", report.getStudent().getPerson().getSex()}
+			{"Formname(s)", report.getStudentClassroomSessionDivision().getStudent().getPerson().getLastnames()}
+			,{"Surname", report.getStudentClassroomSessionDivision().getStudent().getPerson().getGlobalIdentifier().getName()}
+			,{"Date of birth", report.getStudentClassroomSessionDivision().getStudent().getPerson().getGlobalIdentifier().getExistencePeriod().getFrom()}
+			,{"Place of birth", report.getStudentClassroomSessionDivision().getStudent().getPerson().getGlobalIdentifier().getBirthLocation()}
+			,{"Admission No", report.getStudentClassroomSessionDivision().getStudent().getGlobalIdentifier().getCode()}
+			,{"Class", report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getName()}
+			,{"Gender", report.getStudentClassroomSessionDivision().getStudent().getPerson().getSex()}
 			});
 	}
 	
@@ -245,7 +247,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		report.addLabelValues("OVERALL RESULT",new String[][]{
 			{"AVERAGE","78.15"}
 			,{"GRADE","A+"}
-			,{"RANK","24"}
+			,{"RANK","24th"}
 			});
 	}
 	
@@ -322,7 +324,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	
 	public static void main(String[] args) {
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> reports = createStudentClassroomSessionDivisionReportsForOtherGrade();
-		System.out.println("IesaSampleData.main() : "+reports.iterator().next().getClassroomSessionDivisionSubjects().size());
+		System.out.println("IesaSampleData.main() : "+reports.iterator().next().getStudentClassroomSessionDivision().getClassroomSessionDivisionSubjects().size());
 	}
 	
 }

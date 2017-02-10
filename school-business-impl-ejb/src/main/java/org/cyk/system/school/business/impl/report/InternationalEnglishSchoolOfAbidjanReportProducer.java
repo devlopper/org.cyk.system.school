@@ -102,15 +102,15 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducer extends Abstract
 				effortLevelsIntervalCollectionCode = SchoolConstant.Code.IntervalCollection.BEHAVIOUR_SECONDARY_STUDENT;
 			}
 			schoolCommunicationMetricCollectionCode = SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT;
-			report.addSubjectsTableColumnNames("No.","SUBJECTS","TEST 1 "+testCoef,"TEST 2 "+testCoef,"EXAM  "+examCoef,"TOTAL 100%","GRADE","RANK"
+			report.getStudentClassroomSessionDivision().addSubjectsTableColumnNames("No.","SUBJECTS","TEST 1 "+testCoef,"TEST 2 "+testCoef,"EXAM  "+examCoef,"TOTAL 100%","GRADE","RANK"
 					,"OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
 			
 			labelValueCollectionReport = new LabelValueCollectionReport();
 			labelValueCollectionReport.setName("OVERALL RESULT");
-			labelValueCollectionReport.add("AVERAGE",report.getAverage());
-			labelValueCollectionReport.add("GRADE",report.getAverageScale());
+			labelValueCollectionReport.add("AVERAGE",report.getStudentClassroomSessionDivision().getAverage());
+			labelValueCollectionReport.add("GRADE",/*report.getStudentClassroomSessionDivision().getAverageScale()*/"TO COMPUTE");
 			if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentRankable()))
-				labelValueCollectionReport.add("RANK",report.getRank());
+				labelValueCollectionReport.add("RANK",report.getStudentClassroomSessionDivision().getRank());
 			report.addLabelValueCollection(labelValueCollectionReport);
 			
 			addMetricCollection(report, ((StudentClassroomSessionDivision)report.getSource()), effortLevelsMetricCollectionCode);
@@ -140,7 +140,8 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducer extends Abstract
 	
 	protected void addPupilsDetails(StudentClassroomSessionDivisionReportTemplateFile report){
 		addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_STUDENT
-				,new Derive.Adapter.Default().addInputs(report,report.getStudent(),report.getClassroomSessionDivision().getClassroomSession()));
+				,new Derive.Adapter.Default().addInputs(report,report.getStudentClassroomSessionDivision().getStudent()
+						,report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession()));
 	}
 	
 	protected void addAttednanceDetails(StudentClassroomSessionDivisionReportTemplateFile report,StudentClassroomSessionDivision studentClassroomSessionDivision
@@ -184,9 +185,9 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducer extends Abstract
 			}
 			
 		}
-		report.getClassroomSessionDivision().setSource(studentClassroomSessionDivision.getClassroomSessionDivision());
+		report.getStudentClassroomSessionDivision().getClassroomSessionDivision().setSource(studentClassroomSessionDivision.getClassroomSessionDivision());
 		addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_SCHOOL_COMMUNICATION
-				, new Derive.Adapter.Default().addInputs(report,report.getClassroomSessionDivision()),Boolean.FALSE);
+				, new Derive.Adapter.Default().addInputs(report,report.getStudentClassroomSessionDivision().getClassroomSessionDivision()),Boolean.FALSE);
 	}
 
 }

@@ -111,6 +111,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			,CreateReportFileArguments<StudentClassroomSessionDivision> createReportFileArguments) {
 		StudentClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(StudentClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
 		
+		r.setSource(studentClassroomSessionDivision);
+		
 		Student student = studentClassroomSessionDivision.getStudent();
 		StudentClassroomSessionDivision s = studentClassroomSessionDivision;
 		ClassroomSessionDivision csd = s.getClassroomSessionDivision();
@@ -118,7 +120,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		AcademicSession as = s.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
 		NodeResults results = csd.getResults();
 		
-		r.getAcademicSession().setFromDateToDate(inject(TimeBusiness.class).formatPeriodFromTo(as.getExistencePeriod()));
+		//r.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().setSource(cs);
+		r.getStudentClassroomSessionDivision().getAcademicSession().setFromDateToDate(inject(TimeBusiness.class).formatPeriodFromTo(as.getExistencePeriod()));
 		
 		ReportTemplate reportTemplate = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate();
 		if(reportTemplate.getHeaderImage()!=null)
@@ -128,46 +131,47 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			r.setBackgroundImage(inject(FileBusiness.class).findInputStream(backgroundImageFile));
 		
 		inject(ContactCollectionBusiness.class).load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
-		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getAcademicSession().getCompany().getContactCollection());
+		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getStudentClassroomSessionDivision().getAcademicSession().getCompany().getContactCollection());
 		if(cs.getCoordinator()!=null)
-			r.getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
+			r.getStudentClassroomSessionDivision().getCommentator().getPerson().setNames(cs.getCoordinator().getPerson().getNames());
 		
-		r.getClassroomSessionDivision().getClassroomSession().getGlobalIdentifier().setName(formatUsingBusiness(cs));
+		r.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getGlobalIdentifier().setName(formatUsingBusiness(cs));
 		
 		//r.getClassroomSessionDivision().setName(formatUsingBusiness(csd));
-		r.getClassroomSessionDivision().setAverage(format(results.getAverage()));
-		r.getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
-		r.getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
-		r.getClassroomSessionDivision().setNumberOfStudents(inject(NumberBusiness.class).format(results.getNumberOfStudent()));
-		r.getClassroomSessionDivision().setOpenedTime(format(inject(ClassroomSessionBusiness.class)
+		r.getStudentClassroomSessionDivision().getClassroomSessionDivision().setAverage(format(results.getAverage()));
+		r.getStudentClassroomSessionDivision().getClassroomSessionDivision().setHighestAverage(format(results.getAverageHighest()));
+		r.getStudentClassroomSessionDivision().getClassroomSessionDivision().setLowestAverage(format(results.getAverageLowest()));
+		r.getStudentClassroomSessionDivision().getClassroomSessionDivision().setNumberOfStudents(inject(NumberBusiness.class).format(results.getNumberOfStudent()));
+		r.getStudentClassroomSessionDivision().getClassroomSessionDivision().setOpenedTime(format(inject(ClassroomSessionBusiness.class)
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getExistencePeriod().getNumberOfMillisecond().get())));
 		
-		set(student, r.getStudent());
+		set(student, r.getStudentClassroomSessionDivision().getStudent());
 		
 		if(cs.getCoordinator()!=null)
-			set(cs.getCoordinator(), r.getCommentator());
+			set(cs.getCoordinator(), r.getStudentClassroomSessionDivision().getCommentator());
 		
 		if(as.getSchool().getOwnedCompany().getCompany().getSigner()!=null)
 			set(as.getSchool().getOwnedCompany().getCompany().getSigner(), r.getSigner());
 		
-		r.setComments(s.getResults().getAppreciation());
+		r.getStudentClassroomSessionDivision().setComments(s.getResults().getAppreciation());
 		
 		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired()) && s.getResults().getEvaluationSort().getAverage().getValue()!=null){
-			r.setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
-			r.setAverageScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
-			r.setRank(inject(MathematicsBusiness.class).format(s.getResults().getEvaluationSort().getRank()));
+			r.getStudentClassroomSessionDivision().setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
+			//TODO a function to be used in jasper report
+			//r.getStudentClassroomSessionDivision().setAverageScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
+			r.getStudentClassroomSessionDivision().setRank(inject(MathematicsBusiness.class).format(s.getResults().getEvaluationSort().getRank()));
 			
-			r.setAveragePromotionScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAveragePromotedInterval()));
+			r.getStudentClassroomSessionDivision().setAveragePromotionScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAveragePromotedInterval()));
 			
-			r.setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
-			r.setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
-			r.setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
+			r.getStudentClassroomSessionDivision().setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
+			r.getStudentClassroomSessionDivision().setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
+			r.getStudentClassroomSessionDivision().setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
 		}
 		
 		r.setName(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.title",new Object[]{csd.getUiString()}));
-		r.setSubjectsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.subject"));
-		r.setCommentsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.comments"));
-		r.setSchoolStampBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.schoolstamp"));
+		r.getStudentClassroomSessionDivision().setSubjectsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.subject"));
+		r.getStudentClassroomSessionDivision().setCommentsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.comments"));
+		r.getStudentClassroomSessionDivision().setSchoolStampBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.schoolstamp"));
 		
 		if(s.getResults().getEvaluationSort().getRank()==null)
 			;
@@ -192,16 +196,15 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			classroomSessionDivisionSubjectReport.getGlobalIdentifier().setName(studentSubject.getClassroomSessionDivisionSubject().getSubject().getName());
 			classroomSessionDivisionSubjectReport.setNumberOfStudents(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getNumberOfStudent()):NOT_APPLICABLE);
 			//classroomSessionDivisionSubjectReport.getAverageScale().setSource(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval());
-			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r,classroomSessionDivisionSubjectReport);
+			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r.getStudentClassroomSessionDivision(),classroomSessionDivisionSubjectReport);
 			
-			r.getSubjects().add(sr);
-			
+			r.getStudentClassroomSessionDivision().getSubjects().add(sr);
 			
 			for(int i=0;i<evaluationTypes.size();i++){
 				sr.getMarks().add(NOT_APPLICABLE);
 				if(Boolean.TRUE.equals(SchoolConstant.Configuration.Evaluation.SUM_ON_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT)){
-					r.getTempMarkTotals().add(BigDecimal.ZERO);
-					r.getMarkTotals().add(NOT_APPLICABLE);
+					r.getStudentClassroomSessionDivision().getTempMarkTotals().add(BigDecimal.ZERO);
+					r.getStudentClassroomSessionDivision().getMarkTotals().add(NOT_APPLICABLE);
 				}
 			}
 			
@@ -226,8 +229,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		if(Boolean.TRUE.equals(SchoolConstant.Configuration.Evaluation.SUM_ON_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT)){
 			for(int i=0;i<evaluationTypes.size();i++)
-				if(i < r.getMarkTotals().size())
-					r.getMarkTotals().set(i,format(r.getTempMarkTotals().get(i)));
+				if(i < r.getStudentClassroomSessionDivision().getMarkTotals().size())
+					r.getStudentClassroomSessionDivision().getMarkTotals().set(i,format(r.getStudentClassroomSessionDivision().getTempMarkTotals().get(i)));
 		}
 		
 		
@@ -355,15 +358,16 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					effortLevelsIntervalCollectionCode = SchoolConstant.Code.IntervalCollection.BEHAVIOUR_SECONDARY_STUDENT;
 				}
 				schoolCommunicationMetricCollectionCode = SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT;
-				report.addSubjectsTableColumnNames("No.","SUBJECTS","TEST 1 "+testCoef,"TEST 2 "+testCoef,"EXAM  "+examCoef,"TOTAL 100%","GRADE","RANK"
+				report.getStudentClassroomSessionDivision().addSubjectsTableColumnNames("No.","SUBJECTS","TEST 1 "+testCoef,"TEST 2 "+testCoef,"EXAM  "+examCoef,"TOTAL 100%","GRADE","RANK"
 						,"OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
 				
 				labelValueCollectionReport = new LabelValueCollectionReport();
 				labelValueCollectionReport.setName("OVERALL RESULT");
-				labelValueCollectionReport.add("AVERAGE",report.getAverage());
-				labelValueCollectionReport.add("GRADE",report.getAverageScale());
+				labelValueCollectionReport.add("AVERAGE",report.getStudentClassroomSessionDivision().getAverage());
+				//TODO a function to be used in jasper report
+				//labelValueCollectionReport.add("GRADE",report.getAverageScale());
 				if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentRankable()))
-					labelValueCollectionReport.add("RANK",report.getRank());
+					labelValueCollectionReport.add("RANK",report.getStudentClassroomSessionDivision().getRank());
 				report.addLabelValueCollection(labelValueCollectionReport);
 				
 				addMetricCollection(report, ((StudentClassroomSessionDivision)report.getSource()), effortLevelsMetricCollectionCode);
@@ -393,7 +397,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		protected void addPupilsDetails(StudentClassroomSessionDivisionReportTemplateFile report){
 			addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_STUDENT
-					,new Derive.Adapter.Default().addInputs(report,report.getStudent(),report.getClassroomSessionDivision().getClassroomSession()));
+					,new Derive.Adapter.Default().addInputs(report,report.getStudentClassroomSessionDivision().getStudent()
+							,report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession()));
 		}
 		
 		protected void addAttednanceDetails(StudentClassroomSessionDivisionReportTemplateFile report,StudentClassroomSessionDivision studentClassroomSessionDivision
@@ -437,9 +442,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				}
 				
 			}
-			report.getClassroomSessionDivision().setSource(studentClassroomSessionDivision.getClassroomSessionDivision());
+			report.getStudentClassroomSessionDivision().getClassroomSessionDivision().setSource(studentClassroomSessionDivision.getClassroomSessionDivision());
 			addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_SCHOOL_COMMUNICATION
-					, new Derive.Adapter.Default().addInputs(report,report.getClassroomSessionDivision()),Boolean.FALSE);
+					, new Derive.Adapter.Default().addInputs(report,report.getStudentClassroomSessionDivision().getClassroomSessionDivision()),Boolean.FALSE);
 		}
 		
 	}
