@@ -1,8 +1,6 @@
 package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 
@@ -17,12 +15,14 @@ public class StudentClassroomSessionDivisionReportTemplateFile extends AbstractR
 	
 	private StudentClassroomSessionDivisionReport studentClassroomSessionDivision = new StudentClassroomSessionDivisionReport();
 	
-	private Collection<StudentClassroomSessionDivisionReport> previousStudentClassroomSessionDivision = new ArrayList<>();
-	
 	@Override
 	public void generate() {
 		super.generate();
 		studentClassroomSessionDivision.generate();
+		StudentClassroomSessionDivisionReport previousStudentClassroomSessionDivision = new StudentClassroomSessionDivisionReport();
+		previousStudentClassroomSessionDivision.generate();
+		studentClassroomSessionDivision.setPrevious(previousStudentClassroomSessionDivision);
+		previousStudentClassroomSessionDivision.setNext(studentClassroomSessionDivision);
 	}
 	
 }

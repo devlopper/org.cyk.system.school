@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,7 @@ import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.api.value.ValueBusiness.Derive;
 import org.cyk.system.root.business.impl.NumberStringFormatter;
+import org.cyk.system.root.model.AbstractCollectionItem;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
@@ -42,7 +44,9 @@ import org.cyk.system.school.model.actor.StudentReportTemplateFile;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
@@ -52,6 +56,7 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
@@ -111,7 +116,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			,CreateReportFileArguments<StudentClassroomSessionDivision> createReportFileArguments) {
 		StudentClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(StudentClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
 		
-		r.setSource(studentClassroomSessionDivision);
+		r.getStudentClassroomSessionDivision().setSource(studentClassroomSessionDivision);//TODO all following code should be go into setSource
 		
 		Student student = studentClassroomSessionDivision.getStudent();
 		StudentClassroomSessionDivision s = studentClassroomSessionDivision;
@@ -154,11 +159,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			set(as.getSchool().getOwnedCompany().getCompany().getSigner(), r.getSigner());
 		
 		r.getStudentClassroomSessionDivision().setComments(s.getResults().getAppreciation());
-		
-		if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired()) && s.getResults().getEvaluationSort().getAverage().getValue()!=null){
+		r.getStudentClassroomSessionDivision().setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
+		/*if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired()) && s.getResults().getEvaluationSort().getAverage().getValue()!=null){
 			r.getStudentClassroomSessionDivision().setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
 			//TODO a function to be used in jasper report
 			//r.getStudentClassroomSessionDivision().setAverageScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
+			r.getStudentClassroomSessionDivision().getAverageScale().setSource(s.getResults().getEvaluationSort().getAverageAppreciatedInterval());
 			r.getStudentClassroomSessionDivision().setRank(inject(MathematicsBusiness.class).format(s.getResults().getEvaluationSort().getRank()));
 			
 			r.getStudentClassroomSessionDivision().setAveragePromotionScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAveragePromotedInterval()));
@@ -166,7 +172,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			r.getStudentClassroomSessionDivision().setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
 			r.getStudentClassroomSessionDivision().setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
 			r.getStudentClassroomSessionDivision().setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
-		}
+			
+		}*/
 		
 		r.setName(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.title",new Object[]{csd.getUiString()}));
 		r.getStudentClassroomSessionDivision().setSubjectsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.subject"));
@@ -361,14 +368,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				report.getStudentClassroomSessionDivision().addSubjectsTableColumnNames("No.","SUBJECTS","TEST 1 "+testCoef,"TEST 2 "+testCoef,"EXAM  "+examCoef,"TOTAL 100%","GRADE","RANK"
 						,"OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
 				
-				labelValueCollectionReport = new LabelValueCollectionReport();
-				labelValueCollectionReport.setName("OVERALL RESULT");
-				labelValueCollectionReport.add("AVERAGE",report.getStudentClassroomSessionDivision().getAverage());
-				//TODO a function to be used in jasper report
-				//labelValueCollectionReport.add("GRADE",report.getAverageScale());
-				if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentRankable()))
-					labelValueCollectionReport.add("RANK",report.getStudentClassroomSessionDivision().getRank());
-				report.addLabelValueCollection(labelValueCollectionReport);
+				addOverallResult(report);
 				
 				addMetricCollection(report, ((StudentClassroomSessionDivision)report.getSource()), effortLevelsMetricCollectionCode);
 				report.getCurrentLabelValueCollection().setName(StringUtils.upperCase(report.getCurrentLabelValueCollection().getName()));
@@ -392,6 +392,24 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 						,inject(ValuePropertiesDao.class).read(SchoolConstant.Code.ValueProperties.METRIC_COLLECTION_VALUE_KINDERGARTEN_K1_STUDENT),Boolean.TRUE,Boolean.FALSE,null);
 			}
 			addSchoolCommunications(report, studentClassroomSessionDivision,schoolCommunicationMetricCollectionCode);
+			
+			CommonNodeInformations commonNodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
+					((StudentClassroomSessionDivision)report.getStudentClassroomSessionDivision().getSource()).getClassroomSessionDivision().getClassroomSession());
+			
+			Collection<StudentClassroomSessionDivisionReport> previousStudentClassroomSessionDivisionReports = new ArrayList<>();
+			for(int orderNumber = commonNodeInformations.getClassroomSessionDivisionOrderNumberInterval().getLow().getValue().intValue() ; 
+					orderNumber < studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber() ; orderNumber++){
+				StudentClassroomSessionDivisionReport previousStudentClassroomSessionDivisionReport = new StudentClassroomSessionDivisionReport();
+				previousStudentClassroomSessionDivisionReport.setSource(inject(StudentClassroomSessionDivisionDao.class)
+						.readByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
+								, inject(ClassroomSessionDivisionDao.class).readByClassroomSessionByOrderNumber(studentClassroomSessionDivision
+										.getClassroomSessionDivision().getClassroomSession(), new Long(orderNumber))));
+				report.getStudentClassroomSessionDivision().setPrevious(previousStudentClassroomSessionDivisionReport);
+				previousStudentClassroomSessionDivisionReports.add(previousStudentClassroomSessionDivisionReport);
+			}
+			
+			addPreviousResult(report,previousStudentClassroomSessionDivisionReports);
+			
 			return report;
 		}
 		
@@ -409,6 +427,46 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 									.getClassroomSession()).getAttendanceTimeDivisionType()));
 			addMetricCollection(report, studentClassroomSessionDivision, metricCollectionCode,new Derive.Adapter.Default().addInputs(report
 					,studentClassroomSessionDivision.getClassroomSessionDivision()),Boolean.FALSE);
+			
+		}
+		
+		protected void addOverallResult(StudentClassroomSessionDivisionReportTemplateFile report){
+			report.addLabelValues("OVERALL RESULT", new String[][]{
+				{"AVERAGE",report.getStudentClassroomSessionDivision().getAverage()}
+				,{"GRADE",RootConstant.Code.getRelativeCode((AbstractCollectionItem<?>) report.getStudentClassroomSessionDivision().getAverageScale().getSource())}
+				,{"RANK",report.getStudentClassroomSessionDivision().getRank()}
+			});
+		}
+		
+		protected void addPreviousResult(StudentClassroomSessionDivisionReportTemplateFile report,Collection<StudentClassroomSessionDivisionReport> studentClassroomSessionDivisions){
+			if(studentClassroomSessionDivisions==null || studentClassroomSessionDivisions.isEmpty())
+				return;
+			List<String> averages = new ArrayList<>();
+			averages.add("AVERAGE");
+			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
+				averages.add(studentClassroomSessionDivision.getAverage());
+			
+			List<String> grades = new ArrayList<>();
+			grades.add("GRADE");
+			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
+				grades.add(RootConstant.Code.getRelativeCode((AbstractCollectionItem<?>) studentClassroomSessionDivision.getAverageScale().getSource()));
+			
+			List<String> ranks = new ArrayList<>();
+			ranks.add("RANK");
+			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
+				ranks.add(studentClassroomSessionDivision.getRank());
+			
+			List<String> trimesters = new ArrayList<>();
+			trimesters.add("TRIMESTER");
+			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
+				trimesters.add(((StudentClassroomSessionDivision)studentClassroomSessionDivision.getSource()).getClassroomSessionDivision().getOrderNumber().toString());
+			
+			report.addLabelValues("PREVIOUS RESULTS", new String[][]{
+				averages.toArray(new String[]{})
+				,grades.toArray(new String[]{})
+				,ranks.toArray(new String[]{})
+				,trimesters.toArray(new String[]{})
+			});
 			
 		}
 		

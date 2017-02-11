@@ -33,6 +33,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		addEffortLevels(report);
 		addSchoolCommunications(report,Boolean.FALSE);
 		addSubjectsTableColumnNames(report);
+		addPreviousOverallResult(report);
 		return collection;
 	}
 	
@@ -248,6 +249,15 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 			{"AVERAGE","78.15"}
 			,{"GRADE","A+"}
 			,{"RANK","24th"}
+			});
+	}
+	
+	private static void addPreviousOverallResult(StudentClassroomSessionDivisionReportTemplateFile report){
+		report.addLabelValues("PREVIOUS RESULTS",new String[][]{	
+			{"AVERAGE","1","2"}
+			,{"GRADE","A","B"}
+			,{"RANK","3th","4th"}
+			,{"TIMESTER","1","2"}
 			});
 	}
 	

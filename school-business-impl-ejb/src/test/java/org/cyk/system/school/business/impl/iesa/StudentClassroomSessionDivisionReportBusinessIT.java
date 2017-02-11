@@ -206,6 +206,8 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     		//,{SchoolConstant.Code.LevelName.G1,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
     		//,{SchoolConstant.Code.LevelName.G8,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
     		/*,*/{SchoolConstant.Code.LevelName.G9,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
+    		,{SchoolConstant.Code.LevelName.G9,SchoolConstant.Code.ClassroomSessionSuffix.A,2l}
+    		,{SchoolConstant.Code.LevelName.G9,SchoolConstant.Code.ClassroomSessionSuffix.A,3l}
     	}, Boolean.TRUE, Boolean.FALSE);
     	
     }

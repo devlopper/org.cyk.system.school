@@ -7,8 +7,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.party.person.ActorReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
+import org.cyk.utility.common.formatter.NumberFormatter;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +41,32 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 	public StudentClassroomSessionDivisionReport(ClassroomSessionDivisionReport classroomSessionDivision) {
 		super();
 		this.classroomSessionDivision = classroomSessionDivision;
+	}
+	
+	@Override
+	public void setSource(Object source) {
+		super.setSource(source);
+		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) source;
+		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
+				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null){
+			
+			setAverage(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()));
+			getAverageScale().setSource(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverageAppreciatedInterval());
+			
+			NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValue()
+					,null);
+			numberFormatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
+			numberFormatter.setIsAppendExaequo(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getExaequo());
+			numberFormatter.setIsOrdinal(Boolean.TRUE);
+			setRank(numberFormatter.execute());
+			
+			setAveragePromotionScale(RootConstant.Code.getRelativeCode(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()));
+			
+			setTotalCoefficient(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getDivisor()));
+			setTotalAverage(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getDividend()));
+			setTotalAverageCoefficiented(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getDividend()));
+		}
+		
 	}
 	
 	@Override

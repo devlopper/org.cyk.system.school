@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cyk.system.root.model.file.report.AbstractIdentifiableReport;
 import org.cyk.system.root.model.mathematics.IntervalReport;
 import org.cyk.system.root.model.party.person.ActorReport;
-import org.cyk.utility.common.generator.AbstractGeneratable;
 import org.cyk.utility.common.generator.RandomDataProvider;
 
 import lombok.Getter;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
-public abstract class AbstractStudentNodeReport<NODE> extends AbstractGeneratable<NODE> implements Serializable {
+public abstract class AbstractStudentNodeReport<NODE> extends AbstractIdentifiableReport<NODE> implements Serializable {
 
 	private static final long serialVersionUID = 7672451415743549818L;
 
