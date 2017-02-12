@@ -12,11 +12,11 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 
 	private static final long serialVersionUID = -1887987316565799879L;
 	
-	protected static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForOtherGrade__(Boolean provisional){
+	protected static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForOtherGrade__(Long classroomSessionDivisionOrderNumber,Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.setIsDraft(provisional);
-		report.setName("G1-G12 REPORT SHEET");
+		report.setName(classroomSessionDivisionOrderNumber+" TERM - G1-G12 REPORT SHEET");
 		report.getStudentClassroomSessionDivision().getClassroomSessionDivision().setAverage("12");
 		if(Boolean.TRUE.equals(report.getIsDraft())){
 			report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().setDraftBackground(Boolean.TRUE);
@@ -33,16 +33,32 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		addEffortLevels(report);
 		addSchoolCommunications(report,Boolean.FALSE);
 		addSubjectsTableColumnNames(report);
-		addPreviousOverallResult(report);
+		addPreviousOverallResult(classroomSessionDivisionOrderNumber,report);
 		return collection;
 	}
 	
-	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForOtherGrade(){
-		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(Boolean.FALSE);
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createFirstTermStudentClassroomSessionDivisionReportsForOtherGrade(){
+		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(1l,Boolean.FALSE);
 	}
 	
-	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionProvisionalReportsForOtherGrade(){
-		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(Boolean.TRUE);
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createSecondTermStudentClassroomSessionDivisionReportsForOtherGrade(){
+		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(2l,Boolean.FALSE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createThirdTermStudentClassroomSessionDivisionReportsForOtherGrade(){
+		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(3l,Boolean.FALSE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createFirstStudentClassroomSessionDivisionProvisionalReportsForOtherGrade(){
+		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(1l,Boolean.TRUE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createSecondStudentClassroomSessionDivisionProvisionalReportsForOtherGrade(){
+		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(2l,Boolean.TRUE);
+	}
+	
+	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createThirdStudentClassroomSessionDivisionProvisionalReportsForOtherGrade(){
+		return __createStudentClassroomSessionDivisionReportsForOtherGrade__(3l,Boolean.TRUE);
 	}
 	
 	public static Collection<StudentClassroomSessionDivisionReportTemplateFile> createStudentClassroomSessionDivisionReportsForPreKinderGarten(){
@@ -252,13 +268,14 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 			});
 	}
 	
-	private static void addPreviousOverallResult(StudentClassroomSessionDivisionReportTemplateFile report){
-		report.addLabelValues("PREVIOUS RESULTS",new String[][]{	
-			{"AVERAGE","1","2"}
-			,{"GRADE","A","B"}
-			,{"RANK","3th","4th"}
-			,{"TIMESTER","1","2"}
-			});
+	private static void addPreviousOverallResult(Long classroomSessionDivisionOrderNumber,StudentClassroomSessionDivisionReportTemplateFile report){
+		if(classroomSessionDivisionOrderNumber>1)
+			report.addLabelValues("PREVIOUS RESULTS",new String[][]{	
+				{"AVERAGE","42",classroomSessionDivisionOrderNumber > 2 ? "55" : null}
+				,{"GRADE","E",classroomSessionDivisionOrderNumber > 2 ? "B" : null}
+				,{"RANK","3th",classroomSessionDivisionOrderNumber > 2 ? "4th" : null}
+				,{"TRIMESTER","1",classroomSessionDivisionOrderNumber > 2 ? "2" : null}
+				});
 	}
 	
 	private static void addGradingScale(StudentClassroomSessionDivisionReportTemplateFile report){
@@ -333,7 +350,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	public static void main(String[] args) {
-		Collection<StudentClassroomSessionDivisionReportTemplateFile> reports = createStudentClassroomSessionDivisionReportsForOtherGrade();
+		Collection<StudentClassroomSessionDivisionReportTemplateFile> reports = createFirstTermStudentClassroomSessionDivisionReportsForOtherGrade();
 		System.out.println("IesaSampleData.main() : "+reports.iterator().next().getStudentClassroomSessionDivision().getClassroomSessionDivisionSubjects().size());
 	}
 	
