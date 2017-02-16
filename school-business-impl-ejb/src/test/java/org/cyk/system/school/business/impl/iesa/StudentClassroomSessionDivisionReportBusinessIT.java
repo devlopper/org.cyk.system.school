@@ -198,7 +198,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     		,1l}}, Boolean.TRUE, Boolean.FALSE);
     	*/
     	
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(new Object[][]{
+    	Object[][] objects = new Object[][]{
     		//{SchoolConstant.Code.LevelName.PK,null,1l}
     		//,{SchoolConstant.Code.LevelName.K1,null,1l}
     		//,{SchoolConstant.Code.LevelName.K2,null,1l}
@@ -208,7 +208,9 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     		/*,*/{SchoolConstant.Code.LevelName.G9,SchoolConstant.Code.ClassroomSessionSuffix.A,1l}
     		,{SchoolConstant.Code.LevelName.G9,SchoolConstant.Code.ClassroomSessionSuffix.A,2l}
     		,{SchoolConstant.Code.LevelName.G9,SchoolConstant.Code.ClassroomSessionSuffix.A,3l}
-    	}, Boolean.TRUE, Boolean.FALSE);
+    	};
+    	
+    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport(objects, new Boolean[]{Boolean.TRUE,Boolean.FALSE},Boolean.TRUE, Boolean.FALSE);
     	
     }
         

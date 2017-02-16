@@ -196,7 +196,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		createSubjectEvaluation(evaluationTypeBusiness.findByClassroomSessionDivisionSubjectByEvaluationType(subject, evaluationType),details);
 	}
 	
-	public void computeStudentClassroomSessionDivisionResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
+	public void computeStudentClassroomSessionDivisionResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Set<Integer> classroomSessionDivisionIndexes,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean[] isDraft,Boolean createFileOnDisk){
 		/*if(Boolean.TRUE.equals(computeEvaluationResults)){
 			System.out.println("Computing evaluation results of "+classroomSessionDivisions.size()+" classroom session divisions");
 			studentClassroomSessionDivisionBusiness.updateAverage(classroomSessionDivisions, null);
@@ -210,47 +210,49 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		}
 		*/
 		if(Boolean.TRUE.equals(buildReportFile)){
-			System.out.println("Building report of "+classroomSessionDivisions.size()+" classroom session divisions");
-			CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<StudentClassroomSessionDivision>(null)
-					.setIsDraft(Boolean.FALSE);
-			studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),reportArgumentsBuilder,new ServiceCallArguments());
-			
-			if(Boolean.TRUE.equals(createFileOnDisk)){
-				//Collection<File> files = new ArrayList<>();
-				for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
-					classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).find(classroomSessionDivision.getIdentifier());
-					if(classroomSessionDivisionIndexes==null || classroomSessionDivisionIndexes.isEmpty()
-						|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getOrderNumber().intValue())) ){
-						for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
-							studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
-							/*if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class)
-									.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
-											, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
-							*/	
-								//assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
-								System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession());
-								//writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
-								String fileRepresentationTyeCode = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
-										.getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate().getCode();
-								FileRepresentationType fileRepresentationType = inject(FileRepresentationTypeDao.class).read(fileRepresentationTyeCode);
-								write(inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision).iterator().next());
-								//files.add(studentClassroomSessionDivision.getResults().getReport());	
-							//}
+			for(Boolean draft : isDraft){
+				System.out.println("Building ("+(draft?"draft":"final")+") report of "+classroomSessionDivisions.size()+" classroom session divisions");
+				CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<StudentClassroomSessionDivision>(null)
+						.setIsDraft(draft);
+				studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),reportArgumentsBuilder,new ServiceCallArguments());
+				
+				if(Boolean.TRUE.equals(createFileOnDisk)){
+					//Collection<File> files = new ArrayList<>();
+					for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
+						classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).find(classroomSessionDivision.getIdentifier());
+						if(classroomSessionDivisionIndexes==null || classroomSessionDivisionIndexes.isEmpty()
+							|| (classroomSessionDivisionIndexes.contains(classroomSessionDivision.getOrderNumber().intValue())) ){
+							for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisionBusiness.findByClassroomSessionDivision(classroomSessionDivision)){
+								studentClassroomSessionDivision = studentClassroomSessionDivisionBusiness.find(studentClassroomSessionDivision.getIdentifier());
+								/*if( (studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired() && !inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class)
+										.findByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent()
+												, studentClassroomSessionDivision.getClassroomSessionDivision()).isEmpty()) || !studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()){
+								*/	
+									//assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
+									System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession());
+									//writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
+									String fileRepresentationTyeCode = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
+											.getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate().getCode();
+									FileRepresentationType fileRepresentationType = inject(FileRepresentationTypeDao.class).read(fileRepresentationTyeCode);
+									write(inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision).iterator().next());
+									//files.add(studentClassroomSessionDivision.getResults().getReport());	
+								//}
+							}
 						}
 					}
-				}
-				//writeStream(inject(FileBusiness.class).merge(files, FileExtension.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
-	    	}
+					//writeStream(inject(FileBusiness.class).merge(files, FileExtension.PDF), "allreports_"+System.currentTimeMillis(), "pdf");
+		    	}
+			}
 		}
 	}
-	public void computeStudentClassroomSessionDivisionResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
-		computeStudentClassroomSessionDivisionResults(classroomSessionDivisions, null,computeEvaluationResults,computeAttendanceResults,buildReportFile, createFileOnDisk);
+	public void computeStudentClassroomSessionDivisionResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean[] isDraft,Boolean createFileOnDisk){
+		computeStudentClassroomSessionDivisionResults(classroomSessionDivisions, null,computeEvaluationResults,computeAttendanceResults,buildReportFile,isDraft, createFileOnDisk);
 	}
-	public void computeStudentClassroomSessionDivisionResults(Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
-		computeStudentClassroomSessionDivisionResults(inject(ClassroomSessionDivisionBusiness.class).findAll(),computeEvaluationResults,computeAttendanceResults,buildReportFile,createFileOnDisk);
+	public void computeStudentClassroomSessionDivisionResults(Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean[] isDraft,Boolean createFileOnDisk){
+		computeStudentClassroomSessionDivisionResults(inject(ClassroomSessionDivisionBusiness.class).findAll(),computeEvaluationResults,computeAttendanceResults,buildReportFile,isDraft,createFileOnDisk);
 	}
-	public void createStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean createFileOnDisk){
-		computeStudentClassroomSessionDivisionResults(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,buildReportFile, createFileOnDisk);
+	public void createStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean buildReportFile,Boolean[] isDraft,Boolean createFileOnDisk){
+		computeStudentClassroomSessionDivisionResults(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,buildReportFile,isDraft, createFileOnDisk);
 	}
 	
 	public void randomValues(Collection<ClassroomSessionDivision> classroomSessionDivisions,Boolean metric,Boolean attendance,Boolean appreciation){
@@ -466,7 +468,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	/**/
 	
-	public void simulateStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Object[][] objects,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean generateReport,Boolean printReport,Boolean email){
+	public void simulateStudentClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision,Object[][] objects,Boolean computeEvaluationResults,Boolean computeAttendanceResults,Boolean generateReport,Boolean[] isDraft,Boolean printReport,Boolean email){
 		if(objects!=null)
 			for(Object[] object : objects){
 				createSubjectEvaluations((ClassroomSessionDivisionSubject)object[0],(String[][])object[1]);
@@ -477,14 +479,14 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     		//createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,generateReport,printReport);
     	}
     	
-    	computeStudentClassroomSessionDivisionResults(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,generateReport,printReport);
+    	computeStudentClassroomSessionDivisionResults(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,generateReport,isDraft,printReport);
     	
     	if(Boolean.TRUE.equals(email))
     		inject(StudentClassroomSessionDivisionBusiness.class).sendReportFileToEmail(inject(StudentClassroomSessionDivisionBusiness.class)
 				.findByClassroomSessionDivisions(Arrays.asList(classroomSessionDivision)));
 	}
 	
-	public void generateStudentClassroomSessionDivisionReport(Object[][] classroomSessionInfos,Boolean print,Boolean email){
+	public void generateStudentClassroomSessionDivisionReport(Object[][] classroomSessionInfos,Boolean[] isDraft,Boolean print,Boolean email){
 		for(Object[] classroomSessionInfo : classroomSessionInfos){
 			ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
 	    			.findByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber((String)classroomSessionInfo[0],(String)classroomSessionInfo[1]
@@ -497,14 +499,14 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = studentClassroomSessionDivisionSubjects.iterator().next();
 					objects = new Object[][]{
 			    		new Object[]{studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject(),new String[][]{
-		    	    		{studentClassroomSessionDivisionSubjects.iterator().next().getStudent().getCode(),RandomDataProvider.getInstance().randomInt(0, 100)+""
-		    	    			,RandomDataProvider.getInstance().randomInt(0, 100)+"",RandomDataProvider.getInstance().randomInt(0, 100)+""}
+		    	    		{studentClassroomSessionDivisionSubjects.iterator().next().getStudent().getCode(),RandomDataProvider.getInstance().randomInt(10, 20)+""
+		    	    			,RandomDataProvider.getInstance().randomInt(10, 20)+"",RandomDataProvider.getInstance().randomInt(10, 20)+""}
 		    	    	}}
 					};
 				}else
 					System.out.println("No StudentClassroomSessionDivisionSubject found. "+StringUtils.join(classroomSessionInfo,","));
 			}
-			simulateStudentClassroomSessionDivisionReport(classroomSessionDivision, objects, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, print, email);
+			simulateStudentClassroomSessionDivisionReport(classroomSessionDivision, objects, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE,isDraft, print, email);
 		}
 	}
 	
@@ -553,7 +555,8 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
     	for(ClassroomSession classroomSession : classroomSessions)
     		classroomSessionDivisions.addAll(inject(ClassroomSessionDivisionBusiness.class).findByClassroomSession(classroomSession));
     	System.out.println("Creating student classroom session reports");
-		computeStudentClassroomSessionDivisionResults(classroomSessionDivisions,parameters.getClassroomSessionDivisionIndexes(),parameters.getComputeEvaluationResults(),parameters.getComputeAttendanceResults(),parameters.getBuildReportFile(),Boolean.TRUE);
+		computeStudentClassroomSessionDivisionResults(classroomSessionDivisions,parameters.getClassroomSessionDivisionIndexes(),parameters.getComputeEvaluationResults(),parameters.getComputeAttendanceResults(),parameters.getBuildReportFile()
+				,parameters.getIsDraft(),Boolean.TRUE);
 		
 		System.out.println("Creating custom classroom session");
 		ClassroomSession customClassroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
@@ -593,7 +596,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		if(Boolean.TRUE.equals(parameters.getCreateStudentClassroomSessionDivisionReport())){
 			System.out.println("Creating student classroom session reports");
 			computeStudentClassroomSessionDivisionResults(customClassroomSessionDivisions,parameters.getClassroomSessionDivisionIndexes()
-					,parameters.getComputeEvaluationResults(),parameters.getComputeAttendanceResults(),parameters.getBuildReportFile(),Boolean.TRUE);
+					,parameters.getComputeEvaluationResults(),parameters.getComputeAttendanceResults(),parameters.getBuildReportFile(),parameters.getIsDraft(),Boolean.TRUE);
 		}
 		System.out.println("School business simulation ended");
 	}
@@ -610,6 +613,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		private Integer teacherCount=1,studentCount=1,generatedStudentInClassroomSessionCount=1,studentByClassroomSessionCount=1,
 			generatedClassroomSessionCountByLevel=1;
 		private Set<Integer> classroomSessionDivisionIndexes = new HashSet<>();
+		private Boolean[] isDraft = {Boolean.TRUE,Boolean.FALSE};
 		
 		private Boolean createStudentClassroomSessionForAllLevel,createStudentClassroomSessionDivisionReport=Boolean.TRUE;
 		private Boolean createFileOnDiskOfOneStudentClassroomSessionDivisionReportForAllLevel;

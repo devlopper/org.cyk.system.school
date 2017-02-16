@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="15" bottomMargin="0" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="226"/>
+	<property name="ireport.y" value="270"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -111,6 +111,9 @@
 		</field>
 		<field name="extendedValues" class="java.lang.String[]">
 			<fieldDescription><![CDATA[extendedValues]]></fieldDescription>
+		</field>
+		<field name="extendedValue1" class="java.lang.String">
+			<fieldDescription><![CDATA[extendedValue1]]></fieldDescription>
 		</field>
 	</subDataset>
 	<parameter name="CYK_TEXT_STATIC_FONT_NAME" class="java.lang.String" isForPrompting="false">
@@ -343,6 +346,10 @@
 				<reportElement x="0" y="0" width="555" height="50" uuid="7671994c-2614-45b2-a90c-606579c20643"/>
 				<textField>
 					<reportElement style="block header" x="0" y="0" width="555" height="12" uuid="505b9661-1cb9-415f-9a61-566c40d85f3a"/>
+					<box>
+						<leftPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
 					<textElement markup="styled">
 						<font size="9"/>
 					</textElement>
@@ -774,7 +781,7 @@
 									<textElement markup="styled">
 										<font fontName="Batang" size="11" isBold="true"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME}+ "'>" +org.apache.commons.lang3.StringUtils.defaultIfBlank($F{extendedValues}[0],"")+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME}+ "'>" +$F{extendedValue1}+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

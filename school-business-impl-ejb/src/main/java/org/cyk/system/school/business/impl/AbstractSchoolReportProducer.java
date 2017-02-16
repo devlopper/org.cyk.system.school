@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
+import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.file.ScriptBusiness;
@@ -115,7 +116,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	public StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision
 			,CreateReportFileArguments<StudentClassroomSessionDivision> createReportFileArguments) {
 		StudentClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(StudentClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
-		
 		r.getStudentClassroomSessionDivision().setSource(studentClassroomSessionDivision);//TODO all following code should be go into setSource
 		
 		Student student = studentClassroomSessionDivision.getStudent();
@@ -311,10 +311,30 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			addAttednanceDetails(report, studentClassroomSessionDivision, StringUtils.startsWith(levelNameCode, "G") ? 
 					SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT : SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT);
 			
-			arguments.getReportTemplate().getResultFileNamingScript().getInputs().clear();
-			arguments.getReportTemplate().getResultFileNamingScript().getInputs().put("studentClassroomSessionDivision", studentClassroomSessionDivision);
-			report.setName((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getResultFileNamingScript()));
-			arguments.setIdentifiableName(report.getName());
+			if(arguments.getReportTemplate().getNameScript()!=null){
+				arguments.getReportTemplate().getNameScript().getInputs().clear();
+				arguments.getReportTemplate().getNameScript().getInputs().put("studentClassroomSessionDivision", studentClassroomSessionDivision);
+				arguments.getReportTemplate().getNameScript().getInputs().put(RootConstant.Configuration.Script.FORMATTER_BUSINESS, inject(FormatterBusiness.class));
+				arguments.getReportTemplate().getNameScript().getInputs().put(RootConstant.Configuration.Script.IS_DRAFT,report.getIsDraft());
+				report.setName((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getNameScript()));
+			}
+			//arguments.setIdentifiableName(report.getName());
+			
+			if(arguments.getReportTemplate().getResultFileNamingScript()!=null){
+				arguments.getReportTemplate().getResultFileNamingScript().getInputs().clear();
+				arguments.getReportTemplate().getResultFileNamingScript().getInputs().put("studentClassroomSessionDivision", studentClassroomSessionDivision);
+				arguments.getReportTemplate().getResultFileNamingScript().getInputs().put(RootConstant.Configuration.Script.FORMATTER_BUSINESS, inject(FormatterBusiness.class));
+				arguments.getReportTemplate().getResultFileNamingScript().getInputs().put(RootConstant.Configuration.Script.IS_DRAFT,report.getIsDraft());
+				arguments.setIdentifiableName((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getResultFileNamingScript()));
+				//arguments.getFile().setName((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getResultFileNamingScript()));
+			}
+			
+			if(arguments.getReportTemplate().getFooterScript()!=null){
+				arguments.getReportTemplate().getFooterScript().getInputs().clear();
+				arguments.getReportTemplate().getFooterScript().getInputs().put("studentClassroomSessionDivision", studentClassroomSessionDivision);
+				arguments.getReportTemplate().getFooterScript().getInputs().put(RootConstant.Configuration.Script.IS_DRAFT,report.getIsDraft());
+				report.setFooter((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getFooterScript()));
+			}
 			/*
 			Collection<MetricCollectionIdentifiableGlobalIdentifier> metricCollectionIdentifiableGlobalIdentifiers = inject(MetricCollectionIdentifiableGlobalIdentifierDao.class)
 				.readByCriteria(new MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria().addIdentifiableGlobalIdentifier(studentClassroomSessionDivision
@@ -467,6 +487,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				,ranks.toArray(new String[]{})
 				,trimesters.toArray(new String[]{})
 			});
+			
 			
 		}
 		

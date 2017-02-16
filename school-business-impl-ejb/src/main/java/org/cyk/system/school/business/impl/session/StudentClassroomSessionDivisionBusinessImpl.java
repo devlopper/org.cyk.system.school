@@ -287,7 +287,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	public Collection<File> sendReportFileToEmail(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
+	public void sendReportFileToEmail(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		Collection<Notification> notifications = new ArrayList<>();
 		Collection<FileRepresentationType> fileRepresentationTypes = getStudentClassroomSessionDivisionResultsFileRepresentationTypes(studentClassroomSessionDivisions);
 
@@ -323,7 +323,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		});
 		
 		inject(MailBusiness.class).send(notifications,null,sendArguments);
-		return null;
 	}
 	
 	/**/
