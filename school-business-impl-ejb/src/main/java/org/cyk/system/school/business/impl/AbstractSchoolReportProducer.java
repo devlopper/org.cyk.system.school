@@ -128,6 +128,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		//r.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().setSource(cs);
 		r.getStudentClassroomSessionDivision().getAcademicSession().setFromDateToDate(inject(TimeBusiness.class).formatPeriodFromTo(as.getExistencePeriod()));
 		
+		//TODO Not required anymore because in super 
 		ReportTemplate reportTemplate = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate();
 		if(reportTemplate.getHeaderImage()!=null)
 			r.setHeaderImage(inject(FileBusiness.class).findInputStream(reportTemplate.getHeaderImage()));
