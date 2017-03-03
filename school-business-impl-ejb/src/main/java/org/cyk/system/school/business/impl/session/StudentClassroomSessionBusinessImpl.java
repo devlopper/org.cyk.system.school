@@ -9,6 +9,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.company.business.api.sale.SaleBusiness;
+import org.cyk.system.company.business.api.sale.SaleIdentifiableGlobalIdentifierBusiness;
+import org.cyk.system.company.model.sale.Sale;
+import org.cyk.system.company.model.sale.SaleIdentifiableGlobalIdentifier;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
@@ -76,6 +80,16 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		commonUtils.increment(Integer.class, studentClassroomSession.getClassroomSession().getResults(), NodeResults.FIELD_NUMBER_OF_STUDENT
 				, Crud.CREATE.equals(crud)?1:Crud.DELETE.equals(crud)?-1:0);
 		classroomSessionDao.update(studentClassroomSession.getClassroomSession());
+		if(Crud.CREATE.equals(crud)){
+			Sale sale = inject(SaleBusiness.class).instanciateOne();
+			sale.setName("School Fees");
+			inject(SaleBusiness.class).create(sale);
+			
+			SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier = new SaleIdentifiableGlobalIdentifier(sale, studentClassroomSession);
+			inject(SaleIdentifiableGlobalIdentifierBusiness.class).create(saleIdentifiableGlobalIdentifier);
+		}else if(Crud.DELETE.equals(crud)){
+			
+		}
 	}
 	
 	@Override

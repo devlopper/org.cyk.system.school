@@ -17,13 +17,10 @@ import org.cyk.system.root.business.api.network.UniformResourceLocatorBusiness;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFormatter;
-import org.cyk.system.root.business.impl.BusinessServiceProvider;
-import org.cyk.system.root.business.impl.BusinessServiceProvider.Service;
 import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
-import org.cyk.system.root.business.impl.party.person.AbstractActorBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.File;
@@ -71,7 +68,6 @@ import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
-import org.cyk.utility.common.computation.DataReadConfiguration;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -189,7 +185,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				return super.getParentOf(object);
 			}
 		});
-		
+		/*
 		BusinessServiceProvider.Identifiable.COLLECTION.add(new AbstractActorBusinessImpl.BusinessServiceProviderIdentifiable<Student,Student.SearchCriteria>(Student.class){
 			private static final long serialVersionUID = 1322416788278558869L;
 			
@@ -207,7 +203,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				return new Teacher.SearchCriteria(dataReadConfiguration.getGlobalFilter());
 			}
         });
-		
+		*/
 		studentEvaluationResultsRankOptions.setType(RankType.EXAEQUO);
 		studentEvaluationResultsRankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 		

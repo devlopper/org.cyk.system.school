@@ -43,13 +43,13 @@ public class SubjectClassroomSessionAssignToStudentClassroomSessionPage extends 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	private List<SubjectClassroomSession> subjectClassroomSessions;
-	private ItemCollection<StudentClassroomSessionItem,StudentClassroomSession> studentSubjectCollection;
+	private ItemCollection<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession> studentSubjectCollection;
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		studentSubjectCollection = createItemCollection(StudentClassroomSessionItem.class, StudentClassroomSession.class 
-				,new ItemCollectionWebAdapter<StudentClassroomSessionItem,StudentClassroomSession>(){
+		studentSubjectCollection = createItemCollection(StudentClassroomSessionItem.class, StudentClassroomSession.class,null 
+				,new ItemCollectionWebAdapter<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession>(null,crud){
 			private static final long serialVersionUID = -3872058204105902514L;
 			
 			@Override
@@ -58,7 +58,7 @@ public class SubjectClassroomSessionAssignToStudentClassroomSessionPage extends 
 			}
 			
 			@Override
-			public void instanciated(AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession,SelectItem> itemCollection,StudentClassroomSessionItem item) {
+			public void instanciated(AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession,ClassroomSession,SelectItem> itemCollection,StudentClassroomSessionItem item) {
 				super.instanciated(itemCollection, item);
 				item.setStudent(formatUsingBusiness(item.getIdentifiable().getStudent()));
 				item.setClassroomSession(formatUsingBusiness(item.getIdentifiable().getClassroomSession()));

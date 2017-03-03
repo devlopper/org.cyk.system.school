@@ -15,6 +15,7 @@ import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
@@ -33,13 +34,13 @@ public class StudentClassroomSessionDivisionSubjectDeleteManyPage extends Abstra
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private ItemCollection<StudentSubjectItem,StudentClassroomSessionDivisionSubject> collection;
+	private ItemCollection<StudentSubjectItem,StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivision> collection;
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		collection = createItemCollection(StudentSubjectItem.class, StudentClassroomSessionDivisionSubject.class 
-				,new ItemCollectionWebAdapter<StudentSubjectItem,StudentClassroomSessionDivisionSubject>(){
+		collection = createItemCollection(StudentSubjectItem.class, StudentClassroomSessionDivisionSubject.class ,null
+				,new ItemCollectionWebAdapter<StudentSubjectItem,StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivision>(null,crud){
 			private static final long serialVersionUID = -3872058204105902514L;
 			
 			@Override
@@ -65,7 +66,7 @@ public class StudentClassroomSessionDivisionSubjectDeleteManyPage extends Abstra
 			}
 			
 			@Override
-			public void setLabel(AbstractItemCollection<StudentSubjectItem, StudentClassroomSessionDivisionSubject, SelectItem> itemCollection,StudentSubjectItem item) {
+			public void setLabel(AbstractItemCollection<StudentSubjectItem, StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivision, SelectItem> itemCollection,StudentSubjectItem item) {
 				super.setLabel(itemCollection, item);
 				Collection<String> s = new ArrayList<>();
 				for(StudentClassroomSessionDivisionSubjectEvaluation n : item.getIdentifiable().getDetailCollection().getCollection())
@@ -75,7 +76,7 @@ public class StudentClassroomSessionDivisionSubjectDeleteManyPage extends Abstra
 			}
 			
 			@Override
-			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentClassroomSessionDivisionSubject, SelectItem> itemCollection,StudentSubjectItem item) {
+			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivision, SelectItem> itemCollection,StudentSubjectItem item) {
 				super.instanciated(itemCollection, item);
 				item.setApplicable(Boolean.FALSE);
 			}

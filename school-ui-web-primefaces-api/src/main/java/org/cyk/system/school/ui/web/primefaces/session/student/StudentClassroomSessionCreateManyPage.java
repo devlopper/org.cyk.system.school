@@ -35,18 +35,18 @@ public class StudentClassroomSessionCreateManyPage extends AbstractCrudOnePage<S
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private ItemCollection<StudentClassroomSessionItem,StudentClassroomSession> studentClassroomSessionCollection;
+	private ItemCollection<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession> studentClassroomSessionCollection;
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
 		//		+" - "+inject(ClassroomSessionBusiness.class).format(identifiable);
-		studentClassroomSessionCollection = createItemCollection(StudentClassroomSessionItem.class, StudentClassroomSession.class 
-				,new ItemCollectionWebAdapter<StudentClassroomSessionItem,StudentClassroomSession>(){
+		studentClassroomSessionCollection = createItemCollection(StudentClassroomSessionItem.class, StudentClassroomSession.class,null 
+				,new ItemCollectionWebAdapter<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession>(null,crud){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
-			public void instanciated(AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession,SelectItem> itemCollection,StudentClassroomSessionItem item) {
+			public void instanciated(AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession,ClassroomSession,SelectItem> itemCollection,StudentClassroomSessionItem item) {
 				super.instanciated(itemCollection, item);
 				item.getIdentifiable().setStudent(((Form)form.getData()).getStudent());
 				item.getIdentifiable().setClassroomSession(((Form)form.getData()).getClassroomSession());

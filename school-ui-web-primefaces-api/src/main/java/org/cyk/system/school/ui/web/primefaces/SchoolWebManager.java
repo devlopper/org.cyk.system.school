@@ -426,7 +426,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			}
 			page.setChoices(classroomSessionDivisionFieldName, classroomSessionDivisions);
 			CommonNodeInformations commonNodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession);
-			page.getForm().findInputByFieldName(classroomSessionDivisionFieldName).setDisabled(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null);
+			page.getForm().getInputByFieldName(classroomSessionDivisionFieldName).setDisabled(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null);
 			if(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null){
 				for(ClassroomSessionDivision c : classroomSessionDivisions)
 					if(c.getOrderNumber().equals(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()) ){

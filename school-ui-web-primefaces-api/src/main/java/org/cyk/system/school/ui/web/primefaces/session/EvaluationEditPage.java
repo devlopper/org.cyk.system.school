@@ -48,7 +48,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	
 	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
-	private ItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation> markCollection;
+	private ItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation,Evaluation> markCollection;
 	private BigDecimal maximumValue;
 	private Integer decimalPlaces = 0;
 	
@@ -74,7 +74,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
 		
-		markCollection = createItemCollection(StudentClassroomSessionDivisionSubjectEvaluationItem.class, StudentClassroomSessionDivisionSubjectEvaluation.class,new ItemCollectionWebAdapter<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation>(){
+		markCollection = createItemCollection(StudentClassroomSessionDivisionSubjectEvaluationItem.class, StudentClassroomSessionDivisionSubjectEvaluation.class,identifiable,new ItemCollectionWebAdapter<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation,Evaluation>(identifiable,crud){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> create() {
@@ -85,15 +85,11 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 				return identifiable.getStudentSubjectEvaluations();
 			}
 			@Override
-			public Crud getCrud() {
-				return crud;
-			}
-			@Override
 			public Boolean isShowAddButton() {
 				return Boolean.FALSE;
 			}
 			@Override
-			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,SelectItem> itemCollection,StudentClassroomSessionDivisionSubjectEvaluationItem mark) {
+			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,Evaluation,SelectItem> itemCollection,StudentClassroomSessionDivisionSubjectEvaluationItem mark) {
 				super.instanciated(itemCollection, mark);
 				mark.setStudent(mark.getIdentifiable().getStudentClassroomSessionDivisionSubject().getStudent().getCode()+Constant.CHARACTER_SPACE
 						+mark.getIdentifiable().getStudentClassroomSessionDivisionSubject().getStudent().getPerson().getNames());

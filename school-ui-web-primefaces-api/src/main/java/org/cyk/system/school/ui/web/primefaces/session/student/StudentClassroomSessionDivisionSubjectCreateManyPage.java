@@ -13,6 +13,7 @@ import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisio
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
@@ -36,18 +37,18 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private ItemCollection<StudentSubjectItem,StudentClassroomSessionDivisionSubject> studentSubjectCollection;
+	private ItemCollection<StudentSubjectItem,StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivision> studentSubjectCollection;
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
 		//contentTitle = languageBusiness.findClassLabelText(AcademicSession.class)+" : "+identifiable.getAcademicSession().getUiString()
 		//		+" - "+inject(ClassroomSessionBusiness.class).format(identifiable);
-		studentSubjectCollection = createItemCollection(StudentSubjectItem.class, StudentClassroomSessionDivisionSubject.class 
-				,new ItemCollectionWebAdapter<StudentSubjectItem,StudentClassroomSessionDivisionSubject>(){
+		studentSubjectCollection = createItemCollection(StudentSubjectItem.class, StudentClassroomSessionDivisionSubject.class,null 
+				,new ItemCollectionWebAdapter<StudentSubjectItem,StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivision>(null,crud){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
-			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentClassroomSessionDivisionSubject,SelectItem> itemCollection,StudentSubjectItem item) {
+			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivision,SelectItem> itemCollection,StudentSubjectItem item) {
 				super.instanciated(itemCollection, item);
 				item.getIdentifiable().setCascadeOperationToMaster(Boolean.TRUE);
 				item.getIdentifiable().setCascadeOperationToChildren(Boolean.FALSE);

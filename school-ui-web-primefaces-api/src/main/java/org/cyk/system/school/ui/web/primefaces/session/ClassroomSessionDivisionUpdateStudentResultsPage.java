@@ -14,6 +14,7 @@ import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.command.AbstractCommandable.Builder;
 import org.cyk.ui.api.command.UICommandable;
@@ -32,21 +33,21 @@ public class ClassroomSessionDivisionUpdateStudentResultsPage extends AbstractCr
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private ItemCollection<Result,StudentClassroomSessionDivision> resultCollection;
+	private ItemCollection<Result,StudentClassroomSessionDivision,StudentClassroomSession> resultCollection;
 	private Integer appreciationMaxLenght = 255;
 	private BigDecimal maximumMissedDuration;
 	
 	@Override
 	protected void initialisation() {
 		super.initialisation();
-		resultCollection = createItemCollection(Result.class, StudentClassroomSessionDivision.class,new ItemCollectionWebAdapter<Result,StudentClassroomSessionDivision>(){
+		resultCollection = createItemCollection(Result.class, StudentClassroomSessionDivision.class,null,new ItemCollectionWebAdapter<Result,StudentClassroomSessionDivision,StudentClassroomSession>(null,crud){
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public Collection<StudentClassroomSessionDivision> load() {
 				return inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivision(identifiable);
 			}
 			@Override
-			public void instanciated(AbstractItemCollection<Result, StudentClassroomSessionDivision,SelectItem> itemCollection,Result result) {
+			public void instanciated(AbstractItemCollection<Result, StudentClassroomSessionDivision,StudentClassroomSession,SelectItem> itemCollection,Result result) {
 				super.instanciated(itemCollection, result);
 				result.setRegistrationCode(result.getIdentifiable().getStudent().getCode());
 				result.setNames(result.getIdentifiable().getStudent().getPerson().getNames());

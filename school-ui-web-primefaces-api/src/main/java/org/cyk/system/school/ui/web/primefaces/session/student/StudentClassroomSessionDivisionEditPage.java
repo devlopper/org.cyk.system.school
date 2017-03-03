@@ -25,8 +25,10 @@ import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.model.value.Value;
+import org.cyk.system.root.model.value.ValueCollection;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.school.model.SchoolConstant;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.UIManager;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -61,7 +63,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		MetricValueCollection metricValueCollection = null;
 		for(MetricCollection metricCollection : metricCollections){
 			final MetricCollection lMetricCollection = metricCollection;			
-			metricValueCollection = (MetricValueCollection) createMetricValueCollection(metricCollection,new MetricValueCollection.Adapter(){
+			metricValueCollection = (MetricValueCollection) createMetricValueCollection(metricCollection,new MetricValueCollection.Adapter(null,crud){
 				private static final long serialVersionUID = -3872058204105902514L;
 				@Override
 				public Collection<Value> load() {
@@ -83,7 +85,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 				.MetricCollectionType._STUDENT));
 		for(MetricCollectionIdentifiableGlobalIdentifier metricCollectionIdentifiableGlobalIdentifier : inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).findByCriteria(searchCriteria)){
 			final MetricCollectionIdentifiableGlobalIdentifier lMetricCollectionIdentifiableGlobalIdentifier = metricCollectionIdentifiableGlobalIdentifier;			
-			metricValueCollection = (MetricValueCollection) createMetricValueCollection(lMetricCollectionIdentifiableGlobalIdentifier,new MetricValueCollection.Adapter(){
+			metricValueCollection = (MetricValueCollection) createMetricValueCollection(lMetricCollectionIdentifiableGlobalIdentifier,new MetricValueCollection.Adapter(null,crud){
 				private static final long serialVersionUID = -3872058204105902514L;
 				@Override
 				public Collection<Value> load() {
@@ -96,14 +98,16 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		}
 	}
 	
+	
+	
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	protected <TYPE extends AbstractItemCollectionItem<IDENTIFIABLE>, IDENTIFIABLE extends AbstractIdentifiable> ItemCollection<TYPE, IDENTIFIABLE> instanciateItemCollection(
-			String identifier, Class<TYPE> aClass, Class<IDENTIFIABLE> identifiableClass) {
-		return (ItemCollection<TYPE, IDENTIFIABLE>) new MetricValueCollection(identifier);
+	protected <TYPE extends AbstractItemCollectionItem<IDENTIFIABLE>, IDENTIFIABLE extends AbstractIdentifiable, COLLECTION extends AbstractIdentifiable> ItemCollection<TYPE, IDENTIFIABLE, COLLECTION> 
+		instanciateItemCollection(String identifier, Class<TYPE> aClass, Class<IDENTIFIABLE> identifiableClass, COLLECTION collection) {
+		return (ItemCollection<TYPE, IDENTIFIABLE, COLLECTION>) new MetricValueCollection(identifier,null,crud);
 	}
 	
-	public AbstractMetricValueCollection<MetricValueCollection.Item,Value> getMetricValueCollection(Integer index){
+	public AbstractMetricValueCollection<MetricValueCollection.Item,Value,ValueCollection> getMetricValueCollection(Integer index){
 		if(index < metricValueCollections.size())
 			return metricValueCollections.get(index);
 		return null;
@@ -181,7 +185,8 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		
 		/**/
 		
-		public static class ItemCollectionAdapter extends org.cyk.ui.web.primefaces.page.crud.AbstractEditManyPage.ItemCollectionAdapter<StudentClassroomSessionDivisionEditPage.Many, StudentClassroomSessionDivision> {
+		public static class ItemCollectionAdapter extends org.cyk.ui.web.primefaces.page.crud.AbstractEditManyPage.ItemCollectionAdapter<StudentClassroomSessionDivisionEditPage.Many
+			, StudentClassroomSessionDivision,StudentClassroomSession> {
 			private static final long serialVersionUID = -5381415970572336750L;
 				
 			public ItemCollectionAdapter() {
@@ -189,7 +194,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			}
 			
 			@Override
-			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionEditPage.Many, StudentClassroomSessionDivision, SelectItem> itemCollection
+			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionEditPage.Many, StudentClassroomSessionDivision,StudentClassroomSession, SelectItem> itemCollection
 					,StudentClassroomSessionDivisionEditPage.Many item) {
 				super.instanciated(itemCollection, item);
 				item.setLabel(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivision().getClassroomSession())
