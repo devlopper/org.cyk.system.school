@@ -64,7 +64,7 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 	public static final String COLUMN_CLASSROOM_SESSION = "classroomSession";
 	
 	@Getter @Setter
-	public static class SearchCriteria extends AbstractFieldValueSearchCriteriaSet implements Serializable {
+	public static class SearchCriteria extends AbstractFieldValueSearchCriteriaSet.AbstractIdentifiableSearchCriteriaSet implements Serializable {
 
 		private static final long serialVersionUID = 6796076474234170332L;
 

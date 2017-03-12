@@ -1,6 +1,7 @@
 package org.cyk.system.school.business.impl.integration;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import org.cyk.system.company.business.impl.CompanyBusinessTestHelper;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.party.ApplicationBusiness;
+import org.cyk.system.root.business.impl.AbstractBusinessTestHelper.TestCase;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer.Listener.Adapter;
 import org.cyk.system.root.business.impl.BusinessIntegrationTestHelper;
@@ -86,6 +88,10 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
 	
     protected AcademicSession academicSession;
     
+    protected TestCase instanciateTestCase(){
+		return schoolBusinessTestHelper.instanciateTestCase();
+	}
+    
     @Override
     public EntityManager getEntityManager() {
         return g.getEntityManager();
@@ -149,6 +155,11 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     
     protected AbstractIdentifiable create(AbstractIdentifiable object){
         return genericBusiness.create(object);
+    }
+    
+    @SuppressWarnings("unchecked")
+	protected <T extends AbstractIdentifiable> void create(Collection<T> objects){
+        genericBusiness.create((Collection<AbstractIdentifiable>) objects);
     }
     
     protected AbstractIdentifiable update(AbstractIdentifiable object){

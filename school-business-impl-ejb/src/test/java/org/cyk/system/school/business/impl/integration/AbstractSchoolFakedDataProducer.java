@@ -3,14 +3,14 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import lombok.Getter;
-
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
+import org.cyk.system.company.business.impl.AbstractCompanyFakedDataProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl.SchoolDataProducerHelper;
 
+import lombok.Getter;
+
 @Getter
-public abstract class AbstractSchoolFakedDataProducer extends AbstractFakedDataProducer implements Serializable {
+public abstract class AbstractSchoolFakedDataProducer extends AbstractCompanyFakedDataProducer implements Serializable {
 
 	private static final long serialVersionUID = -1832900422621121762L;
 

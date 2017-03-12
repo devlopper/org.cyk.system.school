@@ -26,7 +26,7 @@ public interface SchoolConstant {
 		public static class JobTitle implements Serializable {
 			private static final long serialVersionUID = 1L;
 			
-			public static String DIRECTOR_OF_STUDIES = "DIRECTOR_OF_STUDIES"; 
+			public static String DIRECTOR_OF_STUDIES = "DIRECTOROFSTUDIES"; 
 		}
 		
 		public static class TimeDivisionType implements Serializable {
@@ -208,6 +208,7 @@ public interface SchoolConstant {
 			public static String SPELLING = "SPELLING ";
 			public static String THEORY_OF_KNOWLEDGE = "THEORY_OF_KNOWLEDGE ";
 			public static String UCMAS = "UCMAS ";
+			public static String DIVINITY = "DIVINITY ";
 			
 		}
 		

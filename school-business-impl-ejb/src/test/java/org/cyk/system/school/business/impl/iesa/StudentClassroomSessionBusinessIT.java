@@ -6,8 +6,6 @@ public class StudentClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     
     @Override
     protected void businesses() {
-    	dataProducer.setGenerateCompleteAcademicSession(Boolean.FALSE);
-    	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
     	//schoolBusinessTestHelper.getEvaluationTypes().addAll(dataProducer.getEvaluationTypes());

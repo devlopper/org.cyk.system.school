@@ -31,12 +31,15 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
+import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.utility.common.Constant;
 
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
@@ -91,6 +94,15 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 			}
 			dao.update(classroomSession);
 		}
+	}
+	
+	@Override
+	public ClassroomSession findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(String levelTimeDivisionCode,String suffixCode) {
+		LevelTimeDivision levelTimeDivision = inject(LevelTimeDivisionDao.class).read(levelTimeDivisionCode);
+		if(StringUtils.isBlank(suffixCode))
+			return dao.readWhereSuffixIsNullByAcademicSessionByLevelTimeDivision(inject(AcademicSessionBusiness.class).findCurrent(null), levelTimeDivision);
+		return findByAcademicSessionByLevelTimeDivisionBySuffix(inject(AcademicSessionBusiness.class).findCurrent(null), levelTimeDivision
+				, inject(ClassroomSessionSuffixDao.class).read(suffixCode));
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
@@ -152,7 +164,12 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
-	public ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffix) {
+	public ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, String suffixCode) {
+		return findByAcademicSessionByLevelTimeDivisionBySuffix(academicSession,levelTimeDivision,inject(ClassroomSessionSuffixDao.class).read(suffixCode));
+	}
+	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, ClassroomSessionSuffix suffix) {
 		return dao.readByAcademicSessionByLevelTimeDivisionBySuffix(academicSession,levelTimeDivision,suffix);
 	}
 	

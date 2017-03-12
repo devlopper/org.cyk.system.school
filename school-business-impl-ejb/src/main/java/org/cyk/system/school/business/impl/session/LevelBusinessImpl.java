@@ -46,6 +46,15 @@ public class LevelBusinessImpl extends AbstractTypedBusinessService<Level, Level
 				, inject(LevelSpecialityDao.class).read(levelSpecialityCode));
 		return level;
 	}
+	
+	@Override
+	protected Level __instanciateOne__(String[] values,org.cyk.system.root.business.api.TypedBusiness.InstanciateOneListener<Level> listener) {
+		Level level = super.__instanciateOne__(values, listener);
+		set(listener.getSetListener(), Level.FIELD_LEVEL_NAME);
+		set(listener.getSetListener(), Level.FIELD_LEVEL_SPECIALITY);
+		set(listener.getSetListener(), Level.FIELD_GROUP);
+		return level;
+	}
 
 	@Override
 	public Level instanciateOne(String[] values) {

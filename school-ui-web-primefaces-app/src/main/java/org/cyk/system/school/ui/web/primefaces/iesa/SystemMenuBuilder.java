@@ -16,7 +16,7 @@ public class SystemMenuBuilder extends org.cyk.system.school.ui.web.primefaces.a
 		SystemMenu systemMenu = new SystemMenu();
 		addBusinessMenu(userSession,systemMenu,getStudentCommandable(userSession, null));
 		addBusinessMenu(userSession,systemMenu,getEmployeeCommandable(userSession, null));
-		//addBusinessMenu(userSession,systemMenu,getFinanceCommandable(userSession, null));
+		addBusinessMenu(userSession,systemMenu,getSaleCommandable(userSession, null));
 		addBusinessMenu(userSession,systemMenu,getAcademicCommandable(userSession, null));
 		//addBusinessMenu(userSession,systemMenu,getServiceCommandable(userSession, null));
 		//addBusinessMenu(userSession,systemMenu,getMessageCommandable(userSession, null));

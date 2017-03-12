@@ -10,8 +10,6 @@ public class StructureBusinessIT extends AbstractIesaBusinessIT {
     
     @Override
     protected void businesses() {
-    	dataProducer.setGenerateCompleteAcademicSession(Boolean.FALSE);
-    	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
     	//schoolBusinessTestHelper.createActors(Student.class,new String[]{"STUD1"/*,"STUD2","STUD3","STUD4","STUD5"*/});

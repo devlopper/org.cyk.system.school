@@ -2,122 +2,44 @@ package org.cyk.system.school.business.impl.iesa;
 
 import java.util.Arrays;
 
-import javax.inject.Inject;
-
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.party.person.Person;
-import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
-import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.utility.common.CommonUtils;
 
-public class FakedIesaApplicationSetupBusinessIT extends AbstractBusinessIT {
+public class FakedIesaApplicationSetupBusinessIT extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
     
-    @Inject private IesaFakedDataProducer iesaFakedDataProducer;
-    
     @Override
     protected void businesses() {
-    	String d = String.valueOf(63*inject(MeasureDao.class).read(RootConstant.Code.Measure.TIME_DAY).getValue().longValue());
-    	ClassroomSession classroomSessionPK1 = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-    		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1, null,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-    		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-    		, new String[][]{}
-    		, new String[][]{}
-    		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT}
-    			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_EXPRESSIVE_LANGUAGE}
-    			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_RECEPTIVE_LANGUAGE}
-    			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_READING_READNESS}
-    			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_NUMERACY_DEVELOPMENT}
-    			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_ARTS_MUSIC}
-    			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_SOCIAL_EMOTIONAL_DEVELOPMENT}
-    			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_GROSS_MOTOR_SKILLS}
-    			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_PK_STUDENT_FINE_MOTOR_SKILLS}
-    			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT}}));
     	
-    	ClassroomSession classroomSessionK1 = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-        		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1, null,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-        		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-        		, new String[][]{}
-        		, new String[][]{}
-        		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_ENGLISH_LANGUAGE_ARTS_READING}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_COMMUNICATION_SKILLS}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SCIENCE}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SOCIAL_STUDIES}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_MATHEMATICS}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_WORK_HABITS}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_SOCIAL_SKILLS}
-        			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT}}));
+    	ClassroomSession classroomSessionPK = inject(ClassroomSessionBusiness.class)
+    			.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1, null);
+    
+    	ClassroomSession classroomSessionK1 = inject(ClassroomSessionBusiness.class)
+    			.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1, null);
     	
-    	ClassroomSession classroomSessionK2 = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-        		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.K2_YEAR_1, null,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-        		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-        		, new String[][]{}
-        		, new String[][]{}
-        		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING_READINESS}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WRITING}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_LISTENING_SPEAKING_VIEWING}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_ALPHABET_IDENTIFICATION}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_MATHEMATICS}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_SCIENCE_SOCIAL_STUDIES_MORAL_EDUCATION}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_ART_CRAFT}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_MUSIC}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_PHYSICAL_EDUCATION}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WORK_BEHAVIOUR_HABITS}
-        			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT}}));
+    	ClassroomSession classroomSessionK2 = inject(ClassroomSessionBusiness.class)
+    			.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(SchoolConstant.Code.LevelTimeDivision.K2_YEAR_1, null);
     	
-    	ClassroomSession classroomSessionK3 = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-        		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.K3_YEAR_1, null,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-        		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-        		, new String[][]{}
-        		, new String[][]{}
-        		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING_READINESS}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_READING}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WRITING}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_LISTENING_SPEAKING_VIEWING}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_ALPHABET_IDENTIFICATION}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_MATHEMATICS}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_SCIENCE_SOCIAL_STUDIES_MORAL_EDUCATION}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_ART_CRAFT}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_MUSIC}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_PHYSICAL_EDUCATION}
-        			,{SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K2_STUDENT_WORK_BEHAVIOUR_HABITS}
-        			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT}}));
+    	ClassroomSession classroomSessionK3 = inject(ClassroomSessionBusiness.class)
+    			.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(SchoolConstant.Code.LevelTimeDivision.K3_YEAR_1, null);
     	
-    	ClassroomSession classroomSessionG1A = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-    		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, SchoolConstant.Code.ClassroomSessionSuffix.A,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-    		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-    		, new String[][]{{SchoolConstant.Code.Subject.ACCOUNTING},{SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS},{SchoolConstant.Code.Subject.ART_CRAFT}}
-    		, new String[][]{{SchoolConstant.Code.EvaluationType.TEST1,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.15","100"}
-    			,{SchoolConstant.Code.EvaluationType.TEST2,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.15","100"}
-    			,{SchoolConstant.Code.EvaluationType.EXAM,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.7","100"}}
-    		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT},{SchoolConstant.Code.MetricCollection.BEHAVIOUR_PRIMARY_STUDENT}
-    			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT}}));
+    	ClassroomSession classroomSessionG1A = inject(ClassroomSessionBusiness.class)
+    			.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, SchoolConstant.Code.ClassroomSessionSuffix.A);
     	
-    	ClassroomSession classroomSessionG8A = (ClassroomSession) create(inject(ClassroomSessionBusiness.class)
-    		.instanciateOne(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1, SchoolConstant.Code.ClassroomSessionSuffix.A,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-    				, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-    		, new String[][]{{SchoolConstant.Code.Subject.CHEMISTRY},{SchoolConstant.Code.Subject.BUSINESS_STUDIES},{SchoolConstant.Code.Subject.CHECKPOINT_ENGLISH_LEVEL}}
-    		, new String[][]{{SchoolConstant.Code.EvaluationType.TEST1,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.2","100"}
-    			,{SchoolConstant.Code.EvaluationType.TEST2,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.2","100"}
-    			,{SchoolConstant.Code.EvaluationType.EXAM,SchoolConstant.Code.Interval.EVALUATION_COUNT_BY_TYPE,"0.6","100"}}
-    		, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_STUDENT},{SchoolConstant.Code.MetricCollection.BEHAVIOUR_SECONDARY_STUDENT}
-    			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT}}));
+    	ClassroomSession classroomSessionG8A = inject(ClassroomSessionBusiness.class)
+    			.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1, null);
     	
     	Student studentG1A = inject(StudentBusiness.class).instanciateOneRandomly();
     	studentG1A.setCode("STUDG1A");
@@ -177,7 +99,7 @@ public class FakedIesaApplicationSetupBusinessIT extends AbstractBusinessIT {
     	parent.setLastnames("sandrine meliane");
     	update(parent);
     	
-    	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentPK1.getCode(),classroomSessionPK1.getCode()}));
+    	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentPK1.getCode(),classroomSessionPK.getCode()}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentK1.getCode(),classroomSessionK1.getCode()}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentK2.getCode(),classroomSessionK2.getCode()}));
     	create(inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{studentK3.getCode(),classroomSessionK3.getCode()}));
@@ -188,9 +110,4 @@ public class FakedIesaApplicationSetupBusinessIT extends AbstractBusinessIT {
     	System.exit(0);
     }
     
-    @Override
-    protected AbstractFakedDataProducer getFakedDataProducer() {
-    	return iesaFakedDataProducer;
-    }
-        
 }

@@ -27,8 +27,6 @@ public class StudentClassroomSessionConsultPage extends AbstractConsultPage<Stud
 		SaleIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new SaleIdentifiableGlobalIdentifier.SearchCriteria();
 		searchCriteria.addIdentifiableGlobalIdentifier(identifiable);
 		
-		System.out.println("StudentClassroomSessionConsultPage.processIdentifiableContextualCommandable() : "
-				+inject(SaleIdentifiableGlobalIdentifierBusiness.class).findByCriteria(searchCriteria));
 		for(SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier : inject(SaleIdentifiableGlobalIdentifierBusiness.class).findByCriteria(searchCriteria)){
 			commandable.addChild(AbstractCommandable.Builder.createConsult(saleIdentifiableGlobalIdentifier.getSale(), Icon.THING_MONEY));
 		}

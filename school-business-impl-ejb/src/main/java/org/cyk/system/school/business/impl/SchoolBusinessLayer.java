@@ -17,6 +17,7 @@ import org.cyk.system.root.business.api.network.UniformResourceLocatorBusiness;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFormatter;
+import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
@@ -26,6 +27,7 @@ import org.cyk.system.root.model.ContentType;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.root.model.file.report.ReportTemplate;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.Metric;
@@ -208,6 +210,11 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		studentEvaluationResultsRankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 		
 		inject(GlobalIdentifierPersistenceMappingConfigurations.class).configure();
+		
+		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}
+		,AcademicSession.class,Level.class,LevelTimeDivision.class,ClassroomSession.class,ClassroomSessionDivision.class,ClassroomSessionDivisionSubject.class
+		,ClassroomSessionDivisionSubjectEvaluationType.class,StudentClassroomSession.class,StudentClassroomSessionDivision.class
+		,StudentClassroomSessionDivisionSubject.class);
         
 	}
 	

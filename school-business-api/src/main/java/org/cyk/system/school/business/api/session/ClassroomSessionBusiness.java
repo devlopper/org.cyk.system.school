@@ -14,6 +14,7 @@ import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
+import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 
 public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession> {
 
@@ -24,6 +25,8 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	Collection<ClassroomSession> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 	
 	ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,String suffix);
+	ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, ClassroomSessionSuffix suffix);
+	ClassroomSession findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(String levelTimeDivisionCode,String suffixCode);
 	
 	CommonNodeInformations findCommonNodeInformations(ClassroomSession classroomSession);
 	Collection<FileRepresentationType> findStudentClassroomSessionDivisionResultsFileRepresentationTypes(Collection<ClassroomSession> classroomSessions);
@@ -43,4 +46,5 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	
 	ClassroomSession instanciateOne(String levelTimeDivisionCode, String suffixCode,String coordinatorCode, String timeDivisionTypeCode,
 			String[][] divisions, String[][] subjects, String[][] evaluationTypes, String[][] metricCollections);
+	
 }

@@ -9,8 +9,6 @@ public class SimulateBusinessIT extends AbstractIesaBusinessIT {
  
     @Override
     protected void businesses() {
-    	dataProducer.setGenerateCompleteAcademicSession(Boolean.FALSE);
-    	dataProducer.setNumbreOfStudents(0);
     	installApplication();
 
     	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;

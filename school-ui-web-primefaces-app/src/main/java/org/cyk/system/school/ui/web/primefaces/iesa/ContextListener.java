@@ -1,13 +1,21 @@
 package org.cyk.system.school.ui.web.primefaces.iesa;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import javax.servlet.ServletContextEvent;
 
+import org.cyk.system.company.business.impl.CompanyBusinessLayer;
+import org.cyk.system.company.business.impl.sale.SaleBusinessImpl;
+import org.cyk.system.company.business.impl.sale.SaleCashRegisterMovementCollectionBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeDetails;
+import org.cyk.system.company.model.CompanyConstant;
+import org.cyk.system.company.model.sale.Sale;
+import org.cyk.system.company.model.sale.SaleCashRegisterMovementCollection;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.geography.ContactCollectionDetails;
 import org.cyk.system.root.business.impl.party.person.JobDetails;
@@ -82,36 +90,16 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	TeacherBusinessImpl.Listener.COLLECTION.add(new TeacherBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning());
     	EmployeeBusinessImpl.Listener.COLLECTION.add(new EmployeeBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning());
     	
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, AcademicSession.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, AcademicSession.class);
-		
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, Level.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, Level.class);
-		
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, LevelTimeDivision.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, LevelTimeDivision.class);
-		
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, ClassroomSession.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, ClassroomSession.class);
-		
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, ClassroomSessionDivision.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, ClassroomSessionDivision.class);
-		
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, ClassroomSessionDivisionSubject.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, ClassroomSessionDivisionSubject.class);
+    	AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}
+		,AcademicSession.class,Level.class,LevelTimeDivision.class,ClassroomSession.class,ClassroomSessionDivision.class,ClassroomSessionDivisionSubject.class
+		,ClassroomSessionDivisionSubjectEvaluationType.class,StudentClassroomSession.class,StudentClassroomSessionDivision.class
+		,StudentClassroomSessionDivisionSubject.class);
     	
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, ClassroomSessionDivisionSubjectEvaluationType.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, ClassroomSessionDivisionSubjectEvaluationType.class);
+    	//CompanyConstant.Configuration.SaleCashRegisterMovementCollection.AUTOMATICALLY_GENERATE_REPORT_FILE = Boolean.TRUE;
+    	//CompanyConstant.Configuration.Sale.AUTOMATICALLY_GENERATE_REPORT_FILE = Boolean.TRUE;
 		
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, StudentClassroomSession.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, StudentClassroomSession.class);
+    	inject(CompanyBusinessLayer.class).enableEnterpriseResourcePlanning();
     	
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, StudentClassroomSessionDivision.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, StudentClassroomSessionDivision.class);
-		
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_CODE, StudentClassroomSessionDivisionSubject.class);
-		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(GlobalIdentifier.FIELD_NAME, StudentClassroomSessionDivisionSubject.class);
-		
 		AbstractWindow.WindowInstanceManager.INSTANCE = new PageInstanceManager(){
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -132,6 +120,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				return super.isShowDetails(detailsClass, identifiable,window);
 			}
 		};
+		
 	}
 		
 	/**/

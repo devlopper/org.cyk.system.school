@@ -11,8 +11,6 @@ public class StudentBusinessIT extends AbstractIesaBusinessIT {
     
     @Override
     protected void businesses() {
-    	dataProducer.setGenerateCompleteAcademicSession(Boolean.FALSE);
-    	dataProducer.setNumbreOfStudents(0);
     	installApplication();
     	
     	Student student;

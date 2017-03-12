@@ -4,10 +4,10 @@ import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
-import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
+import org.cyk.system.school.business.impl.integration.enterpriseresourceplanning.AbstractEnterpriseResourcePlanningBusinessIT;
 import org.cyk.system.school.model.SchoolConstant;
 
-public abstract class AbstractIesaBusinessIT extends AbstractBusinessIT {
+public abstract class AbstractIesaBusinessIT extends AbstractEnterpriseResourcePlanningBusinessIT {
 
 	private static final long serialVersionUID = -5752455124275831171L;
 
