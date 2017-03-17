@@ -1,6 +1,6 @@
 package org.cyk.system.school.business.impl.iesa;
 
-import org.cyk.system.school.business.impl.SchoolBusinessTestHelper.SchoolBusinessSimulationParameters;
+import org.cyk.system.school.business.impl._test.SchoolBusinessTestHelper.SchoolBusinessSimulationParameters;
 import org.cyk.system.school.model.SchoolConstant;
 
 public class SimulateBusinessIT extends AbstractIesaBusinessIT {

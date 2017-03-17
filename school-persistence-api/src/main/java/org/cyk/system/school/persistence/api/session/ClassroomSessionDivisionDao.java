@@ -6,6 +6,7 @@ import org.cyk.system.root.persistence.api.TypedDao;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 
 public interface ClassroomSessionDivisionDao extends TypedDao<ClassroomSessionDivision> {
@@ -25,5 +26,11 @@ public interface ClassroomSessionDivisionDao extends TypedDao<ClassroomSessionDi
 
 	Collection<ClassroomSessionDivision> readByLevelNameByClassroomSessionDivisionOrderNumber(String levelNameCode,Long classroomSessionDivisionOrderNumber);
 	Collection<ClassroomSessionDivision> readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber(String levelNameCode,String classroomSessionSuffixCode,Long classroomSessionDivisionOrderNumber);
+
+	Collection<ClassroomSessionDivision> readByLevelTimeDivisionByClassroomSessionDivisionSuffixByClassroomSessionDivisionOrderNumber(
+			LevelTimeDivision levelTimeDivision, ClassroomSessionSuffix classroomSessionSuffix, Long classroomSessionDivisionOrderNumber);
+
+	Collection<ClassroomSessionDivision> readByLevelTimeDivisionByClassroomSessionDivisionOrderNumber(
+			LevelTimeDivision levelTimeDivision, Long classroomSessionDivisionOrderNumber);
 
 }

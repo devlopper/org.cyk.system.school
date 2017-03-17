@@ -1,5 +1,7 @@
 package org.cyk.system.school.business.impl.iesa;
 
+import java.util.Arrays;
+
 import org.cyk.system.company.business.api.sale.SalableProductCollectionBusiness;
 import org.cyk.system.company.business.api.sale.SalableProductCollectionItemBusiness;
 import org.cyk.system.company.business.api.sale.SaleBusiness;
@@ -7,13 +9,30 @@ import org.cyk.system.company.business.api.sale.SaleCashRegisterMovementBusiness
 import org.cyk.system.company.business.api.sale.SaleCashRegisterMovementCollectionBusiness;
 import org.cyk.system.company.model.sale.SalableProductCollection;
 import org.cyk.system.company.model.sale.SalableProductCollectionItem;
+import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.company.model.sale.SaleCashRegisterMovementCollection;
 import org.cyk.system.company.persistence.api.payment.CashRegisterDao;
 import org.cyk.system.company.persistence.api.sale.SalableProductCollectionDao;
 import org.cyk.system.company.persistence.api.sale.SalableProductCollectionItemDao;
+import org.cyk.system.company.persistence.api.sale.SaleIdentifiableGlobalIdentifierDao;
+import org.cyk.system.root.business.api.GenericBusiness;
+import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
+import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper.TestCase;
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.RootConstant;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.root.persistence.api.security.UserAccountDao;
+import org.cyk.system.school.business.api.actor.StudentBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
+import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
+import org.cyk.system.school.model.SchoolConstant;
+import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.utility.common.CommonUtils;
 import org.junit.Test;
 
 public class IesaSaleBusinessIT extends AbstractIesaBusinessIT {
@@ -132,15 +151,39 @@ public class IesaSaleBusinessIT extends AbstractIesaBusinessIT {
     @Test
     public void regularCase(){
     	TestCase testCase = instanciateTestCase();
-    	testCase.create(inject(SaleBusiness.class).instanciateOne("Sale001",IesaFakedDataProducer.CUSTOMER_001, new Object[][]{ {"TP01",1},{"TP02",2} }));
-    	testCase.create(inject(SaleBusiness.class).instanciateOne("Sale002",IesaFakedDataProducer.CUSTOMER_001, new Object[][]{ {"IP01",4},{"IP02",3} }));
+    	ClassroomSession classroomSessionG1A = inject(ClassroomSessionBusiness.class)
+    			.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, SchoolConstant.Code.ClassroomSessionSuffix.A);
     	
-    	testCase.create(inject(SaleCashRegisterMovementCollectionBusiness.class).instanciateOne("P001",null, IesaFakedDataProducer.CASH_REGISTER_001
-    			, new Object[][]{{"Sale001","500"},{"Sale002","800"}}));
-    	testCase.create(inject(SaleCashRegisterMovementCollectionBusiness.class).instanciateOne("P002",null, IesaFakedDataProducer.CASH_REGISTER_001
-    			, new Object[][]{{"Sale001","700"},{"Sale002","300"}}));
-    	testCase.create(inject(SaleCashRegisterMovementCollectionBusiness.class).instanciateOne("P003",null, IesaFakedDataProducer.CASH_REGISTER_001
-    			, new Object[][]{{"Sale002","100"},{"Sale001","250"}}));
+    	Student studentG1A = inject(StudentBusiness.class).instanciateOneRandomly();
+    	studentG1A.setCode("STUDG1A");
+    	studentG1A.setName("komenan");
+    	studentG1A.getPerson().setName("komenan");
+    	studentG1A.getPerson().setLastnames("yao christian");
+    	if(studentG1A.getPerson().getContactCollection()!=null && studentG1A.getPerson().getContactCollection().getElectronicMails()!=null)
+    		studentG1A.getPerson().getContactCollection().getElectronicMails().clear();
+    	inject(ElectronicMailBusiness.class).setAddress(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
+    	inject(ElectronicMailBusiness.class).setAddress(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
+    	
+    	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(studentG1A),AbstractIdentifiable.class));
+    	
+    	Person parent = inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER);
+    	parent.setName("komenan");
+    	parent.setLastnames("n'dri jean");
+    	//parent.getContactCollection().getcoll
+    	update(parent);
+    	
+    	parent = inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER);
+    	parent.setName("komenan");
+    	parent.setLastnames("sandrine meliane");
+    	update(parent);
+    	
+    	StudentClassroomSession studentClassroomSession = (StudentClassroomSession) create(inject(StudentClassroomSessionBusiness.class)
+    			.instanciateOne(new String[]{studentG1A.getCode(),classroomSessionG1A.getCode()}));
+    	
+    	Sale sale = inject(SaleIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(studentClassroomSession).iterator().next().getSale();
+    	
+    	testCase.create(inject(SaleCashRegisterMovementCollectionBusiness.class).instanciateOne("PSF001",null, IesaFakedDataProducer.CASH_REGISTER_001
+    			, new Object[][]{{sale.getCode(),"500"}}));
     	
     	testCase.clean();
     }

@@ -10,6 +10,7 @@ import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -24,7 +25,8 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 	
     private String readByClassroomSession,readByClassroomSessions,countByClassroomSession,readByClassroomSessionByOrderNumber,readByClassroomSessionByIndexByTeacher
     	,readByClassroomSessionByTeacher,readByClassroomSessionsByOrderNumber,readByLevelTimeDivision
-    	,readByLevelNameByClassroomSessionDivisionOrderNumber,readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber;
+    	,readByLevelNameByClassroomSessionDivisionOrderNumber,readByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber
+    	,readByLevelTimeDivisionByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber,readByLevelTimeDivisionByClassroomSessionDivisionOrderNumber;
      
     @Override
     protected void namedQueriesInitialisation() {
@@ -51,6 +53,18 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
         		+ " aClassroomSessionDivision.classroomSession.levelTimeDivision.level.levelName=:levelName"
         		+ " AND aClassroomSessionDivision.classroomSession.suffix = :suffix"
         		+ " AND aClassroomSessionDivision.globalIdentifier.orderNumber = :orderNumber");
+        
+        registerNamedQuery(readByLevelTimeDivisionByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber, "SELECT aClassroomSessionDivision"
+        		+ " FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
+        		+ " aClassroomSessionDivision.classroomSession.levelTimeDivision =:levelTimeDivision"
+        		+ " AND aClassroomSessionDivision.classroomSession.suffix = :suffix"
+        		+ " AND aClassroomSessionDivision.globalIdentifier.orderNumber = :orderNumber");
+        
+        registerNamedQuery(readByLevelTimeDivisionByClassroomSessionDivisionOrderNumber, "SELECT aClassroomSessionDivision"
+        		+ " FROM ClassroomSessionDivision aClassroomSessionDivision WHERE "
+        		+ " aClassroomSessionDivision.classroomSession.levelTimeDivision =:levelTimeDivision"
+        		+ " AND aClassroomSessionDivision.globalIdentifier.orderNumber = :orderNumber");
+        
         registerNamedQuery(readByClassroomSessionByOrderNumber, _select().where(ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
         		.and(getGlobalIdentifierFieldPath(GlobalIdentifier.FIELD_ORDER_NUMBER), PARAMETER_INDEX,ArithmeticOperator.EQ));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(ClassroomSessionDivision.FIELD_CLASSROOMSESSION));
@@ -124,6 +138,26 @@ public class ClassroomSessionDivisionDaoImpl extends AbstractTypedDao<ClassroomS
 				.parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber)
                 .resultMany();
 	}
+
+	@Override
+	public Collection<ClassroomSessionDivision> readByLevelTimeDivisionByClassroomSessionDivisionSuffixByClassroomSessionDivisionOrderNumber(
+			LevelTimeDivision levelTimeDivision, ClassroomSessionSuffix classroomSessionSuffix, Long classroomSessionDivisionOrderNumber) {
+		return namedQuery(readByLevelTimeDivisionByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber)
+				.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision)
+				.parameter(ClassroomSession.FIELD_SUFFIX, classroomSessionSuffix)
+				.parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber)
+                .resultMany();
+	}
+
+	@Override
+	public Collection<ClassroomSessionDivision> readByLevelTimeDivisionByClassroomSessionDivisionOrderNumber(
+			LevelTimeDivision levelTimeDivision, Long classroomSessionDivisionOrderNumber) {
+		return namedQuery(readByLevelTimeDivisionByClassroomSessionDivisionOrderNumber)
+				.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision)
+				.parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber)
+                .resultMany();
+	}
+	
 	
 }
  

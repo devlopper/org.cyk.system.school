@@ -5,17 +5,12 @@ import java.util.Locale;
 
 import javax.servlet.ServletContextEvent;
 
+import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
-import org.cyk.system.company.business.impl.sale.SaleBusinessImpl;
-import org.cyk.system.company.business.impl.sale.SaleCashRegisterMovementCollectionBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeBusinessImpl;
 import org.cyk.system.company.business.impl.structure.EmployeeDetails;
-import org.cyk.system.company.model.CompanyConstant;
-import org.cyk.system.company.model.sale.Sale;
-import org.cyk.system.company.model.sale.SaleCashRegisterMovementCollection;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.company.ui.web.primefaces.sale.SaleConsultPage;
-import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.geography.ContactCollectionDetails;
 import org.cyk.system.root.business.impl.party.person.JobDetails;
@@ -26,6 +21,7 @@ import org.cyk.system.root.business.impl.party.person.PersonDetails;
 import org.cyk.system.root.business.impl.party.person.PersonRelationshipDetails;
 import org.cyk.system.root.business.impl.party.person.SignatureDetails;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValueIdentifiableGlobalIdentifier;
@@ -58,6 +54,7 @@ import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence;
 import org.cyk.utility.common.annotation.user.interfaces.Sequence.Direction;
+import org.cyk.utility.common.generator.AbstractGeneratable;
 
 @javax.servlet.annotation.WebListener
 public class ContextListener extends AbstractSchoolContextListener implements Serializable {
@@ -69,6 +66,8 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		super.contextInitialized(event);
 		MetricCollectionIdentifiableGlobalIdentifier.define(ClassroomSessionDivision.class);
 		MetricValueIdentifiableGlobalIdentifier.define(StudentClassroomSessionDivision.class);
+		
+		AbstractGeneratable.Listener.Adapter.Default.LOCALE = Locale.ENGLISH;
 		
 		StudentClassroomSessionDivisionConsultPage.SUBJECT_DETAILS_CLASS_NAME = StudentClassroomSessionDivisionSubjectDetails.class.getName();
 		StudentClassroomSessionDivisionConsultPage.LOAD_EVALUATIONS = Boolean.TRUE;
@@ -98,7 +97,21 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
     	//CompanyConstant.Configuration.SaleCashRegisterMovementCollection.AUTOMATICALLY_GENERATE_REPORT_FILE = Boolean.TRUE;
     	//CompanyConstant.Configuration.Sale.AUTOMATICALLY_GENERATE_REPORT_FILE = Boolean.TRUE;
 		
-    	inject(CompanyBusinessLayer.class).enableEnterpriseResourcePlanning();
+    	CompanyBusinessLayer.getInstance().enableEnterpriseResourcePlanning();
+		
+    	AbstractCompanyReportProducer.Listener.COLLECTION.add(new AbstractCompanyReportProducer.Listener.Adapter.Default(){
+			private static final long serialVersionUID = 215473098986115952L;
+			
+			@Override
+			public String[] getCustomerPersonRelationshipTypeCodes(AbstractIdentifiable identifiable) {
+				return new String[]{RootConstant.Code.PersonRelationshipType.FAMILY_FATHER,RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER};
+			}
+			
+			@Override
+			public String getCustomerLabel(AbstractIdentifiable identifiable) {
+				return "Parent";
+			}
+		});
     	
 		AbstractWindow.WindowInstanceManager.INSTANCE = new PageInstanceManager(){
 			private static final long serialVersionUID = 1L;

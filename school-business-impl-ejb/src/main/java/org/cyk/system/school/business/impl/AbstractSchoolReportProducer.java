@@ -86,6 +86,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	@SuppressWarnings("unchecked")
 	@Override
 	public <REPORT extends AbstractReportTemplateFile<REPORT>> REPORT produce(Class<REPORT> reportClass, CreateReportFileArguments<?> createReportFileArguments) {
+		if(createReportFileArguments.getLocale()==null)
+			createReportFileArguments.setLocale(RootConstant.Configuration.ReportTemplate.LOCALE);
 		if(StudentReportTemplateFile.class.equals(reportClass)){
 			if(createReportFileArguments.getIdentifiable() instanceof Student)
 				return (REPORT) produceStudentReport((Student)createReportFileArguments.getIdentifiable());
@@ -317,6 +319,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				arguments.getReportTemplate().getNameScript().getInputs().put("studentClassroomSessionDivision", studentClassroomSessionDivision);
 				arguments.getReportTemplate().getNameScript().getInputs().put(RootConstant.Configuration.Script.FORMATTER_BUSINESS, inject(FormatterBusiness.class));
 				arguments.getReportTemplate().getNameScript().getInputs().put(RootConstant.Configuration.Script.IS_DRAFT,report.getIsDraft());
+				
+				arguments.getReportTemplate().getNameScript().getInputs().put(RootConstant.Configuration.ScriptVariable.LOCALE,arguments.getLocale());
 				report.setName((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getNameScript()));
 			}
 			//arguments.setIdentifiableName(report.getName());
@@ -326,6 +330,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				arguments.getReportTemplate().getResultFileNamingScript().getInputs().put("studentClassroomSessionDivision", studentClassroomSessionDivision);
 				arguments.getReportTemplate().getResultFileNamingScript().getInputs().put(RootConstant.Configuration.Script.FORMATTER_BUSINESS, inject(FormatterBusiness.class));
 				arguments.getReportTemplate().getResultFileNamingScript().getInputs().put(RootConstant.Configuration.Script.IS_DRAFT,report.getIsDraft());
+				arguments.getReportTemplate().getResultFileNamingScript().getInputs().put(RootConstant.Configuration.ScriptVariable.LOCALE,arguments.getLocale());
 				arguments.setIdentifiableName((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getResultFileNamingScript()));
 				//arguments.getFile().setName((String) inject(ScriptBusiness.class).evaluate(arguments.getReportTemplate().getResultFileNamingScript()));
 			}
@@ -390,7 +395,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 						,"OUT OF","MAX","CLASS AVERAGE","REMARKS","TEACHER");
 				
 				addOverallResult(report);
-				
+				//System.out.println("Effort level : "+effortLevelsMetricCollectionCode);
 				addMetricCollection(report, ((StudentClassroomSessionDivision)report.getSource()), effortLevelsMetricCollectionCode);
 				report.getCurrentLabelValueCollection().setName(StringUtils.upperCase(report.getCurrentLabelValueCollection().getName()));
 				labelValueCollectionReport = new LabelValueCollectionReport();

@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl._dataproducer.EnterpriseResourcePlanningFakedDataProducer;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 
 public abstract class AbstractEnterpriseResourcePlanningBusinessIT extends AbstractBusinessIT {

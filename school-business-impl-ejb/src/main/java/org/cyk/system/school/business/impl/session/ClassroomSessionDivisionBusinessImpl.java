@@ -38,6 +38,8 @@ import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
+import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.utility.common.Constant;
 
@@ -174,6 +176,19 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		return dao.readByLevelNameByClassroomSessionDivisionOrderNumber(levelNameCode,classroomSessionDivisionOrderNumber);
 	}
 	
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSessionDivision> findByLevelTimeDivisionCodeByClassroomSessionSuffixCodeByClassroomSessionDivisionOrderNumber(String levelTimeDivisionCode, String classroomSessionSuffixCode, Long classroomSessionDivisionOrderNumber) {
+		if(classroomSessionSuffixCode==null)
+			return findByLevelTimeDivisionCodeByClassroomSessionDivisionOrderNumber(levelTimeDivisionCode, classroomSessionDivisionOrderNumber);
+		return dao.readByLevelTimeDivisionByClassroomSessionDivisionSuffixByClassroomSessionDivisionOrderNumber(inject(LevelTimeDivisionDao.class).read(levelTimeDivisionCode)
+				,inject(ClassroomSessionSuffixDao.class).read(classroomSessionSuffixCode),classroomSessionDivisionOrderNumber);
+	}
+
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<ClassroomSessionDivision> findByLevelTimeDivisionCodeByClassroomSessionDivisionOrderNumber(String levelTimeDivisionCode, Long classroomSessionDivisionOrderNumber) {
+		return dao.readByLevelTimeDivisionByClassroomSessionDivisionOrderNumber(inject(LevelTimeDivisionDao.class).read(levelTimeDivisionCode),classroomSessionDivisionOrderNumber);
+	}
+	
 	@Override
 	protected ClassroomSessionDivision __instanciateOne__(String[] values,org.cyk.system.root.business.api.TypedBusiness.InstanciateOneListener<ClassroomSessionDivision> listener) {
 		listener.getInstance().getGlobalIdentifierCreateIfNull();
@@ -220,5 +235,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		}
 		return classroomSessionDivision;
 	}
+
+	
 	
 }

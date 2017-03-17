@@ -1,8 +1,6 @@
-package org.cyk.system.school.business.impl.integration.enterpriseresourceplanning;
+package org.cyk.system.school.business.impl._dataproducer;
 
 import java.io.Serializable;
-
-import org.cyk.system.school.business.impl.integration.AbstractSchoolFakedDataProducer;
 
 import lombok.Getter;
 

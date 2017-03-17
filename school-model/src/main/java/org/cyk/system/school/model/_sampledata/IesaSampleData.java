@@ -242,7 +242,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		report.addLabelValues("PUPIL'S DETAILS",new String[][]{
 			{"Formname(s)", report.getStudentClassroomSessionDivision().getStudent().getPerson().getLastnames()}
 			,{"Surname", report.getStudentClassroomSessionDivision().getStudent().getPerson().getGlobalIdentifier().getName()}
-			,{"Date of birth", report.getStudentClassroomSessionDivision().getStudent().getPerson().getGlobalIdentifier().getExistencePeriod().getFrom()}
+			,{"Date of birth", report.getStudentClassroomSessionDivision().getStudent().getPerson().getGlobalIdentifier().getExistencePeriod().getFromDate()}
 			,{"Place of birth", report.getStudentClassroomSessionDivision().getStudent().getPerson().getGlobalIdentifier().getBirthLocation()}
 			,{"Admission No", report.getStudentClassroomSessionDivision().getStudent().getGlobalIdentifier().getCode()}
 			,{"Class", report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getName()}

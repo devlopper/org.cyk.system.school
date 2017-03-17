@@ -1,4 +1,4 @@
-package org.cyk.system.school.business.impl;
+package org.cyk.system.school.business.impl._test;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -44,6 +44,7 @@ import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjec
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -211,7 +212,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		*/
 		if(Boolean.TRUE.equals(buildReportFile)){
 			for(Boolean draft : isDraft){
-				System.out.println("Building ("+(draft?"draft":"final")+") report of "+classroomSessionDivisions.size()+" classroom session divisions");
+				System.out.println("Building ("+(draft?"draft":"final")+") report of "+classroomSessionDivisions.size()+" classroom session divisions ("+classroomSessionDivisions+")");
 				CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<StudentClassroomSessionDivision>(null)
 						.setIsDraft(draft);
 				studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),reportArgumentsBuilder,new ServiceCallArguments());
@@ -285,7 +286,6 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 					SchoolConstant.Code.MetricCollectionType._STUDENT, classroomSessionDivisions, studentClassroomSessionDivisions);
 			inject(MetricValueBusiness.class).setValueRandomly(metricValues);
 			inject(GenericBusiness.class).update(commonUtils.castCollection(metricValues, AbstractIdentifiable.class));
-			
 			MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new MetricCollectionIdentifiableGlobalIdentifier.SearchCriteria();
 			searchCriteria.addIdentifiablesGlobalIdentifiers(studentClassroomSessionDivisions)
 				.addMetricCollectionTypes(inject(MetricCollectionTypeDao.class).read(SchoolConstant.Code.MetricCollectionType._STUDENT));
@@ -486,10 +486,10 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				.findByClassroomSessionDivisions(Arrays.asList(classroomSessionDivision)));
 	}
 	
-	public void generateStudentClassroomSessionDivisionReport(Object[][] classroomSessionInfos,Boolean[] isDraft,Boolean print,Boolean email){
+	public void generateStudentClassroomSessionDivisionReport(Collection<Object[]> classroomSessionInfos,Boolean[] isDraft,Boolean print,Boolean email){
 		for(Object[] classroomSessionInfo : classroomSessionInfos){
 			ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
-	    			.findByLevelNameByClassroomSessionSuffixByClassroomSessionDivisionOrderNumber((String)classroomSessionInfo[0],(String)classroomSessionInfo[1]
+	    			.findByLevelTimeDivisionCodeByClassroomSessionSuffixCodeByClassroomSessionDivisionOrderNumber((String)classroomSessionInfo[0],(String)classroomSessionInfo[1]
 	    					, (Long)classroomSessionInfo[2]).iterator().next();
 			Object[][] objects = null;
 			if(Boolean.TRUE.equals(classroomSessionDivision.getStudentEvaluationRequired())){

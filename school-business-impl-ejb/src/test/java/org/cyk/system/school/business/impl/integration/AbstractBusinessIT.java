@@ -30,7 +30,7 @@ import org.cyk.system.root.persistence.impl.GenericDaoImpl;
 import org.cyk.system.root.persistence.impl.PersistenceIntegrationTestHelper;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.SchoolBusinessTestHelper;
+import org.cyk.system.school.business.impl._test.SchoolBusinessTestHelper;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
 import org.cyk.utility.common.file.ExcelSheetReader;

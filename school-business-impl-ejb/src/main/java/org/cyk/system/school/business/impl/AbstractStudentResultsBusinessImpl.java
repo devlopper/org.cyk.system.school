@@ -66,6 +66,7 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 	@Override
 	protected void beforeCreate(RESULT identifiable) {
 		super.beforeCreate(identifiable);
+		createIfNotIdentified(identifiable.getStudent());
 		if(identifiable.getResults()==null){
 			identifiable.setResults(new StudentResults());
 			if(identifiable.getStudent()!=null)

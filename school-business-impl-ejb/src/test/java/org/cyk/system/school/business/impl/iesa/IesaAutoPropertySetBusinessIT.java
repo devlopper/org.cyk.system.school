@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.BusinessInterfaceLocator;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;

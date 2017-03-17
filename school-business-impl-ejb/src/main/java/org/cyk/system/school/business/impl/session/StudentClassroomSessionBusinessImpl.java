@@ -9,10 +9,13 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import org.cyk.system.company.business.api.sale.CustomerBusiness;
 import org.cyk.system.company.business.api.sale.SaleBusiness;
 import org.cyk.system.company.business.api.sale.SaleIdentifiableGlobalIdentifierBusiness;
+import org.cyk.system.company.model.sale.Customer;
 import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.company.model.sale.SaleIdentifiableGlobalIdentifier;
+import org.cyk.system.company.persistence.api.sale.CustomerDao;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
@@ -81,8 +84,16 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 				, Crud.CREATE.equals(crud)?1:Crud.DELETE.equals(crud)?-1:0);
 		classroomSessionDao.update(studentClassroomSession.getClassroomSession());
 		if(Crud.CREATE.equals(crud)){
+			Customer customer = inject(CustomerDao.class).read(studentClassroomSession.getStudent().getCode());
+			if(customer==null){
+				customer = inject(CustomerBusiness.class).instanciateOne();
+				customer.setCode(studentClassroomSession.getStudent().getCode());
+				customer.setPerson(studentClassroomSession.getStudent().getPerson());
+				inject(CustomerBusiness.class).create(customer);
+			}
 			Sale sale = inject(SaleBusiness.class).instanciateOne();
 			sale.setName("School Fees");
+			sale.setCustomer(customer);
 			inject(SaleBusiness.class).create(sale);
 			
 			SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier = new SaleIdentifiableGlobalIdentifier(sale, studentClassroomSession);

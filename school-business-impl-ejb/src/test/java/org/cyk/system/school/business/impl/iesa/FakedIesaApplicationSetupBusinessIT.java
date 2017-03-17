@@ -44,6 +44,7 @@ public class FakedIesaApplicationSetupBusinessIT extends AbstractIesaBusinessIT 
     	Student studentG1A = inject(StudentBusiness.class).instanciateOneRandomly();
     	studentG1A.setCode("STUDG1A");
     	studentG1A.setName("komenan");
+    	studentG1A.getPerson().setName("komenan");
     	studentG1A.getPerson().setLastnames("yao christian");
     	if(studentG1A.getPerson().getContactCollection()!=null && studentG1A.getPerson().getContactCollection().getElectronicMails()!=null)
     		studentG1A.getPerson().getContactCollection().getElectronicMails().clear();

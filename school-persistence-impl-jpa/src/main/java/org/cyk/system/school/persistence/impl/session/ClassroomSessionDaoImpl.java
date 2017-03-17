@@ -3,6 +3,8 @@ package org.cyk.system.school.persistence.impl.session;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.persistence.NoResultException;
+
 import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.root.persistence.impl.QueryWrapper;
@@ -91,13 +93,14 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
     @Override
     public ClassroomSession readByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, ClassroomSessionSuffix suffix) {
     	return namedQuery(readByAcademicSessionByLevelTimeDivisionBySuffix).parameter(ClassroomSession.FIELD_ACADEMIC_SESSION, academicSession)
-    			.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision).parameter(ClassroomSession.FIELD_SUFFIX, suffix).resultOne();
+    			.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision).parameter(ClassroomSession.FIELD_SUFFIX, suffix)
+    			.ignoreThrowable(NoResultException.class).resultOne();
     }
     
     @Override
 	public ClassroomSession readWhereSuffixIsNullByAcademicSessionByLevelTimeDivision(AcademicSession academicSession,LevelTimeDivision levelTimeDivision) {
     	return namedQuery(readWhereSuffixIsNullByAcademicSessionByLevelTimeDivision).parameter(ClassroomSession.FIELD_ACADEMIC_SESSION, academicSession)
-    			.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision).resultOne();
+    			.parameter(ClassroomSession.FIELD_LEVEL_TIME_DIVISION, levelTimeDivision).ignoreThrowable(NoResultException.class).resultOne();
 	}
 
 	@Override

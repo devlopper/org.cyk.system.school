@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl.iesa;
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
+import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.integration.AbstractBusinessIT;
 
 public class IesaCrudBusinessIT extends AbstractBusinessIT {

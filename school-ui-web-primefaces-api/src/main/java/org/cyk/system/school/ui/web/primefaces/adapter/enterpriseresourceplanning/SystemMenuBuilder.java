@@ -19,8 +19,6 @@ import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjec
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
-import org.cyk.system.school.business.impl.actor.TeacherBusinessImpl;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -106,7 +104,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 			module.addChild(Builder.createCreateMany(StudentClassroomSession.class, null));
 			module.addChild(Builder.createCreateMany(StudentClassroomSessionDivisionSubject.class, null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionAssignSubjectClassroomSessionToStudentClassroomSession() ,null));
-			addReportCommandables(Student.class,module, StudentBusinessImpl.Listener.COLLECTION);
+			//addReportCommandables(Student.class,module, StudentBusinessImpl.Listener.COLLECTION);
 		}
 		return module;
 	}
@@ -115,7 +113,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	public Commandable getEmployeeCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables) {
 		Commandable module = super.getEmployeeCommandable(userSession, mobileCommandables);
 		module.addChild(createListCommandable(Teacher.class, null));
-		addReportCommandables(Teacher.class,module, TeacherBusinessImpl.Listener.COLLECTION);
+		//addReportCommandables(Teacher.class,module, TeacherBusinessImpl.Listener.COLLECTION);
 		return module;
 	}
 	
