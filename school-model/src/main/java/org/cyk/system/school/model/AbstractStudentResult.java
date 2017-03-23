@@ -43,7 +43,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	
 	@Override
 	public String toString() {
-		return "("+identifier+","+student.getIdentifier()+","+((AbstractIdentifiable)getLevel()).getIdentifier()+")";
+		return "("+identifier+","+student.getIdentifier()+","+((AbstractIdentifiable)getLevel()).getIdentifier()+","+results+")";
 	}
 	
 	@Override

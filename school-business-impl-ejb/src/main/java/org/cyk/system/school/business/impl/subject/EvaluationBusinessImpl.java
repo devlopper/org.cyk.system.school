@@ -76,7 +76,8 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 		return evaluation;
 	}
 	
-	private void save(Evaluation evaluation){
+	@Override
+	public Evaluation save(Evaluation evaluation){
 		for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : evaluation.getStudentSubjectEvaluations()){
 			studentSubjectEvaluation.setEvaluation(evaluation);
 			if(studentSubjectEvaluation.getIdentifier()==null)
@@ -84,6 +85,7 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 			else
 				inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).update(studentSubjectEvaluation);		
 		}
+		return evaluation;
 	}
 	
 	@Override

@@ -13,15 +13,5 @@ public class EnterpriseResourcePlanningFakedDataProducer extends AbstractCompany
 
 	private static final long serialVersionUID = -1832900422621121762L;
 	
-	@Override
-	protected void structure() {
-		
-	}
-
-	@Override
-	protected void doBusiness(Listener listener) {
-		
-	}
-
 	
 }

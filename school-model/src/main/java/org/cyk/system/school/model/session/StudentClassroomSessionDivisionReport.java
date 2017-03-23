@@ -11,6 +11,7 @@ import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.party.person.ActorReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 import org.cyk.utility.common.formatter.NumberFormatter;
+import org.cyk.utility.common.generator.AbstractGeneratable;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,9 +59,11 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 			numberFormatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
 			numberFormatter.setIsAppendExaequo(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getExaequo());
 			numberFormatter.setIsOrdinal(Boolean.TRUE);
+			numberFormatter.setLocale(AbstractGeneratable.Listener.Adapter.Default.LOCALE);
 			setRank(numberFormatter.execute());
 			
-			setAveragePromotionScale(RootConstant.Code.getRelativeCode(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()));
+			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()!=null)
+				setAveragePromotionScale(RootConstant.Code.getRelativeCode(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()));
 			
 			setTotalCoefficient(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getDivisor()));
 			setTotalAverage(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getDividend()));

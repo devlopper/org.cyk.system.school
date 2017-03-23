@@ -27,7 +27,7 @@ public abstract class AbstractIesaFakedDataProducer extends AbstractEnterpriseRe
 	private static final long serialVersionUID = -1832900422621121762L;
 		
 	@Override
-	protected void structure() {
+	protected void structure(Listener listener) {
 		AbstractGeneratable.Listener.Adapter.Default.LOCALE = Locale.ENGLISH;
     	PersistDataListener.COLLECTION.add(new PersistDataListener.Adapter.Default(){
 			private static final long serialVersionUID = -950053441831528010L;
@@ -41,7 +41,7 @@ public abstract class AbstractIesaFakedDataProducer extends AbstractEnterpriseRe
 				return super.processPropertyValue(aClass, instanceCode, name, value);
 			}
 		});
-		super.structure();
+		super.structure(listener);
 		create(inject(TangibleProductBusiness.class).instanciateMany(new String[][]{{"TP01","Books Package Primary"},{"TP02", "Polo shirt Primary"}
 		,{"TP03", "Sportswear Primary"},{"TP04","ID Card"},{"TP05","School Uniform (Up and Down) Primary"},{"TP06","Culottes Primary"}}));
 		create(inject(IntangibleProductBusiness.class).instanciateMany(new String[][]{{"IP01","Re-registration"},{"IP02", "Tuition fees"},{"IP03", "Exam (STA)"}

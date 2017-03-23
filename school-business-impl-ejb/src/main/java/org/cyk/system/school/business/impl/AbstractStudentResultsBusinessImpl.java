@@ -36,6 +36,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.persistence.api.subject.LectureDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
+import org.cyk.utility.common.LogMessage;
 
 public abstract class AbstractStudentResultsBusinessImpl<RESULT extends AbstractStudentResult<LEVEL,DETAIL>,DAO extends TypedDao<RESULT>,LEVEL extends AbstractIdentifiable,DETAIL> extends AbstractTypedBusinessService<RESULT,DAO> implements AbstractStudentResultsBusiness<LEVEL,RESULT,DETAIL>,Serializable {
 
@@ -96,6 +97,7 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 		logTrace("Computing average in module {} . {}={} {}={}",getClazz().getSimpleName(),getResultClass().getSimpleName() ,results.size()
 				,getDetailsClass().getSimpleName(),details.size());
 		for(RESULT result : results){
+			LogMessage.Builder logMessageBuilder = new LogMessage.Builder("Update", "average");
 			setCallArgumentsCurrentExecutionStep(callArguments, result);
 			
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
@@ -124,16 +126,16 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 				//logTrace("No weighted values found for {}.  No average will be computed", result);
 			}else{
 				Average average = mathematicsBusiness.average(weightedValues, schoolBusinessLayer.getAverageComputationListener(), schoolBusinessLayer.getAverageComputationScript());
-				//debug(result.getResults());
-				//setting
 				result.getResults().getEvaluationSort().setAverage(average);
 				result.getResults().getEvaluationSort().setAverageAppreciatedInterval(intervalBusiness.findByCollectionByValue(averageAppreciatedIntervalCollection(level(result)),average.getValue(), 2));
 				result.getResults().getEvaluationSort().setAveragePromotedInterval(intervalBusiness.findByCollectionByValue(averagePromotedIntervalCollection(level(result)),average.getValue(), 2));
 				logIdentifiable("Average computed", result);
 				//logTrace("Average {} , Interval {}",result.getResults().getEvaluationSort().getAverage(),result.getResults().getEvaluationSort().getAverageInterval());
+				addLogMessageBuilderParameters(logMessageBuilder, "results",result.getResults());
 			}
 			dao.update(result);
 			addCallArgumentsWorkDoneByStep(callArguments);
+			logTrace(logMessageBuilder);
 		}
 		
 	}

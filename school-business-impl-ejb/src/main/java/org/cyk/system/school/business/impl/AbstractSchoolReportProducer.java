@@ -62,6 +62,8 @@ import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSub
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
+import org.cyk.utility.common.formatter.NumberFormatter;
+import org.cyk.utility.common.generator.AbstractGeneratable;
 
 public abstract class AbstractSchoolReportProducer extends AbstractCompanyReportProducer implements SchoolReportProducer,Serializable {
 
@@ -223,7 +225,13 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			sr.setAverage(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()):NOT_APPLICABLE);
 			sr.setAverageCoefficiented(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()
 					.multiply(studentSubject.getClassroomSessionDivisionSubject().getWeight()==null?BigDecimal.ONE:studentSubject.getClassroomSessionDivisionSubject().getWeight())):NOT_APPLICABLE);
-			sr.setRank(applicable?inject(MathematicsBusiness.class).format(studentSubject.getResults().getEvaluationSort().getRank()):NOT_APPLICABLE);	
+			
+			NumberFormatter.String rankFormatter = new NumberFormatter.String.Adapter.Default(studentSubject.getResults().getEvaluationSort().getRank().getValue(),null);
+			rankFormatter.setIsOrdinal(Boolean.TRUE);
+			rankFormatter.setLocale(AbstractGeneratable.Listener.Adapter.Default.LOCALE);
+			rankFormatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
+			rankFormatter.setIsAppendExaequo(Boolean.TRUE.equals(studentSubject.getResults().getEvaluationSort().getRank().getExaequo()));
+			sr.setRank(applicable?rankFormatter.execute():NOT_APPLICABLE);	
 			
 			//if(studentSubject.getResults().getEvaluationSort().getAverageInterval()!=null){
 				set(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval(), sr.getAverageScale());
@@ -487,7 +495,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
 				trimesters.add(((StudentClassroomSessionDivision)studentClassroomSessionDivision.getSource()).getClassroomSessionDivision().getOrderNumber().toString());
 			
-			report.addLabelValues("PREVIOUS RESULTS", new String[][]{
+			report.addLabelValues("PREVIOUS TERMS", new String[][]{
 				averages.toArray(new String[]{})
 				,grades.toArray(new String[]{})
 				,ranks.toArray(new String[]{})

@@ -19,7 +19,6 @@ import org.cyk.system.root.model.party.person.MedicalInformations;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
-import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Student.SearchCriteria;
@@ -44,6 +43,12 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 	protected Collection<? extends org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl.Listener<?>> getListeners() {
 		return Listener.COLLECTION;
 	}
+	
+	@Override
+	protected void afterCreate(Student student) {
+		super.afterCreate(student);
+		createIfNotIdentified(student.getStudentClassroomSession());
+	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<Student> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
@@ -66,7 +71,7 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 			public static class Default extends Listener.Adapter implements Serializable {
 				private static final long serialVersionUID = -1625238619828187690L;
 				
-				@Override
+				/*@Override
 				public void afterCreate(Student student) {
 					super.afterCreate(student);
 					if(containsCascadeToClass(StudentClassroomSession.class) && student.getStudentClassroomSession()!=null && student.getStudentClassroomSession().getClassroomSession()!=null 
@@ -74,7 +79,7 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 						student.getStudentClassroomSession().setStudent(student);
 						inject(StudentClassroomSessionBusiness.class).create(student.getStudentClassroomSession());
 					}		
-				}
+				}*/
 				
 				/**/
 				

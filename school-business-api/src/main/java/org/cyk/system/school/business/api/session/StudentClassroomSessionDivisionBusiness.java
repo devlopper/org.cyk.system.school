@@ -70,4 +70,7 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	Collection<StudentClassroomSessionDivision> findByLevelTimeDivision(LevelTimeDivision levelTimeDivision);
 	Collection<StudentClassroomSessionDivision> findByAcademicSession(AcademicSession academicSession);
 	Collection<StudentClassroomSessionDivision> findByAcademicSessionByClassroomSessionDivisionOrderNumber(AcademicSession academicSession, Long classroomSessionDivisionOrderNumber);
+	
+	/**/
+	
 }

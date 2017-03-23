@@ -49,6 +49,7 @@ import org.cyk.system.school.ui.web.primefaces.AbstractSchoolContextListener;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.ui.api.AbstractWindow;
+import org.cyk.ui.web.primefaces.AbstractSystemMenuBuilder;
 import org.cyk.ui.web.primefaces.page.AbstractPrimefacesPage.PageInstanceManager;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
@@ -133,6 +134,8 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 				return super.isShowDetails(detailsClass, identifiable,window);
 			}
 		};
+		
+		AbstractSystemMenuBuilder.DEFAULT = SystemMenuBuilder.getInstance();
 		
 	}
 		
