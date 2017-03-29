@@ -57,9 +57,9 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 	protected void initialisation() {
 		super.initialisation();
 		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeBusiness
-				.class).find(Arrays.asList(SchoolConstant.Code.MetricCollectionType.BEHAVIOUR_STUDENT,SchoolConstant.Code.MetricCollectionType.ATTENDANCE_STUDENT
-						,SchoolConstant.Code.MetricCollectionType.COMMUNICATION_STUDENT))
+				.class).find(SchoolConstant.Code.MetricCollectionType._STUDENT)
 				, identifiable.getClassroomSessionDivision());
+		
 		MetricValueCollection metricValueCollection = null;
 		for(MetricCollection metricCollection : metricCollections){
 			final MetricCollection lMetricCollection = metricCollection;			

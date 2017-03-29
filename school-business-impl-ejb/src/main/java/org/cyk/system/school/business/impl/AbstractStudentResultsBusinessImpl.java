@@ -11,6 +11,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.event.EventBusiness;
 import org.cyk.system.root.business.api.event.EventMissedBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
@@ -64,15 +65,26 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 		return super.getPropertyValueTokens(result, name);
 	}
 	
+	
+	
+	@Override
+	public RESULT instanciateOne() {
+		RESULT instance =  super.instanciateOne();
+		instance.setResults(new StudentResults());
+		return instance;
+	}
+
 	@Override
 	protected void beforeCreate(RESULT identifiable) {
 		super.beforeCreate(identifiable);
 		createIfNotIdentified(identifiable.getStudent());
 		if(identifiable.getResults()==null){
 			identifiable.setResults(new StudentResults());
-			if(identifiable.getStudent()!=null)
-				identifiable.getResults().setCode(identifiable.getStudent().getCode());
+			
 		}
+		
+		if(StringUtils.isBlank(identifiable.getResults().getCode()) && identifiable.getStudent()!=null)
+			identifiable.getResults().setCode(identifiable.getStudent().getCode());
 	}
 	
 	@Override

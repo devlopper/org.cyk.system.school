@@ -72,7 +72,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		studentClassroomSession.setClassroomSession(classroomSession);
 		return studentClassroomSession;
 	}
-	
+	static int i = 0;
 	@Override
 	protected void afterCreate(StudentClassroomSession studentClassroomSession) {
 		super.afterCreate(studentClassroomSession);
@@ -82,6 +82,14 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 				studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
 		}
 		cascade(studentClassroomSession, studentClassroomSessionDivisions, Crud.CREATE);
+	}
+	
+	@Override
+	public StudentClassroomSession create(StudentClassroomSession identifiable) {
+		long t = System.currentTimeMillis();
+		StudentClassroomSession identifiable1 = super.create(identifiable);
+		System.out.println(identifiable.getCode()+" : "+(++i)+" : "+( (System.currentTimeMillis()-t)/1000 ));
+		return identifiable1;
 	}
 	
 	private void cascade(StudentClassroomSession studentClassroomSession,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Crud crud){

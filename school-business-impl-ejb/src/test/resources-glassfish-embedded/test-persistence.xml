@@ -4,9 +4,16 @@
 	<persistence-unit name="test" transaction-type="JTA">
 		<jta-data-source>jdbc/arquillian</jta-data-source>
 		<properties>
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
-			<property name="eclipselink.logging.level.sql" value="ALL" />
+			<!-- drop-and-create-tables : none-->
+			<property name="eclipselink.ddl-generation" value="none" />
+			<property name="eclipselink.logging.level" value="off" />
+			<property name="eclipselink.logging.level.sql" value="off" />
 			<property name="eclipselink.logging.parameters" value="true" />
+			
+			<property name="eclipselink.jdbc.batch-writing" value="jdbc" />
+			<property name="eclipselink.jdbc.batch-writing.size" value="1000"/>
+			<property name="eclipselink.cache.shared.default" value="false"/>
+			
 		</properties>
 	</persistence-unit>
 </persistence>

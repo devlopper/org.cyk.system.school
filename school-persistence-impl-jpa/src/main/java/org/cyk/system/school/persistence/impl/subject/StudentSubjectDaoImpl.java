@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.NoResultException;
 
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
@@ -23,7 +24,7 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentClassroomSess
 	
     private String readByStudentBySubject,readBySubject,readByStudent,readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions
     	,readBySubjects,readByClassroomSessions,readByStudentByClassroomSessionDivision,readByStudentByClassroomSessionDivisionBySubject,readByStudentByClassroomSession
-    	,readByClassroomSessionDivisionByTeacher;
+    	,readByClassroomSessionDivisionByTeacher,readWhereStudentResultsEvaluationAverageIsNullByClassroomSessionDivisionOrderNumber;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -58,6 +59,12 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentClassroomSess
         registerNamedQuery(readByClassroomSessionDivisionByTeacher, _select().where(commonUtils.attributePath(StudentClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
         		,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION).and(commonUtils.attributePath(StudentClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, ClassroomSessionDivisionSubject.FIELD_TEACHER)
                 		,ClassroomSessionDivisionSubject.FIELD_TEACHER, ArithmeticOperator.EQ));
+        
+        
+        registerNamedQuery(readWhereStudentResultsEvaluationAverageIsNullByClassroomSessionDivisionOrderNumber, "SELECT r FROM StudentClassroomSessionDivisionSubject r "
+        		+ " WHERE r.results.evaluationSort.average.value IS NULL "
+        		+ "AND r.classroomSessionDivisionSubject.classroomSessionDivision.globalIdentifier.orderNumber = :orderNumber"
+        		);
         
         registerNamedQuery(readDuplicates, "SELECT r FROM StudentClassroomSessionDivisionSubject r "
         		+ " GROUP BY r.classroomSessionDivisionSubject,r.student "
@@ -154,6 +161,14 @@ public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentClassroomSess
 		return namedQuery(readByStudentByClassroomSessionDivisionBySubject).parameter(StudentClassroomSessionDivisionSubject.FIELD_STUDENT, student)
 			.parameter(ClassroomSessionDivisionSubject.FIELD_SUBJECT, subject)
 			.parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision).resultMany();
+	}
+
+	@Override
+	public Collection<StudentClassroomSessionDivisionSubject> readWhereStudentResultsEvaluationAverageIsNullByClassroomSessionDivisionOrderNumber(
+			Long classroomSessionDivisionOrderNumber) {
+		return namedQuery(readWhereStudentResultsEvaluationAverageIsNullByClassroomSessionDivisionOrderNumber)
+				.parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber)
+				.resultMany();
 	}
 }
  

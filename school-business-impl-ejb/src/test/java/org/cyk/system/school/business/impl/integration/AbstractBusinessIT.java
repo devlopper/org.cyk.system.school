@@ -165,6 +165,11 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     protected AbstractIdentifiable update(AbstractIdentifiable object){
         return genericBusiness.update(object);
     }
+    
+    @SuppressWarnings("unchecked")
+	protected <T extends AbstractIdentifiable> void update(Collection<T> objects){
+        genericBusiness.update((Collection<AbstractIdentifiable>) objects);
+    }
         
     public static Archive<?> createRootDeployment() {
         return  

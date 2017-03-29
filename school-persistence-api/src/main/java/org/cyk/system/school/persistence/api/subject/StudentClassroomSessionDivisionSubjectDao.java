@@ -36,4 +36,5 @@ public interface StudentClassroomSessionDivisionSubjectDao extends TypedDao<Stud
 	/**/
 	
 	Collection<StudentClassroomSessionDivisionSubject> readDuplicatesByStudentByClassroomSessionDivisionBySubject(Student student,ClassroomSessionDivision classroomSessionDivision, Subject subject);
+	Collection<StudentClassroomSessionDivisionSubject> readWhereStudentResultsEvaluationAverageIsNullByClassroomSessionDivisionOrderNumber(Long classroomSessionDivisionOrderNumber);
 }
