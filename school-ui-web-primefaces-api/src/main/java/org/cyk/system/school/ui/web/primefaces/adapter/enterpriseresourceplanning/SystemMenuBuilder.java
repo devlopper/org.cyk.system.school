@@ -1,7 +1,6 @@
 package org.cyk.system.school.ui.web.primefaces.adapter.enterpriseresourceplanning;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -216,7 +215,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 				if(model.getData() instanceof ClassroomSessionDivisionSubjectEvaluationType){
 					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) model.getData();
 					if(classroomSessionDivisionSubjectEvaluationType.getCountInterval()!=null && inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
-							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().intValue() == 1)
 						model.setCollapsedIcon(Icon.THING_TABLE);
 					model.setExpandedIcon(Icon.THING_TABLE);
 					Collection<Evaluation> evaluations = inject(EvaluationBusiness.class).findByClassroomSessionDivisionSubjectEvaluationType((ClassroomSessionDivisionSubjectEvaluationType) model.getData());
@@ -284,7 +283,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
 					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
 					if(inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
-							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().intValue() == 1)
 						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
 							return new Evaluation();
 						else{
@@ -301,7 +300,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
 					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
 					if(inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
-							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
+							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().intValue() == 1)
 						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
 							return Crud.CREATE;
 						else

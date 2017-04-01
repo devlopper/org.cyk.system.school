@@ -253,6 +253,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 				Object object = ((WebHierarchyNode)node.getData()).getData();
 				if(object instanceof ClassroomSessionDivisionSubjectEvaluationType){
 					ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) object;
+					System.out.println(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations());
 					if(inject(IntervalBusiness.class).isLowerEqualsToHigher(classroomSessionDivisionSubjectEvaluationType.getCountInterval()) &&
 							classroomSessionDivisionSubjectEvaluationType.getCountInterval().getLow().getValue().equals(BigDecimal.ONE))
 						if(classroomSessionDivisionSubjectEvaluationType.getNumberOfEvaluations()==0)
