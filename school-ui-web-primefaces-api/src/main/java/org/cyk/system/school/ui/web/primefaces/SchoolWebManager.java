@@ -365,7 +365,6 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		AcademicSession academicSession = inject(AcademicSessionBusiness.class).findCurrent(null);
 		final Teacher teacher = page.getUserSession().getUserAccount().getUser() instanceof Person 
 				? inject(TeacherBusiness.class).findByPerson((Person) page.getUserSession().getUserAccount().getUser()) : null;
-		
 		if(!Boolean.TRUE.equals(page.getUserSession().getIsManager()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){
 			if(teacher==null)
 				;

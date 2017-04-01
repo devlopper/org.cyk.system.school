@@ -130,6 +130,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 						.read(SchoolConstant.Code.MetricCollection.BEHAVIOUR_KINDERGARTEN_K1_STUDENT_EVALUATED), Arrays.asList(studentClassroomSessionDivision));
 			}
 			inject(MetricValueIdentifiableGlobalIdentifierBusiness.class).delete(metricCollections, Arrays.asList(studentClassroomSessionDivision));	
+							
 		}
 		
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivisionSubjectDao,StudentClassroomSessionDivisionSubjectBusiness>(null,inject(StudentClassroomSessionDivisionSubjectBusiness.class))

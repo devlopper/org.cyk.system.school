@@ -358,24 +358,28 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 				ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class)
 						.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(levelTimeDivisionCode,classroomSessionSuffixCode);
 				
-				for(Object[] studentInfos : getStudents(levelTimeDivisionCode, classroomSessionSuffixCode)){
-					Student student = inject(StudentBusiness.class).instanciateOneRandomly((String)studentInfos[0]);
-					student.setName((String)studentInfos[1]);
-					student.getPerson().setLastnames((String)studentInfos[2]);
-					//student.getPerson().getContactCollection()!=null && student.getPerson().getContactCollection()
-					//		.getElectronicMails()!=null);
-			    	student.getPerson().getContactCollection().getElectronicMails().clear();
-			    	if(studentInfos.length>3){
-			    		inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, (String)studentInfos[3]);
-			    		if(studentInfos.length>4){
-			    			inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, (String)studentInfos[4]);
-			    		}
-			    	}
-			    	StudentClassroomSession studentClassroomSession = inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{null,classroomSession.getCode()});
-			    	studentClassroomSession.setStudent(student);
-			    	studentClassroomSessions.add(studentClassroomSession);
-			    	
-				}		
+				Object[][] students = getStudents(levelTimeDivisionCode, classroomSessionSuffixCode);
+				if(students!=null){
+					for(Object[] studentInfos : students){
+						Student student = inject(StudentBusiness.class).instanciateOneRandomly((String)studentInfos[0]);
+						student.setName((String)studentInfos[1]);
+						student.getPerson().setLastnames((String)studentInfos[2]);
+						//student.getPerson().getContactCollection()!=null && student.getPerson().getContactCollection()
+						//		.getElectronicMails()!=null);
+				    	student.getPerson().getContactCollection().getElectronicMails().clear();
+				    	if(studentInfos.length>3){
+				    		inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, (String)studentInfos[3]);
+				    		if(studentInfos.length>4){
+				    			inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, (String)studentInfos[4]);
+				    		}
+				    	}
+				    	StudentClassroomSession studentClassroomSession = inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{null,classroomSession.getCode()});
+				    	studentClassroomSession.setStudent(student);
+				    	studentClassroomSessions.add(studentClassroomSession);
+				    	
+					}		
+				}
+				
 			}
 			
 		}

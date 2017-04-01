@@ -16,6 +16,7 @@ import org.cyk.system.company.model.sale.Customer;
 import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.company.model.sale.SaleIdentifiableGlobalIdentifier;
 import org.cyk.system.company.persistence.api.sale.CustomerDao;
+import org.cyk.system.company.persistence.api.sale.SaleIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
@@ -72,7 +73,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		studentClassroomSession.setClassroomSession(classroomSession);
 		return studentClassroomSession;
 	}
-	static int i = 0;
+	
 	@Override
 	protected void afterCreate(StudentClassroomSession studentClassroomSession) {
 		super.afterCreate(studentClassroomSession);
@@ -85,10 +86,8 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	}
 	
 	@Override
-	public StudentClassroomSession create(StudentClassroomSession identifiable) {
-		long t = System.currentTimeMillis();
-		StudentClassroomSession identifiable1 = super.create(identifiable);
-		System.out.println(identifiable.getCode()+" : "+(++i)+" : "+( (System.currentTimeMillis()-t)/1000 ));
+	public StudentClassroomSession create(StudentClassroomSession studentClassroomSession) {
+		StudentClassroomSession identifiable1 = super.create(studentClassroomSession);
 		return identifiable1;
 	}
 	
@@ -114,8 +113,13 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 			
 			SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier = new SaleIdentifiableGlobalIdentifier(sale, studentClassroomSession);
 			inject(SaleIdentifiableGlobalIdentifierBusiness.class).create(saleIdentifiableGlobalIdentifier);
-		}else if(Crud.DELETE.equals(crud)){
 			
+		}else if(Crud.DELETE.equals(crud)){
+			for(SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier : inject(SaleIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(studentClassroomSession)){
+				Sale sale = saleIdentifiableGlobalIdentifier.getSale();
+				inject(SaleBusiness.class).delete(sale);
+				
+			}
 		}
 	}
 	
