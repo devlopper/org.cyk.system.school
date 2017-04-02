@@ -16,11 +16,19 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 	private static final long serialVersionUID = -6025941646465245555L;
 	
 	private ClassroomSessionReport classroomSession = new ClassroomSessionReport();
+	private BroadsheetReport broadsheet = new BroadsheetReport();
+	private ArrayList<StudentClassroomSessionDivisionReport> studentClassroomSessionDivisions = new ArrayList<>();
 	
 	@Override
 	public void generate() {
 		super.generate();
 		classroomSession.generate();
+		for(int i = 0 ; i < 3 ; i++){
+			StudentClassroomSessionDivisionReport studentClassroomSessionDivision = new StudentClassroomSessionDivisionReport(this);
+			studentClassroomSessionDivision.generate();
+			studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
+		}
+		broadsheet.generate();
 	}
 	
 	@Override

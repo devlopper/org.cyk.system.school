@@ -5,12 +5,26 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.cyk.system.root.model.AbstractSampleData;
+import org.cyk.system.school.model.session.ClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.utility.common.generator.RandomDataProvider;
 
 public class IesaSampleData extends AbstractSampleData implements Serializable {
 
 	private static final long serialVersionUID = -1887987316565799879L;
+	
+	protected static Collection<ClassroomSessionDivisionReportTemplateFile> __createClassroomSessionDivisionReports__(Long classroomSessionDivisionOrderNumber,Boolean provisional){
+		Collection<ClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(ClassroomSessionDivisionReportTemplateFile.class, 1);
+		ClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
+		report.setIsDraft(provisional);
+		report.setName("THE BROAD SHEET");
+		
+		return collection;
+	}
+	
+	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReports(){
+		return __createClassroomSessionDivisionReports__(1l,Boolean.FALSE);
+	}
 	
 	protected static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForOtherGrade__(Long classroomSessionDivisionOrderNumber,Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
