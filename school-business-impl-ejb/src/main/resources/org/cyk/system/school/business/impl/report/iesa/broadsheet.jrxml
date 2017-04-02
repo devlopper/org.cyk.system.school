@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="broadsheet" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="192570b5-5ca5-44f3-baeb-fc70297c011e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="58"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<subDataset name="BroadsheetItemDS" uuid="235190a0-a1f0-4a19-9c14-e3040218738c">
+		<field name="row" class="java.lang.String">
+			<fieldDescription><![CDATA[row]]></fieldDescription>
+		</field>
+		<field name="column" class="java.lang.String">
+			<fieldDescription><![CDATA[column]]></fieldDescription>
+		</field>
+		<field name="value" class="java.lang.String">
+			<fieldDescription><![CDATA[value]]></fieldDescription>
+		</field>
+	</subDataset>
+	<field name="backgroundImage" class="java.io.InputStream">
+		<fieldDescription><![CDATA[backgroundImage]]></fieldDescription>
+	</field>
+	<field name="headerImage" class="java.io.InputStream">
+		<fieldDescription><![CDATA[headerImage]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<field name="isDraft" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[isDraft]]></fieldDescription>
+	</field>
+	<field name="footer" class="java.lang.String">
+		<fieldDescription><![CDATA[footer]]></fieldDescription>
+	</field>
+	<field name="signer" class="org.cyk.system.root.model.party.person.PersonReport">
+		<fieldDescription><![CDATA[signer]]></fieldDescription>
+	</field>
+	<field name="classroomSessionDivision" class="org.cyk.system.school.model.session.ClassroomSessionDivisionReport">
+		<fieldDescription><![CDATA[classroomSessionDivision]]></fieldDescription>
+	</field>
+	<title>
+		<band height="67" splitType="Stretch">
+			<image scaleImage="RetainShape" hAlign="Center" isUsingCache="false" onErrorType="Blank">
+				<reportElement x="0" y="0" width="555" height="66" uuid="8e42e949-dfeb-479c-8261-4e1e8b45ee65"/>
+				<imageExpression><![CDATA[$F{headerImage}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="261" splitType="Stretch">
+			<crosstab>
+				<reportElement x="0" y="0" width="802" height="261" uuid="872e393b-549c-4953-a178-cd52e4d01184"/>
+				<crosstabDataset>
+					<dataset>
+						<datasetRun subDataset="BroadsheetItemDS" uuid="d001e614-6853-4b3d-b7a1-93a51c72d7b3">
+							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{classroomSessionDivision}.getBroadsheet().getCells())]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+				</crosstabDataset>
+				<rowGroup name="row" width="70">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{row}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="25" uuid="4eaefc19-348c-4e95-98d8-1e060bc9a5c9"/>
+								<textFieldExpression><![CDATA[$V{row}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="column" height="91">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{column}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="23" height="91" uuid="8dbf9107-34fa-4f01-8129-ad1133fc1f50"/>
+								<textElement rotation="Left"/>
+								<textFieldExpression><![CDATA[$V{column}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents/>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="valueMeasure" class="java.lang.String">
+					<measureExpression><![CDATA[$F{value}]]></measureExpression>
+				</measure>
+				<crosstabCell width="23" height="25">
+					<cellContents>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="23" height="25" uuid="1f0f59da-11d2-441b-a8ae-9ee21ec14b2e"/>
+							<textFieldExpression><![CDATA[$V{valueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="row">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="a3ffc031-ec4f-476d-b7e9-8c0dbbaa2960"/>
+							<textFieldExpression><![CDATA[$V{valueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="column">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="cdcdc0fb-288b-4528-ae5c-a3bac0ff7f8c"/>
+							<textFieldExpression><![CDATA[$V{valueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="row" columnTotalGroup="column">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="791d341d-6e85-46b6-a918-05b592a6b7f0"/>
+							<textFieldExpression><![CDATA[$V{valueMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</detail>
+</jasperReport>
