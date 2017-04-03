@@ -2,11 +2,11 @@ package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.cyk.utility.common.model.table.AbstractCrossedDataReport;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import org.cyk.utility.common.generator.RandomDataProvider;
+import org.cyk.utility.common.model.table.AbstractCrossedDataReport;
 
 @Getter @Setter
 public class BroadsheetReport extends AbstractCrossedDataReport<BroadsheetReport,BroadsheetReport.Cell> implements Serializable {
@@ -18,8 +18,9 @@ public class BroadsheetReport extends AbstractCrossedDataReport<BroadsheetReport
 	protected String[] getGenerateRows() {
 		String[] rows = new String[40];
 		for(int i =0;i<rows.length;i++)
-			rows[i] = RandomStringUtils.randomAlphanumeric(10);
-		return super.getGenerateRows();
+			rows[i] = RandomDataProvider.getInstance().getMale().lastName()
+				+","+RandomDataProvider.getInstance().getMale().middleName()+" "+RandomDataProvider.getInstance().getMale().firstName();
+		return rows;
 	}
 	
 	@Override
@@ -34,6 +35,8 @@ public class BroadsheetReport extends AbstractCrossedDataReport<BroadsheetReport
 	@Getter @Setter
 	public static class Cell extends AbstractCrossedDataReport.AbstractCell<Cell> implements Serializable {
 		private static final long serialVersionUID = 1L;
+		
+		protected String rank;
 		
 	}
 	

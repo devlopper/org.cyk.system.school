@@ -23,12 +23,15 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 	public void generate() {
 		super.generate();
 		classroomSession.generate();
+		broadsheet.generate();
+	}
+	
+	public void generateStudent(){
 		for(int i = 0 ; i < 3 ; i++){
 			StudentClassroomSessionDivisionReport studentClassroomSessionDivision = new StudentClassroomSessionDivisionReport(this);
 			studentClassroomSessionDivision.generate();
 			studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
 		}
-		broadsheet.generate();
 	}
 	
 	@Override
