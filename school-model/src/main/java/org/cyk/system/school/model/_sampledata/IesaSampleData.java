@@ -13,18 +13,23 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 
 	private static final long serialVersionUID = -1887987316565799879L;
 	
-	protected static Collection<ClassroomSessionDivisionReportTemplateFile> __createClassroomSessionDivisionReports__(Long classroomSessionDivisionOrderNumber,Boolean provisional){
+	protected static Collection<ClassroomSessionDivisionReportTemplateFile> __createClassroomSessionDivisionReports__(Long classroomSessionDivisionOrderNumber,Integer numberOfSubjects){
 		Collection<ClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(ClassroomSessionDivisionReportTemplateFile.class, 1);
 		ClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
+		report.getClassroomSessionDivision().generateSubjects(numberOfSubjects);
 		report.getClassroomSessionDivision().generateStudent();
-		report.setIsDraft(provisional);
+		report.setIsDraft(Boolean.FALSE);
 		report.setName("G1A Broadsheet\r\n2016/2017 Academic Year,First Term");
 		
 		return collection;
 	}
 	
-	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReports(){
-		return __createClassroomSessionDivisionReports__(1l,Boolean.FALSE);
+	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReportsWithThreeSubjects(){
+		return __createClassroomSessionDivisionReports__(1l,3);
+	}
+	
+	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReportsWithFiveSubjects(){
+		return __createClassroomSessionDivisionReports__(1l,5);
 	}
 	
 	protected static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForOtherGrade__(Long classroomSessionDivisionOrderNumber,Boolean provisional){
@@ -367,6 +372,10 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	public static void main(String[] args) {
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> reports = createFirstTermStudentClassroomSessionDivisionReportsForOtherGrade();
 		System.out.println("IesaSampleData.main() : "+reports.iterator().next().getStudentClassroomSessionDivision().getClassroomSessionDivisionSubjects().size());
+		
+		System.out.println(createFirstTermClassroomSessionDivisionReportsWithFiveSubjects().iterator().next()
+				.getClassroomSessionDivision().getStudentClassroomSessionDivisions().get(0).getSubjects().iterator().next().getResults().getEvaluationSort()
+				.getAverage().getValue());
 	}
 	
 }

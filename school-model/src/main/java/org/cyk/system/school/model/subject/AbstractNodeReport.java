@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.cyk.system.root.model.file.report.AbstractIdentifiableReport;
+import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,7 @@ public abstract class AbstractNodeReport<NODE> extends AbstractIdentifiableRepor
 
 	protected String numberOfStudents,highestAverage,average,lowestAverage,openedTime;
 	
+	protected LabelValueCollectionReport labelValueCollection = new LabelValueCollectionReport();
 	
 	@Override
 	public void generate() {

@@ -7,15 +7,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.cyk.system.root.model.RootConstant;
-import org.cyk.system.root.model.party.person.ActorReport;
-import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
-import org.cyk.utility.common.formatter.NumberFormatter;
-import org.cyk.utility.common.generator.AbstractGeneratable;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import org.cyk.system.root.model.RootConstant;
+import org.cyk.system.root.model.party.person.ActorReport;
+import org.cyk.system.school.model.StudentResultsReport;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
+import org.cyk.utility.common.formatter.NumberFormatter;
+import org.cyk.utility.common.generator.AbstractGeneratable;
+import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Getter @Setter @NoArgsConstructor
 public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeReport<StudentClassroomSessionDivisionReport> implements Serializable {
@@ -42,6 +44,14 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 	public StudentClassroomSessionDivisionReport(ClassroomSessionDivisionReport classroomSessionDivision) {
 		super();
 		this.classroomSessionDivision = classroomSessionDivision;
+	}
+	
+	public StudentResultsReport getResultsByClassroomSessionDivisionSubjectReportAtIndex(Integer index){
+		ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = classroomSessionDivision.getClassroomSessionDivisionSubjectAtIndex(index);
+		for(StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubjectReport : subjects)
+			if(studentClassroomSessionDivisionSubjectReport.getClassroomSessionDivisionSubject() == classroomSessionDivisionSubjectReport)
+				return studentClassroomSessionDivisionSubjectReport.getResults();
+		return null;
 	}
 	
 	@Override
@@ -120,6 +130,17 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 	public StudentClassroomSessionDivisionReport addSubjectsTableColumnNames(String...names){
 		subjectsTableColumnNames.addAll(Arrays.asList(names));
 		return this;
+	}
+	
+	public void generateSubjects(Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects,Boolean skipable){
+		subjects = new ArrayList<>();
+		for(ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport : classroomSessionDivisionSubjects){
+			if(RandomDataProvider.getInstance().randomInt(1, 3)==2)
+				continue;
+			StudentClassroomSessionDivisionSubjectReport subject = new StudentClassroomSessionDivisionSubjectReport(this,classroomSessionDivisionSubjectReport);
+			subject.generate();
+			subjects.add(subject);
+		}
 	}
 	
 	@Override
