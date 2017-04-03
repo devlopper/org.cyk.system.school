@@ -208,7 +208,7 @@
 									<text><![CDATA[Av]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:columnFooter height="1" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
 							<jr:detailCell style="column_detail" height="15" rowSpan="1">
 								<textField>
 									<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="2300a7a5-8fd5-473c-9a94-a3dc1d6e4b46"/>
@@ -230,7 +230,7 @@
 									<text><![CDATA[Rk]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:columnFooter height="1" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
 							<jr:detailCell style="column_detail" height="15" rowSpan="1">
 								<textField>
 									<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="c140348a-f2a7-4350-b90c-968f0bc872e7"/>
@@ -264,7 +264,7 @@
 									<text><![CDATA[Av]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:columnFooter height="1" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
 							<jr:detailCell style="column_detail" height="15" rowSpan="1">
 								<textField>
 									<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="0d07cfc0-d1b3-4c1d-9967-3e67855d16c1"/>
@@ -286,7 +286,7 @@
 									<text><![CDATA[Rk]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:columnFooter height="1" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
 							<jr:detailCell style="column_detail" height="15" rowSpan="1">
 								<textField>
 									<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="13dc00e0-f759-437a-a71d-d381db757bdd"/>
@@ -320,7 +320,7 @@
 									<text><![CDATA[Av]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:columnFooter height="1" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
 							<jr:detailCell style="column_detail" height="15" rowSpan="1">
 								<textField>
 									<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="c1b09a33-5ff7-4ddc-a0e4-91ea415e0b7d"/>
@@ -342,7 +342,7 @@
 									<text><![CDATA[Rk]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:columnFooter height="1" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
 							<jr:detailCell style="column_detail" height="15" rowSpan="1">
 								<textField>
 									<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="2dc571f1-2911-446c-941b-d6a1c10a16a8"/>
@@ -376,7 +376,7 @@
 									<text><![CDATA[Av]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:columnFooter height="1" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
 							<jr:detailCell style="column_detail" height="15" rowSpan="1">
 								<textField>
 									<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="fe751f8f-c9b0-4f96-a681-8f7d0a2e12f5"/>
@@ -398,7 +398,7 @@
 									<text><![CDATA[Rk]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:columnFooter height="1" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
 							<jr:detailCell style="column_detail" height="15" rowSpan="1">
 								<textField>
 									<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="d81b1920-530a-44e2-86b2-a4523446f6b5"/>
@@ -408,6 +408,142 @@
 									<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getResultsByClassroomSessionDivisionSubjectReportAtIndex(4).getEvaluationSort().getRank().getValue()]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:columnGroup width="40" uuid="6e927d67-35e3-443b-bff9-432a2088dd6c">
+						<jr:columnHeader style="column_header" height="86" rowSpan="1"/>
+						<jr:column width="20" uuid="64c5293c-d3ac-4e4d-bc8e-ec8233144196">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="20" uuid="65d438d5-84f6-4e3b-bd56-17f08ab921fd">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:columnGroup width="40" uuid="428a70e0-8bd1-47c2-ba2b-2a4bcfdf8e21">
+						<jr:columnHeader style="column_header" height="86" rowSpan="1"/>
+						<jr:column width="20" uuid="3f80f98d-74f0-4e34-93bc-3989db7bafc6">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="20" uuid="c3f52d42-763b-49db-8643-d6b09ec22eaa">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:columnGroup width="40" uuid="5932eaeb-1e35-49d8-8aba-56b191a55567">
+						<jr:columnHeader style="column_header" height="86" rowSpan="1"/>
+						<jr:column width="20" uuid="33b64297-8f4d-4d16-befb-2a592dba7a22">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="20" uuid="1a145114-09b9-41a3-a5a7-de9b967d1a31">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:columnGroup width="40" uuid="0820b9a6-1241-4d22-b45c-95787a7406fa">
+						<jr:columnHeader style="column_header" height="86" rowSpan="1"/>
+						<jr:column width="20" uuid="7dd09ffc-6189-48a8-a622-1e6c9067647e">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="20" uuid="e5eaa20e-5827-4940-8c04-8103865c78bb">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:columnGroup width="40" uuid="a7ce76e6-fe1b-4f9e-ac5a-09f6fd02bc41">
+						<jr:columnHeader style="column_header" height="86" rowSpan="1"/>
+						<jr:column width="20" uuid="4724c26b-15e3-4b87-88aa-0b2836d8fff1">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="20" uuid="b276b66f-4df1-469d-be8a-95e1230d920f">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:columnGroup width="40" uuid="99a20cb9-bffc-493f-8d46-b5d83ce6367b">
+						<jr:columnHeader style="column_header" height="86" rowSpan="1"/>
+						<jr:column width="20" uuid="126b2e3a-5e59-4d9d-bbb8-4e4dedd14922">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="20" uuid="bf0ce943-1860-4249-98dc-73086bd0b511">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:columnGroup width="40" uuid="30724f62-8ab1-4520-85bb-0e4eef01bbca">
+						<jr:columnHeader style="column_header" height="86" rowSpan="1"/>
+						<jr:column width="20" uuid="8c3f8a02-bc12-4365-a96a-d68f4471367a">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="20" uuid="55816c91-b235-4344-bdfc-332790000c72">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:columnGroup width="40" uuid="9aaa5997-ae9c-4a70-b154-0350493d4842">
+						<jr:columnHeader style="column_header" height="86" rowSpan="1"/>
+						<jr:column width="20" uuid="637131a3-9e51-4a1a-ac6b-395099b006a8">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
+						</jr:column>
+						<jr:column width="20" uuid="edc2722a-c4a4-4ee9-9214-b2714bce3be4">
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:tableFooter height="0" rowSpan="1"/>
+							<jr:columnHeader style="column_header" height="15" rowSpan="1"/>
+							<jr:columnFooter height="0" rowSpan="1"/>
+							<jr:detailCell style="column_detail" height="15" rowSpan="1"/>
 						</jr:column>
 					</jr:columnGroup>
 					<jr:column width="21" uuid="a39978fb-9059-4567-9334-c2bf6a494d63">
