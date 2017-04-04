@@ -17,7 +17,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		Collection<ClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(ClassroomSessionDivisionReportTemplateFile.class, 1);
 		ClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.getClassroomSessionDivision().generateSubjects(numberOfSubjects);
-		report.getClassroomSessionDivision().generateStudent();
+		report.getClassroomSessionDivision().generateStudent(50);
 		report.setIsDraft(Boolean.FALSE);
 		report.setName("G1A Broadsheet\r\n2016/2017 Academic Year,First Term");
 		

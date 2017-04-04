@@ -45,6 +45,7 @@ import org.cyk.system.school.model.actor.StudentReportTemplateFile;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
@@ -78,6 +79,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				return StudentReportTemplateFile.class;
 		}
 		
+		if(identifiable instanceof ClassroomSessionDivision){
+			return ClassroomSessionDivisionReportTemplateFile.class;
+		}
+		
 		if(identifiable instanceof StudentClassroomSessionDivision){
 			return StudentClassroomSessionDivisionReportTemplateFile.class;
 		}
@@ -99,6 +104,13 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			if(createReportFileArguments.getIdentifiable() instanceof StudentClassroomSessionDivision){
 				return (REPORT) produceStudentClassroomSessionDivisionReport((StudentClassroomSessionDivision)createReportFileArguments.getIdentifiable()
 						,(CreateReportFileArguments<StudentClassroomSessionDivision>) createReportFileArguments);
+			}
+		}
+		
+		if(ClassroomSessionDivisionReportTemplateFile.class.equals(reportClass)){
+			if(createReportFileArguments.getIdentifiable() instanceof ClassroomSessionDivision){
+				return (REPORT) produceClassroomSessionDivisionReport((ClassroomSessionDivision)createReportFileArguments.getIdentifiable()
+						,(CreateReportFileArguments<ClassroomSessionDivision>) createReportFileArguments);
 			}
 		}
 		
@@ -285,6 +297,14 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	protected void produceStudentClassroomSessionDivisionReportLabelValueCollections(StudentClassroomSessionDivisionReportTemplateFile r,CreateReportFileArguments<?> arguments){
 		
+	}
+	
+	public ClassroomSessionDivisionReportTemplateFile produceClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision
+			,CreateReportFileArguments<ClassroomSessionDivision> createReportFileArguments) {
+		ClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(ClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
+		r.getClassroomSessionDivision().setSource(classroomSessionDivision);
+	
+		return r;
 	}
 
 	/**/

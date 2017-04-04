@@ -26,6 +26,7 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 		labelValueCollection.add("Pass Percentage");
 		labelValueCollection.add("Fail Fraction");
 		labelValueCollection.add("Fail Percentage");
+		labelValueCollection.generateExtendedValues(20);
 	}
 	
 	public ClassroomSessionDivisionSubjectReport getClassroomSessionDivisionSubjectAtIndex(Integer index){
@@ -46,8 +47,8 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 		}
 	}
 	
-	public void generateStudent(){
-		for(int i = 0 ; i < 3 ; i++){
+	public void generateStudent(Integer numberOfStudents){
+		for(int i = 0 ; i < numberOfStudents ; i++){
 			StudentClassroomSessionDivisionReport studentClassroomSessionDivision = new StudentClassroomSessionDivisionReport(this);
 			studentClassroomSessionDivision.generate();
 			studentClassroomSessionDivision.generateSubjects(classroomSessionDivisionSubjects, Boolean.FALSE);

@@ -40,8 +40,8 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	private Boolean studentRankable=Boolean.TRUE;
 	private Boolean studentSubjectRankable=Boolean.TRUE;
 	
-	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> subjects;
-	
+	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects;
+	@Transient private IdentifiableRuntimeCollection<StudentClassroomSessionDivision> studentClassroomSessionDivisions;
 	
 	public ClassroomSessionDivision(ClassroomSession classroomSession,TimeDivisionType timeDivisionType, BigDecimal weight) {
 		super();
@@ -56,10 +56,16 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 		return results;
 	}
 	
-	public IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> getSubjects(){
-		if(subjects == null)
-			subjects = new IdentifiableRuntimeCollection<>();
-		return subjects;
+	public IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> getClassroomSessionDivisionSubjects(){
+		if(classroomSessionDivisionSubjects == null)
+			classroomSessionDivisionSubjects = new IdentifiableRuntimeCollection<>();
+		return classroomSessionDivisionSubjects;
+	}
+	
+	public IdentifiableRuntimeCollection<StudentClassroomSessionDivision> getStudentClassroomSessionDivisions(){
+		if(studentClassroomSessionDivisions == null)
+			studentClassroomSessionDivisions = new IdentifiableRuntimeCollection<>();
+		return studentClassroomSessionDivisions;
 	}
 	
 	@Override

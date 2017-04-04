@@ -74,8 +74,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override
 	protected void afterCreate(ClassroomSessionDivision classroomSessionDivision) {
 		super.afterCreate(classroomSessionDivision);
-		if(classroomSessionDivision.getSubjects().isSynchonizationEnabled())
-			inject(ClassroomSessionDivisionSubjectBusiness.class).create(classroomSessionDivision.getSubjects().getCollection());
+		if(classroomSessionDivision.getClassroomSessionDivisionSubjects().isSynchonizationEnabled())
+			inject(ClassroomSessionDivisionSubjectBusiness.class).create(classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection());
 		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
 		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
 	}
@@ -207,12 +207,12 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		Integer index = listener.getSetListener().getIndex();
 		String value;
 		
-		classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+		classroomSessionDivision.getClassroomSessionDivisionSubjects().setSynchonizationEnabled(Boolean.TRUE);
 		if(StringUtils.isNotBlank(value = values[index++]))
 			for(String subjectCode : StringUtils.split(value,Constant.CHARACTER_VERTICAL_BAR.toString())){
 				ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class)
 						.instanciateOne(new String[]{null,subjectCode,null,values[index]});
-				classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);
+				classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection().add(classroomSessionDivisionSubject);
 				classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
 			}
 		
@@ -227,7 +227,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		
 		for(SubjectClassroomSession subjectClassroomSession : inject(SubjectClassroomSessionDao.class).readByClassroomSession(classroomSessionDivision.getClassroomSession())){
 			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).instanciateOne();
-			classroomSessionDivision.getSubjects().getCollection().add(classroomSessionDivisionSubject);
+			classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection().add(classroomSessionDivisionSubject);
 			classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
 			classroomSessionDivisionSubject.setSubject(subjectClassroomSession.getSubject());
 			classroomSessionDivisionSubject.setWeight(subjectClassroomSession.getWeight());

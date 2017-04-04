@@ -134,12 +134,17 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 	
 	public void generateSubjects(Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects,Boolean skipable){
 		subjects = new ArrayList<>();
+		Integer count = 0;
 		for(ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport : classroomSessionDivisionSubjects){
+			count++;
 			if(Boolean.TRUE.equals(skipable) && RandomDataProvider.getInstance().randomInt(1, 3)==2)
 				continue;
-			StudentClassroomSessionDivisionSubjectReport subject = new StudentClassroomSessionDivisionSubjectReport(this,classroomSessionDivisionSubjectReport);
-			subject.generate();
-			subjects.add(subject);
+			StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubjectReport(this,classroomSessionDivisionSubjectReport);
+			studentClassroomSessionDivisionSubject.generate();
+			studentClassroomSessionDivisionSubject.getResults().getEvaluationSort().getAverage().setValue(RandomDataProvider.getInstance().randomInt(10, 99)+"."
+					+RandomDataProvider.getInstance().randomInt(10, 99));
+			studentClassroomSessionDivisionSubject.getResults().getEvaluationSort().getRank().setValue(String.valueOf(RandomDataProvider.getInstance().randomInt(10, 99)));
+			subjects.add(studentClassroomSessionDivisionSubject);
 		}
 	}
 	
