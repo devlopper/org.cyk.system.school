@@ -32,6 +32,10 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		return __createClassroomSessionDivisionReports__(1l,5);
 	}
 	
+	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReportsWithEighteenSubjects(){
+		return __createClassroomSessionDivisionReports__(1l,18);
+	}
+	
 	protected static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForOtherGrade__(Long classroomSessionDivisionOrderNumber,Boolean provisional){
 		Collection<StudentClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(StudentClassroomSessionDivisionReportTemplateFile.class, 1);
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();

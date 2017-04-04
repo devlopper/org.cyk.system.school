@@ -135,7 +135,7 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 	public void generateSubjects(Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects,Boolean skipable){
 		subjects = new ArrayList<>();
 		for(ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport : classroomSessionDivisionSubjects){
-			if(RandomDataProvider.getInstance().randomInt(1, 3)==2)
+			if(Boolean.TRUE.equals(skipable) && RandomDataProvider.getInstance().randomInt(1, 3)==2)
 				continue;
 			StudentClassroomSessionDivisionSubjectReport subject = new StudentClassroomSessionDivisionSubjectReport(this,classroomSessionDivisionSubjectReport);
 			subject.generate();
