@@ -51,7 +51,6 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 
 	@Override
 	public Evaluation create(Evaluation evaluation) {
-		logIdentifiable("Creating evaluation", evaluation);
 		Long numberOfEvaluations = dao.countByClassroomSessionDivisionSubjectEvaluationType(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
 		logTrace("Number of evaluations found : {}", numberOfEvaluations);
 		exceptionUtils().cannotCreateMoreThan(numberOfEvaluations,evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval(),  Evaluation.class);

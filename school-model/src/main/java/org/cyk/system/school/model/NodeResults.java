@@ -27,6 +27,10 @@ public class NodeResults extends AbstractModelElement implements Serializable {
 	
 	private Integer numberOfStudentPassingEvaluationAverage;
 	
+	public Integer getNumberOfStudentNotPassingEvaluationAverage(){
+		return numberOfStudent - numberOfStudentPassingEvaluationAverage;
+	}
+	
 	@Override
 	public String getUiString() {
 		return average+" ";

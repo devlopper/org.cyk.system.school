@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
@@ -29,6 +30,8 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 
 	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION_DIVISION) @NotNull private ClassroomSessionDivision classroomSessionDivision;
 	
+	@Setter private IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects;
+	
 	/**/
 		
 	public StudentClassroomSessionDivision(Student student,ClassroomSessionDivision classroomSessionDivision) {
@@ -40,6 +43,12 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 	@Override
 	public ClassroomSessionDivision getLevel() {
 		return classroomSessionDivision;
+	}
+	
+	public IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubject> getStudentClassroomSessionDivisionSubjects(){
+		if(studentClassroomSessionDivisionSubjects==null)
+			studentClassroomSessionDivisionSubjects = new IdentifiableRuntimeCollection<>();
+		return studentClassroomSessionDivisionSubjects;
 	}
 	
 	@Override

@@ -12,6 +12,9 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.GenericBusiness;
@@ -65,9 +68,6 @@ import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivi
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper implements Serializable {
@@ -178,19 +178,17 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 		}
 	}
 	
-	public void createSubjectEvaluation(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType,String[][] details){
-		Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType); 
+	public void createSubjectEvaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,String[][] details){
+		Evaluation evaluation = new Evaluation(classroomSessionDivisionSubjectEvaluationType); 
 		for(String[] detail : details){
 			if(StringUtils.isBlank(detail[1]))
 				continue;
-			Student student = studentBusiness.find(detail[0]);
-			StudentClassroomSessionDivisionSubject studentSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(student
-					, subjectEvaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
-			subjectEvaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(subjectEvaluation,studentSubject, new BigDecimal(detail[1])));
+			StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(studentBusiness.find(detail[0])
+					, evaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
+			evaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation,studentClassroomSessionDivisionSubject
+					, new BigDecimal(detail[1])));
 		}
-		//debug(subjectEvaluation);
-		//debug(subjectEvaluation.getStudentSubjectEvaluations().iterator().next());
-		subjectEvaluationBusiness.create(subjectEvaluation);
+		subjectEvaluationBusiness.create(evaluation);
 	}
 
 	public void createSubjectEvaluation(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,String[][] details){
@@ -496,13 +494,31 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = inject(StudentClassroomSessionDivisionSubjectDao.class)
 						.readByClassroomSessionDivision(classroomSessionDivision);
 				if(!studentClassroomSessionDivisionSubjects.isEmpty()){
-					StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = studentClassroomSessionDivisionSubjects.iterator().next();
-					objects = new Object[][]{
-			    		new Object[]{studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject(),new String[][]{
-		    	    		{studentClassroomSessionDivisionSubjects.iterator().next().getStudent().getCode(),RandomDataProvider.getInstance().randomInt(10, 20)+""
-		    	    			,RandomDataProvider.getInstance().randomInt(10, 20)+"",RandomDataProvider.getInstance().randomInt(10, 20)+""}
-		    	    	}}
-					};
+					Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = new HashSet<>();
+					for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : studentClassroomSessionDivisionSubjects){
+						classroomSessionDivisionSubjects.add(studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject());
+					}
+					
+					objects = new Object[classroomSessionDivisionSubjects.size()][];
+					int i = 0;
+					for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
+						Collection<Student> students = new HashSet<>();
+						for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : studentClassroomSessionDivisionSubjects){
+							if(studentClassroomSessionDivisionSubject.getClassroomSessionDivisionSubject().equals(classroomSessionDivisionSubject))
+								students.add(studentClassroomSessionDivisionSubject.getStudent());
+						}
+						String[][] marks = new String[students.size()][4];
+						int j = 0;
+						for(Student student : students){
+							marks[j][0] = student.getCode();
+							for(int k = 1 ; k <= 3 ; k++)
+								marks[j][k] = getRandomDataProvider().randomInt(1, 5) == 2 ? null :  String.valueOf(getRandomDataProvider().randomInt(0, 100));
+							j++;
+						}
+						
+						objects[i++] = new Object[]{classroomSessionDivisionSubject,marks};
+					}
+					
 				}else
 					System.out.println("No StudentClassroomSessionDivisionSubject found. "+StringUtils.join(classroomSessionInfo,","));
 			}

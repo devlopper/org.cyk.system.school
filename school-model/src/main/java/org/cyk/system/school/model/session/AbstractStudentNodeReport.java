@@ -11,7 +11,9 @@ import lombok.Setter;
 import org.cyk.system.root.model.file.report.AbstractIdentifiableReport;
 import org.cyk.system.root.model.mathematics.IntervalReport;
 import org.cyk.system.root.model.party.person.ActorReport;
+import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.StudentResultsReport;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Getter @Setter @NoArgsConstructor
@@ -27,6 +29,14 @@ public abstract class AbstractStudentNodeReport<NODE> extends AbstractIdentifiab
 	@Deprecated protected ActorReport teacher = new ActorReport();//TODO to be deleted , it is not its place
 	
 	@Override
+	public void setSource(Object source) {
+		super.setSource(source);
+		if(source!=null){
+			results.setSource(((AbstractStudentResult<?,?>)source).getResults());
+		}
+	}
+	
+	@Override
 	public void generate() {
 		results.generate();
 		average = positiveFloatNumber(999, 0, 99);
@@ -36,6 +46,13 @@ public abstract class AbstractStudentNodeReport<NODE> extends AbstractIdentifiab
 		for(int i=0;i<3;i++)
 			marks.add(positiveFloatNumber(999, 0, 99));
 		teacher.generate();
+	}
+	
+	/**/
+	protected static final StudentResultsReport NULL_STUDENT_RESULTS_REPORT = new StudentResultsReport();
+	static {
+		NULL_STUDENT_RESULTS_REPORT.getEvaluationSort().getAverage().setValue(Constant.EMPTY_STRING);
+		NULL_STUDENT_RESULTS_REPORT.getEvaluationSort().getRank().setValue(Constant.EMPTY_STRING);
 	}
 	
 }

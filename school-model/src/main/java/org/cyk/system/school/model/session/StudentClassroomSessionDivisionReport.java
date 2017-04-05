@@ -15,6 +15,7 @@ import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.party.person.ActorReport;
 import org.cyk.system.school.model.StudentResultsReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.utility.common.formatter.NumberFormatter;
 import org.cyk.utility.common.generator.AbstractGeneratable;
 import org.cyk.utility.common.generator.RandomDataProvider;
@@ -46,18 +47,26 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 		this.classroomSessionDivision = classroomSessionDivision;
 	}
 	
+	public StudentClassroomSessionDivisionReport(ClassroomSessionDivisionReport classroomSessionDivision,StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		super();
+		this.classroomSessionDivision = classroomSessionDivision;
+		setSource(studentClassroomSessionDivision);
+	}
+	
 	public StudentResultsReport getResultsByClassroomSessionDivisionSubjectReportAtIndex(Integer index){
 		ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = classroomSessionDivision.getClassroomSessionDivisionSubjectAtIndex(index);
 		for(StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubjectReport : subjects)
-			if(studentClassroomSessionDivisionSubjectReport.getClassroomSessionDivisionSubject() == classroomSessionDivisionSubjectReport)
+			if(studentClassroomSessionDivisionSubjectReport.getClassroomSessionDivisionSubject() == classroomSessionDivisionSubjectReport){
 				return studentClassroomSessionDivisionSubjectReport.getResults();
-		return null;
+			}
+		return NULL_STUDENT_RESULTS_REPORT;
 	}
 	
 	@Override
 	public void setSource(Object source) {
 		super.setSource(source);
 		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) source;
+		student.setSource(studentClassroomSessionDivision.getStudent());
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null){
 			
@@ -80,6 +89,26 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 			setTotalAverageCoefficiented(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getDividend()));
 		}
 		
+		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getStudentClassroomSessionDivisionSubjects().isSynchonizationEnabled())){
+			for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : studentClassroomSessionDivision.getStudentClassroomSessionDivisionSubjects().getCollection()){
+				StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubjectReport = new StudentClassroomSessionDivisionSubjectReport(this
+						, null, studentClassroomSessionDivisionSubject);
+				subjects.add(studentClassroomSessionDivisionSubjectReport);
+			}
+		}
+	}
+	
+	public void setClassroomSessionDivisionSubjects(Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects){
+		for(StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubject : subjects)
+			for(ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
+				if( ((StudentClassroomSessionDivisionSubject)studentClassroomSessionDivisionSubject.getSource()).getClassroomSessionDivisionSubject().getCode()
+						.equals(classroomSessionDivisionSubject.getCode())){
+					studentClassroomSessionDivisionSubject.setClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+					//StudentClassroomSessionDivisionSubject s = (StudentClassroomSessionDivisionSubject) studentClassroomSessionDivisionSubject.getSource();
+					//System.out.println("AVG : "+s.getIdentifier()+":"+s.getResults().getEvaluationSort().getAverage().getValue());
+					break;
+				}
+			}
 	}
 	
 	@Override
@@ -118,7 +147,7 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 		}
 		
 		for(ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
-			StudentClassroomSessionDivisionSubjectReport subject = new StudentClassroomSessionDivisionSubjectReport(this,classroomSessionDivisionSubject);
+			StudentClassroomSessionDivisionSubjectReport subject = new StudentClassroomSessionDivisionSubjectReport(this,classroomSessionDivisionSubject,null);
 			subject.generate();
 			subjects.add(subject);
 		}
@@ -139,7 +168,7 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 			count++;
 			if(Boolean.TRUE.equals(skipable) && RandomDataProvider.getInstance().randomInt(1, 3)==2)
 				continue;
-			StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubjectReport(this,classroomSessionDivisionSubjectReport);
+			StudentClassroomSessionDivisionSubjectReport studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubjectReport(this,classroomSessionDivisionSubjectReport,null);
 			studentClassroomSessionDivisionSubject.generate();
 			studentClassroomSessionDivisionSubject.getResults().getEvaluationSort().getAverage().setValue(RandomDataProvider.getInstance().randomInt(10, 99)+"."
 					+RandomDataProvider.getInstance().randomInt(10, 99));

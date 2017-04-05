@@ -15,6 +15,14 @@ public class StudentResultsReport extends AbstractIdentifiableReport<StudentResu
 	private SortReport evaluationSort = new SortReport();
 	
 	@Override
+	public void setSource(Object source) {
+		super.setSource(source);
+		if(source!=null){
+			evaluationSort.setSource( ((StudentResults)source).getEvaluationSort() );
+		}
+	}
+	
+	@Override
 	public void generate() {
 		super.generate();
 		evaluationSort.generate();

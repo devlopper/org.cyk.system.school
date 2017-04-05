@@ -88,9 +88,16 @@
 	<title>
 		<band height="66" splitType="Stretch">
 			<image scaleImage="RetainShape" hAlign="Center" isUsingCache="false" onErrorType="Blank">
-				<reportElement x="0" y="0" width="842" height="66" uuid="8e42e949-dfeb-479c-8261-4e1e8b45ee65"/>
+				<reportElement x="0" y="0" width="200" height="66" uuid="8e42e949-dfeb-479c-8261-4e1e8b45ee65"/>
 				<imageExpression><![CDATA[$F{headerImage}]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="360" y="0" width="220" height="66" uuid="52399fd6-746b-4418-b6ac-dd343af67d0a"/>
+				<textElement>
+					<font fontName="Tin Birdhouse" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
@@ -149,7 +156,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse" size="9"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(0).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(0).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="18d9c524-63cd-41bf-b32c-1565dfe76994">
@@ -201,7 +208,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(1).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(1).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="aef010ee-0c4d-45cd-a5d1-01205a505126">
@@ -257,7 +264,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(2).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(2).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="20e232f4-c2af-470f-bb10-ffd3dd04a39c">
@@ -313,7 +320,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(3).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(3).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="46e38736-4b79-48de-9fda-8f3f16171592">
@@ -369,7 +376,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(4).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(4).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="9e1ce398-ed84-4b8b-a987-9b3a1ba61609">
@@ -425,7 +432,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(5).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(5).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="64c5293c-d3ac-4e4d-bc8e-ec8233144196">
@@ -483,7 +490,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(6).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(6).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="3f80f98d-74f0-4e34-93bc-3989db7bafc6">
@@ -541,7 +548,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(7).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(7).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="33b64297-8f4d-4d16-befb-2a592dba7a22">
@@ -599,7 +606,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(8).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(8).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="7dd09ffc-6189-48a8-a622-1e6c9067647e">
@@ -657,7 +664,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(9).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(9).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="4724c26b-15e3-4b87-88aa-0b2836d8fff1">
@@ -715,7 +722,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(10).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(10).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="126b2e3a-5e59-4d9d-bbb8-4e4dedd14922">
@@ -773,7 +780,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(11).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(11).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="8c3f8a02-bc12-4365-a96a-d68f4471367a">
@@ -831,7 +838,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(12).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(12).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="637131a3-9e51-4a1a-ac6b-395099b006a8">
@@ -889,7 +896,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(13).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(13).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="21729ff9-547e-4eaf-b725-1e15d4bbba83">
@@ -947,7 +954,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(14).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(14).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="1cef97bf-d0a6-4a8b-8990-73cba1085436">
@@ -1005,7 +1012,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(15).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(15).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="44648ea8-60d9-4595-a411-a1306b7a1b1c">
@@ -1063,7 +1070,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(16).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(16).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="314fa6ea-1eea-43a9-ab2f-cec2e9f6ff01">
@@ -1121,7 +1128,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(17).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(17).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="4db74c6e-0947-4dda-bb9b-cfd19b7dddb1">
@@ -1179,7 +1186,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(18).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(18).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="92208c7d-b969-4397-9ec6-63943631d529">
@@ -1237,7 +1244,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(19).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(19).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="bd95b521-ad4a-4c0e-8df9-99fc7bb8c64d">
@@ -1295,7 +1302,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(20).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(20).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="19c3be73-0d36-4808-917e-e2a270437dc1">
@@ -1353,7 +1360,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(21).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(21).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="b4be20e8-0cf0-4af1-853c-dc067fd746dc">
@@ -1411,7 +1418,7 @@
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left" markup="none">
 									<font fontName="Tin Birdhouse"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(22).getName()]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getClassroomSessionDivisionSubjectAtIndex(22).getSubject().getName()]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="2ef48086-439b-4fbe-9f5e-0a988c4c72f9">

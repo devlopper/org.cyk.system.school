@@ -51,7 +51,7 @@ public class ClassroomSessionDivisionSubjectEvaluationType extends AbstractIdent
 	
 	@Override
 	public String toString() {
-		return evaluationType.toString();
+		return classroomSessionDivisionSubject+":"+evaluationType+":"+numberOfEvaluations;
 	}
 	
 	@Override

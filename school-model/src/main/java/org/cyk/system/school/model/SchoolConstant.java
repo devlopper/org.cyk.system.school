@@ -347,6 +347,7 @@ public interface SchoolConstant {
 			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_KINDERGARTEN_K2K3 = generate(StudentClassroomSessionDivision.class
 					,"RESULTS",LevelGroup.KINDERGARTEN,LevelName.K2,LevelName.K3);
 			public static String STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS = generate(StudentClassroomSessionDivision.class,"RESULTS");
+			public static String CLASSROOM_SESSION_DIVISION_BROAD_SHEET_HEADER = generate(ClassroomSessionDivision.class,"BROADSHEETHEADER");
 		}
 		
 		public static class ReportTemplate implements Serializable {

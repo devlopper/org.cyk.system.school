@@ -14,6 +14,7 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.actor.StudentBusinessImpl;
 import org.cyk.system.school.business.impl.integration.enterpriseresourceplanning.AbstractEnterpriseResourcePlanningBusinessIT;
+import org.cyk.system.school.model.SchoolConstant;
 
 public abstract class AbstractIesaBusinessIT extends AbstractEnterpriseResourcePlanningBusinessIT {
 
@@ -22,7 +23,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractEnterpriseResourceP
     @Inject protected IesaFakedDataProducer dataProducer; 
      
     protected void installApplication(Boolean fake){	
-    	
+    	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	PersistDataListener.COLLECTION.add(new PersistDataListener.Adapter.Default(){
 			private static final long serialVersionUID = -950053441831528010L;
 			@SuppressWarnings("unchecked")

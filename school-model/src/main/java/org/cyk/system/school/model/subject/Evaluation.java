@@ -47,6 +47,11 @@ public class Evaluation extends AbstractIdentifiable implements Serializable {
 	}
 	
 	@Override
+	public String toString() {
+		return classroomSessionDivisionSubjectEvaluationType.toString();
+	}
+	
+	@Override
 	public String getLogMessage() {
 		return String.format(LOG_FORMAT, classroomSessionDivisionSubjectEvaluationType.getIdentifier(),getBirthDate(),coefficientApplied);
 	}

@@ -2,6 +2,8 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,9 +28,11 @@ import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
+import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
+import org.cyk.system.root.persistence.api.file.FileDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
@@ -51,6 +55,7 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.EvaluationType;
@@ -59,10 +64,12 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.formatter.NumberFormatter;
 import org.cyk.utility.common.generator.AbstractGeneratable;
 
@@ -223,7 +230,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			classroomSessionDivisionSubjectReport.getGlobalIdentifier().setName(studentSubject.getClassroomSessionDivisionSubject().getSubject().getName());
 			classroomSessionDivisionSubjectReport.setNumberOfStudents(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getNumberOfStudent()):NOT_APPLICABLE);
 			//classroomSessionDivisionSubjectReport.getAverageScale().setSource(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval());
-			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r.getStudentClassroomSessionDivision(),classroomSessionDivisionSubjectReport);
+			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r.getStudentClassroomSessionDivision(),classroomSessionDivisionSubjectReport,null);
 			
 			r.getStudentClassroomSessionDivision().getSubjects().add(sr);
 			
@@ -301,9 +308,57 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	
 	public ClassroomSessionDivisionReportTemplateFile produceClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision
 			,CreateReportFileArguments<ClassroomSessionDivision> createReportFileArguments) {
+		createReportFileArguments.setIdentifiableName(classroomSessionDivision.getName()+" Broadsheet ");
+		classroomSessionDivision.getClassroomSessionDivisionSubjects().addMany(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision));
+		classroomSessionDivision.getStudentClassroomSessionDivisions().addMany(inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision));
+		Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = inject(StudentClassroomSessionDivisionSubjectDao.class)
+				.readByClassroomSessionDivision(classroomSessionDivision);
+		for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : studentClassroomSessionDivisionSubjects){
+			for(StudentClassroomSessionDivision studentClassroomSessionDivision : classroomSessionDivision.getStudentClassroomSessionDivisions().getCollection()){
+				if(studentClassroomSessionDivisionSubject.getStudent().equals(studentClassroomSessionDivision.getStudent())){
+					studentClassroomSessionDivision.getStudentClassroomSessionDivisionSubjects().addOne(studentClassroomSessionDivisionSubject);
+					break;
+				}
+			}
+		}
 		ClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(ClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
+		//r.setHeaderImage(inject(FileBusiness.class).findInputStream(inject(FileDao.class).read(SchoolConstant.Code.File.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS)));
 		r.getClassroomSessionDivision().setSource(classroomSessionDivision);
-	
+		r.setName( classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getCode()
+				+( classroomSessionDivision.getClassroomSession().getSuffix() == null ? Constant.EMPTY_STRING 
+						: classroomSessionDivision.getClassroomSession().getSuffix().getCode())+" Broadsheet");
+		r.getClassroomSessionDivision().getLabelValueCollection().getCollection().clear();
+		
+		Integer numberOfSubjects = classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection().size();
+		LabelValueReport labelValueAverageScore = r.getClassroomSessionDivision().getLabelValueCollection().add("Average Score").setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValueNumberOfStudentsEvaluated = r.getClassroomSessionDivision().getLabelValueCollection().add("Number of students evaluated").setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValuePassFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Fraction").setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValuePassPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Percentage").setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValueFailFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Fraction").setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValueFailPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Percentage").setExtendedValuesSize(numberOfSubjects);
+		
+		
+		NumberStringFormatter numberStringFormatter = new NumberStringFormatter(null, null);
+		numberStringFormatter.setIsPercentage(Boolean.TRUE);
+		int i = 0;
+		for(ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject : r.getClassroomSessionDivision().getClassroomSessionDivisionSubjects()){
+			labelValueAverageScore.getExtendedValues()[i] = classroomSessionDivisionSubject.getAverage();
+			labelValueNumberOfStudentsEvaluated.getExtendedValues()[i] = classroomSessionDivisionSubject.getResults().getNumberOfStudent();
+			
+			BigDecimal passFraction = new BigDecimal(((ClassroomSessionDivisionSubject)classroomSessionDivisionSubject.getSource()).getResults().getNumberOfStudentPassingEvaluationAverage()
+					).divide(new BigDecimal(((ClassroomSessionDivisionSubject)classroomSessionDivisionSubject.getSource()).getResults().getNumberOfStudent()), 4
+							, RoundingMode.HALF_DOWN);
+			
+			labelValuePassFraction.getExtendedValues()[i] = classroomSessionDivisionSubject.getResults().getNumberOfStudentPassingEvaluationAverage()
+					+"/"+classroomSessionDivisionSubject.getResults().getNumberOfStudent();
+			labelValuePassPercentage.getExtendedValues()[i] = numberStringFormatter.setInput(passFraction).execute();
+			
+			labelValueFailFraction.getExtendedValues()[i] = (classroomSessionDivisionSubject.getResults().getNumberOfStudentNotPassingEvaluationAverage())
+					+"/"+classroomSessionDivisionSubject.getResults().getNumberOfStudent();
+			labelValueFailPercentage.getExtendedValues()[i] = numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction)).execute();
+			i++;
+		}
+			
 		return r;
 	}
 

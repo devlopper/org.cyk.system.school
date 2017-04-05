@@ -171,8 +171,12 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		addStudent(SchoolConstant.Code.LevelTimeDivision.K2_YEAR_1,null, new String[][]{ {"STUDK2","Mamadou","kone"} });
 		addStudent(SchoolConstant.Code.LevelTimeDivision.K3_YEAR_1,null, new String[][]{ {"STUDK3","Stack","ariel"} });
 		
-		addStudent(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,SchoolConstant.Code.ClassroomSessionSuffix.A, new String[][]{ {"STUDG1A","komenan","yao christian"
-			,"kycdev@gmail.com","ckydevbackup@gmail.com"} });
+		addStudent(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,SchoolConstant.Code.ClassroomSessionSuffix.A, new String[][]{ 
+				{"STUDG1A","komenan","yao christian","kycdev@gmail.com","ckydevbackup@gmail.com"} 
+				,{"STUDG2A","yao","gérome"}
+				,{"STUDG3A","mamadi","issa"}
+			});
+		
 		addStudent(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1,null, new String[][]{ {"STUDG8A","zadi","gérard"} });
 		addStudent(SchoolConstant.Code.LevelTimeDivision.G9_YEAR_1,null, new String[][]{ {"STUDG9A","djedje","madi"} });
 		

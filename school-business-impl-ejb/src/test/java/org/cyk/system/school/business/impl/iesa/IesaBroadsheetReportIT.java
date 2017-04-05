@@ -7,13 +7,11 @@ import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
+import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.report.InternationalEnglishSchoolOfAbidjanReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 
 public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
 
@@ -21,18 +19,22 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
         
     @Override
     protected void businesses() {
+    	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();    	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
     			, new Boolean[]{Boolean.FALSE},Boolean.FALSE, Boolean.FALSE);
     	
-    	ClassroomSession classroomSession = inject(ClassroomSessionDao.class).readAll().iterator().next();
-    	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionDao.class).readByClassroomSessionByOrderNumber(classroomSession, 1l);
+    	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
+    			.findByLevelTimeDivisionCodeByClassroomSessionSuffixCodeByClassroomSessionDivisionOrderNumber(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1
+    					,SchoolConstant.Code.ClassroomSessionSuffix.A,1l).iterator().next();
     	
     	inject(GenericBusiness.class).createReportFile(classroomSessionDivision, SchoolConstant.Code.ReportTemplate.CLASSROOM_SESSION_DIVISION_BROAD_SHEET
     			, Locale.ENGLISH);
     	
     	File file = inject(FileIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(classroomSessionDivision).iterator().next().getFile();
     	schoolBusinessTestHelper.write(file);
+    	
+    	
     }
     
     @Override
