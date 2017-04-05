@@ -70,8 +70,10 @@ import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
 import org.cyk.utility.common.Constant;
+import org.cyk.utility.common.formatter.Formatter.CharacterSet;
 import org.cyk.utility.common.formatter.NumberFormatter;
 import org.cyk.utility.common.generator.AbstractGeneratable;
+import org.joda.time.DateTime;
 
 public abstract class AbstractSchoolReportProducer extends AbstractCompanyReportProducer implements SchoolReportProducer,Serializable {
 
@@ -321,12 +323,18 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				}
 			}
 		}
+		NumberStringFormatter numberStringFormatter = new NumberStringFormatter(classroomSessionDivision.getOrderNumber(), null);
+		numberStringFormatter.setIsOrdinal(Boolean.TRUE);
+		numberStringFormatter.setCharacterSet(CharacterSet.LETTER);
+		numberStringFormatter.setLocale(RootConstant.Configuration.ReportTemplate.LOCALE);
 		ClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(ClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
 		//r.setHeaderImage(inject(FileBusiness.class).findInputStream(inject(FileDao.class).read(SchoolConstant.Code.File.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS)));
 		r.getClassroomSessionDivision().setSource(classroomSessionDivision);
+		Integer year = new DateTime(classroomSessionDivision.getClassroomSession().getAcademicSession().getExistencePeriod().getFromDate()).getYear();
 		r.setName( classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getCode()
 				+( classroomSessionDivision.getClassroomSession().getSuffix() == null ? Constant.EMPTY_STRING 
-						: classroomSessionDivision.getClassroomSession().getSuffix().getCode())+" Broadsheet");
+						: classroomSessionDivision.getClassroomSession().getSuffix().getCode())+" Broadsheet\r\n"
+						+year+"/"+(year+1)+" ACADEMIC YEAR, "+numberStringFormatter.execute().toUpperCase()+" TERM");
 		r.getClassroomSessionDivision().getLabelValueCollection().getCollection().clear();
 		
 		Integer numberOfSubjects = classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection().size();
@@ -338,7 +346,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		LabelValueReport labelValueFailPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Percentage").setExtendedValuesSize(numberOfSubjects);
 		
 		
-		NumberStringFormatter numberStringFormatter = new NumberStringFormatter(null, null);
+		numberStringFormatter = new NumberStringFormatter(null, null);
 		numberStringFormatter.setIsPercentage(Boolean.TRUE);
 		int i = 0;
 		for(ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject : r.getClassroomSessionDivision().getClassroomSessionDivisionSubjects()){

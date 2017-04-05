@@ -15,9 +15,10 @@ public abstract class AbstractNodeReport<NODE> extends AbstractIdentifiableRepor
 	private static final long serialVersionUID = -4651687386219470908L;
 
 	protected NodeResultsReport results = new NodeResultsReport();
+	@Deprecated
 	protected String numberOfStudents,highestAverage,average,lowestAverage,openedTime;
 	
-	protected LabelValueCollectionReport labelValueCollection = new LabelValueCollectionReport();
+	protected LabelValueCollectionReport labelValueCollection = new LabelValueCollectionReport();//TODO to be removed , use table instead
 	
 	@Override
 	public void setSource(Object source) {
