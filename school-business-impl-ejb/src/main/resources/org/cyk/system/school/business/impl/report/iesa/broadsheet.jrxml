@@ -94,7 +94,7 @@
 			<textField>
 				<reportElement x="360" y="0" width="220" height="66" uuid="52399fd6-746b-4418-b6ac-dd343af67d0a"/>
 				<textElement>
-					<font fontName="Tin Birdhouse" size="13"/>
+					<font fontName="Tin Birdhouse" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
