@@ -12,6 +12,7 @@ import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.LevelDetails;
+import org.cyk.system.school.business.impl.session.LevelGroupDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.SchoolDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
@@ -55,6 +56,7 @@ import org.cyk.system.school.ui.web.primefaces.session.LevelGroupForm;
 import org.cyk.system.school.ui.web.primefaces.session.LevelGroupTypeForm;
 import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.SchoolEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionEditPage;
@@ -102,6 +104,8 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(Level.class, LevelEditPage.Form.class, LevelDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(Level.class, null);
+		uiManager.registerConfiguration(new IdentifiableConfiguration(LevelGroup.class, LevelGroupEditPage.Form.class, LevelGroupDetails.class,null,null,null));
+		uiManager.configBusinessIdentifiable(LevelGroup.class, null);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(Teacher.class, TeacherEditPage.Form.class, TeacherDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(Teacher.class, null);

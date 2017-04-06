@@ -29,6 +29,7 @@ import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
+import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
@@ -568,26 +569,30 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		protected void addPreviousResult(StudentClassroomSessionDivisionReportTemplateFile report,Collection<StudentClassroomSessionDivisionReport> studentClassroomSessionDivisions){
 			if(studentClassroomSessionDivisions==null || studentClassroomSessionDivisions.isEmpty())
 				return;
+			
 			List<String> averages = new ArrayList<>();
 			averages.add("AVERAGE");
-			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
-				averages.add(studentClassroomSessionDivision.getAverage());
 			
 			List<String> grades = new ArrayList<>();
 			grades.add("GRADE");
-			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
-				grades.add(studentClassroomSessionDivision.getAverageScale().getSource() ==null ? "NULL" : 
-					RootConstant.Code.getRelativeCode((AbstractCollectionItem<?>) studentClassroomSessionDivision.getAverageScale().getSource()));
 			
 			List<String> ranks = new ArrayList<>();
 			ranks.add("RANK");
-			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
-				ranks.add(studentClassroomSessionDivision.getRank());
 			
 			List<String> trimesters = new ArrayList<>();
 			trimesters.add("TRIMESTER");
-			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions)
+			
+			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions){
+				averages.add(studentClassroomSessionDivision.getAverageScale().getSource()==null? "NA" 
+						:studentClassroomSessionDivision.getAverage());
+				
+				grades.add(studentClassroomSessionDivision.getAverageScale().getSource() ==null ? "NA" : 
+					RootConstant.Code.getRelativeCode((AbstractCollectionItem<?>) studentClassroomSessionDivision.getAverageScale().getSource()));
+				
+				ranks.add(studentClassroomSessionDivision.getAverageScale().getSource()==null? "NA" : studentClassroomSessionDivision.getRank());
+				
 				trimesters.add(((StudentClassroomSessionDivision)studentClassroomSessionDivision.getSource()).getClassroomSessionDivision().getOrderNumber().toString());
+			}
 			
 			report.addLabelValues("PREVIOUS TERMS", new String[][]{
 				averages.toArray(new String[]{})

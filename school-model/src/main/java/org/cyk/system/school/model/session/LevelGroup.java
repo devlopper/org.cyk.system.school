@@ -38,4 +38,8 @@ public class LevelGroup extends AbstractDataTree<LevelGroupType> implements Seri
 			nodeInformations = new CommonNodeInformations();
 		return nodeInformations;
 	}
+	
+	/**/
+	
+	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
 }

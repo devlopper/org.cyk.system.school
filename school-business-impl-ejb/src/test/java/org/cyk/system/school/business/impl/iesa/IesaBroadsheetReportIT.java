@@ -23,17 +23,17 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();    	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
     			, new Boolean[]{Boolean.FALSE},Boolean.TRUE, Boolean.FALSE);
-    	/*
+    	
     	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
     			.findByLevelTimeDivisionCodeByClassroomSessionSuffixCodeByClassroomSessionDivisionOrderNumber(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1
-    					,SchoolConstant.Code.ClassroomSessionSuffix.A,1l).iterator().next();
+    					,SchoolConstant.Code.ClassroomSessionSuffix.A,2l).iterator().next();
     	
     	inject(GenericBusiness.class).createReportFile(classroomSessionDivision, SchoolConstant.Code.ReportTemplate.CLASSROOM_SESSION_DIVISION_BROAD_SHEET
     			, Locale.ENGLISH);
     	
     	File file = inject(FileIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(classroomSessionDivision).iterator().next().getFile();
     	schoolBusinessTestHelper.write(file);
-    	*/
+    	
     	
     }
     
