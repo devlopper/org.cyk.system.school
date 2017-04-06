@@ -75,7 +75,8 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 		
 		if(userSession.hasRole(Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
-			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
+			//module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
+			
 		}
 		if(userSession.hasRole(Role.MANAGER)){
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
@@ -83,6 +84,10 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles() ,null));
+			
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateClassroomSessionDivisionBroadsheet() ,null));
+			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
+			
 			//module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles() ,null));
 			module.addChild(Builder.createSelectMany(StudentClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles() ,null));
 			

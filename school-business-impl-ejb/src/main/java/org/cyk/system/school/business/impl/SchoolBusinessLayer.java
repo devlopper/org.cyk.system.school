@@ -99,6 +99,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	
 	private String actionEditStudentClassroomSessionDivisionEvaluationAverage = "aescsdea";
+	private String actionUpdateClassroomSessionDivisionBroadsheet = "aucsdbs";
 	private String actionConsultClassroomSessionDivisionBroadsheet = "accsdbs";
 	
 	private RankOptions<SortableStudentResults> studentEvaluationResultsRankOptions = new RankOptions<>();

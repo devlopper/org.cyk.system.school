@@ -350,10 +350,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		LabelValueReport labelValueNumberOfStudentsEvaluated = r.getClassroomSessionDivision().getLabelValueCollection().add("Number of students evaluated",format(classroomSessionDivision.getResults().getNumberOfStudent())).setExtendedValuesSize(numberOfSubjects);
 		BigDecimal passFraction = classroomSessionDivision.getResults().getFractionOfStudentPassingEvaluationAverage(4, RoundingMode.HALF_DOWN);
 		LabelValueReport labelValuePassFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Fraction",r.getClassroomSessionDivision().getResults().getPassFraction()).setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValuePassPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Percentage",numberStringFormatter
+		LabelValueReport labelValuePassPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Percentage",passFraction == null ? null : numberStringFormatter
 				.setInput(passFraction).execute()).setExtendedValuesSize(numberOfSubjects);
 		LabelValueReport labelValueFailFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Fraction",r.getClassroomSessionDivision().getResults().getNotPassFraction()).setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValueFailPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Percentage",numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction))
+		LabelValueReport labelValueFailPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Percentage",passFraction == null ? null : numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction))
 				.execute()).setExtendedValuesSize(numberOfSubjects);
 		
 		int i = 0;
@@ -366,11 +366,11 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			
 			labelValuePassFraction.getExtendedValues()[i] = classroomSessionDivisionSubject.getResults().getNumberOfStudentPassingEvaluationAverage()
 					+"/"+classroomSessionDivisionSubject.getResults().getNumberOfStudent();
-			labelValuePassPercentage.getExtendedValues()[i] = numberStringFormatter.setInput(passFraction).execute();
+			labelValuePassPercentage.getExtendedValues()[i] = passFraction == null ? null : numberStringFormatter.setInput(passFraction).execute();
 			
 			labelValueFailFraction.getExtendedValues()[i] = (classroomSessionDivisionSubject.getResults().getNumberOfStudentNotPassingEvaluationAverage())
 					+"/"+classroomSessionDivisionSubject.getResults().getNumberOfStudent();
-			labelValueFailPercentage.getExtendedValues()[i] = numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction)).execute();
+			labelValueFailPercentage.getExtendedValues()[i] = passFraction == null ? null : numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction)).execute();
 			i++;
 		}
 			

@@ -11,8 +11,13 @@ import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.ArrayUtils;
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
+import org.cyk.system.root.business.api.file.FileRepresentationTypeBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
@@ -28,6 +33,7 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
@@ -62,9 +68,6 @@ import org.primefaces.extensions.model.dynaform.DynaFormControl;
 import org.primefaces.extensions.model.dynaform.DynaFormLabel;
 import org.primefaces.extensions.model.dynaform.DynaFormModel;
 import org.primefaces.extensions.model.dynaform.DynaFormRow;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryManyFormModel.FIELD_IDENTIFIABLES,type=ClassroomSession.class)})
 public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSessionQueryManyFormModel<ClassroomSession> implements Serializable {
@@ -230,6 +233,20 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					
 				});
 				
+			}else if(SchoolBusinessLayer.getInstance().getActionUpdateClassroomSessionDivisionBroadsheet().equals(page.getActionIdentifier())){
+				page.getForm().getSubmitCommandable().getCommand().setShowExecutionProgress(Boolean.TRUE);
+				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						if(SchoolBusinessLayer.getInstance().getActionUpdateClassroomSessionDivisionBroadsheet().equals(page.getActionIdentifier()))
+							return field.getName().equals(ProcessPageAdapter.Form.FIELD_DRAFT);
+						return super.build(data,field);
+					}
+				});
+				page.setExecutionProgress(new ExecutionProgress("Build Classroom Session Division Broadsheet",null));
+				page.getForm().getSubmitCommandable().getCommand().setExecutionProgress(page.getExecutionProgress());
+				PrimefacesManager.getInstance().configureProgressBar(page.getForm().getSubmitCommandable());
 			}
 		}
 		
@@ -339,6 +356,20 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			}else if(SchoolBusinessLayer.getInstance().getActionAssignSubjectClassroomSessionToStudentClassroomSession().equals(actionIdentifier)){
 				WebNavigationManager.getInstance().redirectToDynamicProcessManyPage(SchoolWebManager.getInstance().getOutcomeAssignSubjectClassroomSessionToStudentClassroomSession(),StudentClassroomSession.class
 						,inject(StudentClassroomSessionBusiness.class).findByClassroomSessions(classroomSessions),actionIdentifier);
+			}else if(schoolBusinessLayer.getActionUpdateClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
+						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+				ServiceCallArguments callArguments = new ServiceCallArguments();
+				callArguments.setExecutionProgress(page.getExecutionProgress());
+				/*Form form = (Form) data; 
+				CreateReportFileArguments.Builder<ClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<ClassroomSessionDivision>(null)
+						.setIsDraft(form.getDraft());*/
+				inject(GenericBusiness.class).createReportFiles(classroomSessionDivisions, SchoolConstant.Code.ReportTemplate.CLASSROOM_SESSION_DIVISION_BROAD_SHEET);		
+			}else if(SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
+				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
+						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+				WebNavigationManager.getInstance().redirectToFileConsultManyPage( inject(FileRepresentationTypeBusiness.class)
+						.find(Arrays.asList(SchoolConstant.Code.ReportTemplate.CLASSROOM_SESSION_DIVISION_BROAD_SHEET)),classroomSessionDivisions, FileExtension.PDF);
 			}
 		}
 		

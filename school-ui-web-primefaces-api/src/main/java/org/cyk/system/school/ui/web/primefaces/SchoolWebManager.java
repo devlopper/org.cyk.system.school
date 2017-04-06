@@ -321,9 +321,12 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 		UICommandable module = Builder.create("school.results", null).setIdentifier(COMMANDABLE_IDENTIFIER_RESULTS);
 		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
-			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
+			//module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
 		}
 		if(userSession.hasRole(Role.MANAGER)){
+			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateClassroomSessionDivisionBroadsheet() ,null));
+			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
+			
 			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
 			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
 			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
