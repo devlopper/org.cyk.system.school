@@ -56,6 +56,22 @@
 		</navigation-case>
 		
 		<navigation-case>
+			<from-outcome>levelGroupEditView</from-outcome>
+			<to-view-id>/private/levelgroup/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>levelGroupConsultView</from-outcome>
+			<to-view-id>/private/levelgroup/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>levelGroupListView</from-outcome>
+			<to-view-id>/private/levelgroup/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>classroomSessionDivisionStudentsMetricCollectionEditView</from-outcome>
 			<to-view-id>/private/classroomsessiondivisionstudentsmetriccollection/edit.jsf</to-view-id>
 			<redirect />

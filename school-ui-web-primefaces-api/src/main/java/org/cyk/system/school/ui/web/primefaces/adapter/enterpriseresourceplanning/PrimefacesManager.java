@@ -11,6 +11,7 @@ import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessi
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.LevelGroupDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
@@ -24,6 +25,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -39,6 +41,7 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionS
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
 import org.cyk.ui.api.command.menu.SystemMenu;
@@ -57,7 +60,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	public PrimefacesManager() {
 		configureAcademicSessionClass();
 		configureLevelTimeDivisionClass();
-		
+		configureLevelGroupClass();
 		configureClassroomSessionClass();
 		configureSubjectClassroomSessionClass();
 		
@@ -104,6 +107,27 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 						if(data instanceof PeriodDetails)
 							return isFieldNameIn(field,PeriodDetails.FIELD_FROM_DATE,PeriodDetails.FIELD_TO_DATE);
 						return Boolean.FALSE;
+					}
+				};
+			}
+		});
+	}
+	
+	protected void configureLevelGroupClass() {
+		getFormConfiguration(LevelGroup.class, Crud.CREATE).addFieldNames(LevelGroupEditPage.Form.FIELD_CODE,LevelGroupEditPage.Form.FIELD_NAME
+				,LevelGroupEditPage.Form.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER);
+		
+		registerDetailsConfiguration(LevelGroupDetails.class, new DetailsConfiguration(){
+			private static final long serialVersionUID = 1L;
+			@SuppressWarnings("rawtypes")
+			@Override
+			public ControlSetAdapter.Details getFormControlSetAdapter(Class clazz) {
+				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						return isFieldNameIn(field,LevelGroupDetails.FIELD_CODE,LevelGroupDetails.FIELD_NAME
+									,LevelGroupDetails.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER);
 					}
 				};
 			}

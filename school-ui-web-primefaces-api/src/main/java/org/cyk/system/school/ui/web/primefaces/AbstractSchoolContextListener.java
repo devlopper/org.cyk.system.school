@@ -104,8 +104,9 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(Level.class, LevelEditPage.Form.class, LevelDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(Level.class, null);
-		uiManager.registerConfiguration(new IdentifiableConfiguration(LevelGroup.class, LevelGroupEditPage.Form.class, LevelGroupDetails.class,null,null,null));
-		uiManager.configBusinessIdentifiable(LevelGroup.class, null);
+		
+		//uiManager.registerConfiguration(new IdentifiableConfiguration(LevelGroup.class, LevelGroupEditPage.Form.class, LevelGroupDetails.class,null,null,null));
+		//uiManager.configBusinessIdentifiable(LevelGroup.class, null);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(Teacher.class, TeacherEditPage.Form.class, TeacherDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(Teacher.class, null);
