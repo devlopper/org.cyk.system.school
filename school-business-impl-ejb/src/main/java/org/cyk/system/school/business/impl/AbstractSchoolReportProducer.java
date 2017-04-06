@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +31,6 @@ import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
-import org.cyk.system.root.persistence.api.file.FileDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
@@ -328,6 +326,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		numberStringFormatter.setCharacterSet(CharacterSet.LETTER);
 		numberStringFormatter.setLocale(RootConstant.Configuration.ReportTemplate.LOCALE);
 		ClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(ClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
+		/*
+		File backgroundImageFile = createReportFileArguments.getReportTemplate().getBackgroundImage();
+		
+		if(backgroundImageFile!=null)
+			r.setBackgroundImage(inject(FileBusiness.class).findInputStream(backgroundImageFile));
+		*/
 		//r.setHeaderImage(inject(FileBusiness.class).findInputStream(inject(FileDao.class).read(SchoolConstant.Code.File.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS)));
 		r.getClassroomSessionDivision().setSource(classroomSessionDivision);
 		Integer year = new DateTime(classroomSessionDivision.getClassroomSession().getAcademicSession().getExistencePeriod().getFromDate()).getYear();
@@ -337,24 +341,26 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 						+year+"/"+(year+1)+" ACADEMIC YEAR, "+numberStringFormatter.execute().toUpperCase()+" TERM");
 		r.getClassroomSessionDivision().getLabelValueCollection().getCollection().clear();
 		
-		Integer numberOfSubjects = classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection().size();
-		LabelValueReport labelValueAverageScore = r.getClassroomSessionDivision().getLabelValueCollection().add("Average Score").setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValueNumberOfStudentsEvaluated = r.getClassroomSessionDivision().getLabelValueCollection().add("Number of students evaluated").setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValuePassFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Fraction").setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValuePassPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Percentage").setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValueFailFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Fraction").setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValueFailPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Percentage").setExtendedValuesSize(numberOfSubjects);
-		
-		
 		numberStringFormatter = new NumberStringFormatter(null, null);
 		numberStringFormatter.setIsPercentage(Boolean.TRUE);
+		
+		Integer numberOfSubjects = classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection().size();
+		LabelValueReport labelValueAverageScore = r.getClassroomSessionDivision().getLabelValueCollection().add("Average Score",format(classroomSessionDivision.getResults().getAverage())).setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValueNumberOfStudentsEvaluated = r.getClassroomSessionDivision().getLabelValueCollection().add("Number of students evaluated",format(classroomSessionDivision.getResults().getNumberOfStudent())).setExtendedValuesSize(numberOfSubjects);
+		BigDecimal passFraction = classroomSessionDivision.getResults().getFractionOfStudentPassingEvaluationAverage(4, RoundingMode.HALF_DOWN);
+		LabelValueReport labelValuePassFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Fraction",r.getClassroomSessionDivision().getResults().getPassFraction()).setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValuePassPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Percentage",numberStringFormatter
+				.setInput(passFraction).execute()).setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValueFailFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Fraction",r.getClassroomSessionDivision().getResults().getNotPassFraction()).setExtendedValuesSize(numberOfSubjects);
+		LabelValueReport labelValueFailPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Percentage",numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction))
+				.execute()).setExtendedValuesSize(numberOfSubjects);
+		
 		int i = 0;
 		for(ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubject : r.getClassroomSessionDivision().getClassroomSessionDivisionSubjects()){
 			labelValueAverageScore.getExtendedValues()[i] = classroomSessionDivisionSubject.getAverage();
 			labelValueNumberOfStudentsEvaluated.getExtendedValues()[i] = classroomSessionDivisionSubject.getResults().getNumberOfStudent();
 			
-			BigDecimal passFraction = new BigDecimal(((ClassroomSessionDivisionSubject)classroomSessionDivisionSubject.getSource()).getResults().getNumberOfStudentPassingEvaluationAverage()
-					).divide(new BigDecimal(((ClassroomSessionDivisionSubject)classroomSessionDivisionSubject.getSource()).getResults().getNumberOfStudent()), 4
+			passFraction = ((ClassroomSessionDivisionSubject)classroomSessionDivisionSubject.getSource()).getResults().getFractionOfStudentPassingEvaluationAverage(4
 							, RoundingMode.HALF_DOWN);
 			
 			labelValuePassFraction.getExtendedValues()[i] = classroomSessionDivisionSubject.getResults().getNumberOfStudentPassingEvaluationAverage()

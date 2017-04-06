@@ -25,13 +25,7 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 	private ArrayList<StudentClassroomSessionDivisionReport> studentClassroomSessionDivisions = new ArrayList<>();
 	
 	public ClassroomSessionDivisionReport() {
-		labelValueCollection.add("Average Score");
-		labelValueCollection.add("Number of student evaluated");
-		labelValueCollection.add("Pass Fraction");
-		labelValueCollection.add("Pass Percentage");
-		labelValueCollection.add("Fail Fraction");
-		labelValueCollection.add("Fail Percentage");
-		labelValueCollection.generateExtendedValues(20);
+		
 	}
 	
 	@Override
@@ -48,6 +42,8 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 			studentClassroomSessionDivisions.add(studentClassroomSessionDivisionReport);
 			studentClassroomSessionDivisionReport.setClassroomSessionDivisionSubjects(classroomSessionDivisionSubjects);
 		}
+		
+		results.setSource(((ClassroomSessionDivision)source).getResults());
 	}
 	
 	public ClassroomSessionDivisionSubjectReport getClassroomSessionDivisionSubjectAtIndex(Integer index){
@@ -57,6 +53,14 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 	@Override
 	public void generate() {
 		super.generate();
+		labelValueCollection.getCollection().clear();
+		labelValueCollection.add("Average Score",String.valueOf(provider.randomInt(0, 100)));
+		labelValueCollection.add("Number of student evaluated",String.valueOf(provider.randomInt(0, 100)));
+		labelValueCollection.add("Pass Fraction",String.valueOf(provider.randomInt(0, 100)));
+		labelValueCollection.add("Pass Percentage",String.valueOf(provider.randomInt(0, 100)));
+		labelValueCollection.add("Fail Fraction",String.valueOf(provider.randomInt(0, 100)));
+		labelValueCollection.add("Fail Percentage",String.valueOf(provider.randomInt(0, 100)));
+		labelValueCollection.generateExtendedValues(20);
 		classroomSession.generate();
 	}
 	

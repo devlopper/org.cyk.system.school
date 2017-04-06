@@ -42,6 +42,14 @@
 		<paragraph leftIndent="1"/>
 	</style>
 	<style name="column_av_rk_header_text" mode="Transparent" hAlign="Center" vAlign="Middle" fontName="Agency FB" fontSize="9"/>
+	<style name="column_analysis_detail_blank" style="column_detail">
+		<box>
+			<topPen lineWidth="0.0"/>
+			<leftPen lineWidth="1.0"/>
+			<bottomPen lineWidth="0.0"/>
+			<rightPen lineWidth="1.0"/>
+		</box>
+	</style>
 	<subDataset name="StudentClassroomSessionDivisionDS" uuid="908f0f62-6eeb-4a59-acfd-469cd8e06555">
 		<field name="student" class="org.cyk.system.root.model.party.person.ActorReport">
 			<fieldDescription><![CDATA[student]]></fieldDescription>
@@ -85,6 +93,14 @@
 	<field name="classroomSessionDivision" class="org.cyk.system.school.model.session.ClassroomSessionDivisionReport">
 		<fieldDescription><![CDATA[classroomSessionDivision]]></fieldDescription>
 	</field>
+	<background>
+		<band height="555">
+			<image isUsingCache="true" isLazy="true">
+				<reportElement x="167" y="111" width="494" height="364" uuid="d2b49e8d-7e07-42c1-b543-48cbb53370ca"/>
+				<imageExpression><![CDATA[$F{backgroundImage}]]></imageExpression>
+			</image>
+		</band>
+	</background>
 	<title>
 		<band height="66" splitType="Stretch">
 			<image scaleImage="RetainShape" hAlign="Center" isUsingCache="false" onErrorType="Blank">
@@ -93,7 +109,7 @@
 			</image>
 			<textField>
 				<reportElement x="360" y="0" width="220" height="66" uuid="52399fd6-746b-4418-b6ac-dd343af67d0a"/>
-				<textElement>
+				<textElement textAlignment="Center">
 					<font fontName="Tin Birdhouse" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
@@ -1754,6 +1770,17 @@
 							<textField>
 								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="9946f347-3d47-4660-90bf-aa623b640f50"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(19)]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="15" uuid="b382111f-7358-4e0a-b6a5-bc4a5854e5b6">
+						<jr:detailCell style="column_analysis_detail_blank" height="15" rowSpan="1"/>
+					</jr:column>
+					<jr:column width="70" uuid="89b8ff63-4ea2-4749-bdaa-694c7d900edb">
+						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<textField>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="70" height="15" uuid="4ab74c43-a625-4b33-9f2a-e561b3e891e0"/>
+								<textFieldExpression><![CDATA[$F{labelValue}.getValue()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

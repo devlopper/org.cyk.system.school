@@ -5,6 +5,7 @@ import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.generator.AbstractGeneratable;
 
 @Getter @Setter
@@ -12,7 +13,8 @@ public class NodeResultsReport extends AbstractGeneratable<NodeResultsReport> im
 
 	private static final long serialVersionUID = 1L;
 
-	private String average,averageHighest,averageLowest,numberOfStudent,numberOfStudentPassingEvaluationAverage,numberOfStudentNotPassingEvaluationAverage;
+	private String average,averageHighest,averageLowest,numberOfStudent,numberOfStudentPassingEvaluationAverage,numberOfStudentNotPassingEvaluationAverage,passFraction
+		,notPassFraction;
 	
 	@Override
 	public void setSource(Object source) {
@@ -24,6 +26,8 @@ public class NodeResultsReport extends AbstractGeneratable<NodeResultsReport> im
 			this.numberOfStudent = format(((NodeResults)source).getNumberOfStudent());
 			this.numberOfStudentPassingEvaluationAverage = format(((NodeResults)source).getNumberOfStudentPassingEvaluationAverage());
 			this.numberOfStudentNotPassingEvaluationAverage = format(((NodeResults)source).getNumberOfStudentNotPassingEvaluationAverage());
+			this.passFraction = numberOfStudentPassingEvaluationAverage+Constant.CHARACTER_SLASH+numberOfStudent;
+			this.notPassFraction = numberOfStudentNotPassingEvaluationAverage+Constant.CHARACTER_SLASH+numberOfStudent;
 		}
 	}
 	

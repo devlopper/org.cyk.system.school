@@ -22,8 +22,8 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();    	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
-    			, new Boolean[]{Boolean.FALSE},Boolean.FALSE, Boolean.FALSE);
-    	
+    			, new Boolean[]{Boolean.FALSE},Boolean.TRUE, Boolean.FALSE);
+    	/*
     	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
     			.findByLevelTimeDivisionCodeByClassroomSessionSuffixCodeByClassroomSessionDivisionOrderNumber(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1
     					,SchoolConstant.Code.ClassroomSessionSuffix.A,1l).iterator().next();
@@ -33,7 +33,7 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     	
     	File file = inject(FileIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(classroomSessionDivision).iterator().next().getFile();
     	schoolBusinessTestHelper.write(file);
-    	
+    	*/
     	
     }
     
@@ -41,13 +41,18 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
+    	//dataProducer.getClassroomSessionSuffixes().clear();
+    	
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
+    	
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
+    	dataProducer.getClassroomSessionSuffixes().put(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, new String[]{SchoolConstant.Code.ClassroomSessionSuffix.A});
+    	
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1);
     	
     	dataProducer.getDivisionOrderNumbers().clear();
-    	dataProducer.getDivisionOrderNumbers().add(1l);
-    	//dataProducer.getDivisionOrderNumbers().add(2l);
+    	//dataProducer.getDivisionOrderNumbers().add(1l);
+    	dataProducer.getDivisionOrderNumbers().add(2l);
     	//dataProducer.getDivisionOrderNumbers().add(3l);
     	return dataProducer;
     }

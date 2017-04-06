@@ -17,7 +17,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		Collection<ClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(ClassroomSessionDivisionReportTemplateFile.class, 1);
 		ClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.getClassroomSessionDivision().generateSubjects(numberOfSubjects);
-		report.getClassroomSessionDivision().generateStudent(50);
+		report.getClassroomSessionDivision().generateStudent(30);
 		report.setIsDraft(Boolean.FALSE);
 		report.setName("G1A Broadsheet\r\n2016/2017 Academic Year,First Term");
 		
@@ -378,8 +378,8 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		System.out.println("IesaSampleData.main() : "+reports.iterator().next().getStudentClassroomSessionDivision().getClassroomSessionDivisionSubjects().size());
 		
 		System.out.println(createFirstTermClassroomSessionDivisionReportsWithFiveSubjects().iterator().next()
-				.getClassroomSessionDivision().getStudentClassroomSessionDivisions().get(0).getSubjects().iterator().next().getResults().getEvaluationSort()
-				.getAverage().getValue());
+				.getClassroomSessionDivision().getStudentClassroomSessionDivisions().get(0).getSubjects().iterator().next().getClassroomSessionDivisionSubject()
+				.getSubject().getName());
 	}
 	
 }

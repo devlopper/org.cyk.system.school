@@ -287,7 +287,7 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 	        			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT}}));
 			}
     	
-    	for(String code : new String[]{SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,SchoolConstant.Code.LevelTimeDivision.G2_YEAR_1,SchoolConstant.Code.LevelTimeDivision.G3_YEAR_1})
+    	for(String code : new String[]{SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1,SchoolConstant.Code.LevelTimeDivision.G2_YEAR_1,SchoolConstant.Code.LevelTimeDivision.G3_YEAR_1}){
 	    	for(String suffix : getClassroomSessionSuffixes(code)){
 	    		if(classroomSessionLevelTimeDivisionCodes.contains(code))
 	    			classroomSessions.add(inject(ClassroomSessionBusiness.class)
@@ -301,6 +301,7 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 			    			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT}}));
 	    		
 	    	}
+    	}
     	for(String code : new String[]{SchoolConstant.Code.LevelTimeDivision.G4_YEAR_1,SchoolConstant.Code.LevelTimeDivision.G5_YEAR_1})
 	    	for(String suffix : getClassroomSessionSuffixes(code))
 	    		if(classroomSessionLevelTimeDivisionCodes.contains(code))

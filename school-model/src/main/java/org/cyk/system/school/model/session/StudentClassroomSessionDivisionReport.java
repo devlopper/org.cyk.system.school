@@ -175,6 +175,7 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 			studentClassroomSessionDivisionSubject.getResults().getEvaluationSort().getRank().setValue(String.valueOf(RandomDataProvider.getInstance().randomInt(10, 99)));
 			subjects.add(studentClassroomSessionDivisionSubject);
 		}
+		
 	}
 	
 	@Override
