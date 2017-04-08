@@ -54,7 +54,7 @@ import org.primefaces.extensions.model.dynaform.DynaFormRow;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryManyFormModel.FIELD_IDENTIFIABLES,type=ClassroomSession.class)})
+@Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryManyFormModel.FIELD_IDENTIFIABLES,type=StudentClassroomSessionDivision.class)})
 public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractStudentClassroomSessionDivisionQueryManyFormModel<StudentClassroomSessionDivision> implements Serializable {
 	private static final long serialVersionUID = -3756660150800681378L;
 	

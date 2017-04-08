@@ -53,7 +53,7 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 	
 	@Override
 	public String toString() {
-		return student+" "+classroomSessionDivision;
+		return getCode(); //student+" "+classroomSessionDivision;
 	}
 	
 	@Override

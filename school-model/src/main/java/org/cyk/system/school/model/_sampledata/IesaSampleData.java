@@ -215,7 +215,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		report.setIsDraft(provisional);
 		report.setName("KINDERGARTEN REPORT SHEET");
 		report.getStudentClassroomSessionDivision().setSchoolStampBlockTitle("SCHOOL STAMP AND SIGNATURE");
-		report.getStudentClassroomSessionDivision().setComments(RandomStringUtils.randomAlphabetic(300).toUpperCase()+"_END");
+		report.getStudentClassroomSessionDivision().setComments(RandomStringUtils.randomAlphabetic(900).toUpperCase()+"_END");
 				
 		addPupilsDetails(report);
 		addSchoolAttendance(report);

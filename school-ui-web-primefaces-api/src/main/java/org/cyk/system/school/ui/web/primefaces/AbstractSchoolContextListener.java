@@ -85,6 +85,9 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 	public void contextInitialized(ServletContextEvent event) {
 		super.contextInitialized(event);
 		//schoolWebManager.doMoreInitialisation();
+		
+		//AbstractBusinessEntityFormManyPage.BusinessEntityFormManyPageListener.COLLECTION.add(new );
+
 	}
 	
 	@Override

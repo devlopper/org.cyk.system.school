@@ -64,14 +64,12 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 			}	
 			
 			@Override
-			public Crud getCrud() {
-				return crud;
-			}
-			@Override
 			public Boolean isShowAddButton() {
 				return Boolean.TRUE;
 			}
 		});
+		
+		studentSubjectCollection.setShowAddCommandableAtBottom(Boolean.TRUE);
 	}
 	
 	@Override

@@ -144,7 +144,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
 			public String format(ClassroomSessionDivision classroomSessionDivision, ContentType contentType) {
-				return classroomSessionDivision.getTimeDivisionType().getName()+Constant.CHARACTER_SPACE+(classroomSessionDivision.getOrderNumber());
+				return classroomSessionDivision.getName();//+Constant.CHARACTER_SPACE+(classroomSessionDivision.getOrderNumber());
 			}
 		});
 		
@@ -152,8 +152,20 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 			private static final long serialVersionUID = -4793331650394948152L;
 			@Override
 			public String format(StudentClassroomSessionDivision studentClassroomSessionDivision, ContentType contentType) {
-				return inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision(),contentType)+Constant.CHARACTER_SPACE
-						+inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getStudent(),contentType);
+				//return inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getStudent(),contentType)
+				//		+Constant.CHARACTER_SPACE+;
+				
+				//return studentClassroomSessionDivision.getName();
+				
+				//return inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision(),contentType)+Constant.CHARACTER_SPACE
+				//		+inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getStudent(),contentType);
+				
+				ClassroomSession classroomSession = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession();
+				
+				return classroomSession.getLevelTimeDivision().getLevel().getLevelName().getName()
+						+(classroomSession.getSuffix()==null?Constant.EMPTY_STRING:classroomSession.getSuffix().getName())
+						+Constant.CHARACTER_SPACE+studentClassroomSessionDivision.getStudent().getCode()+Constant.CHARACTER_SPACE
+						+studentClassroomSessionDivision.getStudent().getPerson().getNames();
 			}
 		});
 		

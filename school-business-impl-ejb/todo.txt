@@ -2,5 +2,6 @@ Database update
 Create a report template with code : CLASSROOMSESSIONDIVISIONBROADSHEET
 Create a file with code : CLASSROOMSESSIONDIVISIONBROADSHEET
 
-NodeResults(Embbedable)
-Create column : numberOfStudentPassing
+School Reopens and Next term examination should be take from next class room session division session
+
+Add pagination everywhere

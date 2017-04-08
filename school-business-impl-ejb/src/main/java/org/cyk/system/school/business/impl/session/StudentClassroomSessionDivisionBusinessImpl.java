@@ -23,6 +23,7 @@ import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiable
 import org.cyk.system.root.business.api.mathematics.MetricValueIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.message.MailBusiness;
+import org.cyk.system.root.business.api.message.MessageSendingBusiness;
 import org.cyk.system.root.business.api.message.MessageSendingBusiness.SendArguments;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.event.Notification;

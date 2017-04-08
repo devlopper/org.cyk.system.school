@@ -48,7 +48,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	
 	@Override
 	public String getUiString() {
-		return student.getUiString();
+		return getCode(); //student.getUiString();
 	}
 	
 	
