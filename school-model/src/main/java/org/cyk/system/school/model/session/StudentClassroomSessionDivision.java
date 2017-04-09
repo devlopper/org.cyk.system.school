@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -30,7 +31,7 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 
 	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION_DIVISION) @NotNull private ClassroomSessionDivision classroomSessionDivision;
 	
-	@Setter private IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects;
+	@Transient @Setter private IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects;
 	
 	/**/
 		

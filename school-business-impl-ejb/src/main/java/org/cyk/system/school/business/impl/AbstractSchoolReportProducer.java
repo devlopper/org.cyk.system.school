@@ -160,8 +160,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		if(reportTemplate.getHeaderImage()!=null)
 			r.setHeaderImage(inject(FileBusiness.class).findInputStream(reportTemplate.getHeaderImage()));
 		File backgroundImageFile = createReportFileArguments.getBackgroundImageFile();
-		if(backgroundImageFile!=null)
+		if(backgroundImageFile!=null){
+			//System.out.println("AbstractSchoolReportProducer.produceStudentClassroomSessionDivisionReport() : "+backgroundImageFile.getCode());
 			r.setBackgroundImage(inject(FileBusiness.class).findInputStream(backgroundImageFile));
+		}
 		
 		inject(ContactCollectionBusiness.class).load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
 		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getStudentClassroomSessionDivision().getAcademicSession().getCompany().getContactCollection());

@@ -61,6 +61,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputManyAutoComplete;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyCheck;
 import org.cyk.utility.common.annotation.user.interfaces.InputManyChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
+import org.cyk.utility.common.annotation.user.interfaces.InputOneAutoComplete;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 import org.cyk.utility.common.computation.ExecutionProgress;
@@ -146,7 +147,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier()))
-							return field.getName().equals(ProcessPageAdapter.Form.FIELD_DRAFT);
+							return field.getName().equals(ProcessPageAdapter.Form.FIELD_DRAFT) || field.getName().equals(ProcessPageAdapter.Form.FIELD_BACKGROUND_IMAGE_FILE);
 						return super.build(data,field);
 					}
 				});
@@ -314,6 +315,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				Form form = (Form) data; 
 				CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<StudentClassroomSessionDivision>(null)
 						.setIsDraft(form.getDraft());
+				reportArgumentsBuilder.setBackgroundImageFile(form.getBackgroundImageFile());
+				//System.out.println("ClassroomSessionQueryManyFormModel.ProcessPageAdapter.serve() : "+reportArgumentsBuilder.getBackgroundImageFile().getCode());
 				inject(StudentClassroomSessionDivisionBusiness.class).buildReport(classroomSessionDivisions,form.getUpdateEvaluationResults(),form.getUpdateAttendanceResults()
 						,form.getUpdateRankResults(),schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),reportArgumentsBuilder,callArguments);
 			}else if(ArrayUtils.contains(new String[]{schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults()
@@ -399,7 +402,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			@Input @InputNumber private Integer classroomSessionDivisionMaxCount;
 			@Input @InputChoice @InputManyChoice @InputManyCheck private List<Integer> classroomSessionDivisionIndexesRequired;
 			
-			@Input @InputChoice(load=false) @InputOneChoice @InputOneCombo private File backgroundImageFile;
+			@Input @InputChoice @InputOneChoice @InputChoiceAutoComplete @InputOneAutoComplete private File backgroundImageFile;
 			@Input @InputBooleanButton private Boolean draft=Boolean.FALSE;
 			
 			public static final String FIELD_UPDATE_EVALUATION_RESULTS = "updateEvaluationResults";
