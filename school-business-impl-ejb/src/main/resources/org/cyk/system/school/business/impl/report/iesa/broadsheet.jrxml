@@ -1570,7 +1570,7 @@
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getResults().getEvaluationSort().getAverage().getValue()]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{studentClassroomSessionDivision}.getResults().getEvaluationSort().getRank().getValue()]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
