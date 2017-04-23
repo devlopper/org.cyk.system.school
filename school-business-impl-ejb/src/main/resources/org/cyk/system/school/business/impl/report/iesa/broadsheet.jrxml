@@ -102,15 +102,15 @@
 		</band>
 	</background>
 	<title>
-		<band height="66" splitType="Stretch">
+		<band height="50" splitType="Stretch">
 			<image scaleImage="RetainShape" hAlign="Center" isUsingCache="false" onErrorType="Blank">
-				<reportElement x="0" y="0" width="200" height="66" uuid="8e42e949-dfeb-479c-8261-4e1e8b45ee65"/>
+				<reportElement x="0" y="0" width="167" height="50" uuid="8e42e949-dfeb-479c-8261-4e1e8b45ee65"/>
 				<imageExpression><![CDATA[$F{headerImage}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="360" y="0" width="220" height="66" uuid="52399fd6-746b-4418-b6ac-dd343af67d0a"/>
+				<reportElement x="360" y="0" width="329" height="50" uuid="52399fd6-746b-4418-b6ac-dd343af67d0a"/>
 				<textElement textAlignment="Center">
-					<font fontName="Tin Birdhouse" size="12"/>
+					<font fontName="Tin Birdhouse" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
@@ -125,18 +125,18 @@
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{classroomSessionDivision}.getStudentClassroomSessionDivisions())]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="20" uuid="15593687-540d-4e59-b053-af7f1dea24ca">
-						<jr:columnHeader style="column_header" height="101" rowSpan="2">
+						<jr:columnHeader style="column_header" height="97" rowSpan="2">
 							<staticText>
-								<reportElement style="column_header_textcenter" x="0" y="0" width="20" height="101" uuid="4ae0c72e-7336-49ac-b2b8-4c9089280735"/>
+								<reportElement style="column_header_textcenter" x="0" y="0" width="20" height="97" uuid="4ae0c72e-7336-49ac-b2b8-4c9089280735"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Tin Birdhouse" size="9"/>
 								</textElement>
 								<text><![CDATA[No.]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_detail_text" x="0" y="0" width="20" height="15" uuid="0c713f23-429f-47bb-9a32-dc90e6bff2d5"/>
+								<reportElement style="column_detail_text" x="0" y="0" width="20" height="11" uuid="0c713f23-429f-47bb-9a32-dc90e6bff2d5"/>
 								<textElement>
 									<font fontName="Agency FB" size="9"/>
 								</textElement>
@@ -145,18 +145,18 @@
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="90" uuid="5cc18409-0b79-41a3-953f-149a2fb76d1c">
-						<jr:columnHeader style="column_header" height="101" rowSpan="2">
+						<jr:columnHeader style="column_header" height="97" rowSpan="2">
 							<staticText>
-								<reportElement style="column_header_textcenter" x="0" y="1" width="90" height="100" uuid="093c5485-511f-4f22-a1b0-a7e51efbd8ed"/>
+								<reportElement style="column_header_textcenter" x="0" y="0" width="90" height="97" uuid="093c5485-511f-4f22-a1b0-a7e51efbd8ed"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Tin Birdhouse" size="9"/>
 								</textElement>
 								<text><![CDATA[Student's Name]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_detail_text" x="0" y="0" width="90" height="15" uuid="471d01b3-5691-4c78-9290-44dc7445237e"/>
+								<reportElement style="column_detail_text" x="0" y="0" width="90" height="11" uuid="471d01b3-5691-4c78-9290-44dc7445237e"/>
 								<textElement>
 									<font fontName="Agency FB" size="9"/>
 								</textElement>
@@ -176,18 +176,18 @@
 							</textField>
 						</jr:columnHeader>
 						<jr:column width="18" uuid="18d9c524-63cd-41bf-b32c-1565dfe76994">
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="73db1c44-4259-4b1c-8521-386b4db53e4b"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="73db1c44-4259-4b1c-8521-386b4db53e4b"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
 									<text><![CDATA[Av]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="d55b9303-e1a1-4fa9-a751-b1ace9daac4d"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="d55b9303-e1a1-4fa9-a751-b1ace9daac4d"/>
 									<textElement>
 										<font fontName="Agency FB" size="9"/>
 									</textElement>
@@ -196,18 +196,18 @@
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="12" uuid="1d29bf16-8881-47fc-8550-aa9c6193e228">
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="402cddb8-04c8-4e8f-8d14-fc1d4175d159"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="402cddb8-04c8-4e8f-8d14-fc1d4175d159"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
 									<text><![CDATA[Rk]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="90ceef86-8cd9-478f-b59d-5a31686abd92"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="90ceef86-8cd9-478f-b59d-5a31686abd92"/>
 									<textElement>
 										<font fontName="Agency FB" size="9"/>
 									</textElement>
@@ -229,9 +229,9 @@
 						</jr:columnHeader>
 						<jr:column width="18" uuid="aef010ee-0c4d-45cd-a5d1-01205a505126">
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="2a18c5b4-dc8e-41e2-8987-19c707a5fa15"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="2a18c5b4-dc8e-41e2-8987-19c707a5fa15"/>
 									<textElement>
 										<font fontName="Tin Birdhouse"/>
 									</textElement>
@@ -239,9 +239,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="2300a7a5-8fd5-473c-9a94-a3dc1d6e4b46"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="2300a7a5-8fd5-473c-9a94-a3dc1d6e4b46"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -251,9 +251,9 @@
 						</jr:column>
 						<jr:column width="12" uuid="ada7b24d-575a-4b39-8649-39fbf52da067">
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="a2d50817-8748-4030-9d72-11a14a47d7e1"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="a2d50817-8748-4030-9d72-11a14a47d7e1"/>
 									<textElement>
 										<font fontName="Tin Birdhouse"/>
 									</textElement>
@@ -261,9 +261,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="c140348a-f2a7-4350-b90c-968f0bc872e7"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="c140348a-f2a7-4350-b90c-968f0bc872e7"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -285,9 +285,9 @@
 						</jr:columnHeader>
 						<jr:column width="18" uuid="20e232f4-c2af-470f-bb10-ffd3dd04a39c">
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="7aa0abc7-b2e1-4a81-a6d2-f8ab4dcdf566"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="7aa0abc7-b2e1-4a81-a6d2-f8ab4dcdf566"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -295,9 +295,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="0d07cfc0-d1b3-4c1d-9967-3e67855d16c1"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="0d07cfc0-d1b3-4c1d-9967-3e67855d16c1"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -307,9 +307,9 @@
 						</jr:column>
 						<jr:column width="12" uuid="fe4b2be1-fb9c-4bb9-805e-9476d84fff83">
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="a7057162-829f-405d-b172-d78509ad5179"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="a7057162-829f-405d-b172-d78509ad5179"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -317,9 +317,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="13dc00e0-f759-437a-a71d-d381db757bdd"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="13dc00e0-f759-437a-a71d-d381db757bdd"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -341,9 +341,9 @@
 						</jr:columnHeader>
 						<jr:column width="18" uuid="46e38736-4b79-48de-9fda-8f3f16171592">
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="8cea3b8d-c01c-4fda-b7e2-5f969fa8ebed"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="8cea3b8d-c01c-4fda-b7e2-5f969fa8ebed"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -351,9 +351,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="c1b09a33-5ff7-4ddc-a0e4-91ea415e0b7d"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="c1b09a33-5ff7-4ddc-a0e4-91ea415e0b7d"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -363,9 +363,9 @@
 						</jr:column>
 						<jr:column width="12" uuid="9d3bb942-dfe5-4dfb-b3cf-7383e213d25a">
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="d53badca-ed63-459a-b2be-312c3b8777d1"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="d53badca-ed63-459a-b2be-312c3b8777d1"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -373,9 +373,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="2dc571f1-2911-446c-941b-d6a1c10a16a8"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="2dc571f1-2911-446c-941b-d6a1c10a16a8"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -397,9 +397,9 @@
 						</jr:columnHeader>
 						<jr:column width="18" uuid="9e1ce398-ed84-4b8b-a987-9b3a1ba61609">
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="446271e6-8cae-4536-bcca-bf5dc53f46b6"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="446271e6-8cae-4536-bcca-bf5dc53f46b6"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -407,9 +407,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="fe751f8f-c9b0-4f96-a681-8f7d0a2e12f5"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="fe751f8f-c9b0-4f96-a681-8f7d0a2e12f5"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -419,9 +419,9 @@
 						</jr:column>
 						<jr:column width="12" uuid="8e008890-3bdc-4a3f-935f-70bfe6dd96fd">
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="7f5f386e-39cd-44f4-bd54-9cef5c02f2ee"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="7f5f386e-39cd-44f4-bd54-9cef5c02f2ee"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -429,9 +429,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="d81b1920-530a-44e2-86b2-a4523446f6b5"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="d81b1920-530a-44e2-86b2-a4523446f6b5"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -454,9 +454,9 @@
 						<jr:column width="18" uuid="64c5293c-d3ac-4e4d-bc8e-ec8233144196">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="72853cae-3d1c-4941-a958-a9e56c18887d"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="72853cae-3d1c-4941-a958-a9e56c18887d"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -464,9 +464,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="8e46856e-e238-4d2e-a03c-23fc69f9b31f"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="8e46856e-e238-4d2e-a03c-23fc69f9b31f"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -477,9 +477,9 @@
 						<jr:column width="12" uuid="65d438d5-84f6-4e3b-bd56-17f08ab921fd">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="869c83ed-e9dc-4146-95a6-82969ac281cd"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="869c83ed-e9dc-4146-95a6-82969ac281cd"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -487,9 +487,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="32535355-563e-435e-b15d-d65fe7d7ef2a"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="32535355-563e-435e-b15d-d65fe7d7ef2a"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -512,9 +512,9 @@
 						<jr:column width="18" uuid="3f80f98d-74f0-4e34-93bc-3989db7bafc6">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="84ddb4dd-5b7e-4528-bd14-49b84a31aa7b"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="84ddb4dd-5b7e-4528-bd14-49b84a31aa7b"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -522,9 +522,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="726862a4-8869-4806-9505-96283c916e8c"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="726862a4-8869-4806-9505-96283c916e8c"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -535,9 +535,9 @@
 						<jr:column width="12" uuid="c3f52d42-763b-49db-8643-d6b09ec22eaa">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="e9e1dd45-4765-4038-860c-b0a2c070e3c4"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="e9e1dd45-4765-4038-860c-b0a2c070e3c4"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -545,9 +545,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="1b0a2d17-3fab-46c7-9182-c1bdf709feed"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="1b0a2d17-3fab-46c7-9182-c1bdf709feed"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -570,9 +570,9 @@
 						<jr:column width="18" uuid="33b64297-8f4d-4d16-befb-2a592dba7a22">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="3f9976b6-476c-47fe-951b-b0c0302cc7d7"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="3f9976b6-476c-47fe-951b-b0c0302cc7d7"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -580,9 +580,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="9da19c4f-5cc4-459b-9461-4dc830d27aff"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="9da19c4f-5cc4-459b-9461-4dc830d27aff"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -593,9 +593,9 @@
 						<jr:column width="12" uuid="1a145114-09b9-41a3-a5a7-de9b967d1a31">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="c00e8110-8192-4599-943e-2c2f322f18f4"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="c00e8110-8192-4599-943e-2c2f322f18f4"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -603,9 +603,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="d454c9fa-2ffe-4801-8399-a14129ca578e"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="d454c9fa-2ffe-4801-8399-a14129ca578e"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -628,9 +628,9 @@
 						<jr:column width="18" uuid="7dd09ffc-6189-48a8-a622-1e6c9067647e">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="cf803aa8-2ac9-4fd3-b54c-3dce4d8b0405"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="cf803aa8-2ac9-4fd3-b54c-3dce4d8b0405"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -638,9 +638,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="9d43e334-3c0b-40b1-a544-1dc3bdb1865e"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="9d43e334-3c0b-40b1-a544-1dc3bdb1865e"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -651,9 +651,9 @@
 						<jr:column width="12" uuid="e5eaa20e-5827-4940-8c04-8103865c78bb">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="3aee953a-b6f2-49e0-be7e-e31163214a72"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="3aee953a-b6f2-49e0-be7e-e31163214a72"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -661,9 +661,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="feaf9299-b90b-4040-aac1-9d5f21ddffcf"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="feaf9299-b90b-4040-aac1-9d5f21ddffcf"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -686,9 +686,9 @@
 						<jr:column width="18" uuid="4724c26b-15e3-4b87-88aa-0b2836d8fff1">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="add9a76f-9208-4503-b42a-ebe5ef1bd60c"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="add9a76f-9208-4503-b42a-ebe5ef1bd60c"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -696,9 +696,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="b1e4a147-1d94-4de4-bf43-803604ec6142"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="b1e4a147-1d94-4de4-bf43-803604ec6142"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -709,9 +709,9 @@
 						<jr:column width="12" uuid="b276b66f-4df1-469d-be8a-95e1230d920f">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="d756228b-f634-4158-8d0c-4e4cbc869a76"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="d756228b-f634-4158-8d0c-4e4cbc869a76"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -719,9 +719,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="ea023c68-7567-49f4-9b94-c26b5a753d67"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="ea023c68-7567-49f4-9b94-c26b5a753d67"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -744,9 +744,9 @@
 						<jr:column width="18" uuid="126b2e3a-5e59-4d9d-bbb8-4e4dedd14922">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="ed3d36c7-3a6a-4c26-a2ab-f0915cd88476"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="ed3d36c7-3a6a-4c26-a2ab-f0915cd88476"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -754,9 +754,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="38cdad83-530d-4239-a7b5-341c7e19ee86"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="38cdad83-530d-4239-a7b5-341c7e19ee86"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -767,9 +767,9 @@
 						<jr:column width="12" uuid="bf0ce943-1860-4249-98dc-73086bd0b511">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="19ad63ef-90e4-4833-82dd-912880ffd224"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="19ad63ef-90e4-4833-82dd-912880ffd224"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -777,9 +777,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="7c26fcfe-4ca0-4886-a177-7cf09b351763"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="7c26fcfe-4ca0-4886-a177-7cf09b351763"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -802,9 +802,9 @@
 						<jr:column width="18" uuid="8c3f8a02-bc12-4365-a96a-d68f4471367a">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="3fa4849f-099b-472d-a883-4a024f329949"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="3fa4849f-099b-472d-a883-4a024f329949"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -812,9 +812,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="e1f766e6-ec4d-4a31-9c2e-7d93c5e3889d"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="e1f766e6-ec4d-4a31-9c2e-7d93c5e3889d"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -825,9 +825,9 @@
 						<jr:column width="12" uuid="55816c91-b235-4344-bdfc-332790000c72">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="682b07dc-20ef-45b8-bb4a-7e6c7ad52bed"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="682b07dc-20ef-45b8-bb4a-7e6c7ad52bed"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -835,9 +835,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="2a5cf926-86b7-40da-920b-8c09fb0fcdb0"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="2a5cf926-86b7-40da-920b-8c09fb0fcdb0"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -860,9 +860,9 @@
 						<jr:column width="18" uuid="637131a3-9e51-4a1a-ac6b-395099b006a8">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="e193d2f9-26f9-4a26-95b1-36560c881dfa"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="e193d2f9-26f9-4a26-95b1-36560c881dfa"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -870,9 +870,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="4c054554-721b-4e4c-a659-8d329e6f093a"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="4c054554-721b-4e4c-a659-8d329e6f093a"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -883,9 +883,9 @@
 						<jr:column width="12" uuid="edc2722a-c4a4-4ee9-9214-b2714bce3be4">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="b32c9a2e-6e66-4112-954b-303030480e89"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="b32c9a2e-6e66-4112-954b-303030480e89"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -893,9 +893,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="795c7af3-b3ee-4997-ac8f-9a875de91e80"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="795c7af3-b3ee-4997-ac8f-9a875de91e80"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -918,9 +918,9 @@
 						<jr:column width="18" uuid="21729ff9-547e-4eaf-b725-1e15d4bbba83">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="13cc3925-b296-486d-8c1f-b65365355b2d"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="13cc3925-b296-486d-8c1f-b65365355b2d"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -928,9 +928,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="b24cb2cb-4c92-4068-b66a-126dc7259815"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="b24cb2cb-4c92-4068-b66a-126dc7259815"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -941,9 +941,9 @@
 						<jr:column width="12" uuid="5f4cc25c-6a7d-40e0-834f-87e0842721f9">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="129343b6-ec96-4604-b702-41baa86b6c88"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="129343b6-ec96-4604-b702-41baa86b6c88"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -951,9 +951,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="44f6e4b6-e872-4ccf-beb1-00db29774224"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="44f6e4b6-e872-4ccf-beb1-00db29774224"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -976,9 +976,9 @@
 						<jr:column width="18" uuid="1cef97bf-d0a6-4a8b-8990-73cba1085436">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="5869a25f-ff7d-4e6e-a116-e266f8eaaef2"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="5869a25f-ff7d-4e6e-a116-e266f8eaaef2"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -986,9 +986,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="0987c62a-54ce-4d50-b7d2-679232641d9a"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="0987c62a-54ce-4d50-b7d2-679232641d9a"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -999,9 +999,9 @@
 						<jr:column width="12" uuid="ff24051e-63e7-46a3-b5e4-ccd8307e550d">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="b88a5b0a-d927-473a-a0c0-51ef713f3d77"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="b88a5b0a-d927-473a-a0c0-51ef713f3d77"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1009,9 +1009,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="edee91dd-447f-46f4-969b-23b30d09f3f2"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="edee91dd-447f-46f4-969b-23b30d09f3f2"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1034,9 +1034,9 @@
 						<jr:column width="18" uuid="44648ea8-60d9-4595-a411-a1306b7a1b1c">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="ff5dbcf9-af6a-48cf-94ad-532ac21a3874"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="ff5dbcf9-af6a-48cf-94ad-532ac21a3874"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1044,9 +1044,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="54f9f786-413d-437f-86d9-d0b99f9d15f8"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="54f9f786-413d-437f-86d9-d0b99f9d15f8"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1057,9 +1057,9 @@
 						<jr:column width="12" uuid="4da270ef-f27f-4674-ad4e-45b06c417cee">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="e4a28be3-4c5f-478b-8ae9-50be164c6ac8"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="e4a28be3-4c5f-478b-8ae9-50be164c6ac8"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1067,9 +1067,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="162e67be-d350-4785-a916-b1f7b044fbcf"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="162e67be-d350-4785-a916-b1f7b044fbcf"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1092,9 +1092,9 @@
 						<jr:column width="18" uuid="314fa6ea-1eea-43a9-ab2f-cec2e9f6ff01">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="f0c6d114-3ddc-4b45-b508-8f118834857a"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="f0c6d114-3ddc-4b45-b508-8f118834857a"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1102,9 +1102,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="6182b2b5-a167-4f8a-aa55-a38ff8df58dc"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="6182b2b5-a167-4f8a-aa55-a38ff8df58dc"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1115,9 +1115,9 @@
 						<jr:column width="12" uuid="008f8c93-a1b8-4c2c-938d-4b99ff31c987">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="adaba24d-c37c-4dea-9ac5-099b58b6bacc"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="adaba24d-c37c-4dea-9ac5-099b58b6bacc"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1125,9 +1125,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="72780dbb-da0f-4067-8069-ba6e99441614"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="72780dbb-da0f-4067-8069-ba6e99441614"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1150,9 +1150,9 @@
 						<jr:column width="18" uuid="4db74c6e-0947-4dda-bb9b-cfd19b7dddb1">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="2b5b53d0-c428-436b-9dcd-604ca9fec160"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="2b5b53d0-c428-436b-9dcd-604ca9fec160"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1160,9 +1160,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="c1257f88-4885-4937-80c2-6eba92bb8bfd"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="c1257f88-4885-4937-80c2-6eba92bb8bfd"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1173,9 +1173,9 @@
 						<jr:column width="12" uuid="b6730886-2620-4a7f-978a-9540f1f07774">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="e566b285-711f-4183-8f4c-9d57bb7779d6"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="e566b285-711f-4183-8f4c-9d57bb7779d6"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1183,9 +1183,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="43609219-5d54-422a-9df7-b5473328e19b"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="43609219-5d54-422a-9df7-b5473328e19b"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1208,9 +1208,9 @@
 						<jr:column width="18" uuid="92208c7d-b969-4397-9ec6-63943631d529">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="8343d4de-780e-47a8-9d09-857554cdb613"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="8343d4de-780e-47a8-9d09-857554cdb613"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1218,9 +1218,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="8372d962-11a3-45a2-b048-450e7b19fe4c"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="8372d962-11a3-45a2-b048-450e7b19fe4c"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1231,9 +1231,9 @@
 						<jr:column width="12" uuid="cddf9697-180f-4b09-be50-01d2d23d75ad">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="4cb70753-92b9-4cf9-a53b-3899cec10868"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="4cb70753-92b9-4cf9-a53b-3899cec10868"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1241,9 +1241,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="70ad76ec-3b6e-41f9-b5cf-0f270a6b8ee5"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="70ad76ec-3b6e-41f9-b5cf-0f270a6b8ee5"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1266,9 +1266,9 @@
 						<jr:column width="18" uuid="bd95b521-ad4a-4c0e-8df9-99fc7bb8c64d">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="f9e350c0-ae5e-4909-8592-e3c2edc33137"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="f9e350c0-ae5e-4909-8592-e3c2edc33137"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1276,9 +1276,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="6b5e3e66-7a62-4621-bce9-a53e0f29387c"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="6b5e3e66-7a62-4621-bce9-a53e0f29387c"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1289,9 +1289,9 @@
 						<jr:column width="12" uuid="11e9e045-4b06-412a-97a6-13be9a89f6f7">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="1c9e30c2-7000-4a9b-9a52-e896d1b53a08"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="1c9e30c2-7000-4a9b-9a52-e896d1b53a08"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1299,9 +1299,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="b14aeefb-934f-40df-ab84-6f84a800c311"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="b14aeefb-934f-40df-ab84-6f84a800c311"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1324,9 +1324,9 @@
 						<jr:column width="18" uuid="19c3be73-0d36-4808-917e-e2a270437dc1">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="68c22cac-1c25-4a5c-8893-512474172ee7"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="68c22cac-1c25-4a5c-8893-512474172ee7"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1334,9 +1334,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="05da9bd6-adde-4f71-b6b2-1dcbdba459a0"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="05da9bd6-adde-4f71-b6b2-1dcbdba459a0"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1347,9 +1347,9 @@
 						<jr:column width="12" uuid="df40d5f9-e964-42d1-a871-1738ad29f4b6">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="bf846607-f985-4d8d-aa79-093c999a46a9"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="bf846607-f985-4d8d-aa79-093c999a46a9"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1357,9 +1357,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="e8b00a61-7eba-4703-a038-e80385388e01"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="e8b00a61-7eba-4703-a038-e80385388e01"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1382,9 +1382,9 @@
 						<jr:column width="18" uuid="b4be20e8-0cf0-4af1-853c-dc067fd746dc">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="77b16578-3775-4139-abbf-b5710d29bc45"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="77b16578-3775-4139-abbf-b5710d29bc45"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1392,9 +1392,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="20178e0f-a203-4dc7-97c0-ba56ea2d90cc"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="20178e0f-a203-4dc7-97c0-ba56ea2d90cc"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1405,9 +1405,9 @@
 						<jr:column width="12" uuid="326a352a-aa3a-4741-ada4-a5897143ac44">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="162a5c74-bd97-46b7-ab7f-39f93980f7f6"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="162a5c74-bd97-46b7-ab7f-39f93980f7f6"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1415,9 +1415,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="e231bcb4-8a4b-4fb2-91d2-7b144c835e56"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="e231bcb4-8a4b-4fb2-91d2-7b144c835e56"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1440,9 +1440,9 @@
 						<jr:column width="18" uuid="2ef48086-439b-4fbe-9f5e-0a988c4c72f9">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="15" uuid="eea3e704-7bef-4f28-94e3-c5cb1ce62dd8"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="18" height="11" uuid="eea3e704-7bef-4f28-94e3-c5cb1ce62dd8"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1450,9 +1450,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="15" uuid="d8303ed9-fde5-48aa-b5c5-7ecfacea0be3"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="18" height="11" uuid="d8303ed9-fde5-48aa-b5c5-7ecfacea0be3"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1463,9 +1463,9 @@
 						<jr:column width="12" uuid="6e023c77-307b-40a0-8ebf-3e1877cb074a">
 							<jr:tableHeader height="0" rowSpan="1"/>
 							<jr:tableFooter height="0" rowSpan="1"/>
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="15" uuid="6337ea00-18b1-493d-9adf-0968666ea61a"/>
+									<reportElement style="column_av_rk_header_text" x="0" y="0" width="12" height="11" uuid="6337ea00-18b1-493d-9adf-0968666ea61a"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
@@ -1473,9 +1473,9 @@
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter height="0" rowSpan="1"/>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="15" uuid="22fd5129-2653-4242-9c88-1410cd1ae27d"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="12" height="11" uuid="22fd5129-2653-4242-9c88-1410cd1ae27d"/>
 									<textElement>
 										<font fontName="Agency FB" size="8"/>
 									</textElement>
@@ -1485,18 +1485,18 @@
 						</jr:column>
 					</jr:columnGroup>
 					<jr:column width="15" uuid="a39978fb-9059-4567-9334-c2bf6a494d63">
-						<jr:columnHeader style="column_header" height="101" rowSpan="2">
+						<jr:columnHeader style="column_header" height="97" rowSpan="2">
 							<staticText>
-								<reportElement style="column_header_textcenter" x="0" y="0" width="15" height="101" uuid="bf2ab500-5e0f-4a78-b9fe-299a29bc9fe7"/>
+								<reportElement style="column_header_textcenter" x="0" y="0" width="15" height="97" uuid="bf2ab500-5e0f-4a78-b9fe-299a29bc9fe7"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
 									<font fontName="Tin Birdhouse" size="9"/>
 								</textElement>
 								<text><![CDATA[No. OF SUBJECTS]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_av_rk_detail_text" x="0" y="0" width="15" height="15" uuid="a9a675c1-0282-43c6-bfba-460b5fa24654"/>
+								<reportElement style="column_av_rk_detail_text" x="0" y="0" width="15" height="11" uuid="a9a675c1-0282-43c6-bfba-460b5fa24654"/>
 								<textElement>
 									<font fontName="Agency FB"/>
 								</textElement>
@@ -1515,18 +1515,18 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:column width="30" uuid="73b20631-7e39-48ff-b704-012fd19c38f2">
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_header_textleft" x="0" y="0" width="30" height="15" uuid="403375b5-7d1a-466c-ba21-e62982140f73"/>
+									<reportElement style="column_header_textleft" x="0" y="0" width="30" height="11" uuid="403375b5-7d1a-466c-ba21-e62982140f73"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
 									<text><![CDATA[Total]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="30" height="15" uuid="a76ab629-0175-498b-80a9-ccd0f6a8f405"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="30" height="11" uuid="a76ab629-0175-498b-80a9-ccd0f6a8f405"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -1535,18 +1535,18 @@
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="20" uuid="e89a8613-8bef-48c9-bb65-7418ab566185">
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_header_textleft" x="0" y="0" width="20" height="15" uuid="922eea02-b923-4cfe-8c45-e1b6d8ebbfe5"/>
+									<reportElement style="column_header_textleft" x="0" y="0" width="20" height="11" uuid="922eea02-b923-4cfe-8c45-e1b6d8ebbfe5"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
 									<text><![CDATA[Av]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="20" height="15" uuid="3dfe5895-d7f9-490f-857a-f79c8c786a5a"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="20" height="11" uuid="3dfe5895-d7f9-490f-857a-f79c8c786a5a"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -1555,18 +1555,18 @@
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="20" uuid="363c06a0-6db4-45b1-85eb-85139ed39e1a">
-							<jr:columnHeader style="column_header" height="15" rowSpan="1">
+							<jr:columnHeader style="column_header" height="11" rowSpan="1">
 								<staticText>
-									<reportElement style="column_header_textleft" x="0" y="0" width="20" height="15" uuid="5547574c-ab3c-46f6-9127-e55cce3f9903"/>
+									<reportElement style="column_header_textleft" x="0" y="0" width="20" height="11" uuid="5547574c-ab3c-46f6-9127-e55cce3f9903"/>
 									<textElement>
 										<font fontName="Tin Birdhouse" size="9"/>
 									</textElement>
 									<text><![CDATA[Rk]]></text>
 								</staticText>
 							</jr:columnHeader>
-							<jr:detailCell style="column_detail" height="15" rowSpan="1">
+							<jr:detailCell style="column_detail" height="11" rowSpan="1">
 								<textField>
-									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="20" height="15" uuid="36747f2f-4d7b-4419-be34-32beabab1865"/>
+									<reportElement style="column_av_rk_detail_text" x="0" y="0" width="20" height="11" uuid="36747f2f-4d7b-4419-be34-32beabab1865"/>
 									<textElement>
 										<font fontName="Agency FB"/>
 									</textElement>
@@ -1578,208 +1578,208 @@
 				</jr:table>
 			</componentElement>
 		</band>
-		<band height="75">
+		<band height="67">
 			<componentElement>
-				<reportElement key="table" x="0" y="20" width="360" height="55" uuid="43c42456-5c4d-47e5-ac6b-a2fba2d79f59"/>
+				<reportElement key="table" x="0" y="12" width="360" height="55" uuid="43c42456-5c4d-47e5-ac6b-a2fba2d79f59"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="AnalysisLabelValueDS" uuid="8c8ad4ad-14bf-4239-871c-d70c12c6a277">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{classroomSessionDivision}.getLabelValueCollection().getCollection())]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="110" uuid="c13a55ba-6542-4bb3-8705-48bdf835f8f6">
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="110" height="15" uuid="3b2c7a01-cb2b-4cc2-a2c3-552b997e5fb9"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="110" height="11" uuid="3b2c7a01-cb2b-4cc2-a2c3-552b997e5fb9"/>
 								<textFieldExpression><![CDATA[$F{label}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="219d75ab-fffb-439c-a193-37229fa173ba">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(0) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="e804f165-ab8d-480c-af99-ac9021353f01"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="e804f165-ab8d-480c-af99-ac9021353f01"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(0)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="a7500f4f-9a43-407f-aa90-0cf34c3af5f7">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(1) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="dc24ef27-91d4-49cc-8653-982a804194ce"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="dc24ef27-91d4-49cc-8653-982a804194ce"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(1)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="aa2822bb-9fdd-4c63-82ea-244b267baaae">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(2) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="20156e67-9351-44a5-9c60-f9e64b253b2a"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="20156e67-9351-44a5-9c60-f9e64b253b2a"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(2)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="1d11817b-1b38-4828-9059-57c9c990bfad">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(3) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="575b3b97-a9a9-4367-bcf7-cb2cfcd61912"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="575b3b97-a9a9-4367-bcf7-cb2cfcd61912"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(3)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="bde58e5e-1faa-4d27-954f-a9db2455899f">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(4) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="0ffbd272-6664-472e-8348-1f65401b6559"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="0ffbd272-6664-472e-8348-1f65401b6559"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(4)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="3c96b656-2bf7-438a-a2ea-fd0529b1df11">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(5) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="135aa554-dc80-4c1b-97d4-a6c6930ba80f"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="135aa554-dc80-4c1b-97d4-a6c6930ba80f"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(5)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="c5c56585-0c53-4c56-abfd-bb8c78ca4c5e">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(6) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="de96e47f-af09-491d-8174-e606f339b4a0"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="de96e47f-af09-491d-8174-e606f339b4a0"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(6)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="db41b086-76fa-46a4-b65a-26ce1eaa4240">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(7) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="b52688d6-80a9-4f0f-86a1-5f1d4e05aaf5"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="b52688d6-80a9-4f0f-86a1-5f1d4e05aaf5"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(7)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="b3c715c2-a730-43fe-9cc9-b3b93db94fae">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(8) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="fd96bfc3-f19c-4f43-8e2a-6ff7814f2875"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="fd96bfc3-f19c-4f43-8e2a-6ff7814f2875"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(8)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="f2e24641-7ff7-48d2-8f50-242e788f760e">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(9) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="3587e612-f3eb-4ddf-af56-c92efab761d0"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="3587e612-f3eb-4ddf-af56-c92efab761d0"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(9)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="ab67567e-c739-4db6-85a1-4ae96ce70de4">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(10) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="c6824e68-18d6-4df0-8872-db996c08562a"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="c6824e68-18d6-4df0-8872-db996c08562a"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(10)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="810e7f37-917c-4b08-b3a2-7e39554e729e">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(11) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="1fbc2182-1b72-4e4c-b311-e29e406173e0"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="1fbc2182-1b72-4e4c-b311-e29e406173e0"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(11)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="a2fef3ef-00e6-4162-bd6a-974c1cd70f7d">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(12) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="e5190ecc-41b1-4c60-9999-164e423d83f1"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="e5190ecc-41b1-4c60-9999-164e423d83f1"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(12)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="010bf7af-a2a6-425d-9cd4-a7b4c912d983">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(13) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="cc781dbc-a30d-4f0d-8022-921e6aa37322"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="cc781dbc-a30d-4f0d-8022-921e6aa37322"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(13)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="fe463c5a-8306-474a-aad4-090b2ea6c0ce">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(14) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="c005315c-1e22-4507-8659-2a8b354a1c5d"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="c005315c-1e22-4507-8659-2a8b354a1c5d"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(14)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="59d386b7-12d7-4c6d-93db-e1cde23df356">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(15) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="5c65e3f2-8563-4ea7-b22c-1a9372a4c4a2"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="5c65e3f2-8563-4ea7-b22c-1a9372a4c4a2"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(15)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="dea6cc69-9694-410f-842d-1405ad142531">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(16) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="915ee279-17e8-4517-ba33-4e7221461745"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="915ee279-17e8-4517-ba33-4e7221461745"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(16)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="9be100af-9c3d-4dba-8d10-b607ce1464cf">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(17) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="b7b0daf8-0294-433f-a625-8ae3f141d430"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="b7b0daf8-0294-433f-a625-8ae3f141d430"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(17)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="a8f76c95-6ef8-4815-a7c1-928acb5b59e2">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(18) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="71e29c63-44f7-4c5c-8232-a3322cdde42c"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="71e29c63-44f7-4c5c-8232-a3322cdde42c"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(18)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="30" uuid="8ac5dcee-f992-4f2f-b64a-cbdb86724bbf">
 						<printWhenExpression><![CDATA[$F{classroomSessionDivision}.getClassroomSessionDivisionSubjectAtIndex(19) != null]]></printWhenExpression>
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="15" uuid="9946f347-3d47-4660-90bf-aa623b640f50"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="30" height="11" uuid="9946f347-3d47-4660-90bf-aa623b640f50"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getExtendedValueAt(19)]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="15" uuid="b382111f-7358-4e0a-b6a5-bc4a5854e5b6">
-						<jr:detailCell style="column_analysis_detail_blank" height="15" rowSpan="1"/>
+						<jr:detailCell style="column_analysis_detail_blank" height="11" rowSpan="1"/>
 					</jr:column>
 					<jr:column width="70" uuid="89b8ff63-4ea2-4749-bdaa-694c7d900edb">
-						<jr:detailCell style="column_detail" height="15" rowSpan="1">
+						<jr:detailCell style="column_detail" height="11" rowSpan="1">
 							<textField>
-								<reportElement style="column_analysis_detail_text" x="0" y="0" width="70" height="15" uuid="4ab74c43-a625-4b33-9f2a-e561b3e891e0"/>
+								<reportElement style="column_analysis_detail_text" x="0" y="0" width="70" height="11" uuid="4ab74c43-a625-4b33-9f2a-e561b3e891e0"/>
 								<textFieldExpression><![CDATA[$F{labelValue}.getValue()]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -1787,9 +1787,9 @@
 				</jr:table>
 			</componentElement>
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="dee80b60-c87f-4e4a-b46a-15096a8b368c"/>
+				<reportElement x="0" y="0" width="100" height="13" uuid="dee80b60-c87f-4e4a-b46a-15096a8b368c"/>
 				<textElement>
-					<font fontName="Tin Birdhouse" size="14" isBold="true"/>
+					<font fontName="Tin Birdhouse" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ANALYSIS]]></text>
 			</staticText>

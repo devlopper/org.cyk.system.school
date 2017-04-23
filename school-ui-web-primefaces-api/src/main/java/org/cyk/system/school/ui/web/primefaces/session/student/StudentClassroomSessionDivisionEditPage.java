@@ -21,6 +21,7 @@ import org.cyk.system.root.business.api.mathematics.MetricCollectionTypeBusiness
 import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValue;
@@ -40,7 +41,6 @@ import org.cyk.ui.web.primefaces.MetricValueCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputTextarea;
 
 import lombok.Getter;
@@ -180,8 +180,12 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		
 		private static final long serialVersionUID = -829786138986362643L;
 
-		@Input @InputNumber private String classroomSession;
-		@Input @InputNumber private BigDecimal evaluationAverage;
+		/*@Input @InputText */private String classroomSession;
+		/*@Input @InputNumber */private BigDecimal evaluationAverage;
+		/*@Input @InputText */private String evaluationAverageAsString;
+		/*@Input @InputNumber */private Integer rank;
+		private Boolean exaequo;
+		private Interval gradeInterval;
 		
 		/**/
 		
@@ -201,12 +205,22 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 						+Constant.CHARACTER_SLASH+item.getLabel());
 				item.setClassroomSession(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivision().getClassroomSession()));
 				item.setEvaluationAverage(item.getIdentifiable().getResults().getEvaluationSort().getAverage().getValue());
+				item.setEvaluationAverageAsString(item.getIdentifiable().getResults().getEvaluationSort().getAverage().getValue()==null?null
+						:item.getIdentifiable().getResults().getEvaluationSort().getAverage().getValue()+"");
+				item.setRank(item.getIdentifiable().getResults().getEvaluationSort().getRank().getValue());
+				item.setExaequo(item.getIdentifiable().getResults().getEvaluationSort().getRank().getExaequo());
+				item.setGradeInterval(item.getIdentifiable().getResults().getEvaluationSort().getAverageAppreciatedInterval());
 			}
 			
 			@Override
 			public void write(StudentClassroomSessionDivisionEditPage.Many item) {
 				super.write(item);
-				item.getIdentifiable().getResults().getEvaluationSort().getAverage().setValue(item.getEvaluationAverage());
+				//item.getIdentifiable().getResults().getEvaluationSort().getAverage().setValue(item.getEvaluationAverage());
+				item.getIdentifiable().getResults().getEvaluationSort().getAverage().setValue(new BigDecimal(item.getEvaluationAverageAsString()));
+				//System.out.println("StudentClassroomSessionDivisionEditPage.Many.ItemCollectionAdapter.write() : "+item.getEvaluationAverage()+":"+item.getS());
+				item.getIdentifiable().getResults().getEvaluationSort().getRank().setValue(item.getRank());
+				item.getIdentifiable().getResults().getEvaluationSort().getRank().setExaequo(item.getExaequo());
+				item.getIdentifiable().getResults().getEvaluationSort().setAverageAppreciatedInterval(item.getGradeInterval());
 			}
 			
 		}

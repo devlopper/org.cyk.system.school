@@ -1,6 +1,7 @@
 package org.cyk.system.school.persistence.impl.session;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.persistence.NoResultException;
@@ -23,18 +24,19 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-    private String readByStudentClassroomSessionDivision,readByStudentByClassroomSessionDivision,readByClassroomSession
-    	,readByClassroomSessionDivisions,readByClassroomSessions,readByStudentByClassroomSession,readByClassroomSessionDivisionOrderNumber
+    private String readByClassroomSessionDivisions,readByStudentByClassroomSessionDivision,readByClassroomSession
+    	,readByClassroomSessions,readByStudentByClassroomSession,readByClassroomSessionDivisionOrderNumber
     	,readByClassroomSessionByTeacher,readByLevelTimeDivision,readByAcademicSession,readByAcademicSessionByClassroomSessionDivisionOrderNumber;
     
     @Override
     protected void namedQueriesInitialisation() {
         super.namedQueriesInitialisation();
-        registerNamedQuery(readByStudentClassroomSessionDivision, _select().where(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION));
         
         registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
         		, StudentClassroomSession.FIELD_CLASSROOM_SESSION),StudentClassroomSession.FIELD_CLASSROOM_SESSION));
+        
         registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION));
+        
         registerNamedQuery(readByStudentByClassroomSessionDivision, _select().where(StudentClassroomSessionDivision.FIELD_STUDENT)
         		.and(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION));
         
@@ -62,11 +64,12 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
         
         registerNamedQuery(readByAcademicSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
         		, ClassroomSessionDivision.FIELD_CLASSROOMSESSION,ClassroomSession.FIELD_ACADEMIC_SESSION),ClassroomSession.FIELD_ACADEMIC_SESSION));
+        
     }
     
 	@Override
 	public Collection<StudentClassroomSessionDivision> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
-		return namedQuery(readByStudentClassroomSessionDivision).parameter(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision).resultMany();
+		return readByClassroomSessionDivisions(Arrays.asList(classroomSessionDivision));
 	}
 
 	@Override

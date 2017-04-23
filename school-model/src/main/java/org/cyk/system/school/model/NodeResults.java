@@ -33,7 +33,7 @@ public class NodeResults extends AbstractModelElement implements Serializable {
 	}
 	
 	public BigDecimal getFractionOfStudentPassingEvaluationAverage(Integer scale,RoundingMode roundingMode){
-		return numberOfStudent == null || numberOfStudentPassingEvaluationAverage == null ? null : new BigDecimal(numberOfStudentPassingEvaluationAverage).divide(new BigDecimal(numberOfStudent), scale, roundingMode);
+		return numberOfStudent == null || numberOfStudent<=0 || numberOfStudentPassingEvaluationAverage == null ? null : new BigDecimal(numberOfStudentPassingEvaluationAverage).divide(new BigDecimal(numberOfStudent), scale, roundingMode);
 	}
 	
 	public BigDecimal getFractionOfStudentNotPassingEvaluationAverage(Integer scale,RoundingMode roundingMode){

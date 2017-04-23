@@ -5,14 +5,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.faces.model.SelectItem;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.GenericBusiness;
@@ -63,12 +62,15 @@ import org.cyk.utility.common.annotation.user.interfaces.InputManyChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneAutoComplete;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
-import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+import org.cyk.utility.common.annotation.user.interfaces.InputOneRadio;
 import org.cyk.utility.common.computation.ExecutionProgress;
 import org.primefaces.extensions.model.dynaform.DynaFormControl;
 import org.primefaces.extensions.model.dynaform.DynaFormLabel;
 import org.primefaces.extensions.model.dynaform.DynaFormModel;
 import org.primefaces.extensions.model.dynaform.DynaFormRow;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryManyFormModel.FIELD_IDENTIFIABLES,type=ClassroomSession.class)})
 public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSessionQueryManyFormModel<ClassroomSession> implements Serializable {
@@ -86,9 +88,9 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				
 		@Override
 		public Collection<ClassroomSession> getIdentifiables(AbstractSelectManyPage<?> page) {
-			/*if(SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage().equals(page.getActionIdentifier())){
-				WebNavigationManager.getInstance().redirectToEditManyPage(SchoolWebManager.getInstance().getOutcomeEditStudentClassroomSessionDivisionEvaluationAverage(),StudentClassroomSessionDivision.class,((AbstractQueryManyFormModel)data).getIdentifiables());
-			}else */if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
+			if(SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage().equals(page.getActionIdentifier())){
+				return inject(ClassroomSessionBusiness.class).findAll();
+			}else if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				return inject(ClassroomSessionBusiness.class).findAll();
 			}else if(SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				return inject(ClassroomSessionBusiness.class).findAll();
@@ -241,7 +243,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(SchoolBusinessLayer.getInstance().getActionUpdateClassroomSessionDivisionBroadsheet().equals(page.getActionIdentifier()))
-							return field.getName().equals(ProcessPageAdapter.Form.FIELD_DRAFT);
+							return field.getName().equals(ProcessPageAdapter.Form.FIELD_CLASSROOM_SESSION_DIVISION_BROADSHEET_SORTING);
 						return super.build(data,field);
 					}
 				});
@@ -364,10 +366,14 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				ServiceCallArguments callArguments = new ServiceCallArguments();
 				callArguments.setExecutionProgress(page.getExecutionProgress());
-				/*Form form = (Form) data; 
-				CreateReportFileArguments.Builder<ClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<ClassroomSessionDivision>(null)
-						.setIsDraft(form.getDraft());*/
-				inject(GenericBusiness.class).createReportFiles(classroomSessionDivisions, SchoolConstant.Code.ReportTemplate.CLASSROOM_SESSION_DIVISION_BROAD_SHEET);		
+				Form form = (Form) data;
+				/*CreateReportFileArguments.Builder<ClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<ClassroomSessionDivision>(null)
+						.setIsDraft(Boolean.FALSE);
+				*/
+				Map<String,Boolean> fieldSortingMap = new HashMap<>();
+				if(Form.ClassroomSessionDivisionBroadsheetSorting.STUDENT_NAME.equals(form.getClassroomSessionDivisionBroadsheetSorting()))//TODO do it better
+					fieldSortingMap.put("student", Boolean.TRUE);
+				inject(GenericBusiness.class).createReportFiles(classroomSessionDivisions, SchoolConstant.Code.ReportTemplate.CLASSROOM_SESSION_DIVISION_BROAD_SHEET,fieldSortingMap);		
 			}else if(SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
 						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
@@ -388,6 +394,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			return ArrayUtils.contains(new String[]{SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionReportFiles()
 					,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults()
 					,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks()
+					,SchoolBusinessLayer.getInstance().getActionUpdateClassroomSessionDivisionBroadsheet()
 					,SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles()}, actionIdentifier);
 		}
 		
@@ -405,6 +412,8 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			@Input @InputChoice @InputOneChoice @InputChoiceAutoComplete @InputOneAutoComplete private File backgroundImageFile;
 			@Input @InputBooleanButton private Boolean draft=Boolean.FALSE;
 			
+			@Input @InputChoice @InputOneChoice @InputOneRadio private ClassroomSessionDivisionBroadsheetSorting classroomSessionDivisionBroadsheetSorting;
+			
 			public static final String FIELD_UPDATE_EVALUATION_RESULTS = "updateEvaluationResults";
 			public static final String FIELD_UPDATE_ATTENDANCE_RESULTS = "updateAttendanceResults";
 			public static final String FIELD_UPDATE_RANK_RESULTS = "updateRankResults";
@@ -415,6 +424,22 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			
 			public static final String FIELD_DRAFT = "draft";
 			public static final String FIELD_BACKGROUND_IMAGE_FILE = "backgroundImageFile";
+			public static final String FIELD_CLASSROOM_SESSION_DIVISION_BROADSHEET_SORTING = "classroomSessionDivisionBroadsheetSorting";
+			
+			public static enum ClassroomSessionDivisionBroadsheetSorting{
+				STUDENT_NAME{
+					@Override
+					public String toString() {
+						return "Student names";
+					}
+				}
+				,AVERAGE_VALUE{
+					@Override
+					public String toString() {
+						return "Average";
+					}
+				}
+			}
 		}
 		
 		@Getter @Setter

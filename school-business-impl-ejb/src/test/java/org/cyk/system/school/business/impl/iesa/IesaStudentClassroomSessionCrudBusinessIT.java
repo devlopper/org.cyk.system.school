@@ -3,24 +3,22 @@ package org.cyk.system.school.business.impl.iesa;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cyk.system.root.business.api.message.MailBusiness;
-import org.cyk.system.root.business.api.message.SmtpPropertiesBusiness;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.model.RootConstant;
-import org.cyk.system.root.persistence.api.message.SmtpPropertiesDao;
 import org.cyk.system.root.model.message.SmtpProperties;
+import org.cyk.system.root.persistence.api.message.SmtpPropertiesDao;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.report.InternationalEnglishSchoolOfAbidjanReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.LevelGroup;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
-import org.cyk.system.school.persistence.api.session.LevelGroupDao;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.LevelGroupDao;
 import org.cyk.system.school.persistence.api.session.LevelNameDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 
@@ -95,7 +93,8 @@ public class IesaStudentClassroomSessionCrudBusinessIT extends AbstractIesaBusin
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.K2_YEAR_1);
     	*///dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.K3_YEAR_1);
-    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
+    	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
+    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1);
     	
     	dataProducer.getDivisionOrderNumbers().clear();
     	//dataProducer.getDivisionOrderNumbers().add(1l);

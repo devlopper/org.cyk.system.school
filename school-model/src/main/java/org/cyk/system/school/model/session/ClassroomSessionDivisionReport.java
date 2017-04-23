@@ -72,11 +72,11 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 		}
 	}
 	
-	public void generateStudent(Integer numberOfStudents){
+	public void generateStudent(Integer numberOfStudents,Boolean skipable){
 		for(int i = 0 ; i < numberOfStudents ; i++){
 			StudentClassroomSessionDivisionReport studentClassroomSessionDivision = new StudentClassroomSessionDivisionReport(this);
 			studentClassroomSessionDivision.generate();
-			studentClassroomSessionDivision.generateSubjects(classroomSessionDivisionSubjects, Boolean.FALSE);
+			studentClassroomSessionDivision.generateSubjects(classroomSessionDivisionSubjects, skipable);
 			studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
 		}
 	}

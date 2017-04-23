@@ -1,6 +1,8 @@
 package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -69,15 +71,14 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 	
 	public static final String COLUMN_CLASSROOM_SESSION_DIVISION = "classroomSessionDivision";
 	
-	/*
+	
 	@Getter @Setter
-	public static class SearchCriteria extends AbstractFieldValueSearchCriteriaSet implements Serializable {
+	public static class SearchCriteria extends AbstractSearchCriteria implements Serializable {
 
 		private static final long serialVersionUID = 6796076474234170332L;
 
-		private StudentResults.SearchCriteria results = new StudentResults.SearchCriteria();
 		private Set<Integer> classroomSessionDivisionRequiredIndexes = new LinkedHashSet<>();
 		
-	}*/
+	}
 
 }

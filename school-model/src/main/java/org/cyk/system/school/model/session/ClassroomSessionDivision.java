@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
+import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.NodeResults;
@@ -91,4 +92,14 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	public static final String FIELD_STUDENT_EVALUATION_REQUIRED = "studentEvaluationRequired";
 	public static final String FIELD_STUDENT_SUBJECT_ATTENDANCE_AGGREGATED = "studentSubjectAttendanceAggregated";
 	
+	/**/
+	
+	@Getter @Setter
+	public static class SearchCriteria extends AbstractFieldValueSearchCriteriaSet.AbstractIdentifiableSearchCriteriaSet implements Serializable {
+
+		private static final long serialVersionUID = 6796076474234170332L;
+
+		
+		
+	}
 }
