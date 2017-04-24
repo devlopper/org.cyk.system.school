@@ -3,18 +3,29 @@ package org.cyk.system.school.persistence.impl.subject;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
+import org.cyk.system.school.model.session.AcademicSession;
+import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSuffix;
+import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
+import org.cyk.system.school.model.subject.EvaluationType;
+import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.subject.EvaluationDao;
+import org.cyk.utility.common.computation.ArithmeticOperator;
 
 public class EvaluationDaoImpl extends AbstractTypedDao<Evaluation> implements EvaluationDao,Serializable {
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
 	private String readByClassroomSessionDivisionSubject,countByClassroomSessionDivisionSubject,
-	readByClassroomSessionDivisionSubjectEvaluationType,countByClassroomSessionDivisionSubjectEvaluationType;
+		readByClassroomSessionDivisionSubjectEvaluationType,countByClassroomSessionDivisionSubjectEvaluationType
+		//,readByAcademicSessionByLevelByTimeDivisionTypeByClassroomSessionSuffixByDivisionOrderNumberBySubjectByEvaluationType
+		;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
@@ -22,6 +33,28 @@ public class EvaluationDaoImpl extends AbstractTypedDao<Evaluation> implements E
 		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(commonUtils.attributePath(Evaluation.FIELD_TYPE
 				, ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT), ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT));
 		registerNamedQuery(readByClassroomSessionDivisionSubjectEvaluationType, _select().where(Evaluation.FIELD_TYPE));
+		/*
+		registerNamedQuery(readByAcademicSessionByLevelByTimeDivisionTypeByClassroomSessionSuffixByDivisionOrderNumberBySubjectByEvaluationType, _select()
+			.where(commonUtils.attributePath(Evaluation.FIELD_TYPE,ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
+					,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION,ClassroomSessionDivision.FIELD_CLASSROOMSESSION,ClassroomSession.FIELD_ACADEMIC_SESSION)
+					,ClassroomSession.FIELD_ACADEMIC_SESSION)
+			.and(commonUtils.attributePath(Evaluation.FIELD_TYPE,ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
+					,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION,ClassroomSessionDivision.FIELD_CLASSROOMSESSION)
+					, ClassroomSessionDivision.FIELD_CLASSROOMSESSION, ArithmeticOperator.EQ)
+			.and(commonUtils.attributePath(Evaluation.FIELD_TYPE,ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
+					, ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION, ArithmeticOperator.EQ)
+			.and(commonUtils.attributePath(Evaluation.FIELD_TYPE,ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT)
+					, ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, ArithmeticOperator.EQ)
+			.and(commonUtils.attributePath(Evaluation.FIELD_TYPE,ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
+					,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
+					, "", ArithmeticOperator.EQ)
+			.and(commonUtils.attributePath(Evaluation.FIELD_TYPE,ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
+					,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
+					, "", ArithmeticOperator.EQ)
+			.and(commonUtils.attributePath(Evaluation.FIELD_TYPE,ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
+					,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
+					, "", ArithmeticOperator.EQ)
+			);*/
 	}
 	
 	@Override
@@ -42,6 +75,13 @@ public class EvaluationDaoImpl extends AbstractTypedDao<Evaluation> implements E
 	@Override
 	public Long countByClassroomSessionDivisionSubjectEvaluationType(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 		return countNamedQuery(countByClassroomSessionDivisionSubjectEvaluationType).parameter(Evaluation.FIELD_TYPE, classroomSessionDivisionSubjectEvaluationType).resultOne();
+	}
+
+	@Override
+	public Collection<Evaluation> readByAcademicSessionByLevelByTimeDivisionTypeByClassroomSessionSuffixByDivisionOrderNumberBySubjectByEvaluationType(AcademicSession academicSession,Level level, TimeDivisionType timeDivisionType,ClassroomSessionSuffix classroomSessionSuffix,Long classroomSessionDivisionOrderNumber, Subject subject,
+			EvaluationType evaluationType) {
+		
+		return null;
 	}
 	
 	

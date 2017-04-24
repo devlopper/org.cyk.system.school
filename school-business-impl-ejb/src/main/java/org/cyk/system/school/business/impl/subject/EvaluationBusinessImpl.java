@@ -48,17 +48,21 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 		evaluation.setName(classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getName());
 		return evaluation;
 	}
-
+	
 	@Override
-	public Evaluation create(Evaluation evaluation) {
+	protected void beforeCreate(Evaluation evaluation) {
+		super.beforeCreate(evaluation);
 		Long numberOfEvaluations = dao.countByClassroomSessionDivisionSubjectEvaluationType(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
 		logTrace("Number of evaluations found : {}", numberOfEvaluations);
 		exceptionUtils().cannotCreateMoreThan(numberOfEvaluations,evaluation.getClassroomSessionDivisionSubjectEvaluationType().getCountInterval(),  Evaluation.class);
-		commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, 1l);
-		inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
-		evaluation = super.create(evaluation);
-		save(evaluation);
-		return evaluation;
+	}
+	
+	@Override
+	protected void afterCreate(Evaluation evaluation) {
+		super.afterCreate(evaluation);
+		//commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, 1l);
+		//inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
+		//save(evaluation);
 	}
 	
 	@Override
