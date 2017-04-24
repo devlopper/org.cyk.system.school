@@ -5,7 +5,7 @@
 		<jta-data-source>jdbc/arquillian</jta-data-source>
 		<properties>
 			<!-- drop-and-create-tables : none-->
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+			<property name="eclipselink.ddl-generation" value="none" />
 			<property name="eclipselink.logging.level" value="off" />
 			<property name="eclipselink.logging.level.sql" value="off" />
 			<property name="eclipselink.logging.parameters" value="true" />
