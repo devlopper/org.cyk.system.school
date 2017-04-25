@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.api.RemoteBusiness;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.IdentifiableExcelSheetReader;
 import org.cyk.system.root.business.impl.OneDimensionObjectArrayAdapter;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
+import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.report.InternationalEnglishSchoolOfAbidjanReportProducer;
@@ -20,10 +23,14 @@ import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
+import org.cyk.system.school.persistence.api.subject.SubjectDao;
 
 public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 
@@ -71,77 +78,135 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
     		
     		/**/
     		
-    		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\data\\iesa");
-    		File file = new File(directory, "2016_2017_Trimester_1.xlsx");
+    		evaluation();
     		
-    		System.out.println("Loading all studentClassroomSessionDivisionSubjectEvaluations...");
-    		studentClassroomSessionDivisionSubjectEvaluations = inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).readAll();
-    		System.out.println("#StudentClassroomSessionDivisionSubjectEvaluations : "+studentClassroomSessionDivisionSubjectEvaluations.size());
-    		for(StudentClassroomSessionDivisionSubjectEvaluation studentClassroomSessionDivisionSubjectEvaluation : studentClassroomSessionDivisionSubjectEvaluations){
-    			if(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getOrderNumber()==1l)
-    				studentClassroomSessionDivisionSubjectEvaluations1.add(studentClassroomSessionDivisionSubjectEvaluation);
-    			else if(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getOrderNumber()==2l)
-    				studentClassroomSessionDivisionSubjectEvaluations2.add(studentClassroomSessionDivisionSubjectEvaluation);
-    		}
-    		System.out.println("#StudentClassroomSessionDivisionSubjectEvaluations 1 : "+studentClassroomSessionDivisionSubjectEvaluations1.size());
-    		System.out.println("#StudentClassroomSessionDivisionSubjectEvaluations 2 : "+studentClassroomSessionDivisionSubjectEvaluations2.size());
-    		
-    		System.out.println("Loading all classroomSessionDivisionSubjects...");
-    		classroomSessionDivisionSubjects = inject(ClassroomSessionDivisionSubjectDao.class).readAll();
-    		System.out.println("#classroomSessionDivisionSubjects : "+classroomSessionDivisionSubjects.size());
-    		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
-    			if(classroomSessionDivisionSubject.getClassroomSessionDivision().getOrderNumber()==1l)
-    				classroomSessionDivisionSubjects1.add(classroomSessionDivisionSubject);
-    			else if(classroomSessionDivisionSubject.getClassroomSessionDivision().getOrderNumber()==2l)
-    				classroomSessionDivisionSubjects2.add(classroomSessionDivisionSubject);
-    		}
-    		System.out.println("#classroomSessionDivisionSubjects 1 : "+classroomSessionDivisionSubjects1.size());
-    		System.out.println("#classroomSessionDivisionSubjects 2 : "+classroomSessionDivisionSubjects2.size());
-    		
-    		IdentifiableExcelSheetReader<StudentClassroomSessionDivisionSubjectEvaluation> excelSheetReader = new IdentifiableExcelSheetReader<StudentClassroomSessionDivisionSubjectEvaluation>(file,StudentClassroomSessionDivisionSubjectEvaluation.class);
-        	
-        	OneDimensionObjectArrayAdapter<StudentClassroomSessionDivisionSubjectEvaluation> setter = new OneDimensionObjectArrayAdapter<StudentClassroomSessionDivisionSubjectEvaluation>(StudentClassroomSessionDivisionSubjectEvaluation.class);
-    		
-        	org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray.Adapter.Default<StudentClassroomSessionDivisionSubjectEvaluation> twoDimensionObjectArray = new org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray.Adapter.Default<StudentClassroomSessionDivisionSubjectEvaluation>(setter){
-    			private static final long serialVersionUID = 1L;
-    			
-    			@Override
-    			public StudentClassroomSessionDivisionSubjectEvaluation instanciate(Object[] values) {
-    				StudentClassroomSessionDivisionSubjectEvaluation studentClassroomSessionDivisionSubjectEvaluation = new StudentClassroomSessionDivisionSubjectEvaluation();
-    				studentClassroomSessionDivisionSubjectEvaluation.setEvaluation(getEvaluation(values));
-    				studentClassroomSessionDivisionSubjectEvaluation.setValue(commonUtils.getBigDecimal((String)values[5]));
-    				StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = inject(StudentClassroomSessionDivisionSubjectDao.class)
-    						.readByStudentByClassroomSessionDivisionBySubject(inject(StudentDao.class), classroomSessionDivision, subject);
-    				studentClassroomSessionDivisionSubjectEvaluation.setStudentClassroomSessionDivisionSubject();
-    				return studentClassroomSessionDivisionSubjectEvaluation;
-    			}
-    			
-    			@Override
-    			public Boolean getIgnoreExistingKey(Object[] values, Object key,Object keyType) {
-    				return Boolean.TRUE;
-    			}
-    			
-    			@Override
-    			public StudentClassroomSessionDivisionSubjectEvaluation getInstanceByKey(Object[] values, Object key, Object type) {
-    				return getStudentClassroomSessionDivisionSubjectEvaluation(values);
-    			}
-    		};
-    		
-    		excelSheetReader.execute();
-    		twoDimensionObjectArray.setInput(excelSheetReader.getValues());
-    		twoDimensionObjectArray.execute();
-    		
-    		studentClassroomSessionDivisionSubjectEvaluations1New = twoDimensionObjectArray.getOutput();
-    		System.out.println("#New studentClassroomSessionDivisionSubjectEvaluations : "+studentClassroomSessionDivisionSubjectEvaluations1New.size());
-    	
-    		inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class).create(studentClassroomSessionDivisionSubjectEvaluations1New);
-    		
-    		
+    		marks();
     	}catch(Exception exception){
     		exception.printStackTrace();
     	}
     	
     	System.exit(0);
+    }
+    
+    public void evaluation(){
+		System.out.println("Loading all classroomSessionDivisionSubjectEvaluationTypes...");
+		classroomSessionDivisionSubjectEvaluationTypes = inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).readAll();
+		System.out.println("#ClassroomSessionDivisionSubjectEvaluationTypes : "+classroomSessionDivisionSubjectEvaluationTypes.size());
+		for(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType : classroomSessionDivisionSubjectEvaluationTypes){
+			if(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getOrderNumber()==1l)
+				classroomSessionDivisionSubjectEvaluationTypes1.add(classroomSessionDivisionSubjectEvaluationType);
+			else if(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getOrderNumber()==2l)
+				classroomSessionDivisionSubjectEvaluationTypes2.add(classroomSessionDivisionSubjectEvaluationType);
+		}
+		System.out.println("#ClassroomSessionDivisionSubjectEvaluationTypes1 : "+classroomSessionDivisionSubjectEvaluationTypes1.size());
+		System.out.println("#ClassroomSessionDivisionSubjectEvaluationTypes2 : "+classroomSessionDivisionSubjectEvaluationTypes2.size());
+		
+		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\data\\iesa");
+		File file = new File(directory, "2016_2017_Trimester_1.xlsx");
+		IdentifiableExcelSheetReader<Evaluation> excelSheetReader = new IdentifiableExcelSheetReader<Evaluation>(file,Evaluation.class);
+    	
+    	OneDimensionObjectArrayAdapter<Evaluation> setter = new OneDimensionObjectArrayAdapter<Evaluation>(Evaluation.class);
+		
+    	org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray.Adapter.Default<Evaluation> twoDimensionObjectArray = new org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray.Adapter.Default<Evaluation>(setter){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Evaluation instanciate(Object[] values) {
+				Evaluation evaluation = new Evaluation();
+				evaluation.setClassroomSessionDivisionSubjectEvaluationType(getClassroomSessionDivisionSubjectEvaluationType(values));
+				if(evaluation.getClassroomSessionDivisionSubjectEvaluationType()==null)
+					return null;
+				return evaluation;
+			}
+			
+			@Override
+			public Boolean getIgnoreExistingKey(Object[] values, Object key,Object keyType) {
+				return Boolean.TRUE;
+			}
+			
+			@Override
+			public Evaluation getInstanceByKey(Object[] values, Object key, Object type) {
+				return getEvaluation(values);
+			}
+		};
+		
+		excelSheetReader.execute();
+		twoDimensionObjectArray.setInput(excelSheetReader.getValues());
+		twoDimensionObjectArray.execute();
+		
+		evaluations1New = twoDimensionObjectArray.getOutput();
+		System.out.println("#New evaluations1 : "+evaluations1New.size());
+	
+		create(evaluations1New);
+	}
+    
+    public void marks(){
+    	File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\data\\iesa");
+		File file = new File(directory, "2016_2017_Trimester_1.xlsx");
+		
+		System.out.println("Loading all studentClassroomSessionDivisionSubjectEvaluations...");
+		studentClassroomSessionDivisionSubjectEvaluations = inject(StudentClassroomSessionDivisionSubjectEvaluationDao.class).readAll();
+		System.out.println("#StudentClassroomSessionDivisionSubjectEvaluations : "+studentClassroomSessionDivisionSubjectEvaluations.size());
+		for(StudentClassroomSessionDivisionSubjectEvaluation studentClassroomSessionDivisionSubjectEvaluation : studentClassroomSessionDivisionSubjectEvaluations){
+			if(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getOrderNumber()==1l)
+				studentClassroomSessionDivisionSubjectEvaluations1.add(studentClassroomSessionDivisionSubjectEvaluation);
+			else if(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getOrderNumber()==2l)
+				studentClassroomSessionDivisionSubjectEvaluations2.add(studentClassroomSessionDivisionSubjectEvaluation);
+		}
+		System.out.println("#StudentClassroomSessionDivisionSubjectEvaluations 1 : "+studentClassroomSessionDivisionSubjectEvaluations1.size());
+		System.out.println("#StudentClassroomSessionDivisionSubjectEvaluations 2 : "+studentClassroomSessionDivisionSubjectEvaluations2.size());
+		
+		System.out.println("Loading all classroomSessionDivisionSubjects...");
+		classroomSessionDivisionSubjects = inject(ClassroomSessionDivisionSubjectDao.class).readAll();
+		System.out.println("#classroomSessionDivisionSubjects : "+classroomSessionDivisionSubjects.size());
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects){
+			if(classroomSessionDivisionSubject.getClassroomSessionDivision().getOrderNumber()==1l)
+				classroomSessionDivisionSubjects1.add(classroomSessionDivisionSubject);
+			else if(classroomSessionDivisionSubject.getClassroomSessionDivision().getOrderNumber()==2l)
+				classroomSessionDivisionSubjects2.add(classroomSessionDivisionSubject);
+		}
+		System.out.println("#classroomSessionDivisionSubjects 1 : "+classroomSessionDivisionSubjects1.size());
+		System.out.println("#classroomSessionDivisionSubjects 2 : "+classroomSessionDivisionSubjects2.size());
+		
+		IdentifiableExcelSheetReader<StudentClassroomSessionDivisionSubjectEvaluation> excelSheetReader = new IdentifiableExcelSheetReader<StudentClassroomSessionDivisionSubjectEvaluation>(file,StudentClassroomSessionDivisionSubjectEvaluation.class);
+		excelSheetReader.setIndex(12);
+		excelSheetReader.setSheetName((String)null);
+    	OneDimensionObjectArrayAdapter<StudentClassroomSessionDivisionSubjectEvaluation> setter = new OneDimensionObjectArrayAdapter<StudentClassroomSessionDivisionSubjectEvaluation>(StudentClassroomSessionDivisionSubjectEvaluation.class);
+		
+    	org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray.Adapter.Default<StudentClassroomSessionDivisionSubjectEvaluation> twoDimensionObjectArray = new org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray.Adapter.Default<StudentClassroomSessionDivisionSubjectEvaluation>(setter){
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public StudentClassroomSessionDivisionSubjectEvaluation instanciate(Object[] values) {
+				StudentClassroomSessionDivisionSubjectEvaluation studentClassroomSessionDivisionSubjectEvaluation = new StudentClassroomSessionDivisionSubjectEvaluation();
+				studentClassroomSessionDivisionSubjectEvaluation.setEvaluation(getEvaluation(values));
+				studentClassroomSessionDivisionSubjectEvaluation.setValue(commonUtils.getBigDecimal((String)values[5]));
+				StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = inject(StudentClassroomSessionDivisionSubjectDao.class)
+						.readByStudentByClassroomSessionDivisionBySubject(inject(StudentDao.class).read((String)values[4]), inject(ClassroomSessionDivisionDao.class)
+								.readByClassroomSessionByOrderNumber(inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)values[0], (String)values[1]).iterator().next(), 1l), inject(SubjectDao.class).read((String)values[2]));
+				studentClassroomSessionDivisionSubjectEvaluation.setStudentClassroomSessionDivisionSubject(studentClassroomSessionDivisionSubject);
+				return studentClassroomSessionDivisionSubjectEvaluation;
+			}
+			
+			@Override
+			public Boolean getIgnoreExistingKey(Object[] values, Object key,Object keyType) {
+				return Boolean.TRUE;
+			}
+			
+			@Override
+			public StudentClassroomSessionDivisionSubjectEvaluation getInstanceByKey(Object[] values, Object key, Object type) {
+				return getStudentClassroomSessionDivisionSubjectEvaluation(values);
+			}
+		};
+		
+		excelSheetReader.execute();
+		twoDimensionObjectArray.setInput(excelSheetReader.getValues());
+		twoDimensionObjectArray.execute();
+		
+		studentClassroomSessionDivisionSubjectEvaluations1New = twoDimensionObjectArray.getOutput();
+		System.out.println("#New studentClassroomSessionDivisionSubjectEvaluations : "+studentClassroomSessionDivisionSubjectEvaluations1New.size());
+	
+		create(studentClassroomSessionDivisionSubjectEvaluations1New);
     }
     
     private Evaluation getEvaluation(Object[] values){
@@ -162,6 +227,7 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 					,(String)values[1]) && classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject()
 					.getSubject().getCode().equals(values[2]) && classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getCode().equals(values[3]))
 				return classroomSessionDivisionSubjectEvaluationType;
+			
 		return null;
 	}
 	
