@@ -60,8 +60,8 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	@Override
 	protected void afterCreate(Evaluation evaluation) {
 		super.afterCreate(evaluation);
-		//commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, 1l);
-		//inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
+		commonUtils.increment(Long.class, evaluation.getClassroomSessionDivisionSubjectEvaluationType(), ClassroomSessionDivisionSubjectEvaluationType.FIELD_NUMBER_OF_EVALUATIONS, 1l);
+		inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).update(evaluation.getClassroomSessionDivisionSubjectEvaluationType());
 		//save(evaluation);
 	}
 	
