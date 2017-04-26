@@ -30,7 +30,6 @@ import org.cyk.system.school.persistence.api.subject.EvaluationDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
-import org.cyk.utility.common.CommonUtils;
 
 public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 
@@ -49,9 +48,7 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 	private Collection<Evaluation> evaluations1;
 	private Collection<Evaluation> evaluations1New = new ArrayList<>();
 	
-	//private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentClassroomSessionDivisionSubjectEvaluations;
 	private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentClassroomSessionDivisionSubjectEvaluations1 = new ArrayList<>();
-	//private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentClassroomSessionDivisionSubjectEvaluations2 = new ArrayList<>();
 	private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentClassroomSessionDivisionSubjectEvaluations1New = new ArrayList<>();
     
     @Override
@@ -90,6 +87,30 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
     		
     		evaluations1 = inject(EvaluationDao.class).readByClassroomSessionDivisionSubjectEvaluationTypes(classroomSessionDivisionSubjectEvaluationTypes1);
     		print(Evaluation.class, evaluations1);
+    		/*
+    		System.out.println("1###############################################");
+    		for(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType : classroomSessionDivisionSubjectEvaluationTypes1)
+    			if(classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getCode().startsWith("TEST") && 
+    					classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getSubject().getCode().equals("ART_CRAFT")
+    					&& classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getClassroomSessionDivision()
+    					.getClassroomSession().getLevelTimeDivision().getLevel().getCode().equals("G1"))
+    			System.out.println(classroomSessionDivisionSubjectEvaluationType);
+    		
+    		System.out.println("2###############################################");
+    		for(Evaluation evaluation : evaluations1)
+    			if(evaluation.getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().startsWith("TEST") && 
+    					evaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getSubject().getCode().equals("ART_CRAFT")
+    					&& evaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision()
+    					.getClassroomSession().getLevelTimeDivision().getLevel().getCode().equals("G1"))
+    			System.out.println(evaluation);
+    		*/
+    		/*
+    		debug(getClassroomSessionDivisionSubjectEvaluationType(new Object[]{"G1","A","ART_CRAFT","TEST1",""}));
+    		debug(getClassroomSessionDivisionSubjectEvaluationType(new Object[]{"G1","A","ART_CRAFT","TEST2",""}));
+    		*/
+    		
+    		//debug(getEvaluation(new Object[]{"G1","A","ART_CRAFT","TEST1",""}));
+    		//debug(getEvaluation(new Object[]{"G1","A","ART_CRAFT","TEST2",""}));
     		
     		/**/
     		
@@ -108,10 +129,6 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
     }
     
     public void evaluation(){
-		System.out.println("Loading all classroomSessionDivisionSubjectEvaluationTypes...");
-		
-		System.out.println("#ClassroomSessionDivisionSubjectEvaluationTypes1 : "+classroomSessionDivisionSubjectEvaluationTypes1.size());
-		
 		File directory = new File(System.getProperty("user.dir")+"\\src\\test\\resources\\data\\iesa");
 		File file = new File(directory, "2016_2017_Trimester_1.xlsx");
 		IdentifiableExcelSheetReader<Evaluation> excelSheetReader = new IdentifiableExcelSheetReader<Evaluation>(file,Evaluation.class);
@@ -159,7 +176,7 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 		excelSheetReader.setIndex(12);
 		excelSheetReader.setSheetName((String)null);
 		//excelSheetReader.setFromRowIndex(1142);
-		excelSheetReader.setRowCount(22);
+		//excelSheetReader.setRowCount(22);
 		OneDimensionObjectArrayAdapter<StudentClassroomSessionDivisionSubjectEvaluation> setter = new OneDimensionObjectArrayAdapter<StudentClassroomSessionDivisionSubjectEvaluation>(StudentClassroomSessionDivisionSubjectEvaluation.class);
 		
     	org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray.Adapter.Default<StudentClassroomSessionDivisionSubjectEvaluation> twoDimensionObjectArray = new org.cyk.utility.common.accessor.InstanceFieldSetter.TwoDimensionObjectArray.Adapter.Default<StudentClassroomSessionDivisionSubjectEvaluation>(setter){
@@ -207,36 +224,45 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 		studentClassroomSessionDivisionSubjectEvaluations1New = twoDimensionObjectArray.getOutput();
 		System.out.println("#New studentClassroomSessionDivisionSubjectEvaluations : "+studentClassroomSessionDivisionSubjectEvaluations1New.size());
 	
-		for(StudentClassroomSessionDivisionSubjectEvaluation index : studentClassroomSessionDivisionSubjectEvaluations1New)
-			create(index);	
-
+		Collection<StudentClassroomSessionDivisionSubjectEvaluation> l = new ArrayList<>();
+		int i = 0;
+		for(StudentClassroomSessionDivisionSubjectEvaluation index : studentClassroomSessionDivisionSubjectEvaluations1New){
+			if( i < 1000 ){
+				l.add(index);
+				i++;
+			}else{
+				create(l);
+				l.clear();
+				i = 0;
+			}
+		}
+		
+		if(!l.isEmpty())
+			create(l);
     }
     
     private Evaluation getEvaluation(Object[] values){
-		for(Evaluation evaluation : evaluations1){
-			/*if(evaluation
-					.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getSubject().getCode().startsWith("CREATIVE_WRITING"))
-			System.out.println( evaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
-					.getLevelTimeDivision().getLevel().getCode()+"-"+evaluation.getClassroomSessionDivisionSubjectEvaluationType()
-					.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession().getSuffix()+"-"+evaluation
-					.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getSubject().getCode()+"-"
-					+evaluation.getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode()+" ::: "+StringUtils.join(values,"|"));
-			*/
-			if(getClassroomSession(values)!=null && getClassroomSessionDivisionSubjectEvaluationType(values)!=null)
+		for(Evaluation evaluation : evaluations1)
+			if(matchs(evaluation,values))
 				return evaluation;
-		}
-		System.out.println("NEF : "+CommonUtils.getInstance().convertToString(values, ","));
 		return null;
 	}
+    
+    private Boolean matchs(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,Object[] values){
+    	return classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
+				.getLevelTimeDivision().getLevel().getCode().equals(values[0]) && isSameSuffix(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
+				,(String)values[1]) && classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject()
+				.getSubject().getCode().equals(StringUtils.trim((String)values[2])) && classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getCode().equals(values[3]);
+    }
+    
+    private Boolean matchs(Evaluation evaluation,Object[] values){
+    	return matchs(evaluation.getClassroomSessionDivisionSubjectEvaluationType(), values);
+    }
 	
 	private ClassroomSessionDivisionSubjectEvaluationType getClassroomSessionDivisionSubjectEvaluationType(Object[] values){
 		for(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType : classroomSessionDivisionSubjectEvaluationTypes1)
-			if(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
-					.getLevelTimeDivision().getLevel().getCode().equals(values[0]) && isSameSuffix(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
-					,(String)values[1]) && classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject()
-					.getSubject().getCode().equals(StringUtils.trim((String)values[2])) && classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getCode().equals(values[3]))
+			if(matchs(classroomSessionDivisionSubjectEvaluationType, values))
 				return classroomSessionDivisionSubjectEvaluationType;
-			
 		return null;
 	}
 	
@@ -262,14 +288,6 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 	
 	private StudentClassroomSessionDivisionSubjectEvaluation getStudentClassroomSessionDivisionSubjectEvaluation(Object[] values){
 		for(StudentClassroomSessionDivisionSubjectEvaluation studentClassroomSessionDivisionSubjectEvaluation : studentClassroomSessionDivisionSubjectEvaluations1){
-			if(values[2].equals("ART_CRAFT") && values[3].equals("TEST2") && values[4].equals("IESA/2014MUJ0441-KG")){
-				System.out.println(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
-					.getLevelTimeDivision().getLevel().getCode().equals(values[0]) +":"+ isSameSuffix(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
-					,(String)values[1]) +":"+ studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject()
-					.getSubject().getCode().equals(StringUtils.trim((String)values[2])) +":"+ studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals(values[3]) 
-					+":"+ studentClassroomSessionDivisionSubjectEvaluation.getStudentClassroomSessionDivisionSubject().getStudent().getCode().equals(values[4]));
-				System.out.println(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode()+":"+studentClassroomSessionDivisionSubjectEvaluation.getStudentClassroomSessionDivisionSubject().getStudent().getCode());
-			}
 			if(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
 					.getLevelTimeDivision().getLevel().getCode().equals(values[0]) && isSameSuffix(studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession()
 					,(String)values[1]) && studentClassroomSessionDivisionSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject()
@@ -277,8 +295,6 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 					&& studentClassroomSessionDivisionSubjectEvaluation.getStudentClassroomSessionDivisionSubject().getStudent().getCode().equals(values[4]))
 				return studentClassroomSessionDivisionSubjectEvaluation;
 		}
-		System.out.println("ENF : "+StringUtils.join(values,"|"));
-		
 		return null;
 	}
 	
