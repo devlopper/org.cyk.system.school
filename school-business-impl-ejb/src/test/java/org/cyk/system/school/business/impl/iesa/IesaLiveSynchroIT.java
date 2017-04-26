@@ -166,6 +166,7 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 		System.out.println("#New evaluations1 : "+evaluations1New.size());
 	
 		create(evaluations1New);
+		evaluations1.addAll(evaluations1New);
 	}
     
     public void marks(){
@@ -226,19 +227,28 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 	
 		Collection<StudentClassroomSessionDivisionSubjectEvaluation> l = new ArrayList<>();
 		int i = 0;
+		long t0 = System.currentTimeMillis();
 		for(StudentClassroomSessionDivisionSubjectEvaluation index : studentClassroomSessionDivisionSubjectEvaluations1New){
-			if( i < 1000 ){
+			if( i < 2500 ){
 				l.add(index);
 				i++;
 			}else{
+				System.out.print("Persisting...");
+				long t = System.currentTimeMillis();
 				create(l);
+				System.out.println( ((System.currentTimeMillis()-t)/1000) );
 				l.clear();
 				i = 0;
 			}
 		}
 		
-		if(!l.isEmpty())
+		if(!l.isEmpty()){
+			System.out.print("Persisting...");
+			long t = System.currentTimeMillis();
 			create(l);
+			System.out.println( ((System.currentTimeMillis()-t)/1000) );
+		}
+		System.out.println( ((System.currentTimeMillis()-t0)/1000/60) );
     }
     
     private Evaluation getEvaluation(Object[] values){
