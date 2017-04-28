@@ -315,7 +315,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	public ClassroomSessionDivisionReportTemplateFile produceClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision
 			,final CreateReportFileArguments<ClassroomSessionDivision> createReportFileArguments) {
 		createReportFileArguments.setIdentifiableName(classroomSessionDivision.getName()+" Broadsheet ");
-		classroomSessionDivision.getClassroomSessionDivisionSubjects().addMany(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision));
+		classroomSessionDivision.getClassroomSessionDivisionSubjects().addMany(inject(ClassroomSessionDivisionSubjectDao.class).readWhereStudentExistByClassroomSessionDivision(classroomSessionDivision));
 		List<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>(inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision));
 		
 		Comparator<StudentClassroomSessionDivision> comparator = new Comparator<StudentClassroomSessionDivision>() {
