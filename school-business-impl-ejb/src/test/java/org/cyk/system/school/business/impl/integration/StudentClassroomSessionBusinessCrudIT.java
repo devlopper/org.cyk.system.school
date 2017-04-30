@@ -44,8 +44,8 @@ public class StudentClassroomSessionBusinessCrudIT extends AbstractIesaBusinessI
     	student1.getPerson().setLastnames("yao christian");
     	if(student1.getPerson().getContactCollection()!=null && student1.getPerson().getContactCollection().getElectronicMails()!=null)
     		student1.getPerson().getContactCollection().getElectronicMails().clear();
-    	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
-    	inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
+    	//inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
+    	//inject(ElectronicMailBusiness.class).setAddress(student1.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
     	
     	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(student1),AbstractIdentifiable.class));
     	

@@ -68,7 +68,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractEnterpriseResourceP
 			
 			@Override
 			public String[] getCustomerPersonRelationshipTypeCodes(AbstractIdentifiable identifiable) {
-				return new String[]{RootConstant.Code.PersonRelationshipType.FAMILY_FATHER,RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER};
+				return new String[]{/*RootConstant.Code.PersonRelationshipType.FAMILY_FATHER,RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER*/};
 			}
 			
 			@Override

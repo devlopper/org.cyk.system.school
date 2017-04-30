@@ -7,6 +7,7 @@ import java.util.Collection;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.security.Role;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
@@ -61,7 +62,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	@Override
 	public SystemMenu build(UserSession userSession) {
 		SystemMenu systemMenu = super.build(userSession);
-		if(userSession.hasRole(Role.MANAGER))
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER))
 			addBusinessMenu(userSession,systemMenu,getStudentCommandable(userSession, null));
 		addBusinessMenu(userSession,systemMenu,getAcademicCommandable(userSession, null));
 		return systemMenu;
@@ -69,16 +70,16 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	
 	public Commandable getAcademicCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable(UIManager.getInstance().businessEntityInfos(AcademicSession.class).getUserInterface().getLabelId() /*"command.academic.management"*/, null);
-		if(userSession.hasRole(Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 		}
 		
-		if(userSession.hasRole(Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 			//module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
 			
 		}
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
@@ -102,7 +103,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	
 	public Commandable getStudentCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable(UIManager.getInstance().businessEntityInfos(Student.class).getUserInterface().getLabelId()/* "command.student.management"*/, null);
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			module.addChild(createListCommandable(Student.class, null));
 			module.addChild(createListCommandable(StudentClassroomSession.class, null));
 			module.addChild(Builder.createCreateMany(StudentClassroomSession.class, null));
@@ -124,7 +125,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	
 	public Commandable getRegularActivitiesCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = createModuleCommandable("school.activities", null);
-		if(userSession.hasRole(Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 		}
 		return module;
@@ -132,11 +133,11 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	
 	public Commandable getResultsCardCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		Commandable module = (Commandable) createModuleCommandable("school.results", null).setIdentifier(COMMANDABLE_IDENTIFIER_RESULTS);
-		if(userSession.hasRole(Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER) || userSession.hasRole(SchoolConstant.Code.Role.TEACHER)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
 		}
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionEditStudentClassroomSessionDivisionEvaluationAverage() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionDivisionEvaluationResults() ,null));
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionComputeStudentClassroomSessionEvaluationResults() ,null));
@@ -190,7 +191,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 	@SuppressWarnings("unchecked")
 	@Override
 	protected <TYPE> Collection<TYPE> getNavigatorTreeNodeDatas(Class<TYPE> dataClass,UserSession userSession) {
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findHierarchies();
 		}else{
 			Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());

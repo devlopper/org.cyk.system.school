@@ -161,18 +161,18 @@ public class IesaSaleBusinessIT extends AbstractIesaBusinessIT {
     	studentG1A.getPerson().setLastnames("yao christian");
     	if(studentG1A.getPerson().getContactCollection()!=null && studentG1A.getPerson().getContactCollection().getElectronicMails()!=null)
     		studentG1A.getPerson().getContactCollection().getElectronicMails().clear();
-    	inject(ElectronicMailBusiness.class).setAddress(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
-    	inject(ElectronicMailBusiness.class).setAddress(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
+    	//inject(ElectronicMailBusiness.class).setAddress(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
+    	//inject(ElectronicMailBusiness.class).setAddress(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
     	
     	inject(GenericBusiness.class).create(CommonUtils.getInstance().castCollection(Arrays.asList(studentG1A),AbstractIdentifiable.class));
     	
-    	Person parent = inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER);
+    	Person parent = null;//inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER);
     	parent.setName("komenan");
     	parent.setLastnames("n'dri jean");
     	//parent.getContactCollection().getcoll
     	update(parent);
     	
-    	parent = inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER);
+    	parent = null;//inject(PersonBusiness.class).findOneByPersonByRelationshipType(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER);
     	parent.setName("komenan");
     	parent.setLastnames("sandrine meliane");
     	update(parent);

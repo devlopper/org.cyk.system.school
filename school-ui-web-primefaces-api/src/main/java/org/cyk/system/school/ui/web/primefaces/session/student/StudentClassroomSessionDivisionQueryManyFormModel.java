@@ -125,12 +125,15 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractS
 				for(StudentClassroomSessionDivision studentClassroomSessionDivision : commonUtils.castCollection(page.getElements(), StudentClassroomSessionDivision.class))
 					studentPersons.add(studentClassroomSessionDivision.getStudent().getPerson());				
 				final List<PersonRelationshipType> personRelationshipTypes = (List<PersonRelationshipType>) getPersonRelationshipTypes();
-				final Collection<PersonRelationship> personRelationships = inject(PersonRelationshipBusiness.class).findByPerson2ByTypes(studentPersons,personRelationshipTypes);
+				
+				final Collection<PersonRelationship> personRelationships = null;//inject(PersonRelationshipBusiness.class).findByPerson2ByTypes(studentPersons,personRelationshipTypes);
+				
 				//Collection<Person> parentPersons = inject(PersonBusiness.class).findByPersonRelationshipPerson2ByPersonRelationshipTypes(studentPersons,personRelationshipTypes);
 				//Collection<Person> person1s = inject(PersonBusiness.class).getPerson1(personRelationships);
+				/*
 				inject(ContactBusiness.class).findByCollectionsByClass(inject(PersonBusiness.class).getContactCollections(inject(PersonBusiness.class)
 						.getPerson1(personRelationships)),ElectronicMail.class);
-				
+				*/
 				page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
 				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){
 					private static final long serialVersionUID = 1L;
@@ -160,6 +163,7 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractS
 						if(AbstractOutputDetails.isExtendedFieldName(column.getField().getName())){
 							PersonRelationshipType personRelationshipType = personRelationshipTypes.get(AbstractOutputDetails.getExtendedFieldNameIndex(column.getField().getName()));
 							StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) ((Item)row.getData()).getMaster();
+							/*
 							for(PersonRelationship personRelationship : personRelationships){
 								if(personRelationship.getType().equals(personRelationshipType) 
 										&& personRelationship.getPerson2().equals(studentClassroomSessionDivision.getStudent().getPerson())){
@@ -169,6 +173,7 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractS
 										, Constant.CHARACTER_COMA.toString()));
 								}
 							}
+							*/
 						}
 					}
 				});

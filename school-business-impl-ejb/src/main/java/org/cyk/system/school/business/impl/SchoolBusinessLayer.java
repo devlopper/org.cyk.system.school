@@ -24,6 +24,7 @@ import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.ContentType;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.Script;
 import org.cyk.system.root.model.file.report.ReportTemplate;
@@ -304,8 +305,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Override
 	protected void persistSecurityData(){
 		UniformResourceLocatorBusiness uniformResourceLocatorBusiness = inject(UniformResourceLocatorBusiness.class);
-		Role userRole = getEnumeration(Role.class,Role.USER);
-		Role managerRole = getEnumeration(Role.class,Role.MANAGER);
+		Role userRole = getEnumeration(Role.class,RootConstant.Code.Role.USER);
+		Role managerRole = getEnumeration(Role.class,RootConstant.Code.Role.MANAGER);
 		Role teacherRole = create(new Role(SchoolConstant.Code.Role.TEACHER, "Teacher"));
 		
 		instanciateRoleUniformResourceLocator(userRole, uniformResourceLocatorBusiness.instanciateOne("/private/index.jsf",new String[]{})

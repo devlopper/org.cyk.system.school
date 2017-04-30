@@ -219,8 +219,9 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					students.add(studentClassroomSessionDivision.getStudent());
 				page.getForm().getSubmitCommandable().getCommand().setConfirm(Boolean.TRUE);
 				Collection<Person> persons = inject(PersonBusiness.class).get(students);
-				Collection<Person> parents = inject(PersonBusiness.class).findByPersonRelationshipPerson2ByPersonRelationshipTypes(persons, inject(PersonRelationshipTypeDao.class)
+				Collection<Person> parents = null;/*inject(PersonBusiness.class).findByPersonRelationshipPerson2ByPersonRelationshipTypes(persons, inject(PersonRelationshipTypeDao.class)
 						.read(Arrays.asList(RootConstant.Code.PersonRelationshipType.FAMILY_FATHER,RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER)));
+				*/
 				((SendMessageForm)page.getForm().getData()).setReceivers((List<Person>) parents);
 				
 				page.getForm().getControlSetListeners().add(new ControlSetAdapter<Object>(){

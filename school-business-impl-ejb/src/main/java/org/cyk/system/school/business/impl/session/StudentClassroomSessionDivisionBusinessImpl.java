@@ -305,8 +305,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			String fileNamesAsString = StringUtils.join(fileNames,Constant.CHARACTER_COMA.toString());
 			notification.setTitle(fileNamesAsString);
 			notification.setMessage("Find attached : "+fileNamesAsString);
-			notification.addReceiverIdentifiers(inject(ElectronicMailBusiness.class).findAddresses(studentClassroomSessionDivision.getStudent().getPerson()
+			/*notification.addReceiverIdentifiers(inject(ElectronicMailBusiness.class).findAddresses(studentClassroomSessionDivision.getStudent().getPerson()
 					, Arrays.asList(RootConstant.Code.PersonRelationshipType.FAMILY_FATHER,RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER)));
+			*/
 			notification.addFiles(files);
 			notifications.add(notification);
 		}

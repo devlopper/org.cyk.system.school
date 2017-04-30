@@ -31,13 +31,14 @@ public class IesaStudentClassroomSessionCrudBusinessIT extends AbstractIesaBusin
     @Override
     protected void installApplication() {
     	super.installApplication();
-    	SmtpProperties smtpProperties = inject(SmtpPropertiesDao.class).read(RootConstant.Code.SmtpProperties.DEFAULT);
+    	/*SmtpProperties smtpProperties = inject(SmtpPropertiesDao.class).read(RootConstant.Code.SmtpProperties.DEFAULT);
     	smtpProperties.setHost("smtp.gmail.com");
     	smtpProperties.setFrom("iesaciresults@gmail.com");
     	smtpProperties.setPort(465);
     	smtpProperties.getCredentials().setUsername("iesaciresults@gmail.com");
     	smtpProperties.getCredentials().setPassword("17abIESAresults");
     	update(smtpProperties);
+    	*/
     	
     }
     

@@ -11,11 +11,11 @@ import org.cyk.system.company.model.structure.Company;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
 import org.cyk.system.root.model.party.person.JobTitle;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.party.person.PersonTitle;
-import org.cyk.system.root.model.security.Role;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -144,7 +144,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	@SuppressWarnings("unchecked")
 	@Override
 	protected <TYPE> Collection<TYPE> getNavigatorTreeNodeDatas(Class<TYPE> dataClass,UserSession userSession) {
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findAll();
 		}else{
 			Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());
@@ -286,7 +286,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	public UICommandable getSchoolCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			module = Builder.create("school", null);
 			module.addChild(Builder.createList(AcademicSession.class, null));
 			module.addChild(Builder.createList(LevelTimeDivision.class, null));
@@ -297,7 +297,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	public UICommandable getRegistrationCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			module = Builder.create("command.actor.registration", Icon.PERSON);
 			module.addChild(Builder.createList(Student.class, null));
 			module.addChild(Builder.createList(Teacher.class, null));
@@ -311,7 +311,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	public UICommandable getRegularActivitiesCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = Builder.create("school.activities", null);
-		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivisionSubjectEvaluationType.class,SchoolBusinessLayer.getInstance().getActionCreateSubjectEvaluation() ,null));
 		}
 		return module;
@@ -319,11 +319,11 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	public UICommandable getResultsCardCommandable(UserSession userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = Builder.create("school.results", null).setIdentifier(COMMANDABLE_IDENTIFIER_RESULTS);
-		if(userSession.hasRole(Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER) || isConnectedUserInstanceOfTeacher(userSession)){
 			module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionUpdateStudentClassroomSessionDivisionResults() ,null));
 			//module.addChild(Builder.createSelectOne(ClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
 		}
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionUpdateClassroomSessionDivisionBroadsheet() ,null));
 			addChild(userSession,module,Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet() ,null));
 			
@@ -351,7 +351,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	
 	public UICommandable getControlPanelCommandable(AbstractUserSession<?,?> userSession,Collection<UICommandable> mobileCommandables){
 		UICommandable module = null;
-		if(userSession.hasRole(Role.MANAGER)){
+		if(userSession.hasRole(RootConstant.Code.Role.MANAGER)){
 			module = Builder.create("commandable.school", null);
 			module.addChild(Builder.createList(Company.class, null));
 			module.addChild(Builder.createList(PersonTitle.class, null));

@@ -372,12 +372,13 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 						//student.getPerson().getContactCollection()!=null && student.getPerson().getContactCollection()
 						//		.getElectronicMails()!=null);
 				    	student.getPerson().getContactCollection().getElectronicMails().clear();
-				    	if(studentInfos.length>3){
+				    	/*if(studentInfos.length>3){
 				    		inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, (String)studentInfos[3]);
 				    		if(studentInfos.length>4){
 				    			inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, (String)studentInfos[4]);
 				    		}
-				    	}
+				    	}*/
+				    	
 				    	StudentClassroomSession studentClassroomSession = inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{null,classroomSession.getCode()});
 				    	studentClassroomSession.setStudent(student);
 				    	studentClassroomSessions.add(studentClassroomSession);
@@ -561,17 +562,18 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 			
 		};
 		
-		setter.addFieldName(PersonRelationship.FIELD_PERSON1, 0).addFieldName(PersonRelationship.FIELD_TYPE,1).addFieldName(PersonRelationship.FIELD_PERSON2, 2);
+		//setter.addFieldName(PersonRelationship.FIELD_PERSON1, 0).addFieldName(PersonRelationship.FIELD_TYPE,1).addFieldName(PersonRelationship.FIELD_PERSON2, 2);
 		
 		TwoDimensionObjectArray<PersonRelationship> twoDimensionObjectArray = new TwoDimensionObjectArray<PersonRelationship>(setter){
 			private static final long serialVersionUID = 1L;
-			
+			/*
 			@Override
 			public PersonRelationship getInstanceByKey(Object[] values, Object key, Object type) {
 				return inject(PersonRelationshipDao.class).readByPerson1ByTypeByPerson2((Person)getOneDimension().getValue(Person.class, values[0])
 						, (PersonRelationshipType)getOneDimension().getValue(PersonRelationshipType.class, values[1])
 						, (Person)getOneDimension().getValue(Person.class, values[2]));
 			}
+			*/
 		};
 		
 		inject(PersonRelationshipBusiness.class).synchronize(excelSheetReader,twoDimensionObjectArray);
@@ -597,12 +599,12 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		
 		TwoDimensionObjectArray<UserAccount> twoDimensionObjectArray = new TwoDimensionObjectArray<UserAccount>(setter){
 			private static final long serialVersionUID = 1L;
-
+			/*
 			@Override
 			public UserAccount getInstanceByKey(Object[] values, Object key, Object type) {
 				return inject(UserAccountDao.class).readByCredentials(new Credentials((String)values[1], (String)values[2])); 
 			}
-			
+			*/
 			@Override
 			public UserAccount instanciate(Object[] values) {
 				UserAccount instance = inject(UserAccountBusiness.class).instanciateOne((String)values[0],(String)values[1], (String)values[2]);
