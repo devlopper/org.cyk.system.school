@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.mathematics.Interval;
+import org.cyk.utility.common.Constant;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,7 +52,7 @@ public class ClassroomSessionDivisionSubjectEvaluationType extends AbstractIdent
 	
 	@Override
 	public String toString() {
-		return classroomSessionDivisionSubject+":"+evaluationType+":"+numberOfEvaluations;
+		return Constant.EMPTY_STRING+classroomSessionDivisionSubject+Constant.CHARACTER_GREATER_THAN+evaluationType;
 	}
 	
 	@Override

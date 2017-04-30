@@ -180,6 +180,7 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		addStudent(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1,null, new String[][]{ {"STUDG8A","zadi","gérard"} });
 		addStudent(SchoolConstant.Code.LevelTimeDivision.G9_YEAR_1,null, new String[][]{ {"STUDG9A","djedje","madi"} });
 		
+		addStudent(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1,null, new String[][]{ {"STUDG12_1","yaya","diomande"} });
 	}
 	
 	@Override

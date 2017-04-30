@@ -13,11 +13,21 @@
  		<ui:param name="pageController" value="#{studentClassroomSessionDivisionEditManyEvaluationAveragePage}" />
  		<ui:define name="body">
  			<cyk:itemCollection value="#{studentClassroomSessionDivisionEditManyEvaluationAveragePage.elementCollection}" >
- 				<!--p:column headerText="#{uiManager.text('model.entity.classroomSession')}" >
- 					<h:outputText value="#{item.classroomSession}" />
- 				</p:column-->
- 				<p:column headerText="#{uiManager.text('average')}" >
- 					<p:inputText id="average" value="#{item.evaluationAverage}" required="true" />
+ 				<p:column headerText="#{uiManager.text('field.average')}" >
+ 					<pe:inputNumber id="average" value="#{item.evaluationAverageAsString}" required="true" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('field.rank')}" >
+ 					<pe:inputNumber id="rank" value="#{item.rank}" required="true" />
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('field.exaequo')}" >
+ 					<p:selectBooleanButton offLabel="No" onLabel="Yes" value="#{item.exaequo}" >
+ 					
+ 					</p:selectBooleanButton>
+ 				</p:column>
+ 				<p:column headerText="#{uiManager.text('field.appreciation')}" >
+ 					<p:selectOneMenu value="#{item.gradeInterval}" required="true" converter="#{objectConverter}">
+ 						<f:selectItems value="#{studentClassroomSessionDivisionEditManyEvaluationAveragePage.gradeIntervals}" />
+ 					</p:selectOneMenu>
  				</p:column>
  			</cyk:itemCollection>
  		</ui:define>

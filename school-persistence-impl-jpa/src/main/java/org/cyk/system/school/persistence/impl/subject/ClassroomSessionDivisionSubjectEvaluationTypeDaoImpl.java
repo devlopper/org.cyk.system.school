@@ -1,6 +1,7 @@
 package org.cyk.system.school.persistence.impl.subject;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.persistence.NoResultException;
@@ -16,13 +17,13 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeDaoImpl extends Abstra
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readByClassroomSessionDivisionSubjectByEvaluationType,readByClassroomSessionDivisionSubject,readByClassroomSessionDivision;
+	private String readByClassroomSessionDivisionSubjectByEvaluationType,readByClassroomSessionDivisionSubjects,readByClassroomSessionDivision;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
 		super.namedQueriesInitialisation();
 		registerNamedQuery(readByClassroomSessionDivisionSubjectByEvaluationType, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT).and(ClassroomSessionDivisionSubjectEvaluationType.FIELD_EVALUATION_TYPE));
-		registerNamedQuery(readByClassroomSessionDivisionSubject, _select().where(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT));
+		registerNamedQuery(readByClassroomSessionDivisionSubjects, _select().whereIdentifierIn(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT));
 		registerNamedQuery(readByClassroomSessionDivision, _select().where(commonUtils.attributePath(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, ClassroomSessionDivisionSubject.COLUMN_CLASSROOM_SESSION_DIVISION)
 				,ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION));
 	}
@@ -34,8 +35,13 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeDaoImpl extends Abstra
 	}
 
 	@Override
+	public Collection<ClassroomSessionDivisionSubjectEvaluationType> readByClassroomSessionDivisionSubjects(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects) {
+		return namedQuery(readByClassroomSessionDivisionSubjects).parameterIdentifiers(classroomSessionDivisionSubjects).resultMany();
+	}
+	
+	@Override
 	public Collection<ClassroomSessionDivisionSubjectEvaluationType> readByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
-		return namedQuery(readByClassroomSessionDivisionSubject).parameter(ClassroomSessionDivisionSubjectEvaluationType.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT, classroomSessionDivisionSubject).resultMany();
+		return readByClassroomSessionDivisionSubjects(Arrays.asList(classroomSessionDivisionSubject));
 	}
 	
 	@Override

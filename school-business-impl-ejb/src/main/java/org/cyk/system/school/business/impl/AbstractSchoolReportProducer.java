@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -207,6 +209,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		//r.setName(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.title",new Object[]{csd.getUiString()}));
 		r.getStudentClassroomSessionDivision().setSubjectsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.subject"));
+		r.getStudentClassroomSessionDivision().setSubjectsBlockTitle("COGNITIVE ASSESSMENT");//TODO to be deleted
 		r.getStudentClassroomSessionDivision().setCommentsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.comments"));
 		r.getStudentClassroomSessionDivision().setSchoolStampBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.schoolstamp"));
 		
@@ -310,10 +313,39 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	}
 	
 	public ClassroomSessionDivisionReportTemplateFile produceClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision
-			,CreateReportFileArguments<ClassroomSessionDivision> createReportFileArguments) {
+			,final CreateReportFileArguments<ClassroomSessionDivision> createReportFileArguments) {
 		createReportFileArguments.setIdentifiableName(classroomSessionDivision.getName()+" Broadsheet ");
-		classroomSessionDivision.getClassroomSessionDivisionSubjects().addMany(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision));
-		classroomSessionDivision.getStudentClassroomSessionDivisions().addMany(inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision));
+		classroomSessionDivision.getClassroomSessionDivisionSubjects().addMany(inject(ClassroomSessionDivisionSubjectDao.class).readWhereStudentExistByClassroomSessionDivision(classroomSessionDivision));
+		List<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>(inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision));
+		
+		Comparator<StudentClassroomSessionDivision> comparator = new Comparator<StudentClassroomSessionDivision>() {
+
+			@Override
+			public int compare(StudentClassroomSessionDivision o1, StudentClassroomSessionDivision o2) {
+				if(createReportFileArguments.getFieldSortingMap().containsKey("student")){
+					int c = o1.getStudent().getPerson().getNames().compareTo(o2.getStudent().getPerson().getNames());
+					if(c==0)
+						return o1.getStudent().getPerson().getLastnames().compareTo(o2.getStudent().getPerson().getLastnames());
+					return c;
+				}else{
+					if(o1.getResults().getEvaluationSort().getAverage().getValue()==null)
+						if(o2.getResults().getEvaluationSort().getAverage().getValue()==null)
+							return 0;
+						else
+							return 1;
+					else
+						if(o2.getResults().getEvaluationSort().getAverage().getValue()==null)
+							return -1;
+						else
+							return o2.getResults().getEvaluationSort().getAverage().getValue().compareTo(o1.getResults().getEvaluationSort().getAverage().getValue());
+				}
+			}
+		};
+		
+		Collections.sort(studentClassroomSessionDivisions, comparator);
+		
+		classroomSessionDivision.getStudentClassroomSessionDivisions().addMany(studentClassroomSessionDivisions);
+		
 		Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = inject(StudentClassroomSessionDivisionSubjectDao.class)
 				.readByClassroomSessionDivision(classroomSessionDivision);
 		for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : studentClassroomSessionDivisionSubjects){
@@ -329,13 +361,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		numberStringFormatter.setCharacterSet(CharacterSet.LETTER);
 		numberStringFormatter.setLocale(RootConstant.Configuration.ReportTemplate.LOCALE);
 		ClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(ClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
-		/*
-		File backgroundImageFile = createReportFileArguments.getReportTemplate().getBackgroundImage();
 		
-		if(backgroundImageFile!=null)
-			r.setBackgroundImage(inject(FileBusiness.class).findInputStream(backgroundImageFile));
-		*/
-		//r.setHeaderImage(inject(FileBusiness.class).findInputStream(inject(FileDao.class).read(SchoolConstant.Code.File.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS)));
 		r.getClassroomSessionDivision().setSource(classroomSessionDivision);
 		Integer year = new DateTime(classroomSessionDivision.getClassroomSession().getAcademicSession().getExistencePeriod().getFromDate()).getYear();
 		r.setName( classroomSessionDivision.getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getCode()
@@ -352,10 +378,10 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		LabelValueReport labelValueNumberOfStudentsEvaluated = r.getClassroomSessionDivision().getLabelValueCollection().add("Number of students evaluated",format(classroomSessionDivision.getResults().getNumberOfStudent())).setExtendedValuesSize(numberOfSubjects);
 		BigDecimal passFraction = classroomSessionDivision.getResults().getFractionOfStudentPassingEvaluationAverage(4, RoundingMode.HALF_DOWN);
 		LabelValueReport labelValuePassFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Fraction",r.getClassroomSessionDivision().getResults().getPassFraction()).setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValuePassPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Percentage",passFraction == null ? null : numberStringFormatter
+		LabelValueReport labelValuePassPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Pass Percentage",passFraction == null ? AbstractGeneratable.NULL_VALUE.toString() : numberStringFormatter
 				.setInput(passFraction).execute()).setExtendedValuesSize(numberOfSubjects);
 		LabelValueReport labelValueFailFraction = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Fraction",r.getClassroomSessionDivision().getResults().getNotPassFraction()).setExtendedValuesSize(numberOfSubjects);
-		LabelValueReport labelValueFailPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Percentage",passFraction == null ? null : numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction))
+		LabelValueReport labelValueFailPercentage = r.getClassroomSessionDivision().getLabelValueCollection().add("Fail Percentage",passFraction == null ? AbstractGeneratable.NULL_VALUE.toString() : numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction))
 				.execute()).setExtendedValuesSize(numberOfSubjects);
 		
 		int i = 0;
@@ -368,11 +394,11 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			
 			labelValuePassFraction.getExtendedValues()[i] = classroomSessionDivisionSubject.getResults().getNumberOfStudentPassingEvaluationAverage()
 					+"/"+classroomSessionDivisionSubject.getResults().getNumberOfStudent();
-			labelValuePassPercentage.getExtendedValues()[i] = passFraction == null ? null : numberStringFormatter.setInput(passFraction).execute();
+			labelValuePassPercentage.getExtendedValues()[i] = passFraction == null ? AbstractGeneratable.NULL_VALUE.toString() : numberStringFormatter.setInput(passFraction).execute();
 			
 			labelValueFailFraction.getExtendedValues()[i] = (classroomSessionDivisionSubject.getResults().getNumberOfStudentNotPassingEvaluationAverage())
 					+"/"+classroomSessionDivisionSubject.getResults().getNumberOfStudent();
-			labelValueFailPercentage.getExtendedValues()[i] = passFraction == null ? null : numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction)).execute();
+			labelValueFailPercentage.getExtendedValues()[i] = passFraction == null ? AbstractGeneratable.NULL_VALUE.toString() : numberStringFormatter.setInput(BigDecimal.ONE.subtract(passFraction)).execute();
 			i++;
 		}
 			
@@ -582,7 +608,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			ranks.add("RANK");
 			
 			List<String> trimesters = new ArrayList<>();
-			trimesters.add("TRIMESTER");
+			trimesters.add("TERM");
 			
 			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions){
 				averages.add(studentClassroomSessionDivision.getAverageScale().getSource()==null? "NA" 
@@ -596,7 +622,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				trimesters.add(((StudentClassroomSessionDivision)studentClassroomSessionDivision.getSource()).getClassroomSessionDivision().getOrderNumber().toString());
 			}
 			
-			report.addLabelValues("PREVIOUS TERMS", new String[][]{
+			report.addLabelValues("PREVIOUS RESULTS", new String[][]{
 				averages.toArray(new String[]{})
 				,grades.toArray(new String[]{})
 				,ranks.toArray(new String[]{})
@@ -610,7 +636,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			addMetricCollection(report, studentClassroomSessionDivision,metricCollectionCode);
 			if(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==inject(ClassroomSessionBusiness.class)
 					.findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getClassroomSessionDivisionOrderNumberInterval().getHigh().getValue().intValue()){
-				StudentResults classroomSessionResults = inject(StudentClassroomSessionDao.class)
+				/*StudentResults classroomSessionResults = inject(StudentClassroomSessionDao.class)
 						.readByStudentByClassroomSession(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getResults();
 				
 				report.addLabelValue("ANNUAL AVERAGE",format(classroomSessionResults.getEvaluationSort().getAverage().getValue()));
@@ -623,7 +649,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 								.getAveragePromotedInterval().getName().toUpperCase());
 				report.addLabelValue("NEXT ACADEMIC SESSION",format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 						.getAcademicSession().getNextStartingDate()));
-				
+				*/
 			}else{
 				ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
 						.readByClassroomSessionByOrderNumber(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
@@ -642,6 +668,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 		
 	}
+	
+	/**/
 	
 	/**/
 	

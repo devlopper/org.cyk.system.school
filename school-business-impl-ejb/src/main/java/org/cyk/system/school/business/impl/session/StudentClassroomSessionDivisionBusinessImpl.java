@@ -23,7 +23,6 @@ import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiable
 import org.cyk.system.root.business.api.mathematics.MetricValueIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.message.MailBusiness;
-import org.cyk.system.root.business.api.message.MessageSendingBusiness;
 import org.cyk.system.root.business.api.message.MessageSendingBusiness.SendArguments;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.event.Notification;
@@ -38,6 +37,7 @@ import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
+import org.cyk.system.school.business.api.StudentResultsBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
@@ -148,6 +148,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					.readByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision())
 					, studentClassroomSessionDivision.getDetailCollection().getCollection());
 		}
+		//inject(StudentResultsBusiness.class).update(studentClassroomSessionDivision.getResults());
 		return super.update(studentClassroomSessionDivision);
 	}
 	

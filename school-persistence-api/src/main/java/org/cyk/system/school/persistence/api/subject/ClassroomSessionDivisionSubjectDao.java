@@ -12,6 +12,8 @@ import org.cyk.system.school.model.subject.Subject;
 public interface ClassroomSessionDivisionSubjectDao extends TypedDao<ClassroomSessionDivisionSubject> {
 
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
+	Collection<ClassroomSessionDivisionSubject> readWhereStudentExistByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
+	
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSession(ClassroomSession classroomSession);
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSessionBySubject(ClassroomSession classroomSession,Subject subject);
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions);

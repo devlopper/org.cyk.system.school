@@ -73,13 +73,15 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 			setAverage(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()));
 			getAverageScale().setSource(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverageAppreciatedInterval());
 			
-			NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValue()
-					,null);
-			numberFormatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
-			numberFormatter.setIsAppendExaequo(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getExaequo());
-			numberFormatter.setIsOrdinal(Boolean.TRUE);
-			numberFormatter.setLocale(AbstractGeneratable.Listener.Adapter.Default.LOCALE);
-			setRank(numberFormatter.execute());
+			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValue()!=null){
+				NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValue()
+						,null);
+				numberFormatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
+				numberFormatter.setIsAppendExaequo(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getExaequo());
+				numberFormatter.setIsOrdinal(Boolean.TRUE);
+				numberFormatter.setLocale(AbstractGeneratable.Listener.Adapter.Default.LOCALE);
+				setRank(numberFormatter.execute());
+			}
 			
 			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()!=null)
 				setAveragePromotionScale(RootConstant.Code.getRelativeCode(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()));

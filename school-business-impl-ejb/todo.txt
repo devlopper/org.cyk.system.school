@@ -5,3 +5,5 @@ Create a file with code : CLASSROOMSESSIONDIVISIONBROADSHEET
 School Reopens and Next term examination should be take from next class room session division session
 
 Add pagination everywhere
+
+instanciate studentclassroomsession should come with all its structure(divisions and subjects)

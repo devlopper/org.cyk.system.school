@@ -13,11 +13,11 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 
 	private static final long serialVersionUID = -1887987316565799879L;
 	
-	protected static Collection<ClassroomSessionDivisionReportTemplateFile> __createClassroomSessionDivisionReports__(Long classroomSessionDivisionOrderNumber,Integer numberOfSubjects){
+	protected static Collection<ClassroomSessionDivisionReportTemplateFile> __createClassroomSessionDivisionReports__(Long classroomSessionDivisionOrderNumber,Integer numberOfSubjects,Boolean skipable){
 		Collection<ClassroomSessionDivisionReportTemplateFile> collection = RandomDataProvider.generate(ClassroomSessionDivisionReportTemplateFile.class, 1);
 		ClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.getClassroomSessionDivision().generateSubjects(numberOfSubjects);
-		report.getClassroomSessionDivision().generateStudent(30);
+		report.getClassroomSessionDivision().generateStudent(30,skipable);
 		report.setIsDraft(Boolean.FALSE);
 		report.setName("G1A Broadsheet\r\n2016/2017 Academic Year,First Term");
 		
@@ -25,15 +25,19 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 	}
 	
 	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReportsWithThreeSubjects(){
-		return __createClassroomSessionDivisionReports__(1l,3);
+		return __createClassroomSessionDivisionReports__(1l,3,Boolean.FALSE);
 	}
 	
 	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReportsWithFiveSubjects(){
-		return __createClassroomSessionDivisionReports__(1l,5);
+		return __createClassroomSessionDivisionReports__(1l,5,Boolean.FALSE);
 	}
 	
 	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReportsWithEighteenSubjects(){
-		return __createClassroomSessionDivisionReports__(1l,18);
+		return __createClassroomSessionDivisionReports__(1l,18,Boolean.FALSE);
+	}
+	
+	public static Collection<ClassroomSessionDivisionReportTemplateFile> createFirstTermClassroomSessionDivisionReportsWithEighteenSubjectsSkipable(){
+		return __createClassroomSessionDivisionReports__(1l,18,Boolean.TRUE);
 	}
 	
 	protected static Collection<StudentClassroomSessionDivisionReportTemplateFile> __createStudentClassroomSessionDivisionReportsForOtherGrade__(Long classroomSessionDivisionOrderNumber,Boolean provisional){

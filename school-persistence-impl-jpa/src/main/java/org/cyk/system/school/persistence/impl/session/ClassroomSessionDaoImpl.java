@@ -123,7 +123,7 @@ public class ClassroomSessionDaoImpl extends AbstractTypedDao<ClassroomSession> 
 	
 	@Override
 	public Collection<ClassroomSession> readByLevelName(String levelNameCode) {
-		return namedQuery(readByLevelNameBySuffix).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
+		return namedQuery(readByLevelName).parameter(Level.FIELD_LEVEL_NAME, inject(LevelNameDao.class).read(levelNameCode))
 				.resultMany();
 	}
 	

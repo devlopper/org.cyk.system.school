@@ -21,7 +21,7 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 	private static final long serialVersionUID = 6306356272165070761L;
 
    private String readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readByClassroomSessions,readByClassroomSessionDivisionByTeacher
-   	,readByClassroomSessionBySubject,readByClassroomSessionDivisionBySubject;
+   	,readByClassroomSessionBySubject,readByClassroomSessionDivisionBySubject,readWhereStudentExistByClassroomSessionDivision;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -39,6 +39,11 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
         registerNamedQuery(readByClassroomSessionDivisions, _select().whereIdentifierIn(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION));
         registerNamedQuery(readByClassroomSessions, _select().whereIdentifierIn(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
         		, StudentClassroomSession.FIELD_CLASSROOM_SESSION)));
+        
+        registerNamedQuery(readWhereStudentExistByClassroomSessionDivision, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
+        		.and().whereString(" EXISTS( SELECT studentClassroomSessionDivisionSubject FROM StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject "
+        				+ "WHERE studentClassroomSessionDivisionSubject.classroomSessionDivisionSubject = r ) "));
+        
     }
     
     @Override
@@ -94,6 +99,12 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 	@Override
 	public Collection<ClassroomSessionDivisionSubject> readDuplicates(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		return readManyByClassroomSessionDivisionBySubject(classroomSessionDivisionSubject.getClassroomSessionDivision(), classroomSessionDivisionSubject.getSubject());
+	}
+
+	@Override
+	public Collection<ClassroomSessionDivisionSubject> readWhereStudentExistByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
+		return namedQuery(readWhereStudentExistByClassroomSessionDivision).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision)
+				.resultMany();
 	}
 }
  

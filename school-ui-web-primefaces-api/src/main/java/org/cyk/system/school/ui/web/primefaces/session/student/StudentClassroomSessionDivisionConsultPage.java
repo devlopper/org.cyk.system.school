@@ -55,13 +55,15 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubject> getIdentifiables() {
-				Collection<StudentClassroomSessionDivisionSubject> studentSubjects = inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByStudentByClassroomSessionDivision(identifiable.getStudent(),identifiable.getClassroomSessionDivision());
+				Collection<StudentClassroomSessionDivisionSubject> studentSubjects = inject(StudentClassroomSessionDivisionSubjectBusiness.class)
+						.findByStudentByClassroomSessionDivision(identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 				for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 					studentSubject.getDetails().clear();
-					for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations)
-						if(studentSubjectEvaluation.getStudentClassroomSessionDivisionSubject().getIdentifier().equals(studentSubject.getIdentifier())){
+					for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
+						if(studentSubjectEvaluation.getStudentClassroomSessionDivisionSubject().equals(studentSubject)){
 							studentSubject.getDetails().add(studentSubjectEvaluation);
 						}
+					}
 				}
 				return studentSubjects;
 			}
