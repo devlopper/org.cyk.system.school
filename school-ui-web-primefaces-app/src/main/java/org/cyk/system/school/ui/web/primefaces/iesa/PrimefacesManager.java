@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.cyk.system.root.business.api.Crud;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.ui.web.primefaces.iesa.ContextListener.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionConsultPage;
 import org.cyk.ui.api.command.menu.SystemMenu;
+import org.cyk.ui.api.model.party.AbstractPersonEditFormModel;
 import org.cyk.ui.web.primefaces.Table.ColumnAdapter;
 import org.cyk.ui.web.primefaces.UserSession;
 import org.cyk.ui.web.primefaces.page.AbstractPrimefacesPage;
@@ -21,6 +23,14 @@ public class PrimefacesManager extends org.cyk.system.school.ui.web.primefaces.a
 	
 	public PrimefacesManager() {
 		getFormConfiguration(Student.class, Crud.CREATE).deleteRequiredFieldNames(StudentEditPage.Form.FIELD_CODE);
+		
+		getFormConfiguration(Student.class, Crud.READ).addFieldNames(AbstractPersonEditFormModel.FIELD_CODE,AbstractPersonEditFormModel.FIELD_NAME
+				,AbstractPersonEditFormModel.FIELD_LAST_NAMES,AbstractPersonEditFormModel.FIELD_BIRTH_DATE,AbstractPersonEditFormModel.FIELD_SEX
+				,AbstractPersonEditFormModel.FIELD_IMAGE);
+		
+		getFormConfiguration(Person.class, Crud.READ).addFieldNames(AbstractPersonEditFormModel.FIELD_CODE,AbstractPersonEditFormModel.FIELD_NAME
+				,AbstractPersonEditFormModel.FIELD_LAST_NAMES,AbstractPersonEditFormModel.FIELD_BIRTH_DATE,AbstractPersonEditFormModel.FIELD_SEX
+				,AbstractPersonEditFormModel.FIELD_IMAGE);
 	}
 	
 	@Override
