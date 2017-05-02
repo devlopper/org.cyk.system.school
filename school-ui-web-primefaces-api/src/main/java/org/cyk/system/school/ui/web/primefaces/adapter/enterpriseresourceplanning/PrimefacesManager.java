@@ -372,8 +372,10 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean build(Object data,Field field) {
-						//if(data instanceof StudentClassroomSessionDetails)
-							return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT,StudentClassroomSessionDetails.FIELD_CLASSROOM_SESSION);
+						if(data instanceof StudentDetails)
+							return isFieldNameIn(field,StudentDetails.FIELD_IMAGE,StudentDetails.FIELD_CODE,StudentDetails.FIELD_NAME,StudentDetails.FIELD_LASTNAMES
+									,StudentDetails.FIELD_BIRTH_DATE);
+						return super.build(data, field);
 						
 					}
 				};
@@ -385,7 +387,10 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT);
+						//if(field.getDeclaringClass().equals(StudentDetails.class))
+							return isFieldNameIn(field,StudentDetails.FIELD_IMAGE,StudentDetails.FIELD_CODE,StudentDetails.FIELD_NAME,StudentDetails.FIELD_LASTNAMES
+									,StudentDetails.FIELD_BIRTH_DATE);
+						//return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT);
 					}
 				};
 			}

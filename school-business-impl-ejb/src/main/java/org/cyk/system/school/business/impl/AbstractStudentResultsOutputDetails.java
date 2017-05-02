@@ -19,8 +19,8 @@ import lombok.Setter;
 @Getter @Setter public abstract class AbstractStudentResultsOutputDetails<LEVEL,STUDENT_LEVEL extends AbstractStudentResult<LEVEL, DETAIL>,DETAIL> extends AbstractOutputDetails<STUDENT_LEVEL> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@IncludeInputs private StudentDetails studentDetails;
-	@Input @InputText private String student;
+	@IncludeInputs private StudentDetails student;
+	//@Input @InputText private String student,studentCode,studentName;
 	
 	//TODO to be deleted , use __fXX__ from super class
 	@Input @InputText private String detail0Average,detail1Average,detail2Average,detail3Average,detail4Average,detail5Average,detail6Average,detail7Average
@@ -35,8 +35,8 @@ import lombok.Setter;
 		super(studentLevel);
 		if(studentLevel==null)
 			return;
-		studentDetails = new StudentDetails(studentLevel.getStudent());
-		student = studentLevel.getStudent().getCode()+Constant.CHARACTER_SLASH+studentLevel.getStudent().getPerson().getNames();
+		student = new StudentDetails(studentLevel.getStudent());
+		//student = studentLevel.getStudent().getCode()+Constant.CHARACTER_SLASH+studentLevel.getStudent().getPerson().getNames();
 		
 		if(studentLevel.getResults().getEvaluationSort().getAverage().getDividend()!=null)
 			evaluationAverageDividend = numberBusiness.format(studentLevel.getResults().getEvaluationSort().getAverage().getDividend());

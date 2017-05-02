@@ -82,16 +82,16 @@ extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStude
 				Collection<RESULT_OUTPUT> datas = super.getDatas();
 				RESULT_OUTPUT s = newInstance(getResultOutputClass());
 				s.setIdentifier(AbstractOutputDetails.IDENTIFIER_1);
-				s.setStudent(text("school.report.broadsheet.average"));
+				//s.setStudent(text("school.report.broadsheet.average"));
 				datas.add(s);
 				s = newInstance(getResultOutputClass());
 				s.setIdentifier(AbstractOutputDetails.IDENTIFIER_2);
-				s.setStudent(text("school.report.broadsheet.passfraction"));
+				//s.setStudent(text("school.report.broadsheet.passfraction"));
 				datas.add(s);
 				s = newInstance(getResultOutputClass());
 				s.setIdentifier(AbstractOutputDetails.IDENTIFIER_3);
-				s.setStudent(text("school.report.broadsheet.passpercentage")+Constant.CHARACTER_SPACE+Constant.CHARACTER_LEFT_PARENTHESIS+Constant.CHARACTER_PERCENT
-						+Constant.CHARACTER_RIGHT_PARENTHESIS);
+				//s.setStudent(text("school.report.broadsheet.passpercentage")+Constant.CHARACTER_SPACE+Constant.CHARACTER_LEFT_PARENTHESIS+Constant.CHARACTER_PERCENT
+				//		+Constant.CHARACTER_RIGHT_PARENTHESIS);
 				datas.add(s);
 				return datas;
 			}
