@@ -372,11 +372,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean build(Object data,Field field) {
-						if(data instanceof StudentDetails)
-							return isFieldNameIn(field,StudentDetails.FIELD_IMAGE,StudentDetails.FIELD_CODE,StudentDetails.FIELD_NAME,StudentDetails.FIELD_LASTNAMES
-									,StudentDetails.FIELD_BIRTH_DATE);
-						return super.build(data, field);
-						
+						return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDetails.FIELD_STUDENT_CODE
+							,StudentClassroomSessionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDetails.FIELD_STUDENT_LASTNAMES
+							,StudentClassroomSessionDetails.FIELD_STUDENT_BIRTHDATE);
 					}
 				};
 			}
@@ -387,10 +385,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						//if(field.getDeclaringClass().equals(StudentDetails.class))
-							return isFieldNameIn(field,StudentDetails.FIELD_IMAGE,StudentDetails.FIELD_CODE,StudentDetails.FIELD_NAME,StudentDetails.FIELD_LASTNAMES
-									,StudentDetails.FIELD_BIRTH_DATE);
-						//return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT);
+						return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDetails.FIELD_STUDENT_CODE
+							,StudentClassroomSessionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDetails.FIELD_STUDENT_LASTNAMES
+							,StudentClassroomSessionDetails.FIELD_STUDENT_BIRTHDATE);
 					}
 				};
 			}
@@ -410,8 +407,11 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean build(Object data,Field field) {
+						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_CODE
+								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_LASTNAMES
+								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_BIRTHDATE);
 						//if(data instanceof StudentClassroomSessionDetails)
-							return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT,StudentClassroomSessionDetails.FIELD_CLASSROOM_SESSION);
+						//	return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION);
 						
 					}
 				};
@@ -423,9 +423,13 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION
-								/*,StudentClassroomSessionDivisionDetails.FIELD_NUMBER_OF_TIME_ABSENT*/,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
-								/*,StudentClassroomSessionDivisionDetails.FIELD_CONFERENCE_REQUESTED*/);
+						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_CODE
+								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_LASTNAMES
+								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_BIRTHDATE,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
+								,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION
+								);
+						/*return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION
+								,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE);*/
 					}
 				};
 			}
@@ -448,9 +452,14 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 				private static final long serialVersionUID = 1L;
 				@Override
 				public Boolean build(Object data,Field field) {
+					
+					return isFieldNameIn(field,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_IMAGE,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_CODE
+						,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_NAME,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_LASTNAMES
+						,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_BIRTHDATE,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
+					
 					//if(data instanceof StudentClassroomSessionDetails)
-						return isFieldNameIn(field,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT
-								,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
+						//return isFieldNameIn(field,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT
+						//		,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT);
 					
 				}
 			};
@@ -462,7 +471,11 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 				private static final long serialVersionUID = 1L;
 				@Override
 				public Boolean isColumn(Field field) {
-					return isFieldNameIn(field,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT);
+					return isFieldNameIn(field,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_IMAGE,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_CODE
+						,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_LASTNAMES
+						,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_BIRTHDATE,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
+						,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_EVALUATION_AVERAGE_VALUE);
+					
 				}
 			};
 		}

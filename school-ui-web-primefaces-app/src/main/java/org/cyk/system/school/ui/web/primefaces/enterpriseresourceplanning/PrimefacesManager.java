@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessionDivisionSubjectDetails;
+import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.ui.web.primefaces.iesa.ContextListener.StudentClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
@@ -44,7 +45,10 @@ public class PrimefacesManager extends org.cyk.system.school.ui.web.primefaces.a
 							return isFieldNameIn(field,StudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
 								,StudentClassroomSessionDivisionSubjectDetails.FIELD_TEST1,StudentClassroomSessionDivisionSubjectDetails.FIELD_TEST2
 								,StudentClassroomSessionDivisionSubjectDetails.FIELD_EXAM);
-						return isFieldNameIn(field, StudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT);
+						return isFieldNameIn(field, AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_IMAGE,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_CODE
+								,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_LASTNAMES
+								,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_STUDENT_BIRTHDATE,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT
+								,AbstractStudentClassroomSessionDivisionSubjectDetails.FIELD_EVALUATION_AVERAGE_VALUE);
 					}
 				};
 			}
