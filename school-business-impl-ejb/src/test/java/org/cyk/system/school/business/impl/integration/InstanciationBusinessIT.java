@@ -27,7 +27,7 @@ public class InstanciationBusinessIT extends AbstractBusinessIT {
     	student.setCode("STUD001");
     	student.getPerson().setName("MYNAME");
     	
-    	studentBusiness.completeInstanciationOfOne(student);
+    	//studentBusiness.completeInstanciationOfOne(student);
     	
     	studentBusiness.create(student);
     	
