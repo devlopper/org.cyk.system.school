@@ -48,11 +48,13 @@ public class StudentClassroomSessionCreateManyPage extends AbstractCrudOnePage<S
 			@Override
 			public void instanciated(AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession,ClassroomSession,SelectItem> itemCollection,StudentClassroomSessionItem item) {
 				super.instanciated(itemCollection, item);
+				/*
 				item.getIdentifiable().setStudent(((Form)form.getData()).getStudent());
 				item.getIdentifiable().setClassroomSession(((Form)form.getData()).getClassroomSession());
 				item.setRegistrationCode(item.getIdentifiable().getStudent().getCode());
 				item.setNames(item.getIdentifiable().getStudent().getPerson().getNames());
 				item.setClassroomSession(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSession()));
+				*/
 			}	
 			@Override
 			public Boolean isShowAddButton() {

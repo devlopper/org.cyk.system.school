@@ -50,6 +50,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 			@Override
 			public void instanciated(AbstractItemCollection<StudentSubjectItem, StudentClassroomSessionDivisionSubject,StudentClassroomSessionDivision,SelectItem> itemCollection,StudentSubjectItem item) {
 				super.instanciated(itemCollection, item);
+				/*
 				item.getIdentifiable().setCascadeOperationToMaster(Boolean.TRUE);
 				item.getIdentifiable().setCascadeOperationToChildren(Boolean.FALSE);
 				item.getIdentifiable().setStudent(((Form)form.getData()).getStudent());
@@ -61,6 +62,7 @@ public class StudentClassroomSessionDivisionSubjectCreateManyPage extends Abstra
 				item.setClassroomSessionDivision(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivisionSubject()
 						.getClassroomSessionDivision()));
 				item.setClassroomSessionDivisionSubject(inject(FormatterBusiness.class).format(item.getIdentifiable().getClassroomSessionDivisionSubject()));
+				*/
 			}	
 			
 			@Override

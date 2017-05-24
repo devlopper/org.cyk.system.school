@@ -8,15 +8,13 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.cyk.system.root.business.api.geography.ContactBusiness;
-import org.cyk.system.root.business.api.party.person.PersonBusiness;
-import org.cyk.system.root.business.api.party.person.PersonRelationshipBusiness;
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.geography.ElectronicMail;
-import org.cyk.system.root.model.network.UniformResourceLocatorParameter;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.party.person.PersonRelationship;
 import org.cyk.system.root.model.party.person.PersonRelationshipType;
@@ -24,7 +22,6 @@ import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.model.session.AcademicSession;
-import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.ui.web.primefaces.session.AbstractStudentClassroomSessionDivisionQueryManyFormModel;
 import org.cyk.ui.api.UIManager;
@@ -40,7 +37,6 @@ import org.cyk.ui.web.api.WebManager;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.AbstractProcessManyPage;
 import org.cyk.ui.web.primefaces.page.AbstractSelectManyPage;
-import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.FieldOverride;
 import org.cyk.utility.common.annotation.FieldOverrides;
 import org.cyk.utility.common.builder.UrlStringBuilder;
@@ -50,9 +46,6 @@ import org.primefaces.extensions.model.dynaform.DynaFormControl;
 import org.primefaces.extensions.model.dynaform.DynaFormLabel;
 import org.primefaces.extensions.model.dynaform.DynaFormModel;
 import org.primefaces.extensions.model.dynaform.DynaFormRow;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryManyFormModel.FIELD_IDENTIFIABLES,type=StudentClassroomSessionDivision.class)})
 public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractStudentClassroomSessionDivisionQueryManyFormModel<StudentClassroomSessionDivision> implements Serializable {
@@ -94,7 +87,7 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractS
 			if(SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
 				urlStringBuilder.getQueryStringBuilder().addParameter(inject(UIManager.class).businessEntityInfos(PersonRelationshipType.class).getIdentifier()
 					,inject(WebManager.class).encodeIdentifiablesAsRequestParameterValue(((StudentClassroomSessionDivisionQueryManyFormModel)data)
-					.getPersonRelationshipTypes())).addParameter(UniformResourceLocatorParameter.ENCODED,inject(UIManager.class)
+					.getPersonRelationshipTypes())).addParameter(RootConstant.Code.UniformResourceLocatorParameter.ENCODED,inject(UIManager.class)
 							.businessEntityInfos(PersonRelationshipType.class).getIdentifier());
 			}
 			return urlStringBuilder;
