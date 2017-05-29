@@ -45,7 +45,7 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		StudentClassroomSessionDivisionReportTemplateFile report = collection.iterator().next();
 		report.setIsDraft(provisional);
 		report.setName(classroomSessionDivisionOrderNumber+" TERM - G1-G12 REPORT SHEET");
-		report.getStudentClassroomSessionDivision().getClassroomSessionDivision().setAverage("12");
+		report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getResults().setAverage("12");
 		if(Boolean.TRUE.equals(report.getIsDraft())){
 			report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().setDraftBackground(Boolean.TRUE);
 			report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().generate();

@@ -70,17 +70,20 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null){
 			
-			setAverage(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()));
+			//setAverage(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()));
 			getAverageScale().setSource(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverageAppreciatedInterval());
 			
 			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValue()!=null){
+				
+				//TODO rank formatting should be moved in RankReport
 				NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValue()
 						,null);
 				numberFormatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
 				numberFormatter.setIsAppendExaequo(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getExaequo());
 				numberFormatter.setIsOrdinal(Boolean.TRUE);
 				numberFormatter.setLocale(AbstractGeneratable.Listener.Adapter.Default.LOCALE);
-				setRank(numberFormatter.execute());
+				getResults().getEvaluationSort().getRank().setValueExaequo(numberFormatter.execute());
+				
 			}
 			
 			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()!=null)

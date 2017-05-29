@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -23,7 +22,6 @@ import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
 
-@Stateless
 public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusinessImpl<AcademicSession, AcademicSessionDao> implements AcademicSessionBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
@@ -69,8 +67,8 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	}
 	
 	@Override
-	public AcademicSession update(AcademicSession academicSession) {
-		academicSession = super.update(academicSession);
+	protected void afterUpdate(AcademicSession academicSession) {
+		super.afterUpdate(academicSession);
 		for(AbstractIdentifiable identifiable : genericDao.use(LevelName.class).select().all()){
 			LevelName levelName = (LevelName) identifiable;
 			//TODO a attribute value copy method should be developed
@@ -78,9 +76,8 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 			//TODO all attribute should be copied
 			genericDao.update(levelName);
 		}
-		return academicSession;
 	}
-	
+		
 	@Override
 	public AcademicSession instanciateOne() {
 		AcademicSession academicSession = super.instanciateOne();

@@ -1,8 +1,6 @@
 package org.cyk.system.school.model.subject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -15,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
@@ -28,17 +27,16 @@ public class Evaluation extends AbstractIdentifiable implements Serializable {
 	@JoinColumn(name="type") @ManyToOne @NotNull private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
 	@NotNull private Boolean coefficientApplied = SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED;
 	
-	@Transient private Collection<StudentClassroomSessionDivisionSubjectEvaluation> studentSubjectEvaluations;
+	@Transient private IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubjectEvaluation> studentClassroomSessionDivisionSubjectEvaluations = new IdentifiableRuntimeCollection<>();
 
 	public Evaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
 		super();
 		this.classroomSessionDivisionSubjectEvaluationType = classroomSessionDivisionSubjectEvaluationType;
 	}
 	
-	public Collection<StudentClassroomSessionDivisionSubjectEvaluation> getStudentSubjectEvaluations(){
-		if(studentSubjectEvaluations==null)
-			studentSubjectEvaluations = new ArrayList<>();
-		return studentSubjectEvaluations;
+	@Override
+	public Evaluation setCode(String code) {
+		return (Evaluation) super.setCode(code);
 	}
 	
 	@Override

@@ -107,10 +107,10 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducerOLD extends Abstr
 			
 			labelValueCollectionReport = new LabelValueCollectionReport();
 			labelValueCollectionReport.setName("OVERALL RESULT");
-			labelValueCollectionReport.add("AVERAGE",report.getStudentClassroomSessionDivision().getAverage());
+			labelValueCollectionReport.add("AVERAGE",report.getStudentClassroomSessionDivision().getResults().getEvaluationSort().getAverage().getValue());
 			labelValueCollectionReport.add("GRADE",/*report.getStudentClassroomSessionDivision().getAverageScale()*/"TO COMPUTE");
 			if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentRankable()))
-				labelValueCollectionReport.add("RANK",report.getStudentClassroomSessionDivision().getRank());
+				labelValueCollectionReport.add("RANK",report.getStudentClassroomSessionDivision().getResults().getEvaluationSort().getRank().getValueExaequo());
 			report.addLabelValueCollection(labelValueCollectionReport);
 			
 			addMetricCollection(report, ((StudentClassroomSessionDivision)report.getSource()), effortLevelsMetricCollectionCode);

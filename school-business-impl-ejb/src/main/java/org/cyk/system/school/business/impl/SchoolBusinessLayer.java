@@ -4,12 +4,14 @@ import java.io.Serializable;
 
 import javax.inject.Singleton;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.model.CompanyConstant;
 import org.cyk.system.company.model.structure.Employee;
 import org.cyk.system.root.business.api.ClazzBusiness;
-import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.AverageComputationListener;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions.RankType;
@@ -71,9 +73,6 @@ import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.Deployment;
 import org.cyk.utility.common.annotation.Deployment.InitialisationType;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Singleton @Deployment(initialisationType=InitialisationType.EAGER,order=SchoolBusinessLayer.DEPLOYMENT_ORDER) @Getter
 public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serializable {
@@ -201,25 +200,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 				return super.getParentOf(object);
 			}
 		});
-		/*
-		BusinessServiceProvider.Identifiable.COLLECTION.add(new AbstractActorBusinessImpl.BusinessServiceProviderIdentifiable<Student,Student.SearchCriteria>(Student.class){
-			private static final long serialVersionUID = 1322416788278558869L;
-			
-			@Override
-			protected Student.SearchCriteria createSearchCriteria(Service service,DataReadConfiguration dataReadConfiguration) {
-				return new Student.SearchCriteria(dataReadConfiguration.getGlobalFilter());
-			}
-        });
 		
-		BusinessServiceProvider.Identifiable.COLLECTION.add(new AbstractActorBusinessImpl.BusinessServiceProviderIdentifiable<Teacher,Teacher.SearchCriteria>(Teacher.class){
-			private static final long serialVersionUID = 1322416788278558869L;
-			
-			@Override
-			protected Teacher.SearchCriteria createSearchCriteria(Service service,DataReadConfiguration dataReadConfiguration) {
-				return new Teacher.SearchCriteria(dataReadConfiguration.getGlobalFilter());
-			}
-        });
-		*/
 		studentEvaluationResultsRankOptions.setType(RankType.EXAEQUO);
 		studentEvaluationResultsRankOptions.getSortOptions().setComparator(new SortableStudentResultsComparator(Boolean.TRUE));
 		
@@ -228,7 +209,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}
 		,AcademicSession.class,Level.class,LevelTimeDivision.class,ClassroomSession.class,ClassroomSessionDivision.class,ClassroomSessionDivisionSubject.class
 		,ClassroomSessionDivisionSubjectEvaluationType.class,StudentClassroomSession.class,StudentClassroomSessionDivision.class
-		,StudentClassroomSessionDivisionSubject.class);
+		,StudentClassroomSessionDivisionSubject.class,Evaluation.class);
         
 	}
 	

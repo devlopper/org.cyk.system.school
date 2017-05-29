@@ -16,7 +16,6 @@ import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.file.FileRepresentationTypeBusiness;
-import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness.RankOptions;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
 import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierBusiness;
@@ -24,7 +23,6 @@ import org.cyk.system.root.business.api.mathematics.MetricValueIdentifiableGloba
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.message.MailBusiness;
 import org.cyk.system.root.business.api.message.MessageSendingBusiness.SendArguments;
-import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.event.Notification;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.FileIdentifiableGlobalIdentifier;
@@ -37,7 +35,6 @@ import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
-import org.cyk.system.school.business.api.StudentResultsBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
@@ -139,7 +136,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	}
 	
 	@Override
-	public StudentClassroomSessionDivision update(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+	protected void beforeUpdate(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		super.beforeUpdate(studentClassroomSessionDivision);
 		if(studentClassroomSessionDivision.getDetailCollection()!=null && studentClassroomSessionDivision.getDetailCollection().isSynchonizationEnabled()){
 			for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : studentClassroomSessionDivision.getDetailCollection().getCollection())
 				createIfNotIdentified(studentClassroomSessionDivisionSubject);
@@ -149,16 +147,15 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 					, studentClassroomSessionDivision.getDetailCollection().getCollection());
 		}
 		//inject(StudentResultsBusiness.class).update(studentClassroomSessionDivision.getResults());
-		return super.update(studentClassroomSessionDivision);
 	}
 	
 	@Override
-	public StudentClassroomSessionDivision delete(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+	protected void beforeDelete(StudentClassroomSessionDivision studentClassroomSessionDivision) {
+		super.beforeDelete(studentClassroomSessionDivision);
 		cascade(studentClassroomSessionDivision
 				, studentSubjectDao.readByStudentByClassroomSessionDivision(studentClassroomSessionDivision.getStudent(),studentClassroomSessionDivision.getClassroomSessionDivision()), Crud.DELETE);
-		return super.delete(studentClassroomSessionDivision);
 	}
-	
+			
 	@Override 
 	public void buildReport(StudentClassroomSessionDivision studentClassroomSessionDivision,CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments,ServiceCallArguments arguments) {
 		/*if( (Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
@@ -247,7 +244,6 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		Collection<ClassroomSessionDivisionSubject> subjects = subjectDao.readByClassroomSessionDivisions(classroomSessionDivisions);
 		logTrace("Loaded data. StudentSubjectEvaluation={} , StudentSubject={} , StudentClassroomSessionDivision={}"
 				,studentSubjectEvaluations.size(),studentSubjects.size(),studentClassroomSessionDivisions.size());
-		
 		setCallArgumentsObjects(callArguments, studentClassroomSessionDivisions);
 		/*
 		 * Data computing

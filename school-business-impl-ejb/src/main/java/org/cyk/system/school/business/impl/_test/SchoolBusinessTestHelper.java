@@ -65,6 +65,7 @@ import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
@@ -79,7 +80,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Inject private StudentClassroomSessionDivisionSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
 	@Inject private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
-	@Inject private EvaluationBusiness subjectEvaluationBusiness;
+	@Inject private EvaluationBusiness evaluationBusiness;
 	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness evaluationTypeBusiness;
 	
 	@Inject private LevelTimeDivisionDao levelTimeDivisionDao;
@@ -153,10 +154,11 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				continue;
 			for(ClassroomSessionDivisionSubjectEvaluationType subjectEvaluationType : subjectEvaluationTypes){
 				Evaluation subjectEvaluation = new Evaluation(subjectEvaluationType);
+				subjectEvaluation.getStudentClassroomSessionDivisionSubjectEvaluations().setSynchonizationEnabled(Boolean.TRUE);
 				subjectEvaluation.setCoefficientApplied(coefficientApplied);
 				subjectEvaluations.add(subjectEvaluation);
 				for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects ){
-					subjectEvaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(subjectEvaluation, studentSubject
+					subjectEvaluation.getStudentClassroomSessionDivisionSubjectEvaluations().addOne(new StudentClassroomSessionDivisionSubjectEvaluation(subjectEvaluation, studentSubject
 							, new BigDecimal(RandomDataProvider.getInstance().randomInt(0, subjectEvaluationType.getMaximumValue().intValue()))));
 				}
 			}
@@ -180,15 +182,16 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	
 	public void createSubjectEvaluation(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,String[][] details){
 		Evaluation evaluation = new Evaluation(classroomSessionDivisionSubjectEvaluationType); 
+		evaluation.getStudentClassroomSessionDivisionSubjectEvaluations().setSynchonizationEnabled(Boolean.TRUE);
 		for(String[] detail : details){
 			if(StringUtils.isBlank(detail[1]))
 				continue;
 			StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = studentSubjectBusiness.findByStudentByClassroomSessionDivisionSubject(studentBusiness.find(detail[0])
 					, evaluation.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject());
-			evaluation.getStudentSubjectEvaluations().add(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation,studentClassroomSessionDivisionSubject
+			evaluation.getStudentClassroomSessionDivisionSubjectEvaluations().addOne(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation,studentClassroomSessionDivisionSubject
 					, new BigDecimal(detail[1])));
 		}
-		subjectEvaluationBusiness.create(evaluation);
+		create(evaluation);
 	}
 
 	public void createSubjectEvaluation(ClassroomSessionDivisionSubject subject,EvaluationType evaluationType,String[][] details){
@@ -471,7 +474,6 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			for(Object[] object : objects){
 				createSubjectEvaluations((ClassroomSessionDivisionSubject)object[0],(String[][])object[1]);
 			}
-    	 
     	if(Boolean.TRUE.equals(computeEvaluationResults)){
     		randomValues(Arrays.asList(classroomSessionDivision),Boolean.TRUE,Boolean.TRUE,Boolean.TRUE);
     		//createStudentClassroomSessionDivisionReport(Arrays.asList(classroomSessionDivision),computeEvaluationResults,computeAttendanceResults,generateReport,printReport);
@@ -524,6 +526,10 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 			}
 			simulateStudentClassroomSessionDivisionReport(classroomSessionDivision, objects, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE,isDraft, print, email);
 		}
+	}
+	
+	public void createStudentClassroomSessionDivisionSubjectEvaluations(String levelTimeDivisionCode,String classroomSessionSuffixCode){
+		
 	}
 	
 	public void simulate(SchoolBusinessSimulationParameters parameters){

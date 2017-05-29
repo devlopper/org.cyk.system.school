@@ -120,6 +120,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 			dao.update(classroomSessionDivision);
 		}
 	}
+	
 	/*
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<MetricCollection> findMetricCollectionsByMetricCollectionTypes(Collection<ClassroomSessionDivision> classroomSessionDivisions
@@ -132,8 +133,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		return null;
 	}
 	*/
-	
-	
+		
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<ClassroomSessionDivision> findByClassroomSession(ClassroomSession classroomSession) {
 		return findByClassroomSessions(Arrays.asList(classroomSession));

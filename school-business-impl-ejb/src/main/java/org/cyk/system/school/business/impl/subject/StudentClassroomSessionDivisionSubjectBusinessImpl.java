@@ -73,19 +73,20 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 	}
 
 	@Override
-	public StudentClassroomSessionDivisionSubject delete(StudentClassroomSessionDivisionSubject studentSubject) {
-		cascade(studentSubject,Crud.DELETE);
-		for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluationDao.readByStudentSubject(studentSubject))
+	protected void beforeDelete(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject) {
+		super.beforeDelete(studentClassroomSessionDivisionSubject);
+		cascade(studentClassroomSessionDivisionSubject,Crud.DELETE);
+		for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluationDao.readByStudentSubject(studentClassroomSessionDivisionSubject))
 			studentSubjectEvaluationDao.delete(studentSubjectEvaluation);
-		return super.delete(studentSubject);
 	}
-		 
+			 
 	/**/
 	
 	@Override
 	protected Class<StudentClassroomSessionDivisionSubject> getResultClass() {
 		return StudentClassroomSessionDivisionSubject.class;
 	}
+	
 	@Override
 	protected Class<StudentClassroomSessionDivisionSubjectEvaluation> getDetailsClass() {
 		return StudentClassroomSessionDivisionSubjectEvaluation.class;

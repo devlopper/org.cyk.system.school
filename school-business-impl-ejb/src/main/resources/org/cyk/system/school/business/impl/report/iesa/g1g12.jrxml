@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="15" bottomMargin="0" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1012"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -70,18 +70,6 @@
 		<field name="studentClassroomSessionDivision" class="org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport">
 			<fieldDescription><![CDATA[studentClassroomSessionDivision]]></fieldDescription>
 		</field>
-		<field name="teacher" class="org.cyk.system.root.model.party.person.ActorReport">
-			<fieldDescription><![CDATA[teacher]]></fieldDescription>
-		</field>
-		<field name="averageCoefficiented" class="java.lang.String">
-			<fieldDescription><![CDATA[averageCoefficiented]]></fieldDescription>
-		</field>
-		<field name="rank" class="java.lang.String">
-			<fieldDescription><![CDATA[rank]]></fieldDescription>
-		</field>
-		<field name="average" class="java.lang.String">
-			<fieldDescription><![CDATA[average]]></fieldDescription>
-		</field>
 		<field name="marks" class="java.util.List">
 			<fieldDescription><![CDATA[marks]]></fieldDescription>
 		</field>
@@ -90,6 +78,9 @@
 		</field>
 		<field name="classroomSessionDivisionSubject" class="org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport">
 			<fieldDescription><![CDATA[classroomSessionDivisionSubject]]></fieldDescription>
+		</field>
+		<field name="studentClassroomSessionDivisionSubject" class="org.cyk.system.school.model.session.StudentClassroomSessionDivisionSubjectReport">
+			<fieldDescription><![CDATA[_THIS]]></fieldDescription>
 		</field>
 	</subDataset>
 	<subDataset name="LabelValueDataset" uuid="7032dce2-86ec-46c7-9c95-702d82563ed2">
@@ -410,7 +401,7 @@
 									<textElement textAlignment="Left" markup="styled">
 										<font size="9" isBold="false"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +net.sf.jasperreports.engine.util.JRStringUtil.xmlEncode($F{classroomSessionDivisionSubject}.getName())+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +net.sf.jasperreports.engine.util.JRStringUtil.xmlEncode($F{classroomSessionDivisionSubject}.getSubject().getName())+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -538,7 +529,7 @@
 										<font size="9"/>
 										<paragraph rightIndent="5"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{average}+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivisionSubject}.getResults().getEvaluationSort().getAverage().getValue()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -584,7 +575,7 @@
 										<font size="9"/>
 										<paragraph rightIndent="3"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{rank}+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivisionSubject}.getResults().getEvaluationSort().getRank().getValueExaequo()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -607,7 +598,7 @@
 										<font size="9"/>
 										<paragraph rightIndent="3"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getNumberOfStudents()+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getResults().getNumberOfStudent()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -630,7 +621,7 @@
 										<font size="9"/>
 										<paragraph rightIndent="5"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getHighestAverage()+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getResults().getAverageHighest()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -651,7 +642,7 @@
 									<textElement textAlignment="Right" markup="styled">
 										<font isBold="true"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getAverage()+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getClassroomSessionDivision().getResults().getAverage()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:columnFooter>
 							<jr:detailCell style="table_td_underline" height="12" rowSpan="1">
@@ -661,7 +652,7 @@
 										<font size="9"/>
 										<paragraph rightIndent="5"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getAverage()+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getResults().getAverage()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -710,7 +701,7 @@
 										<font size="9"/>
 										<paragraph leftIndent="5"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{teacher}.getPerson().getTitle()+" "+$F{teacher}.getPerson().getNames()+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{classroomSessionDivisionSubject}.getTeacher().getPerson().getTitle()+" "+$F{classroomSessionDivisionSubject}.getTeacher().getPerson().getNames()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>

@@ -17,13 +17,14 @@ import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.LevelGroupDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 
-public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
+public class IesaStudentClassroomSessionDivisionReportBusinessIT extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
         
     @Override
     protected void businesses() {
     	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();
+    	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	create(inject(TeacherBusiness.class).instanciateManyRandomly(5));
     	
     	Collection<ClassroomSession> classroomSessions = new ArrayList<>();
@@ -52,6 +53,7 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	
     	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
     			, new Boolean[]{Boolean.FALSE},Boolean.TRUE, Boolean.FALSE);
+    	
     }
     
     @Override
@@ -61,6 +63,8 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1);
+    	
+    	dataProducer.getClassroomSessionSuffixes().put(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, new String[]{SchoolConstant.Code.ClassroomSessionSuffix.A});
     	
     	dataProducer.getDivisionOrderNumbers().clear();
     	dataProducer.getDivisionOrderNumbers().add(1l);

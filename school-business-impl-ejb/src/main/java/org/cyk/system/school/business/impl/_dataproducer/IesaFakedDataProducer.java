@@ -4,19 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
 
 import javax.inject.Singleton;
 
+import lombok.Getter;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cyk.system.company.business.api.product.IntangibleProductBusiness;
-import org.cyk.system.company.business.api.product.TangibleProductBusiness;
-import org.cyk.system.company.business.api.sale.SalableProductBusiness;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.geography.ContactCollectionBusiness;
-import org.cyk.system.root.business.api.geography.ElectronicMailBusiness;
 import org.cyk.system.root.business.api.geography.LocationBusiness;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.api.party.person.PersonRelationshipBusiness;
@@ -45,20 +42,15 @@ import org.cyk.system.root.model.party.person.Sex;
 import org.cyk.system.root.model.security.Credentials;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.root.model.time.Period;
-import org.cyk.system.root.persistence.api.geography.ContactCollectionDao;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.root.persistence.api.party.person.PersonExtendedInformationsDao;
-import org.cyk.system.root.persistence.api.party.person.PersonRelationshipDao;
 import org.cyk.system.root.persistence.api.security.RoleDao;
-import org.cyk.system.root.persistence.api.security.UserAccountDao;
-import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
-import org.cyk.system.school.business.api.subject.EvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.StudentResults;
@@ -80,8 +72,6 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.generator.AbstractGeneratable;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
 
-import lombok.Getter;
-
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFakedDataProducer implements Serializable {
 
@@ -95,11 +85,13 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		LanguageBusinessImpl.cache(Locale.FRENCH, "yes", null, CaseType.NONE, "yes");
 		LanguageBusinessImpl.cache(Locale.FRENCH, "yes", null, CaseType.FURL, "yes");
 		LanguageBusinessImpl.cache(Locale.FRENCH, "no", null, CaseType.FURL, "no");
-		
+		/*
+		divisionOrderNumbers.clear();
 		divisionOrderNumbers.add(1l);
 		divisionOrderNumbers.add(2l);
 		divisionOrderNumbers.add(3l);
 		
+		getClassroomSessionSuffixes().clear();
 		addClassroomSessionSuffixes(new Object[][]{
 			{SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1,new String[]{null}}
 			,{SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1,new String[]{null}}
@@ -181,9 +173,10 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		addStudent(SchoolConstant.Code.LevelTimeDivision.G9_YEAR_1,null, new String[][]{ {"STUDG9A","djedje","madi"} });
 		
 		addStudent(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1,null, new String[][]{ {"STUDG12_1","yaya","diomande"} });
+		*/
 	}
 	
-	@Override
+	/*@Override
 	protected void structure(Listener listener) {
 		SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.TRUE;
 		SchoolConstant.Configuration.Evaluation.SUM_ON_STUDENT_CLASSROOM_SESSION_DIVISION_REPORT = Boolean.TRUE;
@@ -202,8 +195,9 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		
 		createClassroomSessions();
 		
-	}
+	}*/
 	
+	/*
 	@Override
 	protected void doBusiness(Listener listener) {
 		super.doBusiness(listener);
@@ -356,55 +350,7 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
     	System.out.println("Number of classroom session to create : "+classroomSessions.size());
     	create(classroomSessions);
 	}
-		
-	protected void createStudentClassroomSessions(){
-		Collection<StudentClassroomSession> studentClassroomSessions = new ArrayList<>();
-		for(String levelTimeDivisionCode : classroomSessionLevelTimeDivisionCodes){
-			for(String classroomSessionSuffixCode : getClassroomSessionSuffixes(levelTimeDivisionCode)){
-				ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class)
-						.findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(levelTimeDivisionCode,classroomSessionSuffixCode);
-				
-				Object[][] students = getStudents(levelTimeDivisionCode, classroomSessionSuffixCode);
-				if(students!=null){
-					for(Object[] studentInfos : students){
-						Student student = inject(StudentBusiness.class).instanciateOneRandomly((String)studentInfos[0]);
-						student.setName((String)studentInfos[1]);
-						student.getPerson().setLastnames((String)studentInfos[2]);
-						//student.getPerson().getContactCollection()!=null && student.getPerson().getContactCollection()
-						//		.getElectronicMails()!=null);
-				    	student.getPerson().getContactCollection().getElectronicMails().clear();
-				    	/*if(studentInfos.length>3){
-				    		inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, (String)studentInfos[3]);
-				    		if(studentInfos.length>4){
-				    			inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, (String)studentInfos[4]);
-				    		}
-				    	}*/
-				    	
-				    	StudentClassroomSession studentClassroomSession = inject(StudentClassroomSessionBusiness.class).instanciateOne(new String[]{null,classroomSession.getCode()});
-				    	studentClassroomSession.setStudent(student);
-				    	studentClassroomSessions.add(studentClassroomSession);
-				    	
-					}		
-				}
-				
-			}
-			
-		}
-		System.out.println("Number of student classroom session to create : "+studentClassroomSessions.size());
-    	create(studentClassroomSessions);
-	}
-	
-	public Collection<Object[]> generate(){
-		Collection<Object[]> datas = new ArrayList<>();
-		for(String levelTimeDivisionCode : classroomSessionLevelTimeDivisionCodes){
-			for(String suffixCode : getClassroomSessionSuffixes(levelTimeDivisionCode)){
-				for(Long divisionOrderNumber : divisionOrderNumbers){
-					datas.add(new Object[]{levelTimeDivisionCode,suffixCode,divisionOrderNumber});
-				}
-			}
-		}
-		return datas;
-	}
+	*/	
 
 	@Override
 	protected void synchronize(Listener listener) {

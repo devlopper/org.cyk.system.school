@@ -22,6 +22,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvalua
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
+import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.command.menu.AbstractSystemMenuBuilder;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
@@ -69,7 +70,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		if(Crud.CREATE.equals(crud)){
 			
 		}else{
-			identifiable.setStudentSubjectEvaluations(inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class).findByEvaluation(identifiable,Crud.UPDATE.equals(crud)));
+			identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().setCollection(inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class).findByEvaluation(identifiable,Crud.UPDATE.equals(crud)));
 			classroomSessionDivisionSubjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
 			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
@@ -78,11 +79,11 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			private static final long serialVersionUID = -3872058204105902514L;
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> create() {
-				return identifiable.getStudentSubjectEvaluations();
+				return identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().getCollection();
 			}
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> load() {
-				return identifiable.getStudentSubjectEvaluations();
+				return identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().getCollection();
 			}
 			@Override
 			public Boolean isShowAddButton() {
@@ -121,6 +122,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		//markCollection.setShowFooter(markCollection.getAddCommandable().getRendered());
 		//onDocumentLoadJavaScript = markCollection.getFormatJavaScript();
 		
+		identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().setSynchonizationEnabled(Boolean.TRUE);
 	}
 	
 	@Override
@@ -129,18 +131,21 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		setChoices(Form.FIELD_TYPE, inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
 	
+	@Override
+	public void transfer(UICommand command, Object parameter) throws Exception {
+		super.transfer(command, parameter);
+		if(form.getSubmitCommandable().getCommand()==command){
+			getIdentifiable().getStudentClassroomSessionDivisionSubjectEvaluations().setCollection(markCollection.getIdentifiables() /*itemCollection.getIdentifiables()*/);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void create() {
-		identifiable.setStudentSubjectEvaluations(markCollection.getIdentifiables());
+		//identifiable.setStudentSubjectEvaluations(markCollection.getIdentifiables());
 		super.create();
 		//schoolWebManager.initialiseNavigatorTree(userSession);
 		AbstractSystemMenuBuilder.DEFAULT.initialiseNavigatorTree(userSession);//TODO do it well
-	}
-	
-	@Override
-	protected void update() {
-		inject(EvaluationBusiness.class).save(identifiable,markCollection.getIdentifiables());
 	}
 	
 	@SuppressWarnings("unchecked")

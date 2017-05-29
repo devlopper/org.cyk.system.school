@@ -9,13 +9,9 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.cyk.system.company.business.api.sale.CustomerBusiness;
 import org.cyk.system.company.business.api.sale.SaleBusiness;
-import org.cyk.system.company.business.api.sale.SaleIdentifiableGlobalIdentifierBusiness;
-import org.cyk.system.company.model.sale.Customer;
 import org.cyk.system.company.model.sale.Sale;
 import org.cyk.system.company.model.sale.SaleIdentifiableGlobalIdentifier;
-import org.cyk.system.company.persistence.api.sale.CustomerDao;
 import org.cyk.system.company.persistence.api.sale.SaleIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
@@ -85,12 +81,6 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		cascade(studentClassroomSession, studentClassroomSessionDivisions, Crud.CREATE);
 	}
 	
-	@Override
-	public StudentClassroomSession create(StudentClassroomSession studentClassroomSession) {
-		StudentClassroomSession identifiable1 = super.create(studentClassroomSession);
-		return identifiable1;
-	}
-	
 	private void cascade(StudentClassroomSession studentClassroomSession,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Crud crud){
 		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null
 				,inject(StudentClassroomSessionDivisionBusiness.class))
@@ -99,6 +89,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 				, Crud.CREATE.equals(crud)?1:Crud.DELETE.equals(crud)?-1:0);
 		classroomSessionDao.update(studentClassroomSession.getClassroomSession());
 		if(Crud.CREATE.equals(crud)){
+			/*
 			Customer customer = inject(CustomerDao.class).read(studentClassroomSession.getStudent().getCode());
 			if(customer==null){
 				customer = inject(CustomerBusiness.class).instanciateOne();
@@ -106,6 +97,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 				customer.setPerson(studentClassroomSession.getStudent().getPerson());
 				inject(CustomerBusiness.class).create(customer);
 			}
+			
 			Sale sale = inject(SaleBusiness.class).instanciateOne();
 			sale.setName("School Fees");
 			sale.setCustomer(customer);
@@ -113,7 +105,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 			
 			SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier = new SaleIdentifiableGlobalIdentifier(sale, studentClassroomSession);
 			inject(SaleIdentifiableGlobalIdentifierBusiness.class).create(saleIdentifiableGlobalIdentifier);
-			
+			*/
 		}else if(Crud.DELETE.equals(crud)){
 			for(SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier : inject(SaleIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(studentClassroomSession)){
 				Sale sale = saleIdentifiableGlobalIdentifier.getSale();
@@ -124,7 +116,8 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	}
 	
 	@Override
-	public StudentClassroomSession update(StudentClassroomSession studentClassroomSession) {
+	protected void beforeUpdate(StudentClassroomSession studentClassroomSession) {
+		super.beforeUpdate(studentClassroomSession);
 		StudentClassroomSession currentStudentClassroomSession = dao.read(studentClassroomSession.getIdentifier());
 		if(currentStudentClassroomSession.getClassroomSession().equals(studentClassroomSession.getClassroomSession())){
 			
@@ -135,17 +128,15 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		if(studentClassroomSession.getDetailCollection()!=null && studentClassroomSession.getDetailCollection().isSynchonizationEnabled()){
 			inject(StudentClassroomSessionDivisionBusiness.class).update(studentClassroomSession.getDetailCollection().getCollection());
 		}
-		
-		return super.update(studentClassroomSession);
 	}
 	
 	@Override
-	public StudentClassroomSession delete(StudentClassroomSession studentClassroomSession) {
+	protected void beforeDelete(StudentClassroomSession studentClassroomSession) {
+		super.beforeDelete(studentClassroomSession);
 		cascade(studentClassroomSession, studentClassroomSessionDivisionDao.readByStudentByClassroomSession(studentClassroomSession.getStudent()
 				, studentClassroomSession.getClassroomSession()), Crud.DELETE);
-		return super.delete(studentClassroomSession);
 	}
-	
+		
 	/**/
 	
 	@Override
@@ -244,6 +235,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	public Collection<StudentClassroomSession> findByClassroomSession(ClassroomSession classroomSession) {
 		return dao.readByClassroomSession(classroomSession);
 	}
+	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentClassroomSession> findByClassroomSessions(Collection<ClassroomSession> classroomSessions) {
 		return dao.readByClassroomSessions(classroomSessions);

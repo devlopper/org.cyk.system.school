@@ -40,6 +40,7 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     					,SchoolConstant.Code.ClassroomSessionSuffix.A,2l).iterator().next();
     	*/
     	
+    	/*
     	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
     			.findByLevelTimeDivisionCodeByClassroomSessionDivisionOrderNumber(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1,2l).iterator().next();
     	
@@ -48,7 +49,7 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     	
     	File file = inject(FileIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(classroomSessionDivision).iterator().next().getFile();
     	schoolBusinessTestHelper.write(file);
-    	
+    	*/
     	
     }
     

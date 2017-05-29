@@ -98,13 +98,13 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	}
 	
 	@Override
-	public ClassroomSessionDivisionSubject delete(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+	protected void beforeDelete(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		super.beforeDelete(classroomSessionDivisionSubject);
 		cascade(classroomSessionDivisionSubject);
 		for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject))
 			inject(StudentClassroomSessionDivisionSubjectBusiness.class).delete(studentClassroomSessionDivisionSubject);
-		return super.delete(classroomSessionDivisionSubject);
 	}
-    
+	
 	//TODO should be factored in higher class
 	@Override
 	public void computeResults(Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects,Collection<StudentClassroomSessionDivisionSubject> studentSubjects) {
