@@ -13,12 +13,14 @@ public class StudentResultsReport extends AbstractIdentifiableReport<StudentResu
 	private static final long serialVersionUID = 6771208248128490701L;
 
 	private SortReport evaluationSort = new SortReport();
+	private String appreciation;
 	
 	@Override
 	public void setSource(Object source) {
 		super.setSource(source);
 		if(source!=null){
 			evaluationSort.setSource( ((StudentResults)source).getEvaluationSort() );
+			appreciation = ((StudentResults)source).getAppreciation();
 		}
 	}
 	
@@ -26,5 +28,6 @@ public class StudentResultsReport extends AbstractIdentifiableReport<StudentResu
 	public void generate() {
 		super.generate();
 		evaluationSort.generate();
+		appreciation = provider.randomText(4, 6, 15, 20);
 	}
 }

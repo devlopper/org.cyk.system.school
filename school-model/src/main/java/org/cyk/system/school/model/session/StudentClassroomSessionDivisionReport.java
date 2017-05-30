@@ -26,8 +26,7 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 	private ActorReport student = new ActorReport();
 	private ClassroomSessionDivisionReport classroomSessionDivision;
 	
-	private String attendedTime,missedTime,missedTimeJustified,averagePromotionScale,totalAverage,totalCoefficient,totalAverageCoefficiented,
-		comments,subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
+	private String attendedTime,missedTime,missedTimeJustified,averagePromotionScale,totalAverage,totalCoefficient,totalAverageCoefficiented;
 	
 	private List<String> markTotals = new ArrayList<>();
 	private List<BigDecimal> tempMarkTotals = new ArrayList<>();
@@ -107,10 +106,6 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 	@Override
 	public void generate() {
 		super.generate();
-		subjectsBlockTitle = "COGNITIVE ASSESSMENT";
-		commentsBlockTitle = "CLASS TEACHER COMMENTS AND SIGNATURE";
-		schoolStampBlockTitle = "SCHOOL STAMP AND SIGNATURE";
-	
 		student.getPerson().getGlobalIdentifier().setGenerateImage(Boolean.TRUE);
 		student.generate();
 		
@@ -124,8 +119,7 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 		totalAverage = positiveFloatNumber(999, 0, 99);
 		totalCoefficient = positiveFloatNumber(999, 0, 99);
 		totalAverageCoefficiented = positiveFloatNumber(999, 0, 99);
-		comments = provider.randomText(4, 6, 15, 20);
-		
+	
 		if(classroomSessionDivisionSubjects==null){
 			classroomSessionDivisionSubjects = new ArrayList<>();
 			for(int i=0;i<18;i++){

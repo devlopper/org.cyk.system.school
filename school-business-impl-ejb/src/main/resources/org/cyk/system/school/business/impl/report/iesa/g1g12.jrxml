@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="15" bottomMargin="0" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="73"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -177,6 +177,9 @@
 	<field name="studentClassroomSessionDivision" class="org.cyk.system.school.model.session.StudentClassroomSessionDivisionReport">
 		<fieldDescription><![CDATA[studentClassroomSessionDivision]]></fieldDescription>
 	</field>
+	<field name="report" class="org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile">
+		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+	</field>
 	<background>
 		<band height="802" splitType="Stretch">
 			<image isUsingCache="true" isLazy="true">
@@ -344,7 +347,7 @@
 					<textElement markup="styled">
 						<font size="9"/>
 					</textElement>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSubjectsBlockTitle()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{report}.getSubjectsBlockTitle()+"</font>"]]></textFieldExpression>
 				</textField>
 				<componentElement>
 					<reportElement key="table 2" x="0" y="12" width="555" height="36" uuid="68657a31-e9fb-40e2-99b6-b3069f952bde"/>
@@ -675,7 +678,7 @@
 										<font size="9"/>
 										<paragraph leftIndent="5"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{averageScale}.getGlobalIdentifier().getName()+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivisionSubject}.getResults().getEvaluationSort().getAverageAppreciatedInterval().getGlobalIdentifier().getName()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
@@ -955,7 +958,7 @@
 						<leftPen lineWidth="1.0"/>
 					</box>
 					<textElement markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getCommentsBlockTitle()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{report}.getCommentsBlockTitle()+"</font>"]]></textFieldExpression>
 				</textField>
 				<image hAlign="Center" isUsingCache="false" onErrorType="Blank">
 					<reportElement x="54" y="68" width="170" height="40" uuid="5df88f9c-cfd0-4d8c-99f8-46f7e049db74"/>
@@ -974,7 +977,7 @@
 					<textElement markup="styled">
 						<paragraph leftIndent="5"/>
 					</textElement>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getComments()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getResults().getAppreciation()+"</font>"]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
@@ -992,7 +995,7 @@
 						<rightPen lineWidth="1.0"/>
 					</box>
 					<textElement markup="styled"/>
-					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivision}.getSchoolStampBlockTitle()+"</font>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_STATIC_FONT_NAME} + "'>" +$F{report}.getSchoolStampBlockTitle()+"</font>"]]></textFieldExpression>
 				</textField>
 				<image scaleImage="RetainShape" hAlign="Center" isUsingCache="false" onErrorType="Blank">
 					<reportElement x="54" y="27" width="170" height="40" uuid="8cdb6d70-e6da-41ae-863b-41162f2f9736"/>

@@ -14,6 +14,7 @@ public class StudentClassroomSessionDivisionReportTemplateFile extends AbstractR
 	private static final long serialVersionUID = -6025941646465245555L;
 	
 	private StudentClassroomSessionDivisionReport studentClassroomSessionDivision = new StudentClassroomSessionDivisionReport();
+	private String subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
 	
 	@Override
 	public void setSource(Object source) {
@@ -26,6 +27,9 @@ public class StudentClassroomSessionDivisionReportTemplateFile extends AbstractR
 	@Override
 	public void generate() {
 		super.generate();
+		subjectsBlockTitle = "COGNITIVE ASSESSMENT";
+		commentsBlockTitle = "CLASS TEACHER COMMENTS AND SIGNATURE";
+		schoolStampBlockTitle = "SCHOOL STAMP AND SIGNATURE";
 		studentClassroomSessionDivision.generate();
 		StudentClassroomSessionDivisionReport previousStudentClassroomSessionDivision = new StudentClassroomSessionDivisionReport();
 		previousStudentClassroomSessionDivision.generate();
