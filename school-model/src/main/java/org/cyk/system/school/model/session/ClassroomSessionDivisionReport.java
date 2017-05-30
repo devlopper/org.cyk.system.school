@@ -31,6 +31,7 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 	@Override
 	public void setSource(Object source) {
 		super.setSource(source);
+		classroomSession.setSource( ((ClassroomSessionDivision)source).getClassroomSession() );
 		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : ((ClassroomSessionDivision)source).getClassroomSessionDivisionSubjects().getCollection()){
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport(classroomSessionDivisionSubject);
 			classroomSessionDivisionSubjects.add(classroomSessionDivisionSubjectReport);

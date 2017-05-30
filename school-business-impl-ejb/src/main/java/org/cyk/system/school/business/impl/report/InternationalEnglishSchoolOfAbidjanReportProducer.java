@@ -6,7 +6,6 @@ import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
-import org.joda.time.DateTime;
 
 
 public  class InternationalEnglishSchoolOfAbidjanReportProducer extends AbstractSchoolReportProducer.Default implements Serializable{
@@ -17,10 +16,12 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducer extends Abstract
 			StudentClassroomSessionDivision studentClassroomSessionDivision,
 			CreateReportFileArguments<StudentClassroomSessionDivision> arguments) {
 		StudentClassroomSessionDivisionReportTemplateFile studentClassroomSessionDivisionReportTemplateFile = super.produceStudentClassroomSessionDivisionReport(studentClassroomSessionDivision, arguments);
-		int y1 = new DateTime(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getExistencePeriod().getFromDate()).getYear();
-		int y2 = new DateTime(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().getExistencePeriod().getToDate()).getYear();
-		studentClassroomSessionDivisionReportTemplateFile.getStudentClassroomSessionDivision().getAcademicSession()
-			.setFromDateToDate(y1+"/"+y2+" ACADEMIC SESSION");
+		
+		//TODO is there a possibility to make from Script ???
+		studentClassroomSessionDivisionReportTemplateFile.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getAcademicSession()
+			.getExistencePeriod().setFromYearToYear(studentClassroomSessionDivisionReportTemplateFile.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getAcademicSession()
+			.getExistencePeriod().getFromYearToYear()+" ACADEMIC SESSION");
+		
 		return studentClassroomSessionDivisionReportTemplateFile;
 	}
 }

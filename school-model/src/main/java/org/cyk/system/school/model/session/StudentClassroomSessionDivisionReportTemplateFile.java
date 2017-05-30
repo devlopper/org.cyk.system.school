@@ -16,6 +16,14 @@ public class StudentClassroomSessionDivisionReportTemplateFile extends AbstractR
 	private StudentClassroomSessionDivisionReport studentClassroomSessionDivision = new StudentClassroomSessionDivisionReport();
 	
 	@Override
+	public void setSource(Object source) {
+		super.setSource(source);
+		if(source!=null){
+			
+		}
+	}
+	
+	@Override
 	public void generate() {
 		super.generate();
 		studentClassroomSessionDivision.generate();

@@ -23,6 +23,7 @@ public class AcademicSessionReport extends AbstractIdentifiableReport<AcademicSe
 			
 		}else{
 			//this.company.setSource((((AcademicSession)source).getcom); 
+			//setFromDateToDate(inject(DatePeriodStringBuilder.class).setDates(gete, date2, part) as.getExistencePeriod()));
 		}
 	}
 	

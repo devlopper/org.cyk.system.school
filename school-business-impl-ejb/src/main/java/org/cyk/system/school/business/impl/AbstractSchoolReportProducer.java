@@ -16,26 +16,24 @@ import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.file.ScriptBusiness;
-import org.cyk.system.root.business.api.geography.ContactCollectionBusiness;
 import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
-import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.api.value.ValueBusiness.Derive;
 import org.cyk.system.root.business.impl.NumberStringFormatter;
 import org.cyk.system.root.model.AbstractCollectionItem;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
-import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.LabelValueReport;
-import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
+import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
+import org.cyk.system.root.persistence.api.party.person.PersonExtendedInformationsDao;
 import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
@@ -43,7 +41,6 @@ import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.SchoolConstant.Code.LevelName;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.StudentReportTemplateFile;
-import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionDivisionReportTemplateFile;
@@ -136,35 +133,32 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	@Override
 	public StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision
 			,CreateReportFileArguments<StudentClassroomSessionDivision> createReportFileArguments) {
+		
+		inject(FileBusiness.class).findInputStream(studentClassroomSessionDivision.getStudent().getPerson().getImage(), Boolean.TRUE);
+		
+		studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getCoordinator().getPerson()
+			.setExtendedInformations(inject(PersonExtendedInformationsDao.class).readByParty(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getCoordinator().getPerson()));
+		inject(FileBusiness.class).findInputStream(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getCoordinator().getPerson().getExtendedInformations().getSignatureSpecimen(), Boolean.TRUE);
+		
 		StudentClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(StudentClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
+		
+		Person signer = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup()
+				.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner();
+		signer.setExtendedInformations(inject(PersonExtendedInformationsDao.class).readByParty(signer));
+		inject(FileBusiness.class).findInputStream(signer.getExtendedInformations().getSignatureSpecimen(), Boolean.TRUE);
+		
 		r.getStudentClassroomSessionDivision().setSource(studentClassroomSessionDivision);//TODO all following code should be go into setSource
-	
-		set(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup()
-				.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner(), r.getSigner());
-
+		r.getSigner().setSource(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup()
+				.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner());
+		
 		Student student = studentClassroomSessionDivision.getStudent();
 		StudentClassroomSessionDivision s = studentClassroomSessionDivision;
-		//ClassroomSessionDivision csd = s.getClassroomSessionDivision();
 		ClassroomSession cs = s.getClassroomSessionDivision().getClassroomSession();
-		AcademicSession as = s.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
-		//NodeResults results = csd.getResults();
+		//AcademicSession as = s.getClassroomSessionDivision().getClassroomSession().getAcademicSession();
 		
-		//r.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().setSource(cs);
-		r.getStudentClassroomSessionDivision().getAcademicSession().setFromDateToDate(inject(TimeBusiness.class).formatPeriodFromTo(as.getExistencePeriod()));
-		
-		//TODO Not required anymore because in super 
-		ReportTemplate reportTemplate = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(cs).getStudentClassroomSessionDivisionResultsReportTemplate();
-		if(reportTemplate.getHeaderImage()!=null)
-			r.setHeaderImage(inject(FileBusiness.class).findInputStream(reportTemplate.getHeaderImage()));
-		File backgroundImageFile = createReportFileArguments.getBackgroundImageFile();
-		if(backgroundImageFile!=null){
-			//System.out.println("AbstractSchoolReportProducer.produceStudentClassroomSessionDivisionReport() : "+backgroundImageFile.getCode());
-			r.setBackgroundImage(inject(FileBusiness.class).findInputStream(backgroundImageFile));
-		}
-		
-		inject(ContactCollectionBusiness.class).load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
-		set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getStudentClassroomSessionDivision().getAcademicSession().getCompany().getContactCollection());
-		set(cs.getCoordinator(), r.getStudentClassroomSessionDivision().getCommentator());
+		//inject(ContactCollectionBusiness.class).load(as.getSchool().getOwnedCompany().getCompany().getContactCollection());
+		//set(as.getSchool().getOwnedCompany().getCompany().getContactCollection(), r.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getAcademicSession().getCompany().getContactCollection());
+		//set(cs.getCoordinator(), r.getStudentClassroomSessionDivision().getCommentator());
 			
 		r.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getGlobalIdentifier().setName(formatUsingBusiness(cs));
 		
@@ -178,33 +172,18 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				.convertAttendanceTimeToDivisionDuration(csd.getClassroomSession(),csd.getExistencePeriod().getNumberOfMillisecond().get())));
 		*/
 		
-		set(student,r.getStudentClassroomSessionDivision().getStudent());
 		
-		//if(cs.getCoordinator()!=null)
-		//	set(cs.getCoordinator(), r.getStudentClassroomSessionDivision().getCommentator());
 		
+		//set(student,r.getStudentClassroomSessionDivision().getStudent());
+		/*
+		if(cs.getCoordinator()!=null)
+			set(cs.getCoordinator(), r.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getCoordinator());
+		*/
 		/*
 		if(as.getSchool().getOwnedCompany().getCompany().getSigner()!=null)
 			set(as.getSchool().getOwnedCompany().getCompany().getSigner(), r.getSigner());
 		*/
 		r.getStudentClassroomSessionDivision().setComments(s.getResults().getAppreciation());
-		//r.getStudentClassroomSessionDivision().setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
-		/*if(Boolean.TRUE.equals(csd.getStudentEvaluationRequired()) && s.getResults().getEvaluationSort().getAverage().getValue()!=null){
-			r.getStudentClassroomSessionDivision().setAverage(format(s.getResults().getEvaluationSort().getAverage().getValue()));
-			//TODO a function to be used in jasper report
-			//r.getStudentClassroomSessionDivision().setAverageScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAverageAppreciatedInterval()));
-			r.getStudentClassroomSessionDivision().getAverageScale().setSource(s.getResults().getEvaluationSort().getAverageAppreciatedInterval());
-			r.getStudentClassroomSessionDivision().setRank(inject(MathematicsBusiness.class).format(s.getResults().getEvaluationSort().getRank()));
-			
-			r.getStudentClassroomSessionDivision().setAveragePromotionScale(RootConstant.Code.getRelativeCode(s.getResults().getEvaluationSort().getAveragePromotedInterval()));
-			
-			r.getStudentClassroomSessionDivision().setTotalCoefficient(format(s.getResults().getEvaluationSort().getAverage().getDivisor()));
-			r.getStudentClassroomSessionDivision().setTotalAverage(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
-			r.getStudentClassroomSessionDivision().setTotalAverageCoefficiented(format(s.getResults().getEvaluationSort().getAverage().getDividend()));
-			
-		}*/
-		
-		//r.setName(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.title",new Object[]{csd.getUiString()}));
 		r.getStudentClassroomSessionDivision().setSubjectsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.subject"));
 		r.getStudentClassroomSessionDivision().setSubjectsBlockTitle("COGNITIVE ASSESSMENT");//TODO to be deleted
 		r.getStudentClassroomSessionDivision().setCommentsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.comments"));
@@ -227,12 +206,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
 			Boolean applicable = studentSubject.getResults().getEvaluationSort().getAverage().getValue()!=null;
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport(studentSubject.getClassroomSessionDivisionSubject());
-			//classroomSessionDivisionSubjectReport.setAverage(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverage()):NOT_APPLICABLE);
-			//classroomSessionDivisionSubjectReport.getGlobalIdentifier().setWeight(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getWeight()):NOT_APPLICABLE);
-			//classroomSessionDivisionSubjectReport.setHighestAverage(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getAverageHighest()):NOT_APPLICABLE);
-			//classroomSessionDivisionSubjectReport.getGlobalIdentifier().setName(studentSubject.getClassroomSessionDivisionSubject().getSubject().getName());
-			//classroomSessionDivisionSubjectReport.setNumberOfStudents(applicable?format(studentSubject.getClassroomSessionDivisionSubject().getResults().getNumberOfStudent()):NOT_APPLICABLE);
-			//classroomSessionDivisionSubjectReport.getAverageScale().setSource(studentSubject.getResults().getEvaluationSort().getAverageAppreciatedInterval());
 			StudentClassroomSessionDivisionSubjectReport sr = new StudentClassroomSessionDivisionSubjectReport(r.getStudentClassroomSessionDivision(),classroomSessionDivisionSubjectReport,studentSubject);
 			
 			r.getStudentClassroomSessionDivision().getSubjects().add(sr);
@@ -244,14 +217,6 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					r.getStudentClassroomSessionDivision().getMarkTotals().add(NOT_APPLICABLE);
 				}
 			}
-			
-			//set(studentSubject.getClassroomSessionDivisionSubject().getTeacher(),sr.getTeacher());
-			
-			/*
-			sr.setAverage(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()):NOT_APPLICABLE);
-			sr.setAverageCoefficiented(applicable?format(studentSubject.getResults().getEvaluationSort().getAverage().getValue()
-					.multiply(studentSubject.getClassroomSessionDivisionSubject().getWeight()==null?BigDecimal.ONE:studentSubject.getClassroomSessionDivisionSubject().getWeight())):NOT_APPLICABLE);
-			*/
 			
 			NumberFormatter.String rankFormatter = new NumberFormatter.String.Adapter.Default(studentSubject.getResults().getEvaluationSort().getRank().getValue(),null);
 			rankFormatter.setIsOrdinal(Boolean.TRUE);

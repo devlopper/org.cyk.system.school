@@ -47,9 +47,9 @@ public class IesaSampleData extends AbstractSampleData implements Serializable {
 		report.setName(classroomSessionDivisionOrderNumber+" TERM - G1-G12 REPORT SHEET");
 		report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getResults().setAverage("12");
 		if(Boolean.TRUE.equals(report.getIsDraft())){
-			report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().setDraftBackground(Boolean.TRUE);
-			report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().generate();
-			report.setBackgroundImage(report.getStudentClassroomSessionDivision().getAcademicSession().getCompany().getBackgroundImage());
+			report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getAcademicSession().getCompany().setDraftBackground(Boolean.TRUE);
+			report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getAcademicSession().getCompany().generate();
+			report.setBackgroundImage(report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getAcademicSession().getCompany().getBackgroundImage());
 			report.setFooter("This Provisional Results Information is not an official document and is for information only.");
 		}
 		addPupilsDetails(report);

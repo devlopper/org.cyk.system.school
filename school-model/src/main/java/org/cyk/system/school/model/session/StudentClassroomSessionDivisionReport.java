@@ -16,8 +16,6 @@ import org.cyk.system.root.model.party.person.ActorReport;
 import org.cyk.system.school.model.StudentResultsReport;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
-import org.cyk.utility.common.formatter.NumberFormatter;
-import org.cyk.utility.common.generator.AbstractGeneratable;
 import org.cyk.utility.common.generator.RandomDataProvider;
 
 @Getter @Setter @NoArgsConstructor
@@ -26,19 +24,18 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 	private static final long serialVersionUID = 7672451415743549818L;
 
 	private ActorReport student = new ActorReport();
-	private ClassroomSessionDivisionReport classroomSessionDivision = new ClassroomSessionDivisionReport();
+	private ClassroomSessionDivisionReport classroomSessionDivision;
 	
 	private String attendedTime,missedTime,missedTimeJustified,averagePromotionScale,totalAverage,totalCoefficient,totalAverageCoefficiented,
 		comments,subjectsBlockTitle,commentsBlockTitle,schoolStampBlockTitle;
+	
 	private List<String> markTotals = new ArrayList<>();
 	private List<BigDecimal> tempMarkTotals = new ArrayList<>();
 	
 	private Collection<StudentClassroomSessionDivisionSubjectReport> subjects = new ArrayList<>();
 	private Collection<ClassroomSessionDivisionSubjectReport> classroomSessionDivisionSubjects;
 	
-	private AcademicSessionReport academicSession = new AcademicSessionReport();
-	
-	private ActorReport commentator = new ActorReport();
+	//private ActorReport commentator = new ActorReport();
 	
 	private List<String> subjectsTableColumnNames = new ArrayList<>();
 	
@@ -67,24 +64,15 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 		super.setSource(source);
 		StudentClassroomSessionDivision studentClassroomSessionDivision = (StudentClassroomSessionDivision) source;
 		student.setSource(studentClassroomSessionDivision.getStudent());
+		if(classroomSessionDivision==null){
+			classroomSessionDivision = new ClassroomSessionDivisionReport();
+			classroomSessionDivision.setSource(studentClassroomSessionDivision.getClassroomSessionDivision());
+		}
+		
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 				&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()!=null){
 			
-			//setAverage(format(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()));
 			getAverageScale().setSource(studentClassroomSessionDivision.getResults().getEvaluationSort().getAverageAppreciatedInterval());
-			
-			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValue()!=null){
-				
-				//TODO rank formatting should be moved in RankReport
-				NumberFormatter.String numberFormatter = new NumberFormatter.String.Adapter.Default(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValue()
-						,null);
-				numberFormatter.setIsAppendOrdinalSuffix(Boolean.TRUE);
-				numberFormatter.setIsAppendExaequo(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getExaequo());
-				numberFormatter.setIsOrdinal(Boolean.TRUE);
-				numberFormatter.setLocale(AbstractGeneratable.Listener.Adapter.Default.LOCALE);
-				getResults().getEvaluationSort().getRank().setValueExaequo(numberFormatter.execute());
-				
-			}
 			
 			if(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()!=null)
 				setAveragePromotionScale(RootConstant.Code.getRelativeCode(studentClassroomSessionDivision.getResults().getEvaluationSort().getAveragePromotedInterval()));
@@ -123,15 +111,11 @@ public class StudentClassroomSessionDivisionReport extends AbstractStudentNodeRe
 		commentsBlockTitle = "CLASS TEACHER COMMENTS AND SIGNATURE";
 		schoolStampBlockTitle = "SCHOOL STAMP AND SIGNATURE";
 	
-		academicSession.getCompany().getGlobalIdentifier().setGenerateImage(Boolean.TRUE);
-		academicSession.getCompany().setGenerateBackground(Boolean.TRUE);
-		academicSession.generate();
-		
 		student.getPerson().getGlobalIdentifier().setGenerateImage(Boolean.TRUE);
 		student.generate();
 		
-		commentator.getPerson().setGenerateSignatureSpecimen(Boolean.TRUE);
-		commentator.generate();
+		//commentator.getPerson().setGenerateSignatureSpecimen(Boolean.TRUE);
+		//commentator.generate();
 		
 		//name = "THIRD TERM PRIMARY REPORT CARD";
 		attendedTime = positiveFloatNumber(999, 0, 99);

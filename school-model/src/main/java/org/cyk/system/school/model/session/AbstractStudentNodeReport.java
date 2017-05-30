@@ -19,8 +19,8 @@ public abstract class AbstractStudentNodeReport<NODE> extends AbstractIdentifiab
 
 	private static final long serialVersionUID = 7672451415743549818L;
 
-	//@Deprecated protected String average,averageCoefficiented,rank;
 	protected StudentResultsReport results = new StudentResultsReport();
+	
 	protected IntervalReport averageScale = new IntervalReport();
 	
 	protected List<String> marks = new ArrayList<>();
@@ -36,9 +36,6 @@ public abstract class AbstractStudentNodeReport<NODE> extends AbstractIdentifiab
 	@Override
 	public void generate() {
 		results.generate();
-		/*average = positiveFloatNumber(999, 0, 99);
-		averageCoefficiented = positiveFloatNumber(999, 0, 99);
-		rank = RandomDataProvider.getInstance().randomInt(1, 100)+"th";*/
 		averageScale.generate();
 		for(int i=0;i<3;i++)
 			marks.add(positiveFloatNumber(999, 0, 99));
