@@ -14,10 +14,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.root.business.api.FormatterBusiness;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
-import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.api.file.ScriptBusiness;
 import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
+import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.api.value.ValueBusiness.Derive;
 import org.cyk.system.root.business.impl.NumberStringFormatter;
 import org.cyk.system.root.model.AbstractCollectionItem;
@@ -33,8 +33,6 @@ import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
-import org.cyk.system.root.persistence.api.party.person.JobInformationsDao;
-import org.cyk.system.root.persistence.api.party.person.PersonExtendedInformationsDao;
 import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
@@ -133,36 +131,26 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	public StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision
 			,CreateReportFileArguments<StudentClassroomSessionDivision> createReportFileArguments) {
 		
-		inject(FileBusiness.class).findInputStream(studentClassroomSessionDivision.getStudent().getPerson().getImage(), Boolean.TRUE);
-		
-		studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getCoordinator().getPerson()
-			.setExtendedInformations(inject(PersonExtendedInformationsDao.class).readByParty(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getCoordinator().getPerson()));
-		inject(FileBusiness.class).findInputStream(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getCoordinator().getPerson().getExtendedInformations().getSignatureSpecimen(), Boolean.TRUE);
+		inject(PersonBusiness.class).setRelatedIdentifiables(studentClassroomSessionDivision.getStudent().getPerson(),Boolean.TRUE,Boolean.FALSE);
+		inject(PersonBusiness.class).setRelatedIdentifiables(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
+				.getCoordinator().getPerson(),Boolean.FALSE,Boolean.TRUE);
+		inject(PersonBusiness.class).setRelatedIdentifiables(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup()
+				.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner(),Boolean.FALSE,Boolean.TRUE,Person.FIELD_JOB_INFORMATIONS);
 		
 		StudentClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(StudentClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
-		
-		Person signer = studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup()
-				.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner();
-		signer.setExtendedInformations(inject(PersonExtendedInformationsDao.class).readByParty(signer));
-		signer.setJobInformations(inject(JobInformationsDao.class).readByParty(signer));
-		inject(FileBusiness.class).findInputStream(signer.getExtendedInformations().getSignatureSpecimen(), Boolean.TRUE);
-		
 		
 		r.getStudentClassroomSessionDivision().setSource(studentClassroomSessionDivision);
 		r.getSigner().setSource(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup()
 				.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner());
 		
-		StudentClassroomSessionDivision s = studentClassroomSessionDivision;
-		
 		r.setSubjectsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.subject"));
-		//r.setSubjectsBlockTitle("COGNITIVE ASSESSMENT");//TODO to be deleted
 		r.setCommentsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.comments"));
 		r.setSchoolStampBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.schoolstamp"));
 		
-		if(s.getResults().getEvaluationSort().getRank()==null)
+		if(studentClassroomSessionDivision.getResults().getEvaluationSort().getRank()==null)
 			;
 		else
-			processStudentSubjects(r, s,createReportFileArguments);
+			processStudentSubjects(r, studentClassroomSessionDivision,createReportFileArguments);
 				
 		produceStudentClassroomSessionDivisionReportLabelValueCollections(r,createReportFileArguments);
 		
@@ -508,7 +496,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		protected void addOverallResult(StudentClassroomSessionDivisionReportTemplateFile report){
 			report.addLabelValues("OVERALL RESULT", new String[][]{
 				{"AVERAGE",report.getStudentClassroomSessionDivision().getResults().getEvaluationSort().getAverage().getValue()}
-				,{"GRADE",RootConstant.Code.getRelativeCode((AbstractCollectionItem<?>) report.getStudentClassroomSessionDivision().getAverageScale().getSource())}
+				,{"GRADE",RootConstant.Code.getRelativeCode((AbstractCollectionItem<?>) report.getStudentClassroomSessionDivision().getResults().getEvaluationSort().getAverageAppreciatedInterval().getSource())}
 				,{"RANK",report.getStudentClassroomSessionDivision().getResults().getEvaluationSort().getRank().getValue()}
 			});
 		}
@@ -530,13 +518,14 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			trimesters.add("TERM");
 			
 			for(StudentClassroomSessionDivisionReport studentClassroomSessionDivision : studentClassroomSessionDivisions){
-				averages.add(studentClassroomSessionDivision.getAverageScale().getSource()==null? "NA" 
+				Object source = studentClassroomSessionDivision.getResults().getEvaluationSort().getAverageAppreciatedInterval().getSource();
+				averages.add(source==null? "NA" //TODO NA should be configurable
 						:studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue());
 				
-				grades.add(studentClassroomSessionDivision.getAverageScale().getSource() ==null ? "NA" : 
-					RootConstant.Code.getRelativeCode((AbstractCollectionItem<?>) studentClassroomSessionDivision.getAverageScale().getSource()));
+				grades.add(source ==null ? "NA" : 
+					RootConstant.Code.getRelativeCode((AbstractCollectionItem<?>) source));
 				
-				ranks.add(studentClassroomSessionDivision.getAverageScale().getSource()==null? "NA" : studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValueExaequo());
+				ranks.add(source==null? "NA" : studentClassroomSessionDivision.getResults().getEvaluationSort().getRank().getValueExaequo());
 				
 				trimesters.add(((StudentClassroomSessionDivision)studentClassroomSessionDivision.getSource()).getClassroomSessionDivision().getOrderNumber().toString());
 			}

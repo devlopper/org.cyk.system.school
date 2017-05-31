@@ -22,6 +22,10 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducer extends Abstract
 			.getExistencePeriod().setFromYearToYear(studentClassroomSessionDivisionReportTemplateFile.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession().getAcademicSession()
 			.getExistencePeriod().getFromYearToYear()+" ACADEMIC SESSION");
 		
+		studentClassroomSessionDivisionReportTemplateFile.setSubjectsBlockTitle("COGNITIVE ASSESSMENT");
+		studentClassroomSessionDivisionReportTemplateFile.setCommentsBlockTitle("COMMENTS");
+		studentClassroomSessionDivisionReportTemplateFile.setSchoolStampBlockTitle("SCHOOL STAMP");
+		
 		return studentClassroomSessionDivisionReportTemplateFile;
 	}
 }

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.cyk.system.root.model.file.report.AbstractIdentifiableReport;
-import org.cyk.system.root.model.mathematics.IntervalReport;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.StudentResultsReport;
 import org.cyk.utility.common.generator.AbstractGeneratable;
@@ -20,8 +19,6 @@ public abstract class AbstractStudentNodeReport<NODE> extends AbstractIdentifiab
 	private static final long serialVersionUID = 7672451415743549818L;
 
 	protected StudentResultsReport results = new StudentResultsReport();
-	
-	protected IntervalReport averageScale = new IntervalReport();
 	
 	protected List<String> marks = new ArrayList<>();
 	
@@ -36,7 +33,6 @@ public abstract class AbstractStudentNodeReport<NODE> extends AbstractIdentifiab
 	@Override
 	public void generate() {
 		results.generate();
-		averageScale.generate();
 		for(int i=0;i<3;i++)
 			marks.add(positiveFloatNumber(999, 0, 99));
 	}

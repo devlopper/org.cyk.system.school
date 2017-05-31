@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Student Classroom Session Division Report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="15" bottomMargin="0" uuid="de4e9630-bfde-428f-bc68-96e9a465fd5d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="73"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -72,9 +72,6 @@
 		</field>
 		<field name="marks" class="java.util.List">
 			<fieldDescription><![CDATA[marks]]></fieldDescription>
-		</field>
-		<field name="averageScale" class="org.cyk.system.root.model.mathematics.IntervalReport">
-			<fieldDescription><![CDATA[averageScale]]></fieldDescription>
 		</field>
 		<field name="classroomSessionDivisionSubject" class="org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectReport">
 			<fieldDescription><![CDATA[classroomSessionDivisionSubject]]></fieldDescription>
@@ -555,7 +552,7 @@
 										<font size="9"/>
 										<paragraph leftIndent="3"/>
 									</textElement>
-									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{averageScale}.getGlobalIdentifier().getCode()+"</font>"]]></textFieldExpression>
+									<textFieldExpression><![CDATA["<font face='" + $P{CYK_TEXT_DYNAMIC_FONT_NAME} + "'>" +$F{studentClassroomSessionDivisionSubject}.getResults().getEvaluationSort().getAverageAppreciatedInterval().getGlobalIdentifier().getCode()+"</font>"]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
