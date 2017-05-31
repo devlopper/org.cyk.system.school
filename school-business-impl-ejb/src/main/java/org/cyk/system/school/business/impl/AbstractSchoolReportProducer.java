@@ -131,18 +131,18 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	public StudentClassroomSessionDivisionReportTemplateFile produceStudentClassroomSessionDivisionReport(StudentClassroomSessionDivision studentClassroomSessionDivision
 			,CreateReportFileArguments<StudentClassroomSessionDivision> createReportFileArguments) {
 		
+		/* Loading needed informations*/
 		inject(PersonBusiness.class).setRelatedIdentifiables(studentClassroomSessionDivision.getStudent().getPerson(),Boolean.TRUE,Boolean.FALSE);
 		inject(PersonBusiness.class).setRelatedIdentifiables(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 				.getCoordinator().getPerson(),Boolean.FALSE,Boolean.TRUE);
 		inject(PersonBusiness.class).setRelatedIdentifiables(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup()
 				.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner(),Boolean.FALSE,Boolean.TRUE,Person.FIELD_JOB_INFORMATIONS);
 		
+		/* Setting report template file properties */
 		StudentClassroomSessionDivisionReportTemplateFile r = createReportTemplateFile(StudentClassroomSessionDivisionReportTemplateFile.class,createReportFileArguments);
-		
 		r.getStudentClassroomSessionDivision().setSource(studentClassroomSessionDivision);
 		r.getSigner().setSource(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getGroup()
 				.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner());
-		
 		r.setSubjectsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.subject"));
 		r.setCommentsBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.comments"));
 		r.setSchoolStampBlockTitle(inject(LanguageBusiness.class).findText("school.report.studentclassroomsessiondivision.results.schoolstamp"));
