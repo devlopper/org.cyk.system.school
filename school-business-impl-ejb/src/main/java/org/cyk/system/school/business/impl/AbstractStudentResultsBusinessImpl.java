@@ -114,11 +114,11 @@ public abstract class AbstractStudentResultsBusinessImpl<RESULT extends Abstract
 			
 			Collection<WeightedValue> weightedValues = new ArrayList<WeightedValue>();
 			//filtering of the data belonging to the student
-			result.getDetails().clear();
+			result.getDetailCollection().getCollection().clear();
 			for(DETAIL detail : details){
 				//System.out.println(result.getStudent().getIdentifier()+" , "+student(detail).getIdentifier()+" : "+result.getStudent().getIdentifier().equals(student(detail).getIdentifier()));
 				if(result.getStudent().getIdentifier().equals(student(detail).getIdentifier())){
-					result.getDetails().add(detail);
+					result.getDetailCollection().addOne(detail);
 					WeightedValue weightedValue = weightedValue(detail);
 					//System.out.println(result.getStudent().getCode()+" , "+weightedValue.getValue());
 					if(weightedValue.getValue()==null)

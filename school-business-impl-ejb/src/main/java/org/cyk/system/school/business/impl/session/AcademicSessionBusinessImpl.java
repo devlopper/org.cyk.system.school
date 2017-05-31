@@ -3,6 +3,7 @@ package org.cyk.system.school.business.impl.session;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -12,15 +13,19 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.impl.time.AbstractIdentifiablePeriodBusinessImpl;
-import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
+import org.cyk.system.school.business.api.session.LevelGroupBusiness;
+import org.cyk.system.school.business.api.session.LevelNameBusiness;
 import org.cyk.system.school.business.api.session.SchoolBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
+import org.cyk.system.school.model.session.CommonNodeInformations;
+import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
+import org.cyk.utility.common.helper.FieldHelper;
 
 public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusinessImpl<AcademicSession, AcademicSessionDao> implements AcademicSessionBusiness,Serializable {
 
@@ -69,13 +74,24 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	@Override
 	protected void afterUpdate(AcademicSession academicSession) {
 		super.afterUpdate(academicSession);
-		for(AbstractIdentifiable identifiable : genericDao.use(LevelName.class).select().all()){
-			LevelName levelName = (LevelName) identifiable;
-			//TODO a attribute value copy method should be developed
-			levelName.getNodeInformations().setCurrentClassroomSessionDivisionIndex(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex());
-			//TODO all attribute should be copied
-			genericDao.update(levelName);
+		FieldHelper fieldHelper = new FieldHelper();
+		if(academicSession.getLevelGroups().isSynchonizationEnabled()){
+			for(LevelGroup levelGroup : academicSession.getLevelGroups().getCollection()){
+				copy(academicSession, levelGroup.getNodeInformations(),academicSession.getLevelGroups().getFieldNames(), fieldHelper);
+			}	
+			inject(LevelGroupBusiness.class).update(academicSession.getLevelGroups().getCollection());
 		}
+		if(academicSession.getLevelNames().isSynchonizationEnabled()){
+			for(LevelName levelName : academicSession.getLevelNames().getCollection()){
+				copy(academicSession, levelName.getNodeInformations(),academicSession.getLevelNames().getFieldNames(), fieldHelper);
+			}
+			inject(LevelNameBusiness.class).update(academicSession.getLevelNames().getCollection());
+		}
+		
+	}
+	
+	private void copy(AcademicSession academicSession,CommonNodeInformations destination,Collection<String> fieldNames,FieldHelper fieldHelper){
+		fieldHelper.copy(academicSession.getNodeInformations(), destination, fieldNames /*CommonNodeInformations.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX*/);	
 	}
 		
 	@Override

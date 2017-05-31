@@ -58,10 +58,10 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 				Collection<StudentClassroomSessionDivisionSubject> studentSubjects = inject(StudentClassroomSessionDivisionSubjectBusiness.class)
 						.findByStudentByClassroomSessionDivision(identifiable.getStudent(),identifiable.getClassroomSessionDivision());
 				for(StudentClassroomSessionDivisionSubject studentSubject : studentSubjects){
-					studentSubject.getDetails().clear();
+					studentSubject.getDetailCollection().getCollection().clear();
 					for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubjectEvaluations){
 						if(studentSubjectEvaluation.getStudentClassroomSessionDivisionSubject().equals(studentSubject)){
-							studentSubject.getDetails().add(studentSubjectEvaluation);
+							studentSubject.getDetailCollection().addOne(studentSubjectEvaluation);
 						}
 					}
 				}

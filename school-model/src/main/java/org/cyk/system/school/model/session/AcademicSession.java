@@ -8,12 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.root.model.time.AbstractIdentifiablePeriod;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
@@ -29,6 +31,9 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 	@Embedded private CommonNodeInformations nodeInformations;
 	
 	@Temporal(value=TemporalType.DATE) private Date nextStartingDate;//TODO to be deleted. look for the next to get the from date
+	
+	@Transient private IdentifiableRuntimeCollection<LevelGroup> levelGroups = new IdentifiableRuntimeCollection<>();
+	@Transient private IdentifiableRuntimeCollection<LevelName> levelNames = new IdentifiableRuntimeCollection<>();
 	
 	public AcademicSession(School school,CommonNodeInformations nodeInformations,Date nextStartingDate) {
 		super();

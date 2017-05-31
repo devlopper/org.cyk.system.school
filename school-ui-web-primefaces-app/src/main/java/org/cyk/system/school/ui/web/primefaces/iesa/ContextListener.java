@@ -152,7 +152,7 @@ public class ContextListener extends AbstractSchoolContextListener implements Se
 		@Input @InputText @Sequence(direction=Direction.AFTER,field=FIELD_TEST2) private String exam;
 		public StudentClassroomSessionDivisionSubjectDetails(StudentClassroomSessionDivisionSubject studentSubject) {
 			super(studentSubject);
-			for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetails()){
+			for(StudentClassroomSessionDivisionSubjectEvaluation studentSubjectEvaluation : studentSubject.getDetailCollection().getCollection()){
 				if(studentSubjectEvaluation.getStudentClassroomSessionDivisionSubject().equals(studentSubject)){
 					if(studentSubjectEvaluation.getEvaluation().getClassroomSessionDivisionSubjectEvaluationType().getEvaluationType().getCode().equals(SchoolConstant.Code.EvaluationType.TEST1))
 						test1 = numberBusiness.format(studentSubjectEvaluation.getValue());
