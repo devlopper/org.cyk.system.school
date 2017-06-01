@@ -96,22 +96,22 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 	}
 	/*
 	public void doMoreInitialisation(){
-		AcademicSession academicSession = inject(AcademicSessionBusiness.class).findCurrent(null);
+		AcademicSession academicSession = inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted();
 		academicSessionInfos = UIManager.getInstance().getTimeBusiness().formatExistencePeriodFromTo(academicSession.getExistencePeriod());
 		classroomSessionDivisionTypeName = academicSession.getNodeInformations().getClassroomSessionTimeDivisionType().getName();
 		classroomSessionDivisionInfos = "No "+(academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 	}*/
 	
 	public String getAcademicSessionInfos(){
-		return UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(inject(AcademicSessionBusiness.class).findCurrent(null).getExistencePeriod());
+		return UIManager.getInstance().getTimeBusiness().formatPeriodFromTo(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getExistencePeriod());
 	}
 	
 	public String getClassroomSessionDivisionTypeName(){
-		return inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getClassroomSessionTimeDivisionType().getName();
+		return inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getClassroomSessionTimeDivisionType().getName();
 	}
 	
 	public String getClassroomSessionDivisionInfos(){
-		return "No "+(inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+		return "No "+(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 	}
 	
 	@Override
@@ -151,7 +151,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			if(teacher==null)
 				return null;
 			
-			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findByAcademicSessionByTeacher(inject(AcademicSessionBusiness.class).findCurrent(null)
+			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findByAcademicSessionByTeacher(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
 					, teacher);
 		}
 	}
@@ -191,11 +191,11 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 				if(object instanceof LevelGroup){
 					LevelGroup levelGroup = (LevelGroup) object;
 					if(Boolean.TRUE.equals(userSession.getIsManager()))
-						return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroup(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup);
+						return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroup(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted(), levelGroup);
 					else{
 						Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());
 						if(teacher!=null)
-							return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroupByTeacher(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup,teacher);
+							return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroupByTeacher(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted(), levelGroup,teacher);
 					}
 						
 				}
@@ -366,7 +366,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			,final String classroomSessionDivisionSubjectFieldName,final String subjectEvaluationTypeFieldName) {
 		String actionIdentifier = webManager.getRequestParameter(UniformResourceLocatorParameter.ACTION_IDENTIFIER);
 		Collection<ClassroomSession> classroomSessions = null;
-		AcademicSession academicSession = inject(AcademicSessionBusiness.class).findCurrent(null);
+		AcademicSession academicSession = inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted();
 		final Teacher teacher = page.getUserSession().getUserAccount().getUser() instanceof Person 
 				? inject(TeacherBusiness.class).findByPerson((Person) page.getUserSession().getUserAccount().getUser()) : null;
 		if(!Boolean.TRUE.equals(page.getUserSession().getIsManager()) && Boolean.TRUE.equals(EVALUATION_EDITABLE_BY_TEACHER_ONLY)){

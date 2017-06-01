@@ -18,7 +18,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 @FieldOverrides(value = {
 		@FieldOverride(name=AbstractDataTreeForm.FIELD_PARENT,type=LevelGroup.class)
 		,@FieldOverride(name=AbstractDataTreeForm.FIELD_TYPE,type=LevelGroupType.class)
-		})
+		}) @Deprecated
 public class LevelGroupForm extends AbstractDataTreeForm<LevelGroup,LevelGroupType> {
 
 	private static final long serialVersionUID = -3927257570208213271L;

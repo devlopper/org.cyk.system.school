@@ -9,7 +9,6 @@ import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.party.person.Person;
-import org.cyk.system.root.model.security.Role;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -95,7 +94,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks(),null)
 					.setIdentifier(COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS));	
 			
-			module.addChild(Builder.createConsult(inject(AcademicSessionBusiness.class).findCurrent(null), null));
+			module.addChild(Builder.createConsult(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted(), null));
 		}
 		
 		return module;
@@ -198,7 +197,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 			if(teacher==null)
 				return null;
 			
-			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findByAcademicSessionByTeacher(inject(AcademicSessionBusiness.class).findCurrent(null)
+			return (Collection<TYPE>) inject(LevelGroupBusiness.class).findByAcademicSessionByTeacher(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
 					, teacher);
 		}
 	}
@@ -241,13 +240,13 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 						Collection<Object> collection = new ArrayList<>();
 						for(Object o : ((LevelGroup)levelGroup).getChildren())
 							collection.add(o);
-						for(Object o : inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroup(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup))
+						for(Object o : inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroup(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted(), levelGroup))
 							collection.add(o);
 						return collection;
 					}else{
 						Teacher teacher = inject(TeacherBusiness.class).findByPerson((Person) userSession.getUser());
 						if(teacher!=null)
-							return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroupByTeacher(inject(AcademicSessionBusiness.class).findCurrent(null), levelGroup,teacher);
+							return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroupByTeacher(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted(), levelGroup,teacher);
 					}
 						
 				}

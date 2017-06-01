@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.persistence.api.file.report.ReportTemplateDao;
@@ -17,17 +18,10 @@ import org.cyk.system.school.persistence.api.session.SchoolDao;
 public class SchoolBusinessImpl extends AbstractTypedBusinessService<School, SchoolDao> implements SchoolBusiness,Serializable {
 
 	private static final long serialVersionUID = -3799482462496328200L;
-	
-	@Inject private OwnedCompanyBusiness ownedCompanyBusiness;
-	
+		
 	@Inject
 	public SchoolBusinessImpl(SchoolDao dao) {
 		super(dao);  
-	}
-
-	@Override
-	public School findDefault() {
-		return dao.readByOwnedCompany(ownedCompanyBusiness.findDefaultOwnedCompany());
 	}
 	
 	@Override
@@ -54,6 +48,10 @@ public class SchoolBusinessImpl extends AbstractTypedBusinessService<School, Sch
 		school.getNodeInformations().setStudentClassroomSessionAveragePromotionScale(inject(IntervalCollectionDao.class).read(values[index++]));
 		school.getNodeInformations().setAttendanceTimeDivisionType(inject(TimeDivisionTypeDao.class).read(values[index++]));
 		school.getNodeInformations().setEvaluationPassAverage(commonUtils.getBigDecimal(values[index++]));
+		
+		if(values.length > index && StringUtils.isNotBlank(values[index])){
+			school.setDefaulted(Boolean.valueOf(values[index]));
+		}
 		
 		return school;
 	}

@@ -41,7 +41,7 @@ public class ClassroomSessionQueryOneFormModel extends AbstractClassroomSessionQ
 		public void serve(Object data, String actionIdentifier) {
 			if(SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
 				ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(
-						((ClassroomSessionQueryOneFormModel)data).getIdentifiable(), inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						((ClassroomSessionQueryOneFormModel)data).getIdentifiable(), inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				WebNavigationManager.getInstance().redirectTo(SchoolWebManager.getInstance().getOutcomeConsultClassroomSessionDivisionBroadsheet(),new Object[]{
 					UniformResourceLocatorParameter.IDENTIFIABLE,classroomSessionDivision
 				}); 

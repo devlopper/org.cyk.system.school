@@ -65,7 +65,6 @@ import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
-import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectEvaluationDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
@@ -80,7 +79,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 	@Inject private StudentClassroomSessionDivisionSubjectBusiness studentSubjectBusiness;
 	@Inject private StudentClassroomSessionDivisionBusiness studentClassroomSessionDivisionBusiness;
 	@Inject private StudentClassroomSessionBusiness studentClassroomSessionBusiness;
-	@Inject private EvaluationBusiness evaluationBusiness;
+
 	@Inject private ClassroomSessionDivisionSubjectEvaluationTypeBusiness evaluationTypeBusiness;
 	
 	@Inject private LevelTimeDivisionDao levelTimeDivisionDao;
@@ -581,7 +580,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				,parameters.getIsDraft(),Boolean.TRUE);
 		
 		System.out.println("Creating custom classroom session");
-		ClassroomSession customClassroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
+		ClassroomSession customClassroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
 				, levelTimeDivisionDao.readOneRandomly(), null,null);
 		customClassroomSession.getExistencePeriod().setFromDate(new Date());
 		customClassroomSession.getExistencePeriod().setToDate(new Date());

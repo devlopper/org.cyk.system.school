@@ -29,7 +29,7 @@ public class StudentClassroomSessionQueryOneFormModel extends AbstractQueryOneFo
 		
 		@Override
 		public Collection<StudentClassroomSession> getIdentifiables(AbstractSelectManyPage<?> selectManyPage) {
-			return inject(StudentClassroomSessionBusiness.class).findByAcademicSession(inject(AcademicSessionBusiness.class).findCurrent(null));
+			return inject(StudentClassroomSessionBusiness.class).findByAcademicSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted());
 		}
 		
 		@Override

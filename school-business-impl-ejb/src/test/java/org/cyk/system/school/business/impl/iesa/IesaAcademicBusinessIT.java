@@ -2,6 +2,7 @@ package org.cyk.system.school.business.impl.iesa;
 
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
+import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.report.InternationalEnglishSchoolOfAbidjanReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
@@ -18,6 +19,11 @@ public class IesaAcademicBusinessIT extends AbstractIesaBusinessIT {
     @Override
     protected void businesses() {
     
+    }
+    
+    @Test
+    public void getSchoolDefaulted(){
+    	assertThat("default does not exist", inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()!=null);
     }
     
     @Test

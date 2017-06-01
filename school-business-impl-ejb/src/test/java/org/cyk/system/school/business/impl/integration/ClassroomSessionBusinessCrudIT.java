@@ -29,13 +29,13 @@ public class ClassroomSessionBusinessCrudIT extends AbstractBusinessIT {
     	academicSession.getExistencePeriod().setToDate(new Date(academicSession.getExistencePeriod().getFromDate().getTime()+DateTimeConstants.MILLIS_PER_DAY*355));
     	create(academicSession);
     	System.out.println(inject(LevelTimeDivisionDao.class).readAll());
-    	create(new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
+    	create(new ClassroomSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
     			,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1), null));
-    	create(new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
+    	create(new ClassroomSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
     			,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G2_YEAR_1), null));
-    	create(new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
+    	create(new ClassroomSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
     			,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G3_YEAR_1), null));
-    	create(new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
+    	create(new ClassroomSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
     			,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G4_YEAR_1), null));*/
 	}
     
@@ -46,7 +46,7 @@ public class ClassroomSessionBusinessCrudIT extends AbstractBusinessIT {
     		Execution execution = CommonUtils.getInstance().execute("Create Classroom session G1"+suffix, new Runnable() {
     			@Override
     			public void run() {
-    				ClassroomSession classroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
+    				ClassroomSession classroomSession = new ClassroomSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
     						,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1), null,null);
     				//classroomSession.setSuffix(suffix);
     				create(classroomSession);
@@ -71,7 +71,7 @@ public class ClassroomSessionBusinessCrudIT extends AbstractBusinessIT {
     	new org.cyk.utility.common.test.TestEnvironmentListener.Try("Un enregistrement avec pour code = abc existe déja"){ 
 			private static final long serialVersionUID = -8176804174113453706L;
 			@Override protected void code() {
-				create(new ClassroomSession(inject(AcademicSessionBusiness.class).findCurrent(null)
+				create(new ClassroomSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()
 						,inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1), null,null));
 			}
 		}.execute();

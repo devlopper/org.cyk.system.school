@@ -8,10 +8,9 @@ import org.cyk.system.school.model.session.School;
 
 public interface AcademicSessionBusiness extends AbstractIdentifiablePeriodBusiness<AcademicSession> {
 
-	AcademicSession findCurrent(School school);
-
 	BigDecimal convertAttendanceTimeToDivisionDuration(Long millisecond);
 	Long convertAttendanceTimeToMillisecond(BigDecimal duration);
 	
-	AcademicSession update(AcademicSession academicSession);
+	AcademicSession findDefaultedBySchool(School school);
+	AcademicSession findDefaultedSchoolDefaulted();
 }

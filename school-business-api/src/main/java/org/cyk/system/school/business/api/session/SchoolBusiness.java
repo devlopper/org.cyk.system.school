@@ -5,6 +5,4 @@ import org.cyk.system.school.model.session.School;
 
 public interface SchoolBusiness extends TypedBusiness<School> {
 
-	School findDefault();
-	
 }

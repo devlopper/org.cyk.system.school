@@ -11,6 +11,7 @@ import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessi
 import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.CommonNodeInformationsDetails;
 import org.cyk.system.school.business.impl.session.LevelGroupDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
@@ -33,6 +34,7 @@ import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.ui.web.primefaces.CommonNodeInformationsFormModel;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
@@ -47,6 +49,7 @@ import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomS
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.api.model.geography.LocationFormModel;
 import org.cyk.ui.api.model.language.LanguageCollectionFormModel;
+import org.cyk.ui.api.model.time.PeriodFormModel;
 import org.cyk.ui.web.primefaces.Table.ColumnAdapter;
 import org.cyk.ui.web.primefaces.UserSession;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
@@ -86,10 +89,14 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	}
 	
 	protected void configureAcademicSessionClass() {
-		getFormConfiguration(AcademicSession.class, Crud.CREATE).addFieldNames(AcademicSessionEditPage.Form.FIELD_AGGREGATE_ATTENDANCE
-				,AcademicSessionEditPage.Form.FIELD_ATTENDANCE_TIME_DIVISION_TYPE,AcademicSessionEditPage.Form.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE
-				,AcademicSessionEditPage.Form.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX,AcademicSessionEditPage.Form.FIELD_FROM_DATE
-				,AcademicSessionEditPage.Form.FIELD_NEXT_STARTING_DATE,AcademicSessionEditPage.Form.FIELD_TO_DATE);
+		getFormConfiguration(AcademicSession.class, Crud.CREATE).addFieldNames(AcademicSessionEditPage.Form.FIELD_EXISTENCE_PERIOD
+				,AcademicSessionEditPage.Form.FIELD_NODE_INFORMATIONS, CommonNodeInformationsFormModel.FIELD_AGGREGATE_ATTENDANCE
+				,CommonNodeInformationsFormModel.FIELD_ATTENDANCE_TIME_DIVISION_TYPE,CommonNodeInformationsFormModel.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL
+				,CommonNodeInformationsFormModel.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE,CommonNodeInformationsFormModel.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX
+				,CommonNodeInformationsFormModel.FIELD_EVALUATION_PASS_AVERAGE,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE
+				,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE
+				,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE
+				,CommonNodeInformationsFormModel.FIELD_STUDENT_SUBJECT_AVERAGE_SCALE,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE);
 		
 		registerDetailsConfiguration(AcademicSessionDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
@@ -101,11 +108,18 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(data instanceof AcademicSessionDetails)
-							return isFieldNameIn(field,AcademicSessionDetails.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX,AcademicSessionDetails.FIELD_EXISTENCE_PERIOD
-									,AcademicSessionDetails.FIELD_AGGREGATE_ATTENDANCE,AcademicSessionDetails.FIELD_ATTENDANCE_TIME_DIVISION_TYPE
-									,AcademicSessionDetails.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE,AcademicSessionDetails.FIELD_NEXT_STARTING_DATE);
+							return isFieldNameIn(field,AcademicSessionDetails.FIELD_SCHOOL,AcademicSessionDetails.FIELD_NODE_INFORMATIONS
+									,AcademicSessionDetails.FIELD_EXISTENCE_PERIOD);
 						if(data instanceof PeriodDetails)
 							return isFieldNameIn(field,PeriodDetails.FIELD_FROM_DATE,PeriodDetails.FIELD_TO_DATE);
+						if(data instanceof CommonNodeInformationsDetails)
+							return isFieldNameIn(field,CommonNodeInformationsDetails.FIELD_AGGREGATE_ATTENDANCE
+									,CommonNodeInformationsDetails.FIELD_ATTENDANCE_TIME_DIVISION_TYPE,CommonNodeInformationsDetails.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL
+									,CommonNodeInformationsDetails.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE,CommonNodeInformationsDetails.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX
+									,CommonNodeInformationsDetails.FIELD_EVALUATION_PASS_AVERAGE,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE
+									,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE
+									,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE
+									,CommonNodeInformationsDetails.FIELD_STUDENT_SUBJECT_AVERAGESCALE);
 						return Boolean.FALSE;
 					}
 				};
@@ -115,7 +129,15 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	
 	protected void configureLevelGroupClass() {
 		getFormConfiguration(LevelGroup.class, Crud.CREATE).addFieldNames(LevelGroupEditPage.Form.FIELD_CODE,LevelGroupEditPage.Form.FIELD_NAME
-				,LevelGroupEditPage.Form.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER);
+				,LevelGroupEditPage.Form.FIELD_NODE_INFORMATIONS,CommonNodeInformationsFormModel.FIELD_AGGREGATE_ATTENDANCE
+				,CommonNodeInformationsFormModel.FIELD_ATTENDANCE_TIME_DIVISION_TYPE,CommonNodeInformationsFormModel.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL
+				,CommonNodeInformationsFormModel.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE,CommonNodeInformationsFormModel.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX
+				,CommonNodeInformationsFormModel.FIELD_EVALUATION_PASS_AVERAGE,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE
+				,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE
+				,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE
+				,CommonNodeInformationsFormModel.FIELD_STUDENT_SUBJECT_AVERAGE_SCALE);
+		
+		getFormConfiguration(LevelGroup.class, Crud.READ).addFieldNames(LevelGroupEditPage.Form.FIELD_CODE,LevelGroupEditPage.Form.FIELD_NAME);
 		
 		registerDetailsConfiguration(LevelGroupDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
@@ -126,8 +148,17 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean build(Object data,Field field) {
-						return isFieldNameIn(field,LevelGroupDetails.FIELD_CODE,LevelGroupDetails.FIELD_NAME
-									,LevelGroupDetails.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER);
+						if(data instanceof LevelGroupDetails)
+							return isFieldNameIn(field,LevelGroupDetails.FIELD_CODE,LevelGroupDetails.FIELD_NAME,LevelGroupDetails.FIELD_NODE_INFORMATIONS);
+						if(data instanceof CommonNodeInformationsDetails)
+							return isFieldNameIn(field,CommonNodeInformationsDetails.FIELD_AGGREGATE_ATTENDANCE
+									,CommonNodeInformationsDetails.FIELD_ATTENDANCE_TIME_DIVISION_TYPE,CommonNodeInformationsDetails.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL
+									,CommonNodeInformationsDetails.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE,CommonNodeInformationsDetails.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX
+									,CommonNodeInformationsDetails.FIELD_EVALUATION_PASS_AVERAGE,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE
+									,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE
+									,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER,CommonNodeInformationsDetails.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE
+									,CommonNodeInformationsDetails.FIELD_STUDENT_SUBJECT_AVERAGESCALE);
+						return Boolean.FALSE;
 					}
 				};
 			}

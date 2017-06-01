@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.TransactionAttribute;
@@ -10,6 +9,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.impl.time.AbstractIdentifiablePeriodBusinessImpl;
@@ -45,22 +45,14 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public AcademicSession findCurrent(School school) {//TODO do better
-		ArrayList<AcademicSession> list = new ArrayList<>(findAll());
-		if(list.isEmpty())
-			return null;
-		return list.get(list.size()-1);
-	}
-
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public BigDecimal convertAttendanceTimeToDivisionDuration(Long millisecond) {
-		TimeDivisionType timeDivisionType = findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType();
+		TimeDivisionType timeDivisionType = findDefaultedSchoolDefaulted().getNodeInformations().getAttendanceTimeDivisionType();
 		return millisecond == null ? BigDecimal.ZERO : inject(MeasureBusiness.class).computeQuotient(timeDivisionType.getMeasure(), new BigDecimal(millisecond));
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Long convertAttendanceTimeToMillisecond(BigDecimal duration) {
-		TimeDivisionType timeDivisionType = findCurrent(null).getNodeInformations().getAttendanceTimeDivisionType();
+		TimeDivisionType timeDivisionType = findDefaultedSchoolDefaulted().getNodeInformations().getAttendanceTimeDivisionType();
 		return duration == null ? 0 : inject(MeasureBusiness.class).computeMultiple(timeDivisionType.getMeasure(), duration).longValue();
 	}
 	
@@ -74,33 +66,34 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	@Override
 	protected void afterUpdate(AcademicSession academicSession) {
 		super.afterUpdate(academicSession);
-		FieldHelper fieldHelper = new FieldHelper();
+		
 		if(academicSession.getLevelGroups().isSynchonizationEnabled()){
 			for(LevelGroup levelGroup : academicSession.getLevelGroups().getCollection()){
-				copy(academicSession, levelGroup.getNodeInformations(),academicSession.getLevelGroups().getFieldNames(), fieldHelper);
+				copy(academicSession, levelGroup.getNodeInformations(),academicSession.getLevelGroups().getFieldNames());
 			}	
 			inject(LevelGroupBusiness.class).update(academicSession.getLevelGroups().getCollection());
 		}
 		if(academicSession.getLevelNames().isSynchonizationEnabled()){
 			for(LevelName levelName : academicSession.getLevelNames().getCollection()){
-				copy(academicSession, levelName.getNodeInformations(),academicSession.getLevelNames().getFieldNames(), fieldHelper);
+				copy(academicSession, levelName.getNodeInformations(),academicSession.getLevelNames().getFieldNames());
 			}
 			inject(LevelNameBusiness.class).update(academicSession.getLevelNames().getCollection());
 		}
 		
 	}
 	
-	private void copy(AcademicSession academicSession,CommonNodeInformations destination,Collection<String> fieldNames,FieldHelper fieldHelper){
-		fieldHelper.copy(academicSession.getNodeInformations(), destination, fieldNames /*CommonNodeInformations.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX*/);	
+	private void copy(AcademicSession academicSession,CommonNodeInformations destination,Collection<String> fieldNames){
+		FieldHelper fieldHelper = new FieldHelper();
+		fieldHelper.copy(academicSession.getNodeInformations(), destination, fieldNames);	
 	}
 		
 	@Override
 	public AcademicSession instanciateOne() {
 		AcademicSession academicSession = super.instanciateOne();
-		academicSession.setSchool(inject(SchoolBusiness.class).findDefault());
+		academicSession.setSchool(inject(SchoolBusiness.class).findDefaulted());
 		return academicSession;
 	}
-	
+		
 	@Override
 	public AcademicSession instanciateOne(String[] values) {
 		AcademicSession academicSession = instanciateOne();
@@ -109,6 +102,21 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 		academicSession.setName(values[index++]);
 		academicSession.getGlobalIdentifierCreateIfNull().getExistencePeriod().setFromDate(inject(TimeBusiness.class).parse(values[index++]));
     	academicSession.getExistencePeriod().setToDate(inject(TimeBusiness.class).parse(values[index++]));
+    	
+    	if(values.length > index && StringUtils.isNotBlank(values[index])){
+    		academicSession.setDefaulted(Boolean.valueOf(values[index]));
+		}
+    	
 		return academicSession;
+	}
+
+	@Override
+	public AcademicSession findDefaultedBySchool(School school) {
+		return dao.readDefaultedBySchool(school);
+	}
+	
+	@Override
+	public AcademicSession findDefaultedSchoolDefaulted() {
+		return findDefaultedBySchool(inject(SchoolBusiness.class).findDefaulted());
 	}
 }

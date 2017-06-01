@@ -38,7 +38,8 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	@ManyToOne @JoinColumn(name=COLUMN_ACADEMIC_SESSION) @NotNull private AcademicSession academicSession;
 	@ManyToOne @JoinColumn(name=COLUMN_LEVEL_TIME_DIVISION) @NotNull private LevelTimeDivision levelTimeDivision;
 	@ManyToOne @JoinColumn(name=COLUMN_SUFFIX) private ClassroomSessionSuffix suffix;
-	@ManyToOne private Teacher coordinator;
+	@ManyToOne @JoinColumn(name=COLUMN_COORDINATOR) private Teacher coordinator;
+	
 	@Embedded private CommonNodeInformations nodeInformations;
 	@Embedded private NodeResults results = new NodeResults();
 	
@@ -99,6 +100,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	public static final String COLUMN_ACADEMIC_SESSION = "academicSession";
 	public static final String COLUMN_LEVEL_TIME_DIVISION = "levelTimeDivision";
 	public static final String COLUMN_SUFFIX = "suffix";
+	public static final String COLUMN_COORDINATOR = "coordinator";
 	
 	/**/
 	

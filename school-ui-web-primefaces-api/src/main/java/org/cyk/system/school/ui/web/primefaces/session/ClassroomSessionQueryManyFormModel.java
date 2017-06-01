@@ -13,6 +13,9 @@ import java.util.Set;
 
 import javax.faces.model.SelectItem;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
@@ -20,11 +23,9 @@ import org.cyk.system.root.business.api.file.FileRepresentationTypeBusiness;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
-import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.TimeDivisionType;
-import org.cyk.system.root.persistence.api.party.person.PersonRelationshipTypeDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -69,9 +70,6 @@ import org.primefaces.extensions.model.dynaform.DynaFormLabel;
 import org.primefaces.extensions.model.dynaform.DynaFormModel;
 import org.primefaces.extensions.model.dynaform.DynaFormRow;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Getter @Setter @FieldOverrides(value={@FieldOverride(name=AbstractQueryManyFormModel.FIELD_IDENTIFIABLES,type=ClassroomSession.class)})
 public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSessionQueryManyFormModel<ClassroomSession> implements Serializable {
 	private static final long serialVersionUID = -3756660150800681378L;
@@ -107,7 +105,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				Collection<ClassroomSession> classroomSessions = ((AbstractQueryManyFormModel)data).getIdentifiables();
 				
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionsByOrderNumber(classroomSessions,
-						inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				
 				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisions(classroomSessionDivisions);
 				
@@ -292,7 +290,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		
 		private Collection<StudentClassroomSessionDivision> getStudentClassroomSessionDivision(Collection<ClassroomSession> classroomSessions){
 			Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionsByOrderNumber(classroomSessions,
-					inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+					inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 			Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisions(classroomSessionDivisions);
 			return studentClassroomSessionDivisions;
 		}
@@ -304,7 +302,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			
 			if(SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
 				/*Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionsByOrderNumber(classroomSessions,
-						inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionBusiness.class).findByClassroomSessionDivisions(classroomSessionDivisions);
 				*/
 				WebNavigationManager.getInstance().redirectToFileConsultManyPage( inject(ClassroomSessionBusiness.class)
@@ -312,7 +310,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 						,getStudentClassroomSessionDivision(classroomSessions), FileExtension.PDF);
 			}else if(schoolBusinessLayer.getActionUpdateStudentClassroomSessionDivisionReportFiles().equals(actionIdentifier)){
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
-						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				ServiceCallArguments callArguments = new ServiceCallArguments();
 				callArguments.setExecutionProgress(page.getExecutionProgress());
 				Form form = (Form) data; 
@@ -326,7 +324,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 					,schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionEvaluationResults(),schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionRankResults()}
 				, actionIdentifier)){
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
-						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				ServiceCallArguments callArguments = new ServiceCallArguments();
 				callArguments.setExecutionProgress(page.getExecutionProgress());
 				if(schoolBusinessLayer.getActionComputeStudentClassroomSessionDivisionAttendanceResults().equals(actionIdentifier))
@@ -364,7 +362,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 						,inject(StudentClassroomSessionBusiness.class).findByClassroomSessions(classroomSessions),actionIdentifier);
 			}else if(schoolBusinessLayer.getActionUpdateClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
-						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				ServiceCallArguments callArguments = new ServiceCallArguments();
 				callArguments.setExecutionProgress(page.getExecutionProgress());
 				Form form = (Form) data;
@@ -377,7 +375,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				inject(GenericBusiness.class).createReportFiles(classroomSessionDivisions, SchoolConstant.Code.ReportTemplate.CLASSROOM_SESSION_DIVISION_BROAD_SHEET,fieldSortingMap);		
 			}else if(SchoolBusinessLayer.getInstance().getActionConsultClassroomSessionDivisionBroadsheet().equals(actionIdentifier)){
 				Collection<ClassroomSessionDivision> classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class)
-						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getCurrentClassroomSessionDivisionIndex());
+						.findByClassroomSessionsByOrderNumber(classroomSessions,inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
 				WebNavigationManager.getInstance().redirectToFileConsultManyPage( inject(FileRepresentationTypeBusiness.class)
 						.find(Arrays.asList(SchoolConstant.Code.ReportTemplate.CLASSROOM_SESSION_DIVISION_BROAD_SHEET)),classroomSessionDivisions, FileExtension.PDF);
 			}

@@ -1,13 +1,11 @@
 package org.cyk.system.school.model.session;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -26,20 +24,20 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 
 	private static final long serialVersionUID = 2742833783679362737L;
 	
-	@ManyToOne @NotNull private School school;
+	@ManyToOne @JoinColumn(name=COLUMN_SCHOOL) @NotNull private School school;
 		
 	@Embedded private CommonNodeInformations nodeInformations;
 	
-	@Temporal(value=TemporalType.DATE) private Date nextStartingDate;//TODO to be deleted. look for the next to get the from date
+	//@Temporal(value=TemporalType.DATE) private Date nextStartingDate;//TODO to be deleted. look for the next to get the from date
 	
 	@Transient private IdentifiableRuntimeCollection<LevelGroup> levelGroups = new IdentifiableRuntimeCollection<>();
 	@Transient private IdentifiableRuntimeCollection<LevelName> levelNames = new IdentifiableRuntimeCollection<>();
 	
-	public AcademicSession(School school,CommonNodeInformations nodeInformations,Date nextStartingDate) {
+	public AcademicSession(School school,CommonNodeInformations nodeInformations/*,Date nextStartingDate*/) {
 		super();
 		this.school = school;
 		this.nodeInformations = nodeInformations;
-		this.nextStartingDate = nextStartingDate;
+		//this.nextStartingDate = nextStartingDate;
 	} 
 	
 	public CommonNodeInformations getNodeInformations(){
@@ -52,6 +50,7 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 	
 	public static final String FIELD_SCHOOL = "school";
 	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
-	public static final String FIELD_NEXT_STARTING_DATE = "nextStartingDate";
+	//public static final String FIELD_NEXT_STARTING_DATE = "nextStartingDate";
 	
+	public static final String COLUMN_SCHOOL = "school";
 }

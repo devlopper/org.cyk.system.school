@@ -170,8 +170,9 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducerOLD extends Abstr
 			report.addLabelValue("PROMOTION INFORMATION",
 					classroomSessionResults.getEvaluationSort().getAveragePromotedInterval()==null?NULL_VALUE:classroomSessionResults.getEvaluationSort()
 							.getAveragePromotedInterval().getName().toUpperCase());
-			report.addLabelValue("NEXT ACADEMIC SESSION",format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
-					.getAcademicSession().getNextStartingDate()));
+			//TODO we need to get the next academic session and get the starting date
+			report.addLabelValue("NEXT ACADEMIC SESSION",/*format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
+					.getAcademicSession().getNextStartingDate())*/"TO COMPUTE");
 			
 		}else{
 			ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)

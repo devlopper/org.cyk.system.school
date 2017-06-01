@@ -12,6 +12,7 @@ import org.cyk.system.school.business.impl.session.AcademicSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.LevelDetails;
+import org.cyk.system.school.business.impl.session.LevelGroupDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.SchoolDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
@@ -51,10 +52,10 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryManyFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionQueryOneFormModel;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
-import org.cyk.system.school.ui.web.primefaces.session.LevelGroupForm;
 import org.cyk.system.school.ui.web.primefaces.session.LevelGroupTypeForm;
 import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.SchoolEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionEditPage;
@@ -98,7 +99,9 @@ public abstract class AbstractSchoolContextListener extends AbstractCompanyConte
 		//identifiableConfiguration.setForms(ClassroomSessionEditPage.Form.class, ClassroomSessionDetails.class);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(LevelGroupType.class, LevelGroupTypeForm.class, LevelGroupTypeForm.class,null,null,null));
-		uiManager.registerConfiguration(new IdentifiableConfiguration(LevelGroup.class, LevelGroupForm.class, LevelGroupForm.class,null,null,null));
+		
+		uiManager.registerConfiguration(new IdentifiableConfiguration(LevelGroup.class, LevelGroupEditPage.Form.class, LevelGroupDetails.class,null,null,null));
+		uiManager.configBusinessIdentifiable(LevelGroup.class, null);
 		
 		uiManager.registerConfiguration(new IdentifiableConfiguration(School.class, SchoolEditPage.Form.class, SchoolDetails.class,null,null,null));
 		uiManager.configBusinessIdentifiable(School.class, null);

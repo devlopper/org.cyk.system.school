@@ -29,7 +29,7 @@ public class StudentClassroomSessionDivisionEditManyEvaluationAveragePage extend
 	protected void initialisation() {
 		super.initialisation();
 		gradeIntervals = webManager.getSelectItems(Interval.class, inject(IntervalBusiness.class)
-				.findByCollection(inject(AcademicSessionBusiness.class).findCurrent(null).getNodeInformations().getStudentClassroomSessionAverageScale()));
+				.findByCollection(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getNodeInformations().getStudentClassroomSessionAverageScale()));
 		for(SelectItem selectItem : gradeIntervals)
 			if(selectItem.getValue()!=null)
 				selectItem.setLabel( ((Interval)selectItem.getValue()).getName());

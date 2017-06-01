@@ -100,8 +100,8 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	public ClassroomSession findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(String levelTimeDivisionCode,String suffixCode) {
 		LevelTimeDivision levelTimeDivision = inject(LevelTimeDivisionDao.class).read(levelTimeDivisionCode);
 		if(StringUtils.isBlank(suffixCode))
-			return dao.readWhereSuffixIsNullByAcademicSessionByLevelTimeDivision(inject(AcademicSessionBusiness.class).findCurrent(null), levelTimeDivision);
-		return findByAcademicSessionByLevelTimeDivisionBySuffix(inject(AcademicSessionBusiness.class).findCurrent(null), levelTimeDivision
+			return dao.readWhereSuffixIsNullByAcademicSessionByLevelTimeDivision(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted(), levelTimeDivision);
+		return findByAcademicSessionByLevelTimeDivisionBySuffix(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted(), levelTimeDivision
 				, inject(ClassroomSessionSuffixDao.class).read(suffixCode));
 	}
 	
@@ -211,13 +211,13 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	protected void prepareFindByCriteria(AbstractFieldValueSearchCriteriaSet searchCriteria) {
 		super.prepareFindByCriteria(searchCriteria);
 		if(((SearchCriteria)searchCriteria).getAcademicSessions().isEmpty())
-			((SearchCriteria)searchCriteria).addAcademicSession(inject(AcademicSessionBusiness.class).findCurrent(null));
+			((SearchCriteria)searchCriteria).addAcademicSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted());
 	}
 	
 	@Override
 	public ClassroomSession instanciateOne() {
 		ClassroomSession classroomSession = super.instanciateOne();
-		classroomSession.setAcademicSession(inject(AcademicSessionBusiness.class).findCurrent(null));
+		classroomSession.setAcademicSession(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted());
 		return classroomSession;
 	}
 	

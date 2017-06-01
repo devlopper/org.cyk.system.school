@@ -106,7 +106,7 @@ public class StudentBusinessImpl extends AbstractActorBusinessImpl<Student, Stud
 						if(StringUtils.isBlank(student.getCode())){
 							NumberStringFormatter orderNumberFormatter = new NumberStringFormatter(inject(StudentDao.class).countAll()+1,null);
 							orderNumberFormatter.setWidth(4);
-							student.setCode(getCodePrefix()+Constant.CHARACTER_SLASH+inject(TimeBusiness.class).findYear(inject(AcademicSessionBusiness.class).findCurrent(null).getBirthDate())
+							student.setCode(getCodePrefix()+Constant.CHARACTER_SLASH+inject(TimeBusiness.class).findYear(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted().getBirthDate())
 									+inject(PersonBusiness.class).findInitials(student.getPerson())+inject(NumberBusiness.class).format(orderNumberFormatter)
 									+Constant.CHARACTER_HYPHEN+student.getAdmissionLevelTimeDivision().getLevel().getGroup().getCode()
 									);

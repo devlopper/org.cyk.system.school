@@ -7,19 +7,28 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.system.school.model.session.LevelGroup;
-import org.cyk.utility.common.annotation.user.interfaces.Input;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
+import org.cyk.utility.common.annotation.user.interfaces.IncludeInputs;
 
 @Getter @Setter
 public class LevelGroupDetails extends AbstractOutputDetails<LevelGroup> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private FieldValue studentClassroomSessionDivisionResultsReportSigner;
+	@IncludeInputs private CommonNodeInformationsDetails nodeInformations;
 	
 	public LevelGroupDetails(LevelGroup levelGroup) {
 		super(levelGroup);
-		studentClassroomSessionDivisionResultsReportSigner = new FieldValue(levelGroup.getNodeInformations().getStudentClassroomSessionDivisionResultsReportSigner());
 	}
 	
-	public static final String FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER = "studentClassroomSessionDivisionResultsReportSigner";
+	@Override
+	public void setMaster(LevelGroup levelGroup) {
+		super.setMaster(levelGroup);
+		if(levelGroup!=null){
+			if(nodeInformations==null)
+				nodeInformations = new CommonNodeInformationsDetails(levelGroup.getNodeInformations());
+			else
+				nodeInformations.setMaster(levelGroup.getNodeInformations());
+		}
+	}
+	
+	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
 }

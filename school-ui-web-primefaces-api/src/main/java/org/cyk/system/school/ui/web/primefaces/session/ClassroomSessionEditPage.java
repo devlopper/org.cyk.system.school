@@ -11,17 +11,18 @@ import lombok.Setter;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.ui.web.primefaces.CommonNodeInformationsFormModel;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
+import org.cyk.utility.common.annotation.user.interfaces.IncludeInputs;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoiceAutoComplete;
-import org.cyk.utility.common.annotation.user.interfaces.InputNumber;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneAutoComplete;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSession> implements Serializable {
@@ -33,20 +34,21 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 		
 		@Input @InputChoice @InputOneChoice @InputOneCombo private AcademicSession academicSession;
 		@Input @InputChoice @InputOneChoice @InputOneCombo private LevelTimeDivision levelTimeDivision;
-		@Input @InputText private String suffix;
+		@Input @InputChoice @InputOneChoice @InputOneCombo private ClassroomSessionSuffix suffix;
 		@Input @InputChoice @InputChoiceAutoComplete @InputOneChoice @InputOneAutoComplete private Teacher coordinator;
-		@Input @InputNumber private Integer numberOfStudent;
+		
+		@IncludeInputs private CommonNodeInformationsFormModel nodeInformations;
 		
 		@Override
 		public void read() {
 			super.read();
-			numberOfStudent = identifiable.getResults().getNumberOfStudent();
+			
 		}
 		
 		@Override
 		public void write() {
 			super.write();
-			identifiable.getResults().setNumberOfStudent(numberOfStudent);
+			
 		}
 		
 		/**/
@@ -54,8 +56,8 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 		public static final String FIELD_ACADEMIC_SESSION = "academicSession";
 		public static final String FIELD_LEVEL_TIME_DIVISION = "levelTimeDivision";
 		public static final String FIELD_SUFFIX = "suffix";
-		public static final String FIELD_NUMBER_OF_STUDENT = "numberOfStudent";
 		public static final String FIELD_COORDINATOR = "coordinator";
+		public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
 		
 	}
 

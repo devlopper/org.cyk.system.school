@@ -39,7 +39,7 @@ public class StudentClassroomSessionEditPage extends AbstractCrudOnePage<Student
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		setChoices(Form.FIELD_CLASSROOM_SESSION, inject(ClassroomSessionBusiness.class).findByAcademicSession(
-				inject(AcademicSessionBusiness.class).findCurrent(null)),identifiable.getClassroomSession());
+				inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted()),identifiable.getClassroomSession());
 	}
 		
 	public static class Form extends AbstractFormModel<StudentClassroomSession> implements Serializable{

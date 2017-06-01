@@ -7,12 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
-import org.cyk.system.company.model.structure.OwnedCompany;
-import org.cyk.system.root.model.AbstractIdentifiable;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import org.cyk.system.company.model.structure.OwnedCompany;
+import org.cyk.system.root.model.AbstractIdentifiable;
 
 @Getter @Setter @Entity @NoArgsConstructor
 public class School extends AbstractIdentifiable implements Serializable {

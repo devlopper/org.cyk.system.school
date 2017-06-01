@@ -72,7 +72,7 @@ public class StudentClassroomSessionDivisionQueryManyFormModel extends AbstractS
 				
 		@Override
 		public Collection<StudentClassroomSessionDivision> getIdentifiables(AbstractSelectManyPage<?> page) {
-			AcademicSession academicSession = inject(AcademicSessionBusiness.class).findCurrent(null);
+			AcademicSession academicSession = inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted();
 			if(SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles().equals(page.getActionIdentifier())){
 				return inject(StudentClassroomSessionDivisionBusiness.class).findByAcademicSessionByClassroomSessionDivisionOrderNumber(
 						academicSession,academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex());
