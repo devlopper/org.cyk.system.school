@@ -15,5 +15,6 @@ public interface ClassroomSessionDivisionSubjectBusiness extends TypedBusiness<C
 	Collection<ClassroomSessionDivisionSubject> findByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 	Collection<ClassroomSessionDivisionSubject> findByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision, Teacher teacher);
 	ClassroomSessionDivisionSubject findByClassroomSessionDivisionBySubject(ClassroomSessionDivision classroomSessionDivision, Subject subject);
+	ClassroomSessionDivisionSubject instanciateOne(ClassroomSessionDivision classroomSessionDivision,Subject subject);
 	
 }

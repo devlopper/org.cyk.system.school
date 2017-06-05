@@ -13,6 +13,11 @@
  		<ui:param name="pageController" value="#{classroomSessionEditPage}" />
  		<ui:define name="body">
  			<cyk:formOneData value="#{classroomSessionEditPage.form}"/>
+ 			<cyk:itemCollection value="#{classroomSessionEditPage.subjectClassroomSessionCollection}" >
+ 				<p:column headerText="#{uiManager.text('field.name')}" >
+ 					<h:outputText value="#{item.label}" />
+ 				</p:column>
+ 			</cyk:itemCollection>
  		</ui:define>
  		
  		<ui:define name="contentMenuBar">

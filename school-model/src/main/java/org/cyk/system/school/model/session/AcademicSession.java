@@ -46,6 +46,16 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 		return nodeInformations;
 	}
 	
+	@Override
+	public String getUiString() {
+		return getCode();
+	}
+	
+	@Override
+	public String toString() {
+		return getCode();
+	}
+	
 	/**/
 	
 	public static final String FIELD_SCHOOL = "school";

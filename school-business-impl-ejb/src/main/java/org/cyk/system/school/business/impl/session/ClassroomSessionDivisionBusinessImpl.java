@@ -41,6 +41,7 @@ import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.utility.common.Constant;
 
 @Stateless
@@ -79,7 +80,13 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
 		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
 	}
-		
+	
+	@Override
+	protected void beforeDelete(ClassroomSessionDivision classroomSessionDivision) {
+		super.beforeDelete(classroomSessionDivision);
+		inject(ClassroomSessionDivisionSubjectBusiness.class).delete(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision));
+	}
+	
 	@Override
 	public void computeResults(Collection<ClassroomSessionDivision> classroomSessionDivisions,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions) {
 		for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
@@ -236,6 +243,13 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		return classroomSessionDivision;
 	}
 
-	
+	@Override
+	public ClassroomSessionDivision instanciateOne(ClassroomSession classroomSession,Long orderNumber) {
+		ClassroomSessionDivision classroomSessionDivision = instanciateOne();
+		classroomSessionDivision.setClassroomSession(classroomSession);
+		classroomSessionDivision.setOrderNumber(orderNumber);
+		classroomSessionDivision.setTimeDivisionType(classroomSession.getNodeInformations().getClassroomSessionTimeDivisionType());
+		return classroomSessionDivision;
+	}	
 	
 }

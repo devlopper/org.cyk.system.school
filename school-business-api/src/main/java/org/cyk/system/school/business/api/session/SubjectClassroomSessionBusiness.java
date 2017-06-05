@@ -10,6 +10,7 @@ import org.cyk.system.school.model.subject.Subject;
 
 public interface SubjectClassroomSessionBusiness extends TypedBusiness<SubjectClassroomSession> {
 
+	SubjectClassroomSession instanciateOne(Subject subject,ClassroomSession classroomSession);
 	Collection<SubjectClassroomSession> findBySubject(Subject subject);
 	Collection<SubjectClassroomSession> findByClassroomSession(ClassroomSession classroomSession);
 	SubjectClassroomSession findBySubjectByClassroomSession(Subject subject,ClassroomSession classroomSession);

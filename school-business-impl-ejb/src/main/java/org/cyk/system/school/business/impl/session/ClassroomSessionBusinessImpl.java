@@ -26,6 +26,7 @@ import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -38,8 +39,10 @@ import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
+import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
 import org.cyk.utility.common.Constant;
 
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
@@ -65,6 +68,13 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 			inject(ClassroomSessionDivisionBusiness.class).create(classroomSession.getDivisions().getCollection());
 	}
 
+	@Override
+	protected void beforeDelete(ClassroomSession classroomSession) {
+		super.beforeDelete(classroomSession);
+		inject(ClassroomSessionDivisionBusiness.class).delete(inject(ClassroomSessionDivisionDao.class).readByClassroomSession(classroomSession));
+		inject(SubjectClassroomSessionBusiness.class).delete(inject(SubjectClassroomSessionDao.class).readByClassroomSession(classroomSession));
+	}
+	
 	@Override
 	public void computeResults(Collection<ClassroomSession> classroomSessions,Collection<StudentClassroomSession> studentClassroomSessions) {
 		for(ClassroomSession classroomSession : classroomSessions){

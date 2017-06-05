@@ -28,5 +28,7 @@ public interface ClassroomSessionDivisionBusiness extends TypedBusiness<Classroo
 	
 	Collection<ClassroomSessionDivision> findByLevelTimeDivisionCodeByClassroomSessionSuffixCodeByClassroomSessionDivisionOrderNumber(String levelTimeDivisionCode,String classroomSessionSuffixCode,Long classroomSessionDivisionOrderNumber);
 	Collection<ClassroomSessionDivision> findByLevelTimeDivisionCodeByClassroomSessionDivisionOrderNumber(String levelTimeDivisionCode,Long classroomSessionDivisionOrderNumber);
+
+	ClassroomSessionDivision instanciateOne(ClassroomSession classroomSession,Long orderNumber);
 	
 }

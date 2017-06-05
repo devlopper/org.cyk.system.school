@@ -89,14 +89,12 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	}
 	
 	protected void configureAcademicSessionClass() {
-		getFormConfiguration(AcademicSession.class, Crud.CREATE).addFieldNames(AcademicSessionEditPage.Form.FIELD_EXISTENCE_PERIOD
-				,AcademicSessionEditPage.Form.FIELD_NODE_INFORMATIONS, CommonNodeInformationsFormModel.FIELD_AGGREGATE_ATTENDANCE
-				,CommonNodeInformationsFormModel.FIELD_ATTENDANCE_TIME_DIVISION_TYPE,CommonNodeInformationsFormModel.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL
-				,CommonNodeInformationsFormModel.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE,CommonNodeInformationsFormModel.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX
-				,CommonNodeInformationsFormModel.FIELD_EVALUATION_PASS_AVERAGE,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE
-				,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE
-				,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE
-				,CommonNodeInformationsFormModel.FIELD_STUDENT_SUBJECT_AVERAGE_SCALE,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE);
+		getFormConfiguration(AcademicSession.class, Crud.CREATE).addFieldNames(AcademicSessionEditPage.Form.FIELD_DEFAULTED,AcademicSessionEditPage.Form.FIELD_EXISTENCE_PERIOD
+				,AcademicSessionEditPage.Form.FIELD_NODE_INFORMATIONS,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE)
+				.addFieldNames(CommonNodeInformationsFormModel.ALL_FIELDS);
+		
+		getFormConfiguration(AcademicSession.class, Crud.READ).addFieldNames(AcademicSessionEditPage.Form.FIELD_DEFAULTED
+				,AcademicSessionEditPage.Form.FIELD_EXISTENCE_PERIOD,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE);
 		
 		registerDetailsConfiguration(AcademicSessionDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
@@ -108,7 +106,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					@Override
 					public Boolean build(Object data,Field field) {
 						if(data instanceof AcademicSessionDetails)
-							return isFieldNameIn(field,AcademicSessionDetails.FIELD_SCHOOL,AcademicSessionDetails.FIELD_NODE_INFORMATIONS
+							return isFieldNameIn(field,AcademicSessionDetails.FIELD_DEFAULTED,AcademicSessionDetails.FIELD_SCHOOL,AcademicSessionDetails.FIELD_NODE_INFORMATIONS
 									,AcademicSessionDetails.FIELD_EXISTENCE_PERIOD);
 						if(data instanceof PeriodDetails)
 							return isFieldNameIn(field,PeriodDetails.FIELD_FROM_DATE,PeriodDetails.FIELD_TO_DATE);
@@ -193,6 +191,11 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	
 	protected void configureClassroomSessionClass() {
 		getFormConfiguration(ClassroomSession.class, Crud.CREATE).addRequiredFieldNames(ClassroomSessionEditPage.Form.FIELD_ACADEMIC_SESSION
+				,ClassroomSessionEditPage.Form.FIELD_LEVEL_TIME_DIVISION).addFieldNames(ClassroomSessionEditPage.Form.FIELD_COORDINATOR
+				,ClassroomSessionEditPage.Form.FIELD_SUFFIX,ClassroomSessionEditPage.Form.FIELD_ONE_SUBJECT_SELECTED,ClassroomSessionEditPage.Form.FIELD_NODE_INFORMATIONS)
+				.addFieldNames(CommonNodeInformationsFormModel.ALL_FIELDS);
+		
+		getFormConfiguration(ClassroomSession.class, Crud.READ).addRequiredFieldNames(ClassroomSessionEditPage.Form.FIELD_ACADEMIC_SESSION
 				,ClassroomSessionEditPage.Form.FIELD_LEVEL_TIME_DIVISION).addFieldNames(ClassroomSessionEditPage.Form.FIELD_COORDINATOR
 				,ClassroomSessionEditPage.Form.FIELD_SUFFIX);
 		

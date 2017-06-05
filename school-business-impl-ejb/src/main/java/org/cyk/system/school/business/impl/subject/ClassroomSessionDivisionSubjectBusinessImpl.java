@@ -101,8 +101,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	protected void beforeDelete(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		super.beforeDelete(classroomSessionDivisionSubject);
 		cascade(classroomSessionDivisionSubject);
-		for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject))
-			inject(StudentClassroomSessionDivisionSubjectBusiness.class).delete(studentClassroomSessionDivisionSubject);
+		inject(StudentClassroomSessionDivisionSubjectBusiness.class).delete(inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
 	
 	//TODO should be factored in higher class
@@ -186,6 +185,14 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		if(StringUtils.isNotBlank(value = values[index++]))
 			classroomSessionDivisionSubject.setGroup(inject(ClassroomSessionDivisionSubjectGroupDao.class).read(value));
 		*/
+		return classroomSessionDivisionSubject;
+	}
+	
+	@Override
+	public ClassroomSessionDivisionSubject instanciateOne(ClassroomSessionDivision classroomSessionDivision,Subject subject) {
+		ClassroomSessionDivisionSubject classroomSessionDivisionSubject = instanciateOne();
+		classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
+		classroomSessionDivisionSubject.setSubject(subject);
 		return classroomSessionDivisionSubject;
 	}
 	

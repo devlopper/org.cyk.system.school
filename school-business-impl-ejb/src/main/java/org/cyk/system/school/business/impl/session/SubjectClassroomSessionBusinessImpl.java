@@ -31,6 +31,14 @@ public class SubjectClassroomSessionBusinessImpl extends AbstractTypedBusinessSe
 	}
 	
 	@Override
+	public SubjectClassroomSession instanciateOne(Subject subject, ClassroomSession classroomSession) {
+		SubjectClassroomSession subjectClassroomSession = instanciateOne();
+		subjectClassroomSession.setSubject(subject);
+		subjectClassroomSession.setClassroomSession(classroomSession);
+		return subjectClassroomSession;
+	}
+	
+	@Override
 	protected void afterCreate(SubjectClassroomSession subjectClassroomSession) {
 		super.afterCreate(subjectClassroomSession);		
 		if(Boolean.TRUE.equals(subjectClassroomSession.getCascadeOperationToChildren())){

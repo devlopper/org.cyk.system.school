@@ -81,5 +81,12 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 		return classroomSessionDivisionSubjectEvaluationType;
 	}
 
-	
+	@Override
+	public ClassroomSessionDivisionSubjectEvaluationType instancaiteOne(ClassroomSessionDivisionSubject classroomSessionDivisionSubject, EvaluationType evaluationType) {
+		ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = instanciateOne();
+		classroomSessionDivisionSubjectEvaluationType.setClassroomSessionDivisionSubject(classroomSessionDivisionSubject);
+		classroomSessionDivisionSubjectEvaluationType.setEvaluationType(evaluationType);
+		classroomSessionDivisionSubjectEvaluationType.setMaximumValue(evaluationType.getMaximum());
+		return classroomSessionDivisionSubjectEvaluationType;
+	}
 }
