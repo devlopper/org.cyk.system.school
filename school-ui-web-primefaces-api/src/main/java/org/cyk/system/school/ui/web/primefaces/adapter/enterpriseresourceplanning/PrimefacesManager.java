@@ -55,6 +55,7 @@ import org.cyk.ui.web.primefaces.UserSession;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.AbstractPrimefacesPage;
 import org.cyk.ui.web.primefaces.page.DetailsConfiguration;
+import org.cyk.utility.common.helper.FieldHelper;
 
 public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.adapter.enterpriseresourceplanning.PrimefacesManager implements Serializable {
 
@@ -91,7 +92,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	protected void configureAcademicSessionClass() {
 		getFormConfiguration(AcademicSession.class, Crud.CREATE).addFieldNames(AcademicSessionEditPage.Form.FIELD_DEFAULTED,AcademicSessionEditPage.Form.FIELD_EXISTENCE_PERIOD
 				,AcademicSessionEditPage.Form.FIELD_NODE_INFORMATIONS,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE)
-				.addFieldNames(CommonNodeInformationsFormModel.ALL_FIELDS);
+				.addFieldNames(new FieldHelper().getNamesWhereReferencedByStaticField(CommonNodeInformationsFormModel.class));
 		
 		getFormConfiguration(AcademicSession.class, Crud.READ).addFieldNames(AcademicSessionEditPage.Form.FIELD_DEFAULTED
 				,AcademicSessionEditPage.Form.FIELD_EXISTENCE_PERIOD,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE);
@@ -193,7 +194,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		getFormConfiguration(ClassroomSession.class, Crud.CREATE).addRequiredFieldNames(ClassroomSessionEditPage.Form.FIELD_ACADEMIC_SESSION
 				,ClassroomSessionEditPage.Form.FIELD_LEVEL_TIME_DIVISION).addFieldNames(ClassroomSessionEditPage.Form.FIELD_COORDINATOR
 				,ClassroomSessionEditPage.Form.FIELD_SUFFIX,ClassroomSessionEditPage.Form.FIELD_ONE_SUBJECT_SELECTED,ClassroomSessionEditPage.Form.FIELD_NODE_INFORMATIONS)
-				.addFieldNames(CommonNodeInformationsFormModel.ALL_FIELDS);
+				.addFieldNames(new FieldHelper().getNamesWhereReferencedByStaticField(CommonNodeInformationsFormModel.class));
 		
 		getFormConfiguration(ClassroomSession.class, Crud.READ).addRequiredFieldNames(ClassroomSessionEditPage.Form.FIELD_ACADEMIC_SESSION
 				,ClassroomSessionEditPage.Form.FIELD_LEVEL_TIME_DIVISION).addFieldNames(ClassroomSessionEditPage.Form.FIELD_COORDINATOR
