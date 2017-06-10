@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import javax.persistence.NoResultException;
 
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.root.persistence.impl.QueryWrapper;
 import org.cyk.system.school.model.actor.Teacher;
@@ -21,7 +23,7 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 	private static final long serialVersionUID = 6306356272165070761L;
 
    private String readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readByClassroomSessions,readByClassroomSessionDivisionByTeacher
-   	,readByClassroomSessionBySubject,readByClassroomSessionDivisionBySubject,readWhereStudentExistByClassroomSessionDivision;
+   	,readByClassroomSessionBySubject,readByClassroomSessionDivisionBySubject,readWhereStudentExistByClassroomSessionDivision,readByClassroomSessionDivisionOrderNumber;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -43,6 +45,10 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
         registerNamedQuery(readWhereStudentExistByClassroomSessionDivision, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
         		.and().whereString(" EXISTS( SELECT studentClassroomSessionDivisionSubject FROM StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject "
         				+ "WHERE studentClassroomSessionDivisionSubject.classroomSessionDivisionSubject = r ) "));
+        
+        registerNamedQuery(readByClassroomSessionDivisionOrderNumber, _select().where(commonUtils.attributePath(
+        		ClassroomSessionDivisionSubject.COLUMN_CLASSROOM_SESSION_DIVISION,AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER
+        		, GlobalIdentifier.FIELD_ORDER_NUMBER),GlobalIdentifier.FIELD_ORDER_NUMBER));
         
     }
     
@@ -104,6 +110,12 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 	@Override
 	public Collection<ClassroomSessionDivisionSubject> readWhereStudentExistByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
 		return namedQuery(readWhereStudentExistByClassroomSessionDivision).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision)
+				.resultMany();
+	}
+
+	@Override
+	public Collection<ClassroomSessionDivisionSubject> readByClassroomSessionDivisionOrderNumber(Long classroomSessionDivisionOrderNumber) {
+		return namedQuery(readByClassroomSessionDivisionOrderNumber).parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber)
 				.resultMany();
 	}
 }

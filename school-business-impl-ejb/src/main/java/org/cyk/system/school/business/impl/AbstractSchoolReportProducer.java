@@ -633,24 +633,28 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		}
 		
 		protected void addSchoolCommunications(StudentClassroomSessionDivisionReportTemplateFile report,StudentClassroomSessionDivision studentClassroomSessionDivision,String metricCollectionCode){
-			addMetricCollection(report, studentClassroomSessionDivision,metricCollectionCode);
+			
 			if(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==inject(ClassroomSessionBusiness.class)
 					.findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getClassroomSessionDivisionOrderNumberInterval().getHigh().getValue().intValue()){
-				/*StudentResults classroomSessionResults = inject(StudentClassroomSessionDao.class)
+				StudentResults classroomSessionResults = inject(StudentClassroomSessionDao.class)
 						.readByStudentByClassroomSession(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getResults();
-				
-				report.addLabelValue("ANNUAL AVERAGE",format(classroomSessionResults.getEvaluationSort().getAverage().getValue()));
-				report.addLabelValue("ANNUAL GRADE"
+				report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS");
+				if(!studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getCode().contains("K")){
+					report.addLabelValue("ANNUAL AVERAGE",format(classroomSessionResults.getEvaluationSort().getAverage().getValue()));
+					report.addLabelValue("ANNUAL GRADE"
 						,classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval()==null?NULL_VALUE:RootConstant.Code
 								.getRelativeCode(classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval()));
-				report.addLabelValue("ANNUAL RANK",inject(MathematicsBusiness.class).format(classroomSessionResults.getEvaluationSort().getRank()));
-				report.addLabelValue("PROMOTION INFORMATION",
+					report.addLabelValue("ANNUAL RANK",classroomSessionResults.getEvaluationSort().getRank().getValue()==null ? "" : inject(MathematicsBusiness.class).format(classroomSessionResults.getEvaluationSort().getRank()));
+					report.addLabelValue("PROMOTION INFORMATION",
 						classroomSessionResults.getEvaluationSort().getAveragePromotedInterval()==null?NULL_VALUE:classroomSessionResults.getEvaluationSort()
 								.getAveragePromotedInterval().getName().toUpperCase());
+				}
 				report.addLabelValue("NEXT ACADEMIC SESSION",format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 						.getAcademicSession().getNextStartingDate()));
-				*/
+				
 			}else{
+				addMetricCollection(report, studentClassroomSessionDivision,metricCollectionCode);
+				
 				ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
 						.readByClassroomSessionByOrderNumber(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 								,(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()+1));
@@ -660,11 +664,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 					
 					
 				}
-				
+			
+				report.getStudentClassroomSessionDivision().getClassroomSessionDivision().setSource(studentClassroomSessionDivision.getClassroomSessionDivision());
+				addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_SCHOOL_COMMUNICATION
+						, new Derive.Adapter.Default().addInputs(report,report.getStudentClassroomSessionDivision().getClassroomSessionDivision()),Boolean.FALSE);
 			}
-			report.getStudentClassroomSessionDivision().getClassroomSessionDivision().setSource(studentClassroomSessionDivision.getClassroomSessionDivision());
-			addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_SCHOOL_COMMUNICATION
-					, new Derive.Adapter.Default().addInputs(report,report.getStudentClassroomSessionDivision().getClassroomSessionDivision()),Boolean.FALSE);
+			
 		}
 		
 	}

@@ -63,6 +63,7 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
@@ -213,6 +214,16 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 				System.out.println("Building ("+(draft?"draft":"final")+") report of "+classroomSessionDivisions.size()+" classroom session divisions ("+classroomSessionDivisions+")");
 				CreateReportFileArguments.Builder<StudentClassroomSessionDivision> reportArgumentsBuilder =  new CreateReportFileArguments.Builder<StudentClassroomSessionDivision>(null)
 						.setIsDraft(draft);
+				studentClassroomSessionDivisionBusiness.updateResults(classroomSessionDivisions
+						, computeEvaluationResults, computeEvaluationResults, schoolBusinessLayer.getStudentEvaluationResultsRankOptions(), computeAttendanceResults, new ServiceCallArguments());
+					
+				for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisions){
+					if(classroomSessionDivision.getOrderNumber()==3){
+						inject(StudentClassroomSessionBusiness.class).updateResults(Arrays.asList(classroomSessionDivision.getClassroomSession()),Boolean.TRUE,Boolean.TRUE
+								,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),Boolean.FALSE,null);
+					}
+				}
+				
 				studentClassroomSessionDivisionBusiness.buildReport(classroomSessionDivisions,computeEvaluationResults,computeAttendanceResults,computeEvaluationResults,schoolBusinessLayer.getStudentEvaluationResultsRankOptions(),reportArgumentsBuilder,new ServiceCallArguments());
 				
 				if(Boolean.TRUE.equals(createFileOnDisk)){

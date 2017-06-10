@@ -66,6 +66,12 @@
 			<version>0.0.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.cyk.jasper.report.font</groupId>
+			<artifactId>jasper-report-font-dejavu</artifactId>
+			<version>0.0.1</version>
+			<scope>test</scope>
+		</dependency>
 		
 	</dependencies>	
 

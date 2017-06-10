@@ -6,21 +6,20 @@
 
     <jdbc-connection-pool datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" res-type="javax.sql.DataSource" name="ArquillianHsqlPool">
       <property name="servername" value="localhost"></property>
-      <property name="databasename" value="cyk_school_db"></property>
+      <property name="databasename" value="cyk_iesaschool_db"></property>
       <property name="user" value="root"></property>
       <property name="password" value="root"></property>
-      <property name="URL" value="jdbc:mysql://localhost:3306/cyk_school_db"></property>
+      <property name="URL" value="jdbc:mysql://localhost:3306/cyk_iesaschool_db"></property>
     </jdbc-connection-pool>
+    
+    <!--jdbc-connection-pool datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" res-type="javax.sql.DataSource" name="ArquillianHsqlPool">
+      <property name="servername" value="iesa-application.com"></property>
+      <property name="databasename" value="cyk_iesaschool_db"></property>
+      <property name="user" value="iesaroot"></property>
+      <property name="password" value="iES@P@Ssw0rd"></property>
+      <property name="URL" value="jdbc:mysql://iesa-application.com:3306/cyk_iesaschool_db"></property>
+    </jdbc-connection-pool-->
     
     <jdbc-resource pool-name="ArquillianHsqlPool" jndi-name="jdbc/arquillian" />
     	
-    <mail-resource host="smtp.gmail.com" jndi-name="mail/cyk_root" from="kycdev@gmail.com" user="kycdev@gmail.com">
-      <property name="mail.smtp.socketFactory.port" value="465"></property>
-      <property name="mail.smtp.port" value="465"></property>
-      <property name="mail.smtp.socketFactory.fallback" value="false"></property>
-      <property name="mail.smtp.auth" value="true"></property>
-      <property name="mail.smtp.password" value="p@ssw0rd*"></property>
-      <property name="mail.smtp.socketFactory.class" value="javax.net.ssl.SSLSocketFactory"></property>
-    </mail-resource>
-    
 </resources>

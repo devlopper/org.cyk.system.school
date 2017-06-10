@@ -23,7 +23,8 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
         
     @Override
     protected void businesses() {
-    	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();
+    	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
+    	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();    	
     	create(inject(TeacherBusiness.class).instanciateManyRandomly(5));
     	
     	Collection<ClassroomSession> classroomSessions = new ArrayList<>();
@@ -59,13 +60,14 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
+    	
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1);
     	
     	dataProducer.getDivisionOrderNumbers().clear();
     	dataProducer.getDivisionOrderNumbers().add(1l);
-    	//dataProducer.getDivisionOrderNumbers().add(2l);
-    	//dataProducer.getDivisionOrderNumbers().add(3l);
+    	dataProducer.getDivisionOrderNumbers().add(2l);
+    	dataProducer.getDivisionOrderNumbers().add(3l);
     	return dataProducer;
     }
         
