@@ -59,14 +59,14 @@ public class StudentClassroomSessionDivisionReportBusinessIT extends AbstractIes
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
-    	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
+    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
     	
-    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
+    	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1);
     	
     	dataProducer.getDivisionOrderNumbers().clear();
-    	dataProducer.getDivisionOrderNumbers().add(1l);
-    	dataProducer.getDivisionOrderNumbers().add(2l);
+    	//dataProducer.getDivisionOrderNumbers().add(1l);
+    	//dataProducer.getDivisionOrderNumbers().add(2l);
     	dataProducer.getDivisionOrderNumbers().add(3l);
     	return dataProducer;
     }

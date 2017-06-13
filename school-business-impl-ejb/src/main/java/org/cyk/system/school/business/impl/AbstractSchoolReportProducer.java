@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,6 +20,10 @@ import org.cyk.system.root.business.api.file.ScriptBusiness;
 import org.cyk.system.root.business.api.geography.ContactCollectionBusiness;
 import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionTypeBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricValueBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.api.value.ValueBusiness.Derive;
@@ -32,12 +37,18 @@ import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.LabelValueReport;
 import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.Average;
+import org.cyk.system.root.model.mathematics.Metric;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
+import org.cyk.system.root.model.mathematics.MetricValue;
+import org.cyk.system.root.model.mathematics.MetricValueIdentifiableGlobalIdentifier;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricValueDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricValueIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
@@ -639,16 +650,40 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				StudentResults classroomSessionResults = inject(StudentClassroomSessionDao.class)
 						.readByStudentByClassroomSession(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getResults();
 				report.addLabelValueCollection("HOME/SCHOOL COMMUNICATIONS");
+				String promotionInformation = null;
 				if(!studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getLevelTimeDivision().getLevel().getCode().contains("K")){
 					report.addLabelValue("ANNUAL AVERAGE",format(classroomSessionResults.getEvaluationSort().getAverage().getValue()));
 					report.addLabelValue("ANNUAL GRADE"
 						,classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval()==null?NULL_VALUE:RootConstant.Code
 								.getRelativeCode(classroomSessionResults.getEvaluationSort().getAverageAppreciatedInterval()));
 					report.addLabelValue("ANNUAL RANK",classroomSessionResults.getEvaluationSort().getRank().getValue()==null ? "" : inject(MathematicsBusiness.class).format(classroomSessionResults.getEvaluationSort().getRank()));
-					report.addLabelValue("PROMOTION INFORMATION",
-						classroomSessionResults.getEvaluationSort().getAveragePromotedInterval()==null?NULL_VALUE:classroomSessionResults.getEvaluationSort()
-								.getAveragePromotedInterval().getName().toUpperCase());
+					promotionInformation = classroomSessionResults.getEvaluationSort().getAveragePromotedInterval()==null?NULL_VALUE:classroomSessionResults.getEvaluationSort()
+										.getAveragePromotedInterval().getName().toUpperCase();
+					//report.addLabelValue("PROMOTION INFORMATION",
+					//	classroomSessionResults.getEvaluationSort().getAveragePromotedInterval()==null?NULL_VALUE:classroomSessionResults.getEvaluationSort()
+					//			.getAveragePromotedInterval().getName().toUpperCase());
+				}else{
+					/*Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeBusiness
+							.class).find(SchoolConstant.Code.MetricCollectionType._STUDENT)
+							, studentClassroomSessionDivision.getClassroomSessionDivision());
+					for(MetricCollection metricCollection : metricCollections){
+						if(metricCollection)
+					}*/
+					
+					MetricCollection metricCollection = inject(MetricCollectionDao.class).read(SchoolConstant.Code.MetricCollection.COMMUNICATION_KINDERGARTEN_STUDENT);
+					
+					for(MetricValue metricValue : inject(MetricValueBusiness.class).findByMetricsByIdentifiables(inject(MetricBusiness.class).findByCollection(metricCollection)
+							, Arrays.asList(studentClassroomSessionDivision))){
+						if(metricValue.getMetric().getCode().endsWith("_Promotionindanger")){
+							if(metricValue.getValue().get()!=null)
+								promotionInformation = ((Boolean)metricValue.getValue().get() ? "NOT " : Constant.EMPTY_STRING)+"PROMOTED";
+							break;
+						}
+						
+					}
+					
 				}
+				report.addLabelValue("PROMOTION INFORMATION",promotionInformation);
 				report.addLabelValue("NEXT ACADEMIC SESSION",format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 						.getAcademicSession().getNextStartingDate()));
 				
