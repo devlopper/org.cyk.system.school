@@ -8,6 +8,12 @@
 		<!-- ########################################### Private Navigations Cases ############################################### -->
 		
 		<navigation-case>
+			<from-outcome>studentClassroomSessionRankView</from-outcome>
+			<to-view-id>/private/studentclassroomsession/rank.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>subjectClassroomSessionEditView</from-outcome>
 			<to-view-id>/private/subjectclassroomsession/edit.jsf</to-view-id>
 			<redirect />
