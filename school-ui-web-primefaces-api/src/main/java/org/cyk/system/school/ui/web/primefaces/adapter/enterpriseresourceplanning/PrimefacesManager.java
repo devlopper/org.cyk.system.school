@@ -374,7 +374,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					public Boolean build(Object data,Field field) {
 						return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDetails.FIELD_STUDENT_CODE
 							,StudentClassroomSessionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDetails.FIELD_STUDENT_LASTNAMES
-							,StudentClassroomSessionDetails.FIELD_STUDENT_BIRTHDATE);
+							,StudentClassroomSessionDetails.FIELD_STUDENT_BIRTHDATE,StudentClassroomSessionDetails.FIELD_EVALUATION_AVERAGE_VALUE
+							,StudentClassroomSessionDetails.FIELD_EVALUATION_RANK_VALUE);
 					}
 				};
 			}
@@ -387,7 +388,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					public Boolean isColumn(Field field) {
 						return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDetails.FIELD_STUDENT_CODE
 							,StudentClassroomSessionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDetails.FIELD_STUDENT_LASTNAMES
-							,StudentClassroomSessionDetails.FIELD_STUDENT_BIRTHDATE);
+							,StudentClassroomSessionDetails.FIELD_STUDENT_BIRTHDATE,StudentClassroomSessionDetails.FIELD_EVALUATION_AVERAGE_VALUE
+							,StudentClassroomSessionDetails.FIELD_EVALUATION_RANK_VALUE);
 					}
 				};
 			}
@@ -409,7 +411,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					public Boolean build(Object data,Field field) {
 						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_CODE
 								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_LASTNAMES
-								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_BIRTHDATE);
+								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_BIRTHDATE,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
+								,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_RANK_VALUE);
 						//if(data instanceof StudentClassroomSessionDetails)
 						//	return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION);
 						
@@ -426,7 +429,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 						return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_CODE
 								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_LASTNAMES
 								,StudentClassroomSessionDivisionDetails.FIELD_STUDENT_BIRTHDATE,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE
-								,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION
+								,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_RANK_VALUE,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION
 								);
 						/*return isFieldNameIn(field,StudentClassroomSessionDivisionDetails.FIELD_STUDENT,StudentClassroomSessionDivisionDetails.FIELD_GLOBAL_APPRECIATION
 								,StudentClassroomSessionDivisionDetails.FIELD_EVALUATION_AVERAGE_VALUE);*/

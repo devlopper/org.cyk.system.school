@@ -8,6 +8,9 @@ import java.util.Set;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -25,11 +28,8 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.SubjectClassroomSession;
 import org.cyk.ui.web.primefaces.Table;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Named @ViewScoped @Getter @Setter
-public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<ClassroomSession,ClassroomSessionDetails,ClassroomSessionDivision,ClassroomSessionDivisionDetails,StudentClassroomSession,StudentClassroomSessionDetails,StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails> implements Serializable {
+public class ClassroomSessionConsultPageOLD extends AbstractClassLevelConsultPage<ClassroomSession,ClassroomSessionDetails,ClassroomSessionDivision,ClassroomSessionDivisionDetails,StudentClassroomSession,StudentClassroomSessionDetails,StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
@@ -44,21 +44,6 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			public Collection<SubjectClassroomSession> getIdentifiables() {
 				return inject(SubjectClassroomSessionBusiness.class).findByClassroomSession(identifiable);
 			}
-			/*
-			@Override
-			public org.cyk.ui.api.model.table.ColumnAdapter getColumnAdapter() {
-				return new org.cyk.ui.api.model.table.ColumnAdapter(){
-					private static final long serialVersionUID = 1L;
-					@Override
-					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field,StudentClassroomSessionDetails.FIELD_STUDENT_IMAGE,StudentClassroomSessionDetails.FIELD_STUDENT_CODE
-							,StudentClassroomSessionDetails.FIELD_STUDENT_NAME,StudentClassroomSessionDetails.FIELD_STUDENT_LASTNAMES
-							,StudentClassroomSessionDetails.FIELD_STUDENT_BIRTHDATE,StudentClassroomSessionDetails.FIELD_EVALUATION_AVERAGE_VALUE
-							,StudentClassroomSessionDetails.FIELD_EVALUATION_RANK_VALUE);
-					}	
-				};
-			}
-			*/
 		});
 	}
 	

@@ -65,7 +65,7 @@ public class StudentClassroomSessionDaoImpl extends AbstractTypedDao<StudentClas
 
 	@Override
 	protected void applySearchCriteriaParameters(QueryWrapper<?> queryWrapper,AbstractFieldValueSearchCriteriaSet searchCriteria) {
-		super.applySearchCriteriaParameters(queryWrapper, searchCriteria);
+		//super.applySearchCriteriaParameters(queryWrapper, searchCriteria);
 		queryWrapper.parameter("classroomSessionDivisionIndexes",((StudentClassroomSession.SearchCriteria)searchCriteria).getDivisionIndexesRequired());
 		queryWrapper.parameter("classroomSessionDivisionMinCount",((StudentClassroomSession.SearchCriteria)searchCriteria).getDivisionCount().getLowest());
 		queryWrapper.parameter("classroomSessionDivisionMaxCount",((StudentClassroomSession.SearchCriteria)searchCriteria).getDivisionCount().getHighest());

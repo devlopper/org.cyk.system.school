@@ -22,6 +22,12 @@ public class StudentClassroomSessionConsultManyRankPage extends AbstractStudentC
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	@Override
+	protected void consultInitialisation() {
+		// TODO Auto-generated method stub
+		//super.consultInitialisation();
+	}
+	
+	@Override
 	protected Collection<StudentClassroomSession> getStudentClassroomSessions() {
 		Collection<Long> identifiers = WebManager.getInstance().decodeIdentifiersRequestParameter();
 		final Collection<StudentClassroomSession> studentClassroomSessions = new ArrayList<>();
@@ -31,4 +37,8 @@ public class StudentClassroomSessionConsultManyRankPage extends AbstractStudentC
 		return studentClassroomSessions;
 	}
 	
+	@Override
+	protected Class<StudentClassroomSession> getClassParameter() {
+		return StudentClassroomSession.class;
+	}
 }

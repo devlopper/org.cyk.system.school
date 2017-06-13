@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -34,6 +35,8 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 	private static final long serialVersionUID = 2742833783679362737L;
 
 	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION) @NotNull private ClassroomSession classroomSession;
+	
+	@Transient private Integer rankLevel,rankGroup;//FIXME to be moved to new version
 	
 	public StudentClassroomSession(Student student,ClassroomSession classroomSession) {
 		super();

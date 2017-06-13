@@ -20,7 +20,8 @@ public class StudentClassroomSessionDetails extends AbstractStudentResultsOutput
 	private static final long serialVersionUID = -4741435164709063863L;
 	
 	@IncludeInputs private ClassroomSessionDetails classroomSessionDetails;
-	@Input @InputText private String tuition,classroomSession;
+	@Input @InputText private String tuition,classroomSession,group,level,suffix,names;
+	private Integer rankClass,rankLevel,rankGroup;
 	
 	public StudentClassroomSessionDetails() {
 		this(null);
@@ -37,12 +38,22 @@ public class StudentClassroomSessionDetails extends AbstractStudentResultsOutput
 		}else{
 			tuition = formatNumber(studentClassroomSession.getTuitionSale().getCost().getValue());
 		}*/
+		names = studentClassroomSession.getStudent().getPerson().getNames();
+		group = studentClassroomSession.getClassroomSession().getLevelTimeDivision().getLevel().getGroup().getCode();
+		level = studentClassroomSession.getClassroomSession().getLevelTimeDivision().getLevel().getCode();
+		suffix = studentClassroomSession.getClassroomSession().getSuffix().getCode();
 		
+		rankGroup = studentClassroomSession.getRankGroup();
+		rankLevel = studentClassroomSession.getRankLevel();
+		if(studentClassroomSession.getResults().getEvaluationSort()!=null && studentClassroomSession.getResults().getEvaluationSort().getRank()!=null)
+			rankClass = studentClassroomSession.getResults().getEvaluationSort().getRank().getValue();
 	}
 	
 	/**/
 	
 	public static final String FIELD_CLASSROOM_SESSION = "classroomSession";
+	public static final String FIELD_RANK_LEVEL = "rankLevel";
+	public static final String FIELD_RANK_GROUP = "rankGroup";
 	
 	public static final Set<String> FIELDS_SIMPLE = new HashSet<>();
 	public static final Set<String> FIELDS_BROAD_SHEET = new HashSet<>();

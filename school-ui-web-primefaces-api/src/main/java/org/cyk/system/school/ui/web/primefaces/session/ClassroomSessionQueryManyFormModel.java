@@ -22,6 +22,7 @@ import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.party.person.PersonRelationshipTypeDao;
@@ -266,12 +267,14 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				for(ClassroomSession classroomSession : classroomSessions){
 					CommonNodeInformations nodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession);
 					if(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()!=null){
-						Long max = inject(IntervalBusiness.class).findLowestGreatestValue(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()).longValue();
+						Interval interval = nodeInformations.getClassroomSessionDivisionOrderNumberInterval();
+						Long min = inject(IntervalBusiness.class).findGreatestLowestValue(interval).longValue();
+						Long max = inject(IntervalBusiness.class).findLowestGreatestValue(interval).longValue();
 						if(max!=null)
-							for(byte i = 0; i < max; i++){
-								if(indexes.add(i) /*|| timeDivisionTypesProcessed.add(nodeInformations.getClassroomSessionTimeDivisionType())*/)
+							for(long i = min; i <= max; i++){
+								if(indexes.add((byte)i) /*|| timeDivisionTypesProcessed.add(nodeInformations.getClassroomSessionTimeDivisionType())*/)
 									input.getList().add(new SelectItem(i, (timeDivisionTypes.size()==1?Constant.EMPTY_STRING
-										:nodeInformations.getAttendanceTimeDivisionType().getName()+Constant.CHARACTER_SPACE)+String.valueOf(i+1)));
+										:nodeInformations.getAttendanceTimeDivisionType().getName()+Constant.CHARACTER_SPACE)+String.valueOf(i)));
 							}
 					}
 				}
@@ -350,6 +353,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 				searchCriteria.getDivisionCount().setLowest(((Form)data).getClassroomSessionDivisionMinCount());
 				searchCriteria.getDivisionCount().setHighest(((Form)data).getClassroomSessionDivisionMaxCount());
 				searchCriteria.getDivisionIndexesRequired().addAll(((Form)data).getClassroomSessionDivisionIndexesRequired());
+				searchCriteria.getClassroomSessions().addAll(classroomSessions);
 				
 				Collection<StudentClassroomSession> studentClassroomSessions = inject(StudentClassroomSessionBusiness.class).findByCriteria(searchCriteria);
 				if(studentClassroomSessions.isEmpty())

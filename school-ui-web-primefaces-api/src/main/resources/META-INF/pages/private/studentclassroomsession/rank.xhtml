@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
+
+    <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
+ 		<ui:param name="pageController" value="#{rankListPage}" />
+ 		<ui:define name="body">
+ 			<!--cyk:table value="#{rankListPage.table}" /-->
+ 			
+ 			<p:dataTable var="studentClassroomSession" value="#{rankListPage.list}" >
+ 				<p:column headerText="Group" filterable="true" filterMatchMode="contains" filterBy="#{studentClassroomSession.group}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.group}" width="120">
+ 					<h:outputText value="#{studentClassroomSession.group}" />
+ 				</p:column>
+ 				<p:column headerText="Level" filterable="true" filterMatchMode="contains" filterBy="#{studentClassroomSession.level}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.level}" width="80">
+ 					<h:outputText value="#{studentClassroomSession.level}" />
+ 				</p:column>
+ 				<p:column headerText="Suffix" filterable="true" filterMatchMode="contains" filterBy="#{studentClassroomSession.suffix}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.suffix}" width="80">
+ 					<h:outputText value="#{studentClassroomSession.suffix}" />
+ 				</p:column>
+ 				
+ 				<p:column headerText="#Registration" filterable="true" filterMatchMode="contains" filterBy="#{studentClassroomSession.student.code}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.student.code}" width="180">
+ 					<h:outputText value="#{studentClassroomSession.student.code}" />
+ 				</p:column>
+ 				<p:column headerText="Name(s)" filterable="true" filterMatchMode="contains" filterBy="#{studentClassroomSession.names}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.names}">
+ 					<h:outputText value="#{studentClassroomSession.names}" />
+ 				</p:column>
+ 				<!--p:column headerText="Lastname(s)" filterable="true" filterMatchMode="contains" filterBy="#{studentClassroomSession.student.lastnames}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.student.lastnames}">
+ 					<h:outputText value="#{studentClassroomSession.student.lastnames}" />
+ 				</p:column-->
+ 				
+ 				<p:column headerText="Class average" filterable="false" filterMatchMode="contains" filterBy="#{studentClassroomSession.evaluationAverageValue}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.evaluationAverageValue}" width="50">
+ 					<h:outputText value="#{studentClassroomSession.evaluationAverageValue}" />
+ 				</p:column>
+ 				
+ 				<p:column headerText="Class rank" filterable="false" filterMatchMode="contains" filterBy="#{studentClassroomSession.rankClass}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.rankClass}" width="50">
+ 					<h:outputText value="#{studentClassroomSession.rankClass}" />
+ 				</p:column>
+ 				<p:column headerText="Level rank" filterable="false" filterMatchMode="contains" filterBy="#{studentClassroomSession.rankLevel}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.rankLevel}" width="50">
+ 					<h:outputText value="#{studentClassroomSession.rankLevel}" />
+ 				</p:column>
+ 				<p:column headerText="Group rank" filterable="false" filterMatchMode="contains" filterBy="#{studentClassroomSession.rankGroup}" 
+ 					sortable="true" sortBy="#{studentClassroomSession.rankGroup}" width="50">
+ 					<h:outputText value="#{studentClassroomSession.rankGroup}" />
+ 				</p:column>
+ 			</p:dataTable>
+ 		</ui:define>
+ 	</ui:decorate>
+ 
+</html>
