@@ -91,8 +91,8 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 			//module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles() ,null));
 			module.addChild(Builder.createSelectMany(StudentClassroomSessionDivision.class,SchoolBusinessLayer.getInstance().getActionSendStudentClassroomSessionDivisionReportFiles() ,null));
 			
-			module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks(),null)
-					.setIdentifier(COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS));	
+			//module.addChild(Builder.createSelectMany(ClassroomSession.class,SchoolBusinessLayer.getInstance().getActionConsultStudentClassroomSessionRanks(),null)
+			//		.setIdentifier(COMMANDABLE_IDENTIFIER_CONSULT_STUDENTCLASSROOMSESSION_RANKS));	
 			
 			module.addChild(Builder.create("command.studentclassroomsession.rank",null,"studentClassroomSessionRankView"));
 			
