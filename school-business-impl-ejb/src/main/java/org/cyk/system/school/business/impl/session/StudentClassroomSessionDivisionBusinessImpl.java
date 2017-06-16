@@ -24,6 +24,7 @@ import org.cyk.system.root.business.api.mathematics.MetricValueIdentifiableGloba
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.message.MailBusiness;
 import org.cyk.system.root.business.api.message.MessageSendingBusiness.SendArguments;
+import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.event.Notification;
 import org.cyk.system.root.model.file.File;
@@ -173,6 +174,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			reportArguments.setIdentifiableName(String.format(nameFormat, studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
 					.getLevelTimeDivision().getLevel().getLevelName().getName().toUpperCase()));
 			*/
+			//studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().setYear1(inject(TimeBusiness.class).findye);
+			//studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession().getAcademicSession().setYear2("");
 			createReportFile(reportArguments);
 			genericDao.update(studentClassroomSessionDivision.getResults());
 			logIdentifiable("Report built",studentClassroomSessionDivision);

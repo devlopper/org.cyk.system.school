@@ -676,7 +676,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 							, Arrays.asList(studentClassroomSessionDivision))){
 						if(metricValue.getMetric().getCode().endsWith("_Promotionindanger")){
 							if(metricValue.getValue().get()!=null)
-								promotionInformation = ((Boolean)metricValue.getValue().get() ? "NOT " : Constant.EMPTY_STRING)+"PROMOTED";
+								promotionInformation = (!((Boolean)metricValue.getValue().get()) ? "NOT " : Constant.EMPTY_STRING)+"PROMOTED";
 							break;
 						}
 						

@@ -26,7 +26,8 @@ public interface StudentClassroomSessionDivisionDao extends TypedDao<StudentClas
 	Collection<StudentClassroomSessionDivision> readByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
 
 	Collection<StudentClassroomSessionDivision> readByClassroomSessionDivisionIndex(Long classroomSessionDivisionOrderNumber);
-
+	Long countByClassroomSessionDivisionIndex(Long classroomSessionDivisionOrderNumber);
+	
 	Collection<StudentClassroomSessionDivision> readByClassroomSessionByTeacher(ClassroomSession classroomSession,Teacher teacher);
 
 	Collection<StudentClassroomSessionDivision> readByLevelTimeDivision(LevelTimeDivision levelTimeDivision);

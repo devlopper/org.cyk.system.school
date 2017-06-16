@@ -18,8 +18,8 @@
       <property name="user" value="iesaroot"></property>
       <property name="password" value="iES@P@Ssw0rd"></property>
       <property name="URL" value="jdbc:mysql://iesa-application.com:3306/cyk_iesaschool_db"></property>
-    </jdbc-connection-pool-->
+    </jdbc-connection-pool>
     
-    <jdbc-resource pool-name="ArquillianHsqlPool" jndi-name="jdbc/arquillian" />
+    <jdbc-resource pool-name="ArquillianHsqlPool" jndi-name="jdbc/arquillian" /-->
     	
 </resources>

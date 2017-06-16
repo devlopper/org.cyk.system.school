@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -29,6 +30,8 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 	@Embedded private CommonNodeInformations nodeInformations;
 	
 	@Temporal(value=TemporalType.DATE) private Date nextStartingDate;//TODO to be deleted. look for the next to get the from date
+	
+	@Transient private String year1,year2;
 	
 	public AcademicSession(School school,CommonNodeInformations nodeInformations,Date nextStartingDate) {
 		super();

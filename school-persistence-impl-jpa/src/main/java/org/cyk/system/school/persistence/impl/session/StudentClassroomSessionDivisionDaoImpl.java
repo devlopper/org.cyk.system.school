@@ -25,7 +25,7 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 	private static final long serialVersionUID = 6306356272165070761L;
 
     private String readByClassroomSessionDivisions,readByStudentByClassroomSessionDivision,readByClassroomSession
-    	,readByClassroomSessions,readByStudentByClassroomSession,readByClassroomSessionDivisionOrderNumber
+    	,readByClassroomSessions,readByStudentByClassroomSession,readByClassroomSessionDivisionOrderNumber,countByClassroomSessionDivisionOrderNumber
     	,readByClassroomSessionByTeacher,readByLevelTimeDivision,readByAcademicSession,readByAcademicSessionByClassroomSessionDivisionOrderNumber;
     
     @Override
@@ -104,6 +104,11 @@ public class StudentClassroomSessionDivisionDaoImpl extends AbstractTypedDao<Stu
 	@Override
 	public Collection<StudentClassroomSessionDivision> readByClassroomSessionDivisionIndex(Long classroomSessionDivisionOrderNumber) {
 		return namedQuery(readByClassroomSessionDivisionOrderNumber).parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber).resultMany();
+	}
+	
+	@Override
+	public Long countByClassroomSessionDivisionIndex(Long classroomSessionDivisionOrderNumber) {
+		return countNamedQuery(countByClassroomSessionDivisionOrderNumber).parameter(GlobalIdentifier.FIELD_ORDER_NUMBER, classroomSessionDivisionOrderNumber).resultOne();
 	}
 
 	@Override

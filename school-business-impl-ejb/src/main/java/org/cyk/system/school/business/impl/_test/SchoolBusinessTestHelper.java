@@ -26,6 +26,7 @@ import org.cyk.system.root.business.api.value.ValueBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
+import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValue;
@@ -244,7 +245,9 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 									String fileRepresentationTyeCode = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
 											.getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate().getCode();
 									FileRepresentationType fileRepresentationType = inject(FileRepresentationTypeDao.class).read(fileRepresentationTyeCode);
-									write(inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision).iterator().next());
+									File file = inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision).iterator().next();
+									System.out.println(file.getName());
+									//write(file);
 									//files.add(studentClassroomSessionDivision.getResults().getReport());	
 								//}
 							}

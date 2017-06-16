@@ -1,16 +1,19 @@
 package org.cyk.system.school.business.impl.iesa;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
-import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
-import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.SchoolConstant;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
-import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.persistence.api.actor.StudentDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
-import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 
 public class IesaClean extends AbstractIesaBusinessIT {
 
@@ -35,7 +38,8 @@ public class IesaClean extends AbstractIesaBusinessIT {
     		}
     	}*/
     	try{
-    		updateClassroomSessionDivisionSubjectsFrom2To3();
+    		//updateClassroomSessionDivisionSubjectsFrom2To3();
+    		createStudentClassroomSessionDivisionFrom2To3();
     	}catch(Exception exception){
     		exception.printStackTrace();
     	}
@@ -60,6 +64,45 @@ public class IesaClean extends AbstractIesaBusinessIT {
     	}
     	
     	inject(ClassroomSessionDivisionSubjectBusiness.class).update(classroomSessionDivisionSubjects3);
+    }
+    
+    private void createStudentClassroomSessionDivisionFrom2To3(){
+    	System.out.println("IesaClean.createStudentClassroomSessionDivisionFrom2To3() : Starts");
+    	System.out.println("Count : 2 : "+inject(StudentClassroomSessionDivisionDao.class).countByClassroomSessionDivisionIndex(2l)+" : 3 : "
+    			+inject(StudentClassroomSessionDivisionDao.class).countByClassroomSessionDivisionIndex(3l));
+    	/*
+    	inject(StudentClassroomSessionDivisionBusiness.class).create(new StudentClassroomSessionDivision(inject(StudentDao.class).read("IESA/2016ICM0876-KG")
+    			, inject(ClassroomSessionDivisionDao.class).readByClassroomSessionByOrderNumber(inject(ClassroomSessionDao.class)
+    					.readByLevelName(SchoolConstant.Code.LevelName.PK).iterator().next(), 3l)));
+    	*/
+    	/*
+    	Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions2 = inject(StudentClassroomSessionDivisionDao.class)
+    			.readByClassroomSessionDivisionIndex(2l);
+    	Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions3 = inject(StudentClassroomSessionDivisionDao.class)
+    			.readByClassroomSessionDivisionIndex(3l);
+    	Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
+    	System.out.println("2 : "+studentClassroomSessionDivisions2.size());
+    	System.out.println("3 : "+studentClassroomSessionDivisions3.size());
+    	for(StudentClassroomSessionDivision studentClassroomSessionDivision2 : studentClassroomSessionDivisions2){
+    		Boolean found = Boolean.FALSE;
+    		for(StudentClassroomSessionDivision studentClassroomSessionDivision3 : studentClassroomSessionDivisions3){
+        		if(studentClassroomSessionDivision2.getClassroomSessionDivision().getClassroomSession()
+        				.equals(studentClassroomSessionDivision3.getClassroomSessionDivision().getClassroomSession()) && 
+        				studentClassroomSessionDivision2.getStudent().equals(studentClassroomSessionDivision3.getStudent()) ){
+        			found = Boolean.TRUE;
+        			break;
+        		}
+        	}
+    		if(Boolean.FALSE.equals(found)){
+    			studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSessionDivision2.getStudent(), studentClassroomSessionDivision2.getClassroomSessionDivision()));
+    		}
+    	}
+    	
+    	System.out.println("Number of new studentClassroomSessionDivisions : "+studentClassroomSessionDivisions.size());
+    	*/
+    	//inject(StudentClassroomSessionDivisionBusiness.class).create(studentClassroomSessionDivisions);
+    	
+    	System.out.println("Done!");
     }
     
     @Override
