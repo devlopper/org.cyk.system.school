@@ -19,7 +19,7 @@ public class ClassroomSessionDivisionSubjectSchedule extends AbstractIdentifiabl
 
 	@ManyToOne private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	
-	@OneToOne private Schedule schedule;
+	//@OneToOne private Schedule schedule;
 	
 	/**/
 	

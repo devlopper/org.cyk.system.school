@@ -57,7 +57,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	/**
 	 * The time table
 	 */
-	@ManyToOne private ScheduleCollection scheduleCollection;
+	//@ManyToOne private ScheduleCollection scheduleCollection;
 	
 	@Transient private Collection<Evaluation> evaluations = new ArrayList<>();
 	@Transient private Collection<Lecture> lectures = new ArrayList<>();
