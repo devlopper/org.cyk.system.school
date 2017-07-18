@@ -43,9 +43,13 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	
     	loadGlobalIdentifiers();
     	createJobTitle();
-    	//createPersons();
-    	
     	createJobTitle();
+    	createJobTitle();
+    	createJobTitle();
+    	
+    	createPersons();
+    	
+    	
     	//persons();
     	
     	testCase.assertIdentifiable(JobTitle.class,"SUPERVISOR", "Nursery and Primary Supervisor");
@@ -88,7 +92,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     
     private void setGlobalIdentifier(Collection<AbstractIdentifiable> identifiables){
     	for(AbstractIdentifiable identifiable : identifiables){
-    		identifiable.setGlobalIdentifier(getGlobalIdentifier(identifiable.getGlobalIdentifier().getIdentifier()));
+    		identifiable.setGlobalIdentifier(new InstanceHelper.Copy.Adapter.Default<GlobalIdentifier>(getGlobalIdentifier(identifiable.getGlobalIdentifier().getIdentifier())).execute());
     		identifiable.getGlobalIdentifier().setIdentifier(null);
     	}
     }
@@ -134,12 +138,15 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 			private static final long serialVersionUID = 1L;
     		@Override
     		protected Key __execute__() {
+    			System.out.println("IesaExcelToDatabase.createJobTitle().new Default() {...}.__execute__() 000");
     			GlobalIdentifier globalIdentifier = getGlobalIdentifier((String)getInput()[0]);
-    			debug(globalIdentifier);
     			return new ArrayHelper.Dimension.Key(globalIdentifier.getCode());
     		}
     	});
     	builder.getMatrix().getRow().getKeyBuilder().addParameters(new Object[]{0});
+    	builder.getMatrix().getRow().setIgnoredKeys(new ArrayList<ArrayHelper.Dimension.Key>());
+    	for(String s : InstanceHelper.getInstance().callGetMethod(InstanceHelper.Pool.getInstance().get(JobTitle.class), String.class, GlobalIdentifier.FIELD_CODE))
+    		builder.getMatrix().getRow().getIgnoredKeys().add(new ArrayHelper.Dimension.Key(s));
     	
     	//builder.getMatrix().getRow().createKeyBuilder(new Object[]{0}, InstanceHelper.getInstance()
     	//		.callGetMethod(InstanceHelper.Pool.getInstance().get(JobTitle.class), String.class, GlobalIdentifier.FIELD_CODE));
@@ -154,16 +161,16 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 				JobTitle jobTitle = super.__execute__();
 				if(jobTitle.getIdentifier()==null)
 					setGlobalIdentifier(jobTitle);
+				else{
+					//System.out.println(jobTitle.getIdentifier()+" : "+jobTitle.getCode()+" : "+jobTitle.getGlobalIdentifier().getIdentifier());
+				}
 				return jobTitle;
 			}
 		};
 		instanceBuilder.setKeyBuilder(new ArrayHelper.Dimension.Key.Builder.Adapter.Default(){
 			private static final long serialVersionUID = 1L;
 			protected ArrayHelper.Dimension.Key __execute__() {
-				System.out
-						.println("IesaExcelToDatabase.createJobTitle().new Default() {...}.__execute__() : "+getInput()[0]);
 				GlobalIdentifier globalIdentifier = getGlobalIdentifier((String)getInput()[0]);
-    			debug(globalIdentifier);
     			return globalIdentifier == null ? null : new ArrayHelper.Dimension.Key(globalIdentifier.getCode());
 			}
 		}).addParameterArrayElementString(FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER));
