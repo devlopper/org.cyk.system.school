@@ -19,11 +19,11 @@ import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.report.InternationalEnglishSchoolOfAbidjanReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.utility.common.helper.ArrayHelper;
+import org.cyk.utility.common.helper.ArrayHelper.Dimension.Key;
 import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.MicrosoftExcelHelper;
-import org.cyk.utility.common.helper.ArrayHelper.Dimension.Key;
 
 public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 
@@ -43,12 +43,10 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	
     	loadGlobalIdentifiers();
     	createJobTitle();
-    	createJobTitle();
-    	createJobTitle();
-    	createJobTitle();
     	
     	createPersons();
-    	
+    	//createPersons();
+    	//createPersons();
     	
     	//persons();
     	
@@ -57,7 +55,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	
     	testCase.assertPerson("IESA/2013TEE0344-KG", "TOKPA", "Edward Elvis");
     	
-    	System.exit(0);
+    	//System.exit(0);
     }
     
     private void loadGlobalIdentifiers(){
@@ -138,15 +136,12 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 			private static final long serialVersionUID = 1L;
     		@Override
     		protected Key __execute__() {
-    			System.out.println("IesaExcelToDatabase.createJobTitle().new Default() {...}.__execute__() 000");
     			GlobalIdentifier globalIdentifier = getGlobalIdentifier((String)getInput()[0]);
     			return new ArrayHelper.Dimension.Key(globalIdentifier.getCode());
     		}
     	});
     	builder.getMatrix().getRow().getKeyBuilder().addParameters(new Object[]{0});
-    	builder.getMatrix().getRow().setIgnoredKeys(new ArrayList<ArrayHelper.Dimension.Key>());
-    	for(String s : InstanceHelper.getInstance().callGetMethod(InstanceHelper.Pool.getInstance().get(JobTitle.class), String.class, GlobalIdentifier.FIELD_CODE))
-    		builder.getMatrix().getRow().getIgnoredKeys().add(new ArrayHelper.Dimension.Key(s));
+    	builder.getMatrix().getRow().addIgnoredKeyValues(InstanceHelper.getInstance().callGetMethod(InstanceHelper.Pool.getInstance().get(JobTitle.class), String.class, GlobalIdentifier.FIELD_CODE));
     	
     	//builder.getMatrix().getRow().createKeyBuilder(new Object[]{0}, InstanceHelper.getInstance()
     	//		.callGetMethod(InstanceHelper.Pool.getInstance().get(JobTitle.class), String.class, GlobalIdentifier.FIELD_CODE));
