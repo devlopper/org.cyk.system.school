@@ -8,9 +8,13 @@ import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.BusinessInterfaceLocator;
 import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
 import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.root.model.party.person.JobInformations;
 import org.cyk.system.root.model.party.person.JobTitle;
 import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.root.model.party.person.PersonExtendedInformations;
+import org.cyk.system.root.model.time.Period;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.report.InternationalEnglishSchoolOfAbidjanReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
@@ -29,25 +33,25 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     private Collection<GlobalIdentifier> globalIdentifiers;
     
     @Override
-    protected void installApplication() {}
-    
-    @Override
     protected void businesses() {
     	TestCase testCase = instanciateTestCase();
     	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();    	
     	
     	loadGlobalIdentifiers();
-    	createIdentifiable(JobTitle.class, Boolean.TRUE, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER));
     	
     	createIdentifiable(JobTitle.class, Boolean.TRUE, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER));
     	createIdentifiable(Person.class, Boolean.TRUE, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER)
-    			,Person.FIELD_LASTNAMES);
+    			,Person.FIELD_LASTNAMES,Person.FIELD_SURNAME,FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER
+    					,GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_FROM_DATE),Person.FIELD_NATIONALITY,Person.FIELD_SEX
+    			,FieldHelper.getInstance().buildPath(Person.FIELD_EXTENDED_INFORMATIONS,PersonExtendedInformations.FIELD_TITLE)
+    			,FieldHelper.getInstance().buildPath(Person.FIELD_JOB_INFORMATIONS,JobInformations.FIELD_FUNCTION)
+    			,FieldHelper.getInstance().buildPath(Person.FIELD_JOB_INFORMATIONS,JobInformations.FIELD_TITLE));
     	
     	testCase.assertIdentifiable(JobTitle.class,"SUPERVISOR", "Nursery and Primary Supervisor");
     	testCase.assertIdentifiable(JobTitle.class,"HS DIRECTOR", "High School Director");
     	
-    	testCase.assertPerson("IESA/2013TEE0344-KG", "TOKPA", "Edward Elvis");
+    	testCase.assertPerson("IESA/2013TEE0344-KG", "TOKPA", "Edward Elvis",RootConstant.Code.Sex.MALE,"19/05/2009","Monrovia, Liberia");
     	
     	//System.exit(0);
     }
