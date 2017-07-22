@@ -14,18 +14,18 @@ import lombok.Setter;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
-import org.cyk.system.school.business.impl.session.SubjectClassroomSessionDetails;
+import org.cyk.system.school.business.impl.session.ClassroomSessionSubjectDetails;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.ui.web.primefaces.Table;
 
 @Named @ViewScoped @Getter @Setter
@@ -33,16 +33,16 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private Table<SubjectClassroomSessionDetails> subjectTable;
+	private Table<ClassroomSessionSubjectDetails> subjectTable;
 		
 	@Override
 	protected void subLevelTable() {
 		super.subLevelTable();
-		subjectTable = (Table<SubjectClassroomSessionDetails>) createDetailsTable(SubjectClassroomSessionDetails.class, new DetailsConfigurationListener.Table.Adapter<SubjectClassroomSession,SubjectClassroomSessionDetails>(SubjectClassroomSession.class, SubjectClassroomSessionDetails.class){
+		subjectTable = (Table<ClassroomSessionSubjectDetails>) createDetailsTable(ClassroomSessionSubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<ClassroomSessionSubject,ClassroomSessionSubjectDetails>(ClassroomSessionSubject.class, ClassroomSessionSubjectDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
-			public Collection<SubjectClassroomSession> getIdentifiables() {
-				return inject(SubjectClassroomSessionBusiness.class).findByClassroomSession(identifiable);
+			public Collection<ClassroomSessionSubject> getIdentifiables() {
+				return inject(ClassroomSessionSubjectBusiness.class).findByClassroomSession(identifiable);
 			}
 		});
 	}

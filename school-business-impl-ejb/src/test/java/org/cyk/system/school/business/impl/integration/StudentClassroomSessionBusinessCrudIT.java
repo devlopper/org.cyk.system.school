@@ -17,12 +17,12 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
-import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.utility.common.CommonUtils;
 
@@ -67,7 +67,7 @@ public class StudentClassroomSessionBusinessCrudIT extends AbstractIesaBusinessI
     	classroomSession = inject(ClassroomSessionDao.class).readByLevelNameBySuffix(SchoolConstant.Code.LevelName.G1,"A").iterator().next();
     	studentClassroomSession = new StudentClassroomSession(student1, classroomSession);
     	inject(GenericBusiness.class).create(studentClassroomSession);
-    	Collection<SubjectClassroomSession> subjectClassroomSessions = inject(SubjectClassroomSessionDao.class).readByClassroomSessionByStudent(classroomSession, student1);
+    	Collection<ClassroomSessionSubject> classroomSessionSubjects = inject(ClassroomSessionSubjectDao.class).readByClassroomSessionByStudent(classroomSession, student1);
     	
     	int count = 17;
 		assertEquals(count, inject(StudentClassroomSessionDivisionSubjectDao.class).readByStudentByClassroomSessionDivision(student1
@@ -82,12 +82,12 @@ public class StudentClassroomSessionBusinessCrudIT extends AbstractIesaBusinessI
 				.findByStudentByClassroomSession(student1, studentClassroomSession.getClassroomSession())){
 			studentClassroomSession.getDetailCollection().getCollection().add(studentClassroomSessionDivision);
 			studentClassroomSessionDivision.getDetailCollection().setSynchonizationEnabled(Boolean.TRUE);
-			for(SubjectClassroomSession subjectClassroomSession : subjectClassroomSessions){
+			for(ClassroomSessionSubject classroomSessionSubject : classroomSessionSubjects){
 				StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = inject(StudentClassroomSessionDivisionSubjectBusiness.class)
-						.findByStudentByClassroomSessionDivisionBySubject(student1, studentClassroomSessionDivision.getClassroomSessionDivision(),subjectClassroomSession.getSubject());
+						.findByStudentByClassroomSessionDivisionBySubject(student1, studentClassroomSessionDivision.getClassroomSessionDivision(),classroomSessionSubject.getSubject());
 				if(studentClassroomSessionDivisionSubject==null)
 					studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student1
-							, inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionBySubject(studentClassroomSessionDivision.getClassroomSessionDivision(),subjectClassroomSession.getSubject()));
+							, inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionBySubject(studentClassroomSessionDivision.getClassroomSessionDivision(),classroomSessionSubject.getSubject()));
 				studentClassroomSessionDivision.getDetailCollection().getCollection().add(studentClassroomSessionDivisionSubject);
 			}
 		}
@@ -107,12 +107,12 @@ public class StudentClassroomSessionBusinessCrudIT extends AbstractIesaBusinessI
 			studentClassroomSession.getDetailCollection().getCollection().add(studentClassroomSessionDivision);
 			studentClassroomSessionDivision.getDetailCollection().setSynchonizationEnabled(Boolean.TRUE);
 			studentClassroomSessionDivision.getDetailCollection().getCollection().clear();
-			for(SubjectClassroomSession subjectClassroomSession : subjectClassroomSessions){
+			for(ClassroomSessionSubject classroomSessionSubject : classroomSessionSubjects){
 				StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = inject(StudentClassroomSessionDivisionSubjectBusiness.class)
-						.findByStudentByClassroomSessionDivisionBySubject(student1, studentClassroomSessionDivision.getClassroomSessionDivision(),subjectClassroomSession.getSubject());
+						.findByStudentByClassroomSessionDivisionBySubject(student1, studentClassroomSessionDivision.getClassroomSessionDivision(),classroomSessionSubject.getSubject());
 				if(studentClassroomSessionDivisionSubject==null)
 					studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student1
-							, inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionBySubject(studentClassroomSessionDivision.getClassroomSessionDivision(),subjectClassroomSession.getSubject()));
+							, inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionBySubject(studentClassroomSessionDivision.getClassroomSessionDivision(),classroomSessionSubject.getSubject()));
 				//studentClassroomSessionDivision.getDetailCollection().getCollection().add(studentClassroomSessionDivisionSubject);
 			}
 		}

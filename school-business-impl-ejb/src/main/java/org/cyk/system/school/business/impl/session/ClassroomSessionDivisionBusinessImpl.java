@@ -34,13 +34,13 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
-import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.utility.common.Constant;
 
@@ -232,13 +232,13 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 			}
 		
 		
-		for(SubjectClassroomSession subjectClassroomSession : inject(SubjectClassroomSessionDao.class).readByClassroomSession(classroomSessionDivision.getClassroomSession())){
+		for(ClassroomSessionSubject classroomSessionSubject : inject(ClassroomSessionSubjectDao.class).readByClassroomSession(classroomSessionDivision.getClassroomSession())){
 			ClassroomSessionDivisionSubject classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class).instanciateOne();
 			classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection().add(classroomSessionDivisionSubject);
 			classroomSessionDivisionSubject.setClassroomSessionDivision(classroomSessionDivision);
-			classroomSessionDivisionSubject.setSubject(subjectClassroomSession.getSubject());
-			classroomSessionDivisionSubject.setWeight(subjectClassroomSession.getWeight());
-			classroomSessionDivisionSubject.setTeacher(subjectClassroomSession.getTeacher());
+			classroomSessionDivisionSubject.setSubject(classroomSessionSubject.getSubject());
+			classroomSessionDivisionSubject.setWeight(classroomSessionSubject.getWeight());
+			classroomSessionDivisionSubject.setTeacher(classroomSessionSubject.getTeacher());
 		}
 		return classroomSessionDivision;
 	}

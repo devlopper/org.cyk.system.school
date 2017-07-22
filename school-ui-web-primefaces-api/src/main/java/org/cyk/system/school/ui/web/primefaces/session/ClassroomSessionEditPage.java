@@ -8,13 +8,13 @@ import javax.inject.Named;
 
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
-import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.LevelTimeDivision;
-import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.ui.web.primefaces.CommonNodeInformationsFormModel;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -39,41 +39,41 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private ItemCollection<SubjectClassroomSessionItem, SubjectClassroomSession, ClassroomSession> subjectClassroomSessionCollection;
+	private ItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject, ClassroomSession> classroomSessionSubjectCollection;
 	
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
-		subjectClassroomSessionCollection = createItemCollection(SubjectClassroomSessionItem.class, SubjectClassroomSession.class,identifiable 
-				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<SubjectClassroomSessionItem,SubjectClassroomSession,ClassroomSession>(identifiable,crud,form){
+		classroomSessionSubjectCollection = createItemCollection(ClassroomSessionSubjectItem.class, ClassroomSessionSubject.class,identifiable 
+				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<ClassroomSessionSubjectItem,ClassroomSessionSubject,ClassroomSession>(identifiable,crud,form){
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public IdentifiableRuntimeCollection<SubjectClassroomSession> getRuntimeCollection() {
+			public IdentifiableRuntimeCollection<ClassroomSessionSubject> getRuntimeCollection() {
 				return getCollection().getSubjects().setSynchonizationEnabled(Boolean.TRUE);
 			}
 			
 			@Override
-			public SubjectClassroomSession instanciate(AbstractItemCollection<SubjectClassroomSessionItem, SubjectClassroomSession, ClassroomSession, SelectItem> itemCollection) {
-				return inject(SubjectClassroomSessionBusiness.class).instanciateOne( (Subject)getInputChoice().getValue(),getCollection() );
+			public ClassroomSessionSubject instanciate(AbstractItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject, ClassroomSession, SelectItem> itemCollection) {
+				return inject(ClassroomSessionSubjectBusiness.class).instanciateOne( (Subject)getInputChoice().getValue(),getCollection() );
 			}
 			
 			@Override
-			public void instanciated(AbstractItemCollection<SubjectClassroomSessionItem, SubjectClassroomSession,ClassroomSession,SelectItem> itemCollection,SubjectClassroomSessionItem item) {
+			public void instanciated(AbstractItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject,ClassroomSession,SelectItem> itemCollection,ClassroomSessionSubjectItem item) {
 				super.instanciated(itemCollection, item);
 				//item.setName(item.getIdentifiable().getSubject().getName());
 			}	
 			
 			@Override
-			public void setLabel(AbstractItemCollection<SubjectClassroomSessionItem, SubjectClassroomSession, ClassroomSession, SelectItem> itemCollection,SubjectClassroomSessionItem item) {
+			public void setLabel(AbstractItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject, ClassroomSession, SelectItem> itemCollection,ClassroomSessionSubjectItem item) {
 				super.setLabel(itemCollection, item);
 				item.setLabel(item.getIdentifiable().getSubject().getName());
 			}
 								
 			@Override
-			public AbstractIdentifiable getMasterSelected(AbstractItemCollection<SubjectClassroomSessionItem, SubjectClassroomSession,ClassroomSession, SelectItem> itemCollection,
-					SubjectClassroomSession subjectClassroomSession) {
-				return subjectClassroomSession.getSubject();
+			public AbstractIdentifiable getMasterSelected(AbstractItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject,ClassroomSession, SelectItem> itemCollection,
+					ClassroomSessionSubject classroomSessionSubject) {
+				return classroomSessionSubject.getSubject();
 			}
 			
 			@Override
@@ -118,7 +118,7 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 		
 	}
 	
-	public static class SubjectClassroomSessionItem extends AbstractItemCollectionItem<SubjectClassroomSession> {
+	public static class ClassroomSessionSubjectItem extends AbstractItemCollectionItem<ClassroomSessionSubject> {
 		private static final long serialVersionUID = 1L;
 		
 	}

@@ -14,14 +14,14 @@ import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
@@ -42,7 +42,7 @@ public class SubjectClassroomSessionAssignToStudentClassroomSessionPage extends 
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private List<SubjectClassroomSession> subjectClassroomSessions;
+	private List<ClassroomSessionSubject> classroomSessionSubjects;
 	private ItemCollection<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession> studentSubjectCollection;
 	
 	@Override
@@ -62,9 +62,9 @@ public class SubjectClassroomSessionAssignToStudentClassroomSessionPage extends 
 				super.instanciated(itemCollection, item);
 				item.setStudent(formatUsingBusiness(item.getIdentifiable().getStudent()));
 				item.setClassroomSession(formatUsingBusiness(item.getIdentifiable().getClassroomSession()));
-				item.setSubjectClassroomSessionChoices(subjectClassroomSessions = new ArrayList<>(inject(SubjectClassroomSessionBusiness.class).findByClassroomSession(
+				item.setClassroomSessionSubjectChoices(classroomSessionSubjects = new ArrayList<>(inject(ClassroomSessionSubjectBusiness.class).findByClassroomSession(
 						item.getIdentifiable().getClassroomSession())));
-				item.setSelectedSubjectClassroomSessions(new ArrayList<>(inject(SubjectClassroomSessionBusiness.class).findByClassroomSessionByStudent(
+				item.setSelectedSubjectClassroomSessions(new ArrayList<>(inject(ClassroomSessionSubjectBusiness.class).findByClassroomSessionByStudent(
 						item.getIdentifiable().getClassroomSession(),item.getIdentifiable().getStudent())));
 			}
 			
@@ -79,12 +79,12 @@ public class SubjectClassroomSessionAssignToStudentClassroomSessionPage extends 
 					item.getIdentifiable().getDetailCollection().getCollection().add(studentClassroomSessionDivision);
 					studentClassroomSessionDivision.getDetailCollection().setSynchonizationEnabled(Boolean.TRUE);
 					studentClassroomSessionDivision.getDetailCollection().getCollection().clear();
-					for(SubjectClassroomSession subjectClassroomSession : item.getSelectedSubjectClassroomSessions()){
+					for(ClassroomSessionSubject classroomSessionSubject : item.getSelectedSubjectClassroomSessions()){
 						StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = inject(StudentClassroomSessionDivisionSubjectBusiness.class)
-								.findByStudentByClassroomSessionDivisionBySubject(student, studentClassroomSessionDivision.getClassroomSessionDivision(),subjectClassroomSession.getSubject());
+								.findByStudentByClassroomSessionDivisionBySubject(student, studentClassroomSessionDivision.getClassroomSessionDivision(),classroomSessionSubject.getSubject());
 						if(studentClassroomSessionDivisionSubject==null)
 							studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student
-									, inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionBySubject(studentClassroomSessionDivision.getClassroomSessionDivision(),subjectClassroomSession.getSubject()));
+									, inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionBySubject(studentClassroomSessionDivision.getClassroomSessionDivision(),classroomSessionSubject.getSubject()));
 						studentClassroomSessionDivision.getDetailCollection().getCollection().add(studentClassroomSessionDivisionSubject);
 					}
 				}
@@ -158,8 +158,8 @@ public class SubjectClassroomSessionAssignToStudentClassroomSessionPage extends 
 		
 		private String student;
 		private String classroomSession;
-		private List<SubjectClassroomSession> subjectClassroomSessionChoices;
-		private List<SubjectClassroomSession> selectedSubjectClassroomSessions;
+		private List<ClassroomSessionSubject> classroomSessionSubjectChoices;
+		private List<ClassroomSessionSubject> selectedSubjectClassroomSessions;
 	}
 	
 }

@@ -15,7 +15,7 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
-import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
@@ -76,7 +76,7 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	testCase.create(classroomSession);
     	assertEquals(3l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
     	assertEquals(4, inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSession(classroomSession).size());
-    	assertEquals(3, inject(SubjectClassroomSessionDao.class).readByClassroomSession(classroomSession).size());
+    	assertEquals(3, inject(ClassroomSessionSubjectDao.class).readByClassroomSession(classroomSession).size());
     	testCase.clean();
     }
     

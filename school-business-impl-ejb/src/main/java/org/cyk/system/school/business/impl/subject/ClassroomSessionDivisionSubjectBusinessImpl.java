@@ -19,7 +19,7 @@ import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.session.SubjectClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
@@ -27,7 +27,7 @@ import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
@@ -35,7 +35,7 @@ import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
-import org.cyk.system.school.persistence.api.session.SubjectClassroomSessionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
@@ -69,12 +69,12 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 	@Override
 	protected void afterCreate(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
 		super.afterCreate(classroomSessionDivisionSubject);
-		SubjectClassroomSession subjectClassroomSession = inject(SubjectClassroomSessionDao.class).readBySubjectByClassroomSession(
-				classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession());
-		if(subjectClassroomSession==null){
-			subjectClassroomSession = new SubjectClassroomSession(classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject
+		ClassroomSessionSubject classroomSessionSubject = inject(ClassroomSessionSubjectDao.class).readByClassroomSessionBySubject(
+				classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession(),classroomSessionDivisionSubject.getSubject());
+		if(classroomSessionSubject==null){
+			classroomSessionSubject = new ClassroomSessionSubject(classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject
 				.getClassroomSessionDivision().getClassroomSession());
-			inject(SubjectClassroomSessionBusiness.class).create(subjectClassroomSession);
+			inject(ClassroomSessionSubjectBusiness.class).create(classroomSessionSubject);
 		}
 		commonUtils.increment(Long.class, classroomSessionDivisionSubject.getClassroomSessionDivision(), ClassroomSessionDivision.FIELD_NUMBER_OF_SUBJECTS, 1l);
 		inject(ClassroomSessionDivisionBusiness.class).update(classroomSessionDivisionSubject.getClassroomSessionDivision());

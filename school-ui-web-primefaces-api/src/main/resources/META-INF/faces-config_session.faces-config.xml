@@ -8,18 +8,18 @@
 		<!-- ########################################### Private Navigations Cases ############################################### -->
 		
 		<navigation-case>
-			<from-outcome>subjectClassroomSessionEditView</from-outcome>
-			<to-view-id>/private/subjectclassroomsession/edit.jsf</to-view-id>
+			<from-outcome>classroomSessionSubjectEditView</from-outcome>
+			<to-view-id>/private/classroomsessionsubject/edit.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>subjectClassroomSessionConsultView</from-outcome>
-			<to-view-id>/private/subjectclassroomsession/consult.jsf</to-view-id>
+			<from-outcome>classroomSessionSubjectConsultView</from-outcome>
+			<to-view-id>/private/classroomsessionsubject/consult.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>subjectClassroomSessionListView</from-outcome>
-			<to-view-id>/private/subjectclassroomsession/list.jsf</to-view-id>
+			<from-outcome>classroomSessionSubjectListView</from-outcome>
+			<to-view-id>/private/classroomsessionsubject/list.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

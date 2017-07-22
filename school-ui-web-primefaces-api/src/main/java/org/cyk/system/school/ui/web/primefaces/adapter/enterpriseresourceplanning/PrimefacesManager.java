@@ -16,7 +16,7 @@ import org.cyk.system.school.business.impl.session.LevelGroupDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
-import org.cyk.system.school.business.impl.session.SubjectClassroomSessionDetails;
+import org.cyk.system.school.business.impl.session.ClassroomSessionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectDetails;
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
@@ -30,7 +30,7 @@ import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
@@ -42,7 +42,7 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionE
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
-import org.cyk.system.school.ui.web.primefaces.session.SubjectClassroomSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
@@ -66,7 +66,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		configureLevelTimeDivisionClass();
 		configureLevelGroupClass();
 		configureClassroomSessionClass();
-		configureSubjectClassroomSessionClass();
+		configureClassroomSessionSubjectClass();
 		
 		configureClassroomSessionDivisionClass();
 		configureClassroomSessionDivisionSubjectClass();
@@ -231,12 +231,12 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		});
 	}
 	
-	protected void configureSubjectClassroomSessionClass() {
-		getFormConfiguration(SubjectClassroomSession.class, Crud.CREATE).addRequiredFieldNames(SubjectClassroomSessionEditPage.Form.FIELD_CLASSROOM_SESSION,
-				SubjectClassroomSessionEditPage.Form.FIELD_SUBJECT)
-					.addFieldNames(SubjectClassroomSessionEditPage.Form.FIELD_TEACHER);
+	protected void configureClassroomSessionSubjectClass() {
+		getFormConfiguration(ClassroomSessionSubject.class, Crud.CREATE).addRequiredFieldNames(ClassroomSessionSubjectEditPage.Form.FIELD_CLASSROOM_SESSION,
+				ClassroomSessionSubjectEditPage.Form.FIELD_SUBJECT)
+					.addFieldNames(ClassroomSessionSubjectEditPage.Form.FIELD_TEACHER);
 		
-		registerDetailsConfiguration(SubjectClassroomSessionDetails.class, new DetailsConfiguration(){
+		registerDetailsConfiguration(ClassroomSessionSubjectDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -245,9 +245,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean build(Object data,Field field) {
-						if(data instanceof SubjectClassroomSessionDetails)
-							return isFieldNameIn(field,SubjectClassroomSessionDetails.FIELD_CLASSROOM_SESSION,SubjectClassroomSessionDetails.FIELD_SUBJECT
-									,SubjectClassroomSessionDetails.FIELD_TEACHER);
+						if(data instanceof ClassroomSessionSubjectDetails)
+							return isFieldNameIn(field,ClassroomSessionSubjectDetails.FIELD_CLASSROOM_SESSION,ClassroomSessionSubjectDetails.FIELD_SUBJECT
+									,ClassroomSessionSubjectDetails.FIELD_TEACHER);
 						return Boolean.FALSE;
 					}
 				};
@@ -258,7 +258,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					private static final long serialVersionUID = 1L;
 					@Override
 					public Boolean isColumn(Field field) {
-						return isFieldNameIn(field, SubjectClassroomSessionDetails.FIELD_SUBJECT, SubjectClassroomSessionDetails.FIELD_TEACHER);
+						return isFieldNameIn(field, ClassroomSessionSubjectDetails.FIELD_SUBJECT, ClassroomSessionSubjectDetails.FIELD_TEACHER);
 					}
 				};
 			}

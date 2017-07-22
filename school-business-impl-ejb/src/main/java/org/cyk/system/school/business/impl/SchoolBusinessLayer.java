@@ -62,7 +62,7 @@ import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.SubjectClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
@@ -177,8 +177,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 					AbstractIdentifiable identifiable = (AbstractIdentifiable) object;
 					if(identifiable instanceof ClassroomSession)
 						return null;//((ClassroomSession)object).getAcademicSession();
-					if(identifiable instanceof SubjectClassroomSession)
-						return ((SubjectClassroomSession)identifiable).getClassroomSession();
+					if(identifiable instanceof ClassroomSessionSubject)
+						return ((ClassroomSessionSubject)identifiable).getClassroomSession();
 					
 					if(identifiable instanceof ClassroomSessionDivision)
 						return ((ClassroomSessionDivision)identifiable).getClassroomSession();
@@ -207,8 +207,8 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 		inject(GlobalIdentifierPersistenceMappingConfigurations.class).configure();
 		
 		AbstractIdentifiableBusinessServiceImpl.addAutoSetPropertyValueClass(new String[]{GlobalIdentifier.FIELD_CODE,GlobalIdentifier.FIELD_NAME}
-		,AcademicSession.class,Level.class,LevelTimeDivision.class,ClassroomSession.class,ClassroomSessionDivision.class,ClassroomSessionDivisionSubject.class
-		,ClassroomSessionDivisionSubjectEvaluationType.class,StudentClassroomSession.class,StudentClassroomSessionDivision.class
+		,AcademicSession.class,Level.class,LevelTimeDivision.class,ClassroomSession.class,ClassroomSessionSubject.class,ClassroomSessionDivision.class
+		,ClassroomSessionDivisionSubject.class,ClassroomSessionDivisionSubjectEvaluationType.class,StudentClassroomSession.class,StudentClassroomSessionDivision.class
 		,StudentClassroomSessionDivisionSubject.class,Evaluation.class);
         
 	}

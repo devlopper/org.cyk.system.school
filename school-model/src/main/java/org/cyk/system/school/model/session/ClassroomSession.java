@@ -46,7 +46,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 	@Column(nullable=false) @NotNull private Long numberOfDivisions=0l;
 	
 	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivision> divisions;
-	@Transient private IdentifiableRuntimeCollection<SubjectClassroomSession> subjects;
+	@Transient private IdentifiableRuntimeCollection<ClassroomSessionSubject> subjects;
 	
 	public ClassroomSession(AcademicSession academicSession,LevelTimeDivision levelTimeDivision,String suffix,Teacher coordinator,CommonNodeInformations nodeInformations) {
 		super();
@@ -78,7 +78,7 @@ public class ClassroomSession extends AbstractIdentifiablePeriod implements Seri
 		return divisions;
 	}
 	
-	public IdentifiableRuntimeCollection<SubjectClassroomSession> getSubjects(){
+	public IdentifiableRuntimeCollection<ClassroomSessionSubject> getSubjects(){
 		if(subjects == null)
 			subjects = new IdentifiableRuntimeCollection<>();
 		return subjects;

@@ -4,11 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.inject.Singleton;
-
-import lombok.Getter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,6 +44,7 @@ import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.persistence.api.party.person.PersonDao;
 import org.cyk.system.root.persistence.api.party.person.PersonExtendedInformationsDao;
 import org.cyk.system.root.persistence.api.security.RoleDao;
+import org.cyk.system.root.persistence.api.value.MeasureDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -71,6 +71,8 @@ import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivi
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.generator.AbstractGeneratable;
 import org.cyk.utility.common.helper.StringHelper.CaseType;
+
+import lombok.Getter;
 
 @Singleton @Getter
 public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFakedDataProducer implements Serializable {
@@ -197,7 +199,11 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		
 	}*/
 	
-	/*
+	@Override
+	protected void structure(Listener listener) {
+		createClassroomSessions();
+	}
+	
 	@Override
 	protected void doBusiness(Listener listener) {
 		super.doBusiness(listener);
@@ -350,7 +356,7 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
     	System.out.println("Number of classroom session to create : "+classroomSessions.size());
     	create(classroomSessions);
 	}
-	*/	
+	
 
 	@Override
 	protected void synchronize(Listener listener) {

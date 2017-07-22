@@ -10,18 +10,10 @@
       xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
 
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
- 		<ui:param name="pageController" value="#{classroomSessionEditPage}" />
+ 		<ui:param name="pageController" value="#{classroomSessionSubjectConsultPage}" />
  		<ui:define name="body">
- 			<cyk:formOneData value="#{classroomSessionEditPage.form}"/>
- 			<cyk:itemCollection value="#{classroomSessionEditPage.classroomSessionSubjectCollection}" >
- 				<p:column headerText="#{uiManager.text('field.name')}" >
- 					<h:outputText value="#{item.label}" />
- 				</p:column>
- 			</cyk:itemCollection>
- 		</ui:define>
- 		
- 		<ui:define name="contentMenuBar">
- 			<cyk:command value="#{classroomSessionEditPage.form.submitCommandable}" executeParameter="#{classroomSessionEditPage.form.data}" />
+ 			<cyk:formOneData value="#{classroomSessionSubjectConsultPage.details}" />	
+			
  		</ui:define>
  	</ui:decorate>
  
