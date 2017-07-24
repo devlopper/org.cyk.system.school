@@ -37,6 +37,7 @@ import org.cyk.system.root.persistence.api.security.SoftwareDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.business.impl.report.InternationalEnglishSchoolOfAbidjanReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
@@ -46,6 +47,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -212,7 +214,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	electronicMailInstanceBuilder.addParameterArrayElementStringIndexInstance(0,ElectronicMail.FIELD_ADDRESS);
     	createIdentifiable(ElectronicMail.class, electronicMailInstanceBuilder,new ArrayHelperDimensionKeyBuilder());
     	
-    	//classroomSessions();
+    	classroomSessions();
     	
     	testCase.assertIdentifiable(JobTitle.class,"SUPERVISOR", "Nursery and Primary Supervisor");
     	testCase.assertIdentifiable(JobTitle.class,"HS DIRECTOR", "High School Director");
@@ -366,6 +368,53 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     			return new Key(classroomSessionSubject.getCode());
     		}
     	});
+    	
+    	Pool.getInstance().load(ClassroomSession.class);
+    	Pool.getInstance().load(Student.class);
+    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<StudentClassroomSession> studentClassroomSessionInstanceBuilder =
+    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<StudentClassroomSession>(StudentClassroomSession.class){
+					private static final long serialVersionUID = 1L;
+					@Override
+					protected StudentClassroomSession __execute__() {
+						String levelCode = null;
+						if("P".equals(getInput()[4])){
+							if("PK".equals(getInput()[1]))
+								levelCode = "K1";
+							else if("K1".equals(getInput()[1]))
+								levelCode = "K2";
+							else if("K2".equals(getInput()[1]))
+								levelCode = "K3";
+							else if("K3".equals(getInput()[1]))
+								levelCode = "G1";
+							else {
+								Integer index = Integer.parseInt( ((String)getInput()[1]).substring(1) );
+								if(index<12)
+									levelCode = "G"+(index+1);
+							}
+						}else
+							levelCode = (String)getInput()[1];
+						if(levelCode!=null){
+							StudentClassroomSession studentClassroomSession = super.__execute__();
+							ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(levelCode,(String)getInput()[2]).iterator().next();
+							studentClassroomSession.setClassroomSession(classroomSession);
+							return studentClassroomSession;
+						}else
+							return null;
+					}
+    		
+    	};
+    	studentClassroomSessionInstanceBuilder.addParameterArrayElementStringIndexInstance(0,StudentClassroomSession.FIELD_STUDENT);
+    	createIdentifiable(StudentClassroomSession.class, studentClassroomSessionInstanceBuilder,new ArrayHelperDimensionKeyBuilder(){
+			private static final long serialVersionUID = 1L;
+    		@Override
+    		protected Key __execute__() {
+    			//System.out.println(getInput()[0]+" - "+getInput()[1]+" : "+inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]));
+    			StudentClassroomSession studentClassroomSession = inject(StudentClassroomSessionBusiness.class)
+    					.findByStudentByClassroomSession(Pool.getInstance().get(Student.class, getInput()[0]),inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]).iterator().next()
+    							);
+    			return new Key(studentClassroomSession.getCode());
+    		}
+    	});
     }
     
     @Override
@@ -376,7 +425,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     			.setDoBusiness(Boolean.FALSE);
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
     	//dataProducer.getDivisionOrderNumbers().clear();
-    	/*
+    	
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.K2_YEAR_1);
@@ -393,7 +442,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G10_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G11_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1);
-    	*/
+    	
     	return dataProducer;
     }
     
