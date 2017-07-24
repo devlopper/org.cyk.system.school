@@ -246,7 +246,7 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		return dao.readByAcademicSession(academicSession);
 	}
 	
-	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public StudentClassroomSession findByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return dao.readByStudentByClassroomSession(student,classroomSession);
 	}

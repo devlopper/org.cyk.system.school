@@ -59,6 +59,7 @@ import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.InstanceHelper.Pool;
 import org.cyk.utility.common.helper.MicrosoftExcelHelper;
 import org.cyk.utility.common.helper.StringHelper;
+import org.cyk.utility.common.helper.SystemHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -69,8 +70,13 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     private static final long serialVersionUID = -6691092648665798471L;
     
     private String workbookFileName = System.getProperty("user.dir")+"\\src\\test\\resources\\data\\iesa\\IESA_2017_2016.xlsx";
-    private String images = "E:/IESA/2016_2017_Files/images/";
+    private String images = SystemHelper.getInstance().getProperty("images.directory.path");
     private static Collection<GlobalIdentifier> GLOBAL_IDENTIFIERS;
+    
+    {
+    	if(!StringUtils.endsWith(images, "\\"))
+			images = images + "\\";
+    }
     
     @Override
     protected void businesses() {
@@ -91,6 +97,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 					protected Person __execute__() {
 						Person person = super.__execute__();
 						person.setContactCollection(new ContactCollection());
+						
 						if(person.getExtendedInformations().getSignatureSpecimen()!=null && !StringHelper.getInstance().isBlank(person.getExtendedInformations().getSignatureSpecimen().getUri())){
 							String name = person.getExtendedInformations().getSignatureSpecimen().getUri()+"."+person.getExtendedInformations().getSignatureSpecimen().getExtension();
 							String path = images+name;
@@ -344,30 +351,6 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     		}
     	});
     	
-    	Pool.getInstance().load(Subject.class);
-    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<ClassroomSessionSubject> classroomSessionSubjectInstanceBuilder =
-    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<ClassroomSessionSubject>(ClassroomSessionSubject.class){
-					private static final long serialVersionUID = 1L;
-					@Override
-					protected ClassroomSessionSubject __execute__() {
-						ClassroomSessionSubject classroomSessionSubject = super.__execute__();
-						classroomSessionSubject.setCascadeOperationToChildren(Boolean.TRUE);
-						return classroomSessionSubject;
-					}
-    		
-    	};
-    	classroomSessionSubjectInstanceBuilder.addParameterArrayElementStringIndexInstance(3,ClassroomSessionSubject.FIELD_TEACHER);
-    	createIdentifiable(ClassroomSessionSubject.class, classroomSessionSubjectInstanceBuilder,new ArrayHelperDimensionKeyBuilder(){
-			private static final long serialVersionUID = 1L;
-    		@Override
-    		protected Key __execute__() {
-    			//System.out.println(getInput()[0]+" - "+getInput()[1]+" : "+inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]));
-    			ClassroomSessionSubject classroomSessionSubject = inject(ClassroomSessionSubjectBusiness.class)
-    					.findByClassroomSessionBySubject(inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]).iterator().next()
-    							, Pool.getInstance().get(Subject.class, getInput()[2]));
-    			return new Key(classroomSessionSubject.getCode());
-    		}
-    	});
     	
     	Pool.getInstance().load(ClassroomSession.class);
     	Pool.getInstance().load(Student.class);
@@ -410,11 +393,38 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     		protected Key __execute__() {
     			//System.out.println(getInput()[0]+" - "+getInput()[1]+" : "+inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]));
     			StudentClassroomSession studentClassroomSession = inject(StudentClassroomSessionBusiness.class)
-    					.findByStudentByClassroomSession(Pool.getInstance().get(Student.class, getInput()[0]),inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]).iterator().next()
+    					.findByStudentByClassroomSession(Pool.getInstance().get(Student.class, getInput()[0]),inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[1],(String)getInput()[2]).iterator().next()
     							);
-    			return new Key(studentClassroomSession.getCode());
+    			return new Key(/*studentClassroomSession.getCode()*/String.valueOf(getInput()[1])+String.valueOf(getInput()[2]));
     		}
     	});
+    	
+    	
+    	Pool.getInstance().load(Subject.class);
+    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<ClassroomSessionSubject> classroomSessionSubjectInstanceBuilder =
+    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<ClassroomSessionSubject>(ClassroomSessionSubject.class){
+					private static final long serialVersionUID = 1L;
+					@Override
+					protected ClassroomSessionSubject __execute__() {
+						ClassroomSessionSubject classroomSessionSubject = super.__execute__();
+						classroomSessionSubject.setCascadeOperationToChildren(Boolean.TRUE);
+						return classroomSessionSubject;
+					}
+    		
+    	};
+    	classroomSessionSubjectInstanceBuilder.addParameterArrayElementStringIndexInstance(3,ClassroomSessionSubject.FIELD_TEACHER);
+    	createIdentifiable(ClassroomSessionSubject.class, classroomSessionSubjectInstanceBuilder,new ArrayHelperDimensionKeyBuilder(){
+			private static final long serialVersionUID = 1L;
+    		@Override
+    		protected Key __execute__() {
+    			//System.out.println(getInput()[0]+" - "+getInput()[1]+" : "+inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]));
+    			ClassroomSessionSubject classroomSessionSubject = inject(ClassroomSessionSubjectBusiness.class)
+    					.findByClassroomSessionBySubject(inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]).iterator().next()
+    							, Pool.getInstance().get(Subject.class, getInput()[2]));
+    			return new Key(classroomSessionSubject.getCode());
+    		}
+    	});
+    	
     }
     
     @Override

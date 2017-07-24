@@ -354,6 +354,11 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		    			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT}}));
     	
     	System.out.println("Number of classroom session to create : "+classroomSessions.size());
+    	for(ClassroomSession classroomSession : classroomSessions){
+    		//create(classroomSession);
+    		//System.out.println("Created "+classroomSession);
+    		classroomSession.getDivisions().setSynchonizationEnabled(Boolean.FALSE);
+    	}
     	create(classroomSessions);
 	}
 	
