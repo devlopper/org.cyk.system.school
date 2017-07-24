@@ -4,11 +4,13 @@ import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.file.FileBusiness;
-import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper.TestCase;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.BusinessInterfaceLocator;
@@ -27,11 +29,9 @@ import org.cyk.system.root.model.party.person.PersonRelationship;
 import org.cyk.system.root.model.party.person.PersonRelationshipExtremity;
 import org.cyk.system.root.model.party.person.PersonRelationshipTypeRole;
 import org.cyk.system.root.model.party.person.Sex;
-import org.cyk.system.root.model.search.StringSearchCriteria;
 import org.cyk.system.root.model.security.Credentials;
 import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.root.model.time.Period;
-import org.cyk.system.root.persistence.api.party.person.PersonRelationshipDao;
 import org.cyk.system.root.persistence.api.security.RoleDao;
 import org.cyk.system.root.persistence.api.security.SoftwareDao;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
@@ -70,16 +70,14 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     private static final long serialVersionUID = -6691092648665798471L;
     
     private String workbookFileName = System.getProperty("user.dir")+"\\src\\test\\resources\\data\\iesa\\IESA_2017_2016.xlsx";
-    private String images = SystemHelper.getInstance().getProperty("images.directory.path");
+    private String images = StringHelper.getInstance().appendIfDoesNotEndWith(SystemHelper.getInstance().getProperty("images.directory.path"),"\\");
+    private Map<Class<?>,Integer> identifiableCountMap = new HashMap<>();
     private static Collection<GlobalIdentifier> GLOBAL_IDENTIFIERS;
-    
-    {
-    	if(!StringUtils.endsWith(images, "\\"))
-			images = images + "\\";
-    }
-    
+   
     @Override
     protected void businesses() {
+    	//SystemHelper.getInstance().getPropertyAs(Integer.class,"personCount")
+    	identifiableCountMap.put(Person.class, 1);
     	TestCase testCase = instanciateTestCase();
     	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();    	
@@ -134,6 +132,9 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 					private static final long serialVersionUID = 1L;
 					@Override
 					protected UserAccount __execute__() {
+						Person person = Pool.getInstance().get(Person.class, getInput()[2]);
+						if(person==null)
+							return null;
 						UserAccount userAccount = super.__execute__();
 						userAccount.setUser(Pool.getInstance().get(Person.class, getInput()[2]));
 						userAccount.getCredentials().setSoftware(inject(SoftwareDao.class).readDefaulted());
@@ -152,6 +153,8 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 					@Override
 					protected Student __execute__() {
 						Student student = super.__execute__();
+						if(student.getPerson()==null)
+							return null;
 						student.setImage(student.getPerson().getImage());
 						return student;
 					}
@@ -170,6 +173,8 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 			@Override
 			protected PersonRelationship __execute__() {
 				PersonRelationship personRelationship = super.__execute__();
+				if(personRelationship.getExtremity1().getPerson()==null || personRelationship.getExtremity2().getPerson()==null)
+					return null;
 				Boolean person1IsStudent = Pool.getInstance().get(Student.class, getInput()[0])!=null;
 				
 				PersonRelationshipExtremity parentExtremity,studentExtremity;
@@ -182,8 +187,6 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 					studentExtremity = personRelationship.getExtremity2();
 					parentExtremity = personRelationship.getExtremity1();
 				}
-				if(studentExtremity.getPerson().getSex()==null)
-					System.out.println(studentExtremity.getPerson().getCode());
 				
 				if(studentExtremity.getPerson().getSex() == null || RootConstant.Code.Sex.MALE.equals(studentExtremity.getPerson().getSex().getCode()))
 					studentExtremityRole = RootConstant.Code.PersonRelationshipTypeRole.FAMILY_PARENT_SON;
@@ -200,8 +203,22 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	    	,2,FieldHelper.getInstance().buildPath(PersonRelationship.FIELD_EXTREMITY_2,PersonRelationshipExtremity.FIELD_PERSON));
     	createIdentifiable(PersonRelationship.class, instanceBuilder,new ArrayHelperDimensionKeyBuilder());
     	
-    	createIdentifiable(Teacher.class, Boolean.TRUE, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER)
+    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<Teacher> teacherInstanceBuilder =
+    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<Teacher>(Teacher.class){
+					private static final long serialVersionUID = 1L;
+					@Override
+					protected Teacher __execute__() {
+						Teacher teacher = super.__execute__();
+						if(teacher.getPerson()==null)
+							return null;
+						return teacher;
+					}
+    		
+    	};
+    	teacherInstanceBuilder.addParameterArrayElementString(FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER)
     			, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_CODE),Student.FIELD_PERSON);
+    	
+    	createIdentifiable(Teacher.class, teacherInstanceBuilder , new  ArrayHelperDimensionKeyBuilder(Boolean.TRUE));
     	Pool.getInstance().load(Teacher.class);//TODO should work without this line
     	
     	InstanceHelperBuilderOneDimensionArrayAdapterDefault<ElectronicMail> electronicMailInstanceBuilder =
@@ -209,8 +226,11 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 					private static final long serialVersionUID = 1L;
 					@Override
 					protected ElectronicMail __execute__() {
+						Person person = Pool.getInstance().get(Person.class, getInput()[1]);
+						if(person==null)
+							return null;
 						ElectronicMail electronicMail = super.__execute__();
-						electronicMail.setCollection(Pool.getInstance().get(Person.class, getInput()[1]).getContactCollection());
+						electronicMail.setCollection(person.getContactCollection());
 						/*if("siatetoni@yahoo.fr".equals(electronicMail.getAddress())){
 							debug(electronicMail.getCollection());
 						}*/
@@ -222,7 +242,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	createIdentifiable(ElectronicMail.class, electronicMailInstanceBuilder,new ArrayHelperDimensionKeyBuilder());
     	
     	classroomSessions();
-    	
+    	/*
     	testCase.assertIdentifiable(JobTitle.class,"SUPERVISOR", "Nursery and Primary Supervisor");
     	testCase.assertIdentifiable(JobTitle.class,"HS DIRECTOR", "High School Director");
     	
@@ -233,6 +253,8 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	
     	testCase.assertPersonRelationship("w2HAZ", RootConstant.Code.PersonRelationshipTypeRole.FAMILY_PARENT_MOTHER
     			, RootConstant.Code.PersonRelationshipTypeRole.FAMILY_PARENT_SON, new String[]{"IESA/2016MKS0907-KG","IESA/2012KSG0288-KG"});
+    	*/
+    	
     	/*
     	Collection<Person> persons = inject(PersonBusiness.class).findByString(new StringSearchCriteria("siatetoni@yahoo.fr"));
     	assertEquals(1, persons == null ? 0 : persons.size());
@@ -319,7 +341,8 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	InstanceHelper.Pool.getInstance().load(aClass);
     	MicrosoftExcelHelper.Workbook.Sheet.Builder builder = new MicrosoftExcelHelper.Workbook.Sheet.Builder.Adapter.Default(workbookFileName,aClass);    	
     	builder.createMatrix().getMatrix().getRow().setFromIndex(1);
-		builder.getMatrix().getRow().setKeyBuilder(keyBuilder);
+    	builder.getMatrix().getRow().setNumberOfIndexes(identifiableCountMap.get(aClass));
+    	builder.getMatrix().getRow().setKeyBuilder(keyBuilder);
     	builder.getMatrix().getRow().getKeyBuilder().addParameters(new Object[]{0});
     	builder.getMatrix().getRow().addIgnoredKeyValues(InstanceHelper.getInstance().callGetMethod(InstanceHelper.Pool.getInstance().get(aClass), String.class
     			, GlobalIdentifier.FIELD_CODE));	
@@ -346,8 +369,9 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     		@Override
     		protected Key __execute__() {
     			//System.out.println(getInput()[0]+" - "+getInput()[1]+" : "+inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]));
-    			ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]).iterator().next();
-    			return new Key(classroomSession.getCode());
+    			Collection<ClassroomSession> classroomSessions = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]);
+    			ClassroomSession classroomSession = classroomSessions.isEmpty() ? null : classroomSessions.iterator().next();
+    			return new Key(classroomSession == null ? (String)getInput()[0]+(String)getInput()[1] : classroomSession.getCode());
     		}
     	});
     	
@@ -377,8 +401,12 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 						}else
 							levelCode = (String)getInput()[1];
 						if(levelCode!=null){
+							String suffix = ArrayUtils.contains(new String[]{"G6","G7","G8","G9","G10","G11","G12"}, levelCode) ? null : (String)getInput()[2];
 							StudentClassroomSession studentClassroomSession = super.__execute__();
-							ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(levelCode,(String)getInput()[2]).iterator().next();
+							if(studentClassroomSession.getStudent()==null)
+								return null;
+							System.out.println(levelCode+" : "+suffix);
+							ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(levelCode,suffix).iterator().next();
 							studentClassroomSession.setClassroomSession(classroomSession);
 							return studentClassroomSession;
 						}else
@@ -407,6 +435,8 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 					@Override
 					protected ClassroomSessionSubject __execute__() {
 						ClassroomSessionSubject classroomSessionSubject = super.__execute__();
+						if(classroomSessionSubject.getClassroomSession()==null)
+							return null;
 						classroomSessionSubject.setCascadeOperationToChildren(Boolean.TRUE);
 						return classroomSessionSubject;
 					}
@@ -421,7 +451,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     			ClassroomSessionSubject classroomSessionSubject = inject(ClassroomSessionSubjectBusiness.class)
     					.findByClassroomSessionBySubject(inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]).iterator().next()
     							, Pool.getInstance().get(Subject.class, getInput()[2]));
-    			return new Key(classroomSessionSubject.getCode());
+    			return new Key(classroomSessionSubject == null ? (String)getInput()[0]+getInput()[1]+getInput()[2] : classroomSessionSubject.getCode());
     		}
     	});
     	
