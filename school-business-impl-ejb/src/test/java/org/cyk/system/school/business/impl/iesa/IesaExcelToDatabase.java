@@ -76,8 +76,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
    
     @Override
     protected void businesses() {
-    	//SystemHelper.getInstance().getPropertyAs(Integer.class,"personCount")
-    	identifiableCountMap.put(Person.class, 1);
+    	identifiableCountMap.put(Person.class, SystemHelper.getInstance().getPropertyAs(Integer.class,"personCount"));
     	TestCase testCase = instanciateTestCase();
     	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();    	
@@ -405,7 +404,6 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 							StudentClassroomSession studentClassroomSession = super.__execute__();
 							if(studentClassroomSession.getStudent()==null)
 								return null;
-							System.out.println(levelCode+" : "+suffix);
 							ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(levelCode,suffix).iterator().next();
 							studentClassroomSession.setClassroomSession(classroomSession);
 							return studentClassroomSession;
