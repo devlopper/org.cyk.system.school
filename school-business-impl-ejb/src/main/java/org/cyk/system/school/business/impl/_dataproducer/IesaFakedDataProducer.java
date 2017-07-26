@@ -212,7 +212,7 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
     	for(ClassroomSession classroomSession : classroomSessions){
     		//create(classroomSession);
     		//System.out.println("Created "+classroomSession);
-    		classroomSession.getDivisions().setSynchonizationEnabled(Boolean.FALSE);
+    		//classroomSession.getDivisions().setSynchonizationEnabled(Boolean.FALSE);
     	}
     	create(classroomSessions);
 	}
