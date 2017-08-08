@@ -53,13 +53,13 @@ import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper;
 import org.cyk.utility.common.helper.ArrayHelper.Dimension.Key;
 import org.cyk.utility.common.helper.CollectionHelper;
-import org.cyk.utility.common.helper.DateHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.InstanceHelper.Pool;
 import org.cyk.utility.common.helper.MicrosoftExcelHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.SystemHelper;
+import org.cyk.utility.common.helper.TimeHelper;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -354,7 +354,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 		instancesBuilder.setOneDimensionArray(instanceBuilder);
 		System.out.print("synchronise ");
 		inject(BusinessInterfaceLocator.class).injectTyped(aClass).synchronize(sheet,instanceBuilder);
-		System.out.println("SUCCESS. "+new DateHelper.Stringifier.Duration.Adapter.Default(System.currentTimeMillis()-millisecond).execute());
+		System.out.println("SUCCESS. "+new TimeHelper.Stringifier.Duration.Adapter.Default(System.currentTimeMillis()-millisecond).execute());
     }
     
     private void classroomSessions(){
