@@ -11,6 +11,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -62,8 +63,10 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			}
 		});
 		
-		currentClassroomSessionDivisionMessage = StringHelper.getInstance().get("current.classroomsessiondivision"
-				, new Object[]{identifiable.getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
+		//inject(LanguageBusiness.class).findText("current.classroomsessiondivision", new Object[]{identifiable.getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
+		//currentClassroomSessionDivisionMessage = StringHelper.getInstance().get("current.classroomsessiondivision", new Object[]{identifiable.getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
+		
+		currentClassroomSessionDivisionMessage = inject(LanguageBusiness.class).findText("current.classroomsessiondivision", new Object[]{identifiable.getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
 	}
 	
 	@Override
