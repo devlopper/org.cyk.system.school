@@ -72,8 +72,8 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		ClassroomSessionSubject classroomSessionSubject = inject(ClassroomSessionSubjectDao.class).readByClassroomSessionBySubject(
 				classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession(),classroomSessionDivisionSubject.getSubject());
 		if(classroomSessionSubject==null){
-			classroomSessionSubject = new ClassroomSessionSubject(classroomSessionDivisionSubject.getSubject(),classroomSessionDivisionSubject
-				.getClassroomSessionDivision().getClassroomSession());
+			classroomSessionSubject = new ClassroomSessionSubject(classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession()
+					,classroomSessionDivisionSubject.getSubject());
 			inject(ClassroomSessionSubjectBusiness.class).create(classroomSessionSubject);
 		}
 		commonUtils.increment(Long.class, classroomSessionDivisionSubject.getClassroomSessionDivision(), ClassroomSessionDivision.FIELD_NUMBER_OF_SUBJECTS, 1l);

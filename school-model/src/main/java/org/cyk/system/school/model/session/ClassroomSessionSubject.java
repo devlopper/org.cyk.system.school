@@ -18,20 +18,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor
-@Table(uniqueConstraints={@UniqueConstraint(columnNames = {ClassroomSessionSubject.FIELD_SUBJECT,ClassroomSessionSubject.FIELD_CLASSROOMSESSION})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames = {ClassroomSessionSubject.FIELD_CLASSROOMSESSION,ClassroomSessionSubject.FIELD_SUBJECT})})
 public class ClassroomSessionSubject extends AbstractNodeAggregatedResult implements Serializable {
 
 	private static final long serialVersionUID = 2742833783679362737L;
 
-	@ManyToOne @JoinColumn(name=COLUMN_SUBJECT) @NotNull private Subject subject;
 	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOMSESSION) @NotNull private ClassroomSession classroomSession;
+	@ManyToOne @JoinColumn(name=COLUMN_SUBJECT) @NotNull private Subject subject;
 	
 	@ManyToOne @JoinColumn(name=COLUMN_TEACHER) private Teacher teacher;
 	
-	public ClassroomSessionSubject(Subject subject,ClassroomSession classroomSession) {
+	public ClassroomSessionSubject(ClassroomSession classroomSession,Subject subject) {
 		super();
-		this.subject = subject;
 		this.classroomSession = classroomSession;
+		this.subject = subject;
 	}
 	
 	@Override

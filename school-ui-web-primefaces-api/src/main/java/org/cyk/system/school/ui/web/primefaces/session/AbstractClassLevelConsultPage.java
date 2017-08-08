@@ -27,6 +27,7 @@ import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.ui.api.AbstractUserSession;
+import org.cyk.ui.api.IdentifierProvider;
 import org.cyk.ui.api.model.table.Cell;
 import org.cyk.ui.api.model.table.Column;
 import org.cyk.ui.api.model.table.Row;
@@ -155,6 +156,16 @@ extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStude
 			public Crud[] getCruds() {
 				return new Crud[]{Crud.READ,Crud.UPDATE,Crud.DELETE};
 			}
+			
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+			
+			@Override
+			public String getTabId() {
+				return IdentifierProvider.Adapter.getTabOf(ClassroomSession.class);
+			}
 		};
 	}
 	
@@ -175,6 +186,16 @@ extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStude
 			@Override
 			public Collection<SUB_LEVEL> getIdentifiables() {
 				return getSubLevels();
+			}
+			
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+			
+			@Override
+			public String getTabId() {
+				return IdentifierProvider.Adapter.getTabOf(ClassroomSession.class);
 			}
 			
 		};

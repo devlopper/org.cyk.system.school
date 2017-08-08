@@ -10,14 +10,22 @@ import org.cyk.utility.common.annotation.user.interfaces.InputText;
 public class ClassroomSessionSubjectDetails extends AbstractOutputDetails<ClassroomSessionSubject> implements Serializable{
 	private static final long serialVersionUID = -4741435164709063863L;
 	
-	@Input @InputText private String classroomSession,subject,teacher;
+	@Input @InputText private FieldValue classroomSession,subject,teacher;
 	
 	public ClassroomSessionSubjectDetails(ClassroomSessionSubject classroomSessionSubject) {
 		super(classroomSessionSubject);
-		classroomSession = formatUsingBusiness(classroomSessionSubject.getClassroomSession());
-		subject = formatUsingBusiness(classroomSessionSubject.getSubject());
-		if(classroomSessionSubject.getTeacher()!=null)
-			teacher = formatUsingBusiness(classroomSessionSubject.getTeacher());
+		
+	}
+	
+	@Override
+	public void setMaster(ClassroomSessionSubject classroomSessionSubject) {
+		super.setMaster(classroomSessionSubject);
+		if(classroomSessionSubject!=null){
+			classroomSession = new FieldValue(classroomSessionSubject.getClassroomSession());
+			subject = new FieldValue(classroomSessionSubject.getSubject());
+			if(classroomSessionSubject.getTeacher()!=null)
+				teacher = new FieldValue(classroomSessionSubject.getTeacher());	
+		}
 	}
 	
 	public static final String FIELD_CLASSROOM_SESSION = "classroomSession";

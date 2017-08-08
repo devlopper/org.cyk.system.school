@@ -26,7 +26,12 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
+import org.cyk.ui.api.IdentifierProvider;
+import org.cyk.ui.api.model.table.AbstractTable.RenderType;
+import org.cyk.ui.api.model.table.Row;
+import org.cyk.ui.api.model.table.RowAdapter;
 import org.cyk.ui.web.primefaces.Table;
+import org.cyk.utility.common.helper.StringHelper;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<ClassroomSession,ClassroomSessionDetails,ClassroomSessionDivision,ClassroomSessionDivisionDetails,StudentClassroomSession,StudentClassroomSessionDetails,StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails> implements Serializable {
@@ -34,7 +39,40 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	private Table<ClassroomSessionSubjectDetails> subjectTable;
+	private String currentClassroomSessionDivisionMessage;
+	
+	@Override
+	protected void initialisation() {
+		super.initialisation();
+		subLevelTable.getRowListeners().add(new RowAdapter<ClassroomSessionDivisionDetails>(userSession){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void added(Row<ClassroomSessionDivisionDetails> row) {
+				super.added(row);
+				row.setHtml(row.getData().getMaster().getTimeDivisionType().getName());
+			}
+		});
 		
+		subjectTable.getRowListeners().add(new RowAdapter<ClassroomSessionSubjectDetails>(userSession){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void added(Row<ClassroomSessionSubjectDetails> row) {
+				super.added(row);
+				row.setHtml(row.getData().getMaster().getSubject().getName()+" / "+row.getData().getMaster().getTeacher().getPerson().getNames());
+			}
+		});
+		
+		currentClassroomSessionDivisionMessage = StringHelper.getInstance().get("current.classroomsessiondivision"
+				, new Object[]{identifiable.getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
+	}
+	
+	@Override
+	protected void afterInitialisation() {
+		super.afterInitialisation();
+		subLevelTable.setRenderType(RenderType.LIST);
+		//subjectTable.setRenderType(RenderType.LIST);
+	}
+	
 	@Override
 	protected void subLevelTable() {
 		super.subLevelTable();
@@ -43,6 +81,16 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			@Override
 			public Collection<ClassroomSessionSubject> getIdentifiables() {
 				return inject(ClassroomSessionSubjectBusiness.class).findByClassroomSession(identifiable);
+			}
+			
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+			
+			@Override
+			public String getTabId() {
+				return IdentifierProvider.Adapter.getTabOf(ClassroomSession.class);
 			}
 		});
 	}

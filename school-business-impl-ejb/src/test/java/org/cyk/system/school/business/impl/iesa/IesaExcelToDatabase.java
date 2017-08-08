@@ -377,6 +377,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	
     	Pool.getInstance().load(ClassroomSession.class);
     	Pool.getInstance().load(Student.class);
+    	/*
     	InstanceHelperBuilderOneDimensionArrayAdapterDefault<StudentClassroomSession> studentClassroomSessionInstanceBuilder =
     			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<StudentClassroomSession>(StudentClassroomSession.class){
 					private static final long serialVersionUID = 1L;
@@ -412,19 +413,19 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
 					}
     		
     	};
+    	
     	studentClassroomSessionInstanceBuilder.addParameterArrayElementStringIndexInstance(0,StudentClassroomSession.FIELD_STUDENT);
     	createIdentifiable(StudentClassroomSession.class, studentClassroomSessionInstanceBuilder,new ArrayHelperDimensionKeyBuilder(){
 			private static final long serialVersionUID = 1L;
     		@Override
     		protected Key __execute__() {
-    			//System.out.println(getInput()[0]+" - "+getInput()[1]+" : "+inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]));
     			StudentClassroomSession studentClassroomSession = inject(StudentClassroomSessionBusiness.class)
     					.findByStudentByClassroomSession(Pool.getInstance().get(Student.class, getInput()[0]),inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[1],(String)getInput()[2]).iterator().next()
     							);
-    			return new Key(/*studentClassroomSession.getCode()*/String.valueOf(getInput()[1])+String.valueOf(getInput()[2]));
+    			return new Key(String.valueOf(getInput()[1])+String.valueOf(getInput()[2]));
     		}
     	});
-    	
+    	*/
     	
     	Pool.getInstance().load(Subject.class);
     	InstanceHelperBuilderOneDimensionArrayAdapterDefault<ClassroomSessionSubject> classroomSessionSubjectInstanceBuilder =

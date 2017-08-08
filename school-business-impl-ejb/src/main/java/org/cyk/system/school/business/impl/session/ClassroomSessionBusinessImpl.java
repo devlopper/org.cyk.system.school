@@ -69,6 +69,13 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	}
 
 	@Override
+	protected void afterUpdate(ClassroomSession classroomSession) {
+		super.afterUpdate(classroomSession);
+		if(classroomSession.getSubjects().isSynchonizationEnabled())
+			inject(ClassroomSessionSubjectBusiness.class).update(classroomSession.getSubjects().getCollection());
+	}
+	
+	@Override
 	protected void beforeDelete(ClassroomSession classroomSession) {
 		super.beforeDelete(classroomSession);
 		inject(ClassroomSessionDivisionBusiness.class).delete(inject(ClassroomSessionDivisionDao.class).readByClassroomSession(classroomSession));
