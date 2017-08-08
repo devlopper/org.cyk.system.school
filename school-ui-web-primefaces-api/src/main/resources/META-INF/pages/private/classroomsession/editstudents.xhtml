@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
+
+    <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
+ 		<ui:param name="pageController" value="#{classroomSessionEditPage}" />
+ 		<ui:define name="body">
+ 			<p:fieldset legend="#{uiManager.text('field.classroomSession')}" toggleable="true" >
+ 				<cyk:formOneData value="#{classroomSessionEditPage.form}"/>
+ 			</p:fieldset>
+ 			<p:fieldset legend="#{uiManager.text('field.subject')}" toggleable="true" collapsed="true" >
+	 			<cyk:itemCollection value="#{classroomSessionEditPage.classroomSessionSubjectCollection}" >
+	 				<p:column headerText="#{uiManager.text('field.subject')}" >
+	 					<h:outputText value="#{item.label}" />
+	 				</p:column>
+	 				<p:column headerText="#{uiManager.text('field.teacher')}" >
+	 					<p:selectOneMenu value="#{item.teacher}" converter="#{objectConverter}" >
+	 						<f:selectItems value="#{classroomSessionEditPage.teachers}" />
+	 					</p:selectOneMenu>
+	 				</p:column>
+	 			</cyk:itemCollection>
+ 			</p:fieldset>
+ 		</ui:define>
+ 		
+ 		<ui:define name="contentMenuBar">
+ 			<cyk:command value="#{classroomSessionEditPage.form.submitCommandable}" executeParameter="#{classroomSessionEditPage.form.data}" />
+ 		</ui:define>
+ 	</ui:decorate>
+ 
+</html>

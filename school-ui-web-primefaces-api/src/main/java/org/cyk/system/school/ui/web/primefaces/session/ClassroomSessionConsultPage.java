@@ -11,6 +11,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.language.LanguageBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
@@ -27,7 +28,10 @@ import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
+import org.cyk.ui.api.Icon;
 import org.cyk.ui.api.IdentifierProvider;
+import org.cyk.ui.api.command.AbstractCommandable;
+import org.cyk.ui.api.command.UICommandable;
 import org.cyk.ui.api.model.table.AbstractTable.RenderType;
 import org.cyk.ui.api.model.table.Row;
 import org.cyk.ui.api.model.table.RowAdapter;
@@ -66,14 +70,22 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 		//inject(LanguageBusiness.class).findText("current.classroomsessiondivision", new Object[]{identifiable.getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
 		//currentClassroomSessionDivisionMessage = StringHelper.getInstance().get("current.classroomsessiondivision", new Object[]{identifiable.getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
 		
-		currentClassroomSessionDivisionMessage = inject(LanguageBusiness.class).findText("current.classroomsessiondivision", new Object[]{identifiable.getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
+		currentClassroomSessionDivisionMessage = inject(LanguageBusiness.class).findText("current.classroomsessiondivision", new Object[]{identifiable
+				.getAcademicSession().getNodeInformations().getCurrentClassroomSessionDivisionIndex()});
 	}
 	
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
-		subLevelTable.setRenderType(RenderType.LIST);
+		//subLevelTable.setRenderType(RenderType.LIST);
 		//subjectTable.setRenderType(RenderType.LIST);
+	}
+	
+	@Override
+	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
+		super.processIdentifiableContextualCommandable(commandable);
+		commandable.addChild(AbstractCommandable.Builder.createCrud(Crud.UPDATE,identifiable,"edit.student.list",null,"classroomSessionEditStudentsView"));
+		commandable.addChild(AbstractCommandable.Builder.createCrud(Crud.UPDATE,identifiable,"edit.subject.list",null,"classroomSessionEditSubjectsView"));
 	}
 	
 	@Override

@@ -114,6 +114,16 @@
 			<redirect />
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>classroomSessionEditStudentsView</from-outcome>
+			<to-view-id>/private/classroomsession/editstudents.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionEditSubjectsView</from-outcome>
+			<to-view-id>/private/classroomsession/editsubjects.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>classroomSessionConsultStudentDivisionReportFileView</from-outcome>
 			<to-view-id>/private/classroomsession/consultstudentdivisionreportfile.jsf</to-view-id>
 			<redirect />

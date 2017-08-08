@@ -25,6 +25,7 @@ public class ClassroomSessionSubjectDetails extends AbstractOutputDetails<Classr
 			subject = new FieldValue(classroomSessionSubject.getSubject());
 			if(classroomSessionSubject.getTeacher()!=null)
 				teacher = new FieldValue(classroomSessionSubject.getTeacher());	
+			text = subject.getValue()+"("+teacher.getValue()+")";
 		}
 	}
 	
