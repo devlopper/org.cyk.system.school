@@ -15,6 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
+import org.cyk.system.root.business.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
@@ -24,6 +25,7 @@ import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalI
 import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.value.LongValue;
 import org.cyk.system.root.persistence.api.GenericDao;
+import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
@@ -88,6 +90,8 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 		super.beforeDelete(classroomSessionDivision);
 		inject(StudentClassroomSessionDivisionBusiness.class).delete(inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision));
 		inject(ClassroomSessionDivisionSubjectBusiness.class).delete(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision));
+		//inject(MetricCollectionIdentifiableGlobalIdentifierBusiness.class).delete(
+		//		inject(MetricCollectionIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(classroomSessionDivision));
 	}
 	
 	@Override

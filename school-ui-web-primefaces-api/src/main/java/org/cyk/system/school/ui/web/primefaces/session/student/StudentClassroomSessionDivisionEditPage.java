@@ -59,7 +59,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 		Collection<MetricCollection> metricCollections = inject(MetricCollectionBusiness.class).findByTypesByIdentifiable(inject(MetricCollectionTypeBusiness
 				.class).find(SchoolConstant.Code.MetricCollectionType._STUDENT)
 				, identifiable.getClassroomSessionDivision());
-		
+		/*
 		MetricValueCollection metricValueCollection = null;
 		for(MetricCollection metricCollection : metricCollections){
 			final MetricCollection lMetricCollection = metricCollection;			
@@ -96,6 +96,7 @@ public class StudentClassroomSessionDivisionEditPage extends AbstractCrudOnePage
 			
 			metricValueCollections.add(metricValueCollection);
 		}
+		*/
 	}
 	
 	

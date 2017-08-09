@@ -1,18 +1,24 @@
 package org.cyk.system.school.business.impl.iesa;
 
+import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper.TestCase;
 import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
+import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.model.SchoolConstant;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.persistence.api.actor.StudentDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
@@ -74,10 +80,42 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     			.instanciateOne(classroomSessionDivision3,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.BIOLOGY)));
     	
     	testCase.create(classroomSession);
+    	
     	assertEquals(3l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
     	assertEquals(4, inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSession(classroomSession).size());
     	assertEquals(3, inject(ClassroomSessionSubjectDao.class).readByClassroomSession(classroomSession).size());
+    	
+    	Student student = inject(StudentBusiness.class).instanciateOneRandomly("S001");
+    	student.setImage(null);
+    	testCase.create(student);
+    	StudentClassroomSession studentClassroomSession = new StudentClassroomSession(student, classroomSession);
+    	testCase.create(studentClassroomSession);
+    	
     	testCase.clean();
+    }
+    
+    @Test
+    public void deleteG8Division(){
+    	
+    	ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(SchoolConstant.Code.Level.G8,null).iterator()
+    			.next();
+    	
+    	inject(GenericBusiness.class).delete(inject(ClassroomSessionDivisionDao.class).readByClassroomSession(classroomSession).iterator().next());
+    	
+    	/*
+    	assertEquals(3l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
+    	assertEquals(4, inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSession(classroomSession).size());
+    	assertEquals(3, inject(ClassroomSessionSubjectDao.class).readByClassroomSession(classroomSession).size());
+    	*/
+    	
+    	/*
+    	Student student = inject(StudentBusiness.class).instanciateOneRandomly("S001");
+    	student.setImage(null);
+    	testCase.create(student);
+    	StudentClassroomSession studentClassroomSession = new StudentClassroomSession(student, classroomSession);
+    	testCase.create(studentClassroomSession);
+    	*/
+    	
     }
     
     @Test
@@ -118,7 +156,7 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
-    	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1);
+    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1);
     	
     	//dataProducer.getClassroomSessionSuffixes().put(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, new String[]{SchoolConstant.Code.ClassroomSessionSuffix.A});
     	
