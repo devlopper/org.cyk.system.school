@@ -10,27 +10,19 @@
       xmlns:cyk="http://xmlns.jcp.org/jsf/composite/org.cyk.ui.web.primefaces/component">
 
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
- 		<ui:param name="pageController" value="#{classroomSessionEditPage}" />
+ 		<ui:param name="pageController" value="#{classroomSessionEditStudentsPage}" />
  		<ui:define name="body">
- 			<p:fieldset legend="#{uiManager.text('field.classroomSession')}" toggleable="true" >
- 				<cyk:formOneData value="#{classroomSessionEditPage.form}"/>
- 			</p:fieldset>
- 			<p:fieldset legend="#{uiManager.text('field.subject')}" toggleable="true" collapsed="true" >
-	 			<cyk:itemCollection value="#{classroomSessionEditPage.classroomSessionSubjectCollection}" >
-	 				<p:column headerText="#{uiManager.text('field.subject')}" >
-	 					<h:outputText value="#{item.label}" />
-	 				</p:column>
-	 				<p:column headerText="#{uiManager.text('field.teacher')}" >
-	 					<p:selectOneMenu value="#{item.teacher}" converter="#{objectConverter}" >
-	 						<f:selectItems value="#{classroomSessionEditPage.teachers}" />
-	 					</p:selectOneMenu>
-	 				</p:column>
-	 			</cyk:itemCollection>
- 			</p:fieldset>
+ 			
+ 			<cyk:itemCollection value="#{classroomSessionEditStudentsPage.studentClassroomSessionCollection}" >
+ 				<p:column headerText="#{uiManager.text('field.student')}" >
+ 					<h:outputText value="#{item.label}" />
+ 				</p:column>
+ 			</cyk:itemCollection>
+ 			
  		</ui:define>
  		
  		<ui:define name="contentMenuBar">
- 			<cyk:command value="#{classroomSessionEditPage.form.submitCommandable}" executeParameter="#{classroomSessionEditPage.form.data}" />
+ 			<cyk:command value="#{classroomSessionEditStudentsPage.form.submitCommandable}" executeParameter="#{classroomSessionEditStudentsPage.form.data}" />
  		</ui:define>
  	</ui:decorate>
  

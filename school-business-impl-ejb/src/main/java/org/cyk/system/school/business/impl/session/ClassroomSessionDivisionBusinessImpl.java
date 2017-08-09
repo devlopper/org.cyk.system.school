@@ -26,6 +26,7 @@ import org.cyk.system.root.model.value.LongValue;
 import org.cyk.system.root.persistence.api.GenericDao;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Teacher;
@@ -41,6 +42,7 @@ import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.utility.common.Constant;
 
@@ -84,6 +86,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override
 	protected void beforeDelete(ClassroomSessionDivision classroomSessionDivision) {
 		super.beforeDelete(classroomSessionDivision);
+		inject(StudentClassroomSessionDivisionBusiness.class).delete(inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision));
 		inject(ClassroomSessionDivisionSubjectBusiness.class).delete(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision));
 	}
 	

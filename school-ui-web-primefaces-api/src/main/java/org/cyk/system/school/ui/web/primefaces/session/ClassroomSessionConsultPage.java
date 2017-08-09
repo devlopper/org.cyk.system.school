@@ -13,30 +13,29 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.language.LanguageBusiness;
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
+import org.cyk.system.school.business.impl.session.ClassroomSessionSubjectDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
-import org.cyk.system.school.business.impl.session.ClassroomSessionSubjectDetails;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSessionSubject;
-import org.cyk.ui.api.Icon;
 import org.cyk.ui.api.IdentifierProvider;
 import org.cyk.ui.api.command.AbstractCommandable;
 import org.cyk.ui.api.command.UICommandable;
-import org.cyk.ui.api.model.table.AbstractTable.RenderType;
 import org.cyk.ui.api.model.table.Row;
 import org.cyk.ui.api.model.table.RowAdapter;
+import org.cyk.ui.web.primefaces.Commandable;
 import org.cyk.ui.web.primefaces.Table;
-import org.cyk.utility.common.helper.StringHelper;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<ClassroomSession,ClassroomSessionDetails,ClassroomSessionDivision,ClassroomSessionDivisionDetails,StudentClassroomSession,StudentClassroomSessionDetails,StudentClassroomSessionDivision,StudentClassroomSessionDivisionDetails> implements Serializable {
@@ -79,6 +78,8 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 		super.afterInitialisation();
 		//subLevelTable.setRenderType(RenderType.LIST);
 		//subjectTable.setRenderType(RenderType.LIST);
+		((Commandable)studentTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
+		((Commandable)subjectTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
 	}
 	
 	@Override
@@ -111,6 +112,11 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			@Override
 			public String getEditPageOutcome() {
 				return "classroomSessionEditSubjectsView";
+			}
+			
+			@Override
+			public AbstractIdentifiable getFormIdentifiable() {
+				return identifiable;
 			}
 		});
 	}

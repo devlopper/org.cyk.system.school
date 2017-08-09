@@ -166,6 +166,16 @@ extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStude
 			public String getTabId() {
 				return IdentifierProvider.Adapter.getTabOf(ClassroomSession.class);
 			}
+			
+			@Override
+			public String getEditPageOutcome() {
+				return "classroomSessionEditStudentsView";
+			}
+			
+			@Override
+			public AbstractIdentifiable getFormIdentifiable() {
+				return identifiable;
+			}
 		};
 	}
 	

@@ -8,15 +8,19 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
+import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.LevelTimeDivision;
-import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.ui.web.primefaces.CommonNodeInformationsFormModel;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
@@ -33,9 +37,6 @@ import org.cyk.utility.common.annotation.user.interfaces.InputChoiceAutoComplete
 import org.cyk.utility.common.annotation.user.interfaces.InputOneAutoComplete;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSession> implements Serializable {
@@ -113,6 +114,7 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 		@IncludeInputs private CommonNodeInformationsFormModel nodeInformations;
 		 
 		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Subject oneSubjectSelected;
+		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Student oneStudentSelected;
 		
 		@Override
 		public void read() {
@@ -134,6 +136,7 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 		public static final String FIELD_COORDINATOR = "coordinator";
 		public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
 		public static final String FIELD_ONE_SUBJECT_SELECTED = "oneSubjectSelected";
+		public static final String FIELD_ONE_STUDENT_SELECTED = "oneStudentSelected";
 		
 	}
 	

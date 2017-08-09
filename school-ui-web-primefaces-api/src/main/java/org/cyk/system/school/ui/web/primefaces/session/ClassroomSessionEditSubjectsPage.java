@@ -82,6 +82,12 @@ public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<Classr
 	}
 	
 	@Override
+	protected void update() {
+		identifiable.getSubjects().setCollection(classroomSessionSubjectCollection.getIdentifiables());
+		super.update();
+	}
+	
+	@Override
 	public Class<?> getFormModelClass() {
 		return Form.class;
 	}

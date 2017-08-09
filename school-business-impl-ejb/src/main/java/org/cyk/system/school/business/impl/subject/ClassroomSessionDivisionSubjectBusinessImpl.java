@@ -10,6 +10,9 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
@@ -37,12 +40,10 @@ import org.cyk.system.school.persistence.api.actor.TeacherDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.Constant;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Stateless
 public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubject, ClassroomSessionDivisionSubjectDao> implements ClassroomSessionDivisionSubjectBusiness,Serializable {
@@ -102,6 +103,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		super.beforeDelete(classroomSessionDivisionSubject);
 		cascade(classroomSessionDivisionSubject);
 		inject(StudentClassroomSessionDivisionSubjectBusiness.class).delete(inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
+		inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).delete(inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
 	
 	//TODO should be factored in higher class

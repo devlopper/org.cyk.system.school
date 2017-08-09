@@ -32,6 +32,7 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
@@ -40,9 +41,9 @@ import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.utility.common.Constant;
 
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
@@ -71,8 +72,19 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Override
 	protected void afterUpdate(ClassroomSession classroomSession) {
 		super.afterUpdate(classroomSession);
-		if(classroomSession.getSubjects().isSynchonizationEnabled())
-			inject(ClassroomSessionSubjectBusiness.class).update(classroomSession.getSubjects().getCollection());
+		//System.out.println("ClassroomSessionBusinessImpl.afterUpdate() : "+classroomSession.getSubjects().isSynchonizationEnabled());
+		/*if(classroomSession.getSubjects().isSynchonizationEnabled())
+			inject(ClassroomSessionSubjectBusiness.class).save(classroomSession.getSubjects().getCollection());
+		*/
+		synchronise(ClassroomSessionSubject.class, classroomSession, classroomSession.getSubjects());
+		synchronise(StudentClassroomSession.class, classroomSession, classroomSession.getStudents());
+		/*
+		if(classroomSession.getStudents().isSynchonizationEnabled()){
+			synchronise(StudentClassroomSession.class, inject(StudentClassroomSessionDao.class).readByClassroomSession(classroomSession)
+					, classroomSession.getStudents().getCollection());
+			
+		}
+		*/
 	}
 	
 	@Override
