@@ -107,6 +107,11 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			public String getTabId() {
 				return IdentifierProvider.Adapter.getTabOf(ClassroomSession.class);
 			}
+			
+			@Override
+			public String getEditPageOutcome() {
+				return "classroomSessionEditSubjectsView";
+			}
 		});
 	}
 	
