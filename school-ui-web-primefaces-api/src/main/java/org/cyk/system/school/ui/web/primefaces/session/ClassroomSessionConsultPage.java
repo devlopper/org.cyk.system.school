@@ -62,7 +62,7 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 			@Override
 			public void added(Row<ClassroomSessionSubjectDetails> row) {
 				super.added(row);
-				row.setHtml(row.getData().getMaster().getSubject().getName()+" / "+row.getData().getMaster().getTeacher().getPerson().getNames());
+				//row.setHtml(row.getData().getMaster().getSubject().getName()+" / "+row.getData().getMaster().getTeacher().getPerson().getNames());
 			}
 		});
 		

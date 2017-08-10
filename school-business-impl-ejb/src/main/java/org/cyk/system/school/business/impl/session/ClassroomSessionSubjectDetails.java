@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.cyk.system.root.business.impl.AbstractOutputDetails;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
+import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.InputText;
 
@@ -25,7 +26,7 @@ public class ClassroomSessionSubjectDetails extends AbstractOutputDetails<Classr
 			subject = new FieldValue(classroomSessionSubject.getSubject());
 			if(classroomSessionSubject.getTeacher()!=null)
 				teacher = new FieldValue(classroomSessionSubject.getTeacher());	
-			text = subject.getValue()+"("+ classroomSessionSubject.getTeacher().getPerson().getNames()+")";
+			text = subject.getValue()+ (classroomSessionSubject.getTeacher()==null ? Constant.EMPTY_STRING : "("+ classroomSessionSubject.getTeacher().getPerson().getNames()+")");
 		}
 	}
 	

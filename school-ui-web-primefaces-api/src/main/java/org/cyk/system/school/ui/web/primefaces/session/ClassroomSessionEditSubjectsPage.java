@@ -43,14 +43,21 @@ public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<Classr
 		super.afterInitialisation();
 		
 		classroomSessionSubjectCollection = createItemCollection(ClassroomSessionSubjectItem.class, ClassroomSessionSubject.class,identifiable 
-				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<ClassroomSessionSubjectItem,ClassroomSessionSubject,ClassroomSession>(identifiable,crud,form){
+				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<ClassroomSessionSubjectItem,ClassroomSessionSubject,ClassroomSession>(identifiable,crud,form,ClassroomSessionSubject.class){
 			private static final long serialVersionUID = 1L;
-			
+			/*
 			@Override
 			public IdentifiableRuntimeCollection<ClassroomSessionSubject> getRuntimeCollection() {
 				return getCollection().getSubjects().setSynchonizationEnabled(Boolean.TRUE);
 			}
-			
+			*/
+			/*
+			@Override
+			public Class<? extends AbstractIdentifiable> getItemClass() {
+				return ClassroomSessionSubject.class;
+			}
+			*/
+			/*
 			@Override
 			public Collection<ClassroomSessionSubject> findByCollection(ClassroomSession classroomSession) {
 				return inject(ClassroomSessionSubjectBusiness.class).findByClassroomSession(classroomSession);
@@ -72,7 +79,7 @@ public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<Classr
 					ClassroomSessionSubject classroomSessionSubject) {
 				return classroomSessionSubject.getSubject();
 			}
-			
+			*/
 			@Override
 			public String getFieldOneItemMasterSelectedName() {
 				return Form.FIELD_ONE_SUBJECT_SELECTED;

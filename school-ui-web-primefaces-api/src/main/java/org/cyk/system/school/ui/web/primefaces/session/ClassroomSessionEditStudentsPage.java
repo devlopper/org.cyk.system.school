@@ -43,7 +43,7 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 		super.afterInitialisation();
 		
 		studentClassroomSessionCollection = createItemCollection(StudentClassroomSessionItem.class, StudentClassroomSession.class,identifiable 
-				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession>(identifiable,crud,form){
+				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession>(identifiable,crud,form,StudentClassroomSession.class){
 			private static final long serialVersionUID = 1L;
 			
 			@Override
