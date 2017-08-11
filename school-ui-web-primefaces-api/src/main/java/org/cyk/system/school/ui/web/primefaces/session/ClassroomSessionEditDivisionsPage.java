@@ -70,11 +70,11 @@ public class ClassroomSessionEditDivisionsPage extends AbstractCrudOnePage<Class
 		});
 	}
 
-	@Override
+	/*@Override
 	protected void update() {
 		identifiable.getDivisions().setCollection(classroomSessionDivisionCollection.getIdentifiables());
 		super.update();
-	}
+	}*/
 	
 	@Override
 	public Class<?> getFormModelClass() {

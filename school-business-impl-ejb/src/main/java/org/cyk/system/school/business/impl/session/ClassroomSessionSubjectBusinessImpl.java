@@ -63,16 +63,13 @@ public class ClassroomSessionSubjectBusinessImpl extends AbstractTypedBusinessSe
 	@Override
 	protected void beforeUpdate(ClassroomSessionSubject classroomSessionSubject) {
 		super.beforeUpdate(classroomSessionSubject);
-		if(classroomSessionSubject.getIdentifier()!=null){
-			ClassroomSessionSubject oldClassroomSessionSubject = dao.read(classroomSessionSubject.getIdentifier());
-			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionBySubject(oldClassroomSessionSubject.getClassroomSession(), oldClassroomSessionSubject.getSubject())){
-				//classroomSessionDivisionSubject.setSubject(classroomSessionSubject.getSubject()); //TODO should not be updated because participate to unique constraint
-				if(Boolean.TRUE.equals(classroomSessionSubject.getCascadeOperationToChildren())){
-					classroomSessionDivisionSubject.setTeacher(classroomSessionSubject.getTeacher());
-					classroomSessionDivisionSubject.setWeight(classroomSessionSubject.getWeight());
-				}
-				inject(ClassroomSessionDivisionSubjectDao.class).update(classroomSessionDivisionSubject);
+		ClassroomSessionSubject oldClassroomSessionSubject = dao.read(classroomSessionSubject.getIdentifier());
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionBySubject(oldClassroomSessionSubject.getClassroomSession(), oldClassroomSessionSubject.getSubject())){
+			if(Boolean.TRUE.equals(classroomSessionSubject.getCascadeOperationToChildren())){
+				classroomSessionDivisionSubject.setTeacher(classroomSessionSubject.getTeacher());
+				classroomSessionDivisionSubject.setWeight(classroomSessionSubject.getWeight());
 			}
+			inject(ClassroomSessionDivisionSubjectDao.class).update(classroomSessionDivisionSubject);
 		}
 	}
 		

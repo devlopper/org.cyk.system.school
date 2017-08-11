@@ -49,11 +49,11 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 		});
 	}
 
-	@Override
+	/*@Override
 	protected void update() {
 		identifiable.getStudents().setCollection(studentClassroomSessionCollection.getIdentifiables());
 		super.update();
-	}
+	}*/
 	
 	@Override
 	public Class<?> getFormModelClass() {
