@@ -1,19 +1,18 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
-import org.cyk.ui.web.api.WebManager;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
@@ -22,16 +21,12 @@ import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<ClassroomSession> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
 	private ItemCollection<StudentClassroomSessionItem, StudentClassroomSession, ClassroomSession> studentClassroomSessionCollection;
-	private List<SelectItem> teachers = WebManager.getInstance().getSelectItems(Teacher.class);
 	
 	@Override
 	protected void afterInitialisation() {
@@ -48,12 +43,6 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 			
 		});
 	}
-
-	/*@Override
-	protected void update() {
-		identifiable.getStudents().setCollection(studentClassroomSessionCollection.getIdentifiables());
-		super.update();
-	}*/
 	
 	@Override
 	public Class<?> getFormModelClass() {
@@ -75,20 +64,6 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 	@Getter @Setter
 	public static class StudentClassroomSessionItem extends AbstractItemCollectionItem<StudentClassroomSession> {
 		private static final long serialVersionUID = 1L;
-		
-		private Student student;
-		
-		@Override
-		public void setIdentifiable(StudentClassroomSession studentClassroomSession) {
-			super.setIdentifiable(studentClassroomSession);
-			student = studentClassroomSession.getStudent();
-		}
-		
-		@Override
-		public void write() {
-			super.write();
-			identifiable.setStudent(student);
-		}
 		
 	}
 

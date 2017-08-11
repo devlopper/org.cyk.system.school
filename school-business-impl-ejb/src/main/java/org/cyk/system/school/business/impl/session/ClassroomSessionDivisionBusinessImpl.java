@@ -67,10 +67,12 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override
 	protected void beforeCreate(ClassroomSessionDivision classroomSessionDivision) {
 		super.beforeCreate(classroomSessionDivision);
-		CommonNodeInformations nodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSessionDivision.getClassroomSession());
-		Long start = nodeInformations.getClassroomSessionDivisionOrderNumberInterval()==null ?
+		if(classroomSessionDivision.getOrderNumber()==null){
+			CommonNodeInformations nodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSessionDivision.getClassroomSession());
+			Long start = nodeInformations.getClassroomSessionDivisionOrderNumberInterval()==null ?
 				1 : inject(IntervalBusiness.class).findGreatestLowestValue(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()).longValue();
-		classroomSessionDivision.setOrderNumber(start+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()));
+			classroomSessionDivision.setOrderNumber(start+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()));
+		}
 		
 	}
 	
