@@ -44,6 +44,7 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 		 
 		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Subject oneSubjectSelected;
 		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Student oneStudentSelected;
+		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Long oneOrderNumberSelected;
 		
 		@Override
 		public void read() {
@@ -66,6 +67,7 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 		public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
 		public static final String FIELD_ONE_SUBJECT_SELECTED = "oneSubjectSelected";
 		public static final String FIELD_ONE_STUDENT_SELECTED = "oneStudentSelected";
+		public static final String FIELD_ONE_ORDER_NUMBER_SELECTED = "oneOrderNumberSelected";
 		
 	}
 	

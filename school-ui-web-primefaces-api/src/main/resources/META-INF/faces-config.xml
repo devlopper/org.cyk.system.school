@@ -124,6 +124,11 @@
 			<redirect />
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>classroomSessionEditDivisionsView</from-outcome>
+			<to-view-id>/private/classroomsession/editdivisions.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>classroomSessionConsultStudentDivisionReportFileView</from-outcome>
 			<to-view-id>/private/classroomsession/consultstudentdivisionreportfile.jsf</to-view-id>
 			<redirect />

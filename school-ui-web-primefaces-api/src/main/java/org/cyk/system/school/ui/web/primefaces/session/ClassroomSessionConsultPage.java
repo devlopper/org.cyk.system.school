@@ -78,16 +78,17 @@ public class ClassroomSessionConsultPage extends AbstractClassLevelConsultPage<C
 		super.afterInitialisation();
 		//subLevelTable.setRenderType(RenderType.LIST);
 		//subjectTable.setRenderType(RenderType.LIST);
+		((Commandable)subLevelTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
 		((Commandable)studentTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
 		((Commandable)subjectTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
 	}
 	
-	@Override
+	/*@Override
 	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
 		super.processIdentifiableContextualCommandable(commandable);
 		commandable.addChild(AbstractCommandable.Builder.createCrud(Crud.UPDATE,identifiable,"edit.student.list",null,"classroomSessionEditStudentsView"));
 		commandable.addChild(AbstractCommandable.Builder.createCrud(Crud.UPDATE,identifiable,"edit.subject.list",null,"classroomSessionEditSubjectsView"));
-	}
+	}*/
 	
 	@Override
 	protected void subLevelTable() {

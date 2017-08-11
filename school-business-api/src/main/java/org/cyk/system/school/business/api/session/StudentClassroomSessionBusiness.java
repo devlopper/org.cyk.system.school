@@ -36,6 +36,6 @@ public interface StudentClassroomSessionBusiness extends AbstractStudentResultsB
 
 	Collection<StudentClassroomSession> findByAcademicSession(AcademicSession academicSession);
 	StudentClassroomSession instanciateOne(Student student, ClassroomSession classroomSession);
-
+	StudentClassroomSession instanciateOne(ClassroomSession classroomSession,Student student);
 	
 }

@@ -195,7 +195,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	protected void configureClassroomSessionClass() {
 		getFormConfiguration(ClassroomSession.class, Crud.CREATE).addRequiredFieldNames(ClassroomSessionEditPage.Form.FIELD_ACADEMIC_SESSION
 				,ClassroomSessionEditPage.Form.FIELD_LEVEL_TIME_DIVISION).addFieldNames(ClassroomSessionEditPage.Form.FIELD_COORDINATOR
-				,ClassroomSessionEditPage.Form.FIELD_SUFFIX
+				,ClassroomSessionEditPage.Form.FIELD_SUFFIX,ClassroomSessionEditPage.Form.FIELD_ONE_ORDER_NUMBER_SELECTED
 				,ClassroomSessionEditPage.Form.FIELD_ONE_STUDENT_SELECTED,ClassroomSessionEditPage.Form.FIELD_ONE_SUBJECT_SELECTED,ClassroomSessionEditPage.Form.FIELD_NODE_INFORMATIONS)
 				.addFieldNames(new FieldHelper().getNamesWhereReferencedByStaticField(CommonNodeInformationsFormModel.class));
 		

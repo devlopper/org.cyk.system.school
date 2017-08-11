@@ -208,6 +208,15 @@ extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStude
 				return IdentifierProvider.Adapter.getTabOf(ClassroomSession.class);
 			}
 			
+			@Override
+			public String getEditPageOutcome() {
+				return "classroomSessionEditDivisionsView";//TODO should be on child
+			}
+			
+			@Override
+			public AbstractIdentifiable getFormIdentifiable() {
+				return identifiable;
+			}
 		};
 	}
 	

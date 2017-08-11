@@ -71,6 +71,11 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	}
 	
 	@Override
+	public StudentClassroomSession instanciateOne(ClassroomSession classroomSession,Student student) {
+		return instanciateOne(student, classroomSession);
+	}
+	
+	@Override
 	protected void afterCreate(StudentClassroomSession studentClassroomSession) {
 		super.afterCreate(studentClassroomSession);
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();

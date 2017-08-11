@@ -40,7 +40,7 @@ public class ClassroomSessionSubjectBusinessImpl extends AbstractTypedBusinessSe
 	}
 	
 	@Override
-	public ClassroomSessionSubject instanciateOne(Subject subject, ClassroomSession classroomSession) {
+	public ClassroomSessionSubject instanciateOne(ClassroomSession classroomSession, Subject subject) {
 		ClassroomSessionSubject classroomSessionSubject = instanciateOne();
 		classroomSessionSubject.setSubject(subject);
 		classroomSessionSubject.setClassroomSession(classroomSession);

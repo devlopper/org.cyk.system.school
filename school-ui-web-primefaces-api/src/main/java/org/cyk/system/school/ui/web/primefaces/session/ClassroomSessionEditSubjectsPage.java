@@ -1,22 +1,17 @@
 package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.IdentifiableRuntimeCollection;
-import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
-import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.api.WebManager;
 import org.cyk.ui.web.primefaces.ItemCollection;
@@ -45,41 +40,7 @@ public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<Classr
 		classroomSessionSubjectCollection = createItemCollection(ClassroomSessionSubjectItem.class, ClassroomSessionSubject.class,identifiable 
 				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<ClassroomSessionSubjectItem,ClassroomSessionSubject,ClassroomSession>(identifiable,crud,form,ClassroomSessionSubject.class){
 			private static final long serialVersionUID = 1L;
-			/*
-			@Override
-			public IdentifiableRuntimeCollection<ClassroomSessionSubject> getRuntimeCollection() {
-				return getCollection().getSubjects().setSynchonizationEnabled(Boolean.TRUE);
-			}
-			*/
-			/*
-			@Override
-			public Class<? extends AbstractIdentifiable> getItemClass() {
-				return ClassroomSessionSubject.class;
-			}
-			*/
-			/*
-			@Override
-			public Collection<ClassroomSessionSubject> findByCollection(ClassroomSession classroomSession) {
-				return inject(ClassroomSessionSubjectBusiness.class).findByClassroomSession(classroomSession);
-			}
 			
-			@Override
-			public ClassroomSessionSubject instanciate(AbstractItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject, ClassroomSession, SelectItem> itemCollection) {
-				return inject(ClassroomSessionSubjectBusiness.class).instanciateOne( (Subject)getInputChoice().getValue(),getCollection() );
-			}
-			
-			@Override
-			public void setLabel(AbstractItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject, ClassroomSession, SelectItem> itemCollection,ClassroomSessionSubjectItem item) {
-				super.setLabel(itemCollection, item);
-				item.setLabel(item.getIdentifiable().getSubject().getName());
-			}
-								
-			@Override
-			public AbstractIdentifiable getMasterSelected(AbstractItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject,ClassroomSession, SelectItem> itemCollection,
-					ClassroomSessionSubject classroomSessionSubject) {
-				return classroomSessionSubject.getSubject();
-			}
-			*/
 			@Override
 			public String getFieldOneItemMasterSelectedName() {
 				return Form.FIELD_ONE_SUBJECT_SELECTED;

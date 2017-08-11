@@ -72,19 +72,9 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	@Override
 	protected void afterUpdate(ClassroomSession classroomSession) {
 		super.afterUpdate(classroomSession);
-		//System.out.println("ClassroomSessionBusinessImpl.afterUpdate() : "+classroomSession.getSubjects().isSynchonizationEnabled());
-		/*if(classroomSession.getSubjects().isSynchonizationEnabled())
-			inject(ClassroomSessionSubjectBusiness.class).save(classroomSession.getSubjects().getCollection());
-		*/
+		synchronise(ClassroomSessionDivision.class, classroomSession, classroomSession.getDivisions());
 		synchronise(ClassroomSessionSubject.class, classroomSession, classroomSession.getSubjects());
 		synchronise(StudentClassroomSession.class, classroomSession, classroomSession.getStudents());
-		/*
-		if(classroomSession.getStudents().isSynchonizationEnabled()){
-			synchronise(StudentClassroomSession.class, inject(StudentClassroomSessionDao.class).readByClassroomSession(classroomSession)
-					, classroomSession.getStudents().getCollection());
-			
-		}
-		*/
 	}
 	
 	@Override
