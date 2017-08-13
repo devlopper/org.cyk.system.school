@@ -12,13 +12,20 @@
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
  		<ui:param name="pageController" value="#{classroomSessionDivisionConsultPage}" />
  		<ui:define name="body">
- 			<cyk:formOneData value="#{classroomSessionDivisionConsultPage.details}" />	
-			<cyk:table value="#{classroomSessionDivisionConsultPage.subLevelTable}" />	
-			<cyk:table value="#{classroomSessionDivisionConsultPage.studentTable}" />
-			<cyk:table value="#{classroomSessionDivisionConsultPage.broadsheetTable}" />
-			<!--cyk:table value="#{classroomSessionDivisionConsultPage.classroomSessionDivisionStudentsMetricCollectionTable}" /-->
-			
-			<cyk:metricCollectionIdentifiableGlobalIdentifiers value="#{classroomSessionDivisionConsultPage.metricCollectionIdentifiableGlobalIdentifiers}" />
+ 			<table border="0" cellpadding="0" cellspacing="0">
+ 				<tr style="vertical-align: top;">
+ 					<td>
+ 						<cyk:formOneData value="#{classroomSessionDivisionConsultPage.details}" />
+ 						<cyk:table value="#{classroomSessionDivisionConsultPage.studentTable}" />
+ 					</td>
+ 					<td style="width: 50%"> 
+ 						<cyk:table value="#{classroomSessionDivisionConsultPage.subjectTable}" />
+ 						
+ 					</td>
+ 				</tr>
+ 			</table>
+ 			
+ 			<cyk:metricCollectionIdentifiableGlobalIdentifiers value="#{classroomSessionDivisionConsultPage.metricCollectionIdentifiableGlobalIdentifiers}" />
 			
  		</ui:define>
  	</ui:decorate>

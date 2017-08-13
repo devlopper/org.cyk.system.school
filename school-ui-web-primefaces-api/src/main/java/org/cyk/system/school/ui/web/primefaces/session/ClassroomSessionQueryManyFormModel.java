@@ -24,11 +24,13 @@ import org.cyk.system.root.business.api.mathematics.IntervalBusiness;
 import org.cyk.system.root.business.api.party.person.PersonBusiness;
 import org.cyk.system.root.business.impl.validation.ExceptionUtils;
 import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.party.person.Person;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
@@ -128,8 +130,7 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 		private Set<TimeDivisionType> getTimeDivisionTypes(AbstractProcessManyPage<?> page){
 			Set<TimeDivisionType> timeDivisionTypes = new LinkedHashSet<>();
 			for(Object object : page.getElements()){
-				CommonNodeInformations nodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations((ClassroomSession) object);
-				timeDivisionTypes.add(nodeInformations.getClassroomSessionTimeDivisionType());
+				timeDivisionTypes.add(inject(CommonNodeInformationsBusiness.class).findValue((ClassroomSession)object,TimeDivisionType.class,CommonNodeInformations.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE));
 			}
 			return timeDivisionTypes;
 		}
@@ -263,14 +264,15 @@ public class ClassroomSessionQueryManyFormModel extends AbstractClassroomSession
 			org.cyk.ui.api.data.collector.control.InputChoice<?,?,?,?,?,SelectItem> input = page.getForm().findInputByClassByFieldName(org.cyk.ui.api.data.collector.control.InputChoice.class, Form.FIELD_CLASSROOMSESSIONDIVISION_INDEXES_REQUIRED);
 			if(input!=null)
 				for(ClassroomSession classroomSession : classroomSessions){
-					CommonNodeInformations nodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession);
-					if(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()!=null){
-						Long max = inject(IntervalBusiness.class).findLowestGreatestValue(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()).longValue();
+					Interval interval = inject(CommonNodeInformationsBusiness.class).findValue(classroomSession,Interval.class,CommonNodeInformations.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL);
+					TimeDivisionType timeDivisionType = inject(CommonNodeInformationsBusiness.class).findValue(classroomSession,TimeDivisionType.class,CommonNodeInformations.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE);
+					if(interval!=null){
+						Long max = inject(IntervalBusiness.class).findLowestGreatestValue(interval).longValue();
 						if(max!=null)
 							for(byte i = 0; i < max; i++){
 								if(indexes.add(i) /*|| timeDivisionTypesProcessed.add(nodeInformations.getClassroomSessionTimeDivisionType())*/)
 									input.getList().add(new SelectItem(i, (timeDivisionTypes.size()==1?Constant.EMPTY_STRING
-										:nodeInformations.getAttendanceTimeDivisionType().getName()+Constant.CHARACTER_SPACE)+String.valueOf(i+1)));
+										:timeDivisionType.getName()+Constant.CHARACTER_SPACE)+String.valueOf(i+1)));
 							}
 					}
 				}

@@ -19,13 +19,14 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.value.LongValue;
 import org.cyk.system.root.persistence.api.GenericDao;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.model.NodeResults;
@@ -68,12 +69,10 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	protected void beforeCreate(ClassroomSessionDivision classroomSessionDivision) {
 		super.beforeCreate(classroomSessionDivision);
 		if(classroomSessionDivision.getOrderNumber()==null){
-			CommonNodeInformations nodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSessionDivision.getClassroomSession());
-			Long start = nodeInformations.getClassroomSessionDivisionOrderNumberInterval()==null ?
-				1 : inject(IntervalBusiness.class).findGreatestLowestValue(nodeInformations.getClassroomSessionDivisionOrderNumberInterval()).longValue();
+			Interval interval = inject(CommonNodeInformationsBusiness.class).findValue(classroomSessionDivision.getClassroomSession(),Interval.class,CommonNodeInformations.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL);
+			Long start = interval==null ? 1 : inject(IntervalBusiness.class).findGreatestLowestValue(interval).longValue();
 			classroomSessionDivision.setOrderNumber(start+dao.countByClassroomSession(classroomSessionDivision.getClassroomSession()));
 		}
-		
 	}
 	
 	@Override
@@ -117,9 +116,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 				if(classroomSessionDivision.getResults().getAverageLowest()==null || s.getResults().getEvaluationSort().getAverage().getValue().compareTo(classroomSessionDivision.getResults().getAverageLowest())<0)
 					classroomSessionDivision.getResults().setAverageLowest(s.getResults().getEvaluationSort().getAverage().getValue());	
 				
-				//TODO should be take first on subject if null on higher
-				if(s.getResults().getEvaluationSort().getAverage().getValue().compareTo(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
-						s.getClassroomSessionDivision().getClassroomSession()).getEvaluationPassAverage())>=0){
+				if(s.getResults().getEvaluationSort().getAverage().getValue().compareTo(inject(CommonNodeInformationsBusiness.class).findValue(s.getClassroomSessionDivision().getClassroomSession(),BigDecimal.class,CommonNodeInformations.FIELD_EVALUATION_PASS_AVERAGE))>=0){
 					results.setNumberOfStudentPassingEvaluationAverage(results.getNumberOfStudentPassingEvaluationAverage()+1);
 				}
 			}

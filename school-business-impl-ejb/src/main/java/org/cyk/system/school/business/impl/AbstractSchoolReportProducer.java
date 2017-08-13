@@ -26,15 +26,18 @@ import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.report.AbstractReportTemplateFile;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
 import org.cyk.system.root.model.file.report.LabelValueReport;
+import org.cyk.system.root.model.mathematics.Interval;
+import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.session.SchoolReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.SchoolConstant.Code.LevelName;
@@ -441,8 +444,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				
 				report.addLabelValueCollection(labelValueCollectionReport);
 				
-				addIntervalCollection(report,inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
-					((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
+				addIntervalCollection(report, inject(CommonNodeInformationsBusiness.class).findValue(((StudentClassroomSessionDivision)report.getSource())
+						.getClassroomSessionDivision().getClassroomSession(),IntervalCollection.class,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE)
 					,null,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 				report.getCurrentLabelValueCollection().setName(StringUtils.upperCase(report.getCurrentLabelValueCollection().getName()));		
 			}
@@ -455,11 +458,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 			}
 			addSchoolCommunications(report, studentClassroomSessionDivision,schoolCommunicationMetricCollectionCode);
 			
-			CommonNodeInformations commonNodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
-					((StudentClassroomSessionDivision)report.getStudentClassroomSessionDivision().getSource()).getClassroomSessionDivision().getClassroomSession());
-			
 			Collection<StudentClassroomSessionDivisionReport> previousStudentClassroomSessionDivisionReports = new ArrayList<>();
-			for(int orderNumber = commonNodeInformations.getClassroomSessionDivisionOrderNumberInterval().getLow().getValue().intValue() ; 
+			for(int orderNumber = inject(CommonNodeInformationsBusiness.class).findValue(((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision()
+					.getClassroomSession(),Interval.class,CommonNodeInformations.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL).getLow().getValue().intValue(); 
 					orderNumber < studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber() ; orderNumber++){
 				StudentClassroomSessionDivisionReport previousStudentClassroomSessionDivisionReport = new StudentClassroomSessionDivisionReport();
 				previousStudentClassroomSessionDivisionReport.setSource(inject(StudentClassroomSessionDivisionDao.class)
@@ -486,8 +487,8 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 				,String metricCollectionCode){
 			addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_ATTENDANCE
 					,new Derive.Adapter.Default().addInputs(report,studentClassroomSessionDivision.getClassroomSessionDivision(),
-							inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
-									.getClassroomSession()).getAttendanceTimeDivisionType()));
+							inject(CommonNodeInformationsBusiness.class).findValue(((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision()
+									.getClassroomSession(),TimeDivisionType.class,CommonNodeInformations.FIELD_ATTENDANCE_TIME_DIVISION_TYPE)));
 			addMetricCollection(report, studentClassroomSessionDivision, metricCollectionCode,new Derive.Adapter.Default().addInputs(report
 					,studentClassroomSessionDivision.getClassroomSessionDivision()),Boolean.FALSE);
 			
@@ -542,8 +543,9 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		protected void addSchoolCommunications(StudentClassroomSessionDivisionReportTemplateFile report,StudentClassroomSessionDivision studentClassroomSessionDivision,String metricCollectionCode){
 			addMetricCollection(report, studentClassroomSessionDivision,metricCollectionCode);
-			if(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==inject(ClassroomSessionBusiness.class)
-					.findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getClassroomSessionDivisionOrderNumberInterval().getHigh().getValue().intValue()){
+			if(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==inject(CommonNodeInformationsBusiness.class)
+					.findValue(((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision().getClassroomSession(),Interval.class
+							,CommonNodeInformations.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL).getHigh().getValue().intValue()){
 				/*StudentResults classroomSessionResults = inject(StudentClassroomSessionDao.class)
 						.readByStudentByClassroomSession(studentClassroomSessionDivision.getStudent(), studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getResults();
 				

@@ -81,6 +81,11 @@
 			<to-view-id>/private/academicsession/list.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>academicSessionEditClassroomSessionsView</from-outcome>
+			<to-view-id>/private/academicsession/editclassroomsessions.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
 		
 		<navigation-case>
 			<from-outcome>levelTimeDivisionEditView</from-outcome>
@@ -147,6 +152,16 @@
 		<navigation-case>
 			<from-outcome>classroomSessionDivisionListView</from-outcome>
 			<to-view-id>/private/classroomsessiondivision/list.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionEditStudentsView</from-outcome>
+			<to-view-id>/private/classroomsessiondivision/editstudents.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>classroomSessionDivisionEditSubjectsView</from-outcome>
+			<to-view-id>/private/classroomsessiondivision/editsubjects.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		<navigation-case>

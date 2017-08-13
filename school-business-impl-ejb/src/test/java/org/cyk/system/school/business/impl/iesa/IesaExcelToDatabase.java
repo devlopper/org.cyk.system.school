@@ -56,6 +56,7 @@ import org.cyk.utility.common.helper.CollectionHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.InstanceHelper.Pool;
+import org.cyk.utility.common.helper.MethodHelper;
 import org.cyk.utility.common.helper.MicrosoftExcelHelper;
 import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.SystemHelper;
@@ -343,7 +344,7 @@ public class IesaExcelToDatabase extends AbstractIesaBusinessIT {
     	builder.getMatrix().getRow().setNumberOfIndexes(identifiableCountMap.get(aClass));
     	builder.getMatrix().getRow().setKeyBuilder(keyBuilder);
     	builder.getMatrix().getRow().getKeyBuilder().addParameters(new Object[]{0});
-    	builder.getMatrix().getRow().addIgnoredKeyValues(InstanceHelper.getInstance().callGetMethod(InstanceHelper.Pool.getInstance().get(aClass), String.class
+    	builder.getMatrix().getRow().addIgnoredKeyValues(MethodHelper.getInstance().callGet(InstanceHelper.Pool.getInstance().get(aClass), String.class
     			, GlobalIdentifier.FIELD_CODE));	
     	
     	System.out.print("sheet ");

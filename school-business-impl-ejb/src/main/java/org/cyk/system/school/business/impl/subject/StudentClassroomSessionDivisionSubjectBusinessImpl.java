@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
@@ -19,6 +19,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
@@ -135,12 +136,14 @@ public class StudentClassroomSessionDivisionSubjectBusinessImpl extends Abstract
 	
 	@Override
 	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSessionDivisionSubject subject) {
-		return inject(ClassroomSessionBusiness.class).findCommonNodeInformations(subject.getClassroomSessionDivision().getClassroomSession()).getStudentSubjectAverageScale();
+		return inject(CommonNodeInformationsBusiness.class).findValue(subject.getClassroomSessionDivision().getClassroomSession(), IntervalCollection.class
+				, CommonNodeInformations.FIELD_STUDENT_SUBJECT_AVERAGESCALE);
 	}
 	
 	@Override
 	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSessionDivisionSubject subject) {
-		return inject(ClassroomSessionBusiness.class).findCommonNodeInformations(subject.getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionAveragePromotionScale();
+		return inject(CommonNodeInformationsBusiness.class).findValue(subject.getClassroomSessionDivision().getClassroomSession(), IntervalCollection.class
+				, CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE);
 	}
 	
 	@Override

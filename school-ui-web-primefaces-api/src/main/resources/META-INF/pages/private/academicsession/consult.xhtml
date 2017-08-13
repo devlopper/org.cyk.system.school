@@ -12,8 +12,16 @@
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
  		<ui:param name="pageController" value="#{academicSessionConsultPage}" />
  		<ui:define name="body">
- 			<cyk:formOneData value="#{academicSessionConsultPage.details}" />	
-			<cyk:table value="#{academicSessionConsultPage.classroomSessionTable}" />
+ 			<table>
+ 				<tr style="vertical-align: top;">
+ 					<td style="width: 50%;">
+ 						<cyk:formOneData value="#{academicSessionConsultPage.details}" />	
+ 					</td>
+ 					<td>
+ 						<cyk:table value="#{academicSessionConsultPage.classroomSessionTable}" />
+ 					</td>
+ 				</tr>
+ 			</table>
  		</ui:define>
  	</ui:decorate>
  

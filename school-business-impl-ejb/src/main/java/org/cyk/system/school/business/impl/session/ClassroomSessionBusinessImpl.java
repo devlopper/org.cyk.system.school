@@ -18,6 +18,7 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.value.MeasureBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.file.FileRepresentationType;
+import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
@@ -27,6 +28,7 @@ import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -145,20 +147,10 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public CommonNodeInformations findCommonNodeInformations(ClassroomSession classroomSession) {
-		CommonNodeInformations commonNodeInformations = classroomSession.getLevelTimeDivision().getLevel().getLevelName().getNodeInformations();
-		if(commonNodeInformations==null)
-			commonNodeInformations = classroomSession.getAcademicSession().getNodeInformations();
-		if(commonNodeInformations==null)
-			commonNodeInformations = classroomSession.getAcademicSession().getSchool().getNodeInformations();
-		return commonNodeInformations;
-	}
-	
-	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Collection<FileRepresentationType> findStudentClassroomSessionDivisionResultsFileRepresentationTypes(Collection<ClassroomSession> classroomSessions) {
 		Set<String> codes = new LinkedHashSet<>();
 		for(ClassroomSession classroomSession : classroomSessions)
-			codes.add(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getStudentClassroomSessionDivisionResultsReportTemplate().getCode());
+			codes.add(inject(CommonNodeInformationsBusiness.class).findValue(classroomSession,ReportTemplate.class,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE).getCode());
 		return inject(FileRepresentationTypeDao.class).readByGlobalIdentifierCodes(codes);
 	}
 	
@@ -172,13 +164,13 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public BigDecimal convertAttendanceTimeToDivisionDuration(ClassroomSession classroomSession,Long millisecond) {
-		TimeDivisionType timeDivisionType = findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType();
+		TimeDivisionType timeDivisionType = inject(CommonNodeInformationsBusiness.class).findValue(classroomSession,TimeDivisionType.class,CommonNodeInformations.FIELD_ATTENDANCE_TIME_DIVISION_TYPE);
 		return millisecond==null?BigDecimal.ZERO:inject(MeasureBusiness.class).computeQuotient(timeDivisionType.getMeasure(), new BigDecimal(millisecond));
 	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public Long convertAttendanceTimeToMillisecond(ClassroomSession classroomSession,BigDecimal duration) {
-		TimeDivisionType timeDivisionType = findCommonNodeInformations(classroomSession).getAttendanceTimeDivisionType();
+		TimeDivisionType timeDivisionType = inject(CommonNodeInformationsBusiness.class).findValue(classroomSession,TimeDivisionType.class,CommonNodeInformations.FIELD_ATTENDANCE_TIME_DIVISION_TYPE);
 		return duration==null?0l:inject(MeasureBusiness.class).computeMultiple(timeDivisionType.getMeasure(), duration).longValue();
 	}
 

@@ -8,12 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.TypedBusiness.CreateReportFileArguments;
 import org.cyk.system.root.business.api.file.ScriptBusiness;
 import org.cyk.system.root.business.api.language.LanguageBusiness;
-import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.value.ValueBusiness.Derive;
 import org.cyk.system.root.business.impl.NumberStringFormatter;
-import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.report.LabelValueCollectionReport;
+import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
@@ -21,16 +20,13 @@ import org.cyk.system.root.persistence.api.mathematics.MetricCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionIdentifiableGlobalIdentifierDao;
 import org.cyk.system.root.persistence.api.mathematics.MetricCollectionTypeDao;
 import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.impl.AbstractSchoolReportProducer;
 import org.cyk.system.school.model.SchoolConstant;
-import org.cyk.system.school.model.StudentResults;
-import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivisionReportTemplateFile;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
-import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
-import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeDao;
 
 public  class InternationalEnglishSchoolOfAbidjanReportProducerOLD extends AbstractSchoolReportProducer.Default implements Serializable{
@@ -122,8 +118,8 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducerOLD extends Abstr
 			
 			report.addLabelValueCollection(labelValueCollectionReport);
 			
-			addIntervalCollection(report,inject(ClassroomSessionBusiness.class).findCommonNodeInformations(
-				((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionAverageScale()
+			addIntervalCollection(report,inject(CommonNodeInformationsBusiness.class).findValue(((StudentClassroomSessionDivision)report.getSource()).getClassroomSessionDivision()
+					.getClassroomSession(),IntervalCollection.class,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE)
 				,null,Boolean.FALSE,Boolean.TRUE,new Integer[][]{{1,2}});
 			report.getCurrentLabelValueCollection().setName(StringUtils.upperCase(report.getCurrentLabelValueCollection().getName()));		
 		}
@@ -144,18 +140,9 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducerOLD extends Abstr
 						,report.getStudentClassroomSessionDivision().getClassroomSessionDivision().getClassroomSession()));
 	}
 	
-	protected void addAttednanceDetails(StudentClassroomSessionDivisionReportTemplateFile report,StudentClassroomSessionDivision studentClassroomSessionDivision
-			,String metricCollectionCode){
-		addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_ATTENDANCE
-				,new Derive.Adapter.Default().addInputs(report,studentClassroomSessionDivision.getClassroomSessionDivision(),
-						inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
-								.getClassroomSession()).getAttendanceTimeDivisionType()));
-		addMetricCollection(report, studentClassroomSessionDivision, metricCollectionCode,new Derive.Adapter.Default().addInputs(report
-				,studentClassroomSessionDivision.getClassroomSessionDivision()),Boolean.FALSE);
-		
-	}
 	
-	protected void addSchoolCommunications(StudentClassroomSessionDivisionReportTemplateFile report,StudentClassroomSessionDivision studentClassroomSessionDivision,String metricCollectionCode){
+	
+	/*protected void addSchoolCommunications(StudentClassroomSessionDivisionReportTemplateFile report,StudentClassroomSessionDivision studentClassroomSessionDivision,String metricCollectionCode){
 		addMetricCollection(report, studentClassroomSessionDivision,metricCollectionCode);
 		if(studentClassroomSessionDivision.getClassroomSessionDivision().getOrderNumber()==inject(ClassroomSessionBusiness.class)
 				.findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()).getClassroomSessionDivisionOrderNumberInterval().getHigh().getValue().intValue()){
@@ -171,8 +158,7 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducerOLD extends Abstr
 					classroomSessionResults.getEvaluationSort().getAveragePromotedInterval()==null?NULL_VALUE:classroomSessionResults.getEvaluationSort()
 							.getAveragePromotedInterval().getName().toUpperCase());
 			//TODO we need to get the next academic session and get the starting date
-			report.addLabelValue("NEXT ACADEMIC SESSION",/*format(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession()
-					.getAcademicSession().getNextStartingDate())*/"TO COMPUTE");
+			report.addLabelValue("NEXT ACADEMIC SESSION","TO COMPUTE");
 			
 		}else{
 			ClassroomSessionDivision nextClassroomSessionDivision = inject(ClassroomSessionDivisionDao.class)
@@ -189,6 +175,6 @@ public  class InternationalEnglishSchoolOfAbidjanReportProducerOLD extends Abstr
 		report.getStudentClassroomSessionDivision().getClassroomSessionDivision().setSource(studentClassroomSessionDivision.getClassroomSessionDivision());
 		addValueCollection(report, SchoolConstant.Code.ValueCollection.STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_SCHOOL_COMMUNICATION
 				, new Derive.Adapter.Default().addInputs(report,report.getStudentClassroomSessionDivision().getClassroomSessionDivision()),Boolean.FALSE);
-	}
+	}*/
 
 }

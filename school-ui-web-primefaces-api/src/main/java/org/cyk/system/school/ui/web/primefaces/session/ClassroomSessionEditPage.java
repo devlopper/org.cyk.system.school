@@ -42,6 +42,7 @@ public class ClassroomSessionEditPage extends AbstractCrudOnePage<ClassroomSessi
 		
 		@IncludeInputs private CommonNodeInformationsFormModel nodeInformations;
 		 
+		//TODO should not be here but in each page only
 		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Subject oneSubjectSelected;
 		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Student oneStudentSelected;
 		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Long oneOrderNumberSelected;

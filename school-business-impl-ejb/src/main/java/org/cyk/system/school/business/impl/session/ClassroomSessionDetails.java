@@ -25,8 +25,10 @@ public class ClassroomSessionDetails extends AbstractOutputDetails<ClassroomSess
 		if(classroomSession!=null){
 			academicSession = new FieldValue(classroomSession.getAcademicSession());
 			levelTimeDivision = new FieldValue(classroomSession.getLevelTimeDivision());
-			suffix = new FieldValue(classroomSession.getSuffix());
-			coordinator = new FieldValue(classroomSession.getCoordinator());
+			if(classroomSession.getSuffix()!=null)
+				suffix = new FieldValue(classroomSession.getSuffix());
+			if(classroomSession.getCoordinator()!=null)
+				coordinator = new FieldValue(classroomSession.getCoordinator());
 			numberOfStudent=formatNumber(classroomSession.getResults().getNumberOfStudent());
 			if(commonNodeInformations==null)
 				commonNodeInformations = new CommonNodeInformationsDetails(classroomSession.getNodeInformations());

@@ -9,8 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.session.ClassroomSession;
-import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.primefaces.ItemCollection;
@@ -22,18 +22,18 @@ import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
 
 @Named @ViewScoped @Getter @Setter
-public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<ClassroomSession> implements Serializable {
+public class ClassroomSessionDivisionEditStudentsPage extends AbstractCrudOnePage<ClassroomSessionDivision> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private ItemCollection<StudentClassroomSessionItem, StudentClassroomSession, ClassroomSession> studentClassroomSessionCollection;
+	private ItemCollection<StudentClassroomSessionDivisionItem, StudentClassroomSessionDivision, ClassroomSessionDivision> studentClassroomSessionDivisionCollection;
 	
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		
-		studentClassroomSessionCollection = createItemCollection(StudentClassroomSessionItem.class, StudentClassroomSession.class,identifiable 
-				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession>(identifiable,crud,form,StudentClassroomSession.class){
+		studentClassroomSessionDivisionCollection = createItemCollection(StudentClassroomSessionDivisionItem.class, StudentClassroomSessionDivision.class,identifiable 
+				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<StudentClassroomSessionDivisionItem,StudentClassroomSessionDivision,ClassroomSessionDivision>(identifiable,crud,form,StudentClassroomSessionDivision.class){
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -42,7 +42,6 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 			}
 			
 		});
-		studentClassroomSessionCollection.setShowItemLabel(Boolean.TRUE);
 	}
 	
 	@Override
@@ -51,7 +50,7 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 	}
 	
 	@Getter @Setter
-	public static class Form extends AbstractFormModel<ClassroomSession> implements Serializable{
+	public static class Form extends AbstractFormModel<ClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		 
 		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Student oneStudentSelected;
@@ -63,7 +62,7 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 	}
 	
 	@Getter @Setter
-	public static class StudentClassroomSessionItem extends AbstractItemCollectionItem<StudentClassroomSession> {
+	public static class StudentClassroomSessionDivisionItem extends AbstractItemCollectionItem<StudentClassroomSessionDivision> {
 		private static final long serialVersionUID = 1L;
 		
 	}

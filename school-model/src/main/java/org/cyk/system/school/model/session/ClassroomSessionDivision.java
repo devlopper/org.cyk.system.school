@@ -36,6 +36,7 @@ public class ClassroomSessionDivision extends AbstractIdentifiablePeriod impleme
 	@Column(nullable=false) @NotNull private Long numberOfSubjects=0l;
 	@Embedded private NodeResults results = new NodeResults();
 	
+	//TODO should be moved else where
 	private Boolean studentEvaluationRequired=Boolean.TRUE;
 	private Boolean studentSubjectAttendanceAggregated=Boolean.TRUE;
 	private Boolean studentRankable=Boolean.TRUE;

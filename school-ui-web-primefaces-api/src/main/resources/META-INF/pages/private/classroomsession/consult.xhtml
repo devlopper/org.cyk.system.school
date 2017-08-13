@@ -13,24 +13,17 @@
  		<ui:param name="pageController" value="#{classroomSessionConsultPage}" />
  		<ui:define name="body">
  			<table border="0" cellpadding="0" cellspacing="0">
- 				<tr>
- 					<td colspan="2">
- 						
- 					</td>
- 				</tr>
  				<tr style="vertical-align: top;">
  					<td>
  						<cyk:formOneData value="#{classroomSessionConsultPage.details}" />
  						<cyk:table value="#{classroomSessionConsultPage.studentTable}" />
  					</td>
  					<td style="width: 50%"> 
- 						<cyk:table value="#{classroomSessionConsultPage.subLevelTable}" />
+ 						<cyk:table value="#{classroomSessionConsultPage.divisionTable}" />
  						<cyk:table value="#{classroomSessionConsultPage.subjectTable}" />
  					</td>
  				</tr>
  			</table>
- 			 							
-			<cyk:table value="#{classroomSessionConsultPage.broadsheetTable}" />
  		</ui:define>
  	</ui:decorate>
  

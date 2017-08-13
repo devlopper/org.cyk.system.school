@@ -188,7 +188,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 			
 			@Override
 			public Collection<?> children(Object object) { 
-				if(object instanceof LevelGroup){
+				/*if(object instanceof LevelGroup){
 					LevelGroup levelGroup = (LevelGroup) object;
 					if(Boolean.TRUE.equals(userSession.getIsManager()))
 						return inject(ClassroomSessionBusiness.class).findByAcademicSessionByLevelGroup(inject(AcademicSessionBusiness.class).findDefaultedSchoolDefaulted(), levelGroup);
@@ -215,19 +215,19 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 				if(object instanceof ClassroomSessionDivisionSubject){
 					ClassroomSessionDivisionSubject classroomSessionDivisionSubject = (ClassroomSessionDivisionSubject) object;
 					return inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);			
-				}
+				}*/
 				return super.children(object);
 			}
 			
 			@Override
 			public Boolean isLeaf(TreeNode node) {
-				Object object = nodeModel(node).getData();
+				/*Object object = nodeModel(node).getData();
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
 					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(classroomSession
 							, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
 					return classroomSessionDivision.getNumberOfSubjects() == 0;
-				}
+				}*/
 				return super.isLeaf(node);
 			}
 			
@@ -428,7 +428,7 @@ public class SchoolWebManager extends AbstractPrimefacesManager implements Seria
 				classroomSessionDivisions = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSession(classroomSession);
 			}
 			page.setChoices(classroomSessionDivisionFieldName, classroomSessionDivisions);
-			CommonNodeInformations commonNodeInformations = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession);
+			CommonNodeInformations commonNodeInformations = null;//inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession);
 			page.getForm().getInputByFieldName(classroomSessionDivisionFieldName).setDisabled(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null);
 			if(commonNodeInformations.getCurrentClassroomSessionDivisionIndex()!=null){
 				for(ClassroomSessionDivision c : classroomSessionDivisions)

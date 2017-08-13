@@ -14,9 +14,6 @@
  		<ui:define name="body">
  			
  			<cyk:itemCollection value="#{classroomSessionEditDivisionsPage.classroomSessionDivisionCollection}" >
- 				<p:column headerText="#{uiManager.text('field.label')}" >
- 					<h:outputText value="#{item.label}" />
- 				</p:column>
  				<p:column headerText="#{uiManager.text('field.timedivisiontype')}" >
  					<p:selectOneMenu value="#{item.timeDivisionType}" converter="#{objectConverter}" >
  						<f:selectItems value="#{classroomSessionEditDivisionsPage.timeDivisionTypes}" />

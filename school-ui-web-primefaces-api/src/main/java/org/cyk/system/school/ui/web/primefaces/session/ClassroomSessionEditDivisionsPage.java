@@ -7,12 +7,10 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
-import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
@@ -68,13 +66,8 @@ public class ClassroomSessionEditDivisionsPage extends AbstractCrudOnePage<Class
 			}
 			
 		});
+		classroomSessionDivisionCollection.setShowItemLabel(Boolean.TRUE);
 	}
-
-	/*@Override
-	protected void update() {
-		identifiable.getDivisions().setCollection(classroomSessionDivisionCollection.getIdentifiables());
-		super.update();
-	}*/
 	
 	@Override
 	public Class<?> getFormModelClass() {

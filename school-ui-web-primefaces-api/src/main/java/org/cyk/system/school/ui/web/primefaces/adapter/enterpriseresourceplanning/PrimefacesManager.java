@@ -42,7 +42,6 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionConsultPa
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
-import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditStudentsPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
@@ -271,8 +270,12 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	}
 	
 	protected void configureClassroomSessionDivisionClass() {
-		getFormConfiguration(ClassroomSessionDivision.class, Crud.UPDATE).addFieldNames(ClassroomSessionDivisionEditPage.Form.FIELD_FROM_DATE
-				,ClassroomSessionDivisionEditPage.Form.FIELD_TO_DATE,ClassroomSessionDivisionEditPage.Form.FIELD_DURATION);
+		getFormConfiguration(ClassroomSessionDivision.class, Crud.CREATE).addFieldNames(ClassroomSessionDivisionEditPage.Form.FIELD_CLASSROOM_SESSION
+				,ClassroomSessionDivisionEditPage.Form.FIELD_TIME_DIVISION_TYPE,ClassroomSessionDivisionEditPage.Form.FIELD_ORDER_NUMBER
+				,ClassroomSessionDivisionEditPage.Form.FIELD_WEIGHT,ClassroomSessionDivisionEditPage.Form.FIELD_EXISTENCE_PERIOD
+				,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE,PeriodFormModel.FIELD_DURATION
+				,ClassroomSessionDivisionEditPage.Form.FIELD_ONE_SUBJECT_SELECTED,ClassroomSessionDivisionEditPage.Form.FIELD_ONE_STUDENT_SELECTED);
+		
 		getFormConfiguration(ClassroomSessionDivision.class, Crud.READ).addFieldNames(ClassroomSessionDivisionDetails.FIELD_CLASSROOM_SESSION
 				,ClassroomSessionDivisionDetails.FIELD_ORDER_NUMBER,ClassroomSessionDivisionDetails.FIELD_WEIGHT);
 		

@@ -12,9 +12,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.GenericBusiness;
@@ -27,6 +24,7 @@ import org.cyk.system.root.business.impl.AbstractBusinessTestHelper;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.FileRepresentationType;
+import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.MetricCollectionIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.mathematics.MetricValue;
 import org.cyk.system.root.model.value.Value;
@@ -40,6 +38,7 @@ import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness.ServiceCallArguments;
@@ -52,6 +51,7 @@ import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -68,6 +68,9 @@ import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivi
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.generator.RandomDataProvider;
 import org.cyk.utility.common.test.TestEnvironmentListener.Try;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Singleton
 public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper implements Serializable {
@@ -232,8 +235,7 @@ public class SchoolBusinessTestHelper extends AbstractBusinessTestHelper impleme
 									//assertThat("Report of "+studentClassroomSessionDivision.getStudent()+" built", studentClassroomSessionDivision.getResults().getReport()!=null);
 									System.out.println("Writing report of : "+studentClassroomSessionDivision.getStudent()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision()+" , "+studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession());
 									//writeReport(studentClassroomSessionDivisionBusiness.findReport(studentClassroomSessionDivision));
-									String fileRepresentationTyeCode = inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
-											.getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate().getCode();
+									String fileRepresentationTyeCode = inject(CommonNodeInformationsBusiness.class).findValue(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(),ReportTemplate.class,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE).getCode();
 									FileRepresentationType fileRepresentationType = inject(FileRepresentationTypeDao.class).read(fileRepresentationTyeCode);
 									write(inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision).iterator().next());
 									//files.add(studentClassroomSessionDivision.getResults().getReport());	

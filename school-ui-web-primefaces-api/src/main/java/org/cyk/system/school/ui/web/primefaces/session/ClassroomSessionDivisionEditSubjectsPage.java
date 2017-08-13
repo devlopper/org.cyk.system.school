@@ -7,9 +7,10 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.school.model.actor.Teacher;
-import org.cyk.system.school.model.session.ClassroomSession;
-import org.cyk.system.school.model.session.ClassroomSessionSubject;
+import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
@@ -26,19 +27,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
-public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<ClassroomSession> implements Serializable {
+public class ClassroomSessionDivisionEditSubjectsPage extends AbstractCrudOnePage<ClassroomSessionDivision> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private ItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject, ClassroomSession> classroomSessionSubjectCollection;
+	private ItemCollection<ClassroomSessionDivisionSubjectItem, ClassroomSessionDivisionSubject, ClassroomSessionDivision> classroomSessionDivisionSubjectCollection;
 	private List<SelectItem> teachers = WebManager.getInstance().getSelectItems(Teacher.class);
 	
 	@Override
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		
-		classroomSessionSubjectCollection = createItemCollection(ClassroomSessionSubjectItem.class, ClassroomSessionSubject.class,identifiable 
-				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<ClassroomSessionSubjectItem,ClassroomSessionSubject,ClassroomSession>(identifiable,crud,form,ClassroomSessionSubject.class){
+		classroomSessionDivisionSubjectCollection = createItemCollection(ClassroomSessionDivisionSubjectItem.class, ClassroomSessionDivisionSubject.class,identifiable 
+				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<ClassroomSessionDivisionSubjectItem,ClassroomSessionDivisionSubject,ClassroomSessionDivision>(identifiable,crud,form,ClassroomSessionDivisionSubject.class){
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -46,8 +47,14 @@ public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<Classr
 				return Form.FIELD_ONE_SUBJECT_SELECTED;
 			}
 			
+			@Override
+					public IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> getRuntimeCollection() {
+						// TODO Auto-generated method stub
+						return identifiable.getClassroomSessionDivisionSubjects();
+					}
+			
 		});
-		classroomSessionSubjectCollection.setShowItemLabel(Boolean.TRUE);
+		classroomSessionDivisionSubjectCollection.setShowItemLabel(Boolean.TRUE);
 	}
 		
 	@Override
@@ -55,7 +62,7 @@ public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<Classr
 		return Form.class;
 	}
 	
-	public static class Form extends AbstractFormModel<ClassroomSession> implements Serializable{
+	public static class Form extends AbstractFormModel<ClassroomSessionDivision> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		 
 		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo protected Subject oneSubjectSelected;
@@ -67,15 +74,15 @@ public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<Classr
 	}
 	
 	@Getter @Setter
-	public static class ClassroomSessionSubjectItem extends AbstractItemCollectionItem<ClassroomSessionSubject> {
+	public static class ClassroomSessionDivisionSubjectItem extends AbstractItemCollectionItem<ClassroomSessionDivisionSubject> {
 		private static final long serialVersionUID = 1L;
 		
 		private Teacher teacher;
 		
 		@Override
-		public void setIdentifiable(ClassroomSessionSubject classroomSessionSubject) {
-			super.setIdentifiable(classroomSessionSubject);
-			teacher = classroomSessionSubject.getTeacher();
+		public void setIdentifiable(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+			super.setIdentifiable(classroomSessionDivisionSubject);
+			teacher = classroomSessionDivisionSubject.getTeacher();
 		}
 		
 		@Override

@@ -8,13 +8,12 @@ import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
-import org.cyk.system.school.model.session.CommonNodeInformations;
+import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
+import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
-import org.cyk.system.school.model.session.ClassroomSession.SearchCriteria;
-import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 
 public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession> {
 
@@ -28,7 +27,6 @@ public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession
 	ClassroomSession findByAcademicSessionByLevelTimeDivisionBySuffix(AcademicSession academicSession,LevelTimeDivision levelTimeDivision, ClassroomSessionSuffix suffix);
 	ClassroomSession findInCurrentAcademicSessionByLevelTimeDivisionBySuffix(String levelTimeDivisionCode,String suffixCode);
 	
-	CommonNodeInformations findCommonNodeInformations(ClassroomSession classroomSession);
 	Collection<FileRepresentationType> findStudentClassroomSessionDivisionResultsFileRepresentationTypes(Collection<ClassroomSession> classroomSessions);
 	Collection<ClassroomSession> findByStudentClassroomSessionDivisions(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivision);
 	

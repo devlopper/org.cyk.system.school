@@ -13,6 +13,7 @@ import org.cyk.system.school.business.api.actor.TeacherBusiness;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.session.LevelGroupBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
@@ -24,6 +25,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelGroupType;
@@ -254,7 +256,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 					ClassroomSession classroomSession = (ClassroomSession) object;
 					
 					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(classroomSession
-							, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+							, inject(CommonNodeInformationsBusiness.class).findValue(classroomSession,Long.class,CommonNodeInformations.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX));
 					
 					if(Boolean.TRUE.equals(userSession.getIsManager()))
 						return inject(ClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivision(classroomSessionDivision);
@@ -276,7 +278,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
 					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(classroomSession
-							, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSession).getCurrentClassroomSessionDivisionIndex());
+							, inject(CommonNodeInformationsBusiness.class).findValue(classroomSession,Long.class,CommonNodeInformations.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX));
 					return classroomSessionDivision.getNumberOfSubjects() == 0;
 				}
 				return super.isLeaf(node);

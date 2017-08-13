@@ -31,6 +31,7 @@ import org.cyk.ui.api.IdentifierProvider;
 import org.cyk.ui.api.model.table.Cell;
 import org.cyk.ui.api.model.table.Column;
 import org.cyk.ui.api.model.table.Row;
+import org.cyk.ui.web.primefaces.Commandable;
 import org.cyk.ui.web.primefaces.PrimefacesManager;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
@@ -116,6 +117,9 @@ extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStude
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		broadsheetTable.postConstruct();
+		
+		((Commandable)subLevelTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
+		((Commandable)studentTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
 	}
 	
 	protected void subLevelTable(){

@@ -10,9 +10,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
@@ -20,9 +17,9 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
-import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
@@ -31,6 +28,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
@@ -44,6 +42,9 @@ import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSub
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.cyk.utility.common.Constant;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Stateless
 public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionDivisionSubject, ClassroomSessionDivisionSubjectDao> implements ClassroomSessionDivisionSubjectBusiness,Serializable {
@@ -130,9 +131,11 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 						if(value.compareTo(results.getAverageHighest())==1){
 							results.setAverageHighest(value);
 						}
-						//TODO should be take first on subject if null on higher
-						if(value.compareTo(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentSubject.getClassroomSessionDivisionSubject()
-								.getClassroomSessionDivision().getClassroomSession()).getEvaluationPassAverage())>=0){
+						BigDecimal pass = classroomSessionDivisionSubject.getEvaluationPassAverage();
+						if(pass==null)
+							pass = inject(CommonNodeInformationsBusiness.class).findValue(classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession()
+									,BigDecimal.class,CommonNodeInformations.FIELD_EVALUATION_PASS_AVERAGE);
+						if(value.compareTo(pass)>=0){
 							results.setNumberOfStudentPassingEvaluationAverage(results.getNumberOfStudentPassingEvaluationAverage()+1);
 						}
 					}

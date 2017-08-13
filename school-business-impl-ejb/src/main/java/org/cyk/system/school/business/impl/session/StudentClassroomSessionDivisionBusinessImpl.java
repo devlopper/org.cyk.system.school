@@ -28,6 +28,7 @@ import org.cyk.system.root.model.file.File;
 import org.cyk.system.root.model.file.FileIdentifiableGlobalIdentifier;
 import org.cyk.system.root.model.file.FileRepresentationType;
 import org.cyk.system.root.model.file.report.ReportBasedOnTemplateFile;
+import org.cyk.system.root.model.file.report.ReportTemplate;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.root.model.mathematics.MetricCollection;
 import org.cyk.system.root.persistence.api.file.FileIdentifiableGlobalIdentifierDao;
@@ -37,6 +38,7 @@ import org.cyk.system.root.persistence.api.value.ValuePropertiesDao;
 import org.cyk.system.school.business.api.SortableStudentResults;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
@@ -48,6 +50,7 @@ import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -222,9 +225,9 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			/*if(Boolean.TRUE.equals(studentClassroomSessionDivision.getClassroomSessionDivision().getStudentEvaluationRequired()) 
 					&& studentClassroomSessionDivision.getResults().getEvaluationSort().getAverage().getValue()==null){
 				logIdentifiable("Cannot build report", studentClassroomSessionDivision);
-			}else{*/
-				reportArgumentsBuilder.setReportTemplate(inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision
-						.getClassroomSessionDivision().getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate());
+			}else{*/ 
+				reportArgumentsBuilder.setReportTemplate(inject(CommonNodeInformationsBusiness.class).findValue(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(), ReportTemplate.class
+						, CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE));
 				CreateReportFileArguments<StudentClassroomSessionDivision> reportArguments = new CreateReportFileArguments.Builder<>(studentClassroomSessionDivision,reportArgumentsBuilder).build();
 				buildReport(studentClassroomSessionDivision,reportArguments);
 			//}
@@ -292,8 +295,8 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 
 		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 			FileRepresentationType fileRepresentationType = inject(FileRepresentationTypeBusiness.class).findOne(fileRepresentationTypes
-					, inject(ClassroomSessionBusiness.class).findCommonNodeInformations(studentClassroomSessionDivision.getClassroomSessionDivision()
-					.getClassroomSession()).getStudentClassroomSessionDivisionResultsReportTemplate().getCode());
+					, inject(CommonNodeInformationsBusiness.class).findValue(studentClassroomSessionDivision.getClassroomSessionDivision().getClassroomSession(), ReportTemplate.class
+							, CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE).getCode());
 			Collection<File> files = inject(FileBusiness.class).findByRepresentationTypeByIdentifiable(fileRepresentationType, studentClassroomSessionDivision);
 			Notification notification = new Notification();
 			Collection<String> fileNames = new ArrayList<>();
@@ -385,12 +388,14 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	
 	@Override
 	protected IntervalCollection averageAppreciatedIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
-		return inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSessionDivision.getClassroomSession()).getStudentClassroomSessionDivisionAverageScale();
+		return inject(CommonNodeInformationsBusiness.class).findValue(classroomSessionDivision.getClassroomSession(), IntervalCollection.class
+				, CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE);
 	}
 	
 	@Override
 	protected IntervalCollection averagePromotedIntervalCollection(ClassroomSessionDivision classroomSessionDivision) {
-		return inject(ClassroomSessionBusiness.class).findCommonNodeInformations(classroomSessionDivision.getClassroomSession()).getStudentClassroomSessionAveragePromotionScale();
+		return inject(CommonNodeInformationsBusiness.class).findValue(classroomSessionDivision.getClassroomSession(), IntervalCollection.class
+				, CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE);
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)

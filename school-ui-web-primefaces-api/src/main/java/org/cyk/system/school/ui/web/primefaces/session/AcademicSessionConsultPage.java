@@ -6,10 +6,12 @@ import java.util.Collection;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
+import org.cyk.ui.api.IdentifierProvider;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 
@@ -32,6 +34,27 @@ public class AcademicSessionConsultPage extends AbstractConsultPage<AcademicSess
 			public Collection<ClassroomSession> getIdentifiables() {
 				return inject(ClassroomSessionBusiness.class).findByAcademicSession(identifiable);
 			}
+			
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+			
+			@Override
+			public String getTabId() {
+				return IdentifierProvider.Adapter.getTabOf(AcademicSession.class);
+			}
+			
+			@Override
+			public String getEditPageOutcome() {
+				return "academicSessionEditClassroomSessionsView";
+			}
+			
+			@Override
+			public AbstractIdentifiable getFormIdentifiable() {
+				return identifiable;
+			}
+			
 		});
 	}
 }
