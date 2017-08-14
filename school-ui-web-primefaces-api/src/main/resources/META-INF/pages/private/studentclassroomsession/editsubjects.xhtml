@@ -12,7 +12,9 @@
     <ui:decorate template="#{webPageLayoutManager.decoratedTemplate}">
  		<ui:param name="pageController" value="#{studentClassroomSessionEditSubjectsPage}" />
  		<ui:define name="body">
- 			
+ 			<cyk:itemCollection value="#{studentClassroomSessionEditSubjectsPage.studentClassroomSessionSubjectCollection}" >
+ 				
+ 			</cyk:itemCollection>
  		</ui:define>
  		
  		<ui:define name="contentMenuBar">
