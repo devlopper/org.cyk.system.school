@@ -65,6 +65,14 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	}
 	
 	@Override
+	public ClassroomSession instanciateOne(AcademicSession academicSession,LevelTimeDivision levelTimeDivision) {
+		ClassroomSession classroomSession = instanciateOne();
+		classroomSession.setAcademicSession(academicSession);
+		classroomSession.setLevelTimeDivision(levelTimeDivision);
+		return classroomSession;
+	}
+	
+	@Override
 	protected void afterCreate(ClassroomSession classroomSession) {
 		super.afterCreate(classroomSession);
 		if(classroomSession.getDivisions().isSynchonizationEnabled())

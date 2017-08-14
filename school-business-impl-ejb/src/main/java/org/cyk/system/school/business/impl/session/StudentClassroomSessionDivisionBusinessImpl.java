@@ -81,7 +81,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 	public StudentClassroomSessionDivisionBusinessImpl(StudentClassroomSessionDivisionDao dao) {
 		super(dao); 
 	}
-	
+		
 	@Override
 	protected void beforeCreate(StudentClassroomSessionDivision studentClassroomSessionDivision) {
 		super.beforeCreate(studentClassroomSessionDivision);
@@ -95,12 +95,14 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		ClassroomSessionDivision classroomSessionDivision = studentClassroomSessionDivision.getClassroomSessionDivision();
 		ClassroomSession classroomSession = classroomSessionDivision.getClassroomSession();
 		
-		StudentClassroomSession studentClassroomSession = studentClassroomSessionDao.readByStudentByClassroomSession(student, classroomSession);
-		if(studentClassroomSession==null){
-			studentClassroomSession = new StudentClassroomSession(student, classroomSession);
-			studentClassroomSession.setCascadeOperationToChildren(studentClassroomSessionDivision.getCascadeOperationToChildren());
-			studentClassroomSession.setCascadeOperationToMaster(studentClassroomSessionDivision.getCascadeOperationToMaster());
-			inject(StudentClassroomSessionBusiness.class).create(studentClassroomSession);
+		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeOperationToMaster())){
+			StudentClassroomSession studentClassroomSession = studentClassroomSessionDao.readByStudentByClassroomSession(student, classroomSession);
+			if(studentClassroomSession==null){
+				studentClassroomSession = new StudentClassroomSession(student, classroomSession);
+				studentClassroomSession.setCascadeOperationToChildren(studentClassroomSessionDivision.getCascadeOperationToChildren());
+				studentClassroomSession.setCascadeOperationToMaster(studentClassroomSessionDivision.getCascadeOperationToMaster());
+				inject(StudentClassroomSessionBusiness.class).create(studentClassroomSession);
+			}	
 		}
 		
 		Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();
@@ -181,6 +183,16 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 			logTrace("Cannot build Student ClassroomSessionDivision Report of Student {} in ClassroomSessionDivision {}", studentClassroomSessionDivision.getStudent()
 					,inject(FormatterBusiness.class).format(studentClassroomSessionDivision.getClassroomSessionDivision()));
 		}*/
+	}
+	
+	@Override
+	public StudentClassroomSessionDivision instanciateOne(ClassroomSessionDivision classroomSessionDivision, Student student) {
+		StudentClassroomSessionDivision studentClassroomSessionDivision = instanciateOne();
+		studentClassroomSessionDivision.setStudent(student);
+		studentClassroomSessionDivision.setClassroomSessionDivision(classroomSessionDivision);
+		//studentClassroomSessionDivision.setCascadeOperationToChildren(Boolean.FALSE);
+		//studentClassroomSessionDivision.setCascadeOperationToMaster(Boolean.FALSE);
+		return studentClassroomSessionDivision;
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)

@@ -18,7 +18,7 @@ import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivi
 import org.cyk.utility.common.computation.ArithmeticOperator;
 import org.cyk.utility.common.computation.LogicalOperator;
 
-public class StudentSubjectDaoImpl extends AbstractTypedDao<StudentClassroomSessionDivisionSubject> /*AbstractStudentResultsDaoImpl<ClassroomSessionDivisionSubject,StudentSubject,StudentSubjectEvaluation>*/ implements StudentClassroomSessionDivisionSubjectDao,Serializable {
+public class StudentClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<StudentClassroomSessionDivisionSubject> /*AbstractStudentResultsDaoImpl<ClassroomSessionDivisionSubject,StudentSubject,StudentSubjectEvaluation>*/ implements StudentClassroomSessionDivisionSubjectDao,Serializable {
 
 	private static final long serialVersionUID = 6306356272165070761L;
 	

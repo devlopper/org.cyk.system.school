@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl.session;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -12,19 +11,22 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.api.value.MeasureBusiness;
+import org.cyk.system.root.business.impl.BusinessInterfaceLocator;
 import org.cyk.system.root.business.impl.time.AbstractIdentifiablePeriodBusinessImpl;
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
-import org.cyk.system.school.business.api.session.LevelGroupBusiness;
-import org.cyk.system.school.business.api.session.LevelNameBusiness;
 import org.cyk.system.school.business.api.session.SchoolBusiness;
 import org.cyk.system.school.model.session.AcademicSession;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
+import org.cyk.utility.common.helper.ClassHelper;
 import org.cyk.utility.common.helper.FieldHelper;
 
 public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusinessImpl<AcademicSession, AcademicSessionDao> implements AcademicSessionBusiness,Serializable {
@@ -67,6 +69,10 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	protected void afterUpdate(AcademicSession academicSession) {
 		super.afterUpdate(academicSession);
 		
+		copy(academicSession, LevelGroup.class,Boolean.TRUE);
+		copy(academicSession, LevelName.class,Boolean.TRUE);
+		copy(academicSession, ClassroomSession.class,Boolean.TRUE);
+		/*
 		if(academicSession.getLevelGroups().isSynchonizationEnabled()){
 			for(LevelGroup levelGroup : academicSession.getLevelGroups().getCollection()){
 				copy(academicSession, levelGroup.getNodeInformations(),academicSession.getLevelGroups().getFieldNames());
@@ -80,11 +86,27 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 			inject(LevelNameBusiness.class).update(academicSession.getLevelNames().getCollection());
 		}
 		
+		if(academicSession.getClassroomSessions().isSynchonizationEnabled()){
+			for(ClassroomSession classroomSession : academicSession.getClassroomSessions().getCollection()){
+				copy(academicSession, classroomSession.getNodeInformations(),academicSession.getClassroomSessions().getFieldNames());
+			}
+			inject(ClassroomSessionBusiness.class).update(academicSession.getClassroomSessions().getCollection());
+		}
+		*/
+		synchronise(ClassroomSession.class, academicSession, academicSession.getClassroomSessions());
+		
 	}
 	
-	private void copy(AcademicSession academicSession,CommonNodeInformations destination,Collection<String> fieldNames){
-		FieldHelper fieldHelper = new FieldHelper();
-		fieldHelper.copy(academicSession.getNodeInformations(), destination, fieldNames);	
+	@SuppressWarnings("unchecked")
+	private <T extends AbstractIdentifiable> void copy(AcademicSession academicSession,Class<T> identifiableClass,Boolean executeUpdate){
+		IdentifiableRuntimeCollection<T> runtimeCollection = (IdentifiableRuntimeCollection<T>) FieldHelper.getInstance().read(academicSession, ClassHelper.getInstance().getVariableName(identifiableClass, Boolean.TRUE));
+		if(runtimeCollection.isSynchonizationEnabled()){
+			for(T identifiable : runtimeCollection.getCollection()){
+				FieldHelper.getInstance().copy(academicSession, (CommonNodeInformations) FieldHelper.getInstance().read(identifiable, AcademicSession.FIELD_NODE_INFORMATIONS),runtimeCollection.getFieldNames());
+			}	
+			if(Boolean.TRUE.equals(executeUpdate))
+				inject(BusinessInterfaceLocator.class).injectTyped(identifiableClass).update(runtimeCollection.getCollection());
+		}
 	}
 		
 	@Override

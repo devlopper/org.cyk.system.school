@@ -32,12 +32,12 @@ public class ClassroomSessionDivisionReport extends AbstractNodeReport<Classroom
 	public void setSource(Object source) {
 		super.setSource(source);
 		classroomSession.setSource( ((ClassroomSessionDivision)source).getClassroomSession() );
-		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : ((ClassroomSessionDivision)source).getClassroomSessionDivisionSubjects().getCollection()){
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : ((ClassroomSessionDivision)source).getSubjects().getCollection()){
 			ClassroomSessionDivisionSubjectReport classroomSessionDivisionSubjectReport = new ClassroomSessionDivisionSubjectReport(classroomSessionDivisionSubject);
 			classroomSessionDivisionSubjects.add(classroomSessionDivisionSubjectReport);
 		}
 		
-		for(StudentClassroomSessionDivision studentClassroomSessionDivision : ((ClassroomSessionDivision)source).getStudentClassroomSessionDivisions().getCollection()){
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : ((ClassroomSessionDivision)source).getStudents().getCollection()){
 			studentClassroomSessionDivision.getStudentClassroomSessionDivisionSubjects().setSynchonizationEnabled(Boolean.TRUE);
 			StudentClassroomSessionDivisionReport studentClassroomSessionDivisionReport = new StudentClassroomSessionDivisionReport(this,studentClassroomSessionDivision);
 			studentClassroomSessionDivisions.add(studentClassroomSessionDivisionReport);

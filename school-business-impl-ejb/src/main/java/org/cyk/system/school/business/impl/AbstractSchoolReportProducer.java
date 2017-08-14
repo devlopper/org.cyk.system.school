@@ -225,7 +225,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 	public ClassroomSessionDivisionReportTemplateFile produceClassroomSessionDivisionReport(ClassroomSessionDivision classroomSessionDivision
 			,final CreateReportFileArguments<ClassroomSessionDivision> createReportFileArguments) {
 		createReportFileArguments.setIdentifiableName(classroomSessionDivision.getName()+" Broadsheet ");
-		classroomSessionDivision.getClassroomSessionDivisionSubjects().addMany(inject(ClassroomSessionDivisionSubjectDao.class).readWhereStudentExistByClassroomSessionDivision(classroomSessionDivision));
+		classroomSessionDivision.getSubjects().addMany(inject(ClassroomSessionDivisionSubjectDao.class).readWhereStudentExistByClassroomSessionDivision(classroomSessionDivision));
 		List<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>(inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision));
 		
 		Comparator<StudentClassroomSessionDivision> comparator = new Comparator<StudentClassroomSessionDivision>() {
@@ -254,12 +254,12 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		
 		Collections.sort(studentClassroomSessionDivisions, comparator);
 		
-		classroomSessionDivision.getStudentClassroomSessionDivisions().addMany(studentClassroomSessionDivisions);
+		classroomSessionDivision.getStudents().addMany(studentClassroomSessionDivisions);
 		
 		Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = inject(StudentClassroomSessionDivisionSubjectDao.class)
 				.readByClassroomSessionDivision(classroomSessionDivision);
 		for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : studentClassroomSessionDivisionSubjects){
-			for(StudentClassroomSessionDivision studentClassroomSessionDivision : classroomSessionDivision.getStudentClassroomSessionDivisions().getCollection()){
+			for(StudentClassroomSessionDivision studentClassroomSessionDivision : classroomSessionDivision.getStudents().getCollection()){
 				if(studentClassroomSessionDivisionSubject.getStudent().equals(studentClassroomSessionDivision.getStudent())){
 					studentClassroomSessionDivision.getStudentClassroomSessionDivisionSubjects().addOne(studentClassroomSessionDivisionSubject);
 					break;
@@ -283,7 +283,7 @@ public abstract class AbstractSchoolReportProducer extends AbstractCompanyReport
 		numberStringFormatter = new NumberStringFormatter(null, null);
 		numberStringFormatter.setIsPercentage(Boolean.TRUE);
 		
-		Integer numberOfSubjects = classroomSessionDivision.getClassroomSessionDivisionSubjects().getCollection().size();
+		Integer numberOfSubjects = classroomSessionDivision.getSubjects().getCollection().size();
 		LabelValueReport labelValueAverageScore = r.getClassroomSessionDivision().getLabelValueCollection().add("Average Score",format(classroomSessionDivision.getResults().getAverage())).setExtendedValuesSize(numberOfSubjects);
 		LabelValueReport labelValueNumberOfStudentsEvaluated = r.getClassroomSessionDivision().getLabelValueCollection().add("Number of students evaluated",format(classroomSessionDivision.getResults().getNumberOfStudent())).setExtendedValuesSize(numberOfSubjects);
 		BigDecimal passFraction = classroomSessionDivision.getResults().getFractionOfStudentPassingEvaluationAverage(4, RoundingMode.HALF_DOWN);

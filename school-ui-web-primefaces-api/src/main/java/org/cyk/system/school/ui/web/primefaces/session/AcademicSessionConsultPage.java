@@ -12,6 +12,7 @@ import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.ui.api.IdentifierProvider;
+import org.cyk.ui.web.primefaces.Commandable;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 
@@ -56,5 +57,11 @@ public class AcademicSessionConsultPage extends AbstractConsultPage<AcademicSess
 			}
 			
 		});
+	}
+	
+	@Override
+	protected void afterInitialisation() {
+		super.afterInitialisation();
+		((Commandable)classroomSessionTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
 	}
 }

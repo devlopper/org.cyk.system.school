@@ -28,6 +28,7 @@ public class AcademicSession extends AbstractIdentifiablePeriod implements Seria
 		
 	@Embedded private CommonNodeInformations nodeInformations;
 	
+	@Transient private IdentifiableRuntimeCollection<ClassroomSession> classroomSessions = new IdentifiableRuntimeCollection<>();
 	@Transient private IdentifiableRuntimeCollection<LevelGroup> levelGroups = new IdentifiableRuntimeCollection<>();
 	@Transient private IdentifiableRuntimeCollection<LevelName> levelNames = new IdentifiableRuntimeCollection<>();
 	

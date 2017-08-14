@@ -21,6 +21,7 @@ import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubje
 import org.cyk.system.school.business.impl.subject.ClassroomSessionDivisionSubjectEvaluationTypeDetails;
 import org.cyk.system.school.business.impl.subject.EvaluationDetails;
 import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectEvaluationDetails;
+import org.cyk.system.school.business.impl.subject.StudentClassroomSessionSubjectDetails;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
@@ -34,14 +35,19 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.ui.web.primefaces.CommonNodeInformationsFormModel;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditClassroomSessionsPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionConsultPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionSubjectEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditDivisionsPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditStudentsPage;
+import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditSubjectsPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
@@ -79,6 +85,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		configureStudentClassroomSessionDivisionSubjectClass();
 		configureStudentClassroomSessionDivisionSubjectEvaluationClass();
 		
+		configureStudentClassroomSessionSubjectClass();
+		
 		configureTeacherClass();
 		
 		configureEvaluationClass();
@@ -92,8 +100,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	
 	protected void configureAcademicSessionClass() {
 		getFormConfiguration(AcademicSession.class, Crud.CREATE).addFieldNames(AcademicSessionEditPage.Form.FIELD_DEFAULTED,AcademicSessionEditPage.Form.FIELD_EXISTENCE_PERIOD
-				,AcademicSessionEditPage.Form.FIELD_NODE_INFORMATIONS,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE)
-				.addFieldNames(new FieldHelper().getNamesWhereReferencedByStaticField(CommonNodeInformationsFormModel.class));
+				,AcademicSessionEditPage.Form.FIELD_NODE_INFORMATIONS,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE
+				,AcademicSessionEditClassroomSessionsPage.Form.FIELD_ONE_LEVEL_TIME_DIVISION_SELECTED)
+				.addFieldNames(FieldHelper.getInstance().getNamesWhereReferencedByStaticField(CommonNodeInformationsFormModel.class));
 		
 		getFormConfiguration(AcademicSession.class, Crud.READ).addFieldNames(AcademicSessionEditPage.Form.FIELD_DEFAULTED
 				,AcademicSessionEditPage.Form.FIELD_EXISTENCE_PERIOD,PeriodFormModel.FIELD_FROM_DATE,PeriodFormModel.FIELD_TO_DATE);
@@ -194,8 +203,8 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	protected void configureClassroomSessionClass() {
 		getFormConfiguration(ClassroomSession.class, Crud.CREATE).addRequiredFieldNames(ClassroomSessionEditPage.Form.FIELD_ACADEMIC_SESSION
 				,ClassroomSessionEditPage.Form.FIELD_LEVEL_TIME_DIVISION).addFieldNames(ClassroomSessionEditPage.Form.FIELD_COORDINATOR
-				,ClassroomSessionEditPage.Form.FIELD_SUFFIX,ClassroomSessionEditPage.Form.FIELD_ONE_ORDER_NUMBER_SELECTED
-				,ClassroomSessionEditPage.Form.FIELD_ONE_STUDENT_SELECTED,ClassroomSessionEditPage.Form.FIELD_ONE_SUBJECT_SELECTED,ClassroomSessionEditPage.Form.FIELD_NODE_INFORMATIONS)
+				,ClassroomSessionEditPage.Form.FIELD_SUFFIX,ClassroomSessionEditDivisionsPage.Form.FIELD_ONE_ORDER_NUMBER_SELECTED
+				,ClassroomSessionEditStudentsPage.Form.FIELD_ONE_STUDENT_SELECTED,ClassroomSessionEditSubjectsPage.Form.FIELD_ONE_SUBJECT_SELECTED,ClassroomSessionEditPage.Form.FIELD_NODE_INFORMATIONS)
 				.addFieldNames(new FieldHelper().getNamesWhereReferencedByStaticField(CommonNodeInformationsFormModel.class));
 		
 		getFormConfiguration(ClassroomSession.class, Crud.READ).addRequiredFieldNames(ClassroomSessionEditPage.Form.FIELD_ACADEMIC_SESSION
@@ -480,6 +489,45 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		
 		registerDetailsConfiguration(AbstractStudentClassroomSessionDivisionSubjectDetails.class, new StudentClassroomSessionDivisionSubjectDetailsConfiguration());
 	}
+	
+	protected void configureStudentClassroomSessionSubjectClass() {
+		getFormConfiguration(StudentClassroomSessionSubject.class, Crud.CREATE).addFieldNames(StudentClassroomSessionSubjectDetails.FIELD_STUDENT
+				,StudentClassroomSessionSubjectDetails.FIELD_CLASSROOM_SESSION_SUBJECT);
+		
+		registerDetailsConfiguration(StudentClassroomSessionSubjectDetails.class, new StudentClassroomSessionDivisionSubjectDetailsConfiguration());
+	}
+	
+	public static class StudentClassroomSessionSubjectDetailsConfiguration extends DetailsConfiguration implements Serializable{
+		private static final long serialVersionUID = -2263239648035992476L;
+		
+		@SuppressWarnings("rawtypes")
+		@Override
+		public ControlSetAdapter.Details getFormControlSetAdapter(Class clazz) {
+			return new DetailsConfiguration.DefaultControlSetAdapter(){ 
+				private static final long serialVersionUID = 1L;
+				@Override
+				public Boolean build(Object data,Field field) {
+					//if(data instanceof StudentClassroomSessionDetails)
+						return isFieldNameIn(field,StudentClassroomSessionSubjectDetails.FIELD_STUDENT
+								,StudentClassroomSessionSubjectDetails.FIELD_CLASSROOM_SESSION_SUBJECT);
+					
+				}
+			};
+		}
+		
+		@Override
+		public ColumnAdapter getTableColumnAdapter(@SuppressWarnings("rawtypes") Class clazz,AbstractPrimefacesPage page) {
+			return new DetailsConfiguration.DefaultColumnAdapter(){
+				private static final long serialVersionUID = 1L;
+				@Override
+				public Boolean isColumn(Field field) {
+					return isFieldNameIn(field,StudentClassroomSessionSubjectDetails.FIELD_STUDENT);
+				}
+			};
+		}
+		
+	}
+	
 	public static class StudentClassroomSessionDivisionSubjectDetailsConfiguration extends DetailsConfiguration implements Serializable{
 		private static final long serialVersionUID = -2263239648035992476L;
 		

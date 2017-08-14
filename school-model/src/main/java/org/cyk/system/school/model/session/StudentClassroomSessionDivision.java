@@ -12,17 +12,18 @@ import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
 import org.cyk.utility.common.annotation.ModelBean.GenderType;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter @Setter @Entity @NoArgsConstructor @ModelBean(crudStrategy=CrudStrategy.BUSINESS,genderType=GenderType.MALE)
 @Table(uniqueConstraints={@UniqueConstraint(columnNames = {StudentClassroomSessionDivision.COLUMN_STUDENT
@@ -33,7 +34,8 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 
 	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION_DIVISION) @NotNull private ClassroomSessionDivision classroomSessionDivision;
 	
-	@Transient @Setter private IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects;
+	@Transient private IdentifiableRuntimeCollection<StudentClassroomSessionSubject> studentClassroomSessionSubjects;
+	@Transient private IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects;
 	
 	/**/
 		
@@ -46,6 +48,12 @@ public class StudentClassroomSessionDivision extends AbstractStudentResult<Class
 	@Override
 	public ClassroomSessionDivision getLevel() {
 		return classroomSessionDivision;
+	}
+	
+	public IdentifiableRuntimeCollection<StudentClassroomSessionSubject> getStudentClassroomSessionSubjects(){
+		if(studentClassroomSessionSubjects==null)
+			studentClassroomSessionSubjects = new IdentifiableRuntimeCollection<>();
+		return studentClassroomSessionSubjects;
 	}
 	
 	public IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubject> getStudentClassroomSessionDivisionSubjects(){

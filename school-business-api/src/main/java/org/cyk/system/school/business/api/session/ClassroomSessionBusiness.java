@@ -17,6 +17,8 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 
 public interface ClassroomSessionBusiness extends TypedBusiness<ClassroomSession> {
 
+	ClassroomSession instanciateOne(AcademicSession academicSession,LevelTimeDivision levelTimeDivision);
+	
 	Collection<ClassroomSession> findByAcademicSession(AcademicSession academicSession);
 	Collection<ClassroomSession> findByAcademicSessionByTeacher(AcademicSession academicSession,Teacher teacher);
 	Collection<ClassroomSession> findByAcademicSessionByCoordinator(AcademicSession academicSession, Teacher coordinator);

@@ -7,7 +7,9 @@ import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.root.model.IdentifiableRuntimeCollection;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
@@ -22,9 +24,6 @@ import org.cyk.utility.common.annotation.user.interfaces.Input.RendererStrategy;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Named @ViewScoped @Getter @Setter
 public class ClassroomSessionDivisionEditSubjectsPage extends AbstractCrudOnePage<ClassroomSessionDivision> implements Serializable {
@@ -46,12 +45,6 @@ public class ClassroomSessionDivisionEditSubjectsPage extends AbstractCrudOnePag
 			public String getFieldOneItemMasterSelectedName() {
 				return Form.FIELD_ONE_SUBJECT_SELECTED;
 			}
-			
-			@Override
-					public IdentifiableRuntimeCollection<ClassroomSessionDivisionSubject> getRuntimeCollection() {
-						// TODO Auto-generated method stub
-						return identifiable.getClassroomSessionDivisionSubjects();
-					}
 			
 		});
 		classroomSessionDivisionSubjectCollection.setShowItemLabel(Boolean.TRUE);

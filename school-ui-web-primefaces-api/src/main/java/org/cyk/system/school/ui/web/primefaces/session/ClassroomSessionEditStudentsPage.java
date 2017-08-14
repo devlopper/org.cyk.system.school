@@ -46,6 +46,11 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 	}
 	
 	@Override
+	protected Class<?> __formModelClass__() {
+		return Form.class;
+	}
+	
+	@Override
 	public Class<?> getFormModelClass() {
 		return Form.class;
 	}

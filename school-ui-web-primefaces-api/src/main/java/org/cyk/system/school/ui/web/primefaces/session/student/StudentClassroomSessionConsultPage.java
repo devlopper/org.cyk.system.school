@@ -1,41 +1,70 @@
 package org.cyk.system.school.ui.web.primefaces.session.student;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import org.cyk.system.company.business.api.sale.SaleIdentifiableGlobalIdentifierBusiness;
-import org.cyk.system.company.model.sale.SaleIdentifiableGlobalIdentifier;
-import org.cyk.system.school.model.session.StudentClassroomSession;
-import org.cyk.ui.api.Icon;
-import org.cyk.ui.api.command.AbstractCommandable;
-import org.cyk.ui.api.command.UICommandable;
-import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import org.cyk.system.root.model.AbstractIdentifiable;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionSubjectBusiness;
+import org.cyk.system.school.business.impl.subject.StudentClassroomSessionSubjectDetails;
+import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
+import org.cyk.ui.api.IdentifierProvider;
+import org.cyk.ui.web.primefaces.Commandable;
+import org.cyk.ui.web.primefaces.Table;
+import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 
 @Named @ViewScoped @Getter @Setter
 public class StudentClassroomSessionConsultPage extends AbstractConsultPage<StudentClassroomSession> implements Serializable {
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
+	private Table<StudentClassroomSessionSubjectDetails> subjectTable;
+	
 	@Override
-	protected void processIdentifiableContextualCommandable(UICommandable commandable) {
-		super.processIdentifiableContextualCommandable(commandable);
-		SaleIdentifiableGlobalIdentifier.SearchCriteria searchCriteria = new SaleIdentifiableGlobalIdentifier.SearchCriteria();
-		searchCriteria.addIdentifiableGlobalIdentifier(identifiable);
+	protected void initialisation() {
+		super.initialisation();
 		
-		for(SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier : inject(SaleIdentifiableGlobalIdentifierBusiness.class).findByCriteria(searchCriteria)){
-			commandable.addChild(AbstractCommandable.Builder.createConsult(saleIdentifiableGlobalIdentifier.getSale(), Icon.THING_MONEY));
-		}
-		/*if(ActorBusinessServiceAdapter.ARE_CUSTOMERS.contains(Student.class)){
-			if(identifiable.getTuitionSale()==null)
-				commandable.addChild(Builder.createCrud(Crud.UPDATE,identifiable,"school.command.definetuition", Icon.THING_MONEY,SchoolWebManager.getInstance().getOutcomeDefineTuition()));
-			else
-				commandable.addChild(Builder.createConsult(identifiable.getTuitionSale(), Icon.THING_MONEY));
-		}*/
+		subjectTable = (Table<StudentClassroomSessionSubjectDetails>) createDetailsTable(StudentClassroomSessionSubjectDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionSubject,StudentClassroomSessionSubjectDetails>(StudentClassroomSessionSubject.class, StudentClassroomSessionSubjectDetails.class){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public Collection<StudentClassroomSessionSubject> getIdentifiables() {
+				return inject(StudentClassroomSessionSubjectBusiness.class).findByStudentClassroomSession(identifiable);
+			}
+			
+			@Override
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+			
+			@Override
+			public String getTabId() {
+				return IdentifierProvider.Adapter.getTabOf(StudentClassroomSession.class);
+			}
+			
+			@Override
+			public String getEditPageOutcome() {
+				return "studentClassroomSessionEditSubjectsView";
+			}
+			
+			@Override
+			public AbstractIdentifiable getFormIdentifiable() {
+				return identifiable;
+			}
+			
+		});
+		
 	}
 	
+	@Override
+	protected void afterInitialisation() {
+		super.afterInitialisation();
+		((Commandable)subjectTable.getUpdateCommandable()).setRendered(Boolean.TRUE);
+	}
+
 }

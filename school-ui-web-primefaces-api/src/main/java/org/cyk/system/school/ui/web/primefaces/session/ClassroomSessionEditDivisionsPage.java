@@ -67,6 +67,7 @@ public class ClassroomSessionEditDivisionsPage extends AbstractCrudOnePage<Class
 			
 		});
 		classroomSessionDivisionCollection.setShowItemLabel(Boolean.TRUE);
+		classroomSessionDivisionCollection.setLabel(text("field.order.number"));
 	}
 	
 	@Override

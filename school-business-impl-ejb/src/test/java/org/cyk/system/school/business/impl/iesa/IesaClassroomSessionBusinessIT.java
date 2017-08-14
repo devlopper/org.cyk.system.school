@@ -65,16 +65,16 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	classroomSession.getDivisions().addOne(classroomSessionDivision1 = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession,1l));
     	classroomSession.getDivisions().addOne(classroomSessionDivision2 = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession,2l));
     	classroomSession.getDivisions().addOne(classroomSessionDivision3 = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession,3l));
-    	classroomSessionDivision1.getClassroomSessionDivisionSubjects().setSynchonizationEnabled(Boolean.TRUE);
-    	classroomSessionDivision1.getClassroomSessionDivisionSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
+    	classroomSessionDivision1.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+    	classroomSessionDivision1.getSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
     			.instanciateOne(classroomSessionDivision1,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ACCOUNTING)));
-    	classroomSessionDivision2.getClassroomSessionDivisionSubjects().setSynchonizationEnabled(Boolean.TRUE);
-    	classroomSessionDivision2.getClassroomSessionDivisionSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
+    	classroomSessionDivision2.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+    	classroomSessionDivision2.getSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
     			.instanciateOne(classroomSessionDivision2,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS)));
-    	classroomSessionDivision3.getClassroomSessionDivisionSubjects().setSynchonizationEnabled(Boolean.TRUE);
-    	classroomSessionDivision3.getClassroomSessionDivisionSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
+    	classroomSessionDivision3.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+    	classroomSessionDivision3.getSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
     			.instanciateOne(classroomSessionDivision3,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ACCOUNTING)));
-    	classroomSessionDivision3.getClassroomSessionDivisionSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
+    	classroomSessionDivision3.getSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
     			.instanciateOne(classroomSessionDivision3,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.BIOLOGY)));
     	
     	testCase.create(classroomSession);
@@ -115,19 +115,19 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	classroomSession.getDivisions().addOne(classroomSessionDivision1 = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession,1l));
     	classroomSession.getDivisions().addOne(classroomSessionDivision2 = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession,2l));
     	classroomSession.getDivisions().addOne(classroomSessionDivision3 = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession,3l));
-    	classroomSessionDivision1.getClassroomSessionDivisionSubjects().setSynchonizationEnabled(Boolean.TRUE);
+    	classroomSessionDivision1.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
     	ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
-    	classroomSessionDivision1.getClassroomSessionDivisionSubjects().addOne(classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class)
+    	classroomSessionDivision1.getSubjects().addOne(classroomSessionDivisionSubject = inject(ClassroomSessionDivisionSubjectBusiness.class)
     			.instanciateOne(classroomSessionDivision1,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ACCOUNTING)));
     	classroomSessionDivisionSubject.getEvaluationTypes().addOne(inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).instancaiteOne(classroomSessionDivisionSubject
     			, inject(EvaluationTypeDao.class).read(SchoolConstant.Code.EvaluationType.TEST1)));
-    	classroomSessionDivision2.getClassroomSessionDivisionSubjects().setSynchonizationEnabled(Boolean.TRUE);
-    	classroomSessionDivision2.getClassroomSessionDivisionSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
+    	classroomSessionDivision2.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+    	classroomSessionDivision2.getSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
     			.instanciateOne(classroomSessionDivision2,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS)));
-    	classroomSessionDivision3.getClassroomSessionDivisionSubjects().setSynchonizationEnabled(Boolean.TRUE);
-    	classroomSessionDivision3.getClassroomSessionDivisionSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
+    	classroomSessionDivision3.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+    	classroomSessionDivision3.getSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
     			.instanciateOne(classroomSessionDivision3,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ART_CRAFT)));
-    	classroomSessionDivision3.getClassroomSessionDivisionSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
+    	classroomSessionDivision3.getSubjects().addOne(inject(ClassroomSessionDivisionSubjectBusiness.class)
     			.instanciateOne(classroomSessionDivision3,inject(SubjectDao.class).read(SchoolConstant.Code.Subject.BIOLOGY)));
     	
     	testCase.create(classroomSession);

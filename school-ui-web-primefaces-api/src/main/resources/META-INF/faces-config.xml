@@ -251,6 +251,11 @@
 			<redirect />
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>studentClassroomSessionEditSubjectsView</from-outcome>
+			<to-view-id>/private/studentclassroomsession/editsubjects.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>studentClassroomSessionCreateManyView</from-outcome>
 			<to-view-id>/private/studentclassroomsession/createmany.jsf</to-view-id>
 			<redirect />
@@ -268,6 +273,22 @@
 		<navigation-case>
 			<from-outcome>studentClassroomSessionConsultManyRankView</from-outcome>
 			<to-view-id>/private/studentclassroomsession/consultmanyrank.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>studentClassroomSessionSubjectEditView</from-outcome>
+			<to-view-id>/private/studentclassroomsessionsubject/edit.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionSubjectConsultView</from-outcome>
+			<to-view-id>/private/studentclassroomsessionsubject/consult.jsf</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>studentClassroomSessionSubjectListView</from-outcome>
+			<to-view-id>/private/studentclassroomsessionsubject/list.jsf</to-view-id>
 			<redirect />
 		</navigation-case>
 		

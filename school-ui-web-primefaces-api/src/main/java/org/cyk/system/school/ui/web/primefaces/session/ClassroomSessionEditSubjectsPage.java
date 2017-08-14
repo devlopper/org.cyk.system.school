@@ -12,6 +12,7 @@ import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
+import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.api.WebManager;
 import org.cyk.ui.web.primefaces.ItemCollection;
@@ -42,12 +43,23 @@ public class ClassroomSessionEditSubjectsPage extends AbstractCrudOnePage<Classr
 			private static final long serialVersionUID = 1L;
 			
 			@Override
+			public void instanciated(AbstractItemCollection<ClassroomSessionSubjectItem, ClassroomSessionSubject, ClassroomSession, SelectItem> itemCollection,ClassroomSessionSubjectItem item) {
+				super.instanciated(itemCollection, item);
+				item.getIdentifiable().setCascadeOperationToChildren(Boolean.TRUE);
+			}
+			
+			@Override
 			public String getFieldOneItemMasterSelectedName() {
 				return Form.FIELD_ONE_SUBJECT_SELECTED;
 			}
 			
 		});
 		classroomSessionSubjectCollection.setShowItemLabel(Boolean.TRUE);
+	}
+	
+	@Override
+	protected Class<?> __formModelClass__() {
+		return Form.class;
 	}
 		
 	@Override

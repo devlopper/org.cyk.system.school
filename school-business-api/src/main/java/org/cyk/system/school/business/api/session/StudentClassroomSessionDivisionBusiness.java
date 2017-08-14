@@ -54,6 +54,7 @@ public interface StudentClassroomSessionDivisionBusiness extends AbstractStudent
 	Collection<StudentClassroomSessionDivision> findByClassroomSessionDivisionOrderNumber(Long classroomSessionDivisionOrderNumber);
 
 	void sendReportFileToEmail(Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions);
+	StudentClassroomSessionDivision instanciateOne(ClassroomSessionDivision classroomSessionDivision,Student student);
 	
 	/**/
 	
