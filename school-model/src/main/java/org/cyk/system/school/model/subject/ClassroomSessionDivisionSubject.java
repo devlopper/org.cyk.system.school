@@ -39,7 +39,7 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION_DIVISION) @NotNull private ClassroomSessionDivision classroomSessionDivision;
 	
 	@ManyToOne @JoinColumn(name=COLUMN_SUBJECT) @NotNull private Subject subject;
-		
+	
 	@ManyToOne private ClassroomSessionDivisionSubjectGroup group;
 	
 	@ManyToOne private Teacher teacher;
@@ -51,7 +51,6 @@ public class ClassroomSessionDivisionSubject extends AbstractIdentifiable implem
 	@Embedded private NodeResults results = new NodeResults();
 	
 	@Transient private IdentifiableRuntimeCollection<ClassroomSessionDivisionSubjectEvaluationType> evaluationTypes;
-	@Transient private Boolean autoCreateStudentClassroomSessionDivisionSubject;
 	
 	/**
 	 * The time table

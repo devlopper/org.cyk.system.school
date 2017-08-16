@@ -7,6 +7,7 @@ import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionSubjectDao;
 import org.cyk.utility.common.helper.FieldHelper;
@@ -29,6 +30,11 @@ public class StudentClassroomSessionSubjectDaoImpl extends AbstractTypedDao<Stud
 	public Collection<StudentClassroomSessionSubject> readByStudentByClassroomSession(Student student, ClassroomSession classroomSession) {
 		return namedQuery(readByStudentByClassroomSession).parameter(StudentClassroomSessionSubject.FIELD_STUDENT, student)
 				.parameter(ClassroomSessionSubject.COLUMN_CLASSROOMSESSION, classroomSession).resultMany();
+	}
+
+	@Override
+	public Collection<StudentClassroomSessionSubject> readByStudentClassroomSession(StudentClassroomSession studentClassroomSession) {
+		return readByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession());
 	}
 	
     

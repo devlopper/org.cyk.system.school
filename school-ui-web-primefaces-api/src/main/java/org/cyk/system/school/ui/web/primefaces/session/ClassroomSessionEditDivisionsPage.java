@@ -8,9 +8,12 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
+import org.cyk.system.root.model.mathematics.Interval;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
@@ -41,9 +44,8 @@ public class ClassroomSessionEditDivisionsPage extends AbstractCrudOnePage<Class
 		@SuppressWarnings("unchecked")
 		org.cyk.ui.api.data.collector.control.InputChoice<?, ?, ?, ?, ?, SelectItem> input = (org.cyk.ui.api.data.collector.control.InputChoice<?, ?, ?, ?, ?, SelectItem>)
 				form.getInputByFieldName(Form.FIELD_ONE_ORDER_NUMBER_SELECTED);
-		input.getList().add(new SelectItem(new Long(1), "1"));
-		input.getList().add(new SelectItem(new Long(2), "2"));
-		input.getList().add(new SelectItem(new Long(3), "3"));
+		input.getList().addAll(WebManager.getInstance().getSelectItems(inject(CommonNodeInformationsBusiness.class)
+				.findValue(identifiable, Interval.class, CommonNodeInformations.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL)));
 		
 		classroomSessionDivisionCollection = createItemCollection(ClassroomSessionDivisionItem.class, ClassroomSessionDivision.class,identifiable 
 				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<ClassroomSessionDivisionItem,ClassroomSessionDivision,ClassroomSession>(identifiable,crud,form,ClassroomSessionDivision.class){
@@ -68,6 +70,11 @@ public class ClassroomSessionEditDivisionsPage extends AbstractCrudOnePage<Class
 		});
 		classroomSessionDivisionCollection.setShowItemLabel(Boolean.TRUE);
 		classroomSessionDivisionCollection.setLabel(text("field.order.number"));
+	}
+
+	@Override
+	protected Class<?> __formModelClass__() {
+		return Form.class;
 	}
 	
 	@Override

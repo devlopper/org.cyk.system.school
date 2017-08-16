@@ -8,20 +8,27 @@ import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
+import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.junit.Test;
 
@@ -84,7 +91,7 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	assertEquals(3, inject(ClassroomSessionSubjectDao.class).readByClassroomSession(classroomSession).size());
     	
     	Student student = inject(StudentBusiness.class).instanciateOneRandomly("S001");
-    	student.setImage(null);
+    	//student.setImage(null);
     	testCase.create(student);
     	StudentClassroomSession studentClassroomSession = new StudentClassroomSession(student, classroomSession);
     	testCase.create(studentClassroomSession);
@@ -133,6 +140,84 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	testCase.create(classroomSession);
     	assertEquals(3l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
     	assertEquals(4, inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSession(classroomSession).size());
+    	testCase.clean();
+    }
+    
+    @Test
+    public void createClassroom(){
+    	TestCase testCase = instanciateTestCase();
+    	ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).instanciateOne();
+    	classroomSession.setLevelTimeDivision(inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1));
+    	classroomSession.getDivisions().setSynchonizationEnabled(Boolean.FALSE);
+    	testCase.create(classroomSession);
+    	assertEquals(0l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
+    	
+    	classroomSession = inject(ClassroomSessionBusiness.class).findByLevelName(SchoolConstant.Code.LevelName.G1).iterator().next();
+    	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession, 1l);
+    	classroomSessionDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(RootConstant.Code.TimeDivisionType.TRIMESTER));
+    	classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.FALSE);
+    	classroomSession.getDivisions().addOne(classroomSessionDivision);
+    	classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession, 2l);
+    	classroomSessionDivision.setTimeDivisionType(inject(TimeDivisionTypeDao.class).read(RootConstant.Code.TimeDivisionType.TRIMESTER));
+    	classroomSessionDivision.getSubjects().setSynchonizationEnabled(Boolean.FALSE);
+    	classroomSession.getDivisions().addOne(classroomSessionDivision);
+    	classroomSession.getDivisions().setSynchonizationEnabled(Boolean.TRUE);
+    	testCase.update(classroomSession);
+    	assertEquals(2l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
+    	
+    	classroomSession = inject(ClassroomSessionBusiness.class).findByLevelName(SchoolConstant.Code.LevelName.G1).iterator().next();
+    	ClassroomSessionSubject classroomSessionSubject = inject(ClassroomSessionSubjectBusiness.class).instanciateOne(classroomSession
+    			, inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ACCOUNTING));
+    	classroomSessionSubject.setCascadeOperationToChildren(Boolean.TRUE);
+    	classroomSession.getSubjects().addOne(classroomSessionSubject);
+    	classroomSessionSubject = inject(ClassroomSessionSubjectBusiness.class).instanciateOne(classroomSession
+    			, inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS));
+    	classroomSessionSubject.setCascadeOperationToChildren(Boolean.TRUE);
+    	classroomSession.getSubjects().addOne(classroomSessionSubject);
+    	classroomSessionSubject = inject(ClassroomSessionSubjectBusiness.class).instanciateOne(classroomSession
+    			, inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ART_CRAFT));
+    	classroomSessionSubject.setCascadeOperationToChildren(Boolean.TRUE);
+    	classroomSession.getSubjects().addOne(classroomSessionSubject);
+    	classroomSession.getSubjects().setSynchonizationEnabled(Boolean.TRUE);
+    	classroomSession.getDivisions().setSynchonizationEnabled(Boolean.FALSE);
+    	testCase.update(classroomSession);
+    	assertEquals(3, inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision).size());
+    	
+    	classroomSession = inject(ClassroomSessionBusiness.class).findByLevelName(SchoolConstant.Code.LevelName.G1).iterator().next();
+    	classroomSession.getDivisions().setSynchonizationEnabled(Boolean.FALSE);
+    	Student student = inject(StudentBusiness.class).instanciateOneRandomly("S001");
+    	testCase.create(student);
+    	StudentClassroomSession studentClassroomSession = inject(StudentClassroomSessionBusiness.class).instanciateOne(classroomSession, student);
+    	studentClassroomSession.setCode(student.getCode());
+    	classroomSession.getStudents().addOne(studentClassroomSession);
+    	student = inject(StudentBusiness.class).instanciateOneRandomly("S002");
+    	testCase.create(student);
+    	studentClassroomSession = inject(StudentClassroomSessionBusiness.class).instanciateOne(classroomSession, student);
+    	studentClassroomSession.setCode(student.getCode());
+    	classroomSession.getStudents().addOne(studentClassroomSession);
+    	student = inject(StudentBusiness.class).instanciateOneRandomly("S003");
+    	testCase.create(student);
+    	studentClassroomSession = inject(StudentClassroomSessionBusiness.class).instanciateOne(classroomSession, student);
+    	studentClassroomSession.setCode(student.getCode());
+    	classroomSession.getStudents().addOne(studentClassroomSession);
+    	classroomSession.getStudents().setSynchonizationEnabled(Boolean.TRUE);
+    	testCase.update(classroomSession);
+    	
+    	assertEquals(0, inject(StudentClassroomSessionDivisionSubjectDao.class).readByStudentByClassroomSessionDivision(inject(StudentDao.class).read("S002")
+    			,classroomSessionDivision).size());
+    	
+    	studentClassroomSession = inject(StudentClassroomSessionBusiness.class).find("S002");
+    	StudentClassroomSessionSubject studentClassroomSessionSubject = inject(StudentClassroomSessionSubjectBusiness.class).instanciateOne(studentClassroomSession
+    			, inject(ClassroomSessionSubjectDao.class).readByClassroomSessionBySubject(classroomSession, inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ART_CRAFT)));
+    	studentClassroomSession.getStudentClassroomSessionSubjects().addOne(studentClassroomSessionSubject);
+    	studentClassroomSessionSubject = inject(StudentClassroomSessionSubjectBusiness.class).instanciateOne(studentClassroomSession
+    			, inject(ClassroomSessionSubjectDao.class).readByClassroomSessionBySubject(classroomSession, inject(SubjectDao.class).read(SchoolConstant.Code.Subject.ADVANCED_MATHEMATICS)));
+    	studentClassroomSession.getStudentClassroomSessionSubjects().addOne(studentClassroomSessionSubject);
+    	studentClassroomSession.getStudentClassroomSessionSubjects().setSynchonizationEnabled(Boolean.TRUE);
+    	testCase.update(studentClassroomSession);
+    	assertEquals(2, inject(StudentClassroomSessionDivisionSubjectDao.class).readByStudentByClassroomSessionDivision(inject(StudentDao.class).read("S002")
+    			,classroomSessionDivision).size());
+    	
     	testCase.clean();
     }
     

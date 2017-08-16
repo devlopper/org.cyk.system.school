@@ -12,11 +12,13 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.model.search.IntegerSearchCriteria;
 import org.cyk.system.school.model.AbstractStudentResult;
 import org.cyk.system.school.model.StudentResults;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.ModelBean;
 import org.cyk.utility.common.annotation.ModelBean.CrudStrategy;
@@ -35,10 +37,18 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 
 	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION) @NotNull private ClassroomSession classroomSession;
 	
+	private IdentifiableRuntimeCollection<StudentClassroomSessionSubject> studentClassroomSessionSubjects;
+	
 	public StudentClassroomSession(Student student,ClassroomSession classroomSession) {
 		super();
 		this.student = student;
 		this.classroomSession = classroomSession;
+	}
+	
+	public IdentifiableRuntimeCollection<StudentClassroomSessionSubject> getStudentClassroomSessionSubjects(){
+		if(studentClassroomSessionSubjects==null)
+			studentClassroomSessionSubjects = new IdentifiableRuntimeCollection<>();
+		return studentClassroomSessionSubjects;
 	}
 
 	@Override

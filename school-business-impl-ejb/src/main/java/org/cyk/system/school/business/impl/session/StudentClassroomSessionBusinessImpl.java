@@ -21,6 +21,7 @@ import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusine
 import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.StudentClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.model.NodeResults;
 import org.cyk.system.school.model.actor.Student;
@@ -35,6 +36,7 @@ import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
@@ -42,6 +44,7 @@ import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionSubjectDao;
 
 @Stateless
 public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsBusinessImpl<StudentClassroomSession,StudentClassroomSessionDao,ClassroomSession, StudentClassroomSessionDivision> implements StudentClassroomSessionBusiness,Serializable {
@@ -136,10 +139,17 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	}
 	
 	@Override
+	protected void afterUpdate(StudentClassroomSession studentClassroomSession) {
+		super.afterUpdate(studentClassroomSession);
+		synchronise(StudentClassroomSessionSubject.class, studentClassroomSession, studentClassroomSession.getStudentClassroomSessionSubjects());
+	}
+	
+	@Override
 	protected void beforeDelete(StudentClassroomSession studentClassroomSession) {
 		super.beforeDelete(studentClassroomSession);
 		cascade(studentClassroomSession, studentClassroomSessionDivisionDao.readByStudentByClassroomSession(studentClassroomSession.getStudent()
 				, studentClassroomSession.getClassroomSession()), Crud.DELETE);
+		inject(StudentClassroomSessionSubjectBusiness.class).delete(inject(StudentClassroomSessionSubjectDao.class).readByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()));
 	}
 		
 	/**/

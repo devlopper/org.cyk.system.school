@@ -1,20 +1,27 @@
 package org.cyk.system.school.business.impl.subject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.impl.AbstractStudentResultsBusinessImpl;
 import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.StudentClassroomSession;
+import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
+import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Lecture;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionSubjectDao;
 
 public class StudentClassroomSessionSubjectBusinessImpl extends AbstractStudentResultsBusinessImpl<StudentClassroomSessionSubject, StudentClassroomSessionSubjectDao,ClassroomSessionSubject, StudentClassroomSessionDivisionSubject> implements StudentClassroomSessionSubjectBusiness,Serializable {
@@ -32,6 +39,30 @@ public class StudentClassroomSessionSubjectBusinessImpl extends AbstractStudentR
 		studentClassroomSessionSubject.setStudent(studentClassroomSession.getStudent());
 		studentClassroomSessionSubject.setClassroomSessionSubject(classroomSessionSubject);
 		return studentClassroomSessionSubject;
+	}
+	
+	@Override
+	protected void afterCreate(StudentClassroomSessionSubject studentClassroomSessionSubject) {
+		super.afterCreate(studentClassroomSessionSubject);
+		Student student = studentClassroomSessionSubject.getStudent();
+		ClassroomSession classroomSession = studentClassroomSessionSubject.getClassroomSessionSubject().getClassroomSession();
+		if(Boolean.TRUE.equals(studentClassroomSessionSubject.getCascadeOperationToChildren())){
+			Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionDao.class).readByStudentByClassroomSession(student, classroomSession);
+			Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = inject(ClassroomSessionDivisionSubjectDao.class)
+					.readByClassroomSessionBySubject(classroomSession, studentClassroomSessionSubject.getClassroomSessionSubject().getSubject());
+			
+			Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();
+			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
+				for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects)
+					if(classroomSessionDivisionSubject.getClassroomSessionDivision().equals(studentClassroomSessionDivision.getClassroomSessionDivision())){
+						StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student,classroomSessionDivisionSubject);
+						studentClassroomSessionDivisionSubject.setCascadeOperationToChildren(studentClassroomSessionSubject.getCascadeOperationToChildren());
+						studentClassroomSessionDivisionSubject.setCascadeOperationToMaster(studentClassroomSessionSubject.getCascadeOperationToMaster());
+						studentClassroomSessionDivisionSubjects.add(studentClassroomSessionDivisionSubject);	
+					}
+			}
+			inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentClassroomSessionDivisionSubjects);
+		}
 	}
 	
 	@Override

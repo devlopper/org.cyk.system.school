@@ -53,6 +53,7 @@ import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
+import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditSubjectsPage;
 import org.cyk.ui.api.command.menu.SystemMenu;
 import org.cyk.ui.api.model.geography.LocationFormModel;
 import org.cyk.ui.api.model.language.LanguageCollectionFormModel;
@@ -418,7 +419,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	
 	protected void configureStudentClassroomSessionClass() {
 		getFormConfiguration(StudentClassroomSession.class, Crud.CREATE).addRequiredFieldNames(StudentClassroomSessionEditPage.Form.FIELD_CLASSROOM_STUDENT
-				,StudentClassroomSessionEditPage.Form.FIELD_CLASSROOM_SESSION);
+				,StudentClassroomSessionEditPage.Form.FIELD_CLASSROOM_SESSION,StudentClassroomSessionEditSubjectsPage.Form.FIELD_ONE_CLASSROOM_SESSION_SUBJECT_SELECTED);
 		registerDetailsConfiguration(StudentClassroomSessionDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;
 			@SuppressWarnings("rawtypes")

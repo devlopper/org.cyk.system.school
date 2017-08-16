@@ -17,7 +17,6 @@ import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
-import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
@@ -79,13 +78,13 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			inject(ClassroomSessionSubjectBusiness.class).create(classroomSessionSubject);
 		}
 		commonUtils.increment(Long.class, classroomSessionDivisionSubject.getClassroomSessionDivision(), ClassroomSessionDivision.FIELD_NUMBER_OF_SUBJECTS, 1l);
-		inject(ClassroomSessionDivisionBusiness.class).update(classroomSessionDivisionSubject.getClassroomSessionDivision());
+		inject(ClassroomSessionDivisionDao.class).update(classroomSessionDivisionSubject.getClassroomSessionDivision());
 		
 		if(classroomSessionDivisionSubject.getEvaluationTypes().isSynchonizationEnabled()){
 			inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).create(classroomSessionDivisionSubject.getEvaluationTypes().getCollection());
 		}
 		
-		if(Boolean.TRUE.equals(classroomSessionDivisionSubject.getAutoCreateStudentClassroomSessionDivisionSubject())){
+		if(Boolean.TRUE.equals(classroomSessionDivisionSubject.getRequired())){
 			for(Student student : inject(StudentDao.class).readByClassroomSessionDivision(classroomSessionDivisionSubject.getClassroomSessionDivision())){
 				StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student,classroomSessionDivisionSubject);
 				studentClassroomSessionDivisionSubject.setCascadeOperationToChildren(Boolean.FALSE);

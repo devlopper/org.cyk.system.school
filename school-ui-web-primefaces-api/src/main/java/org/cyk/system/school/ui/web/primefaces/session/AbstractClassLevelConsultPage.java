@@ -41,7 +41,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter @Setter @Deprecated
 public abstract class AbstractClassLevelConsultPage<LEVEL extends AbstractIdentifiable,LEVEL_OUTPUT,SUB_LEVEL extends AbstractIdentifiable,SUB_LEVEL_OUTPUT,RESULT 
 extends AbstractStudentResult<LEVEL, DETAIL>,RESULT_OUTPUT extends AbstractStudentResultsOutputDetails<LEVEL, RESULT, DETAIL>,DETAIL extends AbstractStudentResult<?, ?>
 ,DETAIL_OUTPUT> extends AbstractConsultPage<LEVEL> implements Serializable {
