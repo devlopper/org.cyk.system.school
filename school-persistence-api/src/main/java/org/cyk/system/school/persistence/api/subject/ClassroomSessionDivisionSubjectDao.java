@@ -22,4 +22,5 @@ public interface ClassroomSessionDivisionSubjectDao extends TypedDao<ClassroomSe
 	ClassroomSessionDivisionSubject readByClassroomSessionDivisionBySubject(ClassroomSessionDivision classroomSessionDivision, Subject subject);
 	
 	Collection<ClassroomSessionDivisionSubject> readManyByClassroomSessionDivisionBySubject(ClassroomSessionDivision classroomSessionDivision, Subject subject);
+	Collection<ClassroomSessionDivisionSubject> readByClassroomSessionDivisionByRequired(ClassroomSessionDivision classroomSessionDivision, Boolean required);
 }

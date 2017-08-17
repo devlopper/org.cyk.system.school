@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.MathematicsBusiness;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.business.api.value.MeasureBusiness;
@@ -29,6 +30,7 @@ import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.api.session.CommonNodeInformationsBusiness;
+import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -46,6 +48,7 @@ import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSuffixDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.utility.common.Constant;
 
 public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<ClassroomSession, ClassroomSessionDao> implements ClassroomSessionBusiness,Serializable {
@@ -73,18 +76,13 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	}
 	
 	@Override
-	protected void afterCreate(ClassroomSession classroomSession) {
-		super.afterCreate(classroomSession);
-		if(classroomSession.getDivisions().isSynchonizationEnabled())
-			inject(ClassroomSessionDivisionBusiness.class).create(classroomSession.getDivisions().getCollection());
-	}
-
-	@Override
-	protected void afterUpdate(ClassroomSession classroomSession) {
-		super.afterUpdate(classroomSession);
-		synchronise(ClassroomSessionDivision.class, classroomSession, classroomSession.getDivisions());
-		synchronise(ClassroomSessionSubject.class, classroomSession, classroomSession.getSubjects());
-		synchronise(StudentClassroomSession.class, classroomSession, classroomSession.getStudents());
+	protected void afterCrud(ClassroomSession classroomSession, Crud crud) {
+		super.afterCrud(classroomSession, crud);
+		if(Crud.isCreateOrUpdate(crud)){
+			synchronise(ClassroomSessionDivision.class, classroomSession, classroomSession.getDivisions());
+			synchronise(ClassroomSessionSubject.class, classroomSession, classroomSession.getSubjects());
+			synchronise(StudentClassroomSession.class, classroomSession, classroomSession.getStudents());
+		}
 	}
 	
 	@Override
@@ -92,6 +90,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 		super.beforeDelete(classroomSession);
 		inject(ClassroomSessionDivisionBusiness.class).delete(inject(ClassroomSessionDivisionDao.class).readByClassroomSession(classroomSession));
 		inject(ClassroomSessionSubjectBusiness.class).delete(inject(ClassroomSessionSubjectDao.class).readByClassroomSession(classroomSession));
+		inject(StudentClassroomSessionBusiness.class).delete(inject(StudentClassroomSessionDao.class).readByClassroomSession(classroomSession));
 	}
 	
 	@Override
@@ -269,8 +268,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	
 	@Override
 	public ClassroomSession instanciateOne(String levelTimeDivisionCode,String suffixCode,String coordinatorCode,String timeDivisionTypeCode,String[][] divisions,String[][] subjects,String[][] evaluationTypes,String[][] metricCollections){
-		return inject(ClassroomSessionBusiness.class)
-    		.instanciateOne(new String[]{null,levelTimeDivisionCode,suffixCode,coordinatorCode,timeDivisionTypeCode
+		return instanciateOne(new String[]{null,levelTimeDivisionCode,suffixCode,coordinatorCode,timeDivisionTypeCode
     		,commonUtils.convertToString(divisions, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
     		,commonUtils.convertToString(subjects, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
     		,commonUtils.convertToString(evaluationTypes, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)

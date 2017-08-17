@@ -16,6 +16,7 @@ public class LevelName extends AbstractEnumeration implements Serializable{
 	private static final long serialVersionUID = 374208919427476791L;
 	
 	@Embedded private CommonNodeInformations nodeInformations;
+	private Boolean allClassroomSessionDivisionSubjectRequired;
 	
 	public LevelName() {}
 
@@ -31,4 +32,5 @@ public class LevelName extends AbstractEnumeration implements Serializable{
 	}
 	
 	public static final String FIELD_NODE_INFORMATIONS = "nodeInformations";
+	public static final String FIELD_ALL_CLASSROOM_SESSION_DIVISION_SUBJECT_REQUIRED = "allClassroomSessionDivisionSubjectRequired";
 }

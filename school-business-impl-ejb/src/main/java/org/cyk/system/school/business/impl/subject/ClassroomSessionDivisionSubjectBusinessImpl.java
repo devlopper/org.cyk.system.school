@@ -66,6 +66,16 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 			return new Object[]{classroomSessionDivisionSubject.getClassroomSessionDivision(),classroomSessionDivisionSubject.getSubject()};
 		return super.getPropertyValueTokens(classroomSessionDivisionSubject, name);
 	}
+	
+	@Override
+	protected void beforeCreate(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+		super.beforeCreate(classroomSessionDivisionSubject);
+		//TODO make it as helper method
+		if(classroomSessionDivisionSubject.getRequired()==null && classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession()
+				.getLevelTimeDivision().getLevel().getLevelName().getRequired()!=null)
+			classroomSessionDivisionSubject.setRequired(classroomSessionDivisionSubject.getClassroomSessionDivision().getClassroomSession()
+					.getLevelTimeDivision().getLevel().getLevelName().getRequired());
+	}
 		
 	@Override
 	protected void afterCreate(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {

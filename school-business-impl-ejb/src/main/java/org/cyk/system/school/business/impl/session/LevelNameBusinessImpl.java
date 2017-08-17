@@ -34,6 +34,8 @@ public class LevelNameBusinessImpl extends AbstractEnumerationBusinessImpl<Level
 		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_ATTENDANCE_TIME_DIVISION_TYPE);
 		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_EVALUATION_PASS_AVERAGE);
 		set(listener.getSetListener(), LevelName.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_AGGREGATE_ATTENDANCE);
+		set(listener.getSetListener(), LevelName.FIELD_ALL_CLASSROOM_SESSION_DIVISION_SUBJECT_REQUIRED);
+		listener.getInstance().setRequired(Boolean.parseBoolean(values[22]));
 		return listener.getInstance();
 	}
 

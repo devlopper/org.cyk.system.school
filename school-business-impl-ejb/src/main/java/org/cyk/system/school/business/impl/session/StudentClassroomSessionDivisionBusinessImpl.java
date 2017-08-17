@@ -107,7 +107,7 @@ public class StudentClassroomSessionDivisionBusinessImpl extends AbstractStudent
 		
 		Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSessionDivision.getCascadeOperationToChildren())){
-			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivision(classroomSessionDivision)){
+			for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : subjectDao.readByClassroomSessionDivisionByRequired(classroomSessionDivision,Boolean.TRUE)){
 				studentClassroomSessionDivisionSubjects.add(new StudentClassroomSessionDivisionSubject(student, classroomSessionDivisionSubject));
 			}
 		}

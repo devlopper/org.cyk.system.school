@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.NoResultException;
 
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.root.persistence.impl.QueryWrapper;
 import org.cyk.system.school.model.actor.Teacher;
@@ -15,13 +16,15 @@ import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.utility.common.computation.ArithmeticOperator;
+import org.cyk.utility.common.helper.FieldHelper;
 
 public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<ClassroomSessionDivisionSubject> implements ClassroomSessionDivisionSubjectDao,Serializable {
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
    private String readByClassroomSessionDivision,readByClassroomSession,readByClassroomSessionDivisions,readByClassroomSessions,readByClassroomSessionDivisionByTeacher
-   	,readByClassroomSessionBySubject,readByClassroomSessionDivisionBySubject,readWhereStudentExistByClassroomSessionDivision;
+   	,readByClassroomSessionBySubject,readByClassroomSessionDivisionBySubject,readWhereStudentExistByClassroomSessionDivision,readByClassroomSessionDivisionByRequired;
     
     @Override
     protected void namedQueriesInitialisation() {
@@ -29,6 +32,9 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
         registerNamedQuery(readByClassroomSessionDivision, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION));
         registerNamedQuery(readByClassroomSessionDivisionBySubject, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
         		.and(ClassroomSessionDivisionSubject.FIELD_SUBJECT));
+        registerNamedQuery(readByClassroomSessionDivisionByRequired, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
+        		.and(FieldHelper.getInstance().buildPath(ClassroomSessionDivisionSubject.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_REQUIRED)
+        				,GlobalIdentifier.FIELD_REQUIRED,ArithmeticOperator.EQ));
         registerNamedQuery(readByClassroomSessionDivisionByTeacher, _select().where(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION)
         		.and(ClassroomSessionDivisionSubject.FIELD_TEACHER));
         registerNamedQuery(readByClassroomSession, _select().where(commonUtils.attributePath(StudentClassroomSessionDivision.FIELD_CLASSROOM_SESSION_DIVISION
@@ -105,6 +111,12 @@ public class ClassroomSessionDivisionSubjectDaoImpl extends AbstractTypedDao<Cla
 	public Collection<ClassroomSessionDivisionSubject> readWhereStudentExistByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision) {
 		return namedQuery(readWhereStudentExistByClassroomSessionDivision).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision)
 				.resultMany();
+	}
+
+	@Override
+	public Collection<ClassroomSessionDivisionSubject> readByClassroomSessionDivisionByRequired(ClassroomSessionDivision classroomSessionDivision, Boolean required) {
+		return namedQuery(readByClassroomSessionDivisionByRequired).parameter(ClassroomSessionDivisionSubject.FIELD_CLASSROOM_SESSION_DIVISION, classroomSessionDivision)
+				.parameter(GlobalIdentifier.FIELD_REQUIRED, required).resultMany();
 	}
 }
  

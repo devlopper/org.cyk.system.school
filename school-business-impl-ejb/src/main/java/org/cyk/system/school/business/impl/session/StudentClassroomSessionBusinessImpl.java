@@ -83,8 +83,12 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		super.afterCreate(studentClassroomSession);
 		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeOperationToChildren())){
-			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession()))
-				studentClassroomSessionDivisions.add(new StudentClassroomSessionDivision(studentClassroomSession.getStudent(), classroomSessionDivision));
+			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession())){
+				StudentClassroomSessionDivision studentClassroomSessionDivision = inject(StudentClassroomSessionDivisionBusiness.class).instanciateOne(classroomSessionDivision, studentClassroomSession.getStudent());
+				studentClassroomSessionDivision.setCascadeOperationToChildren(studentClassroomSession.getCascadeOperationToChildren());
+				studentClassroomSessionDivision.setCascadeOperationToMaster(studentClassroomSession.getCascadeOperationToMaster());
+				studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
+			}
 		}
 		cascade(studentClassroomSession, studentClassroomSessionDivisions, Crud.CREATE);
 	}
