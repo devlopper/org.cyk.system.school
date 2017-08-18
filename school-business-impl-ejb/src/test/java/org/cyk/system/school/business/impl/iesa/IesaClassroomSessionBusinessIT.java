@@ -19,20 +19,19 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
-import org.cyk.system.school.model.session.LevelName;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
-import org.cyk.system.school.persistence.api.session.LevelNameDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.EvaluationTypeDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 import org.junit.Test;
 
@@ -208,7 +207,9 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	assertEquals(3, inject(StudentClassroomSessionDao.class).readByClassroomSession(classroomSession).size());
     	assertEquals(9, inject(StudentClassroomSessionDivisionDao.class).readByClassroomSession(classroomSession).size());
     	assertEquals(36, inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSession(classroomSession).size());
-    	
+    	assertEquals(4, inject(StudentClassroomSessionSubjectDao.class).readByStudentClassroomSession(inject(StudentClassroomSessionDao.class).read("S00A1")).size());
+    	assertEquals(4, inject(StudentClassroomSessionSubjectDao.class).readByStudentClassroomSession(inject(StudentClassroomSessionDao.class).read("S00A2")).size());
+    	assertEquals(4, inject(StudentClassroomSessionSubjectDao.class).readByStudentClassroomSession(inject(StudentClassroomSessionDao.class).read("S00A3")).size());
     	/**/
     	
     	classroomSession = inject(ClassroomSessionBusiness.class).instanciateOne();
@@ -266,8 +267,11 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	assertEquals(3l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
     	assertEquals(12, inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSession(classroomSession).size());
     	assertEquals(0, inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSession(classroomSession).size());
+    	assertEquals(0, inject(StudentClassroomSessionSubjectDao.class).readByStudentClassroomSession(inject(StudentClassroomSessionDao.class).read("S00B1")).size());
+    	assertEquals(0, inject(StudentClassroomSessionSubjectDao.class).readByStudentClassroomSession(inject(StudentClassroomSessionDao.class).read("S00B2")).size());
+    	assertEquals(0, inject(StudentClassroomSessionSubjectDao.class).readByStudentClassroomSession(inject(StudentClassroomSessionDao.class).read("S00B3")).size());
     	
-    	testCase.clean();
+    	//testCase.clean();
     }
     
     @Test

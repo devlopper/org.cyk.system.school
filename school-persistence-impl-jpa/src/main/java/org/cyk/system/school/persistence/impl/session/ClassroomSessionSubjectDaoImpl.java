@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.persistence.NoResultException;
 
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.persistence.impl.AbstractTypedDao;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -12,12 +13,13 @@ import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
+import org.cyk.utility.common.computation.ArithmeticOperator;
 
 public class ClassroomSessionSubjectDaoImpl extends AbstractTypedDao<ClassroomSessionSubject> implements ClassroomSessionSubjectDao,Serializable {
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readBySubject,readByClassroomSession,readBySubjectByClassroomSession,readByClassroomSessionByStudent;
+	private String readBySubject,readByClassroomSession,readBySubjectByClassroomSession,readByClassroomSessionByStudent,readByClassroomSessionByRequired;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
@@ -29,6 +31,7 @@ public class ClassroomSessionSubjectDaoImpl extends AbstractTypedDao<ClassroomSe
 				+ "studentClassroomSessionDivisionSubject.classroomSessionDivisionSubject.classroomSessionDivision.classroomSession = :classroomSession"
 				+ " AND studentClassroomSessionDivisionSubject.classroomSessionDivisionSubject.subject = classroomSessionSubject.subject AND studentClassroomSessionDivisionSubject.student = :student)");
 		registerNamedQuery(readByClassroomSession, _select().where(ClassroomSessionSubject.FIELD_CLASSROOMSESSION));
+		registerNamedQuery(readByClassroomSessionByRequired, _select().where(ClassroomSessionSubject.FIELD_CLASSROOMSESSION).and("globalIdentifier.required", GlobalIdentifier.FIELD_REQUIRED, ArithmeticOperator.EQ));
 		registerNamedQuery(readBySubjectByClassroomSession, _select().where(ClassroomSessionSubject.FIELD_SUBJECT).and(ClassroomSessionSubject.FIELD_CLASSROOMSESSION));
 	}
 	
@@ -54,7 +57,11 @@ public class ClassroomSessionSubjectDaoImpl extends AbstractTypedDao<ClassroomSe
 				.parameter(StudentClassroomSession.FIELD_STUDENT, student).resultMany();
 	}
 
-	
+	@Override
+	public Collection<ClassroomSessionSubject> readByClassroomSessionByRequired(ClassroomSession classroomSession,Boolean required) {
+		return namedQuery(readByClassroomSessionByRequired).parameter(ClassroomSessionSubject.FIELD_CLASSROOMSESSION, classroomSession)
+				.parameter(GlobalIdentifier.FIELD_REQUIRED, required).resultMany();
+	}
 	
 }
  

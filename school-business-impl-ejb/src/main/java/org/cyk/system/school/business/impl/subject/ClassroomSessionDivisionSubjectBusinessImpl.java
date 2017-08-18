@@ -95,12 +95,14 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		}
 		
 		if(Boolean.TRUE.equals(classroomSessionDivisionSubject.getRequired())){
-			for(Student student : inject(StudentDao.class).readByClassroomSessionDivision(classroomSessionDivisionSubject.getClassroomSessionDivision())){
+			Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();
+			for(Student student : inject(StudentDao.class).readNotByClassroomSessionDivisionSubject(classroomSessionDivisionSubject)){
 				StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student,classroomSessionDivisionSubject);
 				studentClassroomSessionDivisionSubject.setCascadeOperationToChildren(Boolean.FALSE);
 				studentClassroomSessionDivisionSubject.setCascadeOperationToMaster(Boolean.TRUE);
-				inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentClassroomSessionDivisionSubject);
+				studentClassroomSessionDivisionSubjects.add(studentClassroomSessionDivisionSubject);
 			}
+			inject(StudentClassroomSessionDivisionSubjectBusiness.class).create(studentClassroomSessionDivisionSubjects);
 		}
 	}
 	

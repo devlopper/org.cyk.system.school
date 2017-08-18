@@ -9,11 +9,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.cyk.system.company.business.api.sale.SaleBusiness;
-import org.cyk.system.company.model.sale.Sale;
-import org.cyk.system.company.model.sale.SaleIdentifiableGlobalIdentifier;
-import org.cyk.system.company.persistence.api.sale.SaleIdentifiableGlobalIdentifierDao;
-import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.WeightedValue;
 import org.cyk.system.root.model.mathematics.IntervalCollection;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
@@ -28,6 +23,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSession.SearchCriteria;
@@ -40,6 +36,7 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.persistence.api.actor.StudentDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
+import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
@@ -57,7 +54,6 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Inject private StudentClassroomSessionDivisionSubjectDao studentSubjectDao;
 	@Inject private ClassroomSessionDivisionSubjectDao subjectDao;
 	@Inject private StudentClassroomSessionDivisionDao studentClassroomSessionDivisionDao;
-	@Inject private ClassroomSessionDao classroomSessionDao;
 	@Inject private ClassroomSessionDivisionDao classroomSessionDivisionDao;
 	
 	@Inject
@@ -81,50 +77,31 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Override
 	protected void afterCreate(StudentClassroomSession studentClassroomSession) {
 		super.afterCreate(studentClassroomSession);
-		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
 		if(Boolean.TRUE.equals(studentClassroomSession.getCascadeOperationToChildren())){
-			for(ClassroomSessionDivision classroomSessionDivision : classroomSessionDivisionDao.readByClassroomSession(studentClassroomSession.getClassroomSession())){
+			Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = new ArrayList<>();
+			for(ClassroomSessionDivision classroomSessionDivision : inject(ClassroomSessionDivisionDao.class).readByClassroomSession(studentClassroomSession.getClassroomSession())){
 				StudentClassroomSessionDivision studentClassroomSessionDivision = inject(StudentClassroomSessionDivisionBusiness.class).instanciateOne(classroomSessionDivision, studentClassroomSession.getStudent());
 				studentClassroomSessionDivision.setCascadeOperationToChildren(studentClassroomSession.getCascadeOperationToChildren());
 				studentClassroomSessionDivision.setCascadeOperationToMaster(studentClassroomSession.getCascadeOperationToMaster());
 				studentClassroomSessionDivisions.add(studentClassroomSessionDivision);
 			}
-		}
-		cascade(studentClassroomSession, studentClassroomSessionDivisions, Crud.CREATE);
-	}
-	
-	private void cascade(StudentClassroomSession studentClassroomSession,Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions,Crud crud){
-		new CascadeOperationListener.Adapter.Default<StudentClassroomSessionDivision,StudentClassroomSessionDivisionDao,StudentClassroomSessionDivisionBusiness>(null
-				,inject(StudentClassroomSessionDivisionBusiness.class))
-			.operate(studentClassroomSessionDivisions, crud);
-		commonUtils.increment(Integer.class, studentClassroomSession.getClassroomSession().getResults(), NodeResults.FIELD_NUMBER_OF_STUDENT
-				, Crud.CREATE.equals(crud)?1:Crud.DELETE.equals(crud)?-1:0);
-		classroomSessionDao.update(studentClassroomSession.getClassroomSession());
-		if(Crud.CREATE.equals(crud)){
-			/*
-			Customer customer = inject(CustomerDao.class).read(studentClassroomSession.getStudent().getCode());
-			if(customer==null){
-				customer = inject(CustomerBusiness.class).instanciateOne();
-				customer.setCode(studentClassroomSession.getStudent().getCode());
-				customer.setPerson(studentClassroomSession.getStudent().getPerson());
-				inject(CustomerBusiness.class).create(customer);
-			}
+			inject(StudentClassroomSessionDivisionBusiness.class).create(studentClassroomSessionDivisions);
 			
-			Sale sale = inject(SaleBusiness.class).instanciateOne();
-			sale.setName("School Fees");
-			sale.setCustomer(customer);
-			inject(SaleBusiness.class).create(sale);
-			
-			SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier = new SaleIdentifiableGlobalIdentifier(sale, studentClassroomSession);
-			inject(SaleIdentifiableGlobalIdentifierBusiness.class).create(saleIdentifiableGlobalIdentifier);
-			*/
-		}else if(Crud.DELETE.equals(crud)){
-			for(SaleIdentifiableGlobalIdentifier saleIdentifiableGlobalIdentifier : inject(SaleIdentifiableGlobalIdentifierDao.class).readByIdentifiableGlobalIdentifier(studentClassroomSession)){
-				Sale sale = saleIdentifiableGlobalIdentifier.getSale();
-				inject(SaleBusiness.class).delete(sale);
-				
+			if(studentClassroomSession.getClassroomSession().getLevelTimeDivision().getLevel().getLevelName().getAllClassroomSessionDivisionSubjectRequired()){
+				Collection<StudentClassroomSessionSubject> studentClassroomSessionSubjects = new ArrayList<>();
+				for(ClassroomSessionSubject classroomSessionSubject : inject(ClassroomSessionSubjectDao.class).readByClassroomSession(studentClassroomSession.getClassroomSession())){
+					StudentClassroomSessionSubject studentClassroomSessionSubject = inject(StudentClassroomSessionSubjectBusiness.class).instanciateOne(studentClassroomSession,classroomSessionSubject);
+					//studentClassroomSessionSubject.setCascadeOperationToChildren(studentClassroomSession.getCascadeOperationToChildren());
+					//studentClassroomSessionSubject.setCascadeOperationToMaster(studentClassroomSession.getCascadeOperationToMaster());
+					studentClassroomSessionSubject.setCascadeOperationToChildren(Boolean.FALSE);
+					studentClassroomSessionSubject.setCascadeOperationToMaster(Boolean.FALSE);
+					studentClassroomSessionSubjects.add(studentClassroomSessionSubject);
+				}
+				inject(StudentClassroomSessionSubjectBusiness.class).create(studentClassroomSessionSubjects);
 			}
 		}
+		
+		commonUtils.increment(Integer.class, studentClassroomSession.getClassroomSession().getResults(), NodeResults.FIELD_NUMBER_OF_STUDENT, 1);
 	}
 	
 	@Override
@@ -151,9 +128,13 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 	@Override
 	protected void beforeDelete(StudentClassroomSession studentClassroomSession) {
 		super.beforeDelete(studentClassroomSession);
-		cascade(studentClassroomSession, studentClassroomSessionDivisionDao.readByStudentByClassroomSession(studentClassroomSession.getStudent()
-				, studentClassroomSession.getClassroomSession()), Crud.DELETE);
-		inject(StudentClassroomSessionSubjectBusiness.class).delete(inject(StudentClassroomSessionSubjectDao.class).readByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()));
+		inject(StudentClassroomSessionDivisionBusiness.class).delete(inject(StudentClassroomSessionDivisionDao.class)
+				.readByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()));
+		
+		commonUtils.increment(Integer.class, studentClassroomSession.getClassroomSession().getResults(), NodeResults.FIELD_NUMBER_OF_STUDENT, -1);
+		
+		inject(StudentClassroomSessionSubjectBusiness.class).delete(inject(StudentClassroomSessionSubjectDao.class)
+				.readByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession()));
 	}
 		
 	/**/

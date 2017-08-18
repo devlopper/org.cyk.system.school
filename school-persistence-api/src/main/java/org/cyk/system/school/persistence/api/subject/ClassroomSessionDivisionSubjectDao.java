@@ -15,7 +15,10 @@ public interface ClassroomSessionDivisionSubjectDao extends TypedDao<ClassroomSe
 	Collection<ClassroomSessionDivisionSubject> readWhereStudentExistByClassroomSessionDivision(ClassroomSessionDivision classroomSessionDivision);
 	
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSession(ClassroomSession classroomSession);
+	
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSessionBySubject(ClassroomSession classroomSession,Subject subject);
+	//Collection<ClassroomSessionDivisionSubject> readNotByClassroomSessionBySubject(ClassroomSession classroomSession,Subject subject);
+	
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSessionDivisions(Collection<ClassroomSessionDivision> classroomSessionDivisions);
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSessions(Collection<ClassroomSession> levels);
 	Collection<ClassroomSessionDivisionSubject> readByClassroomSessionDivisionByTeacher(ClassroomSessionDivision classroomSessionDivision, Teacher teacher);

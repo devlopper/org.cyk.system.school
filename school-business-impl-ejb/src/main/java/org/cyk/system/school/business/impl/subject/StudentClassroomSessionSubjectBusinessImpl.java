@@ -22,6 +22,7 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionSubjectDao;
 
 public class StudentClassroomSessionSubjectBusinessImpl extends AbstractStudentResultsBusinessImpl<StudentClassroomSessionSubject, StudentClassroomSessionSubjectDao,ClassroomSessionSubject, StudentClassroomSessionDivisionSubject> implements StudentClassroomSessionSubjectBusiness,Serializable {
@@ -55,6 +56,9 @@ public class StudentClassroomSessionSubjectBusinessImpl extends AbstractStudentR
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 				for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects)
 					if(classroomSessionDivisionSubject.getClassroomSessionDivision().equals(studentClassroomSessionDivision.getClassroomSessionDivision())){
+						if(inject(StudentClassroomSessionDivisionSubjectDao.class).readByStudentByClassroomSessionDivisionBySubject(student
+								, studentClassroomSessionDivision.getClassroomSessionDivision(), classroomSessionDivisionSubject.getSubject())==null)
+							continue;
 						StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student,classroomSessionDivisionSubject);
 						studentClassroomSessionDivisionSubject.setCascadeOperationToChildren(studentClassroomSessionSubject.getCascadeOperationToChildren());
 						studentClassroomSessionDivisionSubject.setCascadeOperationToMaster(studentClassroomSessionSubject.getCascadeOperationToMaster());
