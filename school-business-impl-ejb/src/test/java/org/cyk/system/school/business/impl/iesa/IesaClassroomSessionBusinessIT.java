@@ -271,7 +271,7 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	assertEquals(0, inject(StudentClassroomSessionSubjectDao.class).readByStudentClassroomSession(inject(StudentClassroomSessionDao.class).read("S00B2")).size());
     	assertEquals(0, inject(StudentClassroomSessionSubjectDao.class).readByStudentClassroomSession(inject(StudentClassroomSessionDao.class).read("S00B3")).size());
     	
-    	//testCase.clean();
+    	testCase.clean();
     }
     
     @Test

@@ -20,6 +20,7 @@ import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
+import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 
@@ -76,8 +77,23 @@ public class ClassroomSessionSubjectBusinessImpl extends AbstractTypedBusinessSe
 	@Override
 	protected void beforeDelete(ClassroomSessionSubject classroomSessionSubject) {
 		super.beforeDelete(classroomSessionSubject);
-		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionBySubject(classroomSessionSubject.getClassroomSession(), classroomSessionSubject.getSubject()))
-			inject(ClassroomSessionDivisionSubjectBusiness.class).delete(classroomSessionDivisionSubject);
+		inject(ClassroomSessionDivisionSubjectBusiness.class).delete(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionBySubject(classroomSessionSubject.getClassroomSession(), classroomSessionSubject.getSubject()));
+		//inject(StudentClassroomSessionBusiness.class).delete(inject(StudentClassroomSessionDao.class).readByClassroomSessionBySubject(classroomSessionSubject.getClassroomSession(), classroomSessionSubject.getSubject()));
+	}
+	
+	@Override
+	protected void deleteFileIdentifiableGlobalIdentifier(ClassroomSessionSubject identifiable) {
+		
+	}
+	
+	@Override
+	protected void deleteMetricValueIdentifiableGlobalIdentifier(ClassroomSessionSubject identifiable) {
+		
+	}
+	
+	@Override
+	protected void deleteMetricCollectionIdentifiableGlobalIdentifier(ClassroomSessionSubject identifiable) {
+		
 	}
 
 	@Override
