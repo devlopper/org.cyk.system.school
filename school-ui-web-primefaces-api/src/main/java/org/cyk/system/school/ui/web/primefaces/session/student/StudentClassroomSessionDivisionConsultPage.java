@@ -13,6 +13,7 @@ import org.cyk.system.school.business.impl.session.AbstractStudentClassroomSessi
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
+import org.cyk.ui.api.IdentifierProvider;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 
@@ -69,8 +70,13 @@ public class StudentClassroomSessionDivisionConsultPage extends AbstractConsultP
 			}
 			
 			@Override
-			public String getTitleId() {
-				return "model.entity.subject";
+			public Boolean getEnabledInDefaultTab() {
+				return Boolean.TRUE;
+			}
+			
+			@Override
+			public String getTabId() {
+				return IdentifierProvider.Adapter.getTabOf(StudentClassroomSessionDivision.class);
 			}
 		});
 		/*for(ClassroomSessionDivisionStudentsMetricCollection classroomSessionDivisionStudentsMetricCollection : inject(ClassroomSessionDivisionStudentsMetricCollectionBusiness.class).findByClassroomSessionDivision(identifiable.getClassroomSessionDivision())){

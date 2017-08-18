@@ -70,12 +70,6 @@ public class StudentClassroomSessionSubjectBusinessImpl extends AbstractStudentR
 	}
 	
 	@Override
-	protected void beforeDelete(StudentClassroomSessionSubject studentClassroomSessionSubject) {
-		super.beforeDelete(studentClassroomSessionSubject);
-		//inject(StudentClassroomSessionSubjectBusiness.class).delete(inject());
-	}
-	
-	@Override
 	public Collection<StudentClassroomSessionSubject> findByStudentClassroomSession(StudentClassroomSession studentClassroomSession) {
 		return dao.readByStudentByClassroomSession(studentClassroomSession.getStudent(),studentClassroomSession.getClassroomSession());
 	}
