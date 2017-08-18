@@ -495,7 +495,32 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		getFormConfiguration(StudentClassroomSessionSubject.class, Crud.CREATE).addFieldNames(StudentClassroomSessionSubjectDetails.FIELD_STUDENT
 				,StudentClassroomSessionSubjectDetails.FIELD_CLASSROOM_SESSION_SUBJECT);
 		
-		registerDetailsConfiguration(StudentClassroomSessionSubjectDetails.class, new StudentClassroomSessionDivisionSubjectDetailsConfiguration());
+		registerDetailsConfiguration(StudentClassroomSessionSubjectDetails.class, new DetailsConfiguration(){
+			private static final long serialVersionUID = 1L;
+			@SuppressWarnings("rawtypes")
+			@Override
+			public ControlSetAdapter.Details getFormControlSetAdapter(Class clazz) {
+				return new DetailsConfiguration.DefaultControlSetAdapter(){ 
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean build(Object data,Field field) {
+						return isFieldNameIn(field,StudentClassroomSessionSubjectDetails.FIELD_STUDENT
+								,StudentClassroomSessionSubjectDetails.FIELD_CLASSROOM_SESSION_SUBJECT);
+					}
+				};
+			}
+			
+			@Override
+			public ColumnAdapter getTableColumnAdapter(Class clazz, AbstractPrimefacesPage page) {
+				return new DetailsConfiguration.DefaultColumnAdapter(){
+					private static final long serialVersionUID = 1L;
+					@Override
+					public Boolean isColumn(Field field) {
+						return isFieldNameIn(field,StudentClassroomSessionSubjectDetails.FIELD_CLASSROOM_SESSION_SUBJECT);
+					}
+				};
+			}
+		});
 	}
 	
 	public static class StudentClassroomSessionSubjectDetailsConfiguration extends DetailsConfiguration implements Serializable{

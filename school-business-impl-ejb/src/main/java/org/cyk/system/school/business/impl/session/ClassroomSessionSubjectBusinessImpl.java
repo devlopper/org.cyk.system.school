@@ -11,17 +11,19 @@ import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionSubjectBusiness;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
+import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionDivisionDao;
 import org.cyk.system.school.persistence.api.session.ClassroomSessionSubjectDao;
-import org.cyk.system.school.persistence.api.session.StudentClassroomSessionDao;
 import org.cyk.system.school.persistence.api.subject.ClassroomSessionDivisionSubjectDao;
+import org.cyk.system.school.persistence.api.subject.StudentClassroomSessionSubjectDao;
 import org.cyk.system.school.persistence.api.subject.SubjectDao;
 
 public class ClassroomSessionSubjectBusinessImpl extends AbstractTypedBusinessService<ClassroomSessionSubject, ClassroomSessionSubjectDao> implements ClassroomSessionSubjectBusiness,Serializable {
@@ -77,8 +79,11 @@ public class ClassroomSessionSubjectBusinessImpl extends AbstractTypedBusinessSe
 	@Override
 	protected void beforeDelete(ClassroomSessionSubject classroomSessionSubject) {
 		super.beforeDelete(classroomSessionSubject);
-		inject(ClassroomSessionDivisionSubjectBusiness.class).delete(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionBySubject(classroomSessionSubject.getClassroomSession(), classroomSessionSubject.getSubject()));
-		//inject(StudentClassroomSessionBusiness.class).delete(inject(StudentClassroomSessionDao.class).readByClassroomSessionBySubject(classroomSessionSubject.getClassroomSession(), classroomSessionSubject.getSubject()));
+		Collection<StudentClassroomSessionSubject> studentClassroomSessionSubjects = inject(StudentClassroomSessionSubjectDao.class).readByClassroomSessionSubject(classroomSessionSubject);
+		//inject(ClassroomSessionDivisionSubjectBusiness.class).delete(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionBySubject(classroomSessionSubject.getClassroomSession(), classroomSessionSubject.getSubject()));
+		inject(StudentClassroomSessionSubjectBusiness.class).delete(studentClassroomSessionSubjects);
+		for(StudentClassroomSessionSubject studentClassroomSessionSubject : studentClassroomSessionSubjects)
+			studentClassroomSessionSubject.setClassroomSessionSubject(null);
 	}
 	
 	@Override

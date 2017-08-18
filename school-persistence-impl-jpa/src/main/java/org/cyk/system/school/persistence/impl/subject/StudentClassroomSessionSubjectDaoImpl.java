@@ -16,7 +16,7 @@ public class StudentClassroomSessionSubjectDaoImpl extends AbstractTypedDao<Stud
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readByStudentByClassroomSession;
+	private String readByStudentByClassroomSession,readByClassroomSessionSubject;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
@@ -24,6 +24,8 @@ public class StudentClassroomSessionSubjectDaoImpl extends AbstractTypedDao<Stud
 		registerNamedQuery(readByStudentByClassroomSession, _select().where(FieldHelper.getInstance()
 			.buildPath(StudentClassroomSessionSubject.FIELD_CLASSROOM_SESSION_SUBJECT,ClassroomSessionSubject.COLUMN_CLASSROOMSESSION)
 			,ClassroomSessionSubject.COLUMN_CLASSROOMSESSION).and(StudentClassroomSessionSubject.FIELD_STUDENT));
+		
+		registerNamedQuery(readByClassroomSessionSubject, _select().where(StudentClassroomSessionSubject.FIELD_CLASSROOM_SESSION_SUBJECT));
 	}
 	
 	@Override
@@ -35,6 +37,11 @@ public class StudentClassroomSessionSubjectDaoImpl extends AbstractTypedDao<Stud
 	@Override
 	public Collection<StudentClassroomSessionSubject> readByStudentClassroomSession(StudentClassroomSession studentClassroomSession) {
 		return readByStudentByClassroomSession(studentClassroomSession.getStudent(), studentClassroomSession.getClassroomSession());
+	}
+
+	@Override
+	public Collection<StudentClassroomSessionSubject> readByClassroomSessionSubject(ClassroomSessionSubject classroomSessionSubject) {
+		return namedQuery(readByClassroomSessionSubject).parameter(StudentClassroomSessionSubject.FIELD_CLASSROOM_SESSION_SUBJECT, classroomSessionSubject).resultMany();
 	}
 	
     

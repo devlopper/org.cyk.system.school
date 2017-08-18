@@ -94,8 +94,15 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override
 	protected void beforeDelete(ClassroomSessionDivision classroomSessionDivision) {
 		super.beforeDelete(classroomSessionDivision);
-		inject(StudentClassroomSessionDivisionBusiness.class).delete(inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision));
-		inject(ClassroomSessionDivisionSubjectBusiness.class).delete(inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision));	
+		Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionDao.class).readByClassroomSessionDivision(classroomSessionDivision);
+		inject(StudentClassroomSessionDivisionBusiness.class).delete(studentClassroomSessionDivisions);
+		for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions)
+			studentClassroomSessionDivision.setClassroomSessionDivision(null);
+		
+		Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = inject(ClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivision(classroomSessionDivision);
+		inject(ClassroomSessionDivisionSubjectBusiness.class).delete(classroomSessionDivisionSubjects);	
+		for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects)
+			classroomSessionDivisionSubject.setClassroomSessionDivision(null);
 	}
 	
 	@Override
