@@ -2,6 +2,7 @@ package org.cyk.system.school.ui.web.primefaces.session;
 
 import java.io.Serializable;
 
+import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -12,6 +13,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
+import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -35,6 +37,14 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 		studentClassroomSessionCollection = createItemCollection(StudentClassroomSessionItem.class, StudentClassroomSession.class,identifiable 
 				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<StudentClassroomSessionItem,StudentClassroomSession,ClassroomSession>(identifiable,crud,form,StudentClassroomSession.class){
 			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void instanciated(
+					AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession, ClassroomSession, SelectItem> itemCollection,
+					StudentClassroomSessionItem item) {
+				super.instanciated(itemCollection, item);
+				item.getIdentifiable().setCascadeOperationToChildren(Boolean.TRUE);
+			}
 			
 			@Override
 			public String getFieldOneItemMasterSelectedName() {
