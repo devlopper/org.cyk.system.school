@@ -10,9 +10,6 @@
 			<property name="eclipselink.logging.level.sql" value="off" />
 			<property name="eclipselink.logging.parameters" value="true" />
 			
-			<property name="eclipselink.jdbc.batch-writing" value="jdbc" />
-			<property name="eclipselink.jdbc.batch-writing.size" value="1000"/>
-			<property name="eclipselink.cache.shared.default" value="false"/>
 			
 		</properties>
 	</persistence-unit>

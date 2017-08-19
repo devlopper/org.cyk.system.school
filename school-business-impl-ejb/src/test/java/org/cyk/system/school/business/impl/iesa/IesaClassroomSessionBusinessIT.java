@@ -38,7 +38,15 @@ import org.junit.Test;
 public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
-            
+    
+    @Override
+    protected void populate() {
+    	super.populate();
+    	for(ClassroomSession classroomSession : ((IesaFakedDataProducer)getFakedDataProducer()).createClassroomSessions()){
+    		create(classroomSession);
+    	}
+    }
+    
     @Test
     public void crudOnlyClassroom(){
     	TestCase testCase = instanciateTestCase();
@@ -149,6 +157,7 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     @Test
     public void requiredSubjects(){
     	TestCase testCase = instanciateTestCase();
+    	
     	ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).instanciateOne();
     	classroomSession.setLevelTimeDivision(inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1));
     	
@@ -277,6 +286,7 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     @Test
     public void createClassroom(){
     	TestCase testCase = instanciateTestCase();
+    	
     	ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).instanciateOne();
     	classroomSession.setLevelTimeDivision(inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1));
     	classroomSession.getDivisions().setSynchonizationEnabled(Boolean.FALSE);
@@ -358,6 +368,10 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
+    	
+    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G2_YEAR_1);
+    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G3_YEAR_1);
+    	
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G9_YEAR_1);
     	

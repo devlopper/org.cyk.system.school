@@ -144,7 +144,7 @@ public abstract class AbstractEnterpriseResourcePlanningFakedDataProducer extend
 		createStudentClassroomSessions();
 	}
 	
-	protected void createClassroomSessions(){
+	public Collection<ClassroomSession> createClassroomSessions(){
 		Collection<ClassroomSession> classroomSessions = new ArrayList<>();
 		String d = String.valueOf(63*inject(MeasureDao.class).read(RootConstant.Code.Measure.TIME_DAY).getValue().longValue());
 		if(classroomSessionLevelTimeDivisionCodes.contains(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1))
@@ -288,7 +288,11 @@ public abstract class AbstractEnterpriseResourcePlanningFakedDataProducer extend
 		    			,{SchoolConstant.Code.MetricCollection.COMMUNICATION_STUDENT}}));
     	
     	System.out.println("Number of classroom session to create : "+classroomSessions.size());
-    	create(classroomSessions);
+    	//create(classroomSessions);
+    	for(ClassroomSession classroomSession : classroomSessions)
+    		create(classroomSession);
+    	
+    	return classroomSessions;
 	}
 		
 	protected void createStudentClassroomSessions(){

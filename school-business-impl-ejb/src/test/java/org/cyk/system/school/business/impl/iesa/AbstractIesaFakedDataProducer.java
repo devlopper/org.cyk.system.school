@@ -218,6 +218,8 @@ public abstract class AbstractIesaFakedDataProducer extends AbstractEnterpriseRe
     	System.out.println( (System.currentTimeMillis() - t) / 1000 ); t = System.currentTimeMillis();
     	System.out.println("Classrooms : "+classroomSessions.size());
     	create(classroomSessions);
+    	//for(ClassroomSession classroomSession : classroomSessions)
+    	//	create(classroomSession);
     	System.out.println( (System.currentTimeMillis() - t) / 1000 );
 	}
 

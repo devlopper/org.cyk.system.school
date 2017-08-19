@@ -65,7 +65,7 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
 		createStudentClassroomSessions();
 	}
 	
-	protected void createClassroomSessions(){
+	public Collection<ClassroomSession> createClassroomSessions(){
 		Collection<ClassroomSession> classroomSessions = new ArrayList<>();
 		String d = String.valueOf(63*inject(MeasureDao.class).read(RootConstant.Code.Measure.TIME_DAY).getValue().longValue());
 		if(classroomSessionLevelTimeDivisionCodes.contains(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1))
@@ -214,7 +214,8 @@ public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFak
     		//System.out.println("Created "+classroomSession);
     		//classroomSession.getDivisions().setSynchonizationEnabled(Boolean.FALSE);
     	}
-    	create(classroomSessions);
+    	//create(classroomSessions);
+    	return classroomSessions;
 	}
 	
 }

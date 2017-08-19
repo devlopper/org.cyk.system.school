@@ -2,7 +2,7 @@
 <Configuration status="WARN">
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
-			<!--MarkerFilter marker="Sex_CREATED" onMatch="ACCEPT" onMismatch="DENY" /-->	
+			<!--MarkerFilter marker="ClassroomSession_CREATED" onMatch="ACCEPT" onMismatch="DENY" /-->	
 			<!--MarkerFilter marker="Sex_create_BEFORE" onMatch="ACCEPT" onMismatch="DENY" /!-->		
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %marker - %msg%n" />
 		</Console>

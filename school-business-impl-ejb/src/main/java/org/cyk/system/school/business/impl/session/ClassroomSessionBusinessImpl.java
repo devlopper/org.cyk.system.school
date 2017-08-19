@@ -24,7 +24,9 @@ import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.model.mathematics.Average;
 import org.cyk.system.root.model.search.AbstractFieldValueSearchCriteriaSet;
 import org.cyk.system.root.model.time.TimeDivisionType;
+import org.cyk.system.root.persistence.api.GenericDao;
 import org.cyk.system.root.persistence.api.file.FileRepresentationTypeDao;
+import org.cyk.system.root.persistence.impl.GenericDaoImpl;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionDivisionBusiness;
@@ -83,6 +85,11 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 			synchronise(ClassroomSessionSubject.class, classroomSession, classroomSession.getSubjects());
 			synchronise(StudentClassroomSession.class, classroomSession, classroomSession.getStudents());
 		}
+	}
+	
+	@Override
+	protected void afterCreate(ClassroomSession identifiable) {
+		super.afterCreate(identifiable);
 	}
 	
 	@Override
