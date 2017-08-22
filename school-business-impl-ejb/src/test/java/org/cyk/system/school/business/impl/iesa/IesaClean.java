@@ -33,12 +33,9 @@ public class IesaClean extends AbstractIesaBusinessIT {
     	}
     	System.exit(0);
     }
-    
-    @Override
-    protected void installApplication(Boolean fake) {}
-    
+    /*
     @Override
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	return super.getFakedDataProducer().setStructurationEnabled(Boolean.FALSE).setSynchronizationEnabled(Boolean.FALSE).setDoBusiness(Boolean.FALSE);
-    }
+    }*/
 }

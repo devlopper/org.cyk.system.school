@@ -1,6 +1,5 @@
 package org.cyk.system.school.business.impl.iesa;
 
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 
 public class IesaSynchronise extends AbstractIesaBusinessIT {
 
@@ -11,11 +10,4 @@ public class IesaSynchronise extends AbstractIesaBusinessIT {
     	System.exit(0);
     }
     
-    @Override
-    protected void installApplication(Boolean fake) {}
-    
-    @Override
-    protected AbstractFakedDataProducer getFakedDataProducer() {
-    	return super.getFakedDataProducer().setStructurationEnabled(Boolean.FALSE).setSynchronizationEnabled(Boolean.TRUE);
-    }
 }

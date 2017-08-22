@@ -51,11 +51,11 @@ public class IesaStudentClassroomSessionDivisionReportBusinessIT extends Abstrac
     		}
     	update(levelGroups);
     	
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
-    			, new Boolean[]{Boolean.FALSE},Boolean.TRUE, Boolean.FALSE);
+    	//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
+    	//		, new Boolean[]{Boolean.FALSE},Boolean.TRUE, Boolean.FALSE);
     	
     }
-    
+    /*
     @Override
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
@@ -71,6 +71,6 @@ public class IesaStudentClassroomSessionDivisionReportBusinessIT extends Abstrac
     	//dataProducer.getDivisionOrderNumbers().add(2l);
     	//dataProducer.getDivisionOrderNumbers().add(3l);
     	return dataProducer;
-    }
+    }*/
         
 }

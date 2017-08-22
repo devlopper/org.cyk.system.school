@@ -16,10 +16,5 @@ public class IesaApplicationSetupBusinessIT extends AbstractBusinessIT {
     protected void businesses() {
     	System.exit(0);
     }
-    
-    @Override
-    protected AbstractFakedDataProducer getFakedDataProducer() {
-    	return iesaFakedDataProducer;
-    }
-        
+            
 }

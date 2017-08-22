@@ -1,8 +1,5 @@
 package org.cyk.system.school.business.impl.iesa;
 
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
-import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
-import org.cyk.system.school.model.SchoolConstant;
 
 public class FakedIesaApplicationSetupBusinessIT extends AbstractIesaBusinessIT {
 
@@ -12,7 +9,7 @@ public class FakedIesaApplicationSetupBusinessIT extends AbstractIesaBusinessIT 
     protected void businesses() {
     	System.exit(0);
     }
-    
+    /*
     @Override
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.FALSE);
@@ -34,5 +31,6 @@ public class FakedIesaApplicationSetupBusinessIT extends AbstractIesaBusinessIT 
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1);
     	return dataProducer;
     }
+    */
     
 }

@@ -32,8 +32,8 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     		if(RandomDataProvider.getInstance().randomBoolean())
     			inject(StudentClassroomSessionDivisionSubjectBusiness.class).delete(index);
     	
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
-    			, new Boolean[]{Boolean.FALSE},Boolean.TRUE, Boolean.FALSE);
+    	//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
+    	//		, new Boolean[]{Boolean.FALSE},Boolean.TRUE, Boolean.FALSE);
     	/*
     	ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class)
     			.findByLevelTimeDivisionCodeByClassroomSessionSuffixCodeByClassroomSessionDivisionOrderNumber(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1
@@ -53,10 +53,10 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     	
     }
     
-    @Override
-    protected AbstractFakedDataProducer getFakedDataProducer() {
-    	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
-    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
+    //@Override
+    //protected AbstractFakedDataProducer getFakedDataProducer() {
+    	//IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
+    	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
     	//dataProducer.getClassroomSessionSuffixes().clear();
     	
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
@@ -66,16 +66,16 @@ public class IesaBroadsheetReportIT extends AbstractIesaBusinessIT {
     	dataProducer.getClassroomSessionSuffixes().put(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, new String[]{SchoolConstant.Code.ClassroomSessionSuffix.A});
     	*/
     	
-    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1);
+    	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1);
     	//dataProducer.getClassroomSessionSuffixes().put(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1, new String[]{SchoolConstant.Code.ClassroomSessionSuffix.A});
     	
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G8_YEAR_1);
     	
-    	dataProducer.getDivisionOrderNumbers().clear();
+    	//dataProducer.getDivisionOrderNumbers().clear();
     	//dataProducer.getDivisionOrderNumbers().add(1l);
-    	dataProducer.getDivisionOrderNumbers().add(2l);
+    	//dataProducer.getDivisionOrderNumbers().add(2l);
     	//dataProducer.getDivisionOrderNumbers().add(3l);
-    	return dataProducer;
-    }
+    	//return dataProducer;
+    //}
         
 }

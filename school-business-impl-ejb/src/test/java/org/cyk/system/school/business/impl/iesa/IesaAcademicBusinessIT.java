@@ -48,7 +48,7 @@ public class IesaAcademicBusinessIT extends AbstractIesaBusinessIT {
     	assertEquals(2l, academicSession.getNodeInformations().getCurrentClassroomSessionDivisionIndex());
     	assertEquals(2l, inject(LevelNameDao.class).readOneRandomly().getNodeInformations().getCurrentClassroomSessionDivisionIndex());
     }
-    
+    /*
     @Override
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
@@ -65,5 +65,6 @@ public class IesaAcademicBusinessIT extends AbstractIesaBusinessIT {
     	//dataProducer.getDivisionOrderNumbers().add(3l);
     	return dataProducer;
     }
+    */
         
 }

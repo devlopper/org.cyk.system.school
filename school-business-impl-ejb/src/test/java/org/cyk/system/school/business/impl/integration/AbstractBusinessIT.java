@@ -13,8 +13,6 @@ import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.root.business.api.party.ApplicationBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper.TestCase;
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer.Listener.Adapter;
 import org.cyk.system.root.business.impl.BusinessIntegrationTestHelper;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.RootBusinessTestHelper;
@@ -33,10 +31,8 @@ import org.cyk.system.school.business.impl.SchoolBusinessLayer;
 import org.cyk.system.school.business.impl._test.SchoolBusinessTestHelper;
 import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.persistence.api.session.AcademicSessionDao;
-import org.cyk.utility.common.file.ExcelSheetReader;
 import org.cyk.utility.common.test.TestEnvironmentListener;
 import org.cyk.utility.test.ArchiveBuilder;
-import org.cyk.utility.test.Transaction;
 import org.cyk.utility.test.integration.AbstractIntegrationTestJpaBased;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -99,16 +95,6 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
 	
     @Override
     protected void populate() {
-    	RootDataProducerHelper.Listener.COLLECTION.add(new RootDataProducerHelper.Listener.Adapter.Default(){
-    		private static final long serialVersionUID = 1L;
-
-			@Override
-    		public ExcelSheetReader processExcelSheetReader(ExcelSheetReader excelSheetReader) {
-    			if(excelSheetReader.getSheetName().equals("Country"))
-    				excelSheetReader.setRowCount(2);
-    			return super.processExcelSheetReader(excelSheetReader);
-    		}
-    	});
     	installApplication();
     }
     
@@ -117,23 +103,14 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     	return Boolean.FALSE;
     }
 
-    protected void installApplication(Boolean fake){
-    	schoolBusinessLayer.installApplication(fake);
-    }
-    
     protected void installApplication(){
     	long t = System.currentTimeMillis();
-    	installApplication(Boolean.TRUE);
+    	schoolBusinessLayer.installApplication();
     	
 		RootBusinessLayer.getInstance().setDefaultSmtpProperties(inject(SmtpPropertiesDao.class).read(RootConstant.Code.SmtpProperties.DEFAULT));
 		
-    	produce(getFakedDataProducer());
     	academicSession = inject(AcademicSessionDao.class).readOneRandomly();
     	System.out.println( ((System.currentTimeMillis()-t)/1000)+" s" );
-    }
-    
-    protected AbstractFakedDataProducer getFakedDataProducer(){
-    	return null;
     }
     
 	@Override
@@ -187,28 +164,5 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     @Override protected void delete() {}
     @Override protected void read() {}
     @Override protected void update() {}
-
-    protected Adapter fakedDataProducerAdapter(){
-    	return new Adapter(){
-			private static final long serialVersionUID = 3722147011791482796L;
-
-			@Override
-    		public void flush() {
-    			super.flush();
-    			getEntityManager().flush();
-    		}
-    	};
-    }
-    
-    protected void produce(final AbstractFakedDataProducer fakedDataProducer){
-    	if(fakedDataProducer==null)
-    		return ;
-    	new Transaction(this,userTransaction,null){
-			@Override
-			public void _execute_() {
-				fakedDataProducer.produce(fakedDataProducerAdapter());
-			}
-    	}.run();
-    }
 
 }

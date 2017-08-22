@@ -446,7 +446,7 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
 				return subject;
 		return null;
 	}
-    
+    /*
     @Override
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer()
@@ -456,6 +456,6 @@ public class IesaLiveSynchroIT extends AbstractIesaBusinessIT {
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
     	dataProducer.getDivisionOrderNumbers().clear();
     	return dataProducer;
-    }
+    }*/
         
 }

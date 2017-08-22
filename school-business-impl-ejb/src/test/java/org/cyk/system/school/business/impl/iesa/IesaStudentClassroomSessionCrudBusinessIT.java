@@ -82,26 +82,26 @@ public class IesaStudentClassroomSessionCrudBusinessIT extends AbstractIesaBusin
     	
     	//inject(MailBusiness.class).setProperties("iesa-ci.com", 465, "results@iesa-ci.com", "17abIESAresults");
     	
-    	schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
-    			, new Boolean[]{Boolean.FALSE},Boolean.FALSE, Boolean.TRUE);
+    	//schoolBusinessTestHelper.generateStudentClassroomSessionDivisionReport( ((IesaFakedDataProducer)getFakedDataProducer()).generate()
+    	//		, new Boolean[]{Boolean.FALSE},Boolean.FALSE, Boolean.TRUE);
     }
     
-    @Override
-    protected AbstractFakedDataProducer getFakedDataProducer() {
-    	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
+    //@Override
+    //protected AbstractFakedDataProducer getFakedDataProducer() {
+    	//IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.TRUE);
     	/*dataProducer.getClassroomSessionLevelTimeDivisionCodes().clear();
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.K1_YEAR_1);
     	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.K2_YEAR_1);
     	*///dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.K3_YEAR_1);
     	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1);
-    	dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1);
+    	//dataProducer.getClassroomSessionLevelTimeDivisionCodes().add(SchoolConstant.Code.LevelTimeDivision.G12_YEAR_1);
     	
-    	dataProducer.getDivisionOrderNumbers().clear();
+    	//dataProducer.getDivisionOrderNumbers().clear();
     	//dataProducer.getDivisionOrderNumbers().add(1l);
-    	dataProducer.getDivisionOrderNumbers().add(2l);
+    	//dataProducer.getDivisionOrderNumbers().add(2l);
     	//dataProducer.getDivisionOrderNumbers().add(3l);
-    	return dataProducer;
-    }
+    	//return dataProducer;
+    //}
         
 }

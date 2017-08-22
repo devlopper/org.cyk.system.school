@@ -337,9 +337,6 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	@Override
 	protected void setConstants() {}
 	
-	@Override
-	protected void fakeTransactions() {}
-	
 	/**/
 
 	/**/

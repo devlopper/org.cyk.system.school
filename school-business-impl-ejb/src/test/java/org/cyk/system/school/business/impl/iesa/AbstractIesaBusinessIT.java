@@ -6,7 +6,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.cyk.system.company.business.impl.AbstractCompanyReportProducer;
 import org.cyk.system.company.business.impl.CompanyBusinessLayer;
 import org.cyk.system.company.model.CompanyConstant;
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.RootConstant;
@@ -22,7 +21,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractEnterpriseResourceP
 
     @Inject protected IesaFakedDataProducer dataProducer; 
      
-    protected void installApplication(Boolean fake){	
+    protected void installApplication(){	
     	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	PersistDataListener.COLLECTION.add(new PersistDataListener.Adapter.Default(){
 			private static final long serialVersionUID = -950053441831528010L;
@@ -55,7 +54,7 @@ public abstract class AbstractIesaBusinessIT extends AbstractEnterpriseResourceP
 			}
 		});
     	
-    	super.installApplication(fake);
+    	super.installApplication();
     	
     	StudentBusinessImpl.Listener.Adapter listener = new StudentBusinessImpl.Listener.Adapter.Default.EnterpriseResourcePlanning();
     	listener.setCodePrefix("IESA");
@@ -78,9 +77,5 @@ public abstract class AbstractIesaBusinessIT extends AbstractEnterpriseResourceP
 		});
     }
     
-    @Override
-    protected AbstractFakedDataProducer getFakedDataProducer() {
-    	return dataProducer;
-    }
     
 }

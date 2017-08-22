@@ -50,10 +50,5 @@ public class IesaAutoPropertySetBusinessIT extends AbstractBusinessIT {
     	for(IDENTIFIABLE identifiable : inject(BusinessInterfaceLocator.class).injectTyped(aClass).findAll())
     		System.out.println(aClass.getSimpleName()+" : "+identifiable.getCode()+" , "+identifiable.getName());
     }
-    
-    @Override
-    protected AbstractFakedDataProducer getFakedDataProducer() {
-    	return iesaFakedDataProducer;
-    }
         
 }

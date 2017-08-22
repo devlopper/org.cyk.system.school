@@ -53,7 +53,7 @@ public class IesaLiveBroadsheetReportIT extends AbstractIesaBusinessIT {
     	
     	System.exit(0);
     }
-    
+    /*
     @Override
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer()
@@ -65,5 +65,5 @@ public class IesaLiveBroadsheetReportIT extends AbstractIesaBusinessIT {
     	dataProducer.getDivisionOrderNumbers().add(2l);
     	return dataProducer;
     }
-        
+    */    
 }

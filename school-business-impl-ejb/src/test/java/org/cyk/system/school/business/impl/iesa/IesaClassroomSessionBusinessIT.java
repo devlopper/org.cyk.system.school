@@ -2,7 +2,6 @@ package org.cyk.system.school.business.impl.iesa;
 
 import org.cyk.system.root.business.api.GenericBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessTestHelper.TestCase;
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.actor.StudentBusiness;
@@ -42,9 +41,9 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     @Override
     protected void populate() {
     	super.populate();
-    	for(ClassroomSession classroomSession : ((IesaFakedDataProducer)getFakedDataProducer()).createClassroomSessions()){
-    		create(classroomSession);
-    	}
+    	//for(ClassroomSession classroomSession : ((IesaFakedDataProducer)getFakedDataProducer()).createClassroomSessions()){
+    	//	create(classroomSession);
+    	//}
     }
     
     @Test
@@ -361,7 +360,7 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	
     	testCase.clean();
     }
-    
+    /*
     @Override
     protected AbstractFakedDataProducer getFakedDataProducer() {
     	IesaFakedDataProducer dataProducer = (IesaFakedDataProducer) super.getFakedDataProducer().setDoBusiness(Boolean.FALSE);
@@ -383,5 +382,6 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	//dataProducer.getDivisionOrderNumbers().add(3l);
     	return dataProducer;
     }
+    */
         
 }
