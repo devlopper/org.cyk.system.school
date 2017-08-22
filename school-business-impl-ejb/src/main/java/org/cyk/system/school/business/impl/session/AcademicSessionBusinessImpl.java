@@ -16,6 +16,7 @@ import org.cyk.system.root.business.impl.time.AbstractIdentifiablePeriodBusiness
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.IdentifiableRuntimeCollection;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
+import org.cyk.system.root.model.time.Period;
 import org.cyk.system.root.model.time.TimeDivisionType;
 import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.SchoolBusiness;
@@ -60,9 +61,11 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	
 	@Override
 	protected void beforeCreate(AcademicSession academicSession) {
+		if(academicSession.getSchool()==null)
+			academicSession.setSchool(inject(SchoolBusiness.class).findDefaulted());
 		super.beforeCreate(academicSession);
 		if(academicSession.getNodeInformations().getAttendanceTimeDivisionType()==null)
-			academicSession.getNodeInformations().set(academicSession.getSchool().getNodeInformations());
+			academicSession.getNodeInformations().set_(academicSession.getSchool().getNodeInformations());
 	}
 	
 	@Override
@@ -140,5 +143,19 @@ public class AcademicSessionBusinessImpl extends AbstractIdentifiablePeriodBusin
 	@Override
 	public AcademicSession findDefaultedSchoolDefaulted() {
 		return findDefaultedBySchool(inject(SchoolBusiness.class).findDefaulted());
+	}
+
+	public static class BuilderOneDimensionArray extends org.cyk.system.root.business.impl.helper.InstanceHelper.BuilderOneDimensionArray<AcademicSession> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public BuilderOneDimensionArray() {
+			super(AcademicSession.class);
+			addFieldCodeName();
+			addParameterArrayElementString(FieldHelper.getInstance().buildPath(AcademicSession.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_FROM_DATE)
+					,FieldHelper.getInstance().buildPath(AcademicSession.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_EXISTENCE_PERIOD,Period.FIELD_TO_DATE)
+					,FieldHelper.getInstance().buildPath(AcademicSession.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_DEFAULTED)
+					);
+		}
+		
 	}
 }

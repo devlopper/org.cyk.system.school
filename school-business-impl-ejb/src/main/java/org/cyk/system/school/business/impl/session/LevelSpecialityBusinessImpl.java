@@ -18,4 +18,13 @@ public class LevelSpecialityBusinessImpl extends AbstractEnumerationBusinessImpl
 		super(dao); 
 	}   
 	
+	public static class BuilderOneDimensionArray extends AbstractEnumerationBusinessImpl.BuilderOneDimensionArray<LevelSpeciality> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public BuilderOneDimensionArray() {
+			super(LevelSpeciality.class);
+		}
+		
+	}
+	
 }

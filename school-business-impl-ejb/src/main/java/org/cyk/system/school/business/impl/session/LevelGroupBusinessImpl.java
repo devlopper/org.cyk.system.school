@@ -1,5 +1,6 @@
 package org.cyk.system.school.business.impl.session;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import javax.ejb.TransactionAttribute;
@@ -28,6 +29,13 @@ public class LevelGroupBusinessImpl extends AbstractDataTreeBusinessImpl<LevelGr
 		return dao.readByAcademicSessionByTeacher(academicSession, teacher);
 	}
 	
-	
+	public static class BuilderOneDimensionArray extends AbstractDataTreeBusinessImpl.BuilderOneDimensionArray<LevelGroup> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public BuilderOneDimensionArray() {
+			super(LevelGroup.class);
+		}
+		
+	}
 	
 }

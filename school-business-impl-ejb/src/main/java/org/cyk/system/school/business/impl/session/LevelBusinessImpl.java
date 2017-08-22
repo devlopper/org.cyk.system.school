@@ -88,4 +88,15 @@ public class LevelBusinessImpl extends AbstractTypedBusinessService<Level, Level
 		
 	}
 
+	/**/
+	
+	public static class BuilderOneDimensionArray extends org.cyk.system.root.business.impl.helper.InstanceHelper.BuilderOneDimensionArray<Level> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public BuilderOneDimensionArray() {
+			super(Level.class);
+			addParameterArrayElementString(Level.FIELD_LEVEL_NAME,Level.FIELD_LEVEL_SPECIALITY,Level.FIELD_GROUP);
+		}
+		
+	}
 }

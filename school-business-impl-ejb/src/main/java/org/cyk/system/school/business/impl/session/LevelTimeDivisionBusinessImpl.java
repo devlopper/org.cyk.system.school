@@ -17,6 +17,7 @@ import org.cyk.system.school.model.session.Level;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.persistence.api.session.LevelDao;
 import org.cyk.system.school.persistence.api.session.LevelTimeDivisionDao;
+import org.cyk.utility.common.helper.FieldHelper;
 
 public class LevelTimeDivisionBusinessImpl extends AbstractTypedBusinessService<LevelTimeDivision, LevelTimeDivisionDao> implements LevelTimeDivisionBusiness,Serializable {
 
@@ -88,4 +89,16 @@ public class LevelTimeDivisionBusinessImpl extends AbstractTypedBusinessService<
 		
 	}
 	
+	/**/
+	
+	public static class BuilderOneDimensionArray extends org.cyk.system.root.business.impl.helper.InstanceHelper.BuilderOneDimensionArray<LevelTimeDivision> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public BuilderOneDimensionArray() {
+			super(LevelTimeDivision.class);
+			addParameterArrayElementString(LevelTimeDivision.FIELD_LEVEL,LevelTimeDivision.FIELD_TIME_DIVISION_TYPE
+					,FieldHelper.getInstance().buildPath(LevelTimeDivision.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_ORDER_NUMBER));
+		}
+		
+	}
 }

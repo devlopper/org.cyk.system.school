@@ -24,4 +24,5 @@ public class EvaluationType extends AbstractEnumeration implements Serializable{
 		super(code,name, abbreviation,null);
 	}
 	
+	public static final String FIELD_MAXIMUM = "maximum";
 }

@@ -8,6 +8,10 @@
 		</Console>
 	</Appenders>
 	<Loggers>
+		<!--Logger name="org.cyk.system.root.business.impl.DataSet"
+			level="trace">
+			<AppenderRef ref="Console" />
+		</Logger-->
 		<!--Logger name="org.cyk.system.school.business.impl.session.ClassroomSessionBusinessImpl" level="trace">
 			<AppenderRef ref="Console" />
 		</Logger>

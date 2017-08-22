@@ -20,6 +20,7 @@ import org.cyk.system.root.business.api.time.TimeBusiness;
 import org.cyk.system.root.business.impl.AbstractBusinessLayer;
 import org.cyk.system.root.business.impl.AbstractFormatter;
 import org.cyk.system.root.business.impl.AbstractIdentifiableBusinessServiceImpl;
+import org.cyk.system.root.business.impl.DataSet;
 import org.cyk.system.root.business.impl.PersistDataListener;
 import org.cyk.system.root.business.impl.RootBusinessLayer;
 import org.cyk.system.root.business.impl.file.report.AbstractReportRepository;
@@ -221,67 +222,71 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	
 	@Override
 	protected void persistStructureData() {
-		createFiles();
-    	createIntervals();
-    	createValues();
+		DataSet dataSet = new DataSet(getClass());
+		
+		createFiles(dataSet);
+    	createIntervals(dataSet);
+    	createValues(dataSet);
     	
-    	createSubjects();
-    	createMetricColletions();
-    	createLevels();
-    	createEvaluations();
+    	createSubjects(dataSet);
+    	createMetricColletions(dataSet);
+    	createLevels(dataSet);
+    	createEvaluations(dataSet);
     	
-    	createSchool();
+    	createSchool(dataSet);
+    	
+    	dataSet.instanciate();
+    	dataSet.create();
     
 	}
 	
-	private void createFiles(){
-		createFromExcelSheet(File.class);
-		createFromExcelSheet(Script.class);
-		createFromExcelSheet(ReportTemplate.class);
+	private void createFiles(DataSet dataSet){
+		dataSet.addClass(File.class);
+		dataSet.addClass(Script.class);
+		dataSet.addClass(ReportTemplate.class);
 		
 	}
 	
-	private void createValues(){
-		createFromExcelSheet(ValueProperties.class);
-    	createFromExcelSheet(Value.class);
-    	createFromExcelSheet(ValueCollection.class);
-    	createFromExcelSheet(ValueCollectionItem.class);
+	private void createValues(DataSet dataSet){
+		dataSet.addClass(ValueProperties.class);
+		dataSet.addClass(Value.class);
+		dataSet.addClass(ValueCollection.class);
+		dataSet.addClass(ValueCollectionItem.class);
 	}
 	
-	private void createSchool(){
-		createFromExcelSheet(School.class);
-		createFromExcelSheet(AcademicSession.class);
+	private void createSchool(DataSet dataSet){
+		dataSet.addClass(School.class);
+		dataSet.addClass(AcademicSession.class);
 	}
 	
-	private void createLevels(){
-		createFromExcelSheet(LevelGroupType.class);
-		createFromExcelSheet(LevelGroup.class);
-		createFromExcelSheet(LevelSpeciality.class);
+	private void createLevels(DataSet dataSet){
+		dataSet.addClass(LevelGroupType.class);
+		dataSet.addClass(LevelGroup.class);
+		dataSet.addClass(LevelSpeciality.class);
 		
-		createFromExcelSheet(LevelName.class);
-		createFromExcelSheet(Level.class);
-		createFromExcelSheet(LevelTimeDivision.class);
-		createFromExcelSheet(ClassroomSessionSuffix.class);
+		dataSet.addClass(LevelName.class);
+		dataSet.addClass(Level.class);
+		dataSet.addClass(LevelTimeDivision.class);
+		dataSet.addClass(ClassroomSessionSuffix.class);
 	}
 	
-	private void createIntervals(){
-		createFromExcelSheet(IntervalCollection.class);
-		createFromExcelSheet(Interval.class);
+	private void createIntervals(DataSet dataSet){
+		dataSet.addClass(IntervalCollection.class);
+		dataSet.addClass(Interval.class);
 	}
 	
-	private void createEvaluations(){
-		createFromExcelSheet(EvaluationType.class);
+	private void createEvaluations(DataSet dataSet){
+		dataSet.addClass(EvaluationType.class);
 	}
 	
-	//TODO labels must be changed in french
-	private void createMetricColletions(){
-		createFromExcelSheet(MetricCollectionType.class);
-		createFromExcelSheet(MetricCollection.class);
-		createFromExcelSheet(Metric.class);
+	private void createMetricColletions(DataSet dataSet){
+		dataSet.addClass(MetricCollectionType.class);
+		dataSet.addClass(MetricCollection.class);
+		dataSet.addClass(Metric.class);
 	}
 	
-	private void createSubjects(){
-		createFromExcelSheet(Subject.class);
+	private void createSubjects(DataSet dataSet){
+		dataSet.addClass(Subject.class);
 	}
 	
 	@Override
@@ -336,9 +341,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
 	protected void fakeTransactions() {}
 	
 	/**/
-	
 
-	
 	/**/
 	
     public static SchoolBusinessLayer getInstance() {

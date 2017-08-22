@@ -54,7 +54,7 @@ public class CommonNodeInformations extends AbstractModelElement implements Seri
 		this.evaluationPassAverage = evaluationPassAverage;
 	}
 	
-	public void set(CommonNodeInformations commonNodeInformations){
+	public void set_(CommonNodeInformations commonNodeInformations){
 		this.studentClassroomSessionDivisionResultsReportTemplate = commonNodeInformations.studentClassroomSessionDivisionResultsReportTemplate;
 		this.studentClassroomSessionDivisionResultsReportSigner = commonNodeInformations.studentClassroomSessionDivisionResultsReportSigner;
 		this.studentSubjectAverageScale = commonNodeInformations.studentSubjectAverageScale;

@@ -1,5 +1,7 @@
 package org.cyk.system.school.business.impl.session;
 
+import java.io.Serializable;
+
 import javax.inject.Inject;
 
 import org.cyk.system.root.business.impl.pattern.tree.AbstractDataTreeTypeBusinessImpl;
@@ -16,5 +18,12 @@ public class LevelGroupTypeBusinessImpl extends AbstractDataTreeTypeBusinessImpl
         super(dao);
     } 
 
-	
+	public static class BuilderOneDimensionArray extends AbstractDataTreeTypeBusinessImpl.BuilderOneDimensionArray<LevelGroupType> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public BuilderOneDimensionArray() {
+			super(LevelGroupType.class);
+		}
+		
+	}
 }

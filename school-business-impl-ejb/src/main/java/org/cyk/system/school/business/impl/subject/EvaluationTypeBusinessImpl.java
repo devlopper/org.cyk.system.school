@@ -26,4 +26,13 @@ public class EvaluationTypeBusinessImpl extends AbstractEnumerationBusinessImpl<
 		return evaluationType;
 	}
 	
+	public static class BuilderOneDimensionArray extends AbstractEnumerationBusinessImpl.BuilderOneDimensionArray<EvaluationType> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public BuilderOneDimensionArray() {
+			super(EvaluationType.class);
+			addParameterArrayElementString(10, EvaluationType.FIELD_MAXIMUM);
+		}
+		
+	}
 }

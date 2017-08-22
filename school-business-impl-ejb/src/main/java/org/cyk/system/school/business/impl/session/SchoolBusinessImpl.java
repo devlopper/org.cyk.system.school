@@ -7,13 +7,16 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.company.business.api.structure.OwnedCompanyBusiness;
 import org.cyk.system.root.business.impl.AbstractTypedBusinessService;
+import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
 import org.cyk.system.root.persistence.api.file.report.ReportTemplateDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalCollectionDao;
 import org.cyk.system.root.persistence.api.mathematics.IntervalDao;
 import org.cyk.system.root.persistence.api.time.TimeDivisionTypeDao;
 import org.cyk.system.school.business.api.session.SchoolBusiness;
+import org.cyk.system.school.model.session.CommonNodeInformations;
 import org.cyk.system.school.model.session.School;
 import org.cyk.system.school.persistence.api.session.SchoolDao;
+import org.cyk.utility.common.helper.FieldHelper;
 
 public class SchoolBusinessImpl extends AbstractTypedBusinessService<School, SchoolDao> implements SchoolBusiness,Serializable {
 
@@ -27,7 +30,7 @@ public class SchoolBusinessImpl extends AbstractTypedBusinessService<School, Sch
 	@Override
 	public School instanciateOne() {
 		School school = super.instanciateOne();
-		school.setOwnedCompany(inject(OwnedCompanyBusiness.class).findDefaultOwnedCompany());		
+		school.setOwnedCompany(inject(OwnedCompanyBusiness.class).findDefaultOwnedCompany());	
 		return school;
 	}
 
@@ -54,5 +57,27 @@ public class SchoolBusinessImpl extends AbstractTypedBusinessService<School, Sch
 		}
 		
 		return school;
+	}
+	
+	public static class BuilderOneDimensionArray extends org.cyk.system.root.business.impl.helper.InstanceHelper.BuilderOneDimensionArray<School> implements Serializable {
+		private static final long serialVersionUID = 1L;
+
+		public BuilderOneDimensionArray() {
+			super(School.class);
+			addFieldCodeName();
+			addParameterArrayElementString(FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_SUBJECT_AVERAGESCALE)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_ATTENDANCE_TIME_DIVISION_TYPE)
+					,FieldHelper.getInstance().buildPath(School.FIELD_NODE_INFORMATIONS,CommonNodeInformations.FIELD_EVALUATION_PASS_AVERAGE)
+					,FieldHelper.getInstance().buildPath(School.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_DEFAULTED)
+					);
+		}
+		
 	}
 }
