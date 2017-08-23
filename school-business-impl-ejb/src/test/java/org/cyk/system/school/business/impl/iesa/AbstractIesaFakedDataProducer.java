@@ -21,7 +21,7 @@ import org.cyk.utility.common.generator.AbstractGeneratable;
 
 import lombok.Getter;
 
-@Getter
+@Getter @Deprecated
 public abstract class AbstractIesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFakedDataProducer implements Serializable {
 
 	private static final long serialVersionUID = -1832900422621121762L;

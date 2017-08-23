@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-@Getter
+@Getter @Deprecated
 public abstract class AbstractSchoolFakedDataProducer extends AbstractCompanyFakedDataProducer implements Serializable {
 
 	private static final long serialVersionUID = -1832900422621121762L;

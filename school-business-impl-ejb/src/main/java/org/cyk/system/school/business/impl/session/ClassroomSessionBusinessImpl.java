@@ -288,7 +288,7 @@ public class ClassroomSessionBusinessImpl extends AbstractTypedBusinessService<C
 	public ClassroomSession instanciateOne(String levelTimeDivisionCode,String suffixCode,String coordinatorCode,String timeDivisionTypeCode,String[][] divisions,String[][] subjects,String[][] evaluationTypes,String[][] metricCollections){
 		return instanciateOne(new String[]{null,levelTimeDivisionCode,suffixCode,coordinatorCode,timeDivisionTypeCode
     		,commonUtils.convertToString(divisions, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
-    		,commonUtils.convertToString(subjects, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
+    		,subjects==null ? null : commonUtils.convertToString(subjects, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
     		,commonUtils.convertToString(evaluationTypes, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
     		,commonUtils.convertToString(metricCollections, Constant.CHARACTER_VERTICAL_BAR, Constant.CHARACTER_COMA)
         		

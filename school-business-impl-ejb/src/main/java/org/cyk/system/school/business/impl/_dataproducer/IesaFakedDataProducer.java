@@ -18,7 +18,7 @@ import org.cyk.utility.common.helper.StringHelper.CaseType;
 
 import lombok.Getter;
 
-@Singleton @Getter
+@Singleton @Getter @Deprecated
 public class IesaFakedDataProducer extends AbstractEnterpriseResourcePlanningFakedDataProducer implements Serializable {
 
 	private static final long serialVersionUID = -1832900422621121762L;

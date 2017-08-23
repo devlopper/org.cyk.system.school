@@ -20,7 +20,7 @@ import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 
-@Getter
+@Getter @Deprecated
 public abstract class AbstractEnterpriseResourcePlanningFakedDataProducer extends AbstractSchoolFakedDataProducer implements Serializable {
 
 	private static final long serialVersionUID = -1832900422621121762L;
