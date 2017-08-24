@@ -104,13 +104,9 @@ public abstract class AbstractBusinessIT extends AbstractIntegrationTestJpaBased
     }
 
     protected void installApplication(){
-    	long t = System.currentTimeMillis();
     	schoolBusinessLayer.installApplication();
-    	
 		RootBusinessLayer.getInstance().setDefaultSmtpProperties(inject(SmtpPropertiesDao.class).read(RootConstant.Code.SmtpProperties.DEFAULT));
-		
     	academicSession = inject(AcademicSessionDao.class).readOneRandomly();
-    	System.out.println( ((System.currentTimeMillis()-t)/1000)+" s" );
     }
     
 	@Override

@@ -82,9 +82,10 @@ public class Iesa2016_2017_To_2017_2018Database extends AbstractIesaBusinessIT {
     	DataSet dataSet = new DataSet(SchoolBusinessLayer.class);
     	dataSet.setExcelWorkbookFileName("data\\iesa\\IESA_2017_2016.xlsx");
     	
-    	//dataSet.addClass(GlobalIdentifier.class, new Glo);
-    	
+    	dataSet.addClass(GlobalIdentifier.class);
+    	System.out.println("Iesa2016_2017_To_2017_2018Database.businesses()");
     	dataSet.instanciate();
+    	System.out.println(dataSet.getInstanceMap().get(GlobalIdentifier.class).size());
     	dataSet.create();
     	
     	/*
