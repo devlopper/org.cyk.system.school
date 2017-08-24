@@ -7,49 +7,29 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.file.FileBusiness;
-import org.cyk.system.root.business.impl.AbstractBusinessTestHelper.TestCase;
-import org.cyk.system.root.business.impl.AbstractFakedDataProducer;
 import org.cyk.system.root.business.impl.BusinessInterfaceLocator;
 import org.cyk.system.root.business.impl.DataSet;
-import org.cyk.system.root.business.impl.file.report.AbstractRootReportProducer;
+import org.cyk.system.root.business.impl.globalidentification.GlobalIdentifierBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
-import org.cyk.system.root.model.RootConstant;
 import org.cyk.system.root.model.file.File;
-import org.cyk.system.root.model.geography.ContactCollection;
-import org.cyk.system.root.model.geography.ElectronicMail;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
-import org.cyk.system.root.model.party.person.JobInformations;
 import org.cyk.system.root.model.party.person.JobTitle;
-import org.cyk.system.root.model.party.person.Person;
-import org.cyk.system.root.model.party.person.PersonExtendedInformations;
-import org.cyk.system.root.model.party.person.PersonRelationship;
-import org.cyk.system.root.model.party.person.PersonRelationshipExtremity;
-import org.cyk.system.root.model.party.person.PersonRelationshipTypeRole;
-import org.cyk.system.root.model.party.person.Sex;
-import org.cyk.system.root.model.security.Credentials;
-import org.cyk.system.root.model.security.UserAccount;
 import org.cyk.system.root.model.time.Period;
-import org.cyk.system.root.persistence.api.security.RoleDao;
-import org.cyk.system.root.persistence.api.security.SoftwareDao;
-import org.cyk.system.school.business.api.session.AcademicSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
-import org.cyk.system.school.business.api.session.StudentClassroomSessionBusiness;
 import org.cyk.system.school.business.impl.SchoolBusinessLayer;
-import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
-import org.cyk.system.school.business.impl.report.InternationalEnglishSchoolOfAbidjanReportProducer;
-import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.actor.Teacher;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.LevelTimeDivision;
-import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -64,10 +44,6 @@ import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.SystemHelper;
 import org.cyk.utility.common.helper.TimeHelper;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 public class Iesa2016_2017_To_2017_2018Database extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
@@ -79,13 +55,9 @@ public class Iesa2016_2017_To_2017_2018Database extends AbstractIesaBusinessIT {
    
     @Override
     protected void businesses() {
-    	DataSet dataSet = new DataSet(SchoolBusinessLayer.class);
-    	dataSet.setExcelWorkbookFileName("data\\iesa\\IESA_2017_2016.xlsx");
-    	
-    	dataSet.addClass(GlobalIdentifier.class);
-    	System.out.println("Iesa2016_2017_To_2017_2018Database.businesses()");
+    	GlobalIdentifierBusinessImpl.BuilderOneDimensionArray.IMAGE_DIRECTORY_PATH = images;
+    	Iesa_2016_2017_DataSet dataSet = new Iesa_2016_2017_DataSet(); 	
     	dataSet.instanciate();
-    	System.out.println(dataSet.getInstanceMap().get(GlobalIdentifier.class).size());
     	dataSet.create();
     	
     	/*
