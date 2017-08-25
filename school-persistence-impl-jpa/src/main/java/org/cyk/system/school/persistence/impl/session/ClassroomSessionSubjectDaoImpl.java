@@ -19,7 +19,7 @@ public class ClassroomSessionSubjectDaoImpl extends AbstractTypedDao<ClassroomSe
 
 	private static final long serialVersionUID = 6306356272165070761L;
 
-	private String readBySubject,readByClassroomSession,readBySubjectByClassroomSession,readByClassroomSessionByStudent,readByClassroomSessionByRequired;
+	private String readBySubject,readByClassroomSession,countByClassroomSession,readBySubjectByClassroomSession,readByClassroomSessionByStudent,readByClassroomSessionByRequired;
 	
 	@Override
 	protected void namedQueriesInitialisation() {
@@ -43,6 +43,11 @@ public class ClassroomSessionSubjectDaoImpl extends AbstractTypedDao<ClassroomSe
 	@Override
 	public Collection<ClassroomSessionSubject> readByClassroomSession(ClassroomSession classroomSession) {
 		return namedQuery(readByClassroomSession).parameter(ClassroomSessionSubject.FIELD_CLASSROOMSESSION, classroomSession).resultMany();
+	}
+	
+	@Override
+	public Long countByClassroomSession(ClassroomSession classroomSession) {
+		return countNamedQuery(countByClassroomSession).parameter(ClassroomSessionSubject.FIELD_CLASSROOMSESSION, classroomSession).resultOne();
 	}
 
 	@Override

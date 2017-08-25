@@ -90,9 +90,7 @@ public class ClassroomSessionDivisionSubjectBusinessImpl extends AbstractTypedBu
 		commonUtils.increment(Long.class, classroomSessionDivisionSubject.getClassroomSessionDivision(), ClassroomSessionDivision.FIELD_NUMBER_OF_SUBJECTS, 1l);
 		inject(ClassroomSessionDivisionDao.class).update(classroomSessionDivisionSubject.getClassroomSessionDivision());
 		
-		if(classroomSessionDivisionSubject.getEvaluationTypes().isSynchonizationEnabled()){
-			inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).create(classroomSessionDivisionSubject.getEvaluationTypes().getCollection());
-		}
+		synchronise(ClassroomSessionDivisionSubjectEvaluationType.class, classroomSessionDivisionSubject, classroomSessionDivisionSubject.getEvaluationTypes());
 		
 		if(Boolean.TRUE.equals(classroomSessionDivisionSubject.getRequired())){
 			Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();

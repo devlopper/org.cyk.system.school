@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -37,7 +38,7 @@ public class StudentClassroomSession extends AbstractStudentResult<ClassroomSess
 
 	@ManyToOne @JoinColumn(name=COLUMN_CLASSROOM_SESSION) @NotNull private ClassroomSession classroomSession;
 	
-	private IdentifiableRuntimeCollection<StudentClassroomSessionSubject> studentClassroomSessionSubjects;
+	@Transient private IdentifiableRuntimeCollection<StudentClassroomSessionSubject> studentClassroomSessionSubjects;
 	
 	public StudentClassroomSession(Student student,ClassroomSession classroomSession) {
 		super();

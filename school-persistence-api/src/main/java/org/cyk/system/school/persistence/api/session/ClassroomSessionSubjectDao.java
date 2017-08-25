@@ -12,6 +12,7 @@ public interface ClassroomSessionSubjectDao extends TypedDao<ClassroomSessionSub
 	
 	Collection<ClassroomSessionSubject> readBySubject(Subject subject);
 	Collection<ClassroomSessionSubject> readByClassroomSession(ClassroomSession classroomSession);
+	Long countByClassroomSession(ClassroomSession classroomSession);
 	ClassroomSessionSubject readByClassroomSessionBySubject(ClassroomSession classroomSession,Subject subject);
 	Collection<ClassroomSessionSubject> readByClassroomSessionByStudent(ClassroomSession classroomSession,Student student);
 	Collection<ClassroomSessionSubject> readByClassroomSessionByRequired(ClassroomSession classroomSession,Boolean required);

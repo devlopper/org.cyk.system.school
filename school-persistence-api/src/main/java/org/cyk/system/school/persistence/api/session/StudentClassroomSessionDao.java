@@ -13,7 +13,8 @@ import org.cyk.system.school.model.session.StudentClassroomSession.SearchCriteri
 public interface StudentClassroomSessionDao extends TypedDao<StudentClassroomSession> {
 
 	Collection<StudentClassroomSession> readByClassroomSession(ClassroomSession classroomSession);
-
+	Long countByClassroomSession(ClassroomSession classroomSession);
+	
 	StudentClassroomSession readByStudentByClassroomSession(Student student, ClassroomSession classroomSession);
 
 	Collection<StudentClassroomSession> readByClassroomSessions(Collection<ClassroomSession> levels);

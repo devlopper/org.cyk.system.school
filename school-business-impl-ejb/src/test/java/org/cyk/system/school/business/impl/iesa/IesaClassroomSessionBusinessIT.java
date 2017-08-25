@@ -12,7 +12,6 @@ import org.cyk.system.school.business.api.session.StudentClassroomSessionBusines
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionSubjectBusiness;
-import org.cyk.system.school.business.impl._dataproducer.IesaFakedDataProducer;
 import org.cyk.system.school.model.SchoolConstant;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
@@ -38,14 +37,6 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
     
-    @Override
-    protected void populate() {
-    	super.populate();
-    	//for(ClassroomSession classroomSession : ((IesaFakedDataProducer)getFakedDataProducer()).createClassroomSessions()){
-    	//	create(classroomSession);
-    	//}
-    }
-    
     @Test
     public void crudOnlyClassroom(){
     	TestCase testCase = instanciateTestCase();
@@ -53,6 +44,8 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	classroomSession.setLevelTimeDivision(inject(LevelTimeDivisionDao.class).read(SchoolConstant.Code.LevelTimeDivision.G1_YEAR_1));
     	testCase.create(classroomSession);
     	assertEquals(0l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
+    	assertEquals(0l, inject(ClassroomSessionSubjectDao.class).countByClassroomSession(classroomSession));
+    	assertEquals(0l, inject(StudentClassroomSessionDao.class).countByClassroomSession(classroomSession));
     	testCase.clean();
     }
     
@@ -68,6 +61,8 @@ public class IesaClassroomSessionBusinessIT extends AbstractIesaBusinessIT {
     	classroomSession.getDivisions().addOne(inject(ClassroomSessionDivisionBusiness.class).instanciateOne(classroomSession,3l));
     	testCase.create(classroomSession);
     	assertEquals(3l, inject(ClassroomSessionDivisionDao.class).countByClassroomSession(classroomSession));
+    	assertEquals(0l, inject(ClassroomSessionSubjectDao.class).countByClassroomSession(classroomSession));
+    	assertEquals(0l, inject(StudentClassroomSessionDao.class).countByClassroomSession(classroomSession));
     	testCase.clean();
     }
     

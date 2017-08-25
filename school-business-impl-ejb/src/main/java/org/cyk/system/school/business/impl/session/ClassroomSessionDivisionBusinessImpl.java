@@ -78,8 +78,7 @@ public class ClassroomSessionDivisionBusinessImpl extends AbstractTypedBusinessS
 	@Override
 	protected void afterCreate(ClassroomSessionDivision classroomSessionDivision) {
 		super.afterCreate(classroomSessionDivision);
-		if(classroomSessionDivision.getSubjects().isSynchonizationEnabled())
-			inject(ClassroomSessionDivisionSubjectBusiness.class).create(classroomSessionDivision.getSubjects().getCollection());
+		synchronise(ClassroomSessionDivisionSubject.class, classroomSessionDivision, classroomSessionDivision.getSubjects());
 		commonUtils.increment(Long.class, classroomSessionDivision.getClassroomSession(), ClassroomSession.FIELD_NUMBER_OF_DIVISIONS, 1l);
 		inject(ClassroomSessionDao.class).update(classroomSessionDivision.getClassroomSession());
 	}

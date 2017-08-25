@@ -35,13 +35,10 @@ public class ClassroomSessionDivisionSubjectEvaluationTypeBusinessImpl extends A
 		}
 		return super.getPropertyValueTokens(classroomSessionDivisionSubjectEvaluationType, name);
 	}
-	
+		
 	@Override
-	protected void beforeCreate(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
-		super.beforeCreate(classroomSessionDivisionSubjectEvaluationType);
-		ClassroomSessionDivisionSubjectEvaluationType existing = dao.readByClassroomSessionDivisionSubjectByEvaluationType(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject()
-				, classroomSessionDivisionSubjectEvaluationType.getEvaluationType());
-		exceptionUtils().exception(existing!=null, "classroomSessionDivisionSubjectEvaluationType.alreadyexists");//TODO create shortcut method
+	protected void afterCreate(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+		super.afterCreate(classroomSessionDivisionSubjectEvaluationType);
 		commonUtils.increment(Long.class, classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject(), ClassroomSessionDivisionSubject.FIELD_NUMBER_OF_EVALUATION_TYPES, 1l);
 		inject(ClassroomSessionDivisionSubjectDao.class).update(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
 	}

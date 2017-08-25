@@ -236,7 +236,7 @@ public class SchoolBusinessLayer extends AbstractBusinessLayer implements Serial
     	createSchool(dataSet);
     	
     	dataSet.instanciate();
-    	dataSet.create();
+    	dataSet.save();
     
 	}
 	

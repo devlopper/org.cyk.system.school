@@ -13,15 +13,33 @@
 			<Filters>
 				<MarkerFilter marker="install" onMatch="ACCEPT" onMismatch="DENY" />
 			</Filters>
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%n" />
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n" />
 		</Console>
 		<Console name="BusinessCrudConsole" target="SYSTEM_OUT">
 			<Filters>
+				<MarkerFilter marker="JobTitleBusinessImpl" onMatch="ACCEPT" onMismatch="NEUTRAL" />
+				<MarkerFilter marker="PersonBusinessImpl" onMatch="ACCEPT" onMismatch="NEUTRAL" />
 				<MarkerFilter marker="create" onMatch="ACCEPT" onMismatch="NEUTRAL" />
 				<MarkerFilter marker="update" onMatch="ACCEPT" onMismatch="DENY" />
 				
 			</Filters>
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level - %msg%n" />
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n" />
+		</Console>
+		<Console name="BusinessCrudConsole2" target="SYSTEM_OUT">
+			<Filters>
+				<MarkerFilter marker="StudentClassroomSessionBusinessImpl" onMatch="NEUTRAL" onMismatch="DENY" />
+				<MarkerFilter marker="create" onMatch="NEUTRAL" onMismatch="DENY" />
+				<MarkerFilter marker="AFTER" onMatch="ACCEPT" onMismatch="DENY" />
+			</Filters>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n" />
+		</Console>
+		<Console name="ClassroomSessionAfterCreateConsole" target="SYSTEM_OUT">
+			<Filters>
+				<MarkerFilter marker="ClassroomSessionBusinessImpl" onMatch="NEUTRAL" onMismatch="DENY" />
+				<MarkerFilter marker="create" onMatch="NEUTRAL" onMismatch="DENY" />
+				<MarkerFilter marker="AFTER" onMatch="ACCEPT" onMismatch="DENY" />
+			</Filters>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} - %msg%n" />
 		</Console>
 	</Appenders>
 	<Loggers>
@@ -41,19 +59,22 @@
 			<AppenderRef ref="InstallConsole" />
 		</Logger>
 		
-		<Logger name="org.cyk.system.root.business.impl.party.person.JobTitleBusinessImpl" level="trace">
+		<!--Logger name="org.cyk.system.root.business.impl.party.person.JobTitleBusinessImpl" level="trace">
 			<AppenderRef ref="BusinessCrudConsole" />
 		</Logger>
-		<!--Logger name="org.cyk.system.school.business.impl.session.ClassroomSessionDivisionBusinessImpl" level="trace">
-			<AppenderRef ref="Console" />
+		<Logger name="org.cyk.system" level="trace">
+			<AppenderRef ref="BusinessCrudConsole" />
 		</Logger-->
+		<Logger name="org.cyk.system.school.business.impl.session.ClassroomSessionBusinessImpl" level="trace">
+			<AppenderRef ref="ClassroomSessionAfterCreateConsole" />
+		</Logger>
 		<!--Logger name="org.cyk.system.school.business.impl.session.ClassroomSessionDivisionSubjectBusinessImpl" level="trace">
 			<AppenderRef ref="Console" />
-		</Logger>
-		
-		<Logger name="org.cyk.system.school.business.impl.session.ClassroomSessionSubjectBusinessImpl" level="trace">
-			<AppenderRef ref="Console" />
 		</Logger-->
+		
+		<Logger name="org.cyk.system.school.business.impl.session.StudentClassroomSessionBusinessImpl" level="trace">
+			<AppenderRef ref="BusinessCrudConsole2" />
+		</Logger>
 	
 		<Root level="debug">
 			<!--AppenderRef ref="Console"/ -->

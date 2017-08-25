@@ -7,29 +7,28 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cyk.system.root.business.api.file.FileBusiness;
 import org.cyk.system.root.business.impl.BusinessInterfaceLocator;
-import org.cyk.system.root.business.impl.DataSet;
 import org.cyk.system.root.business.impl.globalidentification.GlobalIdentifierBusinessImpl;
 import org.cyk.system.root.model.AbstractIdentifiable;
 import org.cyk.system.root.model.file.File;
+import org.cyk.system.root.model.geography.Country;
+import org.cyk.system.root.model.geography.Locality;
 import org.cyk.system.root.model.globalidentification.GlobalIdentifier;
-import org.cyk.system.root.model.party.person.JobTitle;
+import org.cyk.system.root.model.party.person.Person;
+import org.cyk.system.root.model.party.person.Sex;
 import org.cyk.system.root.model.time.Period;
 import org.cyk.system.school.business.api.session.ClassroomSessionBusiness;
 import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
-import org.cyk.system.school.business.impl.SchoolBusinessLayer;
+import org.cyk.system.school.business.impl.__data__.iesa.RealDataSet;
 import org.cyk.system.school.model.actor.Student;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.session.ClassroomSessionSuffix;
 import org.cyk.system.school.model.session.LevelTimeDivision;
+import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.subject.Subject;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper;
@@ -44,6 +43,10 @@ import org.cyk.utility.common.helper.StringHelper;
 import org.cyk.utility.common.helper.SystemHelper;
 import org.cyk.utility.common.helper.TimeHelper;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 public class Iesa2016_2017_To_2017_2018Database extends AbstractIesaBusinessIT {
 
     private static final long serialVersionUID = -6691092648665798471L;
@@ -52,179 +55,14 @@ public class Iesa2016_2017_To_2017_2018Database extends AbstractIesaBusinessIT {
     private String images = StringHelper.getInstance().appendIfDoesNotEndWith(SystemHelper.getInstance().getProperty("images.directory.path"),"\\");
     private Map<Class<?>,Integer> identifiableCountMap = new HashMap<>();
     private static Collection<GlobalIdentifier> GLOBAL_IDENTIFIERS;
-   
+        
     @Override
-    protected void businesses() {
+    protected void businesses() {    	
     	GlobalIdentifierBusinessImpl.BuilderOneDimensionArray.IMAGE_DIRECTORY_PATH = images;
     	Iesa_2016_2017_DataSet dataSet = new Iesa_2016_2017_DataSet(); 	
+    	dataSet.getIdentifiableCountByTransactionMap().put(StudentClassroomSession.class, 1);
     	dataSet.instanciate();
-    	dataSet.create();
-    	
-    	/*
-    	identifiableCountMap.put(Person.class, SystemHelper.getInstance().getPropertyAs(Integer.class,"personCount"));
-    	TestCase testCase = instanciateTestCase();
-    	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
-    	AbstractRootReportProducer.DEFAULT = new InternationalEnglishSchoolOfAbidjanReportProducer();    	
-    	
-    	loadGlobalIdentifiers();
-    	academicSession = inject(AcademicSessionBusiness.class).findDefaulted();
-    	createIdentifiable(JobTitle.class, Boolean.TRUE, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER));
-    	
-    	Pool.getInstance().load(Sex.class);//TODO should work without this line
-    	
-    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<Person> personInstanceBuilder =
-    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<Person>(Person.class){
-					private static final long serialVersionUID = 1L;
-					@Override
-					protected Person __execute__() {
-						Person person = super.__execute__();
-						person.setContactCollection(new ContactCollection());
-						
-						if(person.getExtendedInformations().getSignatureSpecimen()!=null && !StringHelper.getInstance().isBlank(person.getExtendedInformations().getSignatureSpecimen().getUri())){
-							String name = person.getExtendedInformations().getSignatureSpecimen().getUri()+"."+person.getExtendedInformations().getSignatureSpecimen().getExtension();
-							String path = images+name;
-							byte[] bytes;
-							try {
-								bytes = IOUtils.toByteArray(new FileInputStream(path));
-								person.getExtendedInformations().setSignatureSpecimen(inject(FileBusiness.class).process(bytes, name));
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}else if(person.getExtendedInformations().getSignatureSpecimen()!=null){
-							person.getExtendedInformations().setSignatureSpecimen(null);
-						}
-						return person;
-					}
-    		
-    	};
-    	personInstanceBuilder.addParameterArrayElementString(FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER)
-    			,Person.FIELD_LASTNAMES,Person.FIELD_SURNAME,FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER
-    					,GlobalIdentifier.FIELD_BIRTH_LOCATION,AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_OTHER_DETAILS),Person.FIELD_NATIONALITY
-    					,Person.FIELD_SEX
-    			,FieldHelper.getInstance().buildPath(Person.FIELD_EXTENDED_INFORMATIONS,PersonExtendedInformations.FIELD_TITLE)
-    			,FieldHelper.getInstance().buildPath(Person.FIELD_JOB_INFORMATIONS,JobInformations.FIELD_FUNCTION)
-    			,FieldHelper.getInstance().buildPath(Person.FIELD_JOB_INFORMATIONS,JobInformations.FIELD_TITLE)
-    			,FieldHelper.getInstance().buildPath(Person.FIELD_EXTENDED_INFORMATIONS,PersonExtendedInformations.FIELD_SIGNATURE_SPECIMEN,File.FIELD_URI)
-    			,FieldHelper.getInstance().buildPath(Person.FIELD_EXTENDED_INFORMATIONS,PersonExtendedInformations.FIELD_SIGNATURE_SPECIMEN,File.FIELD_EXTENSION));
-    	
-    	createIdentifiable(Person.class, personInstanceBuilder , new ArrayHelperDimensionKeyBuilder(Boolean.TRUE));
-    	
-    	Pool.getInstance().load(Person.class);//TODO should work without this line
-    	
-    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<UserAccount> userAccountInstanceBuilder =
-    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<UserAccount>(UserAccount.class){
-					private static final long serialVersionUID = 1L;
-					@Override
-					protected UserAccount __execute__() {
-						Person person = Pool.getInstance().get(Person.class, getInput()[2]);
-						if(person==null)
-							return null;
-						UserAccount userAccount = super.__execute__();
-						userAccount.setUser(Pool.getInstance().get(Person.class, getInput()[2]));
-						userAccount.getCredentials().setSoftware(inject(SoftwareDao.class).readDefaulted());
-						userAccount.getRoles().add(inject(RoleDao.class).read(SchoolConstant.Code.Role.TEACHER));
-						return userAccount;
-					}
-    		
-    	};
-    	userAccountInstanceBuilder.addParameterArrayElementStringIndexInstance(0,FieldHelper.getInstance().buildPath(UserAccount.FIELD_CREDENTIALS,Credentials.FIELD_USERNAME)
-    			,1,FieldHelper.getInstance().buildPath(UserAccount.FIELD_CREDENTIALS,Credentials.FIELD_PASSWORD));
-    	createIdentifiable(UserAccount.class, userAccountInstanceBuilder,new ArrayHelperDimensionKeyBuilder());
-    	
-    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<Student> studentInstanceBuilder =
-    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<Student>(Student.class){
-					private static final long serialVersionUID = 1L;
-					@Override
-					protected Student __execute__() {
-						Student student = super.__execute__();
-						if(student.getPerson()==null)
-							return null;
-						student.setImage(student.getPerson().getImage());
-						return student;
-					}
-    		
-    	};
-    	studentInstanceBuilder.addParameterArrayElementString(FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER)
-    			, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_CODE),Student.FIELD_PERSON);
-    	
-    	createIdentifiable(Student.class, studentInstanceBuilder , new  ArrayHelperDimensionKeyBuilder(Boolean.TRUE));
-    	
-    	Pool.getInstance().load(Student.class);//TODO should work without this line
-    	Pool.getInstance().load(PersonRelationshipTypeRole.class);//TODO should work without this line
-    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<PersonRelationship> instanceBuilder = new InstanceHelperBuilderOneDimensionArrayAdapterDefault<PersonRelationship>(PersonRelationship.class){
-			private static final long serialVersionUID = 1L;
-			
-			@Override
-			protected PersonRelationship __execute__() {
-				PersonRelationship personRelationship = super.__execute__();
-				if(personRelationship.getExtremity1().getPerson()==null || personRelationship.getExtremity2().getPerson()==null)
-					return null;
-				Boolean person1IsStudent = Pool.getInstance().get(Student.class, getInput()[0])!=null;
-				
-				PersonRelationshipExtremity parentExtremity,studentExtremity;
-				String studentExtremityRole,parentExtremityRole = "FAMILYFATHER".equals(getInput()[1]) ? RootConstant.Code.PersonRelationshipTypeRole.FAMILY_PARENT_FATHER
-						: RootConstant.Code.PersonRelationshipTypeRole.FAMILY_PARENT_MOTHER;
-				if(Boolean.TRUE.equals(person1IsStudent)){
-					studentExtremity = personRelationship.getExtremity1();
-					parentExtremity = personRelationship.getExtremity2();
-				}else{
-					studentExtremity = personRelationship.getExtremity2();
-					parentExtremity = personRelationship.getExtremity1();
-				}
-				
-				if(studentExtremity.getPerson().getSex() == null || RootConstant.Code.Sex.MALE.equals(studentExtremity.getPerson().getSex().getCode()))
-					studentExtremityRole = RootConstant.Code.PersonRelationshipTypeRole.FAMILY_PARENT_SON;
-				else
-					studentExtremityRole = RootConstant.Code.PersonRelationshipTypeRole.FAMILY_PARENT_DAUGHTER;
-				
-				studentExtremity.setRole(Pool.getInstance().get(PersonRelationshipTypeRole.class, studentExtremityRole));
-				parentExtremity.setRole(Pool.getInstance().get(PersonRelationshipTypeRole.class, parentExtremityRole));
-				
-				return personRelationship;
-			}
-    	};
-    	instanceBuilder.addParameterArrayElementStringIndexInstance(0,FieldHelper.getInstance().buildPath(PersonRelationship.FIELD_EXTREMITY_1,PersonRelationshipExtremity.FIELD_PERSON)
-    	    	,2,FieldHelper.getInstance().buildPath(PersonRelationship.FIELD_EXTREMITY_2,PersonRelationshipExtremity.FIELD_PERSON));
-    	createIdentifiable(PersonRelationship.class, instanceBuilder,new ArrayHelperDimensionKeyBuilder());
-    	
-    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<Teacher> teacherInstanceBuilder =
-    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<Teacher>(Teacher.class){
-					private static final long serialVersionUID = 1L;
-					@Override
-					protected Teacher __execute__() {
-						Teacher teacher = super.__execute__();
-						if(teacher.getPerson()==null)
-							return null;
-						return teacher;
-					}
-    		
-    	};
-    	teacherInstanceBuilder.addParameterArrayElementString(FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_IDENTIFIER)
-    			, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_CODE),Student.FIELD_PERSON);
-    	
-    	createIdentifiable(Teacher.class, teacherInstanceBuilder , new  ArrayHelperDimensionKeyBuilder(Boolean.TRUE));
-    	Pool.getInstance().load(Teacher.class);//TODO should work without this line
-    	
-    	InstanceHelperBuilderOneDimensionArrayAdapterDefault<ElectronicMail> electronicMailInstanceBuilder =
-    			new InstanceHelperBuilderOneDimensionArrayAdapterDefault<ElectronicMail>(ElectronicMail.class){
-					private static final long serialVersionUID = 1L;
-					@Override
-					protected ElectronicMail __execute__() {
-						Person person = Pool.getInstance().get(Person.class, getInput()[1]);
-						if(person==null)
-							return null;
-						ElectronicMail electronicMail = super.__execute__();
-						electronicMail.setCollection(person.getContactCollection());
-						
-						return electronicMail;
-					}
-    		
-    	};
-    	electronicMailInstanceBuilder.addParameterArrayElementStringIndexInstance(0,ElectronicMail.FIELD_ADDRESS);
-    	createIdentifiable(ElectronicMail.class, electronicMailInstanceBuilder,new ArrayHelperDimensionKeyBuilder());
-    	
-    	classroomSessions();
-    	*/
+    	dataSet.save();
     	System.exit(0);
     }
     

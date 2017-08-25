@@ -27,7 +27,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 
 	@ManyToOne @JoinColumn(name=COLUMN_STUDENT) @NotNull protected Student student;
 	
-	@OneToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE}) protected StudentResults results; //TODO avoid using cascade
+	@OneToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE}) @JoinColumn(name=COLUMN_RESULTS) protected StudentResults results; //TODO avoid using cascade
 	
 	@Transient protected IdentifiableRuntimeCollection<DETAIL> detailCollection = new IdentifiableRuntimeCollection<>();
 	
@@ -56,6 +56,7 @@ public abstract class AbstractStudentResult<LEVEL,DETAIL> extends AbstractIdenti
 	/**/
 	
 	public static final String COLUMN_STUDENT = "student";
+	public static final String COLUMN_RESULTS = "results";
 	
 	/**/
 	

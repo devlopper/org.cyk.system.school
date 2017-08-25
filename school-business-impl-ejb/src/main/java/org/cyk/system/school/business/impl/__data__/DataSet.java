@@ -42,8 +42,8 @@ public class DataSet extends org.cyk.system.root.business.impl.DataSet implement
 		super(SchoolBusinessLayer.class);
 
 		divisionOrderNumbers.add(1l);
-		divisionOrderNumbers.add(2l);
-		divisionOrderNumbers.add(3l);
+		//divisionOrderNumbers.add(2l);
+		//divisionOrderNumbers.add(3l);
 		
 		addClassroomSessionMetricCollections(new Object[][]{
 			{SchoolConstant.Code.LevelTimeDivision.PK_YEAR_1, new String[][]{{SchoolConstant.Code.MetricCollection.ATTENDANCE_KINDERGARTEN_STUDENT}
@@ -131,12 +131,14 @@ public class DataSet extends org.cyk.system.root.business.impl.DataSet implement
 	
     	for(String code : classroomSessionLevelTimeDivisionCodes){
     		for(String suffix : getClassroomSessionSuffixes(code)){
-    			classroomSessions.add(inject(ClassroomSessionBusiness.class)
-		    		.instanciateOne(code, suffix,null, RootConstant.Code.TimeDivisionType.TRIMESTER
-		    		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"},{"2","1","1/5/2000 0:0","1/8/2000 0:0",d,"true","false"},{"3","1","1/9/2000 0:0","1/12/2000 0:0",d,"true","false"}}
-		    		, getClassroomSessionSubjects(code)
-		    		, getClassroomSessionEvaluationTypes(code)
-		    		, getClassroomSessionMetricCollections(code)));
+    			ClassroomSession classroomSession=inject(ClassroomSessionBusiness.class)
+    		    		.instanciateOne(code, suffix,null, RootConstant.Code.TimeDivisionType.TRIMESTER
+    				    		, new String[][]{{"1","1","1/1/2000 0:0","1/4/2000 0:0",d,"true","false"}}
+    				    		, getClassroomSessionSubjects(code)
+    				    		, getClassroomSessionEvaluationTypes(code)
+    				    		, getClassroomSessionMetricCollections(code));
+    			classroomSession.setCascadeOperationToChildren(Boolean.TRUE);
+    			classroomSessions.add(classroomSession);
 	    	}
     	}
     	return classroomSessions;
