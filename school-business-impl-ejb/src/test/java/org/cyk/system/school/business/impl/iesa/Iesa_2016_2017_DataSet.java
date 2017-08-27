@@ -41,7 +41,6 @@ import org.cyk.system.school.model.subject.Subject;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.helper.ArrayHelper.Dimension.Key;
 import org.cyk.utility.common.helper.FieldHelper;
-import org.cyk.utility.common.helper.InstanceHelper;
 import org.cyk.utility.common.helper.InstanceHelper.Pool;
 import org.cyk.utility.common.helper.StringHelper;
 
@@ -65,14 +64,14 @@ public class Iesa_2016_2017_DataSet extends DataSet implements Serializable {
     				String[] p = StringUtils.split(StringUtils.substringBefore(date, Constant.CHARACTER_SPACE.toString()),"-");
     				array[10] = p[2]+"/"+p[1]+"/"+p[0];
     			}
-    			return super.__execute__();
+    			GlobalIdentifier globalIdentifier = super.__execute__();
+    			return globalIdentifier;
     		}
     	});
-    	/*
+    	
     	addClass(JobTitle.class,new AbstractIdentifiableBusinessServiceImpl.OneDimensionArrayBuilderFromGlobalIdentifier<JobTitle>(JobTitle.class));
     	instanceKeyBuilderMap.put(JobTitle.class, new org.cyk.system.root.business.impl.helper.ArrayHelper.KeyBuilder(Boolean.TRUE));
     	
-    	InstanceHelper.Pool.getInstance().load(Person.class);
     	addClass(Person.class,new AbstractIdentifiableBusinessServiceImpl.OneDimensionArrayBuilderFromGlobalIdentifier<Person>(Person.class){
 			private static final long serialVersionUID = 1L;
     		
@@ -139,7 +138,7 @@ public class Iesa_2016_2017_DataSet extends DataSet implements Serializable {
     			, FieldHelper.getInstance().buildPath(AbstractIdentifiable.FIELD_GLOBAL_IDENTIFIER,GlobalIdentifier.FIELD_CODE),Student.FIELD_PERSON));
     	
     	instanceKeyBuilderMap.put(Student.class, new org.cyk.system.root.business.impl.helper.ArrayHelper.KeyBuilder(Boolean.TRUE));
-    	*/
+    	
     	addClass(PersonRelationship.class,new org.cyk.system.root.business.impl.helper.InstanceHelper.BuilderOneDimensionArray<PersonRelationship>(PersonRelationship.class){
 			private static final long serialVersionUID = 1L;
     		@Override
@@ -175,7 +174,7 @@ public class Iesa_2016_2017_DataSet extends DataSet implements Serializable {
     	
     	instanceKeyBuilderMap.put(PersonRelationship.class, new org.cyk.system.root.business.impl.helper.ArrayHelper.KeyBuilder(Boolean.FALSE));
     	
-    	/*
+    	
     	addClass(Teacher.class,new org.cyk.system.root.business.impl.helper.InstanceHelper.BuilderOneDimensionArray<Teacher>(Teacher.class){
 			private static final long serialVersionUID = 1L;
     		@Override
@@ -249,34 +248,37 @@ public class Iesa_2016_2017_DataSet extends DataSet implements Serializable {
 			@Override
 			protected StudentClassroomSession __execute__() {
 				String levelCode = null;
-				if("P".equals(getInput()[4])){
-					if("PK".equals(getInput()[1]))
-						levelCode = "K1";
-					else if("K1".equals(getInput()[1]))
-						levelCode = "K2";
-					else if("K2".equals(getInput()[1]))
-						levelCode = "K3";
-					else if("K3".equals(getInput()[1]))
-						levelCode = "G1";
-					else {
+				if("PK".equals(getInput()[1]))
+					levelCode = "K1";
+				else if("K1".equals(getInput()[1]))
+					levelCode = "K2";
+				else if("K2".equals(getInput()[1]))
+					levelCode = "K3";
+				else if("K3".equals(getInput()[1]))
+					levelCode = "G1";
+				else {
+					if("P".equals(getInput()[4])){
 						Integer index = Integer.parseInt( ((String)getInput()[1]).substring(1) );
 						if(index<12)
 							levelCode = "G"+(index+1);
-						
-						//if(!"G11".equals(levelCode))
-						//	levelCode = null;
-					}
-					//if(!"G1".equals(levelCode))
-					//	levelCode = null;
-				}else{
-					levelCode = (String)getInput()[1];
+					}else{
+						levelCode = (String)getInput()[1];
+					}	
 				}
+				
 				if(levelCode!=null){
 					String suffix = ArrayUtils.contains(new String[]{"G6","G7","G8","G9","G10","G11","G12"}, levelCode) ? null : (String)getInput()[2];
+					if("K3".equals(levelCode))
+						suffix = "A";
 					StudentClassroomSession studentClassroomSession = super.__execute__();
 					if(studentClassroomSession.getStudent()==null)
 						return null;
-					ClassroomSession classroomSession = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(levelCode,suffix).iterator().next();
+					Collection<ClassroomSession> classroomSessions = inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix(levelCode,suffix);
+					ClassroomSession classroomSession = null;
+					if(classroomSessions.isEmpty())
+						System.out.println("Iesa_2016_2017_DataSet.Iesa_2016_2017_DataSet() : "+levelCode+" : "+suffix+" NOT FOUND");
+					else
+						classroomSession = classroomSessions.iterator().next();
 					studentClassroomSession.setClassroomSession(classroomSession);
 					return studentClassroomSession;
 				}else
@@ -293,33 +295,7 @@ public class Iesa_2016_2017_DataSet extends DataSet implements Serializable {
     			//				);
     			return new Key(String.valueOf(getInput()[1])+String.valueOf(getInput()[2]));
     		}
-    	});
-    	*/
-    	
+    	});	
 	}
-
-	/*
-	@Getter @Setter @Accessors(chain=true)
-    public static class KeyBuilder extends ArrayHelper.Dimension.Key.Builder.Adapter.Default implements Serializable {
-		private static final long serialVersionUID = 1L;
-    	
-		private Boolean isGlobalIdentifier;
-		
-		public KeyBuilder(Boolean isGlobalIdentifier) {
-			super();
-			this.isGlobalIdentifier = isGlobalIdentifier;
-		}
-		
-		public KeyBuilder() {
-			this(Boolean.FALSE);
-		}
-		
-		@Override
-		protected Key __execute__() {
-			return new ArrayHelper.Dimension.Key(Boolean.TRUE.equals(isGlobalIdentifier) 
-					? InstanceHelper.Pool.getInstance().get(GlobalIdentifier.class, getInput()[0]).getCode() : (String)getInput()[0]);
-		}
-
-    }*/
 	
 }

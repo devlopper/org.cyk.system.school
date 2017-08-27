@@ -43,6 +43,7 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjec
 import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
+import org.cyk.system.school.ui.web.primefaces.page.session.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionDivisionQueryOneFormModel;
@@ -57,7 +58,6 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionSubjectEd
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.LevelGroupTypeForm;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelEditPage;
-import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.SchoolEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionDivisionEditPage;

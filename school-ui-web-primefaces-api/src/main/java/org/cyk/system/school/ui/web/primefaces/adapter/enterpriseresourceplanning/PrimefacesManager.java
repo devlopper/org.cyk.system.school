@@ -39,6 +39,7 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.ui.web.primefaces.CommonNodeInformationsFormModel;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
+import org.cyk.system.school.ui.web.primefaces.page.session.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditClassroomSessionsPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionConsultPage;
@@ -50,7 +51,6 @@ import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditStude
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionEditSubjectsPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionSubjectEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.EvaluationEditPage;
-import org.cyk.system.school.ui.web.primefaces.session.school.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.school.LevelTimeDivisionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditSubjectsPage;
@@ -137,15 +137,11 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 		});
 	}
 	
+	@Deprecated
 	protected void configureLevelGroupClass() {
-		getFormConfiguration(LevelGroup.class, Crud.CREATE).addFieldNames(LevelGroupEditPage.Form.FIELD_CODE,LevelGroupEditPage.Form.FIELD_NAME
-				,LevelGroupEditPage.Form.FIELD_NODE_INFORMATIONS,CommonNodeInformationsFormModel.FIELD_AGGREGATE_ATTENDANCE
-				,CommonNodeInformationsFormModel.FIELD_ATTENDANCE_TIME_DIVISION_TYPE,CommonNodeInformationsFormModel.FIELD_CLASSROOM_SESSION_DIVISION_ORDER_NUMBER_INTERVAL
-				,CommonNodeInformationsFormModel.FIELD_CLASSROOM_SESSION_TIME_DIVISION_TYPE,CommonNodeInformationsFormModel.FIELD_CURRENT_CLASSROOM_SESSION_DIVISION_INDEX
-				,CommonNodeInformationsFormModel.FIELD_EVALUATION_PASS_AVERAGE,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_PROMOTION_SCALE
-				,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_AVERAGE_SCALE,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_AVERAGE_SCALE
-				,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_SIGNER,CommonNodeInformationsFormModel.FIELD_STUDENT_CLASSROOM_SESSION_DIVISION_RESULTS_REPORT_TEMPLATE
-				,CommonNodeInformationsFormModel.FIELD_STUDENT_SUBJECT_AVERAGE_SCALE);
+		/*getFormConfiguration(LevelGroup.class, Crud.CREATE).addFieldNames(LevelGroupEditPage.Form.FIELD_CODE,LevelGroupEditPage.Form.FIELD_NAME
+				,LevelGroupEditPage.Form.FIELD_NODE_INFORMATIONS)
+			.addFieldNames(FieldHelper.getInstance().getNamesWhereReferencedByStaticField(CommonNodeInformationsFormModel.class));
 		
 		getFormConfiguration(LevelGroup.class, Crud.READ).addFieldNames(LevelGroupEditPage.Form.FIELD_CODE,LevelGroupEditPage.Form.FIELD_NAME);
 		
@@ -172,7 +168,7 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 					}
 				};
 			}
-		});
+		});*/
 	}
 	
 	protected void configureLevelTimeDivisionClass() {
