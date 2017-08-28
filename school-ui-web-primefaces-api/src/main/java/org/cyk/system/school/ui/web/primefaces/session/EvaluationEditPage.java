@@ -15,20 +15,17 @@ import lombok.Setter;
 
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
-import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
 import org.cyk.system.school.model.actor.Student;
-import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditSubjectsPage.Form;
-import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.command.menu.AbstractSystemMenuBuilder;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
@@ -40,11 +37,11 @@ import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
 import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
+import org.cyk.utility.common.annotation.user.interfaces.Input.RendererStrategy;
 import org.cyk.utility.common.annotation.user.interfaces.InputCalendar;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-import org.cyk.utility.common.annotation.user.interfaces.Input.RendererStrategy;
 
 @Named @ViewScoped @Getter @Setter
 public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
@@ -114,6 +111,12 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 				super.write(item);
 				item.getIdentifiable().setValue(item.getValue());
 			}
+			
+			@Override
+			public String getFieldOneItemMasterSelectedName() {
+				return Form.FIELD_ONE_STUDENT_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_SELECTED;
+			}
+			
 		});
 		((AbstractWebApplicableValueQuestion)studentClassroomSessionDivisionSubjectEvaluationCollection.getApplicableValueQuestion()).setUpdate("markValue");
 		studentClassroomSessionDivisionSubjectEvaluationCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
@@ -136,13 +139,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		
 		//identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().setSynchonizationEnabled(Boolean.TRUE);
 		
-		@SuppressWarnings("unchecked")
-		org.cyk.ui.api.data.collector.control.InputChoice<?, ?, ?, ?, ?, SelectItem> input = (org.cyk.ui.api.data.collector.control.InputChoice<?, ?, ?, ?, ?, SelectItem>)
-				form.getInputByFieldName(Form.FIELD_ONE_STUDENT_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_SELECTED);
 		
-		input.getList().addAll(WebManager.getInstance().getSelectItems(StudentClassroomSessionDivisionSubject.class
-				,inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionSubject(identifiable
-						.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject()),Boolean.FALSE));
 		
 	}
 	
@@ -150,6 +147,20 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	protected void afterInitialisation() {
 		super.afterInitialisation();
 		setChoices(Form.FIELD_TYPE, inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
+		
+		@SuppressWarnings("unchecked")
+		org.cyk.ui.api.data.collector.control.InputChoice<?, ?, ?, ?, ?, SelectItem> input = (org.cyk.ui.api.data.collector.control.InputChoice<?, ?, ?, ?, ?, SelectItem>)
+				form.getInputByFieldName(Form.FIELD_ONE_STUDENT_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_SELECTED);
+		/*
+		System.out.println(inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionSubject(identifiable
+						.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject()));
+		
+		System.out.println(input.getList());
+		
+		input.getList().addAll(WebManager.getInstance().getSelectItems(StudentClassroomSessionDivisionSubject.class
+				,inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionSubject(identifiable
+						.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject()),Boolean.FALSE));
+		*/
 	}
 	
 	/*@Override
@@ -196,7 +207,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		@Input(readOnly=true,disabled=true) @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private ClassroomSessionDivisionSubjectEvaluationType type;
 		@Input @InputCalendar @NotNull private Date date;
 		@NotNull private Boolean coefficientApplied = Boolean.TRUE;
-		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo private Student oneStudentClassroomSessionDivisionSubjectEvaluationSelected;
+		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false,load=false) @InputOneChoice @InputOneCombo private Student oneStudentClassroomSessionDivisionSubjectEvaluationSelected;
 		
 		public static final String FIELD_TYPE = "type";
 		public static final String FIELD_DATE = "date";
