@@ -23,7 +23,7 @@ public class EvaluationBusinessIT extends AbstractEnterpriseResourcePlanningBusi
     public void crud(){
     	SchoolConstant.Configuration.Evaluation.COEFFICIENT_APPLIED = Boolean.FALSE;
     	ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = inject(ClassroomSessionDivisionSubjectEvaluationTypeDao.class).readOneRandomly();
-    	Evaluation evaluation = inject(EvaluationBusiness.class).instanciateOne(classroomSessionDivisionSubjectEvaluationType).setCode("e001");
+    	Evaluation evaluation = inject(EvaluationBusiness.class).instanciateOne(classroomSessionDivisionSubjectEvaluationType,Boolean.TRUE).setCode("e001");
     	for(StudentClassroomSessionDivisionSubjectEvaluation studentClassroomSessionDivisionSubjectEvaluation 
     			: evaluation.getStudentClassroomSessionDivisionSubjectEvaluations().getCollection())
     		studentClassroomSessionDivisionSubjectEvaluation.setValue(new BigDecimal(RandomDataProvider.getInstance().randomInt(0, 100)));

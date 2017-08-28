@@ -11,9 +11,9 @@ public interface EvaluationBusiness extends TypedBusiness<Evaluation> {
 
 	Evaluation instanciateOne(String classroomSessionDivisionSubjectEvaluationTypeCode,String[][] values);
 	
-	Evaluation instanciateOne(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
+	Evaluation instanciateOne(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,Boolean cascadeToChildren);
 	
-	Evaluation instanciateOne(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType);
+	Evaluation instanciateOne(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,Boolean cascadeToChildren);
 	
 	Collection<Evaluation> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);
 

@@ -66,6 +66,10 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 		StudentClassroomSession studentClassroomSession = instanciateOne();
 		studentClassroomSession.setStudent(student);
 		studentClassroomSession.setClassroomSession(classroomSession);
+		if(Boolean.TRUE.equals(classroomSession.getLevelTimeDivision().getLevel().getLevelName().getAllClassroomSessionDivisionSubjectRequired())){
+			for(ClassroomSessionSubject classroomSessionSubject : inject(ClassroomSessionSubjectDao.class).readByClassroomSession(classroomSession))
+				studentClassroomSession.getStudentClassroomSessionSubjects().addOne(new StudentClassroomSessionSubject(student, classroomSessionSubject));
+		}
 		return studentClassroomSession;
 	}
 	
@@ -91,9 +95,9 @@ public class StudentClassroomSessionBusinessImpl extends AbstractStudentResultsB
 				Collection<StudentClassroomSessionSubject> studentClassroomSessionSubjects = new ArrayList<>();
 				for(ClassroomSessionSubject classroomSessionSubject : inject(ClassroomSessionSubjectDao.class).readByClassroomSession(studentClassroomSession.getClassroomSession())){
 					StudentClassroomSessionSubject studentClassroomSessionSubject = inject(StudentClassroomSessionSubjectBusiness.class).instanciateOne(studentClassroomSession,classroomSessionSubject);
-					//studentClassroomSessionSubject.setCascadeOperationToChildren(studentClassroomSession.getCascadeOperationToChildren());
+					studentClassroomSessionSubject.setCascadeOperationToChildren(studentClassroomSession.getCascadeOperationToChildren());
 					//studentClassroomSessionSubject.setCascadeOperationToMaster(studentClassroomSession.getCascadeOperationToMaster());
-					studentClassroomSessionSubject.setCascadeOperationToChildren(Boolean.FALSE);
+					//studentClassroomSessionSubject.setCascadeOperationToChildren(Boolean.FALSE);
 					studentClassroomSessionSubject.setCascadeOperationToMaster(Boolean.FALSE);
 					studentClassroomSessionSubjects.add(studentClassroomSessionSubject);
 				}

@@ -236,7 +236,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 			
 			@Override
 			public Collection<?> children(Object object) { 
-				/*if(object instanceof LevelGroup){
+				if(object instanceof LevelGroup){
 					LevelGroup levelGroup = (LevelGroup) object;
 					if(Boolean.TRUE.equals(userSession.getIsManager())){
 						Collection<Object> collection = new ArrayList<>();
@@ -252,7 +252,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 					}
 						
 				}
-				/*if(object instanceof ClassroomSession){
+				if(object instanceof ClassroomSession){
 					ClassroomSession classroomSession = (ClassroomSession) object;
 					
 					ClassroomSessionDivision classroomSessionDivision = inject(ClassroomSessionDivisionBusiness.class).findByClassroomSessionByOrderNumber(classroomSession
@@ -268,7 +268,7 @@ public class SystemMenuBuilder extends org.cyk.system.company.ui.web.primefaces.
 				if(object instanceof ClassroomSessionDivisionSubject){
 					ClassroomSessionDivisionSubject classroomSessionDivisionSubject = (ClassroomSessionDivisionSubject) object;
 					return inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject);			
-				}*/
+				}
 				return super.children(object);
 			}
 			

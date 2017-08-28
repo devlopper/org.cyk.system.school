@@ -3,32 +3,38 @@ package org.cyk.system.school.ui.web.primefaces.session;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.business.api.Crud;
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
+import org.cyk.system.school.business.api.session.ClassroomSessionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
+import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectBusiness;
 import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisionSubjectEvaluationBusiness;
+import org.cyk.system.school.model.actor.Student;
+import org.cyk.system.school.model.session.ClassroomSessionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.ClassroomSessionDivisionSubjectEvaluationType;
 import org.cyk.system.school.model.subject.Evaluation;
+import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
-import org.cyk.system.school.ui.web.primefaces.SchoolWebManager;
+import org.cyk.system.school.ui.web.primefaces.session.student.StudentClassroomSessionEditSubjectsPage.Form;
 import org.cyk.ui.api.command.UICommand;
 import org.cyk.ui.api.command.menu.AbstractSystemMenuBuilder;
 import org.cyk.ui.api.data.collector.form.AbstractFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
 import org.cyk.ui.web.api.AbstractWebApplicableValueQuestion;
-import org.cyk.ui.web.api.ItemCollectionWebAdapter;
+import org.cyk.ui.web.api.WebManager;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.data.collector.control.ControlSetAdapter;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
@@ -38,9 +44,7 @@ import org.cyk.utility.common.annotation.user.interfaces.InputCalendar;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.cyk.utility.common.annotation.user.interfaces.Input.RendererStrategy;
 
 @Named @ViewScoped @Getter @Setter
 public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
@@ -49,11 +53,10 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	
 	private ClassroomSessionDivisionSubject classroomSessionDivisionSubject;
 	private ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType;
-	private ItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation,Evaluation> markCollection;
+	private ItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation,Evaluation> studentClassroomSessionDivisionSubjectEvaluationCollection;
 	private BigDecimal maximumValue;
+	private String maximumValueAsString;
 	private Integer decimalPlaces = 0;
-	
-	@Inject private SchoolWebManager schoolWebManager;
 	
 	@Override
 	protected void initialisation() {
@@ -64,9 +67,12 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
 		
 		super.initialisation();
-		if(classroomSessionDivisionSubjectEvaluationType!=null){
+		/*if(classroomSessionDivisionSubjectEvaluationType==null){
+			maximumValue = new BigDecimal("10");
+		}else{*/
 			maximumValue = identifiable.getClassroomSessionDivisionSubjectEvaluationType().getMaximumValue();
-		}
+		//}
+		maximumValueAsString = inject(NumberBusiness.class).format(maximumValue);
 		if(Crud.CREATE.equals(crud)){
 			
 		}else{
@@ -74,14 +80,14 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			classroomSessionDivisionSubjectEvaluationType = identifiable.getClassroomSessionDivisionSubjectEvaluationType();
 			classroomSessionDivisionSubject = classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject();
 		}
-		
-		markCollection = createItemCollection(StudentClassroomSessionDivisionSubjectEvaluationItem.class, StudentClassroomSessionDivisionSubjectEvaluation.class,identifiable,new ItemCollectionWebAdapter<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation,Evaluation>(identifiable,crud){
+		studentClassroomSessionDivisionSubjectEvaluationCollection = createItemCollection(StudentClassroomSessionDivisionSubjectEvaluationItem.class, StudentClassroomSessionDivisionSubjectEvaluation.class,identifiable
+				,new org.cyk.ui.web.primefaces.ItemCollectionAdapter<StudentClassroomSessionDivisionSubjectEvaluationItem,StudentClassroomSessionDivisionSubjectEvaluation,Evaluation>(identifiable,crud,form,StudentClassroomSessionDivisionSubjectEvaluation.class){
 			private static final long serialVersionUID = -3872058204105902514L;
-			@Override
+			/*@Override
 			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> create() {
 				return identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().getCollection();
 			}
-			@Override
+			/*@Override
 			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> load() {
 				return identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().getCollection();
 			}
@@ -89,13 +95,19 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			public Boolean isShowAddButton() {
 				return Boolean.FALSE;
 			}
+			
 			@Override
-			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,Evaluation,SelectItem> itemCollection,StudentClassroomSessionDivisionSubjectEvaluationItem mark) {
-				super.instanciated(itemCollection, mark);
-				mark.setStudent(mark.getIdentifiable().getStudentClassroomSessionDivisionSubject().getStudent().getCode()+Constant.CHARACTER_SPACE
-						+mark.getIdentifiable().getStudentClassroomSessionDivisionSubject().getStudent().getPerson().getNames());
-				mark.setValue(mark.getIdentifiable().getValue());
-				mark.setValueAsString(inject(NumberBusiness.class).format(mark.getValue()));
+			public IdentifiableRuntimeCollection<StudentClassroomSessionDivisionSubjectEvaluation> getRuntimeCollection() {
+				return identifiable.getStudentClassroomSessionDivisionSubjectEvaluations();
+			}*/
+			
+			@Override
+			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,Evaluation,SelectItem> itemCollection,StudentClassroomSessionDivisionSubjectEvaluationItem item) {
+				super.instanciated(itemCollection, item);
+				item.setStudent(item.getIdentifiable().getStudentClassroomSessionDivisionSubject().getStudent().getCode()+Constant.CHARACTER_SPACE
+						+item.getIdentifiable().getStudentClassroomSessionDivisionSubject().getStudent().getPerson().getNames());
+				item.setValue(item.getIdentifiable().getValue());
+				item.setValueAsString(inject(NumberBusiness.class).format(item.getValue()));
 			}	
 			@Override
 			public void write(StudentClassroomSessionDivisionSubjectEvaluationItem item) {
@@ -103,9 +115,9 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 				item.getIdentifiable().setValue(item.getValue());
 			}
 		});
-		((AbstractWebApplicableValueQuestion)markCollection.getApplicableValueQuestion()).setUpdate("markValue");
-		markCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
-		markCollection.getApplicableValueQuestion().setRendered(Boolean.TRUE);
+		((AbstractWebApplicableValueQuestion)studentClassroomSessionDivisionSubjectEvaluationCollection.getApplicableValueQuestion()).setUpdate("markValue");
+		studentClassroomSessionDivisionSubjectEvaluationCollection.getDeleteCommandable().setRendered(Boolean.FALSE);
+		studentClassroomSessionDivisionSubjectEvaluationCollection.getApplicableValueQuestion().setRendered(Boolean.TRUE);
 		//markCollection.getAddCommandable().setRendered(Boolean.FALSE);
 		form.getControlSetListeners().add(new ControlSetAdapter<Object>(){
 			private static final long serialVersionUID = 1L;
@@ -122,7 +134,16 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		//markCollection.setShowFooter(markCollection.getAddCommandable().getRendered());
 		//onDocumentLoadJavaScript = markCollection.getFormatJavaScript();
 		
-		identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().setSynchonizationEnabled(Boolean.TRUE);
+		//identifiable.getStudentClassroomSessionDivisionSubjectEvaluations().setSynchonizationEnabled(Boolean.TRUE);
+		
+		@SuppressWarnings("unchecked")
+		org.cyk.ui.api.data.collector.control.InputChoice<?, ?, ?, ?, ?, SelectItem> input = (org.cyk.ui.api.data.collector.control.InputChoice<?, ?, ?, ?, ?, SelectItem>)
+				form.getInputByFieldName(Form.FIELD_ONE_STUDENT_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_SELECTED);
+		
+		input.getList().addAll(WebManager.getInstance().getSelectItems(StudentClassroomSessionDivisionSubject.class
+				,inject(StudentClassroomSessionDivisionSubjectBusiness.class).findByClassroomSessionDivisionSubject(identifiable
+						.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject()),Boolean.FALSE));
+		
 	}
 	
 	@Override
@@ -131,13 +152,13 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		setChoices(Form.FIELD_TYPE, inject(ClassroomSessionDivisionSubjectEvaluationTypeBusiness.class).findByClassroomSessionDivisionSubject(classroomSessionDivisionSubject));
 	}
 	
-	@Override
+	/*@Override
 	public void transfer(UICommand command, Object parameter) throws Exception {
 		super.transfer(command, parameter);
 		if(form.getSubmitCommandable().getCommand()==command){
-			getIdentifiable().getStudentClassroomSessionDivisionSubjectEvaluations().setCollection(markCollection.getIdentifiables() /*itemCollection.getIdentifiables()*/);
+			getIdentifiable().getStudentClassroomSessionDivisionSubjectEvaluations().setCollection(studentClassroomSessionDivisionSubjectEvaluationCollection.getIdentifiables());
 		}
-	}
+	}*/
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -162,23 +183,12 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	}
 	
 	protected Evaluation instanciateIdentifiable() {
-		Evaluation evaluation = inject(EvaluationBusiness.class).instanciateOne(classroomSessionDivisionSubject);
-		evaluation.setClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType);
+		Evaluation evaluation = classroomSessionDivisionSubjectEvaluationType == null 
+				? inject(EvaluationBusiness.class).instanciateOne(classroomSessionDivisionSubject,Boolean.TRUE)
+				: inject(EvaluationBusiness.class).instanciateOne(classroomSessionDivisionSubjectEvaluationType,Boolean.TRUE);
 		return evaluation;
 	}
-		
-	/*
-	@Override
-	protected Collection<UICommandable> contextualCommandables() {
-		UICommandable contextualMenu = instanciateCommandableBuilder().setLabel(formatUsingBusiness(classroomSessionDivisionSubjectEvaluationType)).create();
-	
-		contextualMenu.getChildren().add(Builder.createConsult(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision().getClassroomSession(), null));
-		contextualMenu.getChildren().add(Builder.createConsult(identifiable.getClassroomSessionDivisionSubjectEvaluationType().getClassroomSessionDivisionSubject().getClassroomSessionDivision(), null));
-		contextualMenu.getChildren().add(Builder.createConsult(classroomSessionDivisionSubject, null));
-		
-		return Arrays.asList(contextualMenu);
-	}*/
-		
+			
 	@Getter @Setter
 	public static class Form extends AbstractFormModel<Evaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
@@ -186,10 +196,13 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		@Input(readOnly=true,disabled=true) @InputChoice(load=false) @InputOneChoice @InputOneCombo @NotNull private ClassroomSessionDivisionSubjectEvaluationType type;
 		@Input @InputCalendar @NotNull private Date date;
 		@NotNull private Boolean coefficientApplied = Boolean.TRUE;
+		@Input(rendererStrategy=RendererStrategy.MANUAL) @InputChoice(nullable=false) @InputOneChoice @InputOneCombo private Student oneStudentClassroomSessionDivisionSubjectEvaluationSelected;
 		
 		public static final String FIELD_TYPE = "type";
 		public static final String FIELD_DATE = "date";
 		public static final String FIELD_COEFFICIENT_APPLIED = "coefficientApplied";
+		
+		public static final String FIELD_ONE_STUDENT_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_SELECTED = "oneStudentClassroomSessionDivisionSubjectEvaluationSelected";
 	
 	}
 	

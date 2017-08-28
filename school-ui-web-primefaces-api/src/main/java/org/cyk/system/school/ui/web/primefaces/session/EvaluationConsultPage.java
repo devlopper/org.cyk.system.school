@@ -10,6 +10,7 @@ import org.cyk.system.school.business.api.subject.StudentClassroomSessionDivisio
 import org.cyk.system.school.business.impl.subject.StudentClassroomSessionDivisionSubjectEvaluationDetails;
 import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
+import org.cyk.ui.api.IdentifierProvider;
 import org.cyk.ui.web.primefaces.Table;
 import org.cyk.ui.web.primefaces.page.crud.AbstractConsultPage;
 
@@ -21,17 +22,17 @@ public class EvaluationConsultPage extends AbstractConsultPage<Evaluation> imple
 
 	private static final long serialVersionUID = 3274187086682750183L;
 	
-	private Table<StudentClassroomSessionDivisionSubjectEvaluationDetails> markTable;
+	private Table<StudentClassroomSessionDivisionSubjectEvaluationDetails> studentClassroomSessionDivisionSubjectEvaluationTable;
 	
 	@Override
 	protected void consultInitialisation() {
 		super.consultInitialisation();
 	
-		markTable = (Table<StudentClassroomSessionDivisionSubjectEvaluationDetails>) createDetailsTable(StudentClassroomSessionDivisionSubjectEvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubjectEvaluation,StudentClassroomSessionDivisionSubjectEvaluationDetails>(StudentClassroomSessionDivisionSubjectEvaluation.class, StudentClassroomSessionDivisionSubjectEvaluationDetails.class){
+		studentClassroomSessionDivisionSubjectEvaluationTable = (Table<StudentClassroomSessionDivisionSubjectEvaluationDetails>) createDetailsTable(StudentClassroomSessionDivisionSubjectEvaluationDetails.class, new DetailsConfigurationListener.Table.Adapter<StudentClassroomSessionDivisionSubjectEvaluation,StudentClassroomSessionDivisionSubjectEvaluationDetails>(StudentClassroomSessionDivisionSubjectEvaluation.class, StudentClassroomSessionDivisionSubjectEvaluationDetails.class){
 			private static final long serialVersionUID = 1L;
 			@Override
 			public Collection<StudentClassroomSessionDivisionSubjectEvaluation> getIdentifiables() {
-				return inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class).findByEvaluation(identifiable, Boolean.FALSE);
+				return inject(StudentClassroomSessionDivisionSubjectEvaluationBusiness.class).findByEvaluation(identifiable);
 			}
 			@Override
 			public Boolean getEnabledInDefaultTab() {
@@ -39,7 +40,7 @@ public class EvaluationConsultPage extends AbstractConsultPage<Evaluation> imple
 			}
 			@Override
 			public String getTabId() {
-				return "model.entity.evaluation";
+				return IdentifierProvider.Adapter.getTabOf(Evaluation.class);
 			}
 		});
 	}

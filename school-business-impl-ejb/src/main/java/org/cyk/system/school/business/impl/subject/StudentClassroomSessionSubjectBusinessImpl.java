@@ -51,13 +51,12 @@ public class StudentClassroomSessionSubjectBusinessImpl extends AbstractStudentR
 			Collection<StudentClassroomSessionDivision> studentClassroomSessionDivisions = inject(StudentClassroomSessionDivisionDao.class).readByStudentByClassroomSession(student, classroomSession);
 			Collection<ClassroomSessionDivisionSubject> classroomSessionDivisionSubjects = inject(ClassroomSessionDivisionSubjectDao.class)
 					.readByClassroomSessionBySubject(classroomSession, studentClassroomSessionSubject.getClassroomSessionSubject().getSubject());
-			
 			Collection<StudentClassroomSessionDivisionSubject> studentClassroomSessionDivisionSubjects = new ArrayList<>();
 			for(StudentClassroomSessionDivision studentClassroomSessionDivision : studentClassroomSessionDivisions){
 				for(ClassroomSessionDivisionSubject classroomSessionDivisionSubject : classroomSessionDivisionSubjects)
 					if(classroomSessionDivisionSubject.getClassroomSessionDivision().equals(studentClassroomSessionDivision.getClassroomSessionDivision())){
 						if(inject(StudentClassroomSessionDivisionSubjectDao.class).readByStudentByClassroomSessionDivisionBySubject(student
-								, studentClassroomSessionDivision.getClassroomSessionDivision(), classroomSessionDivisionSubject.getSubject())==null)
+								, studentClassroomSessionDivision.getClassroomSessionDivision(), classroomSessionDivisionSubject.getSubject())!=null)
 							continue;
 						StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = new StudentClassroomSessionDivisionSubject(student,classroomSessionDivisionSubject);
 						studentClassroomSessionDivisionSubject.setCascadeOperationToChildren(studentClassroomSessionSubject.getCascadeOperationToChildren());

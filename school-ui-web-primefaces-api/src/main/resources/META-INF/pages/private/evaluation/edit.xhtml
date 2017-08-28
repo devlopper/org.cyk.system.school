@@ -13,19 +13,27 @@
  		<ui:param name="pageController" value="#{evaluationEditPage}" />
  		<ui:define name="body">
  			<cyk:formOneData value="#{evaluationEditPage.form}"/>
- 			<cyk:itemCollection value="#{evaluationEditPage.markCollection}" >
+ 			<cyk:itemCollection value="#{evaluationEditPage.studentClassroomSessionDivisionSubjectEvaluationCollection}" >
  				<p:column headerText="#{uiManager.text('model.entity.student')}" >
  					<h:outputText value="#{item.student}" />
  				</p:column>
  				<p:column headerText="#{uiManager.text('school.mark')}" >
  					<!--cyk:inputNumber value="#{item.form.findInputByFieldName('value')}"/-->
  					<!--cyk:inputText value="#{item.form.findInputByFieldName('type1')}"/-->
- 					
- 					<pe:inputNumber id="markValue" value="#{item.value}" required="#{true}" autocomplete="false" binding="#{mark}"
- 						minValue="0" maxValue="#{evaluationEditPage.maximumValue}" disabled="#{not item.applicable}"
- 						decimalPlaces="#{evaluationEditPage.decimalPlaces}"  requiredMessage="#{item.student} - #{uiManager.textInputValueRequired('school.mark')}"
- 						rendered="#{evaluationEditPage.form.editable}"/>
- 					<h:outputText value="#{item.valueAsString}" rendered="#{not evaluationEditPage.form.editable}" />
+ 					<table border="0">
+ 						<tr>
+ 							<td>
+ 								<pe:inputNumber id="markValue" value="#{item.value}" required="#{true}" autocomplete="false" binding="#{mark}"
+			 						minValue="0" maxValue="#{evaluationEditPage.maximumValue}" disabled="#{not item.applicable}"
+			 						decimalPlaces="#{evaluationEditPage.decimalPlaces}"  requiredMessage="#{item.student} - #{uiManager.textInputValueRequired('school.mark')}"
+			 						rendered="#{evaluationEditPage.form.editable}"/>
+			 					<h:outputText value="#{item.valueAsString}" rendered="#{not evaluationEditPage.form.editable}" />
+ 							</td>
+ 							<td>
+ 								<h:outputText value="/#{evaluationEditPage.maximumValueAsString}" escape="false"/>
+ 							</td>
+ 						</tr>
+ 					</table>
  				</p:column>
  			</cyk:itemCollection>
  		</ui:define>

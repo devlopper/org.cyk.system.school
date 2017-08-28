@@ -10,7 +10,7 @@
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="eclipselink.logging.level" value="OFF" />
-            <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+            <property name="eclipselink.ddl-generation" value="none" />
             <!--
             <property name="eclipselink.ddl-generation" value="none drop-and-create-tables create-or-extend-tables" />
             -->

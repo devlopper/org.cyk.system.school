@@ -71,5 +71,8 @@ public class StudentClassroomSessionDivisionSubjectEvaluationBusinessImpl extend
 		return collection;
 	}
 
-    
+	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
+	public Collection<StudentClassroomSessionDivisionSubjectEvaluation> findByEvaluation(Evaluation evaluation) {
+		return findByEvaluation(evaluation, Boolean.FALSE);
+	}
 }

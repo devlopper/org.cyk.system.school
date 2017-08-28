@@ -122,7 +122,7 @@ public class DataSet extends org.cyk.system.root.business.impl.DataSet implement
 	@Override
 	public void __instanciate__() {
 		super.__instanciate__();
-		addInstances(ClassroomSession.class, generateClassroomSessions());
+		addInstances(ClassroomSession.class, generateClassroomSessions(),Boolean.TRUE);
 	}
 	
 	protected Collection<ClassroomSession> generateClassroomSessions(){

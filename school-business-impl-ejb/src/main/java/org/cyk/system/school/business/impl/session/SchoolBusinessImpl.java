@@ -30,7 +30,7 @@ public class SchoolBusinessImpl extends AbstractTypedBusinessService<School, Sch
 	@Override
 	public School instanciateOne() {
 		School school = super.instanciateOne();
-		school.setOwnedCompany(inject(OwnedCompanyBusiness.class).findDefaultOwnedCompany());	
+		school.setOwnedCompany(inject(OwnedCompanyBusiness.class).findDefaulted());	
 		return school;
 	}
 

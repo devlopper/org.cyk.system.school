@@ -39,20 +39,20 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public Evaluation instanciateOne(ClassroomSessionDivisionSubject classroomSessionDivisionSubject) {
+	public Evaluation instanciateOne(ClassroomSessionDivisionSubject classroomSessionDivisionSubject,Boolean cascadeToChildren) {
 		Evaluation evaluation = new Evaluation();
-		
-		for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject)){
-			evaluation.getStudentClassroomSessionDivisionSubjectEvaluations().addOne(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation, studentClassroomSessionDivisionSubject, null));
+		if(Boolean.TRUE.equals(cascadeToChildren)){
+			for(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject : inject(StudentClassroomSessionDivisionSubjectDao.class).readByClassroomSessionDivisionSubject(classroomSessionDivisionSubject))
+				evaluation.getStudentClassroomSessionDivisionSubjectEvaluations().addOne(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation, studentClassroomSessionDivisionSubject, null));
 		}
 		return evaluation;
 	}
 	
 	@Override @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-	public Evaluation instanciateOne(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType) {
+	public Evaluation instanciateOne(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType,Boolean cascadeToChildren) {
 		exceptionUtils().cannotCreateMoreThan(dao.countByClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType)
 				,classroomSessionDivisionSubjectEvaluationType.getCountInterval(),  Evaluation.class);
-		Evaluation evaluation = instanciateOne(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject());
+		Evaluation evaluation = instanciateOne(classroomSessionDivisionSubjectEvaluationType.getClassroomSessionDivisionSubject(),cascadeToChildren);
 		evaluation.setClassroomSessionDivisionSubjectEvaluationType(classroomSessionDivisionSubjectEvaluationType);
 		return evaluation;
 	}
@@ -60,7 +60,7 @@ public class EvaluationBusinessImpl extends AbstractTypedBusinessService<Evaluat
 	@Override
 	public Evaluation instanciateOne(String classroomSessionDivisionSubjectEvaluationTypeCode,String[][] values) {
 		ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = read(ClassroomSessionDivisionSubjectEvaluationType.class, classroomSessionDivisionSubjectEvaluationTypeCode);
-		Evaluation evaluation = instanciateOne(classroomSessionDivisionSubjectEvaluationType);
+		Evaluation evaluation = instanciateOne(classroomSessionDivisionSubjectEvaluationType,Boolean.FALSE);
 		evaluation.getStudentClassroomSessionDivisionSubjectEvaluations().getCollection().clear();
 		for(String[] value : values){
 			evaluation.getStudentClassroomSessionDivisionSubjectEvaluations().addOne(new StudentClassroomSessionDivisionSubjectEvaluation(evaluation

@@ -39,9 +39,7 @@ public class ClassroomSessionEditStudentsPage extends AbstractCrudOnePage<Classr
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public void instanciated(
-					AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession, ClassroomSession, SelectItem> itemCollection,
-					StudentClassroomSessionItem item) {
+			public void instanciated(AbstractItemCollection<StudentClassroomSessionItem, StudentClassroomSession, ClassroomSession, SelectItem> itemCollection,StudentClassroomSessionItem item) {
 				super.instanciated(itemCollection, item);
 				item.getIdentifiable().setCascadeOperationToChildren(Boolean.TRUE);
 			}
