@@ -577,9 +577,9 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 				,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_TYPE
 				,EvaluationDetails.FIELD_NAME);
 		
-		getFormConfiguration(Evaluation.class, Crud.UPDATE).addRequiredFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
+		//getFormConfiguration(Evaluation.class, Crud.UPDATE).addRequiredFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
 		
-		getFormConfiguration(Evaluation.class, Crud.DELETE).addFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
+		//getFormConfiguration(Evaluation.class, Crud.DELETE).addFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
 		
 		registerDetailsConfiguration(EvaluationDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;

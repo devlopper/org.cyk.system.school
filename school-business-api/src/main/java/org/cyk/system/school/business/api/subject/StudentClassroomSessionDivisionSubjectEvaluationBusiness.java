@@ -12,6 +12,8 @@ import org.cyk.system.school.model.subject.Evaluation;
 
 public interface StudentClassroomSessionDivisionSubjectEvaluationBusiness extends TypedBusiness<StudentClassroomSessionDivisionSubjectEvaluation> {
 
+	StudentClassroomSessionDivisionSubjectEvaluation instanciateOne(Evaluation evaluation,StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject);
+	
 	Collection<StudentClassroomSessionDivisionSubjectEvaluation> find(StudentClassroomSessionDivisionSubject studentSubject);
 	
 	Collection<StudentClassroomSessionDivisionSubjectEvaluation> findByClassroomSessionDivisionSubject(ClassroomSessionDivisionSubject classroomSessionDivisionSubject);

@@ -28,6 +28,15 @@ public class StudentClassroomSessionDivisionSubjectEvaluationBusinessImpl extend
 	public StudentClassroomSessionDivisionSubjectEvaluationBusinessImpl(StudentClassroomSessionDivisionSubjectEvaluationDao dao) {
 		super(dao); 
 	}
+	
+	@Override
+	public StudentClassroomSessionDivisionSubjectEvaluation instanciateOne(Evaluation evaluation,
+			StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject) {
+		StudentClassroomSessionDivisionSubjectEvaluation studentClassroomSessionDivisionSubjectEvaluation = instanciateOne();
+		studentClassroomSessionDivisionSubjectEvaluation.setEvaluation(evaluation);
+		studentClassroomSessionDivisionSubjectEvaluation.setStudentClassroomSessionDivisionSubject(studentClassroomSessionDivisionSubject);
+		return studentClassroomSessionDivisionSubjectEvaluation;
+	}
 
 	@Override @TransactionAttribute(TransactionAttributeType.NEVER)
 	public Collection<StudentClassroomSessionDivisionSubjectEvaluation> find(StudentClassroomSessionDivisionSubject studentSubject) {
