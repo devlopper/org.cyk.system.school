@@ -13,7 +13,6 @@ import org.cyk.system.school.business.impl.session.ClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionDivisionDetails;
 import org.cyk.system.school.business.impl.session.ClassroomSessionSubjectDetails;
 import org.cyk.system.school.business.impl.session.CommonNodeInformationsDetails;
-import org.cyk.system.school.business.impl.session.LevelGroupDetails;
 import org.cyk.system.school.business.impl.session.LevelTimeDivisionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDetails;
 import org.cyk.system.school.business.impl.session.StudentClassroomSessionDivisionDetails;
@@ -28,7 +27,6 @@ import org.cyk.system.school.model.session.AcademicSession;
 import org.cyk.system.school.model.session.ClassroomSession;
 import org.cyk.system.school.model.session.ClassroomSessionDivision;
 import org.cyk.system.school.model.session.ClassroomSessionSubject;
-import org.cyk.system.school.model.session.LevelGroup;
 import org.cyk.system.school.model.session.LevelTimeDivision;
 import org.cyk.system.school.model.session.StudentClassroomSession;
 import org.cyk.system.school.model.session.StudentClassroomSessionDivision;
@@ -39,7 +37,6 @@ import org.cyk.system.school.model.subject.StudentClassroomSessionSubject;
 import org.cyk.system.school.ui.web.primefaces.CommonNodeInformationsFormModel;
 import org.cyk.system.school.ui.web.primefaces.page.StudentEditPage;
 import org.cyk.system.school.ui.web.primefaces.page.TeacherEditPage;
-import org.cyk.system.school.ui.web.primefaces.page.session.LevelGroupEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditClassroomSessionsPage;
 import org.cyk.system.school.ui.web.primefaces.session.AcademicSessionEditPage;
 import org.cyk.system.school.ui.web.primefaces.session.ClassroomSessionConsultPage;
@@ -571,15 +568,12 @@ public class PrimefacesManager extends org.cyk.system.company.ui.web.primefaces.
 	
 	protected void configureEvaluationClass() {
 		getFormConfiguration(Evaluation.class, Crud.CREATE).addRequiredFieldNames(EvaluationEditPage.Form.FIELD_TYPE
+				,EvaluationEditPage.Form.FIELD_EXISTENCE_PERIOD,PeriodFormModel.FIELD_FROM_DATE
 				,EvaluationEditPage.Form.FIELD_ONE_STUDENT_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_SELECTED);
 		
 		getFormConfiguration(Evaluation.class, Crud.READ).addFieldNames(EvaluationDetails.FIELD_CLASSROOM_SESSION,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION
 				,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT,EvaluationDetails.FIELD_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_TYPE
 				,EvaluationDetails.FIELD_NAME);
-		
-		//getFormConfiguration(Evaluation.class, Crud.UPDATE).addRequiredFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
-		
-		//getFormConfiguration(Evaluation.class, Crud.DELETE).addFieldNames(EvaluationEditPage.Form.FIELD_TYPE);
 		
 		registerDetailsConfiguration(EvaluationDetails.class, new DetailsConfiguration(){
 			private static final long serialVersionUID = 1L;

@@ -9,6 +9,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.cyk.system.root.business.api.mathematics.NumberBusiness;
 import org.cyk.system.school.business.api.subject.ClassroomSessionDivisionSubjectEvaluationTypeBusiness;
 import org.cyk.system.school.business.api.subject.EvaluationBusiness;
@@ -19,25 +22,21 @@ import org.cyk.system.school.model.subject.Evaluation;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubject;
 import org.cyk.system.school.model.subject.StudentClassroomSessionDivisionSubjectEvaluation;
 import org.cyk.ui.api.command.menu.AbstractSystemMenuBuilder;
-import org.cyk.ui.api.data.collector.form.AbstractFormModel;
+import org.cyk.ui.api.model.AbstractBusinessIdentifiedEditFormModel;
 import org.cyk.ui.api.model.AbstractItemCollection;
 import org.cyk.ui.api.model.AbstractItemCollectionItem;
-import org.cyk.ui.web.api.AbstractWebApplicableValueQuestion;
 import org.cyk.ui.web.api.SelectItemHelper;
 import org.cyk.ui.web.api.WebManager;
-import org.cyk.ui.web.primefaces.Commandable;
 import org.cyk.ui.web.primefaces.ItemCollection;
 import org.cyk.ui.web.primefaces.page.crud.AbstractCrudOnePage;
-import org.cyk.utility.common.Constant;
 import org.cyk.utility.common.annotation.user.interfaces.Input;
 import org.cyk.utility.common.annotation.user.interfaces.Input.RendererStrategy;
 import org.cyk.utility.common.annotation.user.interfaces.InputChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneChoice;
 import org.cyk.utility.common.annotation.user.interfaces.InputOneCombo;
+import org.cyk.utility.common.annotation.user.interfaces.Text;
 import org.cyk.utility.common.helper.InstanceHelper;
-
-import lombok.Getter;
-import lombok.Setter;
+import org.cyk.utility.common.helper.NumberHelper;
 
 @Named @ViewScoped @Getter @Setter
 public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implements Serializable {
@@ -77,11 +76,10 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			@Override
 			public void instanciated(AbstractItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation,Evaluation,SelectItem> itemCollection,StudentClassroomSessionDivisionSubjectEvaluationItem item) {
 				super.instanciated(itemCollection, item);
-				item.setStudent(item.getIdentifiable().getStudentClassroomSessionDivisionSubject().getStudent().getCode()+Constant.CHARACTER_SPACE
-						+item.getIdentifiable().getStudentClassroomSessionDivisionSubject().getStudent().getPerson().getNames());
 				item.setValue(item.getIdentifiable().getValue());
 				item.setValueAsString(inject(NumberBusiness.class).format(item.getValue()));
 			}	
+			
 			@Override
 			public void write(StudentClassroomSessionDivisionSubjectEvaluationItem item) {
 				super.write(item);
@@ -89,14 +87,14 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 			}
 			
 			@Override
-			public String getFieldOneItemMasterSelectedName() {
-				return Form.FIELD_ONE_STUDENT_CLASSROOM_SESSION_DIVISION_SUBJECT_EVALUATION_SELECTED;
+			public void setLabel(AbstractItemCollection<StudentClassroomSessionDivisionSubjectEvaluationItem, StudentClassroomSessionDivisionSubjectEvaluation, Evaluation, SelectItem> itemCollection,
+					StudentClassroomSessionDivisionSubjectEvaluationItem item) {
+				super.setLabel(itemCollection, item);
+				item.setLabel(StudentClassroomSessionDivisionSubjectSelectItemBuilder.format(item.getIdentifiable().getStudentClassroomSessionDivisionSubject()));
 			}
 			
 		});
-		
-		//((Commandable)studentClassroomSessionDivisionSubjectEvaluationCollection.getDeleteCommandable()).getButton().setImmediate(Boolean.TRUE);
-		studentClassroomSessionDivisionSubjectEvaluationCollection.getDeleteCommandable().setSkipValidation(Boolean.TRUE);
+		studentClassroomSessionDivisionSubjectEvaluationCollection.setShowItemLabel(Boolean.TRUE);
 	}
 	
 	private void selectClassroomSessionDivisionSubjectEvaluationType(ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType){
@@ -123,7 +121,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	
 	@Override
 	protected Boolean consultOnSuccess() {
-		return Boolean.TRUE;
+		return Boolean.FALSE;
 	}
 	
 	protected Evaluation instanciateIdentifiable() {
@@ -134,7 +132,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 	}
 			
 	@Getter @Setter
-	public static class Form extends AbstractFormModel<Evaluation> implements Serializable{
+	public static class Form extends AbstractBusinessIdentifiedEditFormModel<Evaluation> implements Serializable{
 		private static final long serialVersionUID = -4741435164709063863L;
 		
 		@Input(readOnly=true,disabled=true) 
@@ -144,7 +142,7 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		
 		@NotNull private Boolean coefficientApplied = Boolean.TRUE;
 		
-		@Input(rendererStrategy=RendererStrategy.MANUAL) 
+		@Input(rendererStrategy=RendererStrategy.MANUAL,label=@Text(value="model.entity.student")) 
 		@InputChoice(itemBuilderClass=StudentClassroomSessionDivisionSubjectSelectItemBuilder.class,getChoicesClass=StudentClassroomSessionDivisionSubjects.class,nullable=false) 
 		@InputOneChoice @InputOneCombo 
 		private StudentClassroomSessionDivisionSubject oneStudentClassroomSessionDivisionSubjectEvaluationSelected;
@@ -178,14 +176,16 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		public String getFieldValue(Object instance, String fieldName) {
 			if(instance instanceof ClassroomSessionDivisionSubjectEvaluationType){
 				ClassroomSessionDivisionSubjectEvaluationType classroomSessionDivisionSubjectEvaluationType = (ClassroomSessionDivisionSubjectEvaluationType) instance;
-				return String.format(FORMAT, classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getName(),classroomSessionDivisionSubjectEvaluationType.getMaximumValue());
+				return String.format(FORMAT, classroomSessionDivisionSubjectEvaluationType.getEvaluationType().getName()
+						,NumberHelper.getInstance().stringify(classroomSessionDivisionSubjectEvaluationType.getMaximumValue()));
 			}
 				
 			return super.getFieldValue(instance, fieldName);
 		}
 		
-		public static String FORMAT = "%s/%s";
+		public static String FORMAT = "%s / %s";
 	}
+	
 	
 	public static class ClassroomSessionDivisionSubjectEvaluationTypes extends InstanceHelper.Many.Adapter.Default implements Serializable {
 		private static final long serialVersionUID = 1L;
@@ -210,13 +210,18 @@ public class EvaluationEditPage extends AbstractCrudOnePage<Evaluation> implemen
 		public String getFieldValue(Object instance, String fieldName) {
 			if(instance instanceof StudentClassroomSessionDivisionSubject){
 				StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject = (StudentClassroomSessionDivisionSubject) instance;
-				return String.format(FORMAT, studentClassroomSessionDivisionSubject.getStudent());
+				return format(studentClassroomSessionDivisionSubject);
 			}
 				
 			return super.getFieldValue(instance, fieldName);
 		}
 		
-		public static String FORMAT = "%s";
+		public static String format(StudentClassroomSessionDivisionSubject studentClassroomSessionDivisionSubject){
+			return String.format(FORMAT, studentClassroomSessionDivisionSubject.getStudent().getPerson().getNames()
+					,studentClassroomSessionDivisionSubject.getStudent().getCode());
+		}
+		
+		public static String FORMAT = "%s (%s)";
 	}
 	
 	public static class StudentClassroomSessionDivisionSubjects extends InstanceHelper.Many.Adapter.Default implements Serializable {

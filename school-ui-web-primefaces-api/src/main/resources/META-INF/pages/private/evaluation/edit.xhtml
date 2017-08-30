@@ -14,13 +14,13 @@
  		<ui:define name="body">
  			<cyk:formOneData value="#{evaluationEditPage.form}"/>
  			<cyk:itemCollection value="#{evaluationEditPage.studentClassroomSessionDivisionSubjectEvaluationCollection}" >
- 				<p:column headerText="#{uiManager.text('model.entity.student')}" >
+ 				<!--p:column headerText="#{uiManager.text('model.entity.student')}" >
  					<h:outputText value="#{item.student}" />
- 				</p:column>
+ 				</p:column-->
  				<p:column headerText="#{uiManager.text('school.mark')}" >
  					<pe:inputNumber id="markValue" value="#{item.value}" required="#{not param.skipValidation}" autocomplete="false" binding="#{mark}"
 						minValue="0" maxValue="#{evaluationEditPage.identifiable.classroomSessionDivisionSubjectEvaluationType.maximumValue}" disabled="#{not item.applicable}"
-						decimalPlaces="#{evaluationEditPage.decimalPlaces}"  requiredMessage="#{item.student} - #{uiManager.textInputValueRequired('school.mark')}"
+						decimalPlaces="#{evaluationEditPage.decimalPlaces}"  requiredMessage="#{item.label} - #{uiManager.textInputValueRequired('school.mark')}"
 						rendered="#{evaluationEditPage.form.editable}"/>
 					<h:outputText value="#{item.valueAsString}" rendered="#{not evaluationEditPage.form.editable}" />							
  				</p:column>
