@@ -238,7 +238,7 @@ public class Iesa_2016_2017_DataSet extends DataSet implements Serializable {
     		protected Key __execute__() {
     			ClassroomSessionSubject classroomSessionSubject = inject(ClassroomSessionSubjectBusiness.class)
     					.findByClassroomSessionBySubject(inject(ClassroomSessionBusiness.class).findByLevelNameBySuffix((String)getInput()[0],(String)getInput()[1]).iterator().next()
-    							, Pool.getInstance().get(Subject.class, getInput()[2]));
+    							, Pool.getInstance().get(Subject.class, getInput()[2],Boolean.TRUE));
     			return new Key(classroomSessionSubject == null ? (String)getInput()[0]+getInput()[1]+getInput()[2] : classroomSessionSubject.getCode());
     		}
     	});
@@ -296,6 +296,7 @@ public class Iesa_2016_2017_DataSet extends DataSet implements Serializable {
     			return new Key(String.valueOf(getInput()[1])+String.valueOf(getInput()[2]));
     		}
     	});	
+    	
 	}
 	
 }
