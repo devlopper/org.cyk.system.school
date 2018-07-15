@@ -159,8 +159,8 @@ public class IesaSaleBusinessIT extends AbstractIesaBusinessIT {
     	studentG1A.setName("komenan");
     	studentG1A.getPerson().setName("komenan");
     	studentG1A.getPerson().setLastnames("yao christian");
-    	if(studentG1A.getPerson().getContactCollection()!=null && studentG1A.getPerson().getContactCollection().getElectronicMails()!=null)
-    		studentG1A.getPerson().getContactCollection().getElectronicMails().clear();
+    	//if(studentG1A.getPerson().getContactCollection()!=null && studentG1A.getPerson().getContactCollection().getElectronicMails()!=null)
+    	//	studentG1A.getPerson().getContactCollection().getElectronicMails().clear();
     	//inject(ElectronicMailBusiness.class).setAddress(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, "kycdev@gmail.com");
     	//inject(ElectronicMailBusiness.class).setAddress(studentG1A.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_MOTHER, "ckydevbackup@gmail.com");
     	

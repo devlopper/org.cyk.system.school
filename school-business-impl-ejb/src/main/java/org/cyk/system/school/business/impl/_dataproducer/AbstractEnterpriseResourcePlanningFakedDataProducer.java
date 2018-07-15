@@ -310,7 +310,7 @@ public abstract class AbstractEnterpriseResourcePlanningFakedDataProducer extend
 						student.getPerson().setLastnames((String)studentInfos[2]);
 						//student.getPerson().getContactCollection()!=null && student.getPerson().getContactCollection()
 						//		.getElectronicMails()!=null);
-				    	student.getPerson().getContactCollection().getElectronicMails().clear();
+				    	//student.getPerson().getContactCollection().getElectronicMails().clear();
 				    	/*if(studentInfos.length>3){
 				    		inject(ElectronicMailBusiness.class).setAddress(student.getPerson(), RootConstant.Code.PersonRelationshipType.FAMILY_FATHER, (String)studentInfos[3]);
 				    		if(studentInfos.length>4){
